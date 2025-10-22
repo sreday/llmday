@@ -1,0 +1,29 @@
+base_path: "https://www.llmday.com/"
+base_folder: "static"
+twitter_url: https://twitter.com/sreday_com
+linkedin_url: https://www.linkedin.com/company/sreday/
+youtube_url: https://www.youtube.com/@sreday
+mailto: "mailto:hello@sreday.com"
+
+hero_pictures:
+- ../photos/london-2022-0.jpg
+
+counts:
+ events: 1
+ countries: 1
+ speakers: 10+
+ attendees: 200+
+
+
+events:
+
+  - name: SREday London 2026 Q1
+    location: Canary Wharf, London, UK
+    photo_url: ./assets/images/events/sreday-2026-london-q1.png
+    url: ./2026-london-q1/
+
+events_past: []
+
+meetups: []
+
+meetups_past: []

@@ -1,0 +1,192 @@
+{% extends "_base.html" %}
+
+{% block content %}
+
+<section id="events" class="sponsors-section section theme-bg-light text-white">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3">Upcoming conferences</h3>
+    <div class="row gx-md-5">
+
+      {% for event in events %}
+
+      <div class="col-12 col-lg-6 mb-4">
+        <div class="card rounded">
+          <a href="{{ event.url }}">
+            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ event.name }}</h5>
+            <div class="card-text mb-3">
+              <div class="meta">{{ event.date }}</div>
+            </div>
+            {% if event.url %}
+            <a href="{{ event.url }}">Read more &rarr;</a>
+            {% else %}
+            Details coming soon...
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+    <h3 class="section-heading text-center mb-3">Upcoming meetups</h3>
+    <div class="row gx-md-5">
+
+      {% for event in meetups %}
+
+      <div class="col-12 col-lg-6 mb-4">
+        <div class="card rounded">
+          <a href="./{{ event.url }}">
+            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">
+              <a href="{{ event.url }}">
+              {{ event.name }}
+              </a>
+            </h5>
+            <div class="card-text mb-3">
+              <div class="meta">{{ event.location }}</div>
+              <div class="meta">{{ event.date }} @ {{ event.time}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="past-events" class="sponsors-section section theme-bg-primary text-white">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3 text-white">Past conferences</h3>
+    <div class="row gx-md-5">
+
+      {% for event in events_past %}
+
+      <div class="col-12 col-lg-6 mb-4">
+        <div class="card rounded">
+          <a href="{{ event.url }}">
+            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ event.name }}</h5>
+            <div class="card-text mb-3">
+              <div class="meta">{{ event.date }}</div>
+            </div>
+            {% if event.url %}
+            <a href="{{ event.url }}">Read more &rarr;</a>
+            {% else %}
+            Details coming soon...
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+
+    <h3 class="section-heading text-center mb-3 text-white">Past meetups</h3>
+    <div class="row gx-md-5">
+
+      {% for event in meetups_past %}
+
+      <div class="col-12 col-lg-6 mb-4">
+        <div class="card rounded">
+          <a href="./{{ event.url }}">
+            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">
+              <a href="{{ event.url }}">
+              {{ event.name }}
+              </a>
+            </h5>
+            <div class="card-text mb-3">
+              <div class="meta">{{ event.location }}</div>
+              <div class="meta">{{ event.date }} @ {{ event.time}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<section id="testimonials" class="sponsors-section section">
+  <div class="container speakers-section">
+    <h3 class="section-heading text-center mb-3">What others say about SREday</h3>
+    <div class="row">
+
+      {% for testimonial in testimonials %}
+
+      <div class="col-6 col-lg-3 mb-4">
+        <div class="card rounded">
+          <img src="./assets/images/profiles/{{ testimonial.Headshot }}" class="card-img-top rounded-0" alt="">
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ testimonial.Name }}</h5>
+            <div class="card-text mb-3 text-muted">
+              <div class="meta">{{ testimonial.Job }}</div>
+              {% if testimonial.Company %}
+              <b class="meta">{{ testimonial.Company }}</b>
+              {% endif %}
+            </div>
+            <div class="card-text mb-3">
+              {{ testimonial.Testimonial }}
+            </div>
+          </div>
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              {% if testimonial.Twitter %}<li class="list-inline-item"><a target="_blank" href="https://twitter.com/{{ testimonial.Twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+              {% if testimonial.Linkedin %}<li class="list-inline-item"><a target="_blank" href="{{ testimonial.Linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+              {% if testimonial.Twitter2 %}<li class="list-inline-item"><a target="_blank" href="https://twitter.com/{{ testimonial.Twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+              {% if testimonial.Linkedin2 %}<li class="list-inline-item"><a target="_blank" href="{{ testimonial.Linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<section id="sponsor" class="sponsors-section section theme-bg-primary text-white">
+  <div class="container">
+    <div class="row gx-md-5">
+      <div class="col-12 mb-3">
+        <h3 class="section-heading text-center text-white">Sponsor</h3>
+        <div class="sponsors-cta text-center pt-5">
+<!-- Calendly inline widget begin -->
+<div class="calendly-inline-widget" data-url="https://calendly.com/sreday/30min" style="min-width:320px;height:700px;"></div>
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<!-- Calendly inline widget end -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="partner" class="sponsors-section section theme-bg-light">
+  <div class="container">
+    <div class="row gx-md-5">
+      <div class="col-12 mb-3">
+        <h3 class="section-heading text-center mb-3">Partner</h3>
+        <div class="section-intro text-center single-col-max mx-auto">
+          Interested in bringing SREday to your city?
+        </div>
+        <div class="sponsors-cta text-center pt-5">
+          <a class="btn-secondary btn btn-lg" href="{{ mailto }}">Become A Partner</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
