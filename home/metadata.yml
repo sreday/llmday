@@ -1,8 +1,8 @@
 base_path: "https://www.llmday.com/"
 base_folder: "static"
-twitter_url: https://twitter.com/sreday_com
-linkedin_url: https://www.linkedin.com/company/sreday/
-youtube_url: https://www.youtube.com/@sreday
+twitter_url: https://twitter.com/llmday_com
+linkedin_url: https://www.linkedin.com/company/llmday/
+youtube_url: https://www.youtube.com/@llmday
 mailto: "mailto:hello@llmday.com"
 
 hero_pictures:
