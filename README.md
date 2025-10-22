@@ -38,7 +38,7 @@ make serve
     1. List the relevant ones in `2026-tokyo-q1/metadata.yaml`
 1. Add the conference to the home page
     1. Upload the splash screen
-        1. Put it in `assets/images/events/sreday-2026-tokyo-q1.jpeg`
+        1. Put it in `assets/images/events/llmday-2026-tokyo-q1.jpeg`
     1. Modify the `home/metadata.yaml` file:
         1. Add a new item to the events list
         1. Make sure the url matches the format, e.g `2026-tokyo-q1`
@@ -48,7 +48,7 @@ events:
 
   - name: LLMday Tokyo 2026 Q1
     location: Tokyo, Japan
-    photo_url: ./assets/images/events/sreday-2026-tokyo-q1.jpeg
+    photo_url: ./assets/images/events/llmday-2026-tokyo-q1.jpeg
     url: ./2026-tokyo-q1/
 ...
 ```

@@ -5,13 +5,13 @@
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
-  <loc>https://www.sreday.com/</loc>
+  <loc>https://www.llmday.com/</loc>
   <lastmod>{{ now }}</lastmod>
   <priority>1.00</priority>
 </url>
 {% for url, priority in urls %}
 <url>
-  <loc>https://www.sreday.com/{{ url }}</loc>
+  <loc>https://www.llmday.com/{{ url }}</loc>
   <lastmod>{{ now }}</lastmod>
   <priority>{{ priority }}</priority>
 </url>
