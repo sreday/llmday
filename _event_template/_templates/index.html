@@ -1,0 +1,260 @@
+{% extends "_base.html" %}
+
+{% block content %}
+
+<section id="about" class="about-section section">
+
+  <div class="container">
+    <div class="event-countdown text-center mb-3">
+    {% if event_state != 'after' %}
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event Starts In:</h4>
+      <div id="countdown-box" class="countdown-box"></div>
+    {% else %}
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished</h4>
+    {% endif %}
+    </div>
+  </div>
+  <script>
+    /* ======= Countdown ========= */
+    // set the date we're counting down to
+    var target_date = new Date("{{ start_time }}").getTime();
+     
+    // variables for time units
+    var days, hours, minutes, seconds;
+     
+    // get tag element
+    var countdown =  document.getElementById("countdown-box");
+    var days_span = document.createElement("SPAN");
+    days_span.className = 'days';
+    countdown.appendChild(days_span);
+    var hours_span = document.createElement("SPAN");
+    hours_span.className = 'hours';
+    countdown.appendChild(hours_span);
+    var minutes_span = document.createElement("SPAN");
+    minutes_span.className = 'minutes';
+    countdown.appendChild(minutes_span);
+    var secs_span = document.createElement("SPAN");
+    secs_span.className = 'secs';
+    countdown.appendChild(secs_span);
+     
+    // update the tag with id "countdown" every 1 second
+    setInterval(function () {
+     
+        // find the amount of "seconds" between now and target
+        var current_date = new Date().getTime();
+        var seconds_left = (target_date - current_date) / 1000;
+     
+        // do some time calculations
+        days = parseInt(seconds_left / 86400);
+        seconds_left = seconds_left % 86400;
+         
+        hours = parseInt(seconds_left / 3600);
+        seconds_left = seconds_left % 3600;
+         
+        minutes = parseInt(seconds_left / 60);
+        seconds = parseInt(seconds_left % 60);
+         
+        // format countdown string + set tag value.
+        days_span.innerHTML = '<span class="number">' + days + '</span>' + '<span class="unit">Days</span>';
+        hours_span.innerHTML = '<span class="number">' + hours + '</span>' + '<span class="unit">Hrs</span>';
+        minutes_span.innerHTML = '<span class="number">' + minutes + '</span>' + '<span class="unit">Mins</span>';
+        secs_span.innerHTML = '<span class="number">' + seconds + '</span>' + '<span class="unit">Secs</span>'; 
+     
+    }, 1000);
+    </script>
+</section>
+
+<section id="tickets" class="tickets-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3">Tickets</h3>
+
+    {% if event_state != 'after' %}
+    <div class="row pricing mb-5 mt-10">
+      <div class="col-12 text-center">
+        {% include 'tickets.html' %} 
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% if event_state == 'before' %}
+<section id="schedule" class="schedule-section section theme-bg-light">
+  <div class="container">
+    <h2 class="section-heading text-center mb-5">Schedule</h2>
+    <h4 class="section-heading text-center mb-5">Coming soon</h4>
+  </div>
+</section>
+{% else %}
+<section id="schedule" class="schedule-section section theme-bg-light">
+  <div class="container">
+    <h2 class="section-heading text-center mb-5">Schedule</h2>
+
+
+{% for day in range(days) %}
+    <h4 class="section-heading text-center mb-5">Day {{ day + 1 }}</h4>
+
+    
+    <!-- Nav tabs -->
+    <ul class="schedule-nav nav nav-pills nav-fill" id="myTab" role="tablist">
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+      <li class="nav-item me-2">
+        <a class="nav-link {% if loop.index==1 %}active{% endif %}" id="tab-{{ day }}-{{ loop.index }}" data-bs-toggle="tab" href="#tab-{{ day }}-{{ loop.index }}-content" role="tab" aria-controls="tab-{{ loop.index }}-content"
+          aria-selected={% if loop.index==1 %}"true"{% else %}"false"{% endif %}
+        >
+          <span class="heading">{{ rooms[loop.index0] }}</span>
+          <span class="meta">{{ track }}</span>
+        </a>
+      </li>
+{% endfor %}
+    </ul>
+    
+    <!-- Tab panes -->
+    <div class="schedule-tab-content tab-content">
+
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+      <div class="tab-pane {% if loop.index==1 %}active{% endif %}" id="tab-{{ day }}-{{ loop.index }}-content" role="tabpanel" aria-labelledby="tab-{{ day }}-{{ loop.index }}">
+
+{% for talk in talks_by_tracks[track] %}
+        <div class="item item-talk">
+          <div class="meta">
+            <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
+            <div class="profile">
+              <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img class="profile-image rounded-circle  mb-2" src="{{ talk.photo_url }}" alt=""></a>
+              <div class="name"><a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.name }}</a></div>
+            </div><!--//profile-->
+          </div><!--//meta-->
+          <div class="content">
+            <h3 class="title mb-3">
+              <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
+            </h3>
+            <div class="location mb-3"></i>{{ talk.comment }}{{ talk.organization }}</div>
+            <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
+          </div><!--//content-->
+        </div><!--//item-->
+
+{% endfor %}
+
+      </div><!--//tab-{{ loop.index }}-content-->
+
+{% endfor %}
+    </div><!--//schedule-tab-content-->
+
+
+{% endfor %}
+    <div class="schedule-cta text-center mx-auto"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+  </div>
+</section>
+{% endif %}
+
+
+<section id="speakers" class="speakers-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3">Speakers</h3>
+    <div class="row">
+
+      {% for talk in (talks + keynotes)|sort(attribute='name')|dedupe %}
+
+      <div class="col-6 col-lg-3 mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ talk.name }}</h5>
+            <div class="card-text mb-3">
+              <div class="meta">{{ talk.organization }}</div>
+            </div><!--//card-text-->
+            <a href="./{{ talk.short_url }}">Read more &rarr;</a>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              {% if talk.twitter %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+              {% if talk.linkedin %}<li class="list-inline-item"><a  href="{{ talk.linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+              {% if talk.twitter2 %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+              {% if talk.linkedin2 %}<li class="list-inline-item"><a  href="{{ talk.linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      {% endfor %}
+
+      {% if event_state == 'before' %}
+
+      <div class="col-6 col-lg-3 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h4>More coming soon</h4>
+          </div><!--//card-->
+        </div><!--//card-->
+      </div><!--//col-->
+
+      {% endif %}
+
+    </div><!--//row-->
+    <div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>
+  </div><!--//container-->
+
+</section><!--//speakers-section-->
+
+{% include 'venue.html' %}
+
+<section id="sponsors" class="sponsors-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3">Sponsors &amp; Partners</h3>
+    <div class="section-intro text-center single-col-max mx-auto mb-5">Want to become a sponsor? Get in touch!</div>
+    <div class="row logos justify-content-center">
+      {% for sponsor in sponsors %}
+      <div class="logo-item col-6 col-md-4 col-lg-2"><a href="{{sponsor.url}}" target="_blank"><img src="./assets/images/sponsors/{{ sponsor.logo }}" alt=""></a></div>
+      {% endfor %}
+    </div><!--//row-->
+    <div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="mailto:hello@sreday.com">Become A Sponsor</a></div>
+  </div><!--//container-->
+</section><!--//sponsors-section-->
+
+
+{% for talk in talks + keynotes %}
+<!-- Modal Speaker {{ talk.id }} -->
+<div class="modal modal-speaker modal-speaker-{{ talk.id }}" id="modal-speaker-{{ talk.id }}" tabindex="-1" role="dialog" aria-labelledby="speaker-{{ talk.id }}-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 id="speaker-{{ talk.id }}-ModalLabel" class="modal-title sr-only"
+>{{ talk.name }}</h4>
+          </div>
+          <div class="modal-body p-0">
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="{{ talk.photo_url }}" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">{{ talk.name }}</h2>
+                          <div class="meta mb-2">{{ talk.organization }}</div>
+                          <ul class="social-list list-inline mb-0">
+                            {% if talk.twitter %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+                            {% if talk.linkedin %}<li class="list-inline-item"><a  href="{{ talk.linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+                            {% if talk.twitter2 %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+                            {% if talk.linkedin2 %}<li class="list-inline-item"><a  href="{{ talk.linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p>{{ talk.abstract | markdown }}</p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p>{{ talk.description | markdown }}</p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p>{{ talk.bio | markdown }}</p>
+              </div>
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+{% endfor %}
+
+{% endblock %}

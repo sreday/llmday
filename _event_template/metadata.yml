@@ -1,0 +1,57 @@
+# TODO - change these
+
+# start time includes timezone at the end relative to UTC
+start_time: "2125-11-06T09:00:00-08:00"
+# before - no schedule
+# active - schedule
+# after  - hide ticket sales
+event_state: before
+date_string: "November 7, 2025"
+location_string: "Mars, Milky Way"
+# get this from the event url
+luma_evt: evt-xAhCqaXMWAXAEEm
+cfp_url: https://www.papercall.io/sreday-amsterdam-2025-q4
+
+# the number of tracks needs to be the same per day
+# the tracks will be taken in the order they appear in the CSV file
+days: 1
+attendees: 200
+speakers: 25+
+
+rooms:
+- main room
+- round room
+
+breaks:
+- title: Coffee break
+  duration: 30
+  comment: Main lobby
+  # this decides how many talks in-between this and previous section
+  talks_before: 0
+- title: Lunch & networking
+  duration: 60
+  comment: Main lobby
+  talks_before: 4
+- title: Networking & sponsor crawl
+  duration: 30
+  comment: Main lobby
+  talks_before: 4
+
+sponsors:
+  - logo: hockeystick.png
+    url: https://www.hockeystick.show
+
+# these get displayed at the top
+hero_pictures:
+- ../photos/london-2023-0.jpg
+- ../photos/london-2023-1.jpg
+- ../photos/london-2023-2.jpg
+- ../photos/london-2023-3.jpg
+
+# probably don't need changing
+base_path: "https://www.sreday.com/"
+base_folder: "static"
+twitter_url: https://twitter.com/sreday_com
+linkedin_url: https://www.linkedin.com/company/sreday/
+youtube_url: https://www.youtube.com/@sreday
+mailto: "mailto:hello@sreday.com"
