@@ -15,12 +15,7 @@ counts:
  attendees: 200+
 
 
-events:
-
-  - name: LLMday London 2026 Q1
-    location: Canary Wharf, London, UK
-    photo_url: ./assets/images/events/llmday-2026-london-q1.png
-    url: ./2026-london-q1/
+events: []
 
 events_past: []
 
