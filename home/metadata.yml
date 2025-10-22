@@ -17,7 +17,7 @@ counts:
 
 events:
 
-  - name: SREday London 2026 Q1
+  - name: LLMday London 2026 Q1
     location: Canary Wharf, London, UK
     photo_url: ./assets/images/events/sreday-2026-london-q1.png
     url: ./2026-london-q1/
