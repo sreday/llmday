@@ -7,7 +7,7 @@ start_time: "2026-02-12T09:00:00+01:00"
 # after  - hide ticket sales
 event_state: before
 date_string: "February 12, 2026"
-location_string: "CIC Watsaw, Poland"
+location_string: "CIC Warsaw, Poland"
 # get this from the event url
 luma_evt: evt-cQnhjDq1cPBdaJw
 cfp_url: https://www.papercall.io/llmday-2026-warsaw-q1
