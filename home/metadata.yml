@@ -15,7 +15,12 @@ counts:
  attendees: 200+
 
 
-events: []
+events:
+
+  - name: LLMday Warsaw 2026 Q1
+    location: CIC Warsaw, Poland
+    photo_url: ./assets/images/events/llmday-2026-warsaw-q1.png
+    url: ./2026-warsaw-q1/
 
 events_past: []
 
