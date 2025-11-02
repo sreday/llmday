@@ -1,16 +1,16 @@
 # TODO - change these
 
 # start time includes timezone at the end relative to UTC
-start_time: "2125-11-06T09:00:00-08:00"
+start_time: "2026-02-12T09:00:00+01:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
 event_state: before
-date_string: "November 7, 2025"
-location_string: "Mars, Milky Way"
+date_string: "February 12, 2026"
+location_string: "CIC Watsaw, Poland"
 # get this from the event url
-luma_evt: evt-xAhCqaXMWAXAEEm
-cfp_url: https://www.papercall.io/llmday-amsterdam-2025-q4
+luma_evt: evt-cQnhjDq1cPBdaJw
+cfp_url: https://www.papercall.io/llmday-warsaw-2026-q1
 
 # the number of tracks needs to be the same per day
 # the tracks will be taken in the order they appear in the CSV file
@@ -38,6 +38,8 @@ breaks:
   talks_before: 4
 
 sponsors:
+  - logo: monday.png
+    url: https://monday.com/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
 
