@@ -1,6 +1,6 @@
 # LLMday
 
-In-person conferences for Site Reliability, DevOps and Cloud engineers.
+In-person conferences for Large Language Models, AI and ML.
 
 
 ## Running locally
