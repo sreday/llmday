@@ -47,10 +47,7 @@ sponsors:
 
 # these get displayed at the top
 hero_pictures:
-- ../photos/london-2023-0.jpg
-- ../photos/london-2023-1.jpg
-- ../photos/london-2023-2.jpg
-- ../photos/london-2023-3.jpg
+- ../photos/london-2022-0.jpg
 
 # probably don't need changing
 base_path: "https://www.llmday.com/"
