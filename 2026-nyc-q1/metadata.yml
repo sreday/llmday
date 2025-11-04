@@ -1,15 +1,15 @@
 # TODO - change these
 
 # start time includes timezone at the end relative to UTC
-start_time: "2026-02-12T09:00:00+01:00"
+start_time: "2026-02-12T09:00:00+05:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
 event_state: before
-date_string: "February 12, 2026"
-location_string: "CIC Warsaw, Poland"
+date_string: "March 6, 2026"
+location_string: "VIAM, New York City"
 # get this from the event url
-luma_evt: evt-cQnhjDq1cPBdaJw
+luma_evt: evt-Rq2eouqzffNp2PW
 cfp_url: https://www.papercall.io/llmday-2026-nyc-q1
 
 # the number of tracks needs to be the same per day
