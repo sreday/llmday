@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>https://www.llmday.com/</loc>
+  <lastmod>2025-11-04T18:13:41.032359+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Miko_Pawlikowski_Tech_Author_Podcast_Host_Keynote_How_LLaMas_are_taking_over_the_world</loc>
+  <lastmod>2025-11-04T18:13:41.032359+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+</urlset>
