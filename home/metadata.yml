@@ -22,6 +22,11 @@ events:
     photo_url: ./assets/images/events/llmday-2026-warsaw-q1.png
     url: ./2026-warsaw-q1/
 
+  - name: LLMday NYC 2026 Q1
+    location: VIAM, New York, United States
+    photo_url: ./assets/images/events/llmday-2026-nyc-q1.png
+    url: ./2026-nyc-q1/
+
 events_past: []
 
 meetups: []
