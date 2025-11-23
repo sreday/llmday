@@ -9,7 +9,7 @@ event_state: before
 date_string: "May 28, 2026"
 location_string: "Everyman Canary Wharf, London, UK"
 # get this from the event url
-luma_evt: evt-cQnhjDq1cPBdaJw
+luma_evt: evt-Al1eAFlKKsJZbGO
 cfp_url: https://www.papercall.io/llmday-2026-london-q2
 
 # the number of tracks needs to be the same per day
