@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>https://www.llmday.com/</loc>
+  <lastmod>2025-11-23T19:10:46.852586+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Miko_Pawlikowski_Tech_Author_Podcast_Host_Keynote_How_LLaMas_are_taking_over_the_world</loc>
+  <lastmod>2025-11-23T19:10:46.852586+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Jacek_Dabrowski_Synerise_Coming_soon</loc>
+  <lastmod>2025-11-23T19:10:46.852586+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Jeff_Fan_DigitalOcean_End_VibesBased_RAG__Evals_as_the_Control_Plane</loc>
+  <lastmod>2025-11-23T19:10:46.852586+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Anna_SztyberBetley_Warsaw_University_of_Technology_Beware_of_finetuning_Subliminal_learning_and_weir</loc>
+  <lastmod>2025-11-23T19:10:46.852586+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+</urlset>
