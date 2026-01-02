@@ -5,7 +5,7 @@ start_time: "2026-02-12T09:00:00+01:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
-event_state: before
+event_state: active
 date_string: "February 12, 2026"
 location_string: "CIC Warsaw, Poland"
 # get this from the event url
@@ -20,7 +20,7 @@ speakers: 20+
 
 rooms:
 - main room
-- round room
+- second room
 
 breaks:
 - title: Coffee break
