@@ -150,6 +150,7 @@
     background: white;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     margin-top: 1rem;
+    table-layout: fixed;
   }
   .schedule-grid-table th {
     background: linear-gradient(135deg, #098dcf 0%, #0779b3 100%);
@@ -160,14 +161,21 @@
     font-size: 0.95rem;
   }
   .schedule-grid-table th:first-child {
-    width: 70px;
+    width: 60px;
+  }
+  .schedule-grid-table th:nth-child(2),
+  .schedule-grid-table th:nth-child(3) {
+    width: calc(50% - 30px);
   }
   .schedule-grid-table td {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid #e5ecf4;
     vertical-align: top;
   }
-  .schedule-grid-table tr:hover {
+  .schedule-grid-table td.merged-cell {
+    text-align: center;
+    font-weight: 500;
+    color: #555;
     background: #f8fbfd;
   }
   .schedule-grid-table .time-cell {
@@ -176,17 +184,20 @@
     white-space: nowrap;
   }
   .schedule-grid-table .talk-cell a {
-    color: #333;
+    color: #222;
     text-decoration: none;
     font-weight: 500;
   }
   .schedule-grid-table .talk-cell a:hover {
     color: #098dcf;
   }
-  .schedule-grid-table .speaker-name {
-    color: #666;
+  .schedule-grid-table .speaker-info {
+    color: #444;
     font-size: 0.85rem;
     margin-top: 0.25rem;
+  }
+  .schedule-grid-table .speaker-info .affiliation {
+    color: #666;
   }
   .schedule-meta {
     display: flex;
@@ -299,17 +310,35 @@
 {% endfor %}
 {% endfor %}
 {% for time in all_times|sort %}
+{% set ns = namespace(talks_at_time=[], titles=[]) %}
+{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
+{% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
+{% set _ = ns.talks_at_time.append(talk) %}
+{% set _ = ns.titles.append(talk.title) %}
+{% endfor %}
+{% if ns.talks_at_time|length < loop.index %}
+{% set _ = ns.talks_at_time.append(none) %}
+{% set _ = ns.titles.append('') %}
+{% endif %}
+{% endfor %}
+{% if ns.titles|unique|list|length == 1 and ns.titles[0] != '' %}
+          <tr>
+            <td class="time-cell">{{ time }}</td>
+            <td class="talk-cell merged-cell" colspan="2">{{ ns.titles[0] }}</td>
+          </tr>
+{% else %}
           <tr>
             <td class="time-cell">{{ time }}</td>
 {% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
             <td class="talk-cell">
 {% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
               <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
-              <div class="speaker-name">{{ talk.name }}</div>
+              <div class="speaker-info">{{ talk.name }}{% if talk.organization %} <span class="affiliation">• {{ talk.organization }}</span>{% endif %}</div>
 {% endfor %}
             </td>
 {% endfor %}
           </tr>
+{% endif %}
 {% endfor %}
         </tbody>
       </table>
