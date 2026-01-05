@@ -1,0 +1,35 @@
+---
+interface Props {
+  lumaEventId: string;
+}
+
+const { lumaEventId } = Astro.props;
+---
+
+<section id="tickets" class="tickets-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-5">Tickets</h3>
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+        <iframe
+          src={`https://lu.ma/embed/event/${lumaEventId}/simple`}
+          allowfullscreen
+          aria-hidden="false"
+          tabindex="0"
+        />
+        <div class="text-center mt-3">
+          <a
+            href={`https://lu.ma/event/${lumaEventId}`}
+            class="btn btn-secondary"
+            target="_blank"
+            data-luma-action="checkout"
+          >
+            Register on Luma
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://embed.lu.ma/checkout-button.js"></script>

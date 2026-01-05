@@ -1,0 +1,47 @@
+state: active
+startTime: "2026-02-12T09:00:00+01:00"
+dateString: "February 12, 2026"
+locationString: "CIC Warsaw, Poland"
+days: 1
+attendees: 100
+speakers: "20+"
+rooms:
+  - main room
+  - second room
+breaks:
+  - title: Coffee break
+    duration: 30
+    comment: Main lobby
+    talks_before: 0
+  - title: Lunch & networking
+    duration: 60
+    comment: Main lobby
+    talks_before: 4
+  - title: Networking & sponsor crawl
+    duration: 30
+    comment: Main lobby
+    talks_before: 4
+sponsors:
+  - logo: monday.png
+    url: https://monday.com/
+  - logo: quesma.png
+    url: https://quesma.com/
+  - logo: hockeystick.png
+    url: https://www.hockeystick.show
+lumaEventId: evt-cQnhjDq1cPBdaJw
+cfpUrl: https://www.papercall.io/llmday-2026-warsaw-q1
+heroPictures:
+  - /photos/london-2022-0.jpg
+venue:
+  name: CIC Warsaw
+  address: Chmielna 73
+  city: 00-801 Warsaw, Poland
+  mapEmbedUrl: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.826540004938!2d20.994802477161734!3d52.22836917198625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecd3d5efb088b%3A0x5ef44626a271e8ef!2sCIC%20Warsaw!5e0!3m2!1sen!2suk!4v1762093759946!5m2!1sen!2suk
+  images:
+    - venue-1.jpg
+    - venue-2.jpg
+    - venue-3.jpg
+twitterUrl: https://twitter.com/llmday_com
+linkedinUrl: https://www.linkedin.com/company/llmday/
+youtubeUrl: https://www.youtube.com/@llmday
+mailto: mailto:hello@llmday.com

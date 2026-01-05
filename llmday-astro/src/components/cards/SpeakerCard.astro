@@ -1,0 +1,41 @@
+---
+import type { ScheduleTalk } from '../../lib/schedule';
+
+interface Props {
+  talk: ScheduleTalk;
+  eventSlug: string;
+}
+
+const { talk, eventSlug } = Astro.props;
+const speaker = talk.data.speaker;
+const talkUrl = `/${eventSlug}/talks/${talk.slug}`;
+---
+
+<div class="speaker-card">
+  <a href={talkUrl}>
+    <img
+      class="profile-image"
+      src={`/speakers/${speaker.photo}`}
+      alt={speaker.name}
+    />
+  </a>
+  <h5>{speaker.name}</h5>
+  <div class="meta">{speaker.organization}</div>
+  <a href={talkUrl} class="small">Read more &rarr;</a>
+  <ul class="social-list mt-2">
+    {speaker.twitter && (
+      <li>
+        <a href={`https://twitter.com/${speaker.twitter}`} target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    )}
+    {speaker.linkedin && (
+      <li>
+        <a href={speaker.linkedin} target="_blank" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+    )}
+  </ul>
+</div>

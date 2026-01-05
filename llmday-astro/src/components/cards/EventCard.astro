@@ -1,0 +1,25 @@
+---
+interface Props {
+  name: string;
+  location: string;
+  date: string;
+  photoUrl: string;
+  url: string;
+}
+
+const { name, location, date, photoUrl, url } = Astro.props;
+---
+
+<div class="card h-100">
+  <a href={url}>
+    <img src={photoUrl} alt={name} class="card-img-top" />
+  </a>
+  <div class="card-body">
+    <h5 class="card-title">{name}</h5>
+    <p class="card-text">
+      <small class="text-muted">{date}</small><br />
+      <small class="text-muted">{location}</small>
+    </p>
+    <a href={url} class="btn btn-primary btn-sm">Learn more</a>
+  </div>
+</div>
