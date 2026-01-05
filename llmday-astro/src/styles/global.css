@@ -1,0 +1,563 @@
+/* Global styles for LLMday Astro */
+
+:root {
+  --primary-color: #26986A;
+  --secondary-color: #EC645E;
+  --text-color: #333;
+  --text-muted: #666;
+  --bg-light: #f8f9fa;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color);
+  padding-top: 70px; /* Account for fixed header */
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.retro {
+  font-family: 'Monoton', sans-serif;
+}
+
+.logo {
+  font-size: 5rem;
+  color: white;
+  font-weight: 400;
+}
+
+/* Theme colors */
+.theme-bg-primary {
+  background: var(--primary-color);
+}
+
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+/* Header */
+.header {
+  background: rgba(0, 0, 0, 0.85);
+  transition: all 0.3s ease;
+}
+
+.header .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.header .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+}
+
+.header .nav-link:hover {
+  color: white;
+}
+
+/* Hero section */
+.hero-block {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-carousel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.hero-carousel .carousel-inner,
+.hero-carousel .carousel-item {
+  height: 100%;
+}
+
+.hero-carousel .carousel-item {
+  background-size: cover;
+  background-position: center;
+}
+
+.tinted {
+  box-shadow: 0 3000px rgba(0, 0, 0, 0.5) inset;
+}
+
+.hero-block .container {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-text-block {
+  color: white;
+  text-align: center;
+}
+
+/* Stats block */
+.stats-block .number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.stats-block .unit {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Sections */
+.section {
+  padding: 4rem 0;
+}
+
+.section-heading {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Schedule section */
+.schedule-meta {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.track-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.track-nav a {
+  padding: 0.5rem 1rem;
+  background: var(--bg-light);
+  border-radius: 0.25rem;
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.track-nav a:hover,
+.track-nav a.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.view-toggle {
+  margin-left: auto;
+  cursor: pointer;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.view-toggle:hover {
+  text-decoration: underline;
+}
+
+/* Timeline view */
+.track-section-header {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  border-radius: 0.25rem;
+}
+
+.schedule-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.schedule-item .meta {
+  flex: 0 0 120px;
+  text-align: center;
+}
+
+.schedule-item .time {
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.schedule-item .profile-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+.schedule-item .name {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.schedule-item .content {
+  flex: 1;
+}
+
+.schedule-item .content h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.schedule-item .content h3 a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.schedule-item .content h3 a:hover {
+  color: var(--primary-color);
+}
+
+.schedule-item .location {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.schedule-item .desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.schedule-item.break-item {
+  background: var(--bg-light);
+  border-radius: 0.25rem;
+}
+
+/* Table view */
+.schedule-table-view {
+  display: none;
+}
+
+.schedule-table-view.active {
+  display: block;
+}
+
+.schedule-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.schedule-grid-table th,
+.schedule-grid-table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  vertical-align: top;
+}
+
+.schedule-grid-table th {
+  background: var(--primary-color);
+  color: white;
+  font-weight: 600;
+}
+
+.schedule-grid-table .time-cell {
+  font-weight: 700;
+  color: var(--primary-color);
+  white-space: nowrap;
+  width: 80px;
+}
+
+.schedule-grid-table .talk-cell a {
+  font-weight: 600;
+  color: var(--text-color);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.schedule-grid-table .talk-cell a:hover {
+  color: var(--primary-color);
+}
+
+.schedule-grid-table .speaker-info {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Speakers section */
+.speaker-card {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.speaker-card .profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.speaker-card h5 {
+  margin-bottom: 0.25rem;
+}
+
+.speaker-card .meta {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.speaker-card .social-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.speaker-card .social-list a {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+}
+
+.speaker-card .social-list a:hover {
+  color: var(--primary-color);
+}
+
+/* Venue section */
+.venue-section .desc h4 {
+  margin-bottom: 1rem;
+}
+
+.venue-section iframe {
+  width: 100%;
+  max-width: 600px;
+  height: 350px;
+  border: 0;
+  border-radius: 0.5rem;
+}
+
+.venue-section .figures-holder {
+  position: relative;
+  min-height: 300px;
+}
+
+.venue-section .figure {
+  position: absolute;
+  width: 180px;
+}
+
+.venue-section .figure img {
+  width: 100%;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.venue-section .figure-1 {
+  top: 0;
+  left: 0;
+}
+
+.venue-section .figure-2 {
+  top: 50px;
+  left: 100px;
+}
+
+.venue-section .figure-3 {
+  top: 100px;
+  left: 50px;
+}
+
+/* Sponsors section */
+.sponsors-section .sponsor-logo {
+  max-height: 80px;
+  max-width: 200px;
+  margin: 1rem;
+  filter: grayscale(100%);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.sponsors-section .sponsor-logo:hover {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+/* Tickets section */
+.tickets-section iframe {
+  width: 100%;
+  min-height: 400px;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+/* Footer */
+.footer {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.footer .social-list a {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.5rem;
+}
+
+.footer .social-list a:hover {
+  color: white;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: #1e7a55;
+  border-color: #1e7a55;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+  background-color: #d94f49;
+  border-color: #d94f49;
+}
+
+/* Dialog (modal replacement) */
+.speaker-dialog {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0;
+  max-width: 600px;
+  width: 90%;
+}
+
+.speaker-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.speaker-dialog .dialog-content {
+  padding: 2rem;
+}
+
+.speaker-dialog .close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.speaker-dialog .close-btn:hover {
+  color: var(--text-color);
+}
+
+.speaker-dialog .profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+/* Talk page */
+.talk-page .speaker-profile {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+
+.talk-page .speaker-profile .profile-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.talk-page .speaker-info h2 {
+  margin-bottom: 0.25rem;
+}
+
+.talk-page .organization {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.talk-page .social-links a {
+  margin-right: 1rem;
+  color: var(--primary-color);
+}
+
+.talk-page .talk-content {
+  line-height: 1.8;
+}
+
+.talk-page .talk-content h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* Prose styling for markdown content */
+.prose {
+  max-width: 75ch;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose a {
+  color: var(--primary-color);
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--primary-color);
+  padding-left: 1rem;
+  margin-left: 0;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo {
+    font-size: 3rem;
+  }
+
+  .schedule-item {
+    flex-direction: column;
+  }
+
+  .schedule-item .meta {
+    flex: none;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .talk-page .speaker-profile {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}

@@ -1,0 +1,45 @@
+---
+import type { Event } from '../../content/config';
+
+interface Props {
+  event?: Event;
+}
+
+const { event } = Astro.props;
+const mailto = event?.mailto || 'mailto:hello@llmday.com';
+const linkedinUrl = event?.linkedinUrl || 'https://www.linkedin.com/company/llmday/';
+const twitterUrl = event?.twitterUrl || 'https://twitter.com/llmday_com';
+const youtubeUrl = event?.youtubeUrl || 'https://www.youtube.com/@llmday';
+---
+
+<footer class="footer py-5 theme-bg-primary">
+  <div class="container text-center">
+    <ul class="social-list list-inline mb-4">
+      <li class="list-inline-item me-3">
+        <a target="_blank" href={mailto}>
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      <li class="list-inline-item me-3">
+        <a target="_blank" href={linkedinUrl}>
+          <i class="fab fa-linkedin fa-fw"></i>
+        </a>
+      </li>
+      <li class="list-inline-item me-3">
+        <a target="_blank" href={twitterUrl}>
+          <i class="fab fa-twitter fa-fw"></i>
+        </a>
+      </li>
+      <li class="list-inline-item me-0">
+        <a target="_blank" href={youtubeUrl}>
+          <i class="fab fa-youtube fa-fw"></i>
+        </a>
+      </li>
+    </ul>
+
+    <small class="copyright text-white">
+      Designed with <i class="fas fa-heart" style="color: #EC645E;"></i> by
+      <a href="http://themes.3rdwavemedia.com" target="_blank" class="text-white">Xiaoying Riley</a> for developers
+    </small>
+  </div>
+</footer>

@@ -1,0 +1,30 @@
+---
+import type { Sponsor } from '../../content/config';
+
+interface Props {
+  sponsors: Sponsor[];
+}
+
+const { sponsors } = Astro.props;
+---
+
+{sponsors.length > 0 && (
+  <section id="sponsors" class="sponsors-section section">
+    <div class="container">
+      <h3 class="section-heading text-center mb-5">Sponsors</h3>
+      <div class="row justify-content-center align-items-center">
+        {sponsors.map((sponsor) => (
+          <div class="col-auto">
+            <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
+              <img
+                src={`/sponsors/${sponsor.logo}`}
+                alt="Sponsor"
+                class="sponsor-logo"
+              />
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

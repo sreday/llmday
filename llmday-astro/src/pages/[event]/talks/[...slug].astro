@@ -1,0 +1,94 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../components/layout/BaseLayout.astro';
+import SponsorsSection from '../../../components/sections/SponsorsSection.astro';
+
+export async function getStaticPaths() {
+  const talks = await getCollection('talks');
+  const events = await getCollection('events');
+
+  return talks.map((talk) => {
+    // talk.id is like "2026-warsaw-q1/anna-sztyber-betley-finetuning"
+    const parts = talk.id.split('/');
+    const eventSlug = parts[0];
+    // Remove .md extension from slug
+    const talkSlug = parts.slice(1).join('/').replace(/\.md$/, '');
+    const event = events.find((e) => e.id === eventSlug);
+
+    return {
+      params: { event: eventSlug, slug: talkSlug },
+      props: { talk, event: event?.data, eventSlug, talkSlug },
+    };
+  });
+}
+
+const { talk, event, eventSlug } = Astro.props;
+const { Content } = await render(talk);
+const speaker = talk.data.speaker;
+---
+
+<BaseLayout title={`${talk.data.title} - LLMday`} event={event}>
+  <section class="section talk-page">
+    <div class="container">
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item"><a href={`/${eventSlug}/`}>{event?.locationString || eventSlug}</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{talk.data.title}</li>
+        </ol>
+      </nav>
+
+      <h1 class="mb-4">{talk.data.title}</h1>
+
+      <div class="speaker-profile">
+        <img
+          src={`/speakers/${speaker.photo}`}
+          alt={speaker.name}
+          class="profile-image"
+        />
+        <div class="speaker-info">
+          <h2>{speaker.name}</h2>
+          <p class="organization">{speaker.organization}</p>
+          <div class="social-links">
+            {speaker.linkedin && (
+              <a href={speaker.linkedin} target="_blank" rel="noopener">
+                <i class="fab fa-linkedin"></i> LinkedIn
+              </a>
+            )}
+            {speaker.twitter && (
+              <a href={`https://twitter.com/${speaker.twitter}`} target="_blank" rel="noopener">
+                <i class="fab fa-twitter"></i> Twitter
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {talk.data.coSpeaker && (
+        <div class="co-speaker mt-4">
+          <h4>Co-speaker</h4>
+          <p>
+            <strong>{talk.data.coSpeaker.name}</strong>
+            {talk.data.coSpeaker.linkedin && (
+              <a href={talk.data.coSpeaker.linkedin} target="_blank" rel="noopener" class="ms-2">
+                <i class="fab fa-linkedin"></i>
+              </a>
+            )}
+          </p>
+        </div>
+      )}
+
+      <div class="talk-content prose mt-5">
+        <Content />
+      </div>
+
+      <div class="mt-5">
+        <a href={`/${eventSlug}/#schedule`} class="btn btn-outline-primary">
+          &larr; Back to Schedule
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {event && <SponsorsSection sponsors={event.sponsors} />}
+</BaseLayout>

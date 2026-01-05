@@ -1,0 +1,52 @@
+---
+import type { Event } from '../../content/config';
+
+interface Props {
+  event: Event;
+}
+
+const { event } = Astro.props;
+---
+
+<div id="home" class="hero-block">
+  <div id="hero-carousel" class="hero-carousel carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+    <div class="carousel-inner">
+      {event.heroPictures.map((pic, index) => (
+        <div
+          class={`carousel-item tinted ${index === 0 ? 'active' : ''}`}
+          style={`background: url('${pic}') no-repeat center; background-size: cover;`}
+        />
+      ))}
+    </div>
+
+    {event.heroPictures.length > 1 && (
+      <div class="carousel-indicators">
+        {event.heroPictures.map((_, index) => (
+          <button
+            type="button"
+            data-bs-target="#hero-carousel"
+            class={index === 0 ? 'active' : ''}
+            data-bs-slide-to={index}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+
+  <div class="container">
+    <div class="hero-text-block text-center" style="max-width: 100%;">
+      <h1 class="logo retro">LLMDAY</h1>
+      <h2 class="text-white">Large Language Models, AI and ML</h2>
+      <h3 class="text-white">
+        <i class="far fa-calendar-alt me-2"></i>{event.dateString}
+        <i class="fas fa-map-marker-alt mx-2"></i>{event.locationString}
+      </h3>
+      <div class="hero-cta mt-5">
+        <a class="btn btn-secondary btn-lg" href="#tickets">Get Tickets</a>
+        {event.state !== 'after' && event.cfpUrl && (
+          <a class="btn btn-primary btn-lg" href={event.cfpUrl} target="_blank">CFP</a>
+        )}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import EventCard from '../components/cards/EventCard.astro';
+import TestimonialCard from '../components/cards/TestimonialCard.astro';
+
+const events = await getCollection('events');
+const testimonialsData = await getCollection('testimonials');
+const testimonials = testimonialsData[0]?.data || [];
+
+// Sort events by date
+const sortedEvents = events.sort((a, b) => {
+  return new Date(a.data.startTime).getTime() - new Date(b.data.startTime).getTime();
+});
+
+const upcomingEvents = sortedEvents.filter((e) => e.data.state !== 'after');
+const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
+---
+
+<BaseLayout title="LLMday - Large Language Models Conferences">
+  <!-- Hero -->
+  <div class="hero-block" style="min-height: 60vh;">
+    <div class="tinted" style="position: absolute; inset: 0; background: url('/photos/london-2022-0.jpg') center/cover;"></div>
+    <div class="container" style="position: relative; z-index: 10;">
+      <div class="hero-text-block text-center">
+        <h1 class="logo retro">LLMDAY</h1>
+        <h2 class="text-white">Large Language Models, AI and ML Conferences</h2>
+        <p class="text-white mt-3">Join us at one of our upcoming events around the world</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-block theme-bg-primary text-white py-4 text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="item">
+            <div class="number">{events.length}</div>
+            <div class="unit">Events</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="item">
+            <div class="number">3</div>
+            <div class="unit">Countries</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="item">
+            <div class="number">50+</div>
+            <div class="unit">Speakers</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="item">
+            <div class="number">500+</div>
+            <div class="unit">Attendees</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Events -->
+  {upcomingEvents.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h3 class="section-heading text-center mb-5">Upcoming Conferences</h3>
+        <div class="row g-4">
+          {upcomingEvents.map((event) => (
+            <div class="col-12 col-md-6 col-lg-4">
+              <EventCard
+                name={`LLMday ${event.data.locationString.split(',')[0]}`}
+                location={event.data.locationString}
+                date={event.data.dateString}
+                photoUrl={event.data.heroPictures[0] || '/photos/london-2022-0.jpg'}
+                url={`/${event.id}/`}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Past Events -->
+  {pastEvents.length > 0 && (
+    <section class="section bg-light">
+      <div class="container">
+        <h3 class="section-heading text-center mb-5">Past Conferences</h3>
+        <div class="row g-4">
+          {pastEvents.map((event) => (
+            <div class="col-12 col-md-6 col-lg-4">
+              <EventCard
+                name={`LLMday ${event.data.locationString.split(',')[0]}`}
+                location={event.data.locationString}
+                date={event.data.dateString}
+                photoUrl={event.data.heroPictures[0] || '/photos/london-2022-0.jpg'}
+                url={`/${event.id}/`}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Testimonials -->
+  {testimonials.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h3 class="section-heading text-center mb-5">What People Say</h3>
+        <div class="row g-4">
+          {testimonials.map((testimonial) => (
+            <div class="col-12 col-md-6">
+              <TestimonialCard testimonial={testimonial} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

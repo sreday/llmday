@@ -1,0 +1,33 @@
+---
+import type { Testimonial } from '../../content/config';
+
+interface Props {
+  testimonial: Testimonial;
+}
+
+const { testimonial } = Astro.props;
+---
+
+<div class="card h-100">
+  <div class="card-body">
+    {testimonial.headshot && (
+      <img
+        src={`/testimonials/${testimonial.headshot}`}
+        alt={testimonial.name}
+        class="rounded-circle mb-3"
+        style="width: 80px; height: 80px; object-fit: cover;"
+      />
+    )}
+    <blockquote class="blockquote mb-0">
+      <p class="fs-6">"{testimonial.text}"</p>
+      <footer class="blockquote-footer mt-2">
+        <strong>{testimonial.name}</strong>
+        {testimonial.job && testimonial.company && (
+          <span class="d-block small text-muted">
+            {testimonial.job} @ {testimonial.company}
+          </span>
+        )}
+      </footer>
+    </blockquote>
+  </div>
+</div>

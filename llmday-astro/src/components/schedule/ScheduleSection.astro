@@ -1,0 +1,60 @@
+---
+import type { Event } from '../../content/config';
+import type { ScheduleData } from '../../lib/schedule';
+import TimelineView from './TimelineView.astro';
+import TableView from './TableView.astro';
+
+interface Props {
+  event: Event;
+  schedule: ScheduleData;
+  eventSlug: string;
+}
+
+const { event, schedule, eventSlug } = Astro.props;
+---
+
+<section id="schedule" class="schedule-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3">Schedule</h3>
+    <div class="schedule-meta text-center mb-4">
+      <span>{event.dateString}</span> &bull; <span>{schedule.tracks.length} parallel tracks</span>
+    </div>
+
+    <div class="track-nav">
+      {schedule.tracks.map((track, index) => (
+        <a href={`#track-${index + 1}`}>{track.roomName}</a>
+      ))}
+      <span class="view-toggle" id="view-toggle">view as table</span>
+    </div>
+
+    <div id="timeline-view">
+      <TimelineView schedule={schedule} eventSlug={eventSlug} />
+    </div>
+
+    <div id="table-view" class="schedule-table-view">
+      <TableView schedule={schedule} eventSlug={eventSlug} />
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  const toggleBtn = document.getElementById('view-toggle');
+  const timelineView = document.getElementById('timeline-view');
+  const tableView = document.getElementById('table-view');
+
+  if (toggleBtn && timelineView && tableView) {
+    toggleBtn.addEventListener('click', () => {
+      const isTimeline = !timelineView.classList.contains('d-none');
+
+      if (isTimeline) {
+        timelineView.classList.add('d-none');
+        tableView.classList.add('active');
+        toggleBtn.textContent = 'view as timeline';
+      } else {
+        timelineView.classList.remove('d-none');
+        tableView.classList.remove('active');
+        toggleBtn.textContent = 'view as table';
+      }
+    });
+  }
+</script>
