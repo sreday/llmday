@@ -87,63 +87,130 @@
   </div>
 </section>
 {% else %}
+<style>
+  /* Track navigation */
+  .track-nav {
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+  }
+  .track-nav-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .track-nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .track-nav-links a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #098dcf;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .track-nav-links a:hover {
+    background: #0779b3;
+    color: white;
+  }
+  .schedule-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  .schedule-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .schedule-meta-divider {
+    color: #ccc;
+    font-weight: 300;
+  }
+  /* Track section header */
+  .track-section-header {
+    background: linear-gradient(135deg, #098dcf 0%, #0779b3 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0 0 0;
+    border-radius: 4px 4px 0 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .track-section-header:first-of-type {
+    margin-top: 0;
+  }
+
+</style>
+
 <section id="schedule" class="schedule-section section theme-bg-light">
   <div class="container">
-    <h2 class="section-heading text-center mb-5">Schedule</h2>
+    <h2 class="section-heading text-center mb-4">Schedule</h2>
 
+    <!-- Schedule meta info -->
+    <div class="schedule-meta">
+      <span class="schedule-meta-item">{{ date_string }}</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">{{ tracks|length }} parallel tracks</span>
+    </div>
 
-{% for day in range(days) %}
-    <h4 class="section-heading text-center mb-5">Day {{ day + 1 }}</h4>
-
-    
-    <!-- Nav tabs -->
-    <ul class="schedule-nav nav nav-pills nav-fill" id="myTab" role="tablist">
-{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-      <li class="nav-item me-2">
-        <a class="nav-link {% if loop.index==1 %}active{% endif %}" id="tab-{{ day }}-{{ loop.index }}" data-bs-toggle="tab" href="#tab-{{ day }}-{{ loop.index }}-content" role="tab" aria-controls="tab-{{ loop.index }}-content"
-          aria-selected={% if loop.index==1 %}"true"{% else %}"false"{% endif %}
-        >
-          <span class="heading">{{ rooms[loop.index0] }}</span>
-          <span class="meta">{{ track }}</span>
-        </a>
-      </li>
+    <!-- Track navigation -->
+    <div class="track-nav">
+      <div class="track-nav-inner">
+        <div class="track-nav-links">
+{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
+          <a href="#track-{{ loop.index }}">{{ rooms[loop.index0] }}</a>
 {% endfor %}
-    </ul>
-    
-    <!-- Tab panes -->
-    <div class="schedule-tab-content tab-content">
+        </div>
+      </div>
+    </div>
 
-{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-      <div class="tab-pane {% if loop.index==1 %}active{% endif %}" id="tab-{{ day }}-{{ loop.index }}-content" role="tabpanel" aria-labelledby="tab-{{ day }}-{{ loop.index }}">
-
+    <!-- Schedule content -->
+    <div id="schedule-content">
+{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
+      <div class="track-section-header" id="track-{{ loop.index }}">{{ rooms[loop.index0] }} &bull; Track {{ track }}</div>
+      <div class="schedule-tab-content">
+        <div class="tab-pane active">
 {% for talk in talks_by_tracks[track] %}
-        <div class="item item-talk">
-          <div class="meta">
-            <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
-            <div class="profile">
-              <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img class="profile-image rounded-circle  mb-2" src="{{ talk.photo_url }}" alt=""></a>
-              <div class="name"><a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.name }}</a></div>
-            </div><!--//profile-->
-          </div><!--//meta-->
-          <div class="content">
-            <h3 class="title mb-3">
-              <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
-            </h3>
-            <div class="location mb-3"></i>{{ talk.comment }}{{ talk.organization }}</div>
-            <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
-          </div><!--//content-->
-        </div><!--//item-->
-
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
+              <div class="profile">
+                <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img class="profile-image rounded-circle mb-2" src="{{ talk.photo_url }}" alt=""></a>
+                <div class="name"><a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.name }}</a></div>
+              </div>
+            </div>
+            <div class="content">
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
+              </h3>
+              <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}</div>
+              <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
+            </div>
+          </div>
 {% endfor %}
-
-      </div><!--//tab-{{ loop.index }}-content-->
-
+        </div>
+      </div>
 {% endfor %}
-    </div><!--//schedule-tab-content-->
+    </div>
 
-
-{% endfor %}
-    <div class="schedule-cta text-center mx-auto"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
   </div>
 </section>
 {% endif %}
