@@ -198,6 +198,7 @@
 :root {
   --primary-color: #3B99A1;
   --secondary-color: #EC645E;
+  --footer-green: #26986A;
   --text-color: #333;
   --text-muted: #666;
   --bg-light: #f8f9fa;
@@ -228,7 +229,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Theme colors */
 .theme-bg-primary {
-  background: var(--primary-color);
+  background: var(--footer-green);
 }
 
 .text-primary {
