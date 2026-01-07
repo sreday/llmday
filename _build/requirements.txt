@@ -1,4 +1,0 @@
-jinja2
-pyyaml
-jinja-markdown==1.210911
-python-dateutil
