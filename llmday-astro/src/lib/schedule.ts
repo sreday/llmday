@@ -1,6 +1,6 @@
 // src/lib/schedule.ts
 import type { CollectionEntry } from 'astro:content';
-import type { Event, Break } from '../content/config';
+import type { Event, Break } from '../content.config';
 import { addMinutes, parseISO, format } from 'date-fns';
 
 // Talk with computed fields

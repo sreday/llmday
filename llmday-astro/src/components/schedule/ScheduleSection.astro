@@ -1,5 +1,5 @@
 ---
-import type { Event } from '../../content/config';
+import type { Event } from '../../content.config';
 import type { ScheduleData } from '../../lib/schedule';
 import TimelineView from './TimelineView.astro';
 import TableView from './TableView.astro';
@@ -37,24 +37,102 @@ const { event, schedule, eventSlug } = Astro.props;
   </div>
 </section>
 
-<script is:inline>
-  const toggleBtn = document.getElementById('view-toggle');
-  const timelineView = document.getElementById('timeline-view');
-  const tableView = document.getElementById('table-view');
+<style>
+  .schedule-section {
+    padding: 4rem 0;
+  }
 
-  if (toggleBtn && timelineView && tableView) {
+  .schedule-meta {
+    color: var(--color-text-muted);
+  }
+
+  .track-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .track-nav a {
+    padding: 0.5rem 1rem;
+    background: var(--color-bg-light, #f8f9fa);
+    border-radius: 0.375rem;
+    text-decoration: none;
+    color: var(--color-text);
+    font-size: 0.875rem;
+  }
+
+  .track-nav a:hover {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .view-toggle {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    border-radius: 0.375rem;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+
+  .view-toggle:hover {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  #table-view {
+    display: none;
+  }
+
+  #table-view.active {
+    display: block;
+  }
+
+  #timeline-view.hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  // Schedule view toggle with localStorage persistence
+  const STORAGE_KEY = 'schedule-view';
+
+  function initScheduleToggle() {
+    const toggleBtn = document.getElementById('view-toggle');
+    const timelineView = document.getElementById('timeline-view');
+    const tableView = document.getElementById('table-view');
+
+    if (!toggleBtn || !timelineView || !tableView) return;
+
+    // Restore saved preference
+    const savedView = localStorage.getItem(STORAGE_KEY);
+    if (savedView === 'table') {
+      timelineView.classList.add('hidden');
+      tableView.classList.add('active');
+      toggleBtn.textContent = 'view as timeline';
+    }
+
     toggleBtn.addEventListener('click', () => {
-      const isTimeline = !timelineView.classList.contains('d-none');
+      const isTimeline = !timelineView.classList.contains('hidden');
 
       if (isTimeline) {
-        timelineView.classList.add('d-none');
+        timelineView.classList.add('hidden');
         tableView.classList.add('active');
         toggleBtn.textContent = 'view as timeline';
+        localStorage.setItem(STORAGE_KEY, 'table');
       } else {
-        timelineView.classList.remove('d-none');
+        timelineView.classList.remove('hidden');
         tableView.classList.remove('active');
         toggleBtn.textContent = 'view as table';
+        localStorage.setItem(STORAGE_KEY, 'timeline');
       }
     });
   }
+
+  // Run on page load
+  initScheduleToggle();
 </script>

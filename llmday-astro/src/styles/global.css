@@ -181,11 +181,7 @@
 .card-body { flex: 1 1 auto; padding: 1rem; }
 .card-title { margin-bottom: 0.5rem; }
 
-/* Carousel (basic structure only) */
-.carousel { position: relative; }
-.carousel-inner { position: relative; width: 100%; overflow: hidden; }
-.carousel-item { position: relative; display: none; float: left; width: 100%; margin-right: -100%; backface-visibility: hidden; }
-.carousel-item.active { display: block; }
+/* Carousel styles moved to HeroSection.astro scoped styles */
 
 /* Responsive visibility */
 @media (max-width: 767.98px) {
@@ -267,27 +263,7 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
 }
 
-.hero-carousel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.hero-carousel .carousel-inner,
-.hero-carousel .carousel-item {
-  height: 100%;
-}
-
-.hero-carousel .carousel-item {
-  background-size: cover;
-  background-position: center;
-}
-
-.tinted {
-  box-shadow: 0 3000px rgba(0, 0, 0, 0.5) inset;
-}
+/* Hero carousel styles moved to HeroSection.astro scoped styles */
 
 .hero-block .container {
   position: relative;

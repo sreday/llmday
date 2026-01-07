@@ -1,5 +1,6 @@
-// src/content/config.ts
+// src/content.config.ts - Astro 5 Content Layer API
 import { defineCollection, z } from 'astro:content';
+import { glob, file } from 'astro/loaders';
 
 // === SHARED SCHEMAS ===
 
@@ -26,7 +27,7 @@ const sponsorSchema = z.object({
 // === EVENTS COLLECTION (YAML data) ===
 
 const events = defineCollection({
-  type: 'data',
+  loader: glob({ pattern: '*.yaml', base: './src/content/events' }),
   schema: z.object({
     state: z.enum(['before', 'active', 'after']),
     startTime: z.string(), // ISO datetime string
@@ -53,7 +54,7 @@ const events = defineCollection({
 // === TALKS COLLECTION (Markdown content) ===
 
 const talks = defineCollection({
-  type: 'content', // Markdown files with frontmatter
+  loader: glob({ pattern: '**/*.md', base: './src/content/talks' }),
   schema: z.object({
     // Talk metadata
     status: z.enum(['confirmed', 'keynote']).default('confirmed'),
@@ -83,29 +84,31 @@ const talks = defineCollection({
 
 // === TESTIMONIALS COLLECTION (YAML data) ===
 
+const testimonialItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  job: z.string().default(''),
+  company: z.string().default(''),
+  text: z.string(),
+  event: z.string().default(''),
+  isSpeaker: z.boolean().default(false),
+  headshot: z.string().default(''),
+  twitter: z.string().default(''),
+  linkedin: z.string().default(''),
+});
+
 const testimonials = defineCollection({
-  type: 'data',
-  schema: z.array(
-    z.object({
-      name: z.string(),
-      job: z.string().default(''),
-      company: z.string().default(''),
-      text: z.string(),
-      event: z.string().default(''),
-      isSpeaker: z.boolean().default(false),
-      headshot: z.string().default(''),
-      twitter: z.string().default(''),
-      linkedin: z.string().default(''),
-    })
-  ),
+  loader: file('./src/content/testimonials/all.yaml'),
+  schema: testimonialItemSchema,
 });
 
 export const collections = { events, talks, testimonials };
 
 // === EXPORT INFERRED TYPES ===
+// With Content Layer API, types are inferred differently
 export type Event = z.infer<typeof events.schema>;
 export type Talk = z.infer<typeof talks.schema>;
-export type Testimonial = z.infer<typeof testimonials.schema>[number];
+export type Testimonial = z.infer<typeof testimonialItemSchema>;
 export type Break = z.infer<typeof breakSchema>;
 export type Venue = z.infer<typeof venueSchema>;
 export type Sponsor = z.infer<typeof sponsorSchema>;
