@@ -67,12 +67,12 @@ const { event } = Astro.props;
     left: 0;
     right: 0;
     z-index: 1000;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.4);
     transition: background 0.3s ease;
   }
 
   header.scrolled {
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(8px);
   }
 
@@ -119,6 +119,7 @@ const { event } = Astro.props;
   }
 
   .nav-links {
+    display: flex;
     order: 1;
   }
 
