@@ -8,6 +8,7 @@ export interface ScheduleTalk {
   id: string; // Collection entry ID (path-based slug)
   slug: string; // URL slug derived from id
   data: CollectionEntry<'talks'>['data'];
+  body: string; // Markdown body content
 }
 
 export interface ScheduleItem {
@@ -44,6 +45,7 @@ export function buildSchedule(
       id: t.id,
       slug: t.id.replace(eventSlug + '/', '').replace(/\.md$/, ''),
       data: t.data,
+      body: t.body || '',
     }));
 
   const confirmed = eventTalks.filter((t) => t.data.status === 'confirmed');

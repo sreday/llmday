@@ -9,14 +9,10 @@ const { event } = Astro.props;
 ---
 
 <div id="home" class="hero-block">
-  <div class="hero-carousel">
-    {event.heroPictures.map((pic, index) => (
-      <div
-        class="carousel-item tinted"
-        style={`background-image: url('${pic}'); animation-delay: ${index * 5}s;`}
-      />
-    ))}
-  </div>
+  <div
+    class="hero-background tinted"
+    style={`background-image: url('${event.heroPictures[0] || ''}');`}
+  />
 
   <div class="container">
     <div class="hero-text-block text-center" style="max-width: 100%;">
@@ -50,7 +46,7 @@ const { event } = Astro.props;
   </div>
 </div>
 
-<style define:vars={{ imageCount: event.heroPictures.length }}>
+<style>
   .hero-block {
     position: relative;
     min-height: 100vh;
@@ -60,31 +56,19 @@ const { event } = Astro.props;
     overflow: hidden;
   }
 
-  .hero-carousel {
+  .hero-background {
     position: absolute;
     inset: 0;
     z-index: 0;
-  }
-
-  .carousel-item {
-    position: absolute;
-    inset: 0;
     background-size: cover;
     background-position: center;
-    opacity: 0;
-    animation: carousel-fade calc(var(--imageCount) * 5s) infinite;
   }
 
-  .carousel-item.tinted::after {
+  .hero-background.tinted::after {
     content: '';
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-  }
-
-  @keyframes carousel-fade {
-    0%, 10% { opacity: 1; }
-    20%, 100% { opacity: 0; }
   }
 
   .hero-text-block {
