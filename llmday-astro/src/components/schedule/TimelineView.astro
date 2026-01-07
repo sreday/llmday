@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { ScheduleData } from '../../lib/schedule';
 import { truncate } from '../../lib/utils';
 
@@ -8,6 +9,14 @@ interface Props {
 }
 
 const { schedule, eventSlug } = Astro.props;
+
+// Preload all speaker images
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
+
+function getSpeakerImage(photo: string) {
+  const imagePath = `/src/assets/speakers/${photo}`;
+  return images[imagePath]?.default;
+}
 ---
 
 {schedule.tracks.map((track, trackIndex) => (
@@ -36,16 +45,23 @@ const { schedule, eventSlug } = Astro.props;
       if (item.talk) {
         const talk = item.talk;
         const talkUrl = `/${eventSlug}/talks/${talk.slug}`;
+        const speakerImage = getSpeakerImage(talk.data.speaker.photo);
         return (
           <div class="schedule-item">
             <div class="meta">
               <h4 class="time">{item.timeStr}</h4>
               <a href={talkUrl}>
-                <img
-                  class="profile-image"
-                  src={`/speakers/${talk.data.speaker.photo}`}
-                  alt={talk.data.speaker.name}
-                />
+                {speakerImage ? (
+                  <Image
+                    src={speakerImage}
+                    alt={talk.data.speaker.name}
+                    width={80}
+                    height={80}
+                    class="profile-image"
+                  />
+                ) : (
+                  <div class="profile-placeholder" />
+                )}
               </a>
               <div class="name">{talk.data.speaker.name}</div>
             </div>
@@ -63,3 +79,12 @@ const { schedule, eventSlug } = Astro.props;
     })}
   </div>
 ))}
+
+<style>
+  .profile-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #e5e7eb;
+  }
+</style>
