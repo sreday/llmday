@@ -3,28 +3,46 @@ import type { Sponsor } from '../../content.config';
 
 interface Props {
   sponsors: Sponsor[];
+  mailto?: string;
 }
 
-const { sponsors } = Astro.props;
+const { sponsors, mailto } = Astro.props;
 ---
 
-{sponsors.length > 0 && (
-  <section id="sponsors" class="sponsors-section section">
-    <div class="container">
-      <h3 class="section-heading text-center mb-5">Sponsors</h3>
-      <div class="row justify-content-center align-items-center">
+<section id="sponsors" class="sponsors-section section">
+  <div class="container">
+    <h3 class="section-heading text-center">Sponsors & Partners</h3>
+    <p class="text-center text-muted mb-4">Want to become a sponsor? Get in touch!</p>
+
+    {sponsors.length > 0 && (
+      <div class="sponsors-logos">
         {sponsors.map((sponsor) => (
-          <div class="col-auto">
-            <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
-              <img
-                src={`/sponsors/${sponsor.logo}`}
-                alt="Sponsor"
-                class="sponsor-logo"
-              />
-            </a>
-          </div>
+          <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
+            <img
+              src={`/sponsors/${sponsor.logo}`}
+              alt="Sponsor"
+              class="sponsor-logo"
+            />
+          </a>
         ))}
       </div>
-    </div>
-  </section>
-)}
+    )}
+
+    {mailto && (
+      <div class="text-center mt-4">
+        <a href={mailto} class="btn btn-primary btn-lg">Become A Sponsor</a>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .sponsors-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+</style>
