@@ -41,8 +41,9 @@ function getSpeakerImage(photo: string) {
 }
 ---
 
+<div class="timeline-view">
 {schedule.tracks.map((track, trackIndex) => (
-  <div>
+  <div class="track-wrapper">
     <div class="track-section-header" id={`track-${trackIndex + 1}`}>
       {track.roomName} &bull; Track {track.trackId}
     </div>
@@ -103,6 +104,7 @@ function getSpeakerImage(photo: string) {
     })}
   </div>
 ))}
+</div>
 
 <style>
   .profile-placeholder {

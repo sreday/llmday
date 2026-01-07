@@ -33,30 +33,22 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
   <!-- Stats -->
   <div class="stats-block theme-bg-primary text-white py-4 text-center">
     <div class="container">
-      <div class="row">
-        <div class="col-6 col-md-3">
-          <div class="item">
-            <div class="number">{events.length}</div>
-            <div class="unit">Events</div>
-          </div>
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="number">{events.length}</div>
+          <div class="unit">Events</div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="item">
-            <div class="number">3</div>
-            <div class="unit">Countries</div>
-          </div>
+        <div class="stat-item">
+          <div class="number">3</div>
+          <div class="unit">Countries</div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="item">
-            <div class="number">50+</div>
-            <div class="unit">Speakers</div>
-          </div>
+        <div class="stat-item">
+          <div class="number">50+</div>
+          <div class="unit">Speakers</div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="item">
-            <div class="number">500+</div>
-            <div class="unit">Attendees</div>
-          </div>
+        <div class="stat-item">
+          <div class="number">500+</div>
+          <div class="unit">Attendees</div>
         </div>
       </div>
     </div>

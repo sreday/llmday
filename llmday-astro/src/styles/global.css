@@ -115,8 +115,8 @@
   color: white;
 }
 .btn-primary:hover {
-  background-color: #1e7a55;
-  border-color: #1e7a55;
+  background-color: #2d7a80;
+  border-color: #2d7a80;
 }
 .btn-secondary {
   background-color: var(--secondary-color);
@@ -196,11 +196,12 @@
 }
 
 :root {
-  --primary-color: #26986A;
+  --primary-color: #3B99A1;
   --secondary-color: #EC645E;
   --text-color: #333;
   --text-muted: #666;
   --bg-light: #f8f9fa;
+  --card-bg: #f0f6fa;
 }
 
 body {
@@ -276,16 +277,49 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Stats block */
+.stats-block {
+  padding: 2rem 0;
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.stat-item {
+  flex: 0 0 auto;
+  min-width: 100px;
+  padding: 0.5rem 1rem;
+}
+
 .stats-block .number {
   font-size: 2.5rem;
   font-weight: 700;
   font-family: 'Montserrat', sans-serif;
+  line-height: 1.2;
 }
 
 .stats-block .unit {
   font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 640px) {
+  .stats-row {
+    gap: 1.5rem;
+  }
+
+  .stat-item {
+    min-width: 80px;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .stats-block .number {
+    font-size: 2rem;
+  }
 }
 
 /* Sections */
@@ -339,6 +373,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Timeline view */
+.timeline-view {
+  position: relative;
+}
+
+.timeline-view::before {
+  content: '';
+  position: absolute;
+  left: 160px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--primary-color);
+  opacity: 0.3;
+}
+
 .track-section-header {
   background: var(--primary-color);
   color: white;
@@ -346,24 +395,41 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   margin: 2rem 0 1rem;
   border-radius: 0.25rem;
+  position: relative;
 }
 
 .schedule-item {
   display: flex;
   gap: 1rem;
   padding: 1rem;
-  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+/* Timeline dot */
+.schedule-item::before {
+  content: '';
+  position: absolute;
+  left: 154px;
+  top: 1.5rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  background: white;
+  z-index: 1;
 }
 
 .schedule-item .meta {
-  flex: 0 0 120px;
-  text-align: center;
+  flex: 0 0 140px;
+  text-align: right;
+  padding-right: 2rem;
 }
 
 .schedule-item .time {
   font-weight: 700;
   color: var(--primary-color);
   margin-bottom: 0.5rem;
+  font-size: 1.1rem;
 }
 
 .schedule-item .profile-image {
@@ -466,26 +532,53 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Speakers section */
 .speaker-card {
-  text-align: center;
+  text-align: left;
   margin-bottom: 2rem;
+  background: var(--card-bg);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.speaker-card .card-body {
+  padding: 1.25rem;
+  flex: 1;
 }
 
 .speaker-card .profile-image {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
   object-fit: cover;
-  margin-bottom: 1rem;
 }
 
 .speaker-card h5 {
   margin-bottom: 0.25rem;
+  font-size: 1.1rem;
 }
 
 .speaker-card .meta {
   color: var(--text-muted);
   font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.speaker-card .read-more {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.speaker-card .read-more:hover {
+  text-decoration: underline;
+}
+
+.speaker-card .card-footer {
+  background: rgba(0, 0, 0, 0.03);
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .speaker-card .social-list {
@@ -493,17 +586,16 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
   margin: 0;
   display: flex;
-  justify-content: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .speaker-card .social-list a {
-  color: var(--text-muted);
-  font-size: 1.2rem;
+  color: var(--primary-color);
+  font-size: 1.1rem;
 }
 
 .speaker-card .social-list a:hover {
-  color: var(--primary-color);
+  color: #2d7a80;
 }
 
 /* Venue section */
@@ -521,48 +613,60 @@ h1, h2, h3, h4, h5, h6 {
 
 .venue-section .figures-holder {
   position: relative;
-  min-height: 300px;
+  min-height: 350px;
+  width: 300px;
 }
 
 .venue-section .figure {
   position: absolute;
-  width: 180px;
+  width: 200px;
+  background: white;
+  padding: 8px 8px 25px 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, z-index 0.1s;
+}
+
+.venue-section .figure:hover {
+  transform: scale(1.05) rotate(0deg) !important;
+  z-index: 10;
 }
 
 .venue-section .figure img {
   width: 100%;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: block;
 }
 
 .venue-section .figure-1 {
   top: 0;
-  left: 0;
+  left: 20px;
+  transform: rotate(-6deg);
+  z-index: 3;
 }
 
 .venue-section .figure-2 {
-  top: 50px;
-  left: 100px;
+  top: 80px;
+  left: 80px;
+  transform: rotate(4deg);
+  z-index: 2;
 }
 
 .venue-section .figure-3 {
-  top: 100px;
-  left: 50px;
+  top: 160px;
+  left: 10px;
+  transform: rotate(-3deg);
+  z-index: 1;
 }
 
 /* Sponsors section */
 .sponsors-section .sponsor-logo {
-  max-height: 80px;
-  max-width: 200px;
-  margin: 1rem;
-  filter: grayscale(100%);
-  opacity: 0.7;
+  max-height: 100px;
+  max-width: 250px;
+  margin: 1rem 2rem;
   transition: all 0.3s ease;
 }
 
 .sponsors-section .sponsor-logo:hover {
-  filter: grayscale(0);
-  opacity: 1;
+  transform: scale(1.05);
 }
 
 /* Tickets section */

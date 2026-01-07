@@ -47,5 +47,5 @@ const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
   )}
 
   <VenueSection venue={event.venue} />
-  <SponsorsSection sponsors={event.sponsors} />
+  <SponsorsSection sponsors={event.sponsors} mailto={event.mailto} />
 </BaseLayout>
