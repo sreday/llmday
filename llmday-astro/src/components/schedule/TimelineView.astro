@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { ScheduleData } from '../../lib/schedule';
-import { truncate } from '../../lib/utils';
+import { truncate, getFirstParagraph } from '../../lib/utils';
 
 interface Props {
   schedule: ScheduleData;
@@ -10,12 +10,34 @@ interface Props {
 
 const { schedule, eventSlug } = Astro.props;
 
+// Helper to extract short abstract from markdown body
+function getShortAbstract(body: string, maxLength: number = 150): string {
+  const firstPara = getFirstParagraph(body);
+  if (!firstPara) return '';
+  // Remove markdown formatting
+  const plain = firstPara
+    .replace(/\*\*([^*]+)\*\*/g, '$1')  // bold
+    .replace(/\*([^*]+)\*/g, '$1')      // italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // links
+  return truncate(plain, maxLength);
+}
+
 // Preload all speaker images
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
 
+// Debug: log available keys in dev mode
+if (import.meta.env.DEV) {
+  console.log('Available image keys:', Object.keys(images).slice(0, 3));
+}
+
 function getSpeakerImage(photo: string) {
   const imagePath = `/src/assets/speakers/${photo}`;
-  return images[imagePath]?.default;
+  const image = images[imagePath]?.default;
+  if (!image && import.meta.env.DEV) {
+    console.log(`Image not found: "${imagePath}"`);
+    console.log('Looking for match in:', Object.keys(images).find(k => k.includes(photo.split('.')[0])));
+  }
+  return image;
 }
 ---
 
@@ -46,6 +68,7 @@ function getSpeakerImage(photo: string) {
         const talk = item.talk;
         const talkUrl = `/${eventSlug}/talks/${talk.slug}`;
         const speakerImage = getSpeakerImage(talk.data.speaker.photo);
+        const shortAbstract = getShortAbstract(talk.body);
         return (
           <div class="schedule-item">
             <div class="meta">
@@ -70,6 +93,7 @@ function getSpeakerImage(photo: string) {
                 <a href={talkUrl}>{talk.data.title}</a>
               </h3>
               <div class="location">{talk.data.speaker.organization}</div>
+              {shortAbstract && <div class="desc">{shortAbstract}</div>}
             </div>
           </div>
         );
@@ -86,5 +110,12 @@ function getSpeakerImage(photo: string) {
     height: 80px;
     border-radius: 50%;
     background: #e5e7eb;
+  }
+
+  .desc {
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 </style>
