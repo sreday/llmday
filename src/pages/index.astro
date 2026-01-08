@@ -1,12 +1,27 @@
 ---
 import { getCollection } from 'astro:content';
+import { format, parseISO } from 'date-fns';
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import EventCard from '../components/cards/EventCard.astro';
 import TestimonialCard from '../components/cards/TestimonialCard.astro';
 
 const events = await getCollection('events');
-const testimonialsData = await getCollection('testimonials');
-const testimonials = testimonialsData[0]?.data || [];
+const testimonials = await getCollection('testimonials');
+
+// Format date from startTime
+function formatEventDate(startTime: string): string {
+  const date = parseISO(startTime);
+  return format(date, 'MMMM d, yyyy');
+}
+
+// Format event name from ID (e.g., "2026-warsaw-q1" -> "Warsaw 2026 Q1")
+function formatEventName(eventId: string): string {
+  const parts = eventId.split('-'); // ["2026", "warsaw", "q1"] or ["2026", "nyc", "q1"]
+  const year = parts[0];
+  const city = parts[1].toUpperCase() === 'NYC' ? 'NYC' : parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+  const quarter = parts[2]?.toUpperCase() || '';
+  return `LLMday ${city} ${year} ${quarter}`.trim();
+}
 
 // Import hero photos
 const photoImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/photos/*.{jpg,jpeg,png}', { eager: true });
@@ -73,9 +88,9 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
           {upcomingEvents.map((event) => (
             <div class="col-12 col-md-6 col-lg-4">
               <EventCard
-                name={`LLMday ${event.data.locationString.split(',')[0]}`}
+                name={formatEventName(event.id)}
                 location={event.data.locationString}
-                date={event.data.dateString}
+                date={formatEventDate(event.data.startTime)}
                 photo={getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
                 url={`/${event.id}/`}
               />
@@ -95,9 +110,9 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
           {pastEvents.map((event) => (
             <div class="col-12 col-md-6 col-lg-4">
               <EventCard
-                name={`LLMday ${event.data.locationString.split(',')[0]}`}
+                name={formatEventName(event.id)}
                 location={event.data.locationString}
-                date={event.data.dateString}
+                date={formatEventDate(event.data.startTime)}
                 photo={getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
                 url={`/${event.id}/`}
               />
@@ -112,15 +127,24 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
   {testimonials.length > 0 && (
     <section class="section">
       <div class="container">
-        <h3 class="section-heading text-center mb-5">What People Say</h3>
+        <h3 class="section-heading text-center mb-5">What others say about LLMday</h3>
         <div class="row g-4">
-          {testimonials.map((testimonial) => (
+          {testimonials.map((entry) => (
             <div class="col-12 col-md-6">
-              <TestimonialCard testimonial={testimonial} />
+              <TestimonialCard testimonial={entry.data} />
             </div>
           ))}
         </div>
       </div>
     </section>
   )}
+
+  <!-- Partner CTA -->
+  <section class="section bg-light">
+    <div class="container text-center">
+      <h3 class="section-heading mb-3">Partner</h3>
+      <p class="text-muted mb-4">Interested in bringing LLMday to your city?</p>
+      <a href="mailto:hello@llmday.com" class="btn btn-primary btn-lg">Become A Partner</a>
+    </div>
+  </section>
 </BaseLayout>
