@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Building a Safe and Effective Mental Health Support Bot: The Mental Health Foundation Approach"
 youtube: ""
 speakers:

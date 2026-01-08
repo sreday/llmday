@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "The way to Edge AI"
 youtube: ""
 speakers:

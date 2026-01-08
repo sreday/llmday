@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "End Vibes-Based RAG - Evals as the Control Plane"
 youtube: ""
 speakers:

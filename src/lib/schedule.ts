@@ -69,7 +69,7 @@ export function buildSchedule(
       if ('talk' in item) {
         // It's a talk
         const talk = talksBySlug.get(item.talk);
-        const duration = item.duration ?? talk?.data.duration ?? defaultDuration;
+        const duration = item.duration ?? defaultDuration;
 
         scheduleItems.push({
           type: 'talk',

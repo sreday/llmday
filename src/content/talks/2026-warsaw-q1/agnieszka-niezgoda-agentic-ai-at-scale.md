@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Agentic AI at Scale: Lessons from Enterprise-Level Implementations"
 youtube: ""
 speakers:

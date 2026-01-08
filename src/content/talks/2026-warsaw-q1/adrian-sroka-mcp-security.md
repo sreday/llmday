@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "MCP: Revolution or Security Regression"
 youtube: ""
 speakers:

@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "The Verification Gap: What Separates LLM Demos from Production Agents"
 youtube: ""
 speakers:

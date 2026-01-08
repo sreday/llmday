@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "From Retrieval to Reasoning: Architecting Agentic-RAG Workflows"
 youtube: ""
 speakers:

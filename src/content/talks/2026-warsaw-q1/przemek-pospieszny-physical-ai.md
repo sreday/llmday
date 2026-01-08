@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Physical AI: The New Frontier"
 youtube: ""
 speakers:

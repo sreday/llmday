@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Coming soon"
 youtube: ""
 speakers:

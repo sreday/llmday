@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "From Customer Interview to Working Prototype in One Afternoon (AI-Powered Product Building)"
 youtube: ""
 speakers:

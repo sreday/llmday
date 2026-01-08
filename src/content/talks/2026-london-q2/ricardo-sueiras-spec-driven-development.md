@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "From Vibe to Viable - an introduction to spec driven development"
 youtube: ""
 speakers:

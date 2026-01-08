@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "From TrafficAI to GhostBreakers: Building Stateful AI Agents with Cortex, OpenFlow, and Snowflake Postgres"
 youtube: ""
 speakers:

@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Benchmarking trust: Engineering AI safety pipelines for financial services and life sciences"
 youtube: ""
 speakers:

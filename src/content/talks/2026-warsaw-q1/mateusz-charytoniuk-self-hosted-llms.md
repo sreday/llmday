@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "From Infrastructure to Production: A Year of Self-Hosted LLMs"
 youtube: ""
 speakers:

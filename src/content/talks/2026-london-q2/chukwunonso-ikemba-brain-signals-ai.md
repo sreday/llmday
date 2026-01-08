@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Telepathy Is Just Pattern Recognition: Why Brain Signals Are Just Another Language AI Can Learn"
 youtube: ""
 speakers:

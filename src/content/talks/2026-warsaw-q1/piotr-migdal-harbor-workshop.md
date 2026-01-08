@@ -1,5 +1,4 @@
 ---
-duration: 60
 title: "1h Workshop: Hands-on AI agent evaluation: building benchmarks with Harbor"
 youtube: ""
 speakers:

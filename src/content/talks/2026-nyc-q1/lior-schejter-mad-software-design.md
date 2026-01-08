@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "MAD About Software Design - When AI Architects Argue"
 youtube: ""
 speakers:

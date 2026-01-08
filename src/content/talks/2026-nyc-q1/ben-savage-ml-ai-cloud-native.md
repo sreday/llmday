@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Exploring the Convergence of Machine Learning, AI, and Cloud-Native Technologies in Automation"
 youtube: ""
 speakers:

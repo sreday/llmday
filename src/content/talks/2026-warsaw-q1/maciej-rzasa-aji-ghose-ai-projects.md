@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Growing AI Projects: Where Science Meets Engineering"
 youtube: ""
 speakers:
