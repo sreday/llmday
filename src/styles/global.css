@@ -840,3 +840,29 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
   }
 }
+
+/* Hero social icons */
+.hero-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-social a {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.hero-social a:hover {
+  opacity: 0.8;
+}
+
+.hero-divider {
+  width: 60px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  margin: 1.5rem auto;
+}
