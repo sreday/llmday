@@ -25,19 +25,9 @@ function getShortAbstract(body: string, maxLength: number = 150): string {
 // Preload all speaker images
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
 
-// Debug: log available keys in dev mode
-if (import.meta.env.DEV) {
-  console.log('Available image keys:', Object.keys(images).slice(0, 3));
-}
-
 function getSpeakerImage(photo: string) {
   const imagePath = `/src/assets/speakers/${photo}`;
-  const image = images[imagePath]?.default;
-  if (!image && import.meta.env.DEV) {
-    console.log(`Image not found: "${imagePath}"`);
-    console.log('Looking for match in:', Object.keys(images).find(k => k.includes(photo.split('.')[0])));
-  }
-  return image;
+  return images[imagePath]?.default;
 }
 ---
 

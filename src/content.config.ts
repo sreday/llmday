@@ -35,7 +35,6 @@ const events = defineCollection({
     locationString: z.string(),
     days: z.number().default(1),
     attendees: z.number().default(100),
-    speakers: z.string().default('10+'),
     rooms: z.array(z.string()),
     breaks: z.array(breakSchema).default([]),
     sponsors: z.array(sponsorSchema).default([]),

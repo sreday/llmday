@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { buildSchedule } from '../../lib/schedule';
+import { buildSchedule, getSpeakers } from '../../lib/schedule';
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import HeroSection from '../../components/sections/HeroSection.astro';
 import StatsSection from '../../components/sections/StatsSection.astro';
@@ -25,7 +25,7 @@ const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
 
 <BaseLayout title={`LLMday ${event.locationString}`} event={event}>
   <HeroSection event={event} />
-  <StatsSection event={event} trackCount={schedule.tracks.length} />
+  <StatsSection event={event} trackCount={schedule.tracks.length} speakerCount={getSpeakers(schedule).length} />
 
   {event.state !== 'after' && event.lumaEventId && (
     <TicketsSection lumaEventId={event.lumaEventId} />

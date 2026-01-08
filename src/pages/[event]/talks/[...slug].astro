@@ -54,11 +54,7 @@ const speakerImage = images[imagePath]?.default;
             class="profile-image"
           />
         ) : (
-          <img
-            src={`/speakers/${speaker.photo}`}
-            alt={speaker.name}
-            class="profile-image"
-          />
+          <div class="profile-placeholder" />
         )}
         <div class="speaker-info">
           <h2>{speaker.name}</h2>
@@ -170,6 +166,14 @@ const speakerImage = images[imagePath]?.default;
     height: 200px;
     border-radius: 50%;
     object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .profile-placeholder {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #e5e7eb;
     flex-shrink: 0;
   }
 

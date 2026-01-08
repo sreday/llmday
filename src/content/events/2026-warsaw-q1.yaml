@@ -4,7 +4,6 @@ dateString: "February 12, 2026"
 locationString: "CIC Warsaw, Poland"
 days: 1
 attendees: 100
-speakers: "20+"
 rooms:
   - main room
   - second room
