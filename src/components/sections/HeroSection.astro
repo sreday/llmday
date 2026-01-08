@@ -6,12 +6,24 @@ interface Props {
 }
 
 const { event } = Astro.props;
+
+// Import hero photos
+const photoImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/photos/*.{jpg,jpeg,png}', { eager: true });
+
+function getHeroImage(filename: string) {
+  const path = `/src/assets/photos/${filename}`;
+  return photoImages[path]?.default;
+}
+
+const heroFilename = event.heroPictures[0] || '';
+const heroImage = getHeroImage(heroFilename);
+const heroUrl = heroImage?.src || '';
 ---
 
 <div id="home" class="hero-block">
   <div
     class="hero-background tinted"
-    style={`background-image: url('${event.heroPictures[0] || ''}');`}
+    style={`background-image: url('${heroUrl}');`}
   />
 
   <div class="container">

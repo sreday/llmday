@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { Sponsor } from '../../content.config';
 
 interface Props {
@@ -7,6 +8,14 @@ interface Props {
 }
 
 const { sponsors, mailto } = Astro.props;
+
+// Import sponsor logos
+const sponsorImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/sponsors/*.{png,jpg,jpeg,svg}', { eager: true });
+
+function getSponsorLogo(filename: string) {
+  const path = `/src/assets/sponsors/${filename}`;
+  return sponsorImages[path]?.default;
+}
 ---
 
 <section id="sponsors" class="sponsors-section section">
@@ -16,15 +25,18 @@ const { sponsors, mailto } = Astro.props;
 
     {sponsors.length > 0 && (
       <div class="sponsors-logos">
-        {sponsors.map((sponsor) => (
-          <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
-            <img
-              src={`/sponsors/${sponsor.logo}`}
-              alt="Sponsor"
-              class="sponsor-logo"
-            />
-          </a>
-        ))}
+        {sponsors.map((sponsor) => {
+          const logo = getSponsorLogo(sponsor.logo);
+          return logo && (
+            <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
+              <Image
+                src={logo}
+                alt="Sponsor"
+                class="sponsor-logo"
+              />
+            </a>
+          );
+        })}
       </div>
     )}
 
