@@ -4,7 +4,6 @@ dateString: "March 6, 2026"
 locationString: "VIAM, 1900 Broadway, 6th Floor, New York, NY 10023"
 days: 1
 attendees: 100
-speakers: "10+"
 rooms:
   - main room
   - round room

@@ -4,9 +4,10 @@ import type { Event } from '../../content.config';
 interface Props {
   event: Event;
   trackCount: number;
+  speakerCount: number;
 }
 
-const { event, trackCount } = Astro.props;
+const { event, trackCount, speakerCount } = Astro.props;
 ---
 
 <div class="stats-block theme-bg-primary text-white py-4 text-center">
@@ -17,7 +18,7 @@ const { event, trackCount } = Astro.props;
         <div class="unit">Days</div>
       </div>
       <div class="stat-item">
-        <div class="number">{event.speakers}</div>
+        <div class="number">{speakerCount}</div>
         <div class="unit">Speakers</div>
       </div>
       <div class="stat-item">

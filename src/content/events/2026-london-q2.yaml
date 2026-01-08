@@ -4,7 +4,6 @@ dateString: "May 28, 2026"
 locationString: "Everyman Canary Wharf, London, UK"
 days: 1
 attendees: 150
-speakers: "30+"
 rooms:
   - main room
   - round room

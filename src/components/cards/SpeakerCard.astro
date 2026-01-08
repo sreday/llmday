@@ -28,11 +28,7 @@ const speakerImage = images[imagePath]?.default;
         class="profile-image"
       />
     ) : (
-      <img
-        class="profile-image"
-        src={`/speakers/${speaker.photo}`}
-        alt={speaker.name}
-      />
+      <div class="profile-placeholder" />
     )}
   </a>
   <div class="card-body">
@@ -86,6 +82,12 @@ const speakerImage = images[imagePath]?.default;
     aspect-ratio: 1;
     object-fit: cover;
     display: block;
+  }
+
+  .profile-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #e5e7eb;
   }
 
   .card-body {
