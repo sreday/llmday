@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "SLMs at the Edge: Opportunities & Challenges"
 youtube: ""
 speakers:

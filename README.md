@@ -89,7 +89,6 @@ twitterUrl: https://twitter.com/llmday_com
 ```yaml
 ---
 title: "Talk Title Here"
-duration: 30                           # optional, can be overridden in schedule
 youtube: "dQw4w9WgXcQ"                 # optional, video ID
 speakers:                              # at least one required
   - name: "Speaker Name"

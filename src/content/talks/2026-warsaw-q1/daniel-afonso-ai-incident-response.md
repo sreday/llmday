@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "The State of AI in Incident Response"
 youtube: ""
 speakers:

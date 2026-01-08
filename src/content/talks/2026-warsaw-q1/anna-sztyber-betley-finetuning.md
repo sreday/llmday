@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Beware of finetuning: Subliminal learning and weird generalizations in LLMs during finetuning"
 youtube: ""
 speakers:

@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Is Your GenAI System Ready for Production Reality?"
 youtube: ""
 speakers:

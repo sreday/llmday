@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "No Cloud, No Problem: AI on Your Own Terms"
 youtube: ""
 speakers:

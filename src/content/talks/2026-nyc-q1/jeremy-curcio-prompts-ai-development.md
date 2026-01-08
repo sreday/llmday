@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Engineering Better Prompts for AI Assisted Development"
 youtube: ""
 speakers:

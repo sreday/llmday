@@ -68,7 +68,6 @@ const talks = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/talks' }),
   schema: z.object({
     title: z.string(),
-    duration: z.coerce.number().optional(),
     youtube: z.string().default(''),
     speakers: z.array(speakerSchema).min(1),
   }),

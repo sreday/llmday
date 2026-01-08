@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "How We Evaluate Large Language Models"
 youtube: ""
 speakers:

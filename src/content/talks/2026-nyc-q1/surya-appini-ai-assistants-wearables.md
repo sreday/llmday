@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "Building Next-Generation AI Assistants for Wearables"
 youtube: ""
 speakers:

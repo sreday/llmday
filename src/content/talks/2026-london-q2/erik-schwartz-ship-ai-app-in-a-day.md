@@ -1,5 +1,4 @@
 ---
-duration: 30
 title: "From Context To Impact: How To Ship An AI App In A Day"
 youtube: ""
 speakers:
