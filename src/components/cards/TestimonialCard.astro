@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { Testimonial } from '../../content.config';
 
 interface Props {
@@ -6,28 +7,104 @@ interface Props {
 }
 
 const { testimonial } = Astro.props;
+
+// Import speaker photos for testimonials
+const speakerImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
+
+function getHeadshot(filename: string) {
+  const path = `/src/assets/speakers/${filename}`;
+  return speakerImages[path]?.default;
+}
+
+const headshot = testimonial.headshot ? getHeadshot(testimonial.headshot) : null;
 ---
 
-<div class="card h-100">
-  <div class="card-body">
-    {testimonial.headshot && (
-      <img
-        src={`/testimonials/${testimonial.headshot}`}
+<div class="testimonial-card">
+  <div class="testimonial-header">
+    {headshot ? (
+      <Image
+        src={headshot}
         alt={testimonial.name}
-        class="rounded-circle mb-3"
-        style="width: 80px; height: 80px; object-fit: cover;"
+        width={100}
+        height={100}
+        class="headshot"
       />
+    ) : (
+      <div class="headshot-placeholder" />
     )}
-    <blockquote class="blockquote mb-0">
-      <p class="fs-6">"{testimonial.text}"</p>
-      <footer class="blockquote-footer mt-2">
-        <strong>{testimonial.name}</strong>
-        {testimonial.job && testimonial.company && (
-          <span class="d-block small text-muted">
-            {testimonial.job} @ {testimonial.company}
-          </span>
-        )}
-      </footer>
-    </blockquote>
+    <div class="author-info">
+      <strong class="author-name">{testimonial.name}</strong>
+      {testimonial.job && (
+        <span class="author-role">{testimonial.job}</span>
+      )}
+      {testimonial.company && (
+        <span class="author-company">{testimonial.company}</span>
+      )}
+    </div>
   </div>
+  <blockquote class="testimonial-text">
+    "{testimonial.text}"
+  </blockquote>
 </div>
+
+<style>
+  .testimonial-card {
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .testimonial-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+  }
+
+  .headshot {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .headshot-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    flex-shrink: 0;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .author-name {
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .author-role {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .author-company {
+    font-size: 0.9rem;
+    color: var(--color-primary);
+  }
+
+  .testimonial-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #444;
+    margin: 0;
+    font-style: italic;
+  }
+</style>
