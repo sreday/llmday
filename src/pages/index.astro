@@ -8,6 +8,16 @@ const events = await getCollection('events');
 const testimonialsData = await getCollection('testimonials');
 const testimonials = testimonialsData[0]?.data || [];
 
+// Import hero photos
+const photoImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/photos/*.{jpg,jpeg,png}', { eager: true });
+
+function getPhoto(filename: string) {
+  const path = `/src/assets/photos/${filename}`;
+  return photoImages[path]?.default;
+}
+
+const defaultHeroPhoto = getPhoto('london-2022-0.jpg');
+
 // Sort events by date
 const sortedEvents = events.sort((a, b) => {
   return new Date(a.data.startTime).getTime() - new Date(b.data.startTime).getTime();
@@ -20,7 +30,7 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
 <BaseLayout title="LLMday - Large Language Models Conferences">
   <!-- Hero -->
   <div class="hero-block" style="min-height: 60vh;">
-    <div class="tinted" style="position: absolute; inset: 0; background: url('/photos/london-2022-0.jpg') center/cover;"></div>
+    <div class="tinted" style={`position: absolute; inset: 0; background: url('${defaultHeroPhoto?.src || ''}') center/cover;`}></div>
     <div class="container" style="position: relative; z-index: 10;">
       <div class="hero-text-block text-center">
         <h1 class="logo retro">LLMDAY</h1>
@@ -66,7 +76,7 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
                 name={`LLMday ${event.data.locationString.split(',')[0]}`}
                 location={event.data.locationString}
                 date={event.data.dateString}
-                photoUrl={event.data.heroPictures[0] || '/photos/london-2022-0.jpg'}
+                photo={getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
                 url={`/${event.id}/`}
               />
             </div>
@@ -88,7 +98,7 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
                 name={`LLMday ${event.data.locationString.split(',')[0]}`}
                 location={event.data.locationString}
                 date={event.data.dateString}
-                photoUrl={event.data.heroPictures[0] || '/photos/london-2022-0.jpg'}
+                photo={getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
                 url={`/${event.id}/`}
               />
             </div>

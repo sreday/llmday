@@ -1,18 +1,21 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
   name: string;
   location: string;
   date: string;
-  photoUrl: string;
+  photo?: ImageMetadata;
   url: string;
 }
 
-const { name, location, date, photoUrl, url } = Astro.props;
+const { name, location, date, photo, url } = Astro.props;
 ---
 
 <div class="event-card">
   <a href={url} class="image-link">
-    <img src={photoUrl} alt={name} />
+    {photo && <Image src={photo} alt={name} width={400} height={225} />}
   </a>
   <div class="content">
     <h5>{name}</h5>

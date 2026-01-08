@@ -45,16 +45,3 @@ export function formatDuration(minutes: number): string {
   return `${hours}h ${mins}min`;
 }
 
-/**
- * Get speaker photo URL
- */
-export function getSpeakerPhotoUrl(photo: string): string {
-  return `/speakers/${photo}`;
-}
-
-/**
- * Get sponsor logo URL
- */
-export function getSponsorLogoUrl(logo: string): string {
-  return `/sponsors/${logo}`;
-}
