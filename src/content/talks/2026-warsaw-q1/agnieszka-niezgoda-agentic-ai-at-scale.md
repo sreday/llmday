@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Agentic AI at Scale: Lessons from Enterprise-Level Implementations"
 youtube: ""
-speaker:
-  name: "Agnieszka Niezgoda"
-  organization: "Microsoft"
-  photo: "Agnieszka Niezgoda.png"
-  linkedin: "https://www.linkedin.com/in/agnieszka-niezgoda/"
-  twitter: ""
+speakers:
+  - name: "Agnieszka Niezgoda"
+    organization: "Microsoft"
+    photo: "Agnieszka Niezgoda.png"
+    linkedin: "https://www.linkedin.com/in/agnieszka-niezgoda/"
+    twitter: ""
 ---
 
 ## Abstract

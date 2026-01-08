@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Exploring the Convergence of Machine Learning, AI, and Cloud-Native Technologies in Automation"
 youtube: ""
-speaker:
-  name: "Ben Savage"
-  organization: "Veritas Automata"
-  photo: "Ben Savage.png"
-  linkedin: "https://www.linkedin.com/in/ben-savage-0700b21/"
-  twitter: ""
+speakers:
+  - name: "Ben Savage"
+    organization: "Veritas Automata"
+    photo: "Ben Savage.png"
+    linkedin: "https://www.linkedin.com/in/ben-savage-0700b21/"
+    twitter: ""
 ---
 
 ## Abstract

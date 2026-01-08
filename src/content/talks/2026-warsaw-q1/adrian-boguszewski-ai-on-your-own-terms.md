@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "No Cloud, No Problem: AI on Your Own Terms"
 youtube: ""
-speaker:
-  name: "Adrian Boguszewski"
-  organization: "Intel"
-  photo: "Adrian Boguszewski.png"
-  linkedin: "https://www.linkedin.com/in/adrianboguszewski/"
-  twitter: ""
+speakers:
+  - name: "Adrian Boguszewski"
+    organization: "Intel"
+    photo: "Adrian Boguszewski.png"
+    linkedin: "https://www.linkedin.com/in/adrianboguszewski/"
+    twitter: ""
 ---
 
 ## Abstract

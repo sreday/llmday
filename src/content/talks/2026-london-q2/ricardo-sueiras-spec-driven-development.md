@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "From Vibe to Viable - an introduction to spec driven development"
 youtube: ""
-speaker:
-  name: "Ricardo Sueiras"
-  organization: "AWS"
-  photo: "Ricardo Sueiras.png"
-  linkedin: "https://www.linkedin.com/in/ricardosueiras/"
-  twitter: ""
+speakers:
+  - name: "Ricardo Sueiras"
+    organization: "AWS"
+    photo: "Ricardo Sueiras.png"
+    linkedin: "https://www.linkedin.com/in/ricardosueiras/"
+    twitter: ""
 ---
 
 ## Abstract

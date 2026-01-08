@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Coming soon"
 youtube: ""
-speaker:
-  name: "Jacek Dabrowski"
-  organization: "Synerise"
-  photo: "Jacek Dabrowski.png"
-  linkedin: "https://www.linkedin.com/in/ponythewhite/"
-  twitter: ""
+speakers:
+  - name: "Jacek Dabrowski"
+    organization: "Synerise"
+    photo: "Jacek Dabrowski.png"
+    linkedin: "https://www.linkedin.com/in/ponythewhite/"
+    twitter: ""
 ---
 
 ## Abstract

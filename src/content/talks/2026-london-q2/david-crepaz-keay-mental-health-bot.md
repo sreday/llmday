@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Building a Safe and Effective Mental Health Support Bot: The Mental Health Foundation Approach"
 youtube: ""
-speaker:
-  name: "Dr David Crepaz-Keay"
-  organization: "The Mental Health Foundation"
-  photo: "Dr David Crepaz-Keay.png"
-  linkedin: ""
-  twitter: ""
+speakers:
+  - name: "Dr David Crepaz-Keay"
+    organization: "The Mental Health Foundation"
+    photo: "Dr David Crepaz-Keay.png"
+    linkedin: ""
+    twitter: ""
 ---
 
 ## Abstract

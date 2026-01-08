@@ -12,17 +12,31 @@ const venueSchema = z.object({
   images: z.array(z.string()).default([]),
 });
 
-const breakSchema = z.object({
-  title: z.string(),
-  duration: z.number(),
-  comment: z.string().default(''),
-  talks_before: z.number(),
-});
-
 const sponsorSchema = z.object({
   logo: z.string(),
   url: z.string(),
 });
+
+const speakerSchema = z.object({
+  name: z.string(),
+  organization: z.string().default(''),
+  photo: z.string(),
+  linkedin: z.string().default(''),
+  twitter: z.string().default(''),
+});
+
+// Schedule item: either a talk or a break
+// duration is optional for both - falls back to event's defaultDuration
+const scheduleItemSchema = z.union([
+  z.object({
+    talk: z.string(),
+    duration: z.number().optional(),
+  }),
+  z.object({
+    break: z.string(),
+    duration: z.number().optional(),
+  }),
+]);
 
 // === EVENTS COLLECTION (YAML data) ===
 
@@ -31,18 +45,16 @@ const events = defineCollection({
   schema: z.object({
     state: z.enum(['before', 'active', 'after']),
     startTime: z.string(), // ISO datetime string
-    dateString: z.string(),
     locationString: z.string(),
     days: z.number().default(1),
     attendees: z.number().default(100),
-    rooms: z.array(z.string()),
-    breaks: z.array(breakSchema).default([]),
+    defaultDuration: z.number().default(30),
+    schedule: z.record(z.string(), z.array(scheduleItemSchema)).default({}),
     sponsors: z.array(sponsorSchema).default([]),
     lumaEventId: z.string().default(''),
     cfpUrl: z.string().default(''),
     heroPictures: z.array(z.string()).default([]),
     venue: venueSchema,
-    // Social links
     twitterUrl: z.string().default(''),
     linkedinUrl: z.string().default(''),
     youtubeUrl: z.string().default(''),
@@ -55,29 +67,10 @@ const events = defineCollection({
 const talks = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/talks' }),
   schema: z.object({
-    // Talk metadata
-    status: z.enum(['confirmed', 'keynote']).default('confirmed'),
-    track: z.coerce.string().default('1'),
-    day: z.coerce.number().default(1),
-    duration: z.coerce.number().default(30),
     title: z.string(),
+    duration: z.coerce.number().optional(),
     youtube: z.string().default(''),
-    // Speaker info
-    speaker: z.object({
-      name: z.string(),
-      organization: z.string().default(''),
-      photo: z.string(), // filename, resolved to /speakers/{photo}
-      linkedin: z.string().default(''),
-      twitter: z.string().default(''),
-    }),
-    // Co-speaker (optional)
-    coSpeaker: z
-      .object({
-        name: z.string(),
-        linkedin: z.string().default(''),
-        twitter: z.string().default(''),
-      })
-      .optional(),
+    speakers: z.array(speakerSchema).min(1),
   }),
 });
 
@@ -104,10 +97,10 @@ const testimonials = defineCollection({
 export const collections = { events, talks, testimonials };
 
 // === EXPORT INFERRED TYPES ===
-// With Content Layer API, types are inferred differently
 export type Event = z.infer<typeof events.schema>;
 export type Talk = z.infer<typeof talks.schema>;
 export type Testimonial = z.infer<typeof testimonialItemSchema>;
-export type Break = z.infer<typeof breakSchema>;
+export type Speaker = z.infer<typeof speakerSchema>;
+export type ScheduleItem = z.infer<typeof scheduleItemSchema>;
 export type Venue = z.infer<typeof venueSchema>;
 export type Sponsor = z.infer<typeof sponsorSchema>;

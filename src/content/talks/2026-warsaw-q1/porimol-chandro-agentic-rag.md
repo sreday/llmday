@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 30
 title: "From Retrieval to Reasoning: Architecting Agentic-RAG Workflows"
 youtube: ""
-speaker:
-  name: "Porimol Chandro"
-  organization: "Roche"
-  photo: "Porimol Chandro.png"
-  linkedin: "https://www.linkedin.com/in/porimolchandro/"
-  twitter: ""
+speakers:
+  - name: "Porimol Chandro"
+    organization: "Roche"
+    photo: "Porimol Chandro.png"
+    linkedin: "https://www.linkedin.com/in/porimolchandro/"
+    twitter: ""
 ---
 
 ## Abstract

@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "From TrafficAI to GhostBreakers: Building Stateful AI Agents with Cortex, OpenFlow, and Snowflake Postgres"
 youtube: ""
-speaker:
-  name: "Tim Spann"
-  organization: "Snowflake"
-  photo: "Tim Spann.png"
-  linkedin: "https://www.linkedin.com/in/timothyspann/"
-  twitter: ""
+speakers:
+  - name: "Tim Spann"
+    organization: "Snowflake"
+    photo: "Tim Spann.png"
+    linkedin: "https://www.linkedin.com/in/timothyspann/"
+    twitter: ""
 ---
 
 ## Abstract

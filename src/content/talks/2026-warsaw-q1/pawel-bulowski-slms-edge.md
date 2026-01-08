@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 30
 title: "SLMs at the Edge: Opportunities & Challenges"
 youtube: ""
-speaker:
-  name: "Pawel Bulowski"
-  organization: "Pawel Bulowski AI Consulting"
-  photo: "Pawel Bulowski.png"
-  linkedin: "https://www.linkedin.com/in/pawel-bulowski-ai-agents/"
-  twitter: ""
+speakers:
+  - name: "Pawel Bulowski"
+    organization: "Pawel Bulowski AI Consulting"
+    photo: "Pawel Bulowski.png"
+    linkedin: "https://www.linkedin.com/in/pawel-bulowski-ai-agents/"
+    twitter: ""
 ---
 
 ## Abstract

@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Building Next-Generation AI Assistants for Wearables"
 youtube: ""
-speaker:
-  name: "Surya Appini"
-  organization: "Meta"
-  photo: "Surya Appini.png"
-  linkedin: "https://www.linkedin.com/in/surya-appini/"
-  twitter: "appinisurya"
+speakers:
+  - name: "Surya Appini"
+    organization: "Meta"
+    photo: "Surya Appini.png"
+    linkedin: "https://www.linkedin.com/in/surya-appini/"
+    twitter: "appinisurya"
 ---
 
 ## Abstract

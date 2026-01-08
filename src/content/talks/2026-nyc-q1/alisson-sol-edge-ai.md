@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "The way to Edge AI"
 youtube: ""
-speaker:
-  name: "Alisson Sol"
-  organization: "Capital One"
-  photo: "Alisson Sol.png"
-  linkedin: "https://www.linkedin.com/in/alissonsol/"
-  twitter: ""
+speakers:
+  - name: "Alisson Sol"
+    organization: "Capital One"
+    photo: "Alisson Sol.png"
+    linkedin: "https://www.linkedin.com/in/alissonsol/"
+    twitter: ""
 ---
 
 ## Abstract

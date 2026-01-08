@@ -1,25 +1,26 @@
 state: before
 startTime: "2026-03-06T09:00:00-05:00"
-dateString: "March 6, 2026"
 locationString: "VIAM, 1900 Broadway, 6th Floor, New York, NY 10023"
 days: 1
 attendees: 100
-rooms:
-  - main room
-  - round room
-breaks:
-  - title: Coffee break
-    duration: 30
-    comment: Main lobby
-    talks_before: 0
-  - title: Lunch & networking
-    duration: 60
-    comment: Main lobby
-    talks_before: 4
-  - title: Networking & sponsor crawl
-    duration: 30
-    comment: Main lobby
-    talks_before: 4
+defaultDuration: 30
+
+schedule:
+  "Main Room":
+    - break: Registration & Coffee
+      duration: 30
+    - talk: lior-schejter-mad-software-design
+    - talk: alisson-sol-edge-ai
+    - talk: ben-savage-ml-ai-cloud-native
+    - talk: shantanu-sharma-ai-safety-pipelines
+    - break: Lunch & Networking
+      duration: 60
+    - talk: jeremy-curcio-prompts-ai-development
+    - talk: surya-appini-ai-assistants-wearables
+    - talk: tim-spann-stateful-ai-agents
+    - break: Networking
+      duration: 30
+
 sponsors:
   - logo: viam.png
     url: https://www.viam.com/

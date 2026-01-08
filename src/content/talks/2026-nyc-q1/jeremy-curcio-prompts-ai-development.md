@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Engineering Better Prompts for AI Assisted Development"
 youtube: ""
-speaker:
-  name: "Jeremy Curcio"
-  organization: "Fearless"
-  photo: "Jeremy Curcio.png"
-  linkedin: "https://www.linkedin.com/in/jccurcio/"
-  twitter: ""
+speakers:
+  - name: "Jeremy Curcio"
+    organization: "Fearless"
+    photo: "Jeremy Curcio.png"
+    linkedin: "https://www.linkedin.com/in/jccurcio/"
+    twitter: ""
 ---
 
 ## Abstract

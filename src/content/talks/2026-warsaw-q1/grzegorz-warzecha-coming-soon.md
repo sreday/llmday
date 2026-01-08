@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Coming soon"
 youtube: ""
-speaker:
-  name: "Grzegorz Warzecha"
-  organization: "Genotic"
-  photo: "Grzegorz Warzecha.png"
-  linkedin: "https://www.linkedin.com/in/greg-warzecha/"
-  twitter: ""
+speakers:
+  - name: "Grzegorz Warzecha"
+    organization: "Genotic"
+    photo: "Grzegorz Warzecha.png"
+    linkedin: "https://www.linkedin.com/in/greg-warzecha/"
+    twitter: ""
 ---
 
 ## Abstract

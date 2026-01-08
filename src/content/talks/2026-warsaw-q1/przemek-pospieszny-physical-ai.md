@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 30
 title: "Physical AI: The New Frontier"
 youtube: ""
-speaker:
-  name: "Przemek Pospieszny"
-  organization: "EPAM Systems"
-  photo: "Przemek Pospieszny.png"
-  linkedin: "https://www.linkedin.com/in/ppospieszny/"
-  twitter: ""
+speakers:
+  - name: "Przemek Pospieszny"
+    organization: "EPAM Systems"
+    photo: "Przemek Pospieszny.png"
+    linkedin: "https://www.linkedin.com/in/ppospieszny/"
+    twitter: ""
 ---
 
 ## Abstract

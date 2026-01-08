@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Beware of finetuning: Subliminal learning and weird generalizations in LLMs during finetuning"
 youtube: ""
-speaker:
-  name: "Anna Sztyber-Betley"
-  organization: "Warsaw University of Technology"
-  photo: "Anna Sztyber-Betley.png"
-  linkedin: "https://www.linkedin.com/in/anna-sztyber-7ba143164/"
-  twitter: ""
+speakers:
+  - name: "Anna Sztyber-Betley"
+    organization: "Warsaw University of Technology"
+    photo: "Anna Sztyber-Betley.png"
+    linkedin: "https://www.linkedin.com/in/anna-sztyber-7ba143164/"
+    twitter: ""
 ---
 
 ## Abstract

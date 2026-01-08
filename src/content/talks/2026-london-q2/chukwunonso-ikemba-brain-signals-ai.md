@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Telepathy Is Just Pattern Recognition: Why Brain Signals Are Just Another Language AI Can Learn"
 youtube: ""
-speaker:
-  name: "Chukwunonso Ikemba"
-  organization: "Skipton Building Society"
-  photo: "Chukwunonso Ikemba.png"
-  linkedin: "https://www.linkedin.com/in/chukwunonso-ikemba/"
-  twitter: ""
+speakers:
+  - name: "Chukwunonso Ikemba"
+    organization: "Skipton Building Society"
+    photo: "Chukwunonso Ikemba.png"
+    linkedin: "https://www.linkedin.com/in/chukwunonso-ikemba/"
+    twitter: ""
 ---
 
 ## Abstract

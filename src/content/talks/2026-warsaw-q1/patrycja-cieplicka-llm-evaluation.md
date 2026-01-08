@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "How We Evaluate Large Language Models"
 youtube: ""
-speaker:
-  name: "Patrycja Cieplicka"
-  organization: "Tooploox"
-  photo: "Patrycja Cieplicka.png"
-  linkedin: "https://www.linkedin.com/in/patrycjacieplicka/"
-  twitter: ""
+speakers:
+  - name: "Patrycja Cieplicka"
+    organization: "Tooploox"
+    photo: "Patrycja Cieplicka.png"
+    linkedin: "https://www.linkedin.com/in/patrycjacieplicka/"
+    twitter: ""
 ---
 
 ## Abstract
