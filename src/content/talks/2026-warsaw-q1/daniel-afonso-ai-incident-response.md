@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 30
 title: "The State of AI in Incident Response"
 youtube: ""
-speaker:
-  name: "Daniel Afonso"
-  organization: "PagerDuty"
-  photo: "Daniel Afonso.png"
-  linkedin: "https://www.linkedin.com/in/danieljcafonso/"
-  twitter: "danieljcafonso"
+speakers:
+  - name: "Daniel Afonso"
+    organization: "PagerDuty"
+    photo: "Daniel Afonso.png"
+    linkedin: "https://www.linkedin.com/in/danieljcafonso/"
+    twitter: "danieljcafonso"
 ---
 
 ## Abstract

@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "MAD About Software Design - When AI Architects Argue"
 youtube: ""
-speaker:
-  name: "Lior Schejter"
-  organization: ""
-  photo: "Lior Schejter.png"
-  linkedin: "https://www.linkedin.com/in/liors/"
-  twitter: ""
+speakers:
+  - name: "Lior Schejter"
+    organization: ""
+    photo: "Lior Schejter.png"
+    linkedin: "https://www.linkedin.com/in/liors/"
+    twitter: ""
 ---
 
 ## Abstract

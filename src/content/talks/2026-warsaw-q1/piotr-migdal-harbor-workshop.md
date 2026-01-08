@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 60
 title: "1h Workshop: Hands-on AI agent evaluation: building benchmarks with Harbor"
 youtube: ""
-speaker:
-  name: "Piotr Migdal"
-  organization: "Quesma"
-  photo: "Piotr Migdal.png"
-  linkedin: "https://www.linkedin.com/in/piotrmigdal/"
-  twitter: ""
+speakers:
+  - name: "Piotr Migdal"
+    organization: "Quesma"
+    photo: "Piotr Migdal.png"
+    linkedin: "https://www.linkedin.com/in/piotrmigdal/"
+    twitter: ""
 ---
 
 ## Abstract

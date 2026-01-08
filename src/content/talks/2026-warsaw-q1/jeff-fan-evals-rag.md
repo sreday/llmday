@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 30
 title: "End Vibes-Based RAG - Evals as the Control Plane"
 youtube: ""
-speaker:
-  name: "Jeff Fan"
-  organization: "DigitalOcean"
-  photo: "Jeff Fan.png"
-  linkedin: "https://www.linkedin.com/in/jefffan27/"
-  twitter: ""
+speakers:
+  - name: "Jeff Fan"
+    organization: "DigitalOcean"
+    photo: "Jeff Fan.png"
+    linkedin: "https://www.linkedin.com/in/jefffan27/"
+    twitter: ""
 ---
 
 ## Abstract

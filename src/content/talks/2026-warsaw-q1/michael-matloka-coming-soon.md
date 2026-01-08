@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Coming soon"
 youtube: ""
-speaker:
-  name: "Michael Matloka"
-  organization: "PostHog"
-  photo: "Michael Matloka.png"
-  linkedin: "https://www.linkedin.com/in/matlokam/"
-  twitter: ""
+speakers:
+  - name: "Michael Matloka"
+    organization: "PostHog"
+    photo: "Michael Matloka.png"
+    linkedin: "https://www.linkedin.com/in/matlokam/"
+    twitter: ""
 ---
 
 ## Abstract

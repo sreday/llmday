@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { talk, eventSlug } = Astro.props;
-const speaker = talk.data.speaker;
+const speaker = talk.data.speakers[0];
 const talkUrl = `/${eventSlug}/talks/${talk.slug}`;
 
 // Dynamic import for speaker photo

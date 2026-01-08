@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Benchmarking trust: Engineering AI safety pipelines for financial services and life sciences"
 youtube: ""
-speaker:
-  name: "Shantanu Sharma"
-  organization: "SVAM International Inc."
-  photo: "Shantanu Sharma.png"
-  linkedin: "https://www.linkedin.com/in/shantanu/"
-  twitter: ""
+speakers:
+  - name: "Shantanu Sharma"
+    organization: "SVAM International Inc."
+    photo: "Shantanu Sharma.png"
+    linkedin: "https://www.linkedin.com/in/shantanu/"
+    twitter: ""
 ---
 
 ## Abstract

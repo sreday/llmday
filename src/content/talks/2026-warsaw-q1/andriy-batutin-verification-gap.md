@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 30
 title: "The Verification Gap: What Separates LLM Demos from Production Agents"
 youtube: ""
-speaker:
-  name: "Andriy Batutin"
-  organization: "MacPaw"
-  photo: "Andriy Batutin.png"
-  linkedin: "https://www.linkedin.com/in/andrewbatutin/"
-  twitter: ""
+speakers:
+  - name: "Andriy Batutin"
+    organization: "MacPaw"
+    photo: "Andriy Batutin.png"
+    linkedin: "https://www.linkedin.com/in/andrewbatutin/"
+    twitter: ""
 ---
 
 ## Abstract

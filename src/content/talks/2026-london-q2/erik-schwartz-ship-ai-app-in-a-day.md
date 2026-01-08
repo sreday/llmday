@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "From Context To Impact: How To Ship An AI App In A Day"
 youtube: ""
-speaker:
-  name: "Erik Schwartz"
-  organization: "TheAiExpert.ai"
-  photo: "Erik Schwartz.png"
-  linkedin: "https://www.linkedin.com/in/eschwaa/"
-  twitter: ""
+speakers:
+  - name: "Erik Schwartz"
+    organization: "TheAiExpert.ai"
+    photo: "Erik Schwartz.png"
+    linkedin: "https://www.linkedin.com/in/eschwaa/"
+    twitter: ""
 ---
 
 ## Abstract

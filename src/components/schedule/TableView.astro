@@ -55,11 +55,12 @@ for (const track of schedule.tracks) {
                 }
                 if (item.talk) {
                   const talkUrl = `/${eventSlug}/talks/${item.talk.slug}`;
+                  const speaker = item.talk.data.speakers[0];
                   return (
                     <div>
                       <a href={talkUrl}>{item.talk.data.title}</a>
                       <div class="speaker-info">
-                        {item.talk.data.speaker.name} &bull; {item.talk.data.speaker.organization}
+                        {speaker.name} &bull; {speaker.organization}
                       </div>
                     </div>
                   );

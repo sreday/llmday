@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 30
 title: "Is Your GenAI System Ready for Production Reality?"
 youtube: ""
-speaker:
-  name: "Maish Saidel-Keesing"
-  organization: "AWS"
-  photo: "Maish Saidel-Keesing.png"
-  linkedin: "https://www.linkedin.com/in/maishsk/"
-  twitter: ""
+speakers:
+  - name: "Maish Saidel-Keesing"
+    organization: "AWS"
+    photo: "Maish Saidel-Keesing.png"
+    linkedin: "https://www.linkedin.com/in/maishsk/"
+    twitter: ""
 ---
 
 ## Abstract

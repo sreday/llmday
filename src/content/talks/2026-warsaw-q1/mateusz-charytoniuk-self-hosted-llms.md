@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "From Infrastructure to Production: A Year of Self-Hosted LLMs"
 youtube: ""
-speaker:
-  name: "Mateusz Charytoniuk"
-  organization: "Intentee"
-  photo: "Mateusz Charytoniuk.png"
-  linkedin: "https://www.linkedin.com/in/mateusz-charytoniuk/"
-  twitter: ""
+speakers:
+  - name: "Mateusz Charytoniuk"
+    organization: "Intentee"
+    photo: "Mateusz Charytoniuk.png"
+    linkedin: "https://www.linkedin.com/in/mateusz-charytoniuk/"
+    twitter: ""
 ---
 
 ## Abstract

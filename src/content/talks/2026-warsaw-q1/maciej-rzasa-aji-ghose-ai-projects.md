@@ -1,20 +1,18 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "Growing AI Projects: Where Science Meets Engineering"
 youtube: ""
-speaker:
-  name: "Maciej Rzasa & Aji Ghose"
-  organization: "Chattermill"
-  photo: "Maciej Rzasa & Aji Ghose.png"
-  linkedin: "https://www.linkedin.com/in/maciejrzasa/"
-  twitter: "mjrzasa"
-coSpeaker:
-  name: "Aji Ghose"
-  linkedin: "https://www.linkedin.com/in/aji-ghose-32bb10353/"
-  twitter: ""
+speakers:
+  - name: "Maciej Rzasa"
+    organization: "Chattermill"
+    photo: "Maciej Rzasa & Aji Ghose.png"
+    linkedin: "https://www.linkedin.com/in/maciejrzasa/"
+    twitter: "mjrzasa"
+  - name: "Aji Ghose"
+    organization: "Chattermill"
+    photo: "Maciej Rzasa & Aji Ghose.png"
+    linkedin: "https://www.linkedin.com/in/aji-ghose-32bb10353/"
+    twitter: ""
 ---
 
 ## Abstract

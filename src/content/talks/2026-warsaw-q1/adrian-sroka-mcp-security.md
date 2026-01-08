@@ -1,16 +1,13 @@
 ---
-status: confirmed
-track: "2"
-day: 1
 duration: 30
 title: "MCP: Revolution or Security Regression"
 youtube: ""
-speaker:
-  name: "Adrian Sroka"
-  organization: "Relativity"
-  photo: "Adrian Sroka.png"
-  linkedin: "https://www.linkedin.com/in/adriansroka/"
-  twitter: ""
+speakers:
+  - name: "Adrian Sroka"
+    organization: "Relativity"
+    photo: "Adrian Sroka.png"
+    linkedin: "https://www.linkedin.com/in/adriansroka/"
+    twitter: ""
 ---
 
 ## Abstract

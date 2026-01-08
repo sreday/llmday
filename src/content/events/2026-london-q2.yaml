@@ -1,25 +1,21 @@
 state: before
 startTime: "2026-05-28T09:00:00+00:00"
-dateString: "May 28, 2026"
 locationString: "Everyman Canary Wharf, London, UK"
 days: 1
 attendees: 150
-rooms:
-  - main room
-  - round room
-breaks:
-  - title: Coffee break
-    duration: 30
-    comment: Main lobby
-    talks_before: 0
-  - title: Lunch & networking
-    duration: 60
-    comment: Main lobby
-    talks_before: 4
-  - title: Networking & sponsor crawl
-    duration: 30
-    comment: Main lobby
-    talks_before: 4
+defaultDuration: 30
+
+schedule:
+  "Main Room":
+    - break: Registration & Coffee
+      duration: 30
+    - talk: chukwunonso-ikemba-brain-signals-ai
+    - talk: david-crepaz-keay-mental-health-bot
+    - talk: erik-schwartz-ship-ai-app-in-a-day
+    - talk: ricardo-sueiras-spec-driven-development
+    - break: Networking
+      duration: 30
+
 sponsors:
   - logo: hockeystick.png
     url: https://www.hockeystick.show

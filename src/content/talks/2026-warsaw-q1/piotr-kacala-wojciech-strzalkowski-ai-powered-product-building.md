@@ -1,20 +1,18 @@
 ---
-status: confirmed
-track: "1"
-day: 1
 duration: 30
 title: "From Customer Interview to Working Prototype in One Afternoon (AI-Powered Product Building)"
 youtube: ""
-speaker:
-  name: "Piotr Kacala & Wojciech Strzalkowski"
-  organization: "Displate & GOG.com"
-  photo: "Piotr Kacala & Wojciech Strzalkowski.png"
-  linkedin: "https://www.linkedin.com/in/piotr-kacala/"
-  twitter: ""
-coSpeaker:
-  name: "Wojciech Strzalkowski"
-  linkedin: "https://www.linkedin.com/in/wojtek-strzalkowski/"
-  twitter: ""
+speakers:
+  - name: "Piotr Kacala"
+    organization: "Displate"
+    photo: "Piotr Kacala & Wojciech Strzalkowski.png"
+    linkedin: "https://www.linkedin.com/in/piotr-kacala/"
+    twitter: ""
+  - name: "Wojciech Strzalkowski"
+    organization: "GOG.com"
+    photo: "Piotr Kacala & Wojciech Strzalkowski.png"
+    linkedin: "https://www.linkedin.com/in/wojtek-strzalkowski/"
+    twitter: ""
 ---
 
 ## Abstract

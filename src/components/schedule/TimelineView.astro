@@ -58,7 +58,8 @@ function getSpeakerImage(photo: string) {
       if (item.talk) {
         const talk = item.talk;
         const talkUrl = `/${eventSlug}/talks/${talk.slug}`;
-        const speakerImage = getSpeakerImage(talk.data.speaker.photo);
+        const speaker = talk.data.speakers[0];
+        const speakerImage = getSpeakerImage(speaker.photo);
         const shortAbstract = getShortAbstract(talk.body);
         return (
           <div class="schedule-item">
@@ -68,7 +69,7 @@ function getSpeakerImage(photo: string) {
                 {speakerImage ? (
                   <Image
                     src={speakerImage}
-                    alt={talk.data.speaker.name}
+                    alt={speaker.name}
                     width={80}
                     height={80}
                     class="profile-image"
@@ -77,13 +78,13 @@ function getSpeakerImage(photo: string) {
                   <div class="profile-placeholder" />
                 )}
               </a>
-              <div class="name">{talk.data.speaker.name}</div>
+              <div class="name">{speaker.name}</div>
             </div>
             <div class="content">
               <h3>
                 <a href={talkUrl}>{talk.data.title}</a>
               </h3>
-              <div class="location">{talk.data.speaker.organization}</div>
+              <div class="location">{speaker.organization}</div>
               {shortAbstract && <div class="desc">{shortAbstract}</div>}
             </div>
           </div>
