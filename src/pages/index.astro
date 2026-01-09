@@ -33,6 +33,14 @@ function getPhoto(filename: string) {
 
 const defaultHeroPhoto = getPhoto('london-2022-0.jpg');
 
+// Import event city skyline images
+const eventImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/events/*.png', { eager: true });
+
+function getEventImage(eventId: string) {
+  const path = `/src/assets/events/llmday-${eventId}.png`;
+  return eventImages[path]?.default;
+}
+
 // Sort events by date
 const sortedEvents = events.sort((a, b) => {
   return new Date(a.data.startTime).getTime() - new Date(b.data.startTime).getTime();
@@ -103,7 +111,7 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
                 name={formatEventName(event.id)}
                 location={event.data.locationString}
                 date={formatEventDate(event.data.startTime)}
-                photo={getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
+                photo={getEventImage(event.id) || getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
                 url={`/${event.id}/`}
               />
             </div>
@@ -125,7 +133,7 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
                 name={formatEventName(event.id)}
                 location={event.data.locationString}
                 date={formatEventDate(event.data.startTime)}
-                photo={getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
+                photo={getEventImage(event.id) || getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
                 url={`/${event.id}/`}
               />
             </div>
