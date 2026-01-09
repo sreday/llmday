@@ -1,87 +1,14 @@
 ---
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-
 interface Props {
   name: string;
   location?: string;
   date?: string;
-  photo?: ImageMetadata;
   url: string;
 }
 
-const { name, photo, url } = Astro.props;
+const { name, url } = Astro.props;
 ---
 
-<div class="event-card">
-  <a href={url} class="card-link">
-    <div class="image-container">
-      {photo && <Image src={photo} alt={name} width={600} height={400} />}
-    </div>
-    <div class="card-footer">
-      <h5>{name}</h5>
-      <span class="read-more">Read more &rarr;</span>
-    </div>
-  </a>
+<div>
+  <a href={url}>{name}</a>
 </div>
-
-<style>
-  .event-card {
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 100%;
-    background: white;
-  }
-
-  .event-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  }
-
-  .card-link {
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .image-container {
-    overflow: hidden;
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.3s ease;
-  }
-
-  .event-card:hover img {
-    transform: scale(1.05);
-  }
-
-  .card-footer {
-    padding: 1.25rem;
-    background: white;
-  }
-
-  h5 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--color-text);
-    margin: 0 0 0.75rem 0;
-  }
-
-  .read-more {
-    color: var(--color-primary);
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-
-  .event-card:hover .read-more {
-    text-decoration: underline;
-  }
-</style>
