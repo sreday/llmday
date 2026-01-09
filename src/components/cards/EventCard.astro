@@ -4,39 +4,35 @@ import type { ImageMetadata } from 'astro';
 
 interface Props {
   name: string;
-  location: string;
-  date: string;
+  location?: string;
+  date?: string;
   photo?: ImageMetadata;
   url: string;
 }
 
-const { name, location, date, photo, url } = Astro.props;
+const { name, photo, url } = Astro.props;
 ---
 
 <div class="event-card">
-  <a href={url} class="image-link">
-    {photo && <Image src={photo} alt={name} width={400} height={225} />}
+  <a href={url} class="card-link">
+    <div class="image-container">
+      {photo && <Image src={photo} alt={name} width={600} height={400} />}
+    </div>
+    <div class="card-footer">
+      <h5>{name}</h5>
+      <span class="read-more">Read more &rarr;</span>
+    </div>
   </a>
-  <div class="content">
-    <h5>{name}</h5>
-    <p class="details">
-      <span>{date}</span>
-      <span>{location}</span>
-    </p>
-    <a href={url} class="cta">Learn more</a>
-  </div>
 </div>
 
 <style>
   .event-card {
-    background: white;
     border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     height: 100%;
-    display: flex;
-    flex-direction: column;
+    background: white;
   }
 
   .event-card:hover {
@@ -44,15 +40,21 @@ const { name, location, date, photo, url } = Astro.props;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   }
 
-  .image-link {
-    display: block;
+  .card-link {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .image-container {
     overflow: hidden;
   }
 
   img {
     width: 100%;
-    aspect-ratio: 16/9;
-    object-fit: cover;
+    height: auto;
+    display: block;
     transition: transform 0.3s ease;
   }
 
@@ -60,46 +62,26 @@ const { name, location, date, photo, url } = Astro.props;
     transform: scale(1.05);
   }
 
-  .content {
+  .card-footer {
     padding: 1.25rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    background: white;
   }
 
   h5 {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1.1rem;
-    margin-bottom: 0.5rem;
     color: var(--color-text);
+    margin: 0 0 0.75rem 0;
   }
 
-  .details {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-    flex: 1;
-  }
-
-  .details span {
-    display: block;
-  }
-
-  .cta {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: var(--color-primary);
-    color: white;
-    font-size: 0.875rem;
+  .read-more {
+    color: var(--color-primary);
+    font-size: 0.9rem;
     font-weight: 500;
-    border-radius: 0.375rem;
-    text-decoration: none;
-    transition: background 0.2s ease;
-    align-self: flex-start;
   }
 
-  .cta:hover {
-    background: var(--color-primary-dark, #1e7a55);
+  .event-card:hover .read-more {
+    text-decoration: underline;
   }
 </style>
