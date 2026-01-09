@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import type { Sponsor } from '../../content.config';
 
 interface Props {
@@ -8,63 +7,23 @@ interface Props {
 }
 
 const { sponsors, mailto } = Astro.props;
-
-// Import sponsor logos
-const sponsorImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/sponsors/*.{png,jpg,jpeg,svg}', { eager: true });
-
-function getSponsorLogo(filename: string) {
-  const path = `/src/assets/sponsors/${filename}`;
-  return sponsorImages[path]?.default;
-}
 ---
 
-<section id="sponsors" class="sponsors-section section">
-  <div class="container">
-    <h3 class="section-heading text-center">Sponsors & Partners</h3>
-    <p class="text-center text-muted mb-4">Want to become a sponsor? Get in touch!</p>
+<section id="sponsors">
+  <h2>Sponsors & Partners</h2>
+  <p>Want to become a sponsor? Get in touch!</p>
 
-    {sponsors.length > 0 && (
-      <div class="sponsors-logos">
-        {sponsors.map((sponsor) => {
-          const logo = getSponsorLogo(sponsor.logo);
-          return logo && (
-            <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
-              <Image
-                src={logo}
-                alt="Sponsor"
-                class="sponsor-logo"
-                width={180}
-                height={180}
-              />
-            </a>
-          );
-        })}
-      </div>
-    )}
+  {sponsors.length > 0 && (
+    <ul>
+      {sponsors.map((sponsor) => (
+        <li>
+          <a href={sponsor.url}>{sponsor.logo}</a>
+        </li>
+      ))}
+    </ul>
+  )}
 
-    {mailto && (
-      <div class="text-center mt-4">
-        <a href={mailto} class="btn btn-primary btn-lg">Become A Sponsor</a>
-      </div>
-    )}
-  </div>
+  {mailto && (
+    <p><a href={mailto}>Become A Sponsor</a></p>
+  )}
 </section>
-
-<style>
-  .sponsors-logos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    margin: 2rem 0;
-  }
-
-  .sponsor-logo {
-    object-fit: contain;
-    max-width: 180px;
-    max-height: 180px;
-    width: auto;
-    height: auto;
-  }
-</style>

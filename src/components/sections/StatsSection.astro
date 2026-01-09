@@ -10,71 +10,12 @@ interface Props {
 const { event, trackCount, speakerCount } = Astro.props;
 ---
 
-<div class="stats-block theme-bg-primary text-white py-4 text-center">
-  <div class="container">
-    <div class="stats-row">
-      <div class="stat-item">
-        <div class="number">{event.days}</div>
-        <div class="unit">Days</div>
-      </div>
-      <div class="stat-item">
-        <div class="number">{speakerCount}</div>
-        <div class="unit">Speakers</div>
-      </div>
-      <div class="stat-item">
-        <div class="number">{trackCount}</div>
-        <div class="unit">Tracks</div>
-      </div>
-      <div class="stat-item">
-        <div class="number">{event.attendees}</div>
-        <div class="unit">Attendees</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-  .stats-block {
-    padding: 2rem 0;
-  }
-
-  .stats-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-  }
-
-  .stat-item {
-    flex: 1;
-    min-width: 120px;
-    max-width: 200px;
-    padding: 1rem;
-  }
-
-  .stat-item .number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  .stat-item .unit {
-    font-size: 1rem;
-    opacity: 0.9;
-  }
-
-  @media (max-width: 640px) {
-    .stats-row {
-      gap: 1rem;
-    }
-
-    .stat-item {
-      min-width: 100px;
-      padding: 0.5rem;
-    }
-
-    .stat-item .number {
-      font-size: 2rem;
-    }
-  }
-</style>
+<section>
+  <h2>Stats</h2>
+  <ul>
+    <li>{event.days} Days</li>
+    <li>{speakerCount} Speakers</li>
+    <li>{trackCount} Tracks</li>
+    <li>{event.attendees} Attendees</li>
+  </ul>
+</section>

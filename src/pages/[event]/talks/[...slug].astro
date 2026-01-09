@@ -1,6 +1,5 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { Image } from 'astro:assets';
 import BaseLayout from '../../../components/layout/BaseLayout.astro';
 import SponsorsSection from '../../../components/sections/SponsorsSection.astro';
 
@@ -25,304 +24,38 @@ const { talk, event, eventSlug } = Astro.props;
 const { Content } = await render(talk);
 const speaker = talk.data.speakers[0];
 const additionalSpeakers = talk.data.speakers.slice(1);
-
-// Dynamic import for speaker photo
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
-const imagePath = `/src/assets/speakers/${speaker.photo}`;
-const speakerImage = images[imagePath]?.default;
-
-function getSpeakerImage(photo: string) {
-  const path = `/src/assets/speakers/${photo}`;
-  return images[path]?.default;
-}
 ---
 
 <BaseLayout title={`${talk.data.title} - LLMday`} event={event}>
-  <section class="talk-page">
-    <div class="container">
-      <nav class="breadcrumb" aria-label="breadcrumb">
-        <a href="/">Home</a>
-        <span class="separator">/</span>
-        <a href={`/${eventSlug}/`}>{event?.locationString || eventSlug}</a>
-        <span class="separator">/</span>
-        <span class="current">{talk.data.title}</span>
-      </nav>
+  <p>
+    <a href="/">Home</a> /
+    <a href={`/${eventSlug}/`}>{event?.locationString || eventSlug}</a> /
+    {talk.data.title}
+  </p>
 
-      <h1>{talk.data.title}</h1>
+  <h1>{talk.data.title}</h1>
 
-      <div class="speaker-profile">
-        {speakerImage ? (
-          <Image
-            src={speakerImage}
-            alt={speaker.name}
-            width={200}
-            height={200}
-            class="profile-image"
-          />
-        ) : (
-          <div class="profile-placeholder" />
-        )}
-        <div class="speaker-info">
-          <h2>{speaker.name}</h2>
-          <p class="organization">{speaker.organization}</p>
-          <div class="social-links">
-            {speaker.linkedin && (
-              <a href={speaker.linkedin} target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="icon">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-                LinkedIn
-              </a>
-            )}
-            {speaker.twitter && (
-              <a href={`https://twitter.com/${speaker.twitter}`} target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="icon">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                Twitter
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
+  <h2>{speaker.name}</h2>
+  <p>{speaker.organization}</p>
+  {speaker.linkedin && <p><a href={speaker.linkedin}>LinkedIn</a></p>}
+  {speaker.twitter && <p><a href={`https://twitter.com/${speaker.twitter}`}>Twitter</a></p>}
 
-      {additionalSpeakers.length > 0 && (
-        <div class="additional-speakers">
-          <h4>{additionalSpeakers.length === 1 ? 'Co-speaker' : 'Co-speakers'}</h4>
-          {additionalSpeakers.map((coSpeaker) => {
-            const coSpeakerImage = getSpeakerImage(coSpeaker.photo);
-            return (
-              <div class="co-speaker-profile">
-                {coSpeakerImage ? (
-                  <Image
-                    src={coSpeakerImage}
-                    alt={coSpeaker.name}
-                    width={100}
-                    height={100}
-                    class="co-profile-image"
-                  />
-                ) : (
-                  <div class="co-profile-placeholder" />
-                )}
-                <div class="co-speaker-info">
-                  <strong>{coSpeaker.name}</strong>
-                  {coSpeaker.organization && <span class="organization">{coSpeaker.organization}</span>}
-                  <div class="social-links">
-                    {coSpeaker.linkedin && (
-                      <a href={coSpeaker.linkedin} target="_blank" rel="noopener">
-                        <svg viewBox="0 0 24 24" fill="currentColor" class="icon">
-                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                        </svg>
-                        LinkedIn
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+  {additionalSpeakers.length > 0 && (
+    <>
+      <h3>{additionalSpeakers.length === 1 ? 'Co-speaker' : 'Co-speakers'}</h3>
+      {additionalSpeakers.map((coSpeaker) => (
+        <p>
+          {coSpeaker.name}
+          {coSpeaker.organization && ` (${coSpeaker.organization})`}
+          {coSpeaker.linkedin && <> - <a href={coSpeaker.linkedin}>LinkedIn</a></>}
+        </p>
+      ))}
+    </>
+  )}
 
-      <div class="talk-content prose">
-        <Content />
-      </div>
+  <Content />
 
-      <div class="back-link">
-        <a href={`/${eventSlug}/#schedule`}>
-          &larr; Back to Schedule
-        </a>
-      </div>
-    </div>
-  </section>
+  <p><a href={`/${eventSlug}/#schedule`}>Back to Schedule</a></p>
 
   {event && <SponsorsSection sponsors={event.sponsors} />}
 </BaseLayout>
-
-<style>
-  .talk-page {
-    padding: 2rem 0 4rem;
-  }
-
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-
-  .breadcrumb {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    margin-bottom: 2rem;
-  }
-
-  .breadcrumb a {
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-
-  .breadcrumb a:hover {
-    text-decoration: underline;
-  }
-
-  .separator {
-    color: var(--color-text-muted);
-  }
-
-  .current {
-    color: var(--color-text-muted);
-  }
-
-  h1 {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: var(--color-text);
-  }
-
-  .speaker-profile {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    align-items: flex-start;
-  }
-
-  .profile-image {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-
-  .profile-placeholder {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: #e5e7eb;
-    flex-shrink: 0;
-  }
-
-  .speaker-info h2 {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .organization {
-    color: var(--color-text-muted);
-    margin-bottom: 1rem;
-  }
-
-  .social-links {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .social-links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-primary);
-    text-decoration: none;
-    font-size: 0.875rem;
-  }
-
-  .social-links a:hover {
-    text-decoration: underline;
-  }
-
-  .icon {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .additional-speakers {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    background: var(--color-bg-light, #f8f9fa);
-    border-radius: 0.5rem;
-  }
-
-  .additional-speakers h4 {
-    font-family: var(--font-display);
-    margin-bottom: 1rem;
-  }
-
-  .co-speaker-profile {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-  }
-
-  .co-speaker-profile:last-child {
-    margin-bottom: 0;
-  }
-
-  .co-profile-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-
-  .co-profile-placeholder {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: #e5e7eb;
-    flex-shrink: 0;
-  }
-
-  .co-speaker-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .co-speaker-info .organization {
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
-  }
-
-  .talk-content {
-    line-height: 1.8;
-    margin-top: 2rem;
-  }
-
-  .back-link {
-    margin-top: 3rem;
-  }
-
-  .back-link a {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    border: 2px solid var(--color-primary);
-    color: var(--color-primary);
-    border-radius: 0.375rem;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .back-link a:hover {
-    background: var(--color-primary);
-    color: white;
-  }
-
-  @media (max-width: 640px) {
-    .speaker-profile {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .social-links {
-      justify-content: center;
-    }
-  }
-</style>

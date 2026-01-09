@@ -8,7 +8,6 @@ interface Props {
 
 const { schedule, eventSlug } = Astro.props;
 
-// Build a map of time -> track -> items
 const timeSlotMap = new Map<string, Map<string, ScheduleItem[]>>();
 
 for (const track of schedule.tracks) {
@@ -25,7 +24,7 @@ for (const track of schedule.tracks) {
 }
 ---
 
-<table class="schedule-grid-table">
+<table border="1">
   <thead>
     <tr>
       <th>Time</th>
@@ -37,31 +36,26 @@ for (const track of schedule.tracks) {
   <tbody>
     {schedule.allTimes.map((time) => (
       <tr>
-        <td class="time-cell">{time}</td>
+        <td>{time}</td>
         {schedule.tracks.map((track) => {
           const items = timeSlotMap.get(time)?.get(track.trackId) || [];
           return (
-            <td class="talk-cell">
+            <td>
               {items.map((item) => {
                 if (item.type === 'break' || item.type === 'wrapup') {
                   return (
-                    <div class="break-cell">
-                      <strong>{item.breakInfo?.title}</strong>
-                      {item.breakInfo?.comment && (
-                        <div class="speaker-info">{item.breakInfo.comment}</div>
-                      )}
+                    <div>
+                      {item.breakInfo?.title}
+                      {item.breakInfo?.comment && ` (${item.breakInfo.comment})`}
                     </div>
                   );
                 }
                 if (item.talk) {
-                  const talkUrl = `/${eventSlug}/talks/${item.talk.slug}`;
                   const speaker = item.talk.data.speakers[0];
                   return (
                     <div>
-                      <a href={talkUrl}>{item.talk.data.title}</a>
-                      <div class="speaker-info">
-                        {speaker.name} &bull; {speaker.organization}
-                      </div>
+                      <a href={`/${eventSlug}/talks/${item.talk.slug}/`}>{item.talk.data.title}</a>
+                      ({speaker.name} - {speaker.organization})
                     </div>
                   );
                 }

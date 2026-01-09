@@ -32,11 +32,9 @@ const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
   )}
 
   {event.state === 'before' ? (
-    <section id="schedule" class="section">
-      <div class="container">
-        <h3 class="section-heading text-center mb-5">Schedule</h3>
-        <p class="text-center text-muted">Coming soon</p>
-      </div>
+    <section id="schedule">
+      <h2>Schedule</h2>
+      <p>(Coming soon)</p>
     </section>
   ) : (
     <ScheduleSection event={event} schedule={schedule} eventSlug={eventId} />
