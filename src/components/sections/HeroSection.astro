@@ -2,22 +2,70 @@
 import type { Event } from '../../content.config';
 
 interface Props {
-  event: Event;
+  event?: Event;
+  mode?: 'global' | 'event';
 }
 
-const { event } = Astro.props;
+const { event, mode = 'event' } = Astro.props;
 ---
 
-<section id="home">
-  <h1>LLMDAY</h1>
-  <p>Large Language Models, AI and ML</p>
-  <p>In-person conferences</p>
-  <p><strong>Date:</strong> {event.dateString}</p>
-  <p><strong>Location:</strong> {event.locationString}</p>
-  <p>
-    <a href="#tickets">Get Tickets</a>
-    {event.state !== 'after' && event.cfpUrl && (
-      <> | <a href={event.cfpUrl}>Call for Papers</a></>
-    )}
-  </p>
-</section>
+<div class="relative isolate overflow-hidden bg-slate-900 pb-16 pt-14 sm:pb-20">
+  <!-- Background effects -->
+  <div class="absolute inset-0 -z-10 h-full w-full object-cover">
+     <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800"></div>
+     <div class="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
+  </div>
+  
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 text-center">
+      
+      {mode === 'global' ? (
+        <>
+          <div class="hidden sm:mb-8 sm:flex sm:justify-center">
+            <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-slate-400 ring-1 ring-white/10 hover:ring-white/20">
+              Announcing our 2026 Tour. <a href="#upcoming" class="font-semibold text-white"><span class="absolute inset-0" aria-hidden="true"></span>See cities <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+            The Premier Global <br/>
+            <span class="text-primary-400">LLM Conference</span> Series
+          </h1>
+          <p class="mt-6 text-lg leading-8 text-slate-300">
+            Join the world's leading AI engineers, researchers, and founders. Deep dives into Large Language Models, Generative AI, and Machine Learning.
+          </p>
+          <div class="mt-10 flex items-center justify-center gap-x-6">
+            <a href="#upcoming" class="rounded-full bg-primary-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">Find an Event</a>
+            <a href="#sponsor" class="text-sm font-semibold leading-6 text-white">Become a Sponsor <span aria-hidden="true">→</span></a>
+          </div>
+        </>
+      ) : (
+        <>
+           {/* Event Specific Hero - Minimalist & Functional as requested */}
+           <div class="flex flex-col items-center">
+             <div class="mb-4 inline-flex items-center rounded-md bg-white/10 px-3 py-1 text-sm font-medium text-primary-200 ring-1 ring-inset ring-white/20">
+                {event?.dateString}
+             </div>
+             <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+                LLMday {event?.locationString.split(',')[0]}
+             </h1>
+             <p class="mt-4 text-xl text-slate-300">
+                {event?.locationString}
+             </p>
+             
+             <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                {event?.state !== 'after' && event?.lumaEventId && (
+                  <a href="#tickets" class="rounded-full bg-primary-600 px-8 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+                    Get Tickets
+                  </a>
+                )}
+                <a href="#schedule" class="rounded-full bg-white/10 px-8 py-3 text-base font-semibold text-white shadow-sm hover:bg-white/20 ring-1 ring-inset ring-white/20">
+                  View Schedule
+                </a>
+             </div>
+           </div>
+        </>
+      )}
+
+    </div>
+  </div>
+</div>

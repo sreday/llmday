@@ -2,6 +2,7 @@
 import type { Event } from '../../content.config';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
+import '../../styles/global.css';
 
 interface Props {
   title: string;
@@ -13,17 +14,23 @@ const { title, description = 'Conference on Large Language Models, AI and ML', e
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full scroll-smooth">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{title}</title>
   <meta name="description" content={description}>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="h-full flex flex-col bg-white text-slate-900">
   <Header event={event} />
 
-  <main>
+  <main class="flex-auto">
     <slot />
   </main>
 

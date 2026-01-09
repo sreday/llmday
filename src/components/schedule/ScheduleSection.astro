@@ -1,23 +1,86 @@
 ---
-import type { Event } from '../../content.config';
-import type { ScheduleData } from '../../lib/schedule';
-import TableView from './TableView.astro';
+import type { ScheduleData, ScheduleItem } from '../../lib/schedule';
 
 interface Props {
-  event: Event;
   schedule: ScheduleData;
   eventSlug: string;
 }
 
-const { event, schedule, eventSlug } = Astro.props;
+const { schedule, eventSlug } = Astro.props;
+
+// Helper to group items by time for the view
+const timeSlots = schedule.allTimes.map(time => {
+  const items: { trackId: string, item: ScheduleItem }[] = [];
+  schedule.tracks.forEach(track => {
+    const trackItems = track.items.filter(i => i.timeStr === time);
+    trackItems.forEach(item => items.push({ trackId: track.trackId, item }));
+  });
+  return { time, items };
+});
 ---
 
-<section id="schedule">
-  <h2>Schedule</h2>
-  <p>{event.dateString} - {schedule.tracks.length} parallel tracks</p>
-  <p>Rooms: {schedule.tracks.map(t => t.roomName).join(', ')}</p>
+<div class="flow-root">
+  <ul role="list" class="-mb-8">
+    {timeSlots.map((slot, slotIdx) => (
+      <li>
+        <div class="relative pb-8">
+          {slotIdx !== timeSlots.length - 1 ? (
+            <span class="absolute left-5 top-5 -ml-px h-full w-0.5 bg-slate-200" aria-hidden="true"></span>
+          ) : null}
+          <div class="relative flex gap-x-6">
+            
+            {/* Time Column */}
+            <div class="flex flex-col items-center">
+                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 ring-1 ring-slate-200">
+                    <div class="h-2.5 w-2.5 rounded-full bg-slate-400"></div>
+                 </div>
+                 <div class="mt-2 w-16 text-right text-sm font-bold text-slate-900 leading-none">
+                    {slot.time}
+                 </div>
+            </div>
 
-  <TableView schedule={schedule} eventSlug={eventSlug} />
-
-  <p><a href="#tickets">Buy Tickets</a></p>
-</section>
+            {/* Content Column */}
+            <div class="flex-auto py-0.5">
+                {slot.items.map(({ item }) => {
+                    if (item.type === 'break') {
+                        return (
+                            <div class="rounded-lg bg-slate-50 p-4 ring-1 ring-slate-900/5 mb-4 last:mb-0">
+                                <p class="text-sm font-medium text-slate-900">{item.breakInfo?.title}</p>
+                            </div>
+                        );
+                    }
+                    if (item.talk) {
+                         const speaker = item.talk.data.speakers[0];
+                         return (
+                            <div class="group relative rounded-lg border border-slate-200 bg-white p-4 hover:border-primary-300 hover:shadow-sm transition-all mb-4 last:mb-0">
+                                <div class="flex justify-between items-start gap-4">
+                                    <div class="flex-1">
+                                         <h3 class="text-base font-semibold text-slate-900">
+                                            <a href={`/${eventSlug}/talks/${item.talk.slug}/`}>
+                                                <span class="absolute inset-0"></span>
+                                                {item.talk.data.title}
+                                            </a>
+                                        </h3>
+                                        <p class="mt-1 text-sm text-slate-600">
+                                            {speaker.name}
+                                            {speaker.organization && <span class="text-slate-400"> • {speaker.organization}</span>}
+                                        </p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <span class="inline-flex items-center rounded-full bg-primary-50 px-2 py-1 text-xs font-medium text-primary-700 ring-1 ring-inset ring-primary-700/10">
+                                            Talk
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                         );
+                    }
+                    return null;
+                })}
+            </div>
+          </div>
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>

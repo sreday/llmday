@@ -1,17 +1,26 @@
 ---
-import type { Testimonial } from '../../content.config';
-
 interface Props {
-  testimonial: Testimonial;
+  name: string;
+  role?: string;
+  company?: string;
+  quote: string;
 }
 
-const { testimonial } = Astro.props;
+const { name, role, company, quote } = Astro.props;
 ---
 
-<blockquote>
-  <p>{testimonial.text}</p>
-  <p>— {testimonial.name}
-    {testimonial.job && `, ${testimonial.job}`}
-    {testimonial.company && ` at ${testimonial.company}`}
-  </p>
-</blockquote>
+<figure class="rounded-2xl bg-slate-50 p-8 text-sm leading-6">
+  <blockquote class="text-slate-900">
+    <p>“{quote}”</p>
+  </blockquote>
+  <figcaption class="mt-6 flex items-center gap-x-4">
+    <div>
+      <div class="font-semibold text-slate-900">{name}</div>
+      {(role || company) && (
+        <div class="text-slate-600">
+          {role} {company && `at ${company}`}
+        </div>
+      )}
+    </div>
+  </figcaption>
+</figure>

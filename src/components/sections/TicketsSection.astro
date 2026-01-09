@@ -6,13 +6,26 @@ interface Props {
 const { lumaEventId } = Astro.props;
 ---
 
-<section id="tickets">
-  <h2>Tickets</h2>
-  <p><a href={`https://lu.ma/event/${lumaEventId}`}>Register on Luma</a></p>
-  <iframe
-    src={`https://lu.ma/embed/event/${lumaEventId}/simple`}
-    width="600"
-    height="400"
-    frameborder="1"
-  />
-</section>
+<div class="rounded-2xl bg-white ring-1 ring-slate-900/10 shadow-sm overflow-hidden mb-8">
+  <div class="p-6 bg-slate-900">
+     <h2 class="text-lg font-bold text-white">Get Tickets</h2>
+     <p class="text-slate-300 text-sm mt-1">Secure your spot today.</p>
+  </div>
+  <div class="p-0">
+    <iframe
+      src={`https://lu.ma/embed/event/${lumaEventId}/simple`}
+      width="100%"
+      height="450"
+      frameborder="0"
+      style="border: 1px solid #bfcbda88; border-radius: 4px;"
+      allowfullscreen=""
+      aria-hidden="false"
+      tabindex="0"
+    ></iframe>
+  </div>
+  <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+     <a href={`https://lu.ma/event/${lumaEventId}`} target="_blank" class="text-sm font-semibold text-primary-600 hover:text-primary-700">
+        Open in Luma &rarr;
+     </a>
+  </div>
+</div>
