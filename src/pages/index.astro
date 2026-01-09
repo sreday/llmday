@@ -37,9 +37,14 @@ const globalSponsors = [
   
   <HeroSection mode="global" />
   
-  <StatsSection globalStats={globalStats} />
+  {/* Lifted section: Negative margin to pull it up over the hero bottom or just closer */}
+  <div class="relative z-10 -mt-12 sm:-mt-16 mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="rounded-2xl bg-white shadow-xl ring-1 ring-slate-900/5">
+        <StatsSection globalStats={globalStats} />
+      </div>
+  </div>
 
-  <section id="upcoming" class="py-24 sm:py-32">
+  <section id="upcoming" class="pt-16 pb-24 sm:pt-24 sm:pb-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
         <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Upcoming Conferences</h2>
@@ -49,7 +54,7 @@ const globalSponsors = [
       </div>
       
       {upcomingEvents.length > 0 ? (
-        <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+        <div class="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {upcomingEvents.map((event) => (
             <EventCard 
               id={event.id}
@@ -68,7 +73,7 @@ const globalSponsors = [
   </section>
 
   {testimonials.length > 0 && (
-    <section id="testimonials" class="bg-white py-24 sm:py-32">
+    <section id="testimonials" class="bg-slate-50 py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
           <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Community Feedback</h2>
@@ -92,7 +97,7 @@ const globalSponsors = [
   )}
 
   {pastEvents.length > 0 && (
-    <section id="past" class="bg-slate-50 py-24 sm:py-32">
+    <section id="past" class="bg-white py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
           <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Past Events</h2>
