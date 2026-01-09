@@ -13,14 +13,18 @@ generate: $(addprefix static/,$(addsuffix /index.html,$(years))) static/index.ht
 static/20%/index.html: 20%/static/index.html
 	@echo ">>>" $@
 	cp -r 20$*/static/ static/20$*
+	cp 20$*/metadata.yml static/20$*
+	cp 20$*/_db/talks.csv static/20$*
 
 static/index.html: home/**/*
 	cd home && \
 		make clean && \
 		make generate && \
-		cp -r static/* ../static
+		cp -r static/* ../static && \
+		cp metadata.yml ../static
 	cp -r photos ./static
 	cp -r speakers ./static
+	cp -r ambassadors ./static
 
 env:
 	python3 -m venv env
