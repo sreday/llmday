@@ -1,9 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
-import { buildSchedule, getSpeakers } from '../../lib/schedule';
+import { buildSchedule } from '../../lib/schedule';
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import HeroSection from '../../components/sections/HeroSection.astro';
-import StatsSection from '../../components/sections/StatsSection.astro';
 import ScheduleSection from '../../components/schedule/ScheduleSection.astro';
 import SpeakersSection from '../../components/sections/SpeakersSection.astro';
 import VenueSection from '../../components/sections/VenueSection.astro';
@@ -23,27 +22,63 @@ const allTalks = await getCollection('talks');
 const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
 ---
 
-<BaseLayout title={`LLMday ${event.locationString}`} event={event}>
-  <HeroSection event={event} />
-  <StatsSection event={event} trackCount={schedule.tracks.length} speakerCount={getSpeakers(schedule).length} />
+<BaseLayout title={`LLMday ${event.locationString.split(',')[0]}`} event={event}>
+  
+  <HeroSection event={event} mode="event" />
 
-  {event.state !== 'after' && event.lumaEventId && (
-    <TicketsSection lumaEventId={event.lumaEventId} />
-  )}
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+      
+      {/* Left Main Column */}
+      <div class="lg:col-span-2 space-y-16">
+        
+        {/* Schedule */}
+        <div id="schedule">
+          <div class="border-b border-slate-200 pb-5 mb-8">
+            <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:truncate sm:text-3xl sm:tracking-tight">
+              Schedule
+            </h2>
+             <p class="mt-2 text-sm text-slate-500">
+                {schedule.tracks.length > 1 ? `${schedule.tracks.length} Tracks` : 'Single Track'} • {event.dateString}
+             </p>
+          </div>
+          
+          {event.state === 'before' && !schedule.allTimes.length ? (
+            <div class="rounded-lg bg-slate-50 p-8 text-center">
+              <p class="text-slate-500">Schedule coming soon.</p>
+            </div>
+          ) : (
+             <ScheduleSection schedule={schedule} eventSlug={eventId} />
+          )}
+        </div>
 
-  {event.state === 'before' ? (
-    <section id="schedule">
-      <h2>Schedule</h2>
-      <p>(Coming soon)</p>
-    </section>
-  ) : (
-    <ScheduleSection event={event} schedule={schedule} eventSlug={eventId} />
-  )}
+        {/* Speakers */}
+        <div id="speakers">
+           <SpeakersSection schedule={schedule} eventSlug={eventId} />
+        </div>
+        
+      </div>
 
-  {event.state !== 'before' && (
-    <SpeakersSection schedule={schedule} eventSlug={eventId} />
-  )}
+      {/* Right Sidebar */}
+      <div class="lg:col-span-1 space-y-8">
+        
+        {/* Sticky Wrapper */}
+        <div class="sticky top-24 space-y-8">
+            {event.state !== 'after' && event.lumaEventId && (
+                <TicketsSection lumaEventId={event.lumaEventId} />
+            )}
+            
+            <VenueSection venue={event.venue} />
+            
+            <div class="rounded-2xl bg-white p-6 ring-1 ring-slate-900/5 shadow-sm">
+                <h2 class="text-sm font-semibold text-slate-900 mb-4">Sponsors</h2>
+                <SponsorsSection sponsors={event.sponsors} mailto={event.mailto} showTitle={false} />
+            </div>
+        </div>
 
-  <VenueSection venue={event.venue} />
-  <SponsorsSection sponsors={event.sponsors} mailto={event.mailto} />
+      </div>
+
+    </div>
+  </div>
+
 </BaseLayout>

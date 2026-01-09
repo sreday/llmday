@@ -1,14 +1,76 @@
 ---
+import { format, parseISO } from 'date-fns';
+
 interface Props {
-  name: string;
-  location?: string;
-  date?: string;
-  url: string;
+  id: string;
+  locationString: string;
+  startTime: string;
+  state: 'before' | 'after';
 }
 
-const { name, url } = Astro.props;
+const { id, locationString, startTime, state } = Astro.props;
+
+const date = parseISO(startTime);
+const day = format(date, 'd');
+const month = format(date, 'MMM');
+const year = format(date, 'yyyy');
+const fullDate = format(date, 'MMMM d, yyyy');
+
+// Extract city from location string (usually first part)
+const city = locationString.split(',')[0].trim();
+const eventName = `LLMday ${city} ${year}`;
+
+// Determine status color
+const isUpcoming = state !== 'after';
 ---
 
-<div>
-  <a href={url}>{name}</a>
+<div class="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-md hover:ring-primary-500/50">
+  
+  <div class="p-6">
+    <div class="flex items-center justify-between">
+      <div class="flex flex-col">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">{year}</span>
+        <h3 class="mt-1 text-xl font-bold text-slate-900 group-hover:text-primary-600">
+          <a href={`/${id}/`}>
+            <span class="absolute inset-0"></span>
+            {eventName}
+          </a>
+        </h3>
+      </div>
+      <div class="flex flex-col items-center justify-center rounded-lg bg-slate-50 px-3 py-2 text-center ring-1 ring-slate-100">
+        <span class="text-xs font-bold uppercase text-slate-500">{month}</span>
+        <span class="text-xl font-bold text-slate-900">{day}</span>
+      </div>
+    </div>
+    
+    <div class="mt-4 flex items-center gap-x-2 text-sm text-slate-500">
+      <svg class="h-4 w-4 flex-none text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+      </svg>
+      {locationString}
+    </div>
+  </div>
+
+  <div class="mt-auto border-t border-slate-100 bg-slate-50 px-6 py-4">
+    {isUpcoming ? (
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+          Open for Registration
+        </span>
+        <span class="text-sm font-semibold text-primary-600 group-hover:text-primary-700">
+          View Details <span aria-hidden="true">&rarr;</span>
+        </span>
+      </div>
+    ) : (
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10">
+          Past Event
+        </span>
+        <span class="text-sm font-semibold text-slate-600 group-hover:text-slate-900">
+          See Recap <span aria-hidden="true">&rarr;</span>
+        </span>
+      </div>
+    )}
+  </div>
 </div>

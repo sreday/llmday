@@ -1,104 +1,119 @@
 ---
 import { getCollection } from 'astro:content';
-import { format, parseISO } from 'date-fns';
 import BaseLayout from '../components/layout/BaseLayout.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import StatsSection from '../components/sections/StatsSection.astro';
+import EventCard from '../components/cards/EventCard.astro';
+import TestimonialCard from '../components/cards/TestimonialCard.astro';
+import SponsorsSection from '../components/sections/SponsorsSection.astro';
 
 const events = await getCollection('events');
 const testimonials = await getCollection('testimonials');
-
-function formatEventDate(startTime: string): string {
-  const date = parseISO(startTime);
-  return format(date, 'MMMM d, yyyy');
-}
-
-function formatEventName(eventId: string): string {
-  const parts = eventId.split('-');
-  const year = parts[0];
-  const city = parts[1].toUpperCase() === 'NYC' ? 'NYC' : parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
-  const quarter = parts[2]?.toUpperCase() || '';
-  return `LLMday ${city} ${year} ${quarter}`.trim();
-}
 
 const sortedEvents = events.sort((a, b) => {
   return new Date(a.data.startTime).getTime() - new Date(b.data.startTime).getTime();
 });
 
 const upcomingEvents = sortedEvents.filter((e) => e.data.state !== 'after');
-const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
+const pastEvents = sortedEvents.filter((e) => e.data.state === 'after').reverse(); // Newest past first
+
+const globalStats = {
+  cities: new Set(events.map(e => e.data.locationString.split(',')[0].trim())).size,
+  events: events.length,
+  speakers: 50, // Static for now, could be dynamic
+  attendees: 500
+};
+
+// Dummy sponsors for home page
+const globalSponsors = [
+  { logo: 'viam', url: 'https://www.viam.com/' },
+  { logo: 'quesma', url: 'https://quesma.com/' },
+  { logo: 'monday', url: 'https://monday.com/' },
+  { logo: 'hockeystick', url: 'https://www.hockeystick.show' }
+];
 ---
 
-<BaseLayout title="LLMday - Large Language Models Conferences">
-  <h1>LLMDAY</h1>
-  <p>Large Language Models, AI and ML In-person Conferences</p>
-  <p>Worldwide - Europe and US</p>
+<BaseLayout title="LLMday - The Premier Global LLM Conference Series">
+  
+  <HeroSection mode="global" />
+  
+  <StatsSection globalStats={globalStats} />
 
-  <h2>Stats</h2>
-  <ul>
-    <li>3 Countries</li>
-    <li>{events.length} Events</li>
-    <li>50+ Speakers</li>
-    <li>500+ Attendees</li>
-  </ul>
-
-  {upcomingEvents.length > 0 && (
-    <section id="upcoming">
-      <h2>Upcoming conferences</h2>
-      <ul>
-        {upcomingEvents.map((event) => (
-          <li>
-            <a href={`/${event.id}/`}>{formatEventName(event.id)}</a>
-            - {formatEventDate(event.data.startTime)}
-            ({event.data.locationString})
-          </li>
-        ))}
-      </ul>
-      <h3>Upcoming meetups</h3>
-      <p>(none scheduled)</p>
-    </section>
-  )}
-
-  <section>
-    <h2>Past conferences</h2>
-    <h3>Past meetups</h3>
+  <section id="upcoming" class="py-24 sm:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Upcoming Conferences</h2>
+        <p class="mt-2 text-lg leading-8 text-slate-600">
+          Join us in a city near you.
+        </p>
+      </div>
+      
+      {upcomingEvents.length > 0 ? (
+        <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          {upcomingEvents.map((event) => (
+            <EventCard 
+              id={event.id}
+              locationString={event.data.locationString}
+              startTime={event.data.startTime}
+              state={event.data.state}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="mt-16 text-center text-slate-500">
+          No upcoming events scheduled at the moment. Check back soon!
+        </div>
+      )}
+    </div>
   </section>
-
-  {pastEvents.length > 0 && (
-    <section id="past">
-      <ul>
-        {pastEvents.map((event) => (
-          <li>
-            <a href={`/${event.id}/`}>{formatEventName(event.id)}</a>
-            - {formatEventDate(event.data.startTime)}
-          </li>
-        ))}
-      </ul>
-    </section>
-  )}
 
   {testimonials.length > 0 && (
-    <section id="testimonials">
-      <h2>What others say about LLMday</h2>
-      {testimonials.map((entry) => (
-        <blockquote>
-          <p>{entry.data.text}</p>
-          <p>— {entry.data.name}
-            {entry.data.job && `, ${entry.data.job}`}
-            {entry.data.company && ` at ${entry.data.company}`}
-          </p>
-        </blockquote>
-      ))}
+    <section id="testimonials" class="bg-white py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Community Feedback</h2>
+        </div>
+        <div class="mx-auto mt-16 flow-root max-w-2xl sm:mt-20 lg:mx-0 lg:max-w-none">
+          <div class="-mt-8 sm:-mx-4 sm:columns-2 sm:text-[0] lg:columns-3">
+            {testimonials.map((entry) => (
+              <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
+                <TestimonialCard
+                  name={entry.data.name}
+                  role={entry.data.job}
+                  company={entry.data.company}
+                  quote={entry.data.text}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   )}
 
-  <section id="sponsor">
-    <h2>Sponsor</h2>
-    <p>Interested in sponsoring LLMday?</p>
-    <p><a href="https://calendly.com/mark-llmday/30-sponsor">Schedule a call</a></p>
-  </section>
+  {pastEvents.length > 0 && (
+    <section id="past" class="bg-slate-50 py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Past Events</h2>
+          <p class="mt-2 text-lg leading-8 text-slate-600">
+             See what you missed.
+          </p>
+        </div>
+        <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+           {pastEvents.map((event) => (
+            <EventCard 
+              id={event.id}
+              locationString={event.data.locationString}
+              startTime={event.data.startTime}
+              state={event.data.state}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
-  <section id="partner">
-    <h2>Partner</h2>
-    <p>Interested in bringing LLMday to your city?</p>
-    <p><a href="mailto:hello@llmday.com">Become A Partner</a></p>
-  </section>
+  <SponsorsSection sponsors={globalSponsors} mailto="mailto:hello@llmday.com" />
+
 </BaseLayout>

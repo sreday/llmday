@@ -4,26 +4,45 @@ import type { Sponsor } from '../../content.config';
 interface Props {
   sponsors: Sponsor[];
   mailto?: string;
+  showTitle?: boolean;
 }
 
-const { sponsors, mailto } = Astro.props;
+const { sponsors, mailto, showTitle = true } = Astro.props;
 ---
 
-<section id="sponsors">
-  <h2>Sponsors & Partners</h2>
-  <p>Want to become a sponsor? Get in touch!</p>
-
-  {sponsors.length > 0 && (
-    <ul>
+<section id="sponsors" class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    {showTitle && (
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Supported by Industry Leaders</h2>
+        <p class="mt-4 text-lg leading-8 text-slate-600">
+          We partner with the most innovative companies in AI.
+        </p>
+      </div>
+    )}
+    
+    <div class="mx-auto mt-16 grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-4">
       {sponsors.map((sponsor) => (
-        <li>
-          <a href={sponsor.url}>{sponsor.logo}</a>
-        </li>
+        <a href={sponsor.url} target="_blank" rel="noopener noreferrer" class="group flex justify-center">
+            {/* 
+               In a real scenario, we'd style the SVG/Image to be grayscale and then color on hover.
+               Since we are rendering raw images/filenames, we'll simulate the container effect.
+            */}
+            <div class="relative h-12 w-full object-contain grayscale transition duration-200 group-hover:grayscale-0 flex items-center justify-center">
+                <span class="text-xl font-bold text-slate-400 group-hover:text-slate-900">{sponsor.logo.replace('.png', '').replace('.jpg', '')}</span>
+                {/* Note: In a real app, use <Image /> from astro:assets here */}
+            </div>
+        </a>
       ))}
-    </ul>
-  )}
-
-  {mailto && (
-    <p><a href={mailto}>Become A Sponsor</a></p>
-  )}
+    </div>
+    
+    {mailto && (
+       <div class="mt-16 flex justify-center">
+          <p class="relative rounded-full bg-white px-4 py-1.5 text-sm leading-6 text-slate-600 ring-1 ring-slate-900/10 hover:ring-slate-900/20">
+            <span class="hidden md:inline">Interested in sponsorship opportunities?</span>
+            <a href={mailto} class="font-semibold text-primary-600"><span class="absolute inset-0" aria-hidden="true"></span> Get in touch <span aria-hidden="true">&rarr;</span></a>
+          </p>
+       </div>
+    )}
+  </div>
 </section>

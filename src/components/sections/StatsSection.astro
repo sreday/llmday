@@ -1,21 +1,44 @@
 ---
-import type { Event } from '../../content.config';
-
 interface Props {
-  event: Event;
-  trackCount: number;
-  speakerCount: number;
+  event?: any; // Making optional to use globally
+  trackCount?: number;
+  speakerCount?: number;
+  
+  // Global stats override
+  globalStats?: {
+    cities: number;
+    events: number;
+    speakers: number;
+    attendees: number;
+  };
 }
 
-const { event, trackCount, speakerCount } = Astro.props;
+const { event, trackCount, speakerCount, globalStats } = Astro.props;
+
+const stats = globalStats ? [
+  { label: 'Countries', value: globalStats.cities },
+  { label: 'Events', value: globalStats.events },
+  { label: 'Speakers', value: `50+` },
+  { label: 'Attendees', value: `500+` },
+] : [
+  { label: 'Days', value: event?.days },
+  { label: 'Speakers', value: speakerCount },
+  { label: 'Tracks', value: trackCount },
+  { label: 'Attendees', value: event?.attendees },
+];
 ---
 
-<section>
-  <h2>Stats</h2>
-  <ul>
-    <li>{event.days} Days</li>
-    <li>{speakerCount} Speakers</li>
-    <li>{trackCount} Tracks</li>
-    <li>{event.attendees} Attendees</li>
-  </ul>
-</section>
+<div class="bg-white py-12 sm:py-16">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-4">
+      {stats.map((stat) => (
+        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+          <dt class="text-base leading-7 text-slate-600">{stat.label}</dt>
+          <dd class="order-first text-3xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+            {stat.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</div>

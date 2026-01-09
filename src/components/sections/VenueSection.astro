@@ -8,17 +8,24 @@ interface Props {
 const { venue } = Astro.props;
 ---
 
-<section id="venue">
-  <h2>Venue</h2>
-  <h3>{venue.name}</h3>
-  <address>
-    {venue.address}, {venue.city}
-  </address>
-  <iframe
-    src={venue.mapEmbedUrl}
-    width="600"
-    height="300"
-    frameborder="1"
-    loading="lazy"
-  />
-</section>
+<div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-900/5">
+  <h2 class="text-lg font-bold text-slate-900 mb-4">Venue</h2>
+  <div class="mb-4">
+    <h3 class="font-semibold text-slate-900">{venue.name}</h3>
+    <p class="text-sm text-slate-600 mt-1">{venue.address}</p>
+    <p class="text-sm text-slate-600">{venue.city}</p>
+  </div>
+  
+  <div class="relative w-full aspect-square rounded-lg overflow-hidden bg-slate-200">
+    <iframe
+      src={venue.mapEmbedUrl}
+      width="100%"
+      height="100%"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="absolute inset-0 h-full w-full"
+    ></iframe>
+  </div>
+</div>
