@@ -3,9 +3,9 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import HeroSection from '../components/sections/HeroSection.astro';
 import StatsSection from '../components/sections/StatsSection.astro';
-import EventCard from '../components/cards/EventCard.astro';
 import TestimonialCard from '../components/cards/TestimonialCard.astro';
 import SponsorsSection from '../components/sections/SponsorsSection.astro';
+import EventCard from '../components/cards/EventCard.astro';
 
 const events = await getCollection('events');
 const testimonials = await getCollection('testimonials');
@@ -16,6 +16,8 @@ const sortedEvents = events.sort((a, b) => {
 
 const upcomingEvents = sortedEvents.filter((e) => e.data.state !== 'after');
 const pastEvents = sortedEvents.filter((e) => e.data.state === 'after').reverse(); // Newest past first
+const nextEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : undefined;
+const otherUpcomingEvents = upcomingEvents.length > 1 ? upcomingEvents.slice(1) : [];
 
 const globalStats = {
   cities: new Set(events.map(e => e.data.locationString.split(',')[0].trim())).size,
@@ -35,50 +37,48 @@ const globalSponsors = [
 
 <BaseLayout title="LLMday - The Premier Global LLM Conference Series">
   
-  <HeroSection mode="global" />
+  <HeroSection mode="global" nextEvent={nextEvent} />
   
-  {/* Lifted section: Negative margin to pull it up over the hero bottom or just closer */}
-  <div class="relative z-10 -mt-12 sm:-mt-16 mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="rounded-2xl bg-white shadow-xl ring-1 ring-slate-900/5">
-        <StatsSection globalStats={globalStats} />
-      </div>
+  {/* Stats Strip - Compact */}
+  <div class="border-b border-slate-200 bg-white">
+      <StatsSection globalStats={globalStats} compact={true} />
   </div>
 
-  <section id="upcoming" class="pt-16 pb-24 sm:pt-24 sm:pb-32">
+  <section id="upcoming" class="py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl text-center">
-        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Upcoming Conferences</h2>
-        <p class="mt-2 text-lg leading-8 text-slate-600">
-          Join us in a city near you.
-        </p>
+      <div class="mx-auto max-w-2xl text-center mb-10">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900">Upcoming Events</h2>
       </div>
       
-      {upcomingEvents.length > 0 ? (
-        <div class="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {upcomingEvents.map((event) => (
-            <EventCard 
-              id={event.id}
-              locationString={event.data.locationString}
-              startTime={event.data.startTime}
-              state={event.data.state}
-            />
-          ))}
-        </div>
+      {otherUpcomingEvents.length > 0 ? (
+         <div class="mx-auto grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+             {/* If we have other upcoming events, show them here */}
+             {otherUpcomingEvents.map(event => (
+                 <EventCard 
+                   id={event.id}
+                   locationString={event.data.locationString}
+                   startTime={event.data.startTime}
+                   state={event.data.state}
+                 />
+             ))}
+         </div>
       ) : (
-        <div class="mt-16 text-center text-slate-500">
-          No upcoming events scheduled at the moment. Check back soon!
-        </div>
+          upcomingEvents.length === 1 ? (
+             <p class="text-center text-slate-500">More events coming soon.</p>
+          ) : (
+             <p class="text-center text-slate-500">No upcoming events scheduled at the moment.</p>
+          )
       )}
     </div>
   </section>
 
   {testimonials.length > 0 && (
-    <section id="testimonials" class="bg-slate-50 py-24 sm:py-32">
+    <section id="testimonials" class="bg-slate-50 py-16 sm:py-24">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center">
-          <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Community Feedback</h2>
+        <div class="mx-auto max-w-2xl text-center mb-12">
+          <h2 class="text-3xl font-bold tracking-tight text-slate-900">Community Feedback</h2>
         </div>
-        <div class="mx-auto mt-16 flow-root max-w-2xl sm:mt-20 lg:mx-0 lg:max-w-none">
+        <div class="mx-auto flow-root max-w-2xl lg:mx-0 lg:max-w-none">
           <div class="-mt-8 sm:-mx-4 sm:columns-2 sm:text-[0] lg:columns-3">
             {testimonials.map((entry) => (
               <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
@@ -97,15 +97,12 @@ const globalSponsors = [
   )}
 
   {pastEvents.length > 0 && (
-    <section id="past" class="bg-white py-24 sm:py-32">
+    <section id="past" class="bg-white py-16 sm:py-24">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center">
-          <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Past Events</h2>
-          <p class="mt-2 text-lg leading-8 text-slate-600">
-             See what you missed.
-          </p>
+        <div class="mx-auto max-w-2xl text-center mb-10">
+          <h2 class="text-3xl font-bold tracking-tight text-slate-900">Past Events</h2>
         </div>
-        <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+        <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-4">
            {pastEvents.map((event) => (
             <EventCard 
               id={event.id}

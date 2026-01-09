@@ -3,6 +3,7 @@ interface Props {
   event?: any; // Making optional to use globally
   trackCount?: number;
   speakerCount?: number;
+  compact?: boolean;
   
   // Global stats override
   globalStats?: {
@@ -13,7 +14,7 @@ interface Props {
   };
 }
 
-const { event, trackCount, speakerCount, globalStats } = Astro.props;
+const { event, trackCount, speakerCount, globalStats, compact = false } = Astro.props;
 
 const stats = globalStats ? [
   { label: 'Countries', value: globalStats.cities },
@@ -28,13 +29,13 @@ const stats = globalStats ? [
 ];
 ---
 
-<div class="bg-white py-12 sm:py-16">
+<div class={`bg-white ${compact ? 'py-8 sm:py-10' : 'py-12 sm:py-16'}`}>
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
-    <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-4">
+    <dl class={`grid grid-cols-2 gap-x-8 gap-y-8 text-center lg:grid-cols-4 ${compact ? '' : 'gap-y-16'}`}>
       {stats.map((stat) => (
-        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+        <div class="mx-auto flex max-w-xs flex-col gap-y-2">
           <dt class="text-base leading-7 text-slate-600">{stat.label}</dt>
-          <dd class="order-first text-3xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+          <dd class={`order-first font-semibold tracking-tight text-slate-900 ${compact ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-5xl'}`}>
             {stat.value}
           </dd>
         </div>
