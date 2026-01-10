@@ -8,45 +8,41 @@ defaultDuration: 30
 
 schedule:
   "Main Room":
-    - break: Registration & Coffee
+    - break: Coffee break
       duration: 30
     - talk: jakub-rohleder-retrieval-economics
-      duration: 45
-    - talk: adrian-boguszewski-ai-on-your-own-terms
-    - talk: agnieszka-niezgoda-agentic-ai-at-scale
-    - talk: anna-sztyber-betley-finetuning
-    - talk: maciej-rzasa-aji-ghose-ai-projects
-    - break: Lunch & Networking
-      duration: 60
-    - talk: mateusz-charytoniuk-self-hosted-llms
-    - talk: patrycja-cieplicka-llm-evaluation
     - talk: piotr-kacala-wojciech-strzalkowski-ai-powered-product-building
-    - talk: grzegorz-warzecha-coming-soon
-    - talk: jacek-dabrowski-coming-soon
-    - break: Networking
+    - talk: anna-sztyber-betley-finetuning
+    - talk: patrycja-cieplicka-llm-evaluation
+    - break: Lunch & networking
+      duration: 60
+    - break: Networking & sponsor crawl
       duration: 30
+    - talk: agnieszka-niezgoda-agentic-ai-at-scale
+    - talk: zbigniew-lukasiak-llm-interface
+    - talk: mateusz-charytoniuk-self-hosted-llms
+    - talk: adrian-boguszewski-ai-on-your-own-terms
+    - talk: maciej-rzasa-aji-ghose-ai-projects
+    - talk: grzegorz-warzecha-coming-soon
     - talk: michael-matloka-coming-soon
 
   "Second Room":
-    - break: Registration & Coffee
+    - break: Coffee break
       duration: 30
-    - break: Keynote in Main Room
-      duration: 45
-    - talk: adrian-sroka-mcp-security
-    - talk: andriy-batutin-verification-gap
-    - talk: daniel-afonso-ai-incident-response
-    - talk: jeff-fan-evals-rag
-    - break: Lunch & Networking
-      duration: 60
-    - talk: maish-saidel-keesing-genai-production
-    - talk: pawel-bulowski-slms-edge
-    - talk: porimol-chandro-agentic-rag
     - talk: przemek-pospieszny-physical-ai
-    - talk: zbigniew-lukasiak-llm-interface
-    - break: Networking
-      duration: 30
+    - talk: adrian-sroka-mcp-security
     - talk: piotr-migdal-harbor-workshop
+    - talk: piotr-migdal-harbor-workshop
+    - break: Lunch & networking
       duration: 60
+    - break: Networking & sponsor crawl
+      duration: 30
+    - talk: maish-saidel-keesing-genai-production
+    - talk: andriy-batutin-verification-gap
+    - talk: porimol-chandro-agentic-rag
+    - talk: pawel-bulowski-slms-edge
+    - talk: jeff-fan-evals-rag
+    - talk: daniel-afonso-ai-incident-response
 
 sponsors:
   - logo: monday.png
