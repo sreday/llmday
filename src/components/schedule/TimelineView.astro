@@ -1,0 +1,115 @@
+---
+import { Image } from 'astro:assets';
+import type { ScheduleData } from '../../lib/schedule';
+import { truncate, getFirstParagraph } from '../../lib/utils';
+
+interface Props {
+  schedule: ScheduleData;
+  eventSlug: string;
+}
+
+const { schedule, eventSlug } = Astro.props;
+
+// Helper to extract short abstract from markdown body
+function getShortAbstract(body: string, maxLength: number = 150): string {
+  const firstPara = getFirstParagraph(body);
+  if (!firstPara) return '';
+  // Remove markdown formatting
+  const plain = firstPara
+    .replace(/\*\*([^*]+)\*\*/g, '$1')  // bold
+    .replace(/\*([^*]+)\*/g, '$1')      // italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // links
+  return truncate(plain, maxLength);
+}
+
+// Preload all speaker images
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
+
+function getSpeakerImage(photo: string) {
+  const imagePath = `/src/assets/speakers/${photo}`;
+  return images[imagePath]?.default;
+}
+---
+
+<div class="timeline-view">
+{schedule.tracks.map((track, trackIndex) => (
+  <div class="track-wrapper">
+    <div class="track-section-header" id={`track-${trackIndex + 1}`}>
+      {track.roomName} &bull; Track {track.trackId}
+    </div>
+
+    {track.items.map((item) => {
+      if (item.type === 'break' || item.type === 'wrapup') {
+        return (
+          <div class="schedule-item break-item">
+            <div class="meta">
+              <h4 class="time">{item.timeStr}</h4>
+            </div>
+            <div class="content">
+              <h3>{item.breakInfo?.title}</h3>
+              {item.breakInfo?.comment && (
+                <div class="location">{item.breakInfo.comment}</div>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      if (item.talk) {
+        const talk = item.talk;
+        const talkUrl = `/${eventSlug}/talks/${talk.slug}`;
+        const speaker = talk.data.speakers[0];
+        const speakerImage = getSpeakerImage(speaker.photo);
+        const shortAbstract = getShortAbstract(talk.body);
+        return (
+          <div class="schedule-item">
+            <div class="meta">
+              <h4 class="time">{item.timeStr}</h4>
+              <a href={talkUrl}>
+                {speakerImage ? (
+                  <Image
+                    src={speakerImage}
+                    alt={speaker.name}
+                    width={80}
+                    height={80}
+                    class="profile-image"
+                    loading="eager"
+                  />
+                ) : (
+                  <div class="profile-placeholder" />
+                )}
+              </a>
+              <div class="name">{speaker.name}</div>
+            </div>
+            <div class="content">
+              <h3>
+                <a href={talkUrl}>{talk.data.title}</a>
+              </h3>
+              <div class="location">{speaker.organization}</div>
+              {shortAbstract && <div class="desc">{shortAbstract}</div>}
+            </div>
+          </div>
+        );
+      }
+
+      return null;
+    })}
+  </div>
+))}
+</div>
+
+<style>
+  .profile-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #e5e7eb;
+  }
+
+  .desc {
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+</style>

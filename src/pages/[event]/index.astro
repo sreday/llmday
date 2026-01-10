@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import { buildSchedule, getSpeakers } from '../../lib/schedule';
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import HeroSection from '../../components/sections/HeroSection.astro';
+import StatsSection from '../../components/sections/StatsSection.astro';
+import ScheduleSection from '../../components/schedule/ScheduleSection.astro';
+import SpeakersSection from '../../components/sections/SpeakersSection.astro';
+import VenueSection from '../../components/sections/VenueSection.astro';
+import SponsorsSection from '../../components/sections/SponsorsSection.astro';
+import TicketsSection from '../../components/sections/TicketsSection.astro';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map((event) => ({
+    params: { event: event.id },
+    props: { event: event.data, eventId: event.id },
+  }));
+}
+
+const { event, eventId } = Astro.props;
+const allTalks = await getCollection('talks');
+const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
+---
+
+<BaseLayout title={`LLMday ${event.locationString}`} event={event}>
+  <HeroSection event={event} />
+  <StatsSection event={event} trackCount={schedule.tracks.length} speakerCount={getSpeakers(schedule).length} />
+
+  {event.state !== 'after' && event.lumaEventId && (
+    <TicketsSection lumaEventId={event.lumaEventId} />
+  )}
+
+  {event.state === 'before' ? (
+    <section id="schedule" class="section">
+      <div class="container">
+        <h3 class="section-heading text-center mb-5">Schedule</h3>
+        <p class="text-center text-muted">Coming soon</p>
+      </div>
+    </section>
+  ) : (
+    <ScheduleSection event={event} schedule={schedule} eventSlug={eventId} />
+  )}
+
+  {event.state !== 'before' && (
+    <SpeakersSection schedule={schedule} eventSlug={eventId} />
+  )}
+
+  <VenueSection venue={event.venue} />
+  <SponsorsSection sponsors={event.sponsors} mailto={event.mailto} />
+</BaseLayout>
