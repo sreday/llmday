@@ -16,15 +16,27 @@ const { event, mode = 'event', nextEvent, cityName } = Astro.props;
 
 {mode === 'global' ? (
   <div class="relative isolate overflow-hidden bg-slate-900">
-    <div class="absolute inset-0 -z-10 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800"></div>
+    {/* Photo background with overlay - cropped to show hands/audience */}
+    <div class="absolute inset-0 -z-10">
+      <img
+        src="/assets/photos/london-2022-0.jpg"
+        alt=""
+        class="w-full h-full object-cover object-bottom"
+        style="object-position: center 85%;"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/40"></div>
+    </div>
 
-    <div class="mx-auto max-w-7xl px-6 lg:px-8 py-10 sm:py-12">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8 py-16 sm:py-20">
       <div class="text-center max-w-3xl mx-auto">
-        <h1 class="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-          The Premier Global <span class="text-primary-400">LLM Conference</span>
+        <p class="text-lg sm:text-xl font-semibold tracking-widest text-llm-green uppercase mb-4">
+          LLMday
+        </p>
+        <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl leading-tight">
+          Large Language Models, AI and ML
         </h1>
-        <p class="mt-4 text-base text-slate-300 max-w-2xl mx-auto">
-          Join the world's leading AI engineers, researchers, and founders. Deep dives into Large Language Models, Generative AI, and Machine Learning.
+        <p class="mt-4 text-xl sm:text-2xl text-slate-200 font-light">
+          In-person conferences
         </p>
       </div>
     </div>

@@ -46,6 +46,7 @@ const events = defineCollection({
     state: z.enum(['before', 'active', 'after']),
     startTime: z.string(), // ISO datetime string
     locationString: z.string(),
+    image: z.string().default(''), // Event card image (city skyline)
     days: z.number().default(1),
     attendees: z.number().default(100),
     defaultDuration: z.number().default(30),

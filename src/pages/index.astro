@@ -46,32 +46,30 @@ function getCityFromId(eventId: string) {
   {/* Upcoming Events - Directly visible, no scrolling needed */}
   <section id="upcoming" class="py-8 sm:py-10 bg-white">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <h2 class="text-lg font-bold text-slate-900 mb-4">Upcoming Events</h2>
+      <div class="text-center mb-6">
+        <h2 class="text-lg font-bold text-slate-900">Upcoming Events</h2>
+        <p class="text-sm text-slate-500">Register for our next conferences</p>
+      </div>
 
       {upcomingEvents.length > 0 ? (
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {upcomingEvents.map((event) => {
-            const date = parseISO(event.data.startTime);
             const city = getCityFromId(event.id);
+            const imageUrl = event.data.image ? `/assets/events/${event.data.image}` : null;
             return (
-              <a href={`/${event.id}/`} class="group block rounded-lg border border-slate-200 p-4 hover:border-primary-500 hover:shadow-sm transition-all">
-                <div class="flex items-start justify-between gap-4">
-                  <div class="min-w-0">
-                    <h3 class="font-semibold text-slate-900 group-hover:text-primary-600">
-                      LLMday {city}
-                    </h3>
-                    <p class="text-sm text-slate-500 mt-1">{event.data.locationString}</p>
+              <a href={`/${event.id}/`} class="group block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                {imageUrl && (
+                  <div class="aspect-[2/1] overflow-hidden">
+                    <img
+                      src={imageUrl}
+                      alt={`LLMday ${city}`}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
-                  <div class="text-right shrink-0">
-                    <div class="text-xs font-medium text-slate-500 uppercase">{format(date, 'MMM')}</div>
-                    <div class="text-xl font-bold text-slate-900">{format(date, 'd')}</div>
-                  </div>
-                </div>
-                <div class="mt-3 flex items-center justify-between">
-                  <span class="inline-flex items-center rounded bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700">
-                    Open for Registration
-                  </span>
-                  <span class="text-xs font-medium text-primary-600">View Details →</span>
+                )}
+                <div class="p-4">
+                  <h3 class="font-bold text-slate-900">LLMday {city}</h3>
+                  <span class="text-primary-600 text-sm font-medium">Registration open →</span>
                 </div>
               </a>
             );
@@ -87,14 +85,18 @@ function getCityFromId(eventId: string) {
   {testimonials.length > 0 && (
     <section id="testimonials" class="py-8 sm:py-10 bg-slate-50">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <h2 class="text-lg font-bold text-slate-900 mb-4">Community Feedback</h2>
-        <div class={`grid gap-4 ${testimonials.length === 1 ? 'max-w-lg' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
+        <div class="text-center mb-6">
+          <h2 class="text-lg font-bold text-slate-900">Testimonials</h2>
+          <p class="text-sm text-slate-500">What attendees say about LLMday</p>
+        </div>
+        <div class={`grid gap-4 ${testimonials.length === 1 ? 'max-w-lg mx-auto' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
           {testimonials.map((entry) => (
             <TestimonialCard
               name={entry.data.name}
               role={entry.data.job}
               company={entry.data.company}
               quote={entry.data.text}
+              headshot={entry.data.headshot}
             />
           ))}
         </div>
@@ -106,7 +108,10 @@ function getCityFromId(eventId: string) {
   {pastEvents.length > 0 && (
     <section id="past" class="py-8 sm:py-10 bg-white">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <h2 class="text-lg font-bold text-slate-900 mb-4">Past Events</h2>
+        <div class="text-center mb-6">
+          <h2 class="text-lg font-bold text-slate-900">Past Events</h2>
+          <p class="text-sm text-slate-500">Browse recordings and materials</p>
+        </div>
         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {pastEvents.map((event) => {
             const date = parseISO(event.data.startTime);
@@ -130,31 +135,29 @@ function getCityFromId(eventId: string) {
     </section>
   )}
 
-  {/* Sponsors - Compact */}
-  <section id="sponsors" class="py-8 sm:py-10 bg-slate-50 border-t border-slate-200">
+  {/* Sponsors */}
+  <section id="sponsors" class="py-10 sm:py-12 bg-slate-50 border-t border-slate-200">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 class="text-lg font-bold text-slate-900">Sponsors</h2>
-          <p class="text-sm text-slate-500">Partners who make LLMday possible</p>
-        </div>
-        <div class="flex items-center gap-6">
-          {globalSponsors.map((sponsor) => {
-            const logoFile = sponsor.logo.includes('.') ? sponsor.logo : `${sponsor.logo}.png`;
-            return (
-              <a href={sponsor.url} target="_blank" rel="noopener noreferrer" class="group">
-                <img
-                  src={`/assets/sponsors/${logoFile}`}
-                  alt={sponsor.logo}
-                  class="h-6 sm:h-8 w-auto object-contain opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition"
-                  loading="lazy"
-                />
-              </a>
-            );
-          })}
-        </div>
+      <div class="text-center mb-8">
+        <h2 class="text-lg font-bold text-slate-900">Sponsors</h2>
+        <p class="text-sm text-slate-500">Partners who make LLMday possible</p>
       </div>
-      <div class="mt-4 text-center sm:text-right">
+      <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-12">
+        {globalSponsors.map((sponsor) => {
+          const logoFile = sponsor.logo.includes('.') ? sponsor.logo : `${sponsor.logo}.png`;
+          return (
+            <a href={sponsor.url} target="_blank" rel="noopener noreferrer" class="group">
+              <img
+                src={`/assets/sponsors/${logoFile}`}
+                alt={sponsor.logo}
+                class="h-12 sm:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition"
+                loading="lazy"
+              />
+            </a>
+          );
+        })}
+      </div>
+      <div class="mt-6 text-center">
         <a href="mailto:hello@llmday.com" class="text-sm font-medium text-primary-600 hover:text-primary-700">
           Become a sponsor →
         </a>

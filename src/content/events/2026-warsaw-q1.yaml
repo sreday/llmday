@@ -1,6 +1,7 @@
 state: active
 startTime: "2026-02-12T09:00:00+01:00"
 locationString: "CIC Warsaw, Poland"
+image: llmday-2026-warsaw-q1.png
 days: 1
 attendees: 100
 defaultDuration: 30

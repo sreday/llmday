@@ -1,6 +1,7 @@
 state: before
 startTime: "2026-05-28T09:00:00+00:00"
 locationString: "Everyman Canary Wharf, London, UK"
+image: llmday-2026-london-q2.png
 days: 1
 attendees: 150
 defaultDuration: 30
