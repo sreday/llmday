@@ -8,13 +8,3 @@
   headshot: Miko Pawlikowski.png
   twitter: ""
   linkedin: ""
-- id: mark-pawlikowski
-  name: Mark Pawlikowski
-  job: Organizer
-  company: LLMday
-  text: "We've been doing AI-first online conferences for a while now, as a part of the Conf42 brand. Starting LLMday - a series of in-person events around the same theme - feels like the right next step to bring the community together in person."
-  event: LLMday Warsaw
-  isSpeaker: true
-  headshot: Mark Pawlikowski.png
-  twitter: ""
-  linkedin: ""

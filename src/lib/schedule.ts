@@ -104,14 +104,20 @@ export function buildSchedule(
   };
 }
 
-// Helper to get all unique speakers from schedule
+// Helper to check if a talk is a placeholder
+export function isPlaceholderTalk(talk: ScheduleTalk): boolean {
+  const title = talk.data.title.toLowerCase();
+  return title === 'coming soon' || title === 'tba' || title === 'to be announced';
+}
+
+// Helper to get all unique speakers from schedule (excluding placeholders)
 export function getSpeakers(schedule: ScheduleData): ScheduleTalk[] {
   const seen = new Set<string>();
   const result: ScheduleTalk[] = [];
 
   for (const track of schedule.tracks) {
     for (const item of track.items) {
-      if (item.talk) {
+      if (item.talk && !isPlaceholderTalk(item.talk)) {
         for (const speaker of item.talk.data.speakers) {
           if (!seen.has(speaker.name)) {
             seen.add(speaker.name);

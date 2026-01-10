@@ -73,24 +73,20 @@ const globalSponsors = [
   </section>
 
   {testimonials.length > 0 && (
-    <section id="testimonials" class="bg-slate-50 py-16 sm:py-24">
+    <section id="testimonials" class="bg-slate-50 py-10 sm:py-12">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center mb-12">
-          <h2 class="text-3xl font-bold tracking-tight text-slate-900">Community Feedback</h2>
+        <div class="mb-6">
+          <h2 class="text-xl font-bold tracking-tight text-slate-900 text-center">Community Feedback</h2>
         </div>
-        <div class="mx-auto flow-root max-w-2xl lg:mx-0 lg:max-w-none">
-          <div class="-mt-8 sm:-mx-4 sm:columns-2 sm:text-[0] lg:columns-3">
-            {testimonials.map((entry) => (
-              <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-                <TestimonialCard
-                  name={entry.data.name}
-                  role={entry.data.job}
-                  company={entry.data.company}
-                  quote={entry.data.text}
-                />
-              </div>
-            ))}
-          </div>
+        <div class={`grid gap-4 ${testimonials.length === 1 ? 'max-w-xl mx-auto' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
+          {testimonials.map((entry) => (
+            <TestimonialCard
+              name={entry.data.name}
+              role={entry.data.job}
+              company={entry.data.company}
+              quote={entry.data.text}
+            />
+          ))}
         </div>
       </div>
     </section>

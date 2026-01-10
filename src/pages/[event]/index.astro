@@ -27,25 +27,25 @@ const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
   <HeroSection event={event} mode="event" />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-    <div class="flex flex-col-reverse lg:grid lg:grid-cols-3 gap-8 lg:gap-12">
-      
+    <div class="lg:grid lg:grid-cols-3 gap-8 lg:gap-12">
+
       {/* Left Main Column (Schedule & Content) */}
       <div class="lg:col-span-2 space-y-12">
-        
+
         {/* Schedule */}
         <div id="schedule" class="scroll-mt-20">
-          <div class="flex items-baseline justify-between border-b border-slate-200 pb-4 mb-6">
-            <h2 class="text-2xl font-bold leading-7 text-slate-900">
+          <div class="flex items-baseline justify-between border-b border-slate-200 pb-3 mb-4">
+            <h2 class="text-xl font-bold leading-7 text-slate-900">
               Schedule
             </h2>
-             <p class="text-sm text-slate-500">
-                {event.dateString} • {schedule.tracks.length > 1 ? `${schedule.tracks.length} Tracks` : 'Single Track'}
+             <p class="text-xs text-slate-500">
+                {schedule.tracks.length > 1 ? `${schedule.tracks.length} Tracks` : ''}
              </p>
           </div>
-          
+
           {event.state === 'before' && !schedule.allTimes.length ? (
-            <div class="rounded-lg bg-slate-50 p-8 text-center">
-              <p class="text-slate-500">Schedule coming soon.</p>
+            <div class="rounded-lg bg-slate-50 p-6 text-center">
+              <p class="text-slate-500 text-sm">Schedule coming soon.</p>
             </div>
           ) : (
              <ScheduleSection schedule={schedule} eventSlug={eventId} />
@@ -56,24 +56,24 @@ const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
         <div id="speakers" class="scroll-mt-20">
            <SpeakersSection schedule={schedule} eventSlug={eventId} />
         </div>
-        
+
       </div>
 
-      {/* Right Sidebar (Sticky Logistics) */}
-      <div class="lg:col-span-1">
+      {/* Right Sidebar (Sticky Logistics) - Hidden on mobile, shown via sticky bar */}
+      <div class="hidden lg:block lg:col-span-1">
         <div class="lg:sticky lg:top-24 space-y-6">
             {event.state !== 'after' && event.lumaEventId && (
                 <div id="tickets" class="scroll-mt-24">
                   <TicketsSection lumaEventId={event.lumaEventId} />
                 </div>
             )}
-            
+
             <div id="venue" class="scroll-mt-24">
                 <VenueSection venue={event.venue} />
             </div>
-            
-            <div id="sponsors" class="rounded-2xl bg-white p-6 ring-1 ring-slate-900/5 shadow-sm">
-                <h2 class="text-sm font-semibold text-slate-900 mb-4">Sponsors</h2>
+
+            <div id="sponsors" class="rounded-2xl bg-white p-5 ring-1 ring-slate-900/5 shadow-sm">
+                <h2 class="text-sm font-semibold text-slate-900 mb-3">Sponsors</h2>
                 <SponsorsSection sponsors={event.sponsors} mailto={event.mailto} showTitle={false} />
             </div>
         </div>
