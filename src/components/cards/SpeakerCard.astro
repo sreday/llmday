@@ -15,27 +15,21 @@ const { name, role, company, image, talkTitle, talkSlug, eventSlug } = Astro.pro
 const imageUrl = image ? `/assets/speakers/${image}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
 ---
 
-<div class="group relative flex flex-col items-start">
-  <div class="relative w-full overflow-hidden rounded-2xl bg-slate-100 aspect-[4/5] mb-4">
-    <img 
-        src={imageUrl} 
+<a href={`/${eventSlug}/talks/${talkSlug}/`} class="group block">
+  <div class="relative w-full overflow-hidden rounded-lg bg-slate-100 aspect-square mb-2">
+    <img
+        src={imageUrl}
         alt={name}
-        class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"
+        class="absolute inset-0 h-full w-full object-cover transition duration-200 group-hover:scale-105"
         loading="lazy"
     />
   </div>
-  <div class="max-w-xl">
-    <div class="mt-0 flex items-center gap-x-4 text-xs">
-        {company && (
-            <span class="relative z-10 rounded-full bg-slate-50 px-3 py-1.5 font-medium text-slate-600 ring-1 ring-inset ring-slate-900/5">{company}</span>
-        )}
-    </div>
-    <h3 class="mt-3 text-lg font-semibold leading-6 text-slate-900 group-hover:text-slate-600">
-      <a href={`/${eventSlug}/talks/${talkSlug}/`}>
-        <span class="absolute inset-0"></span>
-        {name}
-      </a>
+  <div>
+    <h3 class="text-xs font-medium text-slate-900 group-hover:text-primary-600 leading-tight truncate">
+      {name}
     </h3>
-    {role && <p class="text-sm leading-6 text-slate-500">{role}</p>}
+    {company && (
+      <p class="text-[10px] text-slate-500 truncate mt-0.5">{company}</p>
+    )}
   </div>
-</div>
+</a>
