@@ -9,6 +9,8 @@ schedule:
   "Main Room":
     - break: Registration & Coffee
       duration: 30
+    - talk: jakub-rohleder-retrieval-economics
+      duration: 45
     - talk: adrian-boguszewski-ai-on-your-own-terms
     - talk: agnieszka-niezgoda-agentic-ai-at-scale
     - talk: anna-sztyber-betley-finetuning
@@ -27,6 +29,8 @@ schedule:
   "Second Room":
     - break: Registration & Coffee
       duration: 30
+    - break: Keynote in Main Room
+      duration: 45
     - talk: adrian-sroka-mcp-security
     - talk: andriy-batutin-verification-gap
     - talk: daniel-afonso-ai-incident-response
