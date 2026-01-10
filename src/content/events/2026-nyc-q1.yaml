@@ -1,6 +1,7 @@
 state: before
 startTime: "2026-03-06T09:00:00-05:00"
 locationString: "VIAM, 1900 Broadway, 6th Floor, New York, NY 10023"
+image: llmday-2026-nyc-q1.png
 days: 1
 attendees: 100
 defaultDuration: 30
