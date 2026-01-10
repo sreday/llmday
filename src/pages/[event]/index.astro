@@ -20,11 +20,23 @@ export async function getStaticPaths() {
 const { event, eventId } = Astro.props;
 const allTalks = await getCollection('talks');
 const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
+
+// Get city name from event ID
+const cityMap: Record<string, string> = {
+  'warsaw': 'Warsaw',
+  'nyc': 'New York',
+  'london': 'London',
+  'berlin': 'Berlin',
+  'paris': 'Paris',
+  'sf': 'San Francisco',
+};
+const cityKey = eventId.split('-')[1];
+const cityName = cityMap[cityKey] || cityKey.charAt(0).toUpperCase() + cityKey.slice(1);
 ---
 
-<BaseLayout title={`LLMday ${event.locationString.split(',')[0]}`} event={event}>
-  
-  <HeroSection event={event} mode="event" />
+<BaseLayout title={`LLMday ${cityName}`} event={event}>
+
+  <HeroSection event={event} mode="event" cityName={cityName} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
     <div class="lg:grid lg:grid-cols-3 gap-8 lg:gap-12">
