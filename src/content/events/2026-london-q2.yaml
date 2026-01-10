@@ -1,5 +1,6 @@
 state: before
 startTime: "2026-05-28T09:00:00+00:00"
+timezone: "Europe/London"
 locationString: "Everyman Canary Wharf, London, UK"
 days: 1
 attendees: 150

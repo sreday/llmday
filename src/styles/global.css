@@ -822,6 +822,15 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 3rem;
   }
 
+  /* Hide timeline line and dots on mobile */
+  .timeline-view::before {
+    display: none;
+  }
+
+  .schedule-item::before {
+    display: none;
+  }
+
   .schedule-item {
     flex-direction: column;
   }
@@ -832,6 +841,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     gap: 1rem;
+    padding-right: 0;
   }
 
   .talk-page .speaker-profile {

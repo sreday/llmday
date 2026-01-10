@@ -45,6 +45,7 @@ const events = defineCollection({
   schema: z.object({
     state: z.enum(['before', 'active', 'after']),
     startTime: z.string(), // ISO datetime string
+    timezone: z.string().default('UTC'), // IANA timezone name
     locationString: z.string(),
     days: z.number().default(1),
     attendees: z.number().default(100),

@@ -1,5 +1,6 @@
 state: active
 startTime: "2026-02-12T09:00:00+01:00"
+timezone: "Europe/Warsaw"
 locationString: "CIC Warsaw, Poland"
 days: 1
 attendees: 100
@@ -21,9 +22,9 @@ schedule:
     - talk: patrycja-cieplicka-llm-evaluation
     - talk: piotr-kacala-wojciech-strzalkowski-ai-powered-product-building
     - talk: grzegorz-warzecha-coming-soon
+    - talk: jacek-dabrowski-coming-soon
     - break: Networking
       duration: 30
-    - talk: jacek-dabrowski-coming-soon
     - talk: michael-matloka-coming-soon
 
   "Second Room":
