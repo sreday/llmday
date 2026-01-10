@@ -28,13 +28,18 @@ const additionalSpeakers = talk.data.speakers.slice(1);
 
 // Dynamic import for speaker photo
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
-const imagePath = `/src/assets/speakers/${speaker.photo}`;
-const speakerImage = images[imagePath]?.default;
 
-function getSpeakerImage(photo: string) {
+function getSpeakerImage(photo: string, speakerName: string) {
   const path = `/src/assets/speakers/${photo}`;
-  return images[path]?.default;
+  const image = images[path]?.default;
+  // Fail build if speaker photo is declared but missing
+  if (photo && !image) {
+    throw new Error(`Missing speaker image: ${photo} for speaker ${speakerName}`);
+  }
+  return image;
 }
+
+const speakerImage = getSpeakerImage(speaker.photo, speaker.name);
 ---
 
 <BaseLayout title={`${talk.data.title} - LLMday`} event={event}>
@@ -90,7 +95,7 @@ function getSpeakerImage(photo: string) {
         <div class="additional-speakers">
           <h4>{additionalSpeakers.length === 1 ? 'Co-speaker' : 'Co-speakers'}</h4>
           {additionalSpeakers.map((coSpeaker) => {
-            const coSpeakerImage = getSpeakerImage(coSpeaker.photo);
+            const coSpeakerImage = getSpeakerImage(coSpeaker.photo, coSpeaker.name);
             return (
               <div class="co-speaker-profile">
                 {coSpeakerImage ? (

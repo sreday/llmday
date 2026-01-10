@@ -15,6 +15,11 @@ const talkUrl = `/${eventSlug}/talks/${talk.slug}`;
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
 const imagePath = `/src/assets/speakers/${speaker.photo}`;
 const speakerImage = images[imagePath]?.default;
+
+// Fail build if speaker photo is declared but missing
+if (speaker.photo && !speakerImage) {
+  throw new Error(`Missing speaker image: ${speaker.photo} for speaker ${speaker.name}`);
+}
 ---
 
 <div class="speaker-card">

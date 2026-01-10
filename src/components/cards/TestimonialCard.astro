@@ -11,12 +11,17 @@ const { testimonial } = Astro.props;
 // Import speaker photos for testimonials
 const speakerImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
 
-function getHeadshot(filename: string) {
+function getHeadshot(filename: string, name: string) {
   const path = `/src/assets/speakers/${filename}`;
-  return speakerImages[path]?.default;
+  const image = speakerImages[path]?.default;
+  // Fail build if headshot is declared but missing
+  if (filename && !image) {
+    throw new Error(`Missing testimonial headshot: ${filename} for ${name}`);
+  }
+  return image;
 }
 
-const headshot = testimonial.headshot ? getHeadshot(testimonial.headshot) : null;
+const headshot = testimonial.headshot ? getHeadshot(testimonial.headshot, testimonial.name) : null;
 ---
 
 <div class="testimonial-card">

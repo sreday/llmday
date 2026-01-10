@@ -25,9 +25,14 @@ function getShortAbstract(body: string, maxLength: number = 150): string {
 // Preload all speaker images
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/speakers/*.png', { eager: true });
 
-function getSpeakerImage(photo: string) {
+function getSpeakerImage(photo: string, speakerName: string) {
   const imagePath = `/src/assets/speakers/${photo}`;
-  return images[imagePath]?.default;
+  const image = images[imagePath]?.default;
+  // Fail build if speaker photo is declared but missing
+  if (photo && !image) {
+    throw new Error(`Missing speaker image: ${photo} for speaker ${speakerName}`);
+  }
+  return image;
 }
 ---
 
@@ -59,7 +64,7 @@ function getSpeakerImage(photo: string) {
         const talk = item.talk;
         const talkUrl = `/${eventSlug}/talks/${talk.slug}`;
         const speaker = talk.data.speakers[0];
-        const speakerImage = getSpeakerImage(speaker.photo);
+        const speakerImage = getSpeakerImage(speaker.photo, speaker.name);
         const shortAbstract = getShortAbstract(talk.body);
         return (
           <div class="schedule-item">
