@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import type { Venue } from '../../content.config';
+
+interface Props {
+  venue: Venue;
+}
+
+const { venue } = Astro.props;
+
+// Import venue images
+const venueImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/venue/*.{jpg,jpeg,png}', { eager: true });
+
+function getVenueImage(filename: string) {
+  const path = `/src/assets/venue/${filename}`;
+  return venueImages[path]?.default;
+}
+---
+
+<section id="venue" class="venue-section section theme-bg-primary text-white">
+  <div class="container">
+    <h3 class="section-heading text-center mb-5 text-white">Venue</h3>
+    <div class="row gx-5 py-lg-5">
+      <div class="col-12 col-lg-7 h-100">
+        <div class="desc">
+          <h4 class="text-white mb-3">{venue.name}</h4>
+          <p>
+            {venue.address}<br />
+            {venue.city}
+          </p>
+
+          <div class="row pt-3">
+            <iframe
+              src={venue.mapEmbedUrl}
+              style="border:0;"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-3 col-lg-4 offset-lg-1 position-relative h-100 mt-5 mt-lg-0">
+        <div class="figures-holder">
+          {venue.images.slice(0, 3).map((img, index) => {
+            const image = getVenueImage(img);
+            return image && (
+              <div class={`figure figure-${index + 1}`}>
+                <Image class="shadow" src={image} alt={`${venue.name} photo ${index + 1}`} />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

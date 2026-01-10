@@ -1,0 +1,48 @@
+state: before
+startTime: "2026-03-06T09:00:00-05:00"
+locationString: "VIAM, 1900 Broadway, 6th Floor, New York, NY 10023"
+days: 1
+attendees: 100
+defaultDuration: 30
+
+schedule:
+  "Main Room":
+    - break: Registration & Coffee
+      duration: 30
+    - talk: lior-schejter-mad-software-design
+    - talk: alisson-sol-edge-ai
+    - talk: ben-savage-ml-ai-cloud-native
+    - talk: shantanu-sharma-ai-safety-pipelines
+    - break: Lunch & Networking
+      duration: 60
+    - talk: jeremy-curcio-prompts-ai-development
+    - talk: surya-appini-ai-assistants-wearables
+    - talk: tim-spann-stateful-ai-agents
+    - talk: karen-zhou-eval-systems
+    - talk: suvendu-mohanty-voice-llms
+    - talk: harish-mandhadi-ai-dlc
+    - break: Networking
+      duration: 30
+
+sponsors:
+  - logo: viam.png
+    url: https://www.viam.com/
+  - logo: hockeystick.png
+    url: https://www.hockeystick.show
+lumaEventId: evt-Rq2eouqzffNp2PW
+cfpUrl: https://www.papercall.io/llmday-2026-nyc-q1
+heroPictures:
+  - london-2022-0.jpg
+venue:
+  name: VIAM office
+  address: 1900 Broadway, 6th Floor
+  city: New York, NY 10023
+  mapEmbedUrl: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1004.234234253616!2d-73.98249453032727!3d40.77181311385228!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258f56fb5f9f7%3A0xb7f1884fd17857e6!2s1900%20Broadway%2C%20New%20York%2C%20NY%2010023!5e1!3m2!1sen!2sus!4v1731041527458!5m2!1sen!2sus
+  images:
+    - venue-1.jpg
+    - venue-2.jpg
+    - venue-3.jpg
+twitterUrl: https://twitter.com/llmday_com
+linkedinUrl: https://www.linkedin.com/company/llmday/
+youtubeUrl: https://www.youtube.com/@llmday
+mailto: mailto:hello@llmday.com

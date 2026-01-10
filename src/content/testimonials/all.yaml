@@ -1,0 +1,20 @@
+- id: miko-pawlikowski
+  name: Miko Pawlikowski
+  job: Tech Author
+  company: Hockeystick.show
+  text: "LLMs and AI agents are quickly becoming part of every developer's daily tools. LLMday feels like the perfect chance to see where all this is actually heading. And honestly, even if AI turns out to be a bubble, I can't shake the feeling that the real revolution hasn't even started yet, and we'd like to be there when it does."
+  event: LLMday Warsaw
+  isSpeaker: true
+  headshot: Miko Pawlikowski.png
+  twitter: ""
+  linkedin: ""
+- id: mark-pawlikowski
+  name: Mark Pawlikowski
+  job: Organizer
+  company: LLMday
+  text: "We've been doing AI-first online conferences for a while now, as a part of the Conf42 brand. Starting LLMday - a series of in-person events around the same theme - feels like the right next step to bring the community together in person."
+  event: LLMday Warsaw
+  isSpeaker: true
+  headshot: Mark Pawlikowski.png
+  twitter: ""
+  linkedin: ""

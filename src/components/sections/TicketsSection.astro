@@ -1,0 +1,79 @@
+---
+interface Props {
+  lumaEventId: string;
+}
+
+const { lumaEventId } = Astro.props;
+---
+
+<section id="tickets" class="tickets-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-5">Tickets</h3>
+    <div class="luma-wrapper">
+      <div class="luma-embed-container">
+        <iframe
+          src={`https://lu.ma/embed/event/${lumaEventId}/simple`}
+          width="800"
+          height="690"
+          frameborder="0"
+          allowfullscreen
+          aria-hidden="false"
+          tabindex="0"
+        />
+      </div>
+      <div class="text-center mt-4">
+        <a
+          href={`https://lu.ma/event/${lumaEventId}`}
+          class="luma-checkout--button"
+          data-luma-action="checkout"
+          data-luma-event-id={lumaEventId}
+        >
+          Register on luma
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script id="luma-checkout" src="https://embed.lu.ma/checkout-button.js"></script>
+
+<style>
+  .luma-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .luma-embed-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 86.25%; /* 690/800 aspect ratio */
+    height: 0;
+    overflow: hidden;
+  }
+
+  .luma-embed-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(191, 203, 218, 0.53);
+    border-radius: 4px;
+  }
+
+  .luma-checkout--button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #1a1a2e;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+  }
+
+  .luma-checkout--button:hover {
+    background: #2d2d44;
+    color: white;
+  }
+</style>
