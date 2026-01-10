@@ -1,0 +1,39 @@
+base_path: "https://www.llmday.com/"
+base_folder: "static"
+twitter_url: https://twitter.com/llmday_com
+linkedin_url: https://www.linkedin.com/company/llmday/
+youtube_url: https://www.youtube.com/@llmday
+mailto: "mailto:hello@llmday.com"
+
+hero_pictures:
+- ../photos/london-2022-0.jpg
+
+counts:
+ events: 1
+ countries: 1
+ speakers: 10+
+ attendees: 200+
+
+
+events:
+
+  - name: LLMday Warsaw 2026 Q1
+    location: CIC Warsaw, Poland
+    photo_url: ./assets/images/events/llmday-2026-warsaw-q1.png
+    url: ./2026-warsaw-q1/
+
+  - name: LLMday NYC 2026 Q1
+    location: VIAM, New York, United States
+    photo_url: ./assets/images/events/llmday-2026-nyc-q1.png
+    url: ./2026-nyc-q1/
+
+  - name: LLMday London 2026 Q2
+    location: Everyman Canary Wharf, London, UK
+    photo_url: ./assets/images/events/llmday-2026-london-q2.png
+    url: ./2026-london-q2/
+
+events_past: []
+
+meetups: []
+
+meetups_past: []

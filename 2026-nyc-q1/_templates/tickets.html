@@ -1,0 +1,24 @@
+<div class="ratio ratio-16x9">
+  <iframe
+    class=""
+    src="https://lu.ma/embed/event/{{ luma_evt }}/simple"
+    width="800"
+    height="690"
+    frameborder="0"
+    style="border: 1px solid #bfcbda88; border-radius: 4px;"
+    allowfullscreen=""
+    aria-hidden="false"
+    tabindex="0"
+  ></iframe>
+</div>
+
+<a
+  href="https://lu.ma/event/{{ luma_evt }}"
+  class="luma-checkout--button"
+  data-luma-action="checkout"
+  data-luma-event-id="{{ luma_evt }}"
+>
+  Register on luma
+</a>
+
+<script id="luma-checkout" src="https://embed.lu.ma/checkout-button.js"></script>
