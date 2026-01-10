@@ -1,0 +1,70 @@
+state: active
+startTime: "2026-02-12T09:00:00+01:00"
+timezone: "Europe/Warsaw"
+locationString: "CIC Warsaw, Poland"
+days: 1
+attendees: 100
+defaultDuration: 30
+
+schedule:
+  "Main Room":
+    - break: Coffee break
+      duration: 30
+    - talk: jakub-rohleder-retrieval-economics
+    - talk: piotr-kacala-wojciech-strzalkowski-ai-powered-product-building
+    - talk: anna-sztyber-betley-finetuning
+    - talk: patrycja-cieplicka-llm-evaluation
+    - break: Lunch & networking
+      duration: 60
+    - break: Networking & sponsor crawl
+      duration: 30
+    - talk: agnieszka-niezgoda-agentic-ai-at-scale
+    - talk: zbigniew-lukasiak-llm-interface
+    - talk: mateusz-charytoniuk-self-hosted-llms
+    - talk: adrian-boguszewski-ai-on-your-own-terms
+    - talk: maciej-rzasa-aji-ghose-ai-projects
+    - talk: grzegorz-warzecha-coming-soon
+    - talk: michael-matloka-coming-soon
+
+  "Second Room":
+    - break: Coffee break
+      duration: 30
+    - talk: przemek-pospieszny-physical-ai
+    - talk: adrian-sroka-mcp-security
+    - talk: piotr-migdal-harbor-workshop
+    - talk: piotr-migdal-harbor-workshop
+    - break: Lunch & networking
+      duration: 60
+    - break: Networking & sponsor crawl
+      duration: 30
+    - talk: maish-saidel-keesing-genai-production
+    - talk: andriy-batutin-verification-gap
+    - talk: porimol-chandro-agentic-rag
+    - talk: pawel-bulowski-slms-edge
+    - talk: jeff-fan-evals-rag
+    - talk: daniel-afonso-ai-incident-response
+
+sponsors:
+  - logo: monday.png
+    url: https://monday.com/
+  - logo: quesma.png
+    url: https://quesma.com/
+  - logo: hockeystick.png
+    url: https://www.hockeystick.show
+lumaEventId: evt-cQnhjDq1cPBdaJw
+cfpUrl: https://www.papercall.io/llmday-2026-warsaw-q1
+heroPictures:
+  - london-2022-0.jpg
+venue:
+  name: CIC Warsaw
+  address: Chmielna 73
+  city: 00-801 Warsaw, Poland
+  mapEmbedUrl: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.826540004938!2d20.994802477161734!3d52.22836917198625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecd3d5efb088b%3A0x5ef44626a271e8ef!2sCIC%20Warsaw!5e0!3m2!1sen!2suk!4v1762093759946!5m2!1sen!2suk
+  images:
+    - venue-1.jpg
+    - venue-2.jpg
+    - venue-3.jpg
+twitterUrl: https://twitter.com/llmday_com
+linkedinUrl: https://www.linkedin.com/company/llmday/
+youtubeUrl: https://www.youtube.com/@llmday
+mailto: mailto:hello@llmday.com
