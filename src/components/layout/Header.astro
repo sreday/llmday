@@ -8,188 +8,62 @@ interface Props {
 const { event } = Astro.props;
 ---
 
-<header id="header">
-  <nav>
-    <button
-      class="menu-toggle"
-      type="button"
-      id="navbar-toggler"
-      aria-controls="navigation"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a href="/" class="flex items-center gap-2">
+          <span class="text-xl font-bold tracking-tight text-slate-900">LLM<span class="text-primary-600">day</span></span>
+        </a>
+      </div>
 
-    <div id="navigation" class="nav-links">
-      {event ? (
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="#tickets">Tickets</a></li>
-          <li><a href="#schedule">Schedule</a></li>
-          <li><a href="#speakers">Speakers</a></li>
-          <li><a href="#venue">Venue</a></li>
-          <li><a href="#sponsors">Sponsors</a></li>
-        </ul>
-      ) : (
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="#upcoming">Upcoming events</a></li>
-          <li><a href="#past">Past events</a></li>
-          <li><a href="#testimonials">Testimonials</a></li>
-          <li><a href="#sponsor">Sponsor</a></li>
-          <li><a href="#partner">Partner</a></li>
-          <li><a href="/terms/">Terms & Conditions</a></li>
-        </ul>
-      )}
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex md:gap-x-8">
+        {event ? (
+          <>
+            <a href="/" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Home</a>
+            <a href="#schedule" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Schedule</a>
+            <a href="#speakers" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Speakers</a>
+            <a href="#venue" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Venue</a>
+            <a href="#sponsors" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Sponsors</a>
+          </>
+        ) : (
+          <>
+            <a href="#upcoming" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Events</a>
+            <a href="#past" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Past</a>
+            <a href="#testimonials" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Testimonials</a>
+            <a href="#sponsor" class="text-sm font-semibold leading-6 text-slate-900 hover:text-primary-600">Sponsor</a>
+          </>
+        )}
+      </nav>
+
+      <!-- CTA Button -->
+      <div class="hidden md:flex md:items-center">
+        {event ? (
+             event.lumaEventId ? (
+                <a href="#tickets" class="rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+                  Get Tickets
+                </a>
+             ) : (
+                <span class="text-sm text-slate-500">Registration Closed</span>
+             )
+        ) : (
+          <a href="#upcoming" class="rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+            Find an Event
+          </a>
+        )}
+      </div>
+
+      <!-- Mobile menu button (simple implementation for now) -->
+      <div class="flex md:hidden">
+        <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-slate-700">
+          <span class="sr-only">Open main menu</span>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
     </div>
-
-    {event && <a class="tickets-btn" href="#tickets">Tickets</a>}
-  </nav>
+  </div>
 </header>
-
-<script>
-  // Mobile menu toggle
-  const toggler = document.getElementById('navbar-toggler');
-  const navigation = document.getElementById('navigation');
-  const header = document.getElementById('header');
-
-  toggler?.addEventListener('click', () => {
-    navigation?.classList.toggle('show');
-    const expanded = toggler.getAttribute('aria-expanded') === 'true';
-    toggler.setAttribute('aria-expanded', String(!expanded));
-  });
-
-  // Header background on scroll
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      header?.classList.add('scrolled');
-    } else {
-      header?.classList.remove('scrolled');
-    }
-  });
-</script>
-
-<style>
-  header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: transparent;
-    transition: background 0.3s ease;
-  }
-
-  header.scrolled {
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(8px);
-  }
-
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .tickets-btn {
-    display: inline-block;
-    padding: 0.5rem 1.25rem;
-    background: var(--color-secondary, #EC645E);
-    color: white;
-    font-weight: 500;
-    font-size: 0.875rem;
-    border-radius: 0.375rem;
-    text-decoration: none;
-    transition: background 0.2s ease;
-    order: 2;
-  }
-
-  .tickets-btn:hover {
-    background: #d94f49;
-  }
-
-  .menu-toggle {
-    display: none;
-    padding: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.8);
-    order: 0;
-  }
-
-  .menu-toggle svg {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .nav-links {
-    display: flex;
-    order: 1;
-  }
-
-  .nav-links ul {
-    display: flex;
-    gap: 0.25rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .nav-links a {
-    display: block;
-    padding: 0.5rem 1rem;
-    color: white;
-    font-weight: 400;
-    font-size: 0.9rem;
-    text-decoration: none;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5);
-    transition: color 0.2s ease;
-  }
-
-  .nav-links a:hover {
-    color: white;
-    opacity: 0.8;
-  }
-
-  /* Mobile styles */
-  @media (max-width: 768px) {
-    nav {
-      justify-content: space-between;
-    }
-
-    .menu-toggle {
-      display: block;
-    }
-
-    .nav-links {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.95);
-      padding: 1rem;
-    }
-
-    .nav-links.show {
-      display: block;
-    }
-
-    .nav-links ul {
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .nav-links a {
-      padding: 0.75rem 1rem;
-    }
-  }
-</style>

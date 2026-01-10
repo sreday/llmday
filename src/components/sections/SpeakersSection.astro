@@ -12,15 +12,25 @@ const { schedule, eventSlug } = Astro.props;
 const speakers = getSpeakers(schedule);
 ---
 
-<section id="speakers" class="speakers-section section">
-  <div class="container">
-    <h3 class="section-heading text-center mb-5">Speakers</h3>
-    <div class="row">
-      {speakers.map((speaker) => (
-        <div class="col-6 col-md-4 col-lg-3">
-          <SpeakerCard talk={speaker} eventSlug={eventSlug} />
-        </div>
-      ))}
+<section id="speakers" class="bg-white">
+  <div class="mx-auto max-w-7xl">
+    <div class="mb-6">
+      <h2 class="text-xl font-bold tracking-tight text-slate-900">Speakers</h2>
+    </div>
+    <div class="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+      {speakers.map((talk) => {
+        const speaker = talk.data.speakers[0];
+        return (
+          <SpeakerCard
+            name={speaker.name}
+            company={speaker.organization}
+            image={speaker.photo}
+            talkTitle={talk.data.title}
+            talkSlug={talk.slug}
+            eventSlug={eventSlug}
+          />
+        );
+      })}
     </div>
   </div>
 </section>

@@ -1,152 +1,189 @@
 ---
-import type { Event } from '../../content.config';
-import type { ScheduleData } from '../../lib/schedule';
-import TimelineView from './TimelineView.astro';
-import TableView from './TableView.astro';
+import type { ScheduleData, ScheduleItem } from '../../lib/schedule';
+import { isPlaceholderTalk } from '../../lib/schedule';
 
 interface Props {
-  event: Event;
   schedule: ScheduleData;
   eventSlug: string;
 }
 
-const { event, schedule, eventSlug } = Astro.props;
+const { schedule, eventSlug } = Astro.props;
+
+// Check if we have multiple tracks
+const hasMultipleTracks = schedule.tracks.length > 1;
+
+// Filter out placeholder talks and get cleaned schedule per track
+const cleanedTracks = schedule.tracks.map(track => ({
+  ...track,
+  items: track.items.filter(item => {
+    if (item.type === 'break') return true;
+    if (item.talk && isPlaceholderTalk(item.talk)) return false;
+    return true;
+  })
+}));
+
+// Get unique times from cleaned tracks
+const allTimesSet = new Set<string>();
+cleanedTracks.forEach(track => {
+  track.items.forEach(item => allTimesSet.add(item.timeStr));
+});
+const allTimes = Array.from(allTimesSet).sort();
+
+// Build time slots for display
+const timeSlots = allTimes.map(time => {
+  const items: { trackId: string, item: ScheduleItem, roomName: string }[] = [];
+  cleanedTracks.forEach(track => {
+    const trackItems = track.items.filter(i => i.timeStr === time);
+    trackItems.forEach(item => items.push({ trackId: track.trackId, item, roomName: track.roomName }));
+  });
+  return { time, items };
+});
 ---
 
-<section id="schedule" class="schedule-section section">
-  <div class="container">
-    <h3 class="section-heading text-center mb-3">Schedule</h3>
-    <div class="schedule-meta text-center mb-4">
-      <span>{event.dateString}</span> &bull; <span>{schedule.tracks.length} parallel tracks</span>
-    </div>
-
-    <div class="track-nav">
-      {schedule.tracks.map((track, index) => (
-        <a href={`#track-${index + 1}`}>{track.roomName}</a>
+{hasMultipleTracks ? (
+  <!-- Tabbed view for multiple tracks -->
+  <div class="schedule-tabs" x-data="{ activeTrack: '1' }">
+    <!-- Tab buttons -->
+    <div class="flex border-b border-slate-200 mb-4">
+      {cleanedTracks.map((track, idx) => (
+        <button
+          type="button"
+          class="schedule-tab px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors"
+          :class={`activeTrack === '${track.trackId}' ? 'border-primary-600 text-primary-600' : 'border-transparent text-slate-500 hover:text-slate-700'`}
+          @click={`activeTrack = '${track.trackId}'`}
+        >
+          {track.roomName || `Track ${track.trackId}`}
+        </button>
       ))}
-      <span class="view-toggle" id="view-toggle">view as table</span>
     </div>
 
-    <div id="timeline-view">
-      <TimelineView schedule={schedule} eventSlug={eventSlug} />
-    </div>
-
-    <div id="table-view" class="schedule-table-view">
-      <TableView schedule={schedule} eventSlug={eventSlug} />
-    </div>
-
-    <div class="schedule-cta text-center mt-5">
-      <a href="#tickets" class="btn btn-secondary btn-lg">Buy Tickets</a>
-    </div>
+    <!-- Tab content -->
+    {cleanedTracks.map(track => (
+      <div
+        class="track-content"
+        x-show={`activeTrack === '${track.trackId}'`}
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+      >
+        <div class="space-y-1">
+          {track.items.map((item) => {
+            if (item.type === 'break') {
+              return (
+                <div class="flex items-center gap-3 py-2 text-slate-400">
+                  <span class="w-12 text-xs font-medium tabular-nums">{item.timeStr}</span>
+                  <span class="text-xs uppercase tracking-wide">{item.breakInfo?.title}</span>
+                </div>
+              );
+            }
+            if (item.talk) {
+              const speaker = item.talk.data.speakers[0];
+              return (
+                <a
+                  href={`/${eventSlug}/talks/${item.talk.slug}/`}
+                  class="flex items-start gap-3 py-2 px-2 -mx-2 rounded hover:bg-slate-50 transition-colors group"
+                >
+                  <span class="w-12 text-xs font-medium text-slate-400 tabular-nums pt-0.5">{item.timeStr}</span>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-sm font-medium text-slate-900 group-hover:text-primary-600 leading-tight">
+                      {item.talk.data.title}
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-0.5 truncate">
+                      {speaker.name}
+                      {speaker.organization && <span class="text-slate-400"> · {speaker.organization}</span>}
+                    </p>
+                  </div>
+                </a>
+              );
+            }
+            return null;
+          })}
+        </div>
+      </div>
+    ))}
   </div>
-</section>
-
-<style>
-  .schedule-section {
-    padding: 4rem 0;
-  }
-
-  .schedule-meta {
-    color: var(--color-text-muted);
-  }
-
-  .track-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-  }
-
-  .track-nav a {
-    padding: 0.5rem 1.25rem;
-    background: transparent;
-    border: 2px solid var(--primary-color, #3B99A1);
-    border-radius: 2rem;
-    text-decoration: none;
-    color: var(--primary-color, #3B99A1);
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .track-nav a:hover,
-  .track-nav a:first-child {
-    background: var(--primary-color, #3B99A1);
-    color: white;
-  }
-
-  .view-toggle {
-    padding: 0.5rem 1.25rem;
-    background: transparent;
-    border: 2px solid var(--primary-color, #3B99A1);
-    border-radius: 2rem;
-    color: var(--primary-color, #3B99A1);
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    margin-left: auto;
-  }
-
-  .view-toggle:hover {
-    background: var(--primary-color, #3B99A1);
-    color: white;
-  }
-
-  .schedule-cta {
-    margin-top: 3rem;
-  }
-
-  #table-view {
-    display: none;
-  }
-
-  #table-view.active {
-    display: block;
-  }
-
-  #timeline-view.hidden {
-    display: none;
-  }
-</style>
+) : (
+  <!-- Single track - simple list -->
+  <div class="space-y-1">
+    {cleanedTracks[0]?.items.map((item) => {
+      if (item.type === 'break') {
+        return (
+          <div class="flex items-center gap-3 py-2 text-slate-400">
+            <span class="w-12 text-xs font-medium tabular-nums">{item.timeStr}</span>
+            <span class="text-xs uppercase tracking-wide">{item.breakInfo?.title}</span>
+          </div>
+        );
+      }
+      if (item.talk) {
+        const speaker = item.talk.data.speakers[0];
+        return (
+          <a
+            href={`/${eventSlug}/talks/${item.talk.slug}/`}
+            class="flex items-start gap-3 py-2 px-2 -mx-2 rounded hover:bg-slate-50 transition-colors group"
+          >
+            <span class="w-12 text-xs font-medium text-slate-400 tabular-nums pt-0.5">{item.timeStr}</span>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-sm font-medium text-slate-900 group-hover:text-primary-600 leading-tight">
+                {item.talk.data.title}
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5 truncate">
+                {speaker.name}
+                {speaker.organization && <span class="text-slate-400"> · {speaker.organization}</span>}
+              </p>
+            </div>
+          </a>
+        );
+      }
+      return null;
+    })}
+  </div>
+)}
 
 <script>
-  // Schedule view toggle with localStorage persistence
-  const STORAGE_KEY = 'schedule-view';
+  // Simple tab functionality without Alpine.js
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.schedule-tab');
+    const contents = document.querySelectorAll('.track-content');
 
-  function initScheduleToggle() {
-    const toggleBtn = document.getElementById('view-toggle');
-    const timelineView = document.getElementById('timeline-view');
-    const tableView = document.getElementById('table-view');
+    if (tabs.length === 0) return;
 
-    if (!toggleBtn || !timelineView || !tableView) return;
-
-    // Restore saved preference
-    const savedView = localStorage.getItem(STORAGE_KEY);
-    if (savedView === 'table') {
-      timelineView.classList.add('hidden');
-      tableView.classList.add('active');
-      toggleBtn.textContent = 'view as timeline';
-    }
-
-    toggleBtn.addEventListener('click', () => {
-      const isTimeline = !timelineView.classList.contains('hidden');
-
-      if (isTimeline) {
-        timelineView.classList.add('hidden');
-        tableView.classList.add('active');
-        toggleBtn.textContent = 'view as timeline';
-        localStorage.setItem(STORAGE_KEY, 'table');
+    // Initialize - show first track
+    contents.forEach((content, idx) => {
+      if (idx === 0) {
+        content.classList.remove('hidden');
       } else {
-        timelineView.classList.remove('hidden');
-        tableView.classList.remove('active');
-        toggleBtn.textContent = 'view as table';
-        localStorage.setItem(STORAGE_KEY, 'timeline');
+        content.classList.add('hidden');
       }
     });
-  }
 
-  // Run on page load
-  initScheduleToggle();
+    tabs.forEach((tab, idx) => {
+      tab.addEventListener('click', () => {
+        // Update tab styles
+        tabs.forEach((t, i) => {
+          if (i === idx) {
+            t.classList.add('border-primary-600', 'text-primary-600');
+            t.classList.remove('border-transparent', 'text-slate-500');
+          } else {
+            t.classList.remove('border-primary-600', 'text-primary-600');
+            t.classList.add('border-transparent', 'text-slate-500');
+          }
+        });
+
+        // Show/hide content
+        contents.forEach((content, i) => {
+          if (i === idx) {
+            content.classList.remove('hidden');
+          } else {
+            content.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // Set initial active state
+    if (tabs[0]) {
+      tabs[0].classList.add('border-primary-600', 'text-primary-600');
+      tabs[0].classList.remove('border-transparent', 'text-slate-500');
+    }
+  });
 </script>

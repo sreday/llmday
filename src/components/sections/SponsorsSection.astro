@@ -1,70 +1,49 @@
 ---
-import { Image } from 'astro:assets';
 import type { Sponsor } from '../../content.config';
 
 interface Props {
   sponsors: Sponsor[];
   mailto?: string;
+  showTitle?: boolean;
 }
 
-const { sponsors, mailto } = Astro.props;
-
-// Import sponsor logos
-const sponsorImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/sponsors/*.{png,jpg,jpeg,svg}', { eager: true });
-
-function getSponsorLogo(filename: string) {
-  const path = `/src/assets/sponsors/${filename}`;
-  return sponsorImages[path]?.default;
-}
+const { sponsors, mailto, showTitle = true } = Astro.props;
 ---
 
-<section id="sponsors" class="sponsors-section section">
-  <div class="container">
-    <h3 class="section-heading text-center">Sponsors & Partners</h3>
-    <p class="text-center text-muted mb-4">Want to become a sponsor? Get in touch!</p>
-
-    {sponsors.length > 0 && (
-      <div class="sponsors-logos">
-        {sponsors.map((sponsor) => {
-          const logo = getSponsorLogo(sponsor.logo);
-          return logo && (
-            <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
-              <Image
-                src={logo}
-                alt="Sponsor"
-                class="sponsor-logo"
-                width={180}
-                height={180}
-              />
-            </a>
-          );
-        })}
+<section id="sponsors" class="bg-white py-12 sm:py-16">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    {showTitle && (
+      <div class="mx-auto max-w-2xl text-center mb-8">
+        <h2 class="text-xl font-bold tracking-tight text-slate-900">Supported by Industry Leaders</h2>
+        <p class="mt-2 text-sm text-slate-600">
+          We partner with the most innovative companies in AI.
+        </p>
       </div>
     )}
 
+    <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-12">
+      {sponsors.map((sponsor) => {
+        const logoFile = sponsor.logo.includes('.') ? sponsor.logo : `${sponsor.logo}.png`;
+        return (
+          <a href={sponsor.url} target="_blank" rel="noopener noreferrer" class="group">
+            <img
+              src={`/assets/sponsors/${logoFile}`}
+              alt={sponsor.logo.replace('.png', '').replace('.jpg', '')}
+              class="h-8 sm:h-10 w-auto object-contain opacity-60 grayscale transition duration-200 group-hover:opacity-100 group-hover:grayscale-0"
+              loading="lazy"
+            />
+          </a>
+        );
+      })}
+    </div>
+
     {mailto && (
-      <div class="text-center mt-4">
-        <a href={mailto} class="btn btn-primary btn-lg">Become A Sponsor</a>
-      </div>
+       <div class="mt-8 flex justify-center">
+          <p class="relative rounded-full bg-slate-50 px-4 py-1.5 text-sm leading-6 text-slate-600 ring-1 ring-slate-900/5 hover:ring-slate-900/10">
+            <span class="hidden md:inline">Interested in sponsorship opportunities?</span>
+            <a href={mailto} class="font-semibold text-primary-600"><span class="absolute inset-0" aria-hidden="true"></span> Get in touch <span aria-hidden="true">&rarr;</span></a>
+          </p>
+       </div>
     )}
   </div>
 </section>
-
-<style>
-  .sponsors-logos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    margin: 2rem 0;
-  }
-
-  .sponsor-logo {
-    object-fit: contain;
-    max-width: 180px;
-    max-height: 180px;
-    width: auto;
-    height: auto;
-  }
-</style>

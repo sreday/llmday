@@ -2,146 +2,59 @@
 import type { Event } from '../../content.config';
 
 interface Props {
-  event: Event;
+  event?: Event;
+  mode?: 'global' | 'event';
+  nextEvent?: {
+      id: string;
+      data: Event;
+  };
+  cityName?: string;
+  dateString?: string;
 }
 
-const { event } = Astro.props;
-
-// Import hero photos
-const photoImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/photos/*.{jpg,jpeg,png}', { eager: true });
-
-function getHeroImage(filename: string) {
-  const path = `/src/assets/photos/${filename}`;
-  return photoImages[path]?.default;
-}
-
-const heroFilename = event.heroPictures[0] || '';
-const heroImage = getHeroImage(heroFilename);
-const heroUrl = heroImage?.src || '';
+const { event, mode = 'event', nextEvent, cityName, dateString } = Astro.props;
 ---
 
-<div id="home" class="hero-block">
-  <div
-    class="hero-background tinted"
-    style={`background-image: url('${heroUrl}');`}
-  />
+{mode === 'global' ? (
+  <div class="relative isolate overflow-hidden bg-slate-900">
+    {/* Photo background with overlay - cropped to show hands/audience */}
+    <div class="absolute inset-0 -z-10">
+      <img
+        src="/assets/photos/london-2022-0.jpg"
+        alt=""
+        class="w-full h-full object-cover object-bottom"
+        style="object-position: center 85%;"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/40"></div>
+    </div>
 
-  <div class="container">
-    <div class="hero-text-block text-center" style="max-width: 100%;">
-      <h1 class="logo retro">LLMDAY</h1>
-      <h2 class="hero-subtitle">Large Language Models, AI and ML</h2>
-      <p class="hero-tagline">In-person conferences</p>
-      <h3 class="text-white hero-info">
-        <span class="info-item">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-            <line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8" y1="2" x2="8" y2="6"/>
-            <line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-          {event.dateString}
-        </span>
-        <span class="info-item">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          {event.locationString}
-        </span>
-      </h3>
-
-      <div class="hero-cta">
-        <a class="btn btn-secondary btn-lg" href="#tickets">Get Tickets</a>
-        {event.state !== 'after' && event.cfpUrl && (
-          <a class="btn btn-primary btn-lg" href={event.cfpUrl} target="_blank">CFP</a>
-        )}
+    <div class="mx-auto max-w-7xl px-6 lg:px-8 py-16 sm:py-20">
+      <div class="text-center max-w-3xl mx-auto">
+        <p class="text-4xl sm:text-5xl lg:text-6xl mb-4 text-white" style="font-family: 'Monoton', cursive;">
+          LLMDAY
+        </p>
+        <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl leading-tight">
+          Large Language Models, AI and ML
+        </h1>
+        <p class="mt-4 text-xl sm:text-2xl text-slate-200 font-light">
+          In-person conferences
+        </p>
       </div>
     </div>
   </div>
-</div>
-
-<style>
-  .hero-block {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .hero-background {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-size: cover;
-    background-position: center;
-  }
-
-  .hero-background.tinted::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-  }
-
-  .hero-text-block {
-    position: relative;
-    z-index: 1;
-    padding: 2rem;
-  }
-
-  .hero-subtitle {
-    color: white;
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-
-  .hero-tagline {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-  }
-
-  .hero-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.25rem;
-    font-weight: 400;
-    margin-bottom: 1.5rem;
-  }
-
-  .info-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .icon {
-    width: 1.25em;
-    height: 1.25em;
-    vertical-align: middle;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  @media (max-width: 640px) {
-    .hero-info {
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .hero-subtitle {
-      font-size: 1.25rem;
-    }
-  }
-</style>
+) : (
+  <div class="relative isolate overflow-hidden bg-slate-900 border-b border-white/10">
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-slate-900 to-slate-800"></div>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <h1 class="text-xl font-bold tracking-tight text-white sm:text-2xl">
+          LLMday {cityName}
+          <span class="font-normal text-slate-400 mx-2">·</span>
+          <span class="font-normal text-slate-300">{dateString}</span>
+          <span class="font-normal text-slate-400 mx-2">·</span>
+          <span class="font-normal text-slate-400">{event?.locationString}</span>
+        </h1>
+      </div>
+    </div>
+  </div>
+)}

@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
-import { buildSchedule, getSpeakers } from '../../lib/schedule';
+import { format, parseISO } from 'date-fns';
+import { buildSchedule } from '../../lib/schedule';
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import HeroSection from '../../components/sections/HeroSection.astro';
-import StatsSection from '../../components/sections/StatsSection.astro';
 import ScheduleSection from '../../components/schedule/ScheduleSection.astro';
 import SpeakersSection from '../../components/sections/SpeakersSection.astro';
 import VenueSection from '../../components/sections/VenueSection.astro';
@@ -21,31 +21,83 @@ export async function getStaticPaths() {
 const { event, eventId } = Astro.props;
 const allTalks = await getCollection('talks');
 const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
+
+// Get city name from event ID
+const cityMap: Record<string, string> = {
+  'warsaw': 'Warsaw',
+  'nyc': 'New York',
+  'london': 'London',
+  'berlin': 'Berlin',
+  'paris': 'Paris',
+  'sf': 'San Francisco',
+};
+const cityKey = eventId.split('-')[1];
+const cityName = cityMap[cityKey] || cityKey.charAt(0).toUpperCase() + cityKey.slice(1);
+
+// Format the event date
+const eventDate = format(parseISO(event.startTime), 'MMMM d, yyyy');
 ---
 
-<BaseLayout title={`LLMday ${event.locationString}`} event={event}>
-  <HeroSection event={event} />
-  <StatsSection event={event} trackCount={schedule.tracks.length} speakerCount={getSpeakers(schedule).length} />
+<BaseLayout title={`LLMday ${cityName}`} event={event}>
 
-  {event.state !== 'after' && event.lumaEventId && (
-    <TicketsSection lumaEventId={event.lumaEventId} />
-  )}
+  <HeroSection event={event} mode="event" cityName={cityName} dateString={eventDate} />
 
-  {event.state === 'before' ? (
-    <section id="schedule" class="section">
-      <div class="container">
-        <h3 class="section-heading text-center mb-5">Schedule</h3>
-        <p class="text-center text-muted">Coming soon</p>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+
+    {/* Tickets - Prominent at top, visible on all devices */}
+    {event.state !== 'after' && event.lumaEventId && (
+      <div id="tickets" class="scroll-mt-20 mb-8 lg:mb-12">
+        <TicketsSection lumaEventId={event.lumaEventId} />
       </div>
-    </section>
-  ) : (
-    <ScheduleSection event={event} schedule={schedule} eventSlug={eventId} />
-  )}
+    )}
 
-  {event.state !== 'before' && (
-    <SpeakersSection schedule={schedule} eventSlug={eventId} />
-  )}
+    <div class="lg:grid lg:grid-cols-3 gap-8 lg:gap-12">
 
-  <VenueSection venue={event.venue} />
-  <SponsorsSection sponsors={event.sponsors} mailto={event.mailto} />
+      {/* Left Main Column (Schedule & Content) */}
+      <div class="lg:col-span-2 space-y-12">
+
+        {/* Schedule */}
+        <div id="schedule" class="scroll-mt-20">
+          <div class="flex items-baseline justify-between border-b border-slate-200 pb-3 mb-4">
+            <h2 class="text-xl font-bold leading-7 text-slate-900">
+              Schedule
+            </h2>
+             <p class="text-xs text-slate-500">
+                {schedule.tracks.length > 1 ? `${schedule.tracks.length} Tracks` : ''}
+             </p>
+          </div>
+
+          {event.state === 'before' && !schedule.allTimes.length ? (
+            <div class="rounded-lg bg-slate-50 p-6 text-center">
+              <p class="text-slate-500 text-sm">Schedule coming soon.</p>
+            </div>
+          ) : (
+             <ScheduleSection schedule={schedule} eventSlug={eventId} />
+          )}
+        </div>
+
+        {/* Speakers */}
+        <div id="speakers" class="scroll-mt-20">
+           <SpeakersSection schedule={schedule} eventSlug={eventId} />
+        </div>
+
+      </div>
+
+      {/* Right Sidebar (Sticky Logistics) */}
+      <div class="hidden lg:block lg:col-span-1">
+        <div class="lg:sticky lg:top-24 space-y-6">
+            <div id="venue" class="scroll-mt-24">
+                <VenueSection venue={event.venue} />
+            </div>
+
+            <div id="sponsors" class="rounded-2xl bg-white p-5 ring-1 ring-slate-900/5 shadow-sm">
+                <h2 class="text-sm font-semibold text-slate-900 mb-3">Sponsors</h2>
+                <SponsorsSection sponsors={event.sponsors} mailto={event.mailto} showTitle={false} />
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </BaseLayout>
