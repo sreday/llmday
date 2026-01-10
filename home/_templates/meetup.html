@@ -1,0 +1,164 @@
+{% extends "meetup_base.html" %}
+
+{% block content %}
+
+<section id="schedule" class="schedule-section section theme-bg-light">
+  <div class="container">
+    <h2 class="section-heading text-center mb-5">Schedule</h2>
+    <h4 class="section-heading text-center mb-5"></h4>
+
+    <!-- Tab panes -->
+    <div class="schedule-tab-content tab-content">
+
+{% for talk in talks %}
+        <div class="item item-talk">
+          <div class="meta">
+            <h4 class="time mb-3"></h4>
+            <div class="profile">
+              <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img class="profile-image rounded-circle  mb-2" src="{{ talk.photo_url }}" alt=""></a>
+              <div class="name"><a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.name }}</a></div>
+            </div><!--//profile-->
+          </div><!--//meta-->
+          <div class="content">
+            <h3 class="title mb-3">
+              <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
+            </h3>
+            <div class="location mb-3"></i>{{ talk.comment }}{{ talk.organization }}</div>
+            <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
+          </div><!--//content-->
+        </div><!--//item-->
+
+{% endfor %}
+
+      </div>
+
+    </div><!--//schedule-tab-content-->
+
+    <div class="schedule-cta text-center mx-auto"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Tickets</a></div>
+  </div>
+</section>
+
+
+<section id="speakers" class="speakers-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3">Speakers</h3>
+    <div class="row">
+
+      {% for talk in (talks)|sort(attribute='name') %}
+
+      <div class="col-6 col-lg-3 mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ talk.name }}</h5>
+            <div class="card-text mb-3">
+              <div class="meta">{{ talk.organization }}</div>
+            </div><!--//card-text-->
+            <a href="./{{ talk.short_url }}">Read more &rarr;</a>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              {% if talk.twitter %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+              {% if talk.linkedin %}<li class="list-inline-item"><a  href="{{ talk.linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+              {% if talk.twitter2 %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+              {% if talk.linkedin2 %}<li class="list-inline-item"><a  href="{{ talk.linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      {% endfor %}
+
+      {% if event_state == 'before' %}
+
+      <div class="col-6 col-lg-3 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h4>More coming soon</h4>
+          </div><!--//card-->
+        </div><!--//card-->
+      </div><!--//col-->
+
+      {% endif %}
+
+    </div><!--//row-->
+  </div><!--//container-->
+
+</section><!--//speakers-section-->
+
+<section id="venue" class="venue-section section  theme-bg-primary text-white">
+  <div class="container">
+    <h3 class="section-heading text-center mb-5 text-white">Venue</h3>
+    <div class="row gx-5 py-lg-5">
+      <div class="col-12 h-100">
+        <div class="desc">
+          <p>
+            {{ meetup.address }}
+          </p>
+
+          <div class="row pt-3">
+            {{ meetup.gmaps }}
+          </div><!--//row-->
+        </div><!--//desc-->
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//container-->
+</section><!--//venue-section-->
+
+
+<section id="tickets" class="tickets-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3">Tickets</h3>
+    <div class="row pricing mb-5 mt-10"></div>
+      <div class="col-12 text-center">
+        {{ meetup.tickets_embed }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% for talk in talks %}
+<!-- Modal Speaker {{ talk.id }} -->
+<div class="modal modal-speaker modal-speaker-{{ talk.id }}" id="modal-speaker-{{ talk.id }}" tabindex="-1" role="dialog" aria-labelledby="speaker-{{ talk.id }}-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 id="speaker-{{ talk.id }}-ModalLabel" class="modal-title sr-only"
+>{{ talk.name }}</h4>
+          </div>
+          <div class="modal-body p-0">
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="{{ talk.photo_url }}" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">{{ talk.name }}</h2>
+                          <div class="meta mb-2">{{ talk.organization }}</div>
+                          <ul class="social-list list-inline mb-0">
+                            {% if talk.twitter %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+                            {% if talk.linkedin %}<li class="list-inline-item"><a  href="{{ talk.linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+                            {% if talk.twitter2 %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+                            {% if talk.linkedin2 %}<li class="list-inline-item"><a  href="{{ talk.linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p>{{ talk.abstract | markdown }}</p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p>{{ talk.description | markdown }}</p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p>{{ talk.bio | markdown }}</p>
+              </div>
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+{% endfor %}
+
+{% endblock %}
