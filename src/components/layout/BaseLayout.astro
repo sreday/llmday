@@ -1,0 +1,84 @@
+---
+import type { Event } from '../../content.config';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import '../../styles/app.css';
+import '../../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  event?: Event;
+  ogImage?: string;
+}
+
+const { title, description = 'Conference on Large Language Models, AI and ML', event, ogImage } = Astro.props;
+const heroImage = ogImage || (event?.heroPictures?.[0] ? `https://llmday.com${event.heroPictures[0]}` : '');
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+
+  <title>{title}</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@300;400;700&family=Monoton&display=swap" rel="stylesheet">
+
+  <!-- Open Graph -->
+  {heroImage && <meta property="og:image" content={heroImage}>}
+  <meta property="og:type" content="website">
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@llmday_com">
+  <meta name="twitter:creator" content="@llmday_com">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  {heroImage && <meta name="twitter:image" content={heroImage}>}
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CQ2KV6LK8G');
+  </script>
+</head>
+
+<body>
+  <Header event={event} />
+
+  <main>
+    <slot />
+  </main>
+
+  <Footer event={event} />
+
+  <!-- Smooth scroll for anchor links -->
+  <script is:inline>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
