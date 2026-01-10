@@ -9,9 +9,10 @@ interface Props {
       data: Event;
   };
   cityName?: string;
+  dateString?: string;
 }
 
-const { event, mode = 'event', nextEvent, cityName } = Astro.props;
+const { event, mode = 'event', nextEvent, cityName, dateString } = Astro.props;
 ---
 
 {mode === 'global' ? (
@@ -45,21 +46,14 @@ const { event, mode = 'event', nextEvent, cityName } = Astro.props;
   <div class="relative isolate overflow-hidden bg-slate-900 border-b border-white/10">
     <div class="absolute inset-0 -z-10 bg-gradient-to-r from-slate-900 to-slate-800"></div>
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-            LLMday {cityName}
-          </h1>
-          <p class="mt-1 text-sm text-slate-400">
-            {event?.dateString} · {event?.locationString}
-          </p>
-        </div>
-
-        {event?.state !== 'after' && event?.lumaEventId && (
-          <a href="#tickets" class="rounded-full bg-primary-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500">
-            Get Tickets
-          </a>
-        )}
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <h1 class="text-xl font-bold tracking-tight text-white sm:text-2xl">
+          LLMday {cityName}
+          <span class="font-normal text-slate-400 mx-2">·</span>
+          <span class="font-normal text-slate-300">{dateString}</span>
+          <span class="font-normal text-slate-400 mx-2">·</span>
+          <span class="font-normal text-slate-400">{event?.locationString}</span>
+        </h1>
       </div>
     </div>
   </div>

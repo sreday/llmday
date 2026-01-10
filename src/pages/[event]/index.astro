@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { format, parseISO } from 'date-fns';
 import { buildSchedule } from '../../lib/schedule';
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import HeroSection from '../../components/sections/HeroSection.astro';
@@ -32,13 +33,24 @@ const cityMap: Record<string, string> = {
 };
 const cityKey = eventId.split('-')[1];
 const cityName = cityMap[cityKey] || cityKey.charAt(0).toUpperCase() + cityKey.slice(1);
+
+// Format the event date
+const eventDate = format(parseISO(event.startTime), 'MMMM d, yyyy');
 ---
 
 <BaseLayout title={`LLMday ${cityName}`} event={event}>
 
-  <HeroSection event={event} mode="event" cityName={cityName} />
+  <HeroSection event={event} mode="event" cityName={cityName} dateString={eventDate} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+
+    {/* Tickets - Prominent at top, visible on all devices */}
+    {event.state !== 'after' && event.lumaEventId && (
+      <div id="tickets" class="scroll-mt-20 mb-8 lg:mb-12">
+        <TicketsSection lumaEventId={event.lumaEventId} />
+      </div>
+    )}
+
     <div class="lg:grid lg:grid-cols-3 gap-8 lg:gap-12">
 
       {/* Left Main Column (Schedule & Content) */}
@@ -71,15 +83,9 @@ const cityName = cityMap[cityKey] || cityKey.charAt(0).toUpperCase() + cityKey.s
 
       </div>
 
-      {/* Right Sidebar (Sticky Logistics) - Hidden on mobile, shown via sticky bar */}
+      {/* Right Sidebar (Sticky Logistics) */}
       <div class="hidden lg:block lg:col-span-1">
         <div class="lg:sticky lg:top-24 space-y-6">
-            {event.state !== 'after' && event.lumaEventId && (
-                <div id="tickets" class="scroll-mt-24">
-                  <TicketsSection lumaEventId={event.lumaEventId} />
-                </div>
-            )}
-
             <div id="venue" class="scroll-mt-24">
                 <VenueSection venue={event.venue} />
             </div>
@@ -93,19 +99,5 @@ const cityName = cityMap[cityKey] || cityKey.charAt(0).toUpperCase() + cityKey.s
 
     </div>
   </div>
-
-  {/* Mobile Sticky Action Bar */}
-  {event.state !== 'after' && event.lumaEventId && (
-    <div class="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white p-4 lg:hidden shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-        <div class="flex gap-4">
-            <a href="#tickets" class="flex-1 rounded-full bg-primary-600 px-4 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-500">
-                Get Tickets
-            </a>
-            <a href="#schedule" class="flex-1 rounded-full bg-slate-100 px-4 py-3 text-center text-sm font-semibold text-slate-900 hover:bg-slate-200">
-                View Schedule
-            </a>
-        </div>
-    </div>
-  )}
 
 </BaseLayout>
