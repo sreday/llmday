@@ -41,6 +41,7 @@ schedule:
     - talk: pawel-bulowski-slms-edge
     - talk: porimol-chandro-agentic-rag
     - talk: przemek-pospieszny-physical-ai
+    - talk: zbigniew-lukasiak-llm-interface
     - break: Networking
       duration: 30
     - talk: piotr-migdal-harbor-workshop
