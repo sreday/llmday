@@ -20,6 +20,7 @@ schedule:
     - talk: tim-spann-stateful-ai-agents
     - talk: karen-zhou-eval-systems
     - talk: suvendu-mohanty-voice-llms
+    - talk: harish-mandhadi-ai-dlc
     - break: Networking
       duration: 30
 
