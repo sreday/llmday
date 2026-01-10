@@ -47,7 +47,7 @@ function getVenueImage(filename: string) {
             const image = getVenueImage(img);
             return image && (
               <div class={`figure figure-${index + 1}`}>
-                <Image class="shadow" src={image} alt={`${venue.name} photo ${index + 1}`} />
+                <Image class="shadow" src={image} alt={`${venue.name} photo ${index + 1}`} loading="eager" />
               </div>
             );
           })}

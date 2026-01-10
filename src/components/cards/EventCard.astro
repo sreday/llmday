@@ -16,7 +16,7 @@ const { name, photo, url } = Astro.props;
 <div class="event-card">
   <a href={url} class="card-link">
     <div class="image-container">
-      {photo && <Image src={photo} alt={name} width={600} height={400} />}
+      {photo && <Image src={photo} alt={name} width={600} height={400} loading="eager" />}
     </div>
     <div class="card-footer">
       <h5>{name}</h5>

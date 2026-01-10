@@ -1,7 +1,8 @@
 // src/lib/schedule.ts
 import type { CollectionEntry } from 'astro:content';
 import type { Event, ScheduleItem as SchemaScheduleItem } from '../content.config';
-import { addMinutes, parseISO, format } from 'date-fns';
+import { addMinutes, parseISO } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 
 // Talk with computed fields
 export interface ScheduleTalk {
@@ -55,6 +56,7 @@ export function buildSchedule(
   const allTimes = new Set<string>();
   const tracks: TrackSchedule[] = [];
   let trackIndex = 0;
+  const timezone = event.timezone || 'UTC';
 
   // Process each room in the schedule
   for (const [roomName, items] of Object.entries(event.schedule)) {
@@ -63,7 +65,7 @@ export function buildSchedule(
     let currentTime = parseISO(event.startTime);
 
     for (const item of items) {
-      const timeStr = format(currentTime, 'HH:mm');
+      const timeStr = formatInTimeZone(currentTime, timezone, 'HH:mm');
       allTimes.add(timeStr);
 
       if ('talk' in item) {
