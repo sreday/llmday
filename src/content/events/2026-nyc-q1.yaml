@@ -18,6 +18,8 @@ schedule:
     - talk: jeremy-curcio-prompts-ai-development
     - talk: surya-appini-ai-assistants-wearables
     - talk: tim-spann-stateful-ai-agents
+    - talk: karen-zhou-eval-systems
+    - talk: suvendu-mohanty-voice-llms
     - break: Networking
       duration: 30
 
