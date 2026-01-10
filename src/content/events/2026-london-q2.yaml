@@ -8,13 +8,15 @@ defaultDuration: 30
 
 schedule:
   "Main Room":
-    - break: Registration & Coffee
+    - break: Coffee break
       duration: 30
-    - talk: chukwunonso-ikemba-brain-signals-ai
-    - talk: david-crepaz-keay-mental-health-bot
     - talk: erik-schwartz-ship-ai-app-in-a-day
     - talk: ricardo-sueiras-spec-driven-development
-    - break: Networking
+    - talk: chukwunonso-ikemba-brain-signals-ai
+    - talk: david-crepaz-keay-mental-health-bot
+    - break: Lunch & networking
+      duration: 60
+    - break: Networking & sponsor crawl
       duration: 30
 
 sponsors:
