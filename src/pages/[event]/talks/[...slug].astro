@@ -41,9 +41,9 @@ function getSpeakerImage(photo: string) {
   <section class="talk-page">
     <div class="container">
       <nav class="breadcrumb" aria-label="breadcrumb">
-        <a href={import.meta.env.BASE_URL}>Home</a>
+        <a href="./">Home</a>
         <span class="separator">/</span>
-        <a href={`${import.meta.env.BASE_URL}${eventSlug}/`}>{event?.locationString || eventSlug}</a>
+        <a href={`${eventSlug}/`}>{event?.locationString || eventSlug}</a>
         <span class="separator">/</span>
         <span class="current">{talk.data.title}</span>
       </nav>
@@ -129,7 +129,7 @@ function getSpeakerImage(photo: string) {
       </div>
 
       <div class="back-link">
-        <a href={`${import.meta.env.BASE_URL}${eventSlug}/#schedule`}>
+        <a href={`${eventSlug}/#schedule`}>
           &larr; Back to Schedule
         </a>
       </div>
