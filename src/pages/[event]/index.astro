@@ -42,9 +42,7 @@ const schedule = buildSchedule({ ...event, id: eventId }, allTalks);
     <ScheduleSection event={event} schedule={schedule} eventSlug={eventId} />
   )}
 
-  {event.state !== 'before' && (
-    <SpeakersSection schedule={schedule} eventSlug={eventId} />
-  )}
+  <SpeakersSection schedule={schedule} eventSlug={eventId} />
 
   <VenueSection venue={event.venue} />
   <SponsorsSection sponsors={event.sponsors} mailto={event.mailto} />
