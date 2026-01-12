@@ -26,9 +26,9 @@ const heroImage = ogImage || (event?.heroPictures?.[0] ? `https://llmday.com${ev
 
   <title>{title}</title>
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href={`${import.meta.env.BASE_URL}favicon/apple-touch-icon.png`}>
+  <link rel="icon" type="image/png" sizes="32x32" href={`${import.meta.env.BASE_URL}favicon/favicon-32x32.png`}>
+  <link rel="icon" type="image/png" sizes="16x16" href={`${import.meta.env.BASE_URL}favicon/favicon-16x16.png`}>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">

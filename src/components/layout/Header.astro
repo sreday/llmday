@@ -26,7 +26,7 @@ const { event } = Astro.props;
     <div id="navigation" class="nav-links">
       {event ? (
         <ul>
-          <li><a href="/">Home</a></li>
+          <li><a href={import.meta.env.BASE_URL}>Home</a></li>
           <li><a href="#tickets">Tickets</a></li>
           <li><a href="#schedule">Schedule</a></li>
           <li><a href="#speakers">Speakers</a></li>
@@ -35,13 +35,13 @@ const { event } = Astro.props;
         </ul>
       ) : (
         <ul>
-          <li><a href="/">Home</a></li>
+          <li><a href={import.meta.env.BASE_URL}>Home</a></li>
           <li><a href="#upcoming">Upcoming events</a></li>
           <li><a href="#past">Past events</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#sponsor">Sponsor</a></li>
           <li><a href="#partner">Partner</a></li>
-          <li><a href="/terms/">Terms & Conditions</a></li>
+          <li><a href={`${import.meta.env.BASE_URL}terms/`}>Terms & Conditions</a></li>
         </ul>
       )}
     </div>

@@ -99,7 +99,7 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
               <EventCard
                 name={formatEventName(event.id)}
                 photo={getEventImage(event.id) || getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
-                url={`/${event.id}/`}
+                url={`${import.meta.env.BASE_URL}${event.id}/`}
               />
             </div>
           ))}
@@ -127,7 +127,7 @@ const pastEvents = sortedEvents.filter((e) => e.data.state === 'after');
               <EventCard
                 name={formatEventName(event.id)}
                 photo={getEventImage(event.id) || getPhoto(event.data.heroPictures[0]) || defaultHeroPhoto}
-                url={`/${event.id}/`}
+                url={`${import.meta.env.BASE_URL}${event.id}/`}
               />
             </div>
           ))}
