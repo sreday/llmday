@@ -42,6 +42,10 @@ jobs:
           ASTRO_SITE: ${{ steps.pages.outputs.origin }}
           ASTRO_BASE: ${{ steps.pages.outputs.base_path }}
 
+      - name: Remove CNAME for dev deployment
+        if: github.ref == 'refs/heads/dev'
+        run: rm -f dist/CNAME
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
