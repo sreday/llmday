@@ -1,7 +1,7 @@
 # TODO - change these
 
 # start time includes timezone at the end relative to UTC
-start_time: "2026-02-12T09:00:00+05:00"
+start_time: "2026-03-06T09:00:00+05:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
