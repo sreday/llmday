@@ -24,3 +24,17 @@ Rather than optimising for fluency alone, the Mental Health Foundation’s appro
 This presentation offers a practical case study in building mental health bots that are helpful without being unsafe—and shows why mental health applications require more than generic AI capability.",,"Dr David Crepaz-Keay, FRSPH, is Head of Research and Applied Learning at the Mental Health Foundation, a 75 year old public mental health NGO. He leads the London based research team and is responsible AI, LLMs and knowledge management systems for the organisation.
 
 Dr Crepaz-Keay is a former co-chair and now member of the ethics, policy and position committee of the International Society for Psychiatric Genetics and a fellow of the Royal Society for Public Health. He is an editor of the Journal of Mental Health Training, Education and Practice; the Oxford Handbook of Philosophy and Public Mental Health and the Handbook of Phenomenology, Values and Clinical Decision-Making in Personalised Mental Health Care. He has been a technical advisor for the World Health Organisation, senior mental health advisor to Public Health England, written a mental health module for the Open University, written, spoken and campaigned for improvements in mental health services."
+,confirmed,Michele Sciabarra,1,1,Nuvolaris,Michele Sciabarra.png,https://www.linkedin.com/in/msciab/,,,,Trustable: building a private “Lovable-like” AI using only open source,"In this talk we show how we built Trustable, a fully private AI platform that delivers an experience similar to Lovable, while keeping everything under the company’s control.
+
+No opaque clouds. No closed models. No external AI services quietly siphoning your data.
+
+Starting from Apache OpenServerless and OpenCode, we walk through how to design and implement a system that:
+
+* orchestrates AI agents and complex workflows
+* naturally blends code, data, and automation
+* runs on-prem or on dedicated infrastructure
+* keeps data, prompts, and logs fully private
+
+We focus on the real architecture, the hard trade-offs, and what it actually takes to move from demos to production-ready AI systems.
+
+A practical story about building AI that feels lovable to users, but is genuinely trustable for organizations.",,"Michele Sciabarrà is the Founder and CEO of Nuvolaris.io, where he focuses on building secure Private AI and serverless platforms that balance innovation, risk control, and real business impact. He is a long time open source contributor, an Apache Software Foundation PMC member for OpenWhisk, and a published author and trainer with decades of experience in cloud, serverless, and distributed systems."
