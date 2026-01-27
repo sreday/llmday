@@ -6,61 +6,145 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
   <loc>https://www.llmday.com/</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Lior_Schejter_MAD_About_Software_Design__When_AI_Architects_Argue</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Jakub_Rohleder_Mondaycom_Keynote_Stop_Making_Your_Agents_More_Expensive__Make_Your_Retrieval_Better</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Ben_Savage_Veritas_Automata_Exploring_the_Convergence_of_Machine_Learning__AI__and_CloudNative_Techn</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Michael_Matloka_PostHog_Keynote_10_Learnings_from_Launching_an_Agentic_AI_Product_at_Scale</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Tim_Spann_Snowflake_From_TrafficAI_to_GhostBreakers_Building_Stateful_AI_Agents_with_Cortex__OpenFlo</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Piotr_Kacala__Wojtek_Strzalkowski_AI_Product_Heroes__GOGcom_From_Customer_Interview_to_Working_Proto</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Surya_Appini_Meta_Building_NextGeneration_AI_Assistants_for_Wearables</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Anna_SztyberBetley_Warsaw_University_of_Technology_Beware_of_finetuning_Subliminal_learning_and_weir</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Jeremy_Curcio_Fearless_Engineering_Better_Prompts_for_AI_Assisted_Development</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Patrycja_Cieplicka_Tooploox_How_We_Evaluate_Large_Language_Models</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Karen_Zhou_Anthropic_Building_Evaluation_Systems_for_AI_Coding_Agents_at_Scale</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Agnieszka_Niezgoda_Microsoft_Agentic_AI_at_Scale_Lessons_from_EnterpriseLevel_Implementations</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Suvendu_Mohanty_Amazon_FineTuning_LLMs_for_VoiceFirst_Consumer_Experiences</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Kasper_Kalfas_Software_Mind_Building_a_Personal_Biohacking_Data_Platform_with_Python_From_Wearables_</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Shantanu_Sharma_SVAM_International_Benchmarking_trust_Engineering_AI_safety_pipelines_for_financial_</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Patryk_Owczarz_Filip_Dzieciol__Jacek_Jackowski_MountsAI_When_HR_stops_clicking_practical_application</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Alisson_Sol_Capital_One_The_way_to_Edge_AI</loc>
-  <lastmod>2026-01-27T17:42:41.228495+00:00</lastmod>
+  <loc>https://www.llmday.com/Zbigniew_Lukasiak_Programmer_One_Interface_Fluid_Movement_Between_LLM_and_Code</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Mateusz_Charytoniuk_Intentee_From_Infrastructure_to_Production_A_Year_of_SelfHosted_LLMs</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Adrian_Boguszewski_Intel_No_Cloud__No_Problem_AI_on_Your_Own_Terms</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Grzegorz_Warzecha_Genotic_Coming_soon</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Maciej_Rzasa__Aji_Ghose_Chattermill_Growing_AI_Projects_Where_Science_Meets_Engineering</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Adrian_Sroka_Relativity_MCP_Revolution_or_Security_Regression</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Piotr_Migdal_Quesma_1h_Workshop_Handson_AI_agent_evaluation_building_benchmarks_with_Harbor</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Piotr_Migdal_Quesma_1h_Workshop_Handson_AI_agent_evaluation_building_benchmarks_with_Harbor</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Maish_SaidelKeesing_AWS_Is_Your_GenAI_System_Ready_for_Production_Reality</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Sachin_Jha__Biswajit_Satapathy_Red_Hat_Measuring_What_Matters_MCP_as_the_Backbone_of_Your_RAG_Evalua</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Andriy_Batutin_exMacPaw_The_Verification_Gap_What_Separates_LLM_Demos_from_Production_Agents</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Porimol_Chandro_Roche_From_Retrieval_to_Reasoning_Architecting_AgenticRAG_Workflows</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Pawel_Bulowski_Pawel_Bulowski_AI_Consulting_SLMs_at_the_Edge_Opportunities__Challenges</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Randy_Bias_Mirantis_Agents_Need_to_be_Paged__Not_Prompted_if_we_Truly_Want_AIOps</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Daniel_Afonso_PagerDuty_The_State_of_AI_in_Incident_Response</loc>
+  <lastmod>2026-01-27T17:45:35.712657+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
