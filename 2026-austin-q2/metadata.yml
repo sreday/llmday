@@ -1,26 +1,29 @@
-# TODO - change these
-
-# start time includes timezone at the end relative to UTC
-start_time: "2026-02-12T09:00:00+05:00"
+base_path: "https://www.sreday.com/"
+base_folder: "static"
 # before - no schedule
 # active - schedule
-# after  - hide ticket sales
-event_state: active
-date_string: "March 6, 2026"
-location_string: "VIAM, 1900 Broadway, 6th Floor, New York, NY 10023"
-# get this from the event url
-luma_evt: evt-Rq2eouqzffNp2PW
-cfp_url: https://www.papercall.io/llmday-2026-nyc-q1
+# after  - hide tickets
+event_state: before
+start_time: "2026-05-11T10:00:00-05:00"
+date_string: "May 11, 2026"
+location_string: "Austin, Texas, USA"
+
+cfp_url: https://www.papercall.io/sreday-2026-austin-q2
+twitter_url: https://twitter.com/sreday_com
+linkedin_url: https://www.linkedin.com/company/sreday/
+youtube_url: https://www.youtube.com/@sreday
+luma_evt: evt-1YmhIL8mncDoBhO
+mailto: "mailto:hello@sreday.com"
 
 # the number of tracks needs to be the same per day
-# the tracks will be taken in the order they appear in the CSV file
+# the tracks will be taken in the order they appear in the csv file and spread equally on both days
 days: 1
 attendees: 100
 speakers: 10+
 
 rooms:
 - main room
-- round room
+- mini room
 
 breaks:
 - title: Coffee break
@@ -31,26 +34,36 @@ breaks:
 - title: Lunch & networking
   duration: 60
   comment: Main lobby
-  talks_before: 4
+  talks_before: 3
 - title: Networking & sponsor crawl
+  duration: 30
+  comment: Main lobby
+  talks_before: 3
+- title: Wrap up
   duration: 30
   comment: Main lobby
   talks_before: 4
 
+
 sponsors:
-  - logo: viam.png
-    url: https://www.viam.com/
+  - logo: harness.png
+    url: https://www.harness.io/
+  - logo: imply.png
+    url: https://imply.io/
+  - logo: xurrent.png
+    url: https://www.xurrent.com/
   - logo: hockeystick.png
-    url: https://www.hockeystick.show
+    url: https://www.hockeystick.show/
 
-# these get displayed at the top
+
 hero_pictures:
-- ../photos/london-2022-0.jpg
-
-# probably don't need changing
-base_path: "https://www.llmday.com/"
-base_folder: "static"
-twitter_url: https://twitter.com/llmday_com
-linkedin_url: https://www.linkedin.com/company/llmday/
-youtube_url: https://www.youtube.com/@llmday
-mailto: "mailto:hello@llmday.com"
+- ../photos/sreday-san-francisco-2024-0.jpg
+- ../photos/sreday-san-francisco-2024-1.jpg
+- ../photos/sreday-san-francisco-2024-2.jpg
+- ../photos/sreday-san-francisco-2024-3.jpg
+- ../photos/sreday-san-francisco-2024-4.jpg
+- ../photos/sreday-san-francisco-2024-5.jpg
+- ../photos/london-2023-0.jpg
+- ../photos/london-2023-1.jpg
+- ../photos/london-2023-2.jpg
+- ../photos/london-2023-3.jpg
