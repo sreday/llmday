@@ -163,10 +163,6 @@
   .schedule-grid-table th:first-child {
     width: 60px;
   }
-  .schedule-grid-table th:nth-child(2),
-  .schedule-grid-table th:nth-child(3) {
-    width: calc(50% - 30px);
-  }
   .schedule-grid-table td {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid #e5ecf4;
@@ -248,22 +244,25 @@
       <span class="schedule-meta-item">{{ tracks|length }} parallel tracks</span>
     </div>
 
+{% for day in range(days) %}
+    <h4 class="section-heading text-center mb-5">Day {{ day + 1 }}</h4>
+
     <!-- Track navigation -->
     <div class="track-nav">
       <div class="track-nav-inner">
-        <div class="track-nav-links" id="track-links">
-{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
-          <a href="#track-{{ loop.index }}">{{ rooms[loop.index0] }}</a>
+        <div class="track-nav-links" id="track-links-{{ day }}">
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+          <a href="#track-{{ day }}-{{ loop.index }}">{{ rooms[loop.index0] }}</a>
 {% endfor %}
         </div>
-        <span class="view-toggle-link" id="view-toggle" onclick="toggleView()">view as table</span>
+        <span class="view-toggle-link" id="view-toggle-{{ day }}" onclick="toggleView({{ day }})">view as table</span>
       </div>
     </div>
 
     <!-- Timeline View (default) -->
-    <div id="timeline-view" class="schedule-timeline-view">
-{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
-      <div class="track-section-header" id="track-{{ loop.index }}">{{ rooms[loop.index0] }} &bull; Track {{ track }}</div>
+    <div id="timeline-view-{{ day }}" class="schedule-timeline-view">
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+      <div class="track-section-header" id="track-{{ day }}-{{ loop.index }}">{{ rooms[loop.index0] }} &bull; Track {{ track }}</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 {% for talk in talks_by_tracks[track] %}
@@ -290,19 +289,19 @@
     </div>
 
     <!-- Table View -->
-    <div id="table-view" class="schedule-table-view">
+    <div id="table-view-{{ day }}" class="schedule-table-view">
       <table class="schedule-grid-table">
         <thead>
           <tr>
             <th>Time</th>
-{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
-            <th>{{ rooms[loop.index0] }}</th>
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+            <th style="width: calc((100% - 60px) / {{ (tracks|length) // days }})">{{ rooms[loop.index0] }}</th>
 {% endfor %}
           </tr>
         </thead>
         <tbody>
 {% set all_times = [] %}
-{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
 {% for talk in talks_by_tracks[track] %}
 {% if talk.start_time.strftime('%H:%M') not in all_times %}
 {% set _ = all_times.append(talk.start_time.strftime('%H:%M')) %}
@@ -311,7 +310,7 @@
 {% endfor %}
 {% for time in all_times|sort %}
 {% set ns = namespace(talks_at_time=[], titles=[]) %}
-{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
 {% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
 {% set _ = ns.talks_at_time.append(talk) %}
 {% set _ = ns.titles.append(talk.title) %}
@@ -324,12 +323,12 @@
 {% if ns.titles|unique|list|length == 1 and ns.titles[0] != '' %}
           <tr>
             <td class="time-cell">{{ time }}</td>
-            <td class="talk-cell merged-cell" colspan="2">{{ ns.titles[0] }}</td>
+            <td class="talk-cell merged-cell" colspan="{{ (tracks|length) // days }}">{{ ns.titles[0] }}</td>
           </tr>
 {% else %}
           <tr>
             <td class="time-cell">{{ time }}</td>
-{% for track in tracks[(tracks|length)//days*(0):(tracks|length)//days*(1)] %}
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
             <td class="talk-cell">
 {% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
               <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
@@ -344,12 +343,14 @@
       </table>
     </div>
 
+{% endfor %}
+
     <script>
-    function toggleView() {
-      const timelineView = document.getElementById('timeline-view');
-      const tableView = document.getElementById('table-view');
-      const toggleBtn = document.getElementById('view-toggle');
-      const trackLinks = document.getElementById('track-links');
+    function toggleView(day) {
+      const timelineView = document.getElementById('timeline-view-' + day);
+      const tableView = document.getElementById('table-view-' + day);
+      const toggleBtn = document.getElementById('view-toggle-' + day);
+      const trackLinks = document.getElementById('track-links-' + day);
 
       if (tableView.classList.contains('active')) {
         tableView.classList.remove('active');

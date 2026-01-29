@@ -87,63 +87,288 @@
   </div>
 </section>
 {% else %}
+<style>
+  /* Track navigation */
+  .track-nav {
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+  }
+  .track-nav-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .track-nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .track-nav-links a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #098dcf;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .track-nav-links a:hover {
+    background: #0779b3;
+    color: white;
+  }
+  .view-toggle-link {
+    color: #098dcf;
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #098dcf;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .view-toggle-link:hover {
+    background: #098dcf;
+    color: white;
+  }
+  .view-toggle-link.active {
+    background: #098dcf;
+    color: white;
+  }
+  /* Table view */
+  .schedule-table-view { display: none; }
+  .schedule-table-view.active { display: block; }
+  .schedule-timeline-view { display: block; }
+  .schedule-timeline-view.hidden { display: none; }
+  .schedule-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 1rem;
+    table-layout: fixed;
+  }
+  .schedule-grid-table th {
+    background: linear-gradient(135deg, #098dcf 0%, #0779b3 100%);
+    color: white;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .schedule-grid-table th:first-child {
+    width: 60px;
+  }
+  .schedule-grid-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5ecf4;
+    vertical-align: top;
+  }
+  .schedule-grid-table td.merged-cell {
+    text-align: center;
+    font-weight: 500;
+    color: #555;
+    background: #f8fbfd;
+  }
+  .schedule-grid-table .time-cell {
+    color: #098dcf;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .schedule-grid-table .talk-cell a {
+    color: #222;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .schedule-grid-table .talk-cell a:hover {
+    color: #098dcf;
+  }
+  .schedule-grid-table .speaker-info {
+    color: #444;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+  .schedule-grid-table .speaker-info .affiliation {
+    color: #666;
+  }
+  .schedule-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  .schedule-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .schedule-meta-divider {
+    color: #ccc;
+    font-weight: 300;
+  }
+  /* Track section header */
+  .track-section-header {
+    background: linear-gradient(135deg, #098dcf 0%, #0779b3 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0 0 0;
+    border-radius: 4px 4px 0 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .track-section-header:first-of-type {
+    margin-top: 0;
+  }
+
+</style>
+
 <section id="schedule" class="schedule-section section theme-bg-light">
   <div class="container">
-    <h2 class="section-heading text-center mb-5">Schedule</h2>
+    <h2 class="section-heading text-center mb-4">Schedule</h2>
 
+    <!-- Schedule meta info -->
+    <div class="schedule-meta">
+      <span class="schedule-meta-item">{{ date_string }}</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">{{ tracks|length }} parallel tracks</span>
+    </div>
 
 {% for day in range(days) %}
     <h4 class="section-heading text-center mb-5">Day {{ day + 1 }}</h4>
 
-    
-    <!-- Nav tabs -->
-    <ul class="schedule-nav nav nav-pills nav-fill" id="myTab" role="tablist">
+    <!-- Track navigation -->
+    <div class="track-nav">
+      <div class="track-nav-inner">
+        <div class="track-nav-links" id="track-links-{{ day }}">
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-      <li class="nav-item me-2">
-        <a class="nav-link {% if loop.index==1 %}active{% endif %}" id="tab-{{ day }}-{{ loop.index }}" data-bs-toggle="tab" href="#tab-{{ day }}-{{ loop.index }}-content" role="tab" aria-controls="tab-{{ loop.index }}-content"
-          aria-selected={% if loop.index==1 %}"true"{% else %}"false"{% endif %}
-        >
-          <span class="heading">{{ rooms[loop.index0] }}</span>
-          <span class="meta">{{ track }}</span>
-        </a>
-      </li>
+          <a href="#track-{{ day }}-{{ loop.index }}">{{ rooms[loop.index0] }}</a>
 {% endfor %}
-    </ul>
-    
-    <!-- Tab panes -->
-    <div class="schedule-tab-content tab-content">
+        </div>
+        <span class="view-toggle-link" id="view-toggle-{{ day }}" onclick="toggleView({{ day }})">view as table</span>
+      </div>
+    </div>
 
+    <!-- Timeline View (default) -->
+    <div id="timeline-view-{{ day }}" class="schedule-timeline-view">
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-      <div class="tab-pane {% if loop.index==1 %}active{% endif %}" id="tab-{{ day }}-{{ loop.index }}-content" role="tabpanel" aria-labelledby="tab-{{ day }}-{{ loop.index }}">
-
+      <div class="track-section-header" id="track-{{ day }}-{{ loop.index }}">{{ rooms[loop.index0] }} &bull; Track {{ track }}</div>
+      <div class="schedule-tab-content">
+        <div class="tab-pane active">
 {% for talk in talks_by_tracks[track] %}
-        <div class="item item-talk">
-          <div class="meta">
-            <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
-            <div class="profile">
-              <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img class="profile-image rounded-circle  mb-2" src="{{ talk.photo_url }}" alt=""></a>
-              <div class="name"><a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.name }}</a></div>
-            </div><!--//profile-->
-          </div><!--//meta-->
-          <div class="content">
-            <h3 class="title mb-3">
-              <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
-            </h3>
-            <div class="location mb-3"></i>{{ talk.comment }}{{ talk.organization }}</div>
-            <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
-          </div><!--//content-->
-        </div><!--//item-->
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
+              <div class="profile">
+                <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img class="profile-image rounded-circle mb-2" src="{{ talk.photo_url }}" alt=""></a>
+                <div class="name"><a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.name }}</a></div>
+              </div>
+            </div>
+            <div class="content">
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
+              </h3>
+              <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}</div>
+              <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
+            </div>
+          </div>
+{% endfor %}
+        </div>
+      </div>
+{% endfor %}
+    </div>
+
+    <!-- Table View -->
+    <div id="table-view-{{ day }}" class="schedule-table-view">
+      <table class="schedule-grid-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+            <th style="width: calc((100% - 60px) / {{ (tracks|length) // days }})">{{ rooms[loop.index0] }}</th>
+{% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+{% set all_times = [] %}
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+{% for talk in talks_by_tracks[track] %}
+{% if talk.start_time.strftime('%H:%M') not in all_times %}
+{% set _ = all_times.append(talk.start_time.strftime('%H:%M')) %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% for time in all_times|sort %}
+{% set ns = namespace(talks_at_time=[], titles=[]) %}
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+{% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
+{% set _ = ns.talks_at_time.append(talk) %}
+{% set _ = ns.titles.append(talk.title) %}
+{% endfor %}
+{% if ns.talks_at_time|length < loop.index %}
+{% set _ = ns.talks_at_time.append(none) %}
+{% set _ = ns.titles.append('') %}
+{% endif %}
+{% endfor %}
+{% if ns.titles|unique|list|length == 1 and ns.titles[0] != '' %}
+          <tr>
+            <td class="time-cell">{{ time }}</td>
+            <td class="talk-cell merged-cell" colspan="{{ (tracks|length) // days }}">{{ ns.titles[0] }}</td>
+          </tr>
+{% else %}
+          <tr>
+            <td class="time-cell">{{ time }}</td>
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+            <td class="talk-cell">
+{% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
+              <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
+              <div class="speaker-info">{{ talk.name }}{% if talk.organization %} <span class="affiliation">• {{ talk.organization }}</span>{% endif %}</div>
+{% endfor %}
+            </td>
+{% endfor %}
+          </tr>
+{% endif %}
+{% endfor %}
+        </tbody>
+      </table>
+    </div>
 
 {% endfor %}
 
-      </div><!--//tab-{{ loop.index }}-content-->
+    <script>
+    function toggleView(day) {
+      const timelineView = document.getElementById('timeline-view-' + day);
+      const tableView = document.getElementById('table-view-' + day);
+      const toggleBtn = document.getElementById('view-toggle-' + day);
+      const trackLinks = document.getElementById('track-links-' + day);
 
-{% endfor %}
-    </div><!--//schedule-tab-content-->
+      if (tableView.classList.contains('active')) {
+        tableView.classList.remove('active');
+        timelineView.classList.remove('hidden');
+        toggleBtn.textContent = 'view as table';
+        toggleBtn.classList.remove('active');
+        trackLinks.style.display = 'flex';
+      } else {
+        tableView.classList.add('active');
+        timelineView.classList.add('hidden');
+        toggleBtn.textContent = 'view as timeline';
+        toggleBtn.classList.add('active');
+        trackLinks.style.display = 'none';
+      }
+    }
+    </script>
 
-
-{% endfor %}
-    <div class="schedule-cta text-center mx-auto"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
   </div>
 </section>
 {% endif %}
