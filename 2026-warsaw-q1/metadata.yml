@@ -55,6 +55,19 @@ sponsors:
 hero_pictures:
 - ../photos/london-2022-0.jpg
 
+# brand identity
+brand_name: "LLMday"
+brand_domain: "llmday.com"
+brand_description: "Conference on Large Language Models, AI and Machine Learning"
+brand_tagline: "Large Language Models, AI and Machine Learning"
+brand_og_pitch: "Probably the most awesome LLM conference in"
+brand_color: "#1c591a"
+brand_twitter: "@llmday_com"
+brand_ga_id: "G-CQ2KV6LK8G"
+brand_gads_id: "AW-17496979257"
+brand_twt_pixel: "ofo1h"
+logo_image: ""
+
 # probably don't need changing
 base_path: "https://www.llmday.com/"
 base_folder: "static"
