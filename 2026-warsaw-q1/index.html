@@ -361,10 +361,6 @@
   .schedule-grid-table th:first-child {
     width: 60px;
   }
-  .schedule-grid-table th:nth-child(2),
-  .schedule-grid-table th:nth-child(3) {
-    width: calc(50% - 30px);
-  }
   .schedule-grid-table td {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid #e5ecf4;
@@ -446,24 +442,27 @@
       <span class="schedule-meta-item">2 parallel tracks</span>
     </div>
 
+
+    <h4 class="section-heading text-center mb-5">Day 1</h4>
+
     <!-- Track navigation -->
     <div class="track-nav">
       <div class="track-nav-inner">
-        <div class="track-nav-links" id="track-links">
+        <div class="track-nav-links" id="track-links-0">
 
-          <a href="#track-1">main room</a>
+          <a href="#track-0-1">main room</a>
 
-          <a href="#track-2">second room</a>
+          <a href="#track-0-2">second room</a>
 
         </div>
-        <span class="view-toggle-link" id="view-toggle" onclick="toggleView()">view as table</span>
+        <span class="view-toggle-link" id="view-toggle-0" onclick="toggleView(0)">view as table</span>
       </div>
     </div>
 
     <!-- Timeline View (default) -->
-    <div id="timeline-view" class="schedule-timeline-view">
+    <div id="timeline-view-0" class="schedule-timeline-view">
 
-      <div class="track-section-header" id="track-1">main room &bull; Track 1</div>
+      <div class="track-section-header" id="track-0-1">main room &bull; Track 1</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 
@@ -759,7 +758,7 @@
         </div>
       </div>
 
-      <div class="track-section-header" id="track-2">second room &bull; Track 2</div>
+      <div class="track-section-header" id="track-0-2">second room &bull; Track 2</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 
@@ -1024,15 +1023,15 @@
     </div>
 
     <!-- Table View -->
-    <div id="table-view" class="schedule-table-view">
+    <div id="table-view-0" class="schedule-table-view">
       <table class="schedule-grid-table">
         <thead>
           <tr>
             <th>Time</th>
 
-            <th>main room</th>
+            <th style="width: calc((100% - 60px) / 2)">main room</th>
 
-            <th>second room</th>
+            <th style="width: calc((100% - 60px) / 2)">second room</th>
 
           </tr>
         </thead>
@@ -1679,12 +1678,14 @@
       </table>
     </div>
 
+
+
     <script>
-    function toggleView() {
-      const timelineView = document.getElementById('timeline-view');
-      const tableView = document.getElementById('table-view');
-      const toggleBtn = document.getElementById('view-toggle');
-      const trackLinks = document.getElementById('track-links');
+    function toggleView(day) {
+      const timelineView = document.getElementById('timeline-view-' + day);
+      const tableView = document.getElementById('table-view-' + day);
+      const toggleBtn = document.getElementById('view-toggle-' + day);
+      const trackLinks = document.getElementById('track-links-' + day);
 
       if (tableView.classList.contains('active')) {
         tableView.classList.remove('active');
