@@ -186,4 +186,4 @@ print("Generating sitemap.xml with %d items" % len(SITEMAP_URLS))
 now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=datetime.timezone.utc).isoformat()
 with open(BASE_FOLDER + "/sitemap.xml", "w") as f:
     template = env.get_template("sitemap.xml")
-    f.write(template.render(urls=SITEMAP_URLS, now=now))
+    f.write(template.render(urls=SITEMAP_URLS, now=now, **context))
