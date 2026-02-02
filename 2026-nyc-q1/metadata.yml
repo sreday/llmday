@@ -40,6 +40,8 @@ breaks:
 sponsors:
   - logo: viam.png
     url: https://www.viam.com/
+  - logo: arf.png
+    url: https://github.com/petterjuan/agentic-reliability-framework
   - logo: hockeystick.png
     url: https://www.hockeystick.show
 
