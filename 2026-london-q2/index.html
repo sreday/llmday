@@ -372,6 +372,29 @@
 
       <div class="col-6 col-lg-3 mb-4">
         <div class="card rounded">
+          <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img src="../speakers/Jake Page.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Jake Page</h5>
+            <div class="card-text mb-3">
+              <div class="meta">MetalBear</div>
+            </div><!--//card-text-->
+            <a href="./Jake_Page_MetalBear_The_Limits_of_Vibe_Coding_What_Happens_When_AIGenerated_Code_Lands_in_Your_Clust">Read more &rarr;</a>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/jake-page-aws/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col-6 col-lg-3 mb-4">
+        <div class="card rounded">
           <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Kaan Ozdogru.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Kaan Ozdogru</h5>
@@ -908,6 +931,49 @@ The session dives into measurement and iteration: quantitative engagement metric
               </div>
               <div class="desc p-2 p-lg-3">
                 <p><p>Kaan Ozdogru is a machine learning engineer at Wayve, working on end to end AI for autonomous driving. Based in London, he focuses on building and scaling learning driven systems for real world autonomy.</p></p>
+              </div>
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 8 -->
+<div class="modal modal-speaker modal-speaker-8" id="modal-speaker-8" tabindex="-1" role="dialog" aria-labelledby="speaker-8-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 id="speaker-8-ModalLabel" class="modal-title sr-only"
+>Jake Page</h4>
+          </div>
+          <div class="modal-body p-0">
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Jake Page.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Jake Page</h2>
+                          <div class="meta mb-2">MetalBear</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/jake-page-aws/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p><p>Most people aren't vibe coding an entire app from scratch and shipping it to production without a second thought. What’s more likely to happen is more subtle and potentially riskier. You've got a pre-existing service running in your cluster, it's been reviewed, it has access to your database, your secrets, your internal APIs. Then someone asks an AI assistant to add a feature. The generated code works, great! But, it also hardcodes an API key, or passes raw model output to users, or creates a public ingress to an internal service. And it lands inside a system that already has the keys to everything. The recent <a href="https://www.wiz.io/blog/exposed-moltbook-database-reveals-millions-of-api-keys">Moltbook incident</a> made these blaring security concerns around AI generated code blaringly apparent, a single missing config exposed 1.5 million API keys. At a certain point AI-generated code will make its way into Kubernetes clusters and the security implications are real, are we ready to address them?</p>
+<p>In this talk we'll break down the specific risks that AI-generated code introduces when it lands in Kubernetes, from pod security and secret management to network exposure and LLM workloads. Then we'll build the fix: open-source security skills you drop into your AI coding assistant so it generates secure defaults automatically. We'll validate those skills against a live cluster using mirrord, no image rebuilds, no redeploys, just fast feedback until the policies actually work. You'll leave with a repo you can use today and an answer to the question every team shipping AI-generated code needs to figure out: if AI writes the code, what reviews it?</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p><p>Jake Page is a former high-school teacher turned DevOps engineer and now DevRel Engineer. Over the past five years, he has focused on cloud-native developer tooling across packaging, software delivery, FinOps, testing, and debugging, often with a strong Kubernetes angle. Now based in Lisbon, Jake is passionate about learning by doing and frequently speaks at meetups and conferences.</p></p>
               </div>
           </div><!--//modal-body-->
       </div><!--//modal-content-->
