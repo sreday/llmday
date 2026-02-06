@@ -188,22 +188,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">The way to Edge AI</h1>
+    <h1 class="section-heading text-center mb-3">The Limits of Vibe Coding: What Happens When AI-Generated Code Lands in Your Cluster</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4">
         <div class="card rounded-0">
-          <img src="../speakers/Alisson Sol.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Adna Zujo Lakisic.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Alisson Sol</h5>
+            <h5 class="card-title mb-2">Adna Zujo Lakisic</h5>
             <div class="card-text mb-3">
-              <div class="meta">Stealth Startup</div>
+              <div class="meta">MetalBear</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/alissonsol/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/adna-zujo-lakisic/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -216,19 +216,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <p><p>As telecommunications evolves toward 6G, Radio Access Networks (RAN) will fundamentally transform application architecture beyond today's approach of endpoints calling LLMs on remote data centers. This presentation examines three critical software development challenges for the next decade:</p>
-<ul>
-<li>Real-time AI at the Edge: Moving from cloud-dependent inference to distributed processing meeting RAN's strict latency requirements.</li>
-<li>Multi-tenant Resource Optimization: Transitioning to shared platforms where AI workloads coexist while maintaining service-level agreements.</li>
-<li>Federated Learning and Privacy: Shifting from centralized training to federated approaches preserving privacy across distributed networks.</li>
-</ul>
-<p>The goal is sharing a roadmap for AI-native infrastructure where intelligence lives at the network edge.</p></p>
+                <p><p>Most people aren't vibe coding an entire app from scratch and shipping it to production without a second thought. What’s more likely to happen is more subtle and potentially riskier. You've got a pre-existing service running in your cluster, it's been reviewed, it has access to your database, your secrets, your internal APIs. Then someone asks an AI assistant to add a feature. The generated code works, great! But, it also hardcodes an API key, or passes raw model output to users, or creates a public ingress to an internal service. And it lands inside a system that already has the keys to everything. The recent <a href="https://www.wiz.io/blog/exposed-moltbook-database-reveals-millions-of-api-keys">Moltbook incident</a> made these blaring security concerns around AI generated code blaringly apparent, a single missing config exposed 1.5 million API keys. At a certain point AI-generated code will make its way into Kubernetes clusters and the security implications are real, are we ready to address them?</p>
+<p>In this talk we'll break down the specific risks that AI-generated code introduces when it lands in Kubernetes, from pod security and secret management to network exposure and LLM workloads. Then we'll build the fix: open-source security skills you drop into your AI coding assistant so it generates secure defaults automatically. We'll validate those skills against a live cluster using mirrord, no image rebuilds, no redeploys, just fast feedback until the policies actually work. You'll leave with a repo you can use today and an answer to the question every team shipping AI-generated code needs to figure out: if AI writes the code, what reviews it?</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <p><p>Alisson Sol is a hands-on engineering leader with deep expertise in distributed systems, AI, and scaling products to millions of users at top tech companies. More info at <a href="https://AlissonSol.com">https://AlissonSol.com</a></p></p>
+                <p><p>Adna Zujo Lakisic is a Solutions Engineer based in North America, currently working at MetalBear. She brings a strong engineering background spanning software development, technical consulting, and solutions engineering across media, marketing, and technology companies. Prior to MetalBear, she spent several years as a Senior Engineer at Haymarket Media US, where she supported large scale digital platforms. Her experience also includes technical consulting roles at Omega IT and solutions engineering at Midan Marketing, with hands on work in areas such as Terraform, Python, Kubernetes, and cloud infrastructure. Earlier in her career, Adna helped shape and fund a mobile tour guide platform focused on promoting tourism in Mostar through curated self guided experiences.</p></p>
               </div>
 
           </div><!--//card-->
