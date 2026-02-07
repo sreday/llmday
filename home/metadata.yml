@@ -52,10 +52,6 @@ description_template: |
  
  [Take a look at the lineup so far]({{ website }})
  
- Questions? Want to bring LLMday to your city? Ping **[mark@llmday.com](mailto:mark@llmday.com?subject=Question%20about%20{{ name }})**
- 
- ---
- 
  #### Who is this for?
  
  - Are you building, fine-tuning, or deploying large language models?
