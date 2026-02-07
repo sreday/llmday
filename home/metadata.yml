@@ -42,3 +42,54 @@ events_past: []
 meetups: []
 
 meetups_past: []
+
+description_template: |
+ ### LLM Engineers, assemble in {{ location }} on {{ start_date }}!
+ 
+ **LLMday** is an in-person event bringing together the fast-growing community of AI researchers, ML engineers, data scientists, and developers working with large language models.
+ 
+ Please note: this is an **in-person-only event**, with no option to present remotely. You’ll need to be present in {location} on {date} in order to deliver your talk.
+ 
+ [Take a look at the lineup so far]({{ website }})
+ 
+ Questions? Want to bring LLMday to your city? Ping **[mark@llmday.com](mailto:mark@llmday.com?subject=Question%20about%20{{ name }})**
+ 
+ ---
+ 
+ #### Who is this for?
+ 
+ - Are you building, fine-tuning, or deploying large language models?
+ - Do you work on training pipelines, inference infrastructure, or evaluation?
+ - Are you applying generative AI or agentic systems in real-world scenarios?
+ 
+ If you answered yes to any of these, join us for a day of learning, collaboration, and shared experience.
+ 
+ You will connect with experts shaping the AI landscape, peers exploring what is possible today, and a community that enjoys exchanging ideas, lessons learned, and practical insights.
+ 
+ ---
+ 
+ #### Topics
+ 
+ We want to hear about hands-on, experience-driven work across LLMs, AI, and ML, including:
+ 
+ - Lessons learned from real projects, including failures, trade-offs, and surprises.
+ - Deep dives into model architectures, training workflows, optimization, data, and evaluation.
+ - Getting started talks that help others adopt LLM technologies more effectively.
+ - New projects, especially open source tools, frameworks, datasets, or demos.
+ - Ethics, safety, and responsible AI practices, including bias and alignment.
+ - Applied AI use cases, integrations, and deployment stories.
+ - Physical AI, where models interact with hardware, devices, or environments.
+ - MLOps for LLMs, from experimentation to production.
+ - Prompt engineering and interaction patterns for models, agents, and systems.
+ 
+ ---
+ 
+ #### Am I the right speaker for this?
+ 
+ If you are building, researching, or experimenting with LLMs, the answer is yes.
+ 
+ We welcome speakers from diverse backgrounds across industry, academia, and open source. Whether you work on models, infrastructure, operations, or applications, we are interested in your perspective as long as it aligns with the core themes of LLMs, AI, and ML.
+ 
+ For questions, please ping **mark@llmday.com**.
+ 
+ Thank you for presenting with us!
