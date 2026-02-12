@@ -19,8 +19,8 @@ attendees: 150+
 speakers: 20+
 
 rooms:
-- main room
-- second room
+- mhall 2+3
+- garage
 
 breaks:
 - title: Coffee break
