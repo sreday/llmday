@@ -24,6 +24,7 @@ static/index.html: home/**/*
 		cp metadata.yml ../static
 	cp -r photos ./static
 	cp -r speakers ./static
+	cp -r ambassadors ./static
 
 env:
 	python3 -m venv env
