@@ -59,6 +59,76 @@
   </div>
 </section>
 
+<section id="ambassadors" class="section theme-bg-light">
+    <div class="container">
+        <h2 class="section-heading text-center mb-3">{{ brand_name }} Ambassadors</h2>
+        <div class="section-intro text-center single-col-max mx-auto mb-5">
+            Our ambassadors are key community members who help us bring {{ brand_name }} to cities around the world.
+            Know someone who should be an ambassador? <a href="{{ mailto }}?subject=Ambassador%20nomination">Nominate them here!</a>
+        </div>
+
+        <div class="row">
+            {% for ambassador in ambassadors %}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card rounded h-100 shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <img src="./ambassadors/{{ ambassador.Headshot }}"
+                                 class="rounded-circle img-fluid shadow-sm"
+                                 style="width: 150px; height: 150px; object-fit: cover;"
+                                 alt="{{ ambassador.Name }}">
+                        </div>
+                        <h4 class="card-title mb-1">
+                            {{ ambassador.Name }}
+                            {% if ambassador.Linkedin %}
+                            <a target="_blank" href="{{ ambassador.Linkedin }}" class="text-primary ms-1" style="font-size: 0.9rem;"><i class="fab fa-linkedin-in fa-fw"></i></a>
+                            {% endif %}
+                        </h4>
+                        <div class="text-muted mb-3">
+                            <div class="fw-bold">{{ ambassador.Job }}</div>
+                            {% if ambassador.Company %}
+                            <div class="small">{{ ambassador.Company }}</div>
+                            {% endif %}
+                            {% if ambassador.Event %}
+                            <div class="badge bg-primary mt-2">{{ ambassador.Event }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-text text-start">
+                            {% if ambassador.Note|length > 100 %}
+                                <span id="short-note-{{ loop.index }}">{{ ambassador.Note[:100] }}...</span>
+                                <span id="long-note-{{ loop.index }}" style="display: none;">{{ ambassador.Note }}</span>
+                                <a href="javascript:void(0);" id="link-{{ loop.index }}" class="ms-1 fw-bold" onclick="toggleNote({{ loop.index }})">Read more</a>
+                            {% else %}
+                                {{ ambassador.Note }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+function toggleNote(id) {
+    var short = document.getElementById('short-note-' + id);
+    var long = document.getElementById('long-note-' + id);
+    var link = document.getElementById('link-' + id);
+
+    if (short.style.display === 'none') {
+        short.style.display = 'inline';
+        long.style.display = 'none';
+        link.innerText = 'Read more';
+    } else {
+        short.style.display = 'none';
+        long.style.display = 'inline';
+        link.innerText = 'Show less';
+    }
+}
+</script>
+
 <section id="past-events" class="sponsors-section section theme-bg-primary text-white">
   <div class="container">
     <h3 class="section-heading text-center mb-3 text-white">Past conferences</h3>

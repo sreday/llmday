@@ -39,6 +39,7 @@ with open('metadata.yml') as f:
 
 # read the csv
 context["testimonials"] = read_csv("./_db/testimonials.csv")
+context["ambassadors"] = read_csv("./_db/ambassadors.csv")
 
 # MAIN PAGES
 print(DIVIDER)
