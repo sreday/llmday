@@ -284,6 +284,74 @@
   </div>
 </section>
 
+<section id="ambassadors" class="section theme-bg-light">
+    <div class="container">
+        <h2 class="section-heading text-center mb-3">LLMday Ambassadors</h2>
+        <div class="section-intro text-center single-col-max mx-auto mb-5">
+            Our ambassadors are key community members who help us bring LLMday to cities around the world.
+            Know someone who should be an ambassador? <a href="mailto:hello@llmday.com?subject=Ambassador%20nomination">Nominate them here!</a>
+        </div>
+
+        <div class="row">
+            
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card rounded h-100 shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <img src="./ambassadors/Kyle Forster.png"
+                                 class="rounded-circle img-fluid shadow-sm"
+                                 style="width: 150px; height: 150px; object-fit: cover;"
+                                 alt="Kyle Forster">
+                        </div>
+                        <h4 class="card-title mb-1">
+                            Kyle Forster
+                            
+                            <a target="_blank" href="https://www.linkedin.com/in/kyforster/" class="text-primary ms-1" style="font-size: 0.9rem;"><i class="fab fa-linkedin-in fa-fw"></i></a>
+                            
+                        </h4>
+                        <div class="text-muted mb-3">
+                            <div class="fw-bold">Founder & CEO</div>
+                            
+                            <div class="small">RunWhen</div>
+                            
+                            
+                            <div class="badge bg-primary mt-2">Global</div>
+                            
+                        </div>
+
+                        <div class="card-text text-start">
+                            
+                                <span id="short-note-1">What started as RunWhen sponsoring a handful of events quickly grew into a long term partnership, an...</span>
+                                <span id="long-note-1" style="display: none;">What started as RunWhen sponsoring a handful of events quickly grew into a long term partnership, and it's been genuinely fun to watch these conferences expand into multiple cities across Europe and the US while keeping the same thoughtful, practitioner driven feel. I've known Mark and Miko for a while, and working with people who truly care about the community they're building makes this even better. We're excited to keep tightening the partnership between RunWhen and the conference series and to see what this community evolves into next.</span>
+                                <a href="javascript:void(0);" id="link-1" class="ms-1 fw-bold" onclick="toggleNote(1)">Read more</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<script>
+function toggleNote(id) {
+    var short = document.getElementById('short-note-' + id);
+    var long = document.getElementById('long-note-' + id);
+    var link = document.getElementById('link-' + id);
+
+    if (short.style.display === 'none') {
+        short.style.display = 'inline';
+        long.style.display = 'none';
+        link.innerText = 'Read more';
+    } else {
+        short.style.display = 'none';
+        long.style.display = 'inline';
+        link.innerText = 'Show less';
+    }
+}
+</script>
+
 <section id="past-events" class="sponsors-section section theme-bg-primary text-white">
   <div class="container">
     <h3 class="section-heading text-center mb-3 text-white">Past conferences</h3>
