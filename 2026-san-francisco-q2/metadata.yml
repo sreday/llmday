@@ -9,7 +9,7 @@ event_state: active
 date_string: "April 16, 2026"
 location_string: "Harness, San Francisco, United States"
 # get this from the event url
-luma_evt: evt-Rq2eouqzffNp2PW
+luma_evt: evt-6PPnLrXPdXBVfdl
 cfp_url: hhttps://cfp.ninja/e/llmday-2026-san-francisco-q2
 
 # the number of tracks needs to be the same per day
