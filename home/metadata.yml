@@ -18,11 +18,6 @@ counts:
 
 events:
 
-  - name: LLMday Warsaw 2026 Q1
-    location: CIC Warsaw, Poland
-    photo_url: ./assets/images/events/llmday-2026-warsaw-q1.png
-    url: ./2026-warsaw-q1/
-
   - name: LLMday NYC 2026 Q1
     location: VIAM, New York, United States
     photo_url: ./assets/images/events/llmday-2026-nyc-q1.png
@@ -38,7 +33,12 @@ events:
     photo_url: ./assets/images/events/llmday-2026-austin-q2.png
     url: ./2026-austin-q2/
 
-events_past: []
+events_past:
+
+  - name: LLMday Warsaw 2026 Q1
+    location: CIC Warsaw, Poland
+    photo_url: ./assets/images/events/llmday-2026-warsaw-q1.png
+    url: ./2026-warsaw-q1/
 
 meetups: []
 
