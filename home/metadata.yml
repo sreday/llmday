@@ -23,15 +23,20 @@ events:
     photo_url: ./assets/images/events/llmday-2026-nyc-q1.png
     url: ./2026-nyc-q1/
 
-  - name: LLMday London 2026 Q2
-    location: Everyman Canary Wharf, London, UK
-    photo_url: ./assets/images/events/llmday-2026-london-q2.png
-    url: ./2026-london-q2/
+  - name: LLMday San Francisco 2026 Q2
+    location: Harness, San Francisco, United States
+    photo_url: ./assets/images/events/llmday-2026-san-francisco-q2.png
+    url: ./2026-san-francisco-q2/
 
   - name: LLMday Austin 2026 Q2
     location: Austin, Texas, United States
     photo_url: ./assets/images/events/llmday-2026-austin-q2.png
     url: ./2026-austin-q2/
+
+  - name: LLMday London 2026 Q2
+    location: Everyman Canary Wharf, London, UK
+    photo_url: ./assets/images/events/llmday-2026-london-q2.png
+    url: ./2026-london-q2/
 
 events_past:
 
