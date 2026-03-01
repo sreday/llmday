@@ -10,6 +10,7 @@ clean:
 theme:
 	cp -r ../_assets/template_v1/* static/
 	cp -r assets static
+	cp -r ../sponsors static
 
 serve:
 	python _build/serve.py
