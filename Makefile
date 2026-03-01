@@ -25,6 +25,7 @@ static/index.html: home/**/*
 	cp -r photos ./static
 	cp -r speakers ./static
 	cp -r ambassadors ./static
+	cp -r sponsors ./static
 
 env:
 	python3 -m venv env
