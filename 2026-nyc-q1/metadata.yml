@@ -40,6 +40,8 @@ breaks:
 sponsors:
   - logo: viam.png
     url: https://www.viam.com/
+  - logo: harness.png
+    url: https://www.harness.io
   - logo: arf.png
     url: https://github.com/petterjuan/agentic-reliability-framework
   - logo: hockeystick.png
