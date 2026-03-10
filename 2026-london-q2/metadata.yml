@@ -40,6 +40,8 @@ breaks:
 sponsors:
   - logo: hockeystick.png
     url: https://www.hockeystick.show
+  - logo: ksug.ai.png
+    url: https://ksug.ai/?ref=sre
 
 # these get displayed at the top
 hero_pictures:
