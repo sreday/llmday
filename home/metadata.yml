@@ -25,11 +25,6 @@ counts:
 
 events:
 
-  - name: LLMday NYC 2026 Q1
-    location: VIAM, New York, United States
-    photo_url: ./assets/images/events/llmday-2026-nyc-q1.png
-    url: ./2026-nyc-q1/
-
   - name: LLMday San Francisco 2026 Q2
     location: Harness, San Francisco, United States
     photo_url: ./assets/images/events/llmday-2026-san-francisco-q2.png
@@ -46,6 +41,11 @@ events:
     url: ./2026-london-q2/
 
 events_past:
+
+  - name: LLMday NYC 2026 Q1
+    location: VIAM, New York, United States
+    photo_url: ./assets/images/events/llmday-2026-nyc-q1.png
+    url: ./2026-nyc-q1/
 
   - name: LLMday Warsaw 2026 Q1
     location: CIC Warsaw, Poland
