@@ -41,4 +41,7 @@ serve:
 	python3 _build/serve.py
 	open http://localhost:8080
 
-.PHONY: env deps clean serve
+optimize:
+	python _build/optimize_images.py
+
+.PHONY: env deps clean serve optimize
