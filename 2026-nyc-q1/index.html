@@ -180,8 +180,6 @@
 				<div class="hero-cta mt-5">
 					<a class="btn btn-secondary btn-lg" href="#tickets">Get Tickets</a>
 					
-					<a class="btn btn-primary btn-lg" href="https://www.papercall.io/llmday-2026-nyc-q1" target="_blank">CFP</a>
-					
 			    </div>
 			</div><!--//hero-text-block-->
 		</div><!--//container-->
@@ -228,8 +226,7 @@
   <div class="container">
     <div class="event-countdown text-center mb-3">
     
-      <h4 class="countdown-intro mb-2 text-center mb-3">Event Starts In:</h4>
-      <div id="countdown-box" class="countdown-box"></div>
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished</h4>
     
     </div>
   </div>
@@ -287,59 +284,6 @@
   <div class="container">
     <h3 class="section-heading text-center mb-3">Tickets</h3>
 
-    
-    <div class="row pricing mb-5 mt-10">
-      <div class="col-12 text-center">
-        <div class="ratio ratio-16x9 d-none d-md-block">
-  <iframe
-    class=""
-    data-src="https://lu.ma/embed/event/evt-Rq2eouqzffNp2PW/simple"
-    width="800"
-    height="690"
-    frameborder="0"
-    style="border: 1px solid #bfcbda88; border-radius: 4px;"
-    allowfullscreen=""
-    aria-hidden="false"
-    tabindex="0"
-  ></iframe>
-</div>
-
-<a
-  href="https://lu.ma/event/evt-Rq2eouqzffNp2PW"
-  class="luma-checkout--button"
-  data-luma-action="checkout"
-  data-luma-event-id="evt-Rq2eouqzffNp2PW"
->
-  Register on luma
-</a>
-
-<script id="luma-checkout" src="https://embed.lu.ma/checkout-button.js"></script>
-<script>
-  (function() {
-    var params = window.location.search;
-
-    // 1. Handle the Iframe (Prevent double-load)
-    var iframe = document.querySelector('iframe[data-src*="lu.ma/embed"]');
-    if (iframe) {
-      var src = iframe.getAttribute('data-src');
-      var separator = src.indexOf('?') > -1 ? '&' : '?';
-      // Set the real 'src' now, including params
-      iframe.setAttribute('src', src + (params ? separator + params.substring(1) : ''));
-    }
-
-    // 2. Handle the Button
-    if (params) {
-      var btn = document.querySelector('.luma-checkout--button');
-      if (btn) {
-        var href = btn.getAttribute('href');
-        var separator = href.indexOf('?') > -1 ? '&' : '?';
-        btn.setAttribute('href', href + separator + params.substring(1));
-      }
-    }
-  })();
-</script> 
-      </div>
-    </div>
     
 
   </div>
