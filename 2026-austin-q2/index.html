@@ -387,6 +387,29 @@
 
       <div class="col-6 col-lg-3 mb-4">
         <div class="card rounded">
+          <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img src="../speakers/Mingxuan Zhao.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Mingxuan Zhao</h5>
+            <div class="card-text mb-3">
+              <div class="meta">IBM</div>
+            </div><!--//card-text-->
+            <a href="./Mingxuan_Zhao_IBM_Unlocking_Document_Intelligence_with_OpenSource_AI">Read more &rarr;</a>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col-6 col-lg-3 mb-4">
+        <div class="card rounded">
           <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img src="../speakers/Sandhya Subramani.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Sandhya Subramani</h5>
@@ -508,6 +531,51 @@
               </div>
               <div class="desc p-2 p-lg-3">
                 <p><p>Sandhya Subramani is a Senior Developer Advocate for Generative AI at Amazon Web Services, specializing in applied AI research and production-grade machine learning systems. She previously served as a Lead Applied AI Scientist at a stealth AI startup and as a Data Scientist at Warner Bros. Discovery, where she focused on applied AI/ML research and data-driven product development. Earlier in her career, she worked as an AI Engineer at Fidelity Investments within enterprise cybersecurity. Sandhya’s expertise spans generative AI, NLP, applied machine learning research, and translating advanced AI capabilities into real-world applications.</p></p>
+              </div>
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 2 -->
+<div class="modal modal-speaker modal-speaker-2" id="modal-speaker-2" tabindex="-1" role="dialog" aria-labelledby="speaker-2-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 id="speaker-2-ModalLabel" class="modal-title sr-only"
+>Mingxuan Zhao</h4>
+          </div>
+          <div class="modal-body p-0">
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Mingxuan Zhao.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Mingxuan Zhao</h2>
+                          <div class="meta mb-2">IBM</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p><p>Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.</p>
+<p>In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
+We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI &amp; Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.</p>
+<p>Docling is fully open-source under MIT license, so you can run it locally for sensitive data and air-gapped environments.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p><p>Mingxuan Zhao is a Software Developer II at IBM working in Open Technology. A graduate of the Cockrell School of Engineering at the University of Texas at Austin, Mingxuan focuses on building developer-focused tools and contributing to modern web and cloud technologies. Based in New York, Mingxuan works on open and collaborative engineering initiatives within IBM.</p></p>
               </div>
           </div><!--//modal-body-->
       </div><!--//modal-content-->
