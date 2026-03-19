@@ -1,22 +1,22 @@
 # TODO - change these
 
 # start time includes timezone at the end relative to UTC
-start_time: "2125-11-06T09:00:00-08:00"
+start_time: "2026-06-04T09:00:00+05:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
 event_state: before
-date_string: "November 7, 2025"
-location_string: "Mars, Milky Way"
+date_string: "June 4, 2026"
+location_string: "Microsoft Experience Center NYC, United States"
 # get this from the event url
-luma_evt: evt-xAhCqaXMWAXAEEm
-cfp_url: https://www.papercall.io/llmday-amsterdam-2025-q4
+luma_evt: evt-1BqFGdv0FUyvBDj
+cfp_url: https://cfp.ninja/e/llmday-2026-nyc-q2
 
 # the number of tracks needs to be the same per day
 # the tracks will be taken in the order they appear in the CSV file
 days: 1
-attendees: 200
-speakers: 25+
+attendees: 90
+speakers: 10+
 
 rooms:
 - main room
@@ -38,6 +38,8 @@ breaks:
   talks_before: 4
 
 sponsors:
+  - logo: microsoft.png
+    url: https://www.microsoft.com/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
 
@@ -53,7 +55,7 @@ brand_name: "LLMday"
 brand_domain: "llmday.com"
 brand_description: "Conference on Large Language Models, AI and Machine Learning"
 brand_tagline: "Large Language Models, AI and Machine Learning"
-brand_og_pitch: "Probably the most awesome LLM conference!"
+brand_og_pitch: "Probably the most awesome LLM conference"
 brand_color: "#1c591a"
 brand_twitter: "@llmday_com"
 brand_ga_id: "G-CQ2KV6LK8G"

@@ -40,6 +40,11 @@ events:
     photo_url: ./assets/images/events/llmday-2026-london-q2.png
     url: ./2026-london-q2/
 
+  - name: LLMday NYC 2026 Q1
+    location: Microsoft Experience Center NYC, New York, United States
+    photo_url: ./assets/images/events/llmday-2026-nyc-q2.png
+    url: ./2026-nyc-q2/
+
 events_past:
 
   - name: LLMday NYC 2026 Q1
