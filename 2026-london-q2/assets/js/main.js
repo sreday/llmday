@@ -58,6 +58,7 @@ scrollLinks.forEach((scrollLink) => {
 		const y = element.getBoundingClientRect().top + window.pageYOffset - yOffset;
 		
 		window.scrollTo({top: y, behavior: 'smooth'});
+		history.pushState(null, null, scrollLink.getAttribute("href"));
 		
 		
 		//Collapse mobile menu after clicking
