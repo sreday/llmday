@@ -252,7 +252,7 @@ function toggleNote(id) {
         <h3 class="section-heading text-center text-white">Sponsor</h3>
 
         {% if sponsor_logos %}
-        <div class="sponsor-carousel-wrap" style="background:#fff;border-radius:8px;padding:1.5rem 0;margin-bottom:2rem;overflow:hidden;">
+        <div class="sponsor-carousel-wrap" style="background:#fff;border-radius:8px;padding:2rem 0;margin-top:1.5rem;margin-bottom:1.5rem;overflow:hidden;">
           <div class="sponsor-carousel-track">
             {% for logo in sponsor_logos %}
             <div class="sponsor-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}"></div>
@@ -273,9 +273,9 @@ function toggleNote(id) {
         }
         .sponsor-carousel-track:hover { animation-play-state: paused; }
         .sponsor-carousel-item img {
-          height: 50px;
+          height: 100px;
           width: auto;
-          max-width: 120px;
+          max-width: 240px;
           object-fit: contain;
           filter: grayscale(20%);
           transition: filter 0.2s ease;
@@ -288,7 +288,7 @@ function toggleNote(id) {
         </style>
         {% endif %}
 
-        <div class="sponsors-cta text-center pt-5">
+        <div class="sponsors-cta text-center">
 <!-- Calendly inline widget begin -->
 <div class="calendly-inline-widget" data-url="https://calendly.com/mark-llmday/30-sponsor" style="min-width:320px;height:700px;"></div>
 <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
