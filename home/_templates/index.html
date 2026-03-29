@@ -250,6 +250,44 @@ function toggleNote(id) {
     <div class="row gx-md-5">
       <div class="col-12 mb-3">
         <h3 class="section-heading text-center text-white">Sponsor</h3>
+
+        {% if sponsor_logos %}
+        <div class="sponsor-carousel-wrap" style="background:#fff;border-radius:8px;padding:1.5rem 0;margin-bottom:2rem;overflow:hidden;">
+          <div class="sponsor-carousel-track">
+            {% for logo in sponsor_logos %}
+            <div class="sponsor-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}"></div>
+            {% endfor %}
+            {% for logo in sponsor_logos %}
+            <div class="sponsor-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}"></div>
+            {% endfor %}
+          </div>
+        </div>
+        <style>
+        .sponsor-carousel-wrap { position: relative; }
+        .sponsor-carousel-track {
+          display: flex;
+          align-items: center;
+          gap: 3rem;
+          width: max-content;
+          animation: sponsor-scroll 40s linear infinite;
+        }
+        .sponsor-carousel-track:hover { animation-play-state: paused; }
+        .sponsor-carousel-item img {
+          height: 50px;
+          width: auto;
+          max-width: 120px;
+          object-fit: contain;
+          filter: grayscale(20%);
+          transition: filter 0.2s ease;
+        }
+        .sponsor-carousel-item img:hover { filter: grayscale(0%); }
+        @keyframes sponsor-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        </style>
+        {% endif %}
+
         <div class="sponsors-cta text-center pt-5">
 <!-- Calendly inline widget begin -->
 <div class="calendly-inline-widget" data-url="https://calendly.com/mark-llmday/30-sponsor" style="min-width:320px;height:700px;"></div>

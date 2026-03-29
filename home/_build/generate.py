@@ -5,6 +5,9 @@ import re
 import csv
 import yaml
 import markdown
+import os
+import shutil
+import glob
 
 from jinja2 import Environment, FileSystemLoader
 from jinja_markdown import MarkdownExtension
@@ -40,6 +43,27 @@ with open('metadata.yml') as f:
 # read the csv
 context["testimonials"] = read_csv("./_db/testimonials.csv")
 context["ambassadors"] = read_csv("./_db/ambassadors.csv")
+
+# SPONSOR LOGOS CAROUSEL
+# Scan all event subfolders (../20*) for sponsor logos, deduplicate, sort
+print(DIVIDER)
+print("Scanning sponsor logos from event subfolders")
+SPONSORS_DEST = BASE_FOLDER + "/sponsors"
+os.makedirs(SPONSORS_DEST, exist_ok=True)
+seen = set()
+sponsor_logos = []
+for logo_path in sorted(glob.glob("../sponsors/*.png") + glob.glob("../sponsors/*.jpg")):
+    filename = os.path.basename(logo_path)
+    key = filename.lower()
+    if key not in seen:
+        seen.add(key)
+        dest = os.path.join(SPONSORS_DEST, filename)
+        shutil.copy2(logo_path, dest)
+        sponsor_logos.append(filename)
+        print(f"  {filename}")
+sponsor_logos.sort(key=lambda x: x.lower())
+context["sponsor_logos"] = sponsor_logos
+print(f"  Total: {len(sponsor_logos)} unique sponsor logos")
 
 # MAIN PAGES
 print(DIVIDER)
