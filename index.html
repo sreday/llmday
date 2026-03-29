@@ -939,6 +939,16 @@ function toggleNote(id) {
           100% { transform: translateX(-50%); }
         }
         </style>
+        <script>
+        (function() {
+          var track = document.querySelector('.sponsor-carousel-track');
+          if (track) {
+            var SPEED = 80; // pixels per second
+            var totalWidth = track.scrollWidth / 2;
+            track.style.animationDuration = (totalWidth / SPEED) + 's';
+          }
+        })();
+        </script>
         
 
         <div class="sponsors-cta text-center">
