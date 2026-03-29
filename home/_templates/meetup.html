@@ -2,6 +2,7 @@
 
 {% block content %}
 
+{% if talks %}
 <section id="schedule" class="schedule-section section theme-bg-light">
   <div class="container">
     <h2 class="section-heading text-center mb-5">Schedule</h2>
@@ -37,8 +38,10 @@
     <div class="schedule-cta text-center mx-auto"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Tickets</a></div>
   </div>
 </section>
+{% endif %}
 
 
+{% if talks %}
 <section id="speakers" class="speakers-section section">
   <div class="container">
     <h3 class="section-heading text-center mb-3">Speakers</h3>
@@ -85,6 +88,7 @@
   </div><!--//container-->
 
 </section><!--//speakers-section-->
+{% endif %}
 
 <section id="venue" class="venue-section section  theme-bg-primary text-white">
   <div class="container">
