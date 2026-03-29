@@ -52,6 +52,24 @@ def optimize_jpeg(path, max_width):
         print(f"  WARNING: {path}: {e}")
 
 
+def optimize_jpeg_quality_only(path):
+    """Reduce JPEG quality without resizing (used for hero/slideshow images)."""
+    if path.stat().st_size < MIN_FILE_SIZE:
+        return
+    try:
+        img = Image.open(path)
+        original_size = path.stat().st_size
+        if img.mode == "RGBA":
+            bg = Image.new("RGB", img.size, (255, 255, 255))
+            bg.paste(img, mask=img.split()[3])
+            img = bg
+        img.save(path, "JPEG", quality=JPEG_QUALITY, optimize=True)
+        new_size = path.stat().st_size
+        print(f"  {path}: {original_size // 1024}KB -> {new_size // 1024}KB")
+    except Exception as e:
+        print(f"  WARNING: {path}: {e}")
+
+
 def process_files(pattern, handler, label):
     """Find files matching glob pattern under STATIC_DIR and process them."""
     files = sorted(STATIC_DIR.glob(pattern))
@@ -81,8 +99,8 @@ def main():
         ("assets/images/events/*.png",       lambda f: optimize_png(f, (MAX_CARD_WIDTH, 9999)), "Event card images (png)"),
         ("assets/images/events/*.jpg",       lambda f: optimize_jpeg(f, MAX_CARD_WIDTH), "Event card images (jpg)"),
         ("assets/images/events/*.jpeg",      lambda f: optimize_jpeg(f, MAX_CARD_WIDTH), "Event card images (jpeg)"),
-        ("photos/*.jpg",                     lambda f: optimize_jpeg(f, MAX_PHOTO_WIDTH), "Event photos (jpg)"),
-        ("photos/*.jpeg",                    lambda f: optimize_jpeg(f, MAX_PHOTO_WIDTH), "Event photos (jpeg)"),
+        ("photos/*.jpg",                     optimize_jpeg_quality_only, "Hero/slideshow photos (jpg)"),
+        ("photos/*.jpeg",                    optimize_jpeg_quality_only, "Hero/slideshow photos (jpeg)"),
         ("20*/assets/images/venue/*.jpg",    lambda f: optimize_jpeg(f, MAX_PHOTO_WIDTH), "Venue photos (jpg)"),
         ("20*/assets/images/venue/*.jpeg",   lambda f: optimize_jpeg(f, MAX_PHOTO_WIDTH), "Venue photos (jpeg)"),
     ]
