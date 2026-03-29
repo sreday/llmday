@@ -811,6 +811,136 @@ function toggleNote(id) {
     <div class="row gx-md-5">
       <div class="col-12 mb-3">
         <h3 class="section-heading text-center text-white">Sponsor</h3>
+
+        
+        <div class="sponsor-carousel-wrap" style="background:#fff;border-radius:8px;padding:1.5rem 0;margin-bottom:2rem;overflow:hidden;">
+          <div class="sponsor-carousel-track">
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/aliengiraffe.png" alt="aliengiraffe"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/arf.png" alt="arf"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/cast_ai.png" alt="cast_ai"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/chainguard.png" alt="chainguard"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/datadog.png" alt="datadog"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/filmforum.png" alt="filmforum"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/harness.png" alt="harness"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/hockeystick.png" alt="hockeystick"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/imply.png" alt="imply"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/kerno.png" alt="kerno"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/komodor.png" alt="komodor"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/ksug.ai.png" alt="ksug"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/mezmo.png" alt="mezmo"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/microsoft.png" alt="microsoft"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/monday.png" alt="monday"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/neubird.png" alt="neubird"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/openobserve.png" alt="openobserve"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/packt.png" alt="packt"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/pomerium.png" alt="pomerium"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/posthog.png" alt="posthog"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/quesma.png" alt="quesma"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/uhub.png" alt="uhub"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/viam.png" alt="viam"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/xurrent.png" alt="xurrent"></div>
+            
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/aliengiraffe.png" alt="aliengiraffe"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/arf.png" alt="arf"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/cast_ai.png" alt="cast_ai"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/chainguard.png" alt="chainguard"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/datadog.png" alt="datadog"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/filmforum.png" alt="filmforum"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/harness.png" alt="harness"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/hockeystick.png" alt="hockeystick"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/imply.png" alt="imply"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/kerno.png" alt="kerno"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/komodor.png" alt="komodor"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/ksug.ai.png" alt="ksug"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/mezmo.png" alt="mezmo"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/microsoft.png" alt="microsoft"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/monday.png" alt="monday"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/neubird.png" alt="neubird"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/openobserve.png" alt="openobserve"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/packt.png" alt="packt"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/pomerium.png" alt="pomerium"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/posthog.png" alt="posthog"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/quesma.png" alt="quesma"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/uhub.png" alt="uhub"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/viam.png" alt="viam"></div>
+            
+            <div class="sponsor-carousel-item"><img src="./sponsors/xurrent.png" alt="xurrent"></div>
+            
+          </div>
+        </div>
+        <style>
+        .sponsor-carousel-wrap { position: relative; }
+        .sponsor-carousel-track {
+          display: flex;
+          align-items: center;
+          gap: 3rem;
+          width: max-content;
+          animation: sponsor-scroll 40s linear infinite;
+        }
+        .sponsor-carousel-track:hover { animation-play-state: paused; }
+        .sponsor-carousel-item img {
+          height: 50px;
+          width: auto;
+          max-width: 120px;
+          object-fit: contain;
+          filter: grayscale(20%);
+          transition: filter 0.2s ease;
+        }
+        .sponsor-carousel-item img:hover { filter: grayscale(0%); }
+        @keyframes sponsor-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        </style>
+        
+
         <div class="sponsors-cta text-center pt-5">
 <!-- Calendly inline widget begin -->
 <div class="calendly-inline-widget" data-url="https://calendly.com/mark-llmday/30-sponsor" style="min-width:320px;height:700px;"></div>
