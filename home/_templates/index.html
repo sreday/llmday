@@ -2,8 +2,10 @@
 
 {% block content %}
 
+{% if events or meetups %}
 <section id="events" class="sponsors-section section theme-bg-light text-white">
   <div class="container">
+    {% if events %}
     <h3 class="section-heading text-center mb-3">Upcoming conferences</h3>
     <div class="row gx-md-5">
 
@@ -30,6 +32,8 @@
 
       {% endfor %}
     </div>
+    {% endif %}
+    {% if meetups %}
     <h3 class="section-heading text-center mb-3">Upcoming meetups</h3>
     <div class="row gx-md-5">
 
@@ -56,9 +60,12 @@
 
       {% endfor %}
     </div>
+    {% endif %}
   </div>
 </section>
+{% endif %}
 
+{% if ambassadors %}
 <section id="ambassadors" class="section theme-bg-light">
     <div class="container">
         <h2 class="section-heading text-center mb-3">{{ brand_name }} Ambassadors</h2>
@@ -128,9 +135,12 @@ function toggleNote(id) {
     }
 }
 </script>
+{% endif %}
 
+{% if events_past or meetups_past %}
 <section id="past-events" class="sponsors-section section theme-bg-primary text-white">
   <div class="container">
+    {% if events_past %}
     <h3 class="section-heading text-center mb-3 text-white">Past conferences</h3>
     <div class="row gx-md-5">
 
@@ -157,7 +167,8 @@ function toggleNote(id) {
 
       {% endfor %}
     </div>
-
+    {% endif %}
+    {% if meetups_past %}
     <h3 class="section-heading text-center mb-3 text-white">Past meetups</h3>
     <div class="row gx-md-5">
 
@@ -184,10 +195,13 @@ function toggleNote(id) {
 
       {% endfor %}
     </div>
+    {% endif %}
   </div>
 </section>
+{% endif %}
 
 
+{% if testimonials %}
 <section id="testimonials" class="sponsors-section section">
   <div class="container speakers-section">
     <h3 class="section-heading text-center mb-3">What others say about LLMday</h3>
@@ -225,6 +239,7 @@ function toggleNote(id) {
     </div>
   </div>
 </section>
+{% endif %}
 
 
 <section id="sponsor" class="sponsors-section section theme-bg-primary text-white">

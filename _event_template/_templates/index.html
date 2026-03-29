@@ -374,6 +374,7 @@
 {% endif %}
 
 
+{% if talks or keynotes %}
 <section id="speakers" class="speakers-section section">
   <div class="container">
     <h3 class="section-heading text-center mb-3">Speakers</h3>
@@ -421,9 +422,11 @@
   </div><!--//container-->
 
 </section><!--//speakers-section-->
+{% endif %}
 
 {% include 'venue.html' %}
 
+{% if sponsors %}
 <section id="sponsors" class="sponsors-section section">
   <div class="container">
     <h3 class="section-heading text-center mb-3">Sponsors &amp; Partners</h3>
@@ -436,6 +439,7 @@
     <div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="{{ mailto }}">Become A Sponsor</a></div>
   </div><!--//container-->
 </section><!--//sponsors-section-->
+{% endif %}
 
 
 {% for talk in talks + keynotes %}
