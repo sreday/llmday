@@ -732,8 +732,24 @@ function toggleNote(id) {
     </div>
     
     
+    
   </div>
 </section>
+<style>
+.past-conf-extra, .past-meetup-extra { display: none; }
+.btn-past-more { color: #fff; background: transparent; border: 2px solid #26986A; }
+.btn-past-more:hover, .btn-past-more:focus { background: #26986A; color: #fff; }
+</style>
+<script>
+function showMorePastConf() {
+  document.querySelectorAll('.past-conf-extra').forEach(function(el) { el.classList.remove('past-conf-extra'); });
+  document.getElementById('show-more-past-conf').style.display = 'none';
+}
+function showMorePastMeetup() {
+  document.querySelectorAll('.past-meetup-extra').forEach(function(el) { el.classList.remove('past-meetup-extra'); });
+  document.getElementById('show-more-past-meetup').style.display = 'none';
+}
+</script>
 
 
 
