@@ -212,7 +212,7 @@ function toggleNote(id) {
 
       {% for testimonial in testimonials %}
 
-      <div class="col-6 col-lg-3 mb-4">
+      <div class="col-6 col-lg-3 mb-4{% if loop.index > 8 %} testimonial-extra{% endif %}">
         <div class="card rounded">
           <img src="./assets/images/profiles/{{ testimonial.Headshot }}" class="card-img-top rounded-0" alt="">
           <div class="card-body">
@@ -240,8 +240,20 @@ function toggleNote(id) {
 
       {% endfor %}
     </div>
+    {% if testimonials|length > 8 %}
+    <div class="text-center mt-3">
+      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-outline-secondary" onclick="showMoreTestimonials()">Show {{ testimonials|length - 8 }} more</a>
+    </div>
+    {% endif %}
   </div>
 </section>
+<style>.testimonial-extra { display: none; }</style>
+<script>
+function showMoreTestimonials() {
+  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.style.display = ''; });
+  document.getElementById('show-more-testimonials').style.display = 'none';
+}
+</script>
 {% endif %}
 
 
