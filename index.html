@@ -739,28 +739,31 @@ function toggleNote(id) {
 
 
 <section id="testimonials" class="sponsors-section section">
-  <div class="container speakers-section">
+  <div class="container">
     <h3 class="section-heading text-center mb-3">What others say about LLMday</h3>
     <div class="row">
 
       
-
-      <div class="col-6 col-lg-3 mb-4">
-        <div class="card rounded">
-          <img src="./assets/images/profiles/Miko Pawlikowski.png" class="card-img-top rounded-0" alt="">
-          <div class="card-body">
-            <h5 class="card-title mb-2">Miko Pawlikowski</h5>
-            <div class="card-text mb-3 text-muted">
-              <div class="meta">Tech Author</div>
+      <div class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card rounded h-100">
+          <img src="./assets/images/profiles/Miko Pawlikowski.png" class="card-img-top rounded-0" style="height:90px;object-fit:cover;object-position:top;" alt="">
+          <div class="card-body p-2">
+            <h6 class="card-title mb-1" style="font-size:0.8rem;">Miko Pawlikowski</h6>
+            <div class="card-text mb-2 text-muted" style="font-size:0.72rem;">
+              <div>Tech Author</div>
               
-              <b class="meta">Hockeystick.show</b>
+              <b>Hockeystick.show</b>
               
             </div>
-            <div class="card-text mb-3">
-              LLMs and AI agents are quickly becoming part of every developer’s daily tools. LLMday feels like the perfect chance to see where all this is actually heading. And honestly, even if AI turns out to be a bubble, I can’t shake the feeling that the real revolution hasn’t even started yet, and we’d like to be there when it does.
+            <div style="font-size:0.75rem;">
+              
+                <span id="t-short-1">LLMs and AI agents are quickly becoming part of every developer’s daily tools. LLMday feels like the perfect chance to s...</span>
+                <span id="t-long-1" style="display:none;">LLMs and AI agents are quickly becoming part of every developer’s daily tools. LLMday feels like the perfect chance to see where all this is actually heading. And honestly, even if AI turns out to be a bubble, I can’t shake the feeling that the real revolution hasn’t even started yet, and we’d like to be there when it does.</span>
+                <a href="javascript:void(0);" id="t-link-1" class="d-block mt-1 fw-bold" onclick="toggleTestimonial(1)">Show more</a>
+              
             </div>
           </div>
-          <div class="card-footer text-muted">
+          <div class="card-footer text-muted p-2">
             <ul class="social-list list-inline mb-0">
               
               
@@ -770,25 +773,27 @@ function toggleNote(id) {
           </div>
         </div>
       </div>
-
       
-
-      <div class="col-6 col-lg-3 mb-4">
-        <div class="card rounded">
-          <img src="./assets/images/profiles/Mark Pawlikowski.png" class="card-img-top rounded-0" alt="">
-          <div class="card-body">
-            <h5 class="card-title mb-2">Mark Pawlikowski</h5>
-            <div class="card-text mb-3 text-muted">
-              <div class="meta">Organizer</div>
+      <div class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card rounded h-100">
+          <img src="./assets/images/profiles/Mark Pawlikowski.png" class="card-img-top rounded-0" style="height:90px;object-fit:cover;object-position:top;" alt="">
+          <div class="card-body p-2">
+            <h6 class="card-title mb-1" style="font-size:0.8rem;">Mark Pawlikowski</h6>
+            <div class="card-text mb-2 text-muted" style="font-size:0.72rem;">
+              <div>Organizer</div>
               
-              <b class="meta">LLMday</b>
+              <b>LLMday</b>
               
             </div>
-            <div class="card-text mb-3">
-              We’ve been doing AI-first online conferences for a while now, as a part of the Conf42 brand. Starting LLMday - a series of in-person events around the same theme - feels like the right next step to bring the community together in person.
+            <div style="font-size:0.75rem;">
+              
+                <span id="t-short-2">We’ve been doing AI-first online conferences for a while now, as a part of the Conf42 brand. Starting LLMday - a series ...</span>
+                <span id="t-long-2" style="display:none;">We’ve been doing AI-first online conferences for a while now, as a part of the Conf42 brand. Starting LLMday - a series of in-person events around the same theme - feels like the right next step to bring the community together in person.</span>
+                <a href="javascript:void(0);" id="t-link-2" class="d-block mt-1 fw-bold" onclick="toggleTestimonial(2)">Show more</a>
+              
             </div>
           </div>
-          <div class="card-footer text-muted">
+          <div class="card-footer text-muted p-2">
             <ul class="social-list list-inline mb-0">
               
               
@@ -798,11 +803,37 @@ function toggleNote(id) {
           </div>
         </div>
       </div>
-
       
+
     </div>
+    
   </div>
 </section>
+
+<style>
+.testimonial-extra { display: none; }
+</style>
+
+<script>
+function toggleTestimonial(id) {
+  var short = document.getElementById('t-short-' + id);
+  var long = document.getElementById('t-long-' + id);
+  var link = document.getElementById('t-link-' + id);
+  if (short.style.display === 'none') {
+    short.style.display = 'inline';
+    long.style.display = 'none';
+    link.innerText = 'Show more';
+  } else {
+    short.style.display = 'none';
+    long.style.display = 'inline';
+    link.innerText = 'Show less';
+  }
+}
+function showMoreTestimonials() {
+  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.style.display = ''; });
+  document.getElementById('show-more-testimonials').style.display = 'none';
+}
+</script>
 
 
 
