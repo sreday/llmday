@@ -804,10 +804,14 @@ function toggleNote(id) {
     
   </div>
 </section>
-<style>.testimonial-extra { display: none; }</style>
+<style>
+.testimonial-extra { display: none; }
+.btn-brand-primary { background: #26986A; color: #fff; border: none; }
+.btn-brand-primary:hover, .btn-brand-primary:focus { background: #2dae7a; color: #fff; }
+</style>
 <script>
 function showMoreTestimonials() {
-  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.style.display = ''; });
+  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.classList.remove('testimonial-extra'); });
   document.getElementById('show-more-testimonials').style.display = 'none';
 }
 </script>
