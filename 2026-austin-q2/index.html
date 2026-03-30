@@ -291,7 +291,7 @@
   src="https://lu.ma/embed/event/evt-c4GCCY74gEHeD4q/simple"
   width="100%"
   frameborder="0"
-  style="border: 1px solid #bfcbda88; border-radius: 4px; display: block; min-height: 200px;"
+  style="border: 1px solid #bfcbda88; border-radius: 4px; display: block; height: 800px;"
   allowfullscreen=""
   aria-hidden="false"
   tabindex="0"
@@ -331,12 +331,17 @@
       }
     }
 
-    // Auto-resize iframe via Luma postMessage
+    // Auto-resize iframe via Luma postMessage (overrides fixed height if received)
     window.addEventListener('message', function(e) {
-      if (e.origin !== 'https://lu.ma') return;
+      if (!iframe) return;
       var d = e.data;
-      if (d && typeof d.height === 'number') {
-        iframe.style.height = d.height + 'px';
+      if (!d) return;
+      // Handle multiple possible Luma message formats
+      var h = null;
+      if (typeof d.height === 'number' && d.height > 100) h = d.height;
+      else if (typeof d.height === 'string' && parseInt(d.height) > 100) h = parseInt(d.height);
+      if (h !== null) {
+        iframe.style.height = h + 'px';
       }
     });
   })();
