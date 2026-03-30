@@ -286,19 +286,16 @@
     
     <div class="row pricing mb-5 mt-10">
       <div class="col-12 text-center">
-        <div class="ratio ratio-16x9 d-none d-md-block">
-  <iframe
-    class=""
-    data-src="https://lu.ma/embed/event/evt-c4GCCY74gEHeD4q/simple"
-    width="800"
-    height="690"
-    frameborder="0"
-    style="border: 1px solid #bfcbda88; border-radius: 4px;"
-    allowfullscreen=""
-    aria-hidden="false"
-    tabindex="0"
-  ></iframe>
-</div>
+        <iframe
+  id="luma-tickets-iframe"
+  src="https://lu.ma/embed/event/evt-c4GCCY74gEHeD4q/simple"
+  width="100%"
+  frameborder="0"
+  style="border: 1px solid #bfcbda88; border-radius: 4px; display: block; min-height: 200px;"
+  allowfullscreen=""
+  aria-hidden="false"
+  tabindex="0"
+></iframe>
 
 <a
   href="https://lu.ma/event/evt-c4GCCY74gEHeD4q"
@@ -313,25 +310,33 @@
 <script>
   (function() {
     var params = window.location.search;
+    var iframe = document.getElementById('luma-tickets-iframe');
 
-    // 1. Handle the Iframe (Prevent double-load)
-    var iframe = document.querySelector('iframe[data-src*="lu.ma/embed"]');
-    if (iframe) {
-      var src = iframe.getAttribute('data-src');
-      var separator = src.indexOf('?') > -1 ? '&' : '?';
-      // Set the real 'src' now, including params
-      iframe.setAttribute('src', src + (params ? separator + params.substring(1) : ''));
+    // Append query params to iframe src
+    if (iframe && params) {
+      var src = iframe.getAttribute('src');
+      var sep = src.indexOf('?') > -1 ? '&' : '?';
+      iframe.setAttribute('src', src + sep + params.substring(1));
     }
 
-    // 2. Handle the Button
+    // Append query params to button
     if (params) {
       var btn = document.querySelector('.luma-checkout--button');
       if (btn) {
         var href = btn.getAttribute('href');
-        var separator = href.indexOf('?') > -1 ? '&' : '?';
-        btn.setAttribute('href', href + separator + params.substring(1));
+        var sep = href.indexOf('?') > -1 ? '&' : '?';
+        btn.setAttribute('href', href + sep + params.substring(1));
       }
     }
+
+    // Auto-resize iframe via Luma postMessage
+    window.addEventListener('message', function(e) {
+      if (e.origin !== 'https://lu.ma') return;
+      var d = e.data;
+      if (d && typeof d.height === 'number') {
+        iframe.style.height = d.height + 'px';
+      }
+    });
   })();
 </script> 
       </div>
