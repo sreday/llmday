@@ -206,33 +206,28 @@ function toggleNote(id) {
 
 {% if testimonials %}
 <section id="testimonials" class="sponsors-section section">
-  <div class="container">
-    <h3 class="section-heading text-center mb-3">What others say about {{ brand_name }}</h3>
+  <div class="container speakers-section">
+    <h3 class="section-heading text-center mb-3">What others say about LLMday</h3>
     <div class="row">
 
       {% for testimonial in testimonials %}
-      <div class="col-6 col-md-4 col-lg-2 mb-3{% if loop.index > 12 %} testimonial-extra{% endif %}">
-        <div class="card rounded h-100">
-          <img src="./assets/images/profiles/{{ testimonial.Headshot }}" class="card-img-top rounded-0" style="height:90px;object-fit:cover;object-position:top;" alt="">
-          <div class="card-body p-2">
-            <h6 class="card-title mb-1" style="font-size:0.8rem;">{{ testimonial.Name }}</h6>
-            <div class="card-text mb-2 text-muted" style="font-size:0.72rem;">
-              <div>{{ testimonial.Job }}</div>
+
+      <div class="col-6 col-lg-3 mb-4">
+        <div class="card rounded">
+          <img src="./assets/images/profiles/{{ testimonial.Headshot }}" class="card-img-top rounded-0" alt="">
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ testimonial.Name }}</h5>
+            <div class="card-text mb-3 text-muted">
+              <div class="meta">{{ testimonial.Job }}</div>
               {% if testimonial.Company %}
-              <b>{{ testimonial.Company }}</b>
+              <b class="meta">{{ testimonial.Company }}</b>
               {% endif %}
             </div>
-            <div style="font-size:0.75rem;">
-              {% if testimonial.Testimonial|length > 120 %}
-                <span id="t-short-{{ loop.index }}">{{ testimonial.Testimonial[:120] }}...</span>
-                <span id="t-long-{{ loop.index }}" style="display:none;">{{ testimonial.Testimonial }}</span>
-                <a href="javascript:void(0);" id="t-link-{{ loop.index }}" class="d-block mt-1 fw-bold" onclick="toggleTestimonial({{ loop.index }})">Show more</a>
-              {% else %}
-                {{ testimonial.Testimonial }}
-              {% endif %}
+            <div class="card-text mb-3">
+              {{ testimonial.Testimonial }}
             </div>
           </div>
-          <div class="card-footer text-muted p-2">
+          <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               {% if testimonial.Twitter %}<li class="list-inline-item"><a target="_blank" href="https://twitter.com/{{ testimonial.Twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
               {% if testimonial.Linkedin %}<li class="list-inline-item"><a target="_blank" href="{{ testimonial.Linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
@@ -242,41 +237,11 @@ function toggleNote(id) {
           </div>
         </div>
       </div>
-      {% endfor %}
 
+      {% endfor %}
     </div>
-    {% if testimonials|length > 12 %}
-    <div class="text-center mt-3">
-      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-outline-secondary btn-sm" onclick="showMoreTestimonials()">Show {{ testimonials|length - 12 }} more</a>
-    </div>
-    {% endif %}
   </div>
 </section>
-
-<style>
-.testimonial-extra { display: none; }
-</style>
-
-<script>
-function toggleTestimonial(id) {
-  var short = document.getElementById('t-short-' + id);
-  var long = document.getElementById('t-long-' + id);
-  var link = document.getElementById('t-link-' + id);
-  if (short.style.display === 'none') {
-    short.style.display = 'inline';
-    long.style.display = 'none';
-    link.innerText = 'Show more';
-  } else {
-    short.style.display = 'none';
-    long.style.display = 'inline';
-    link.innerText = 'Show less';
-  }
-}
-function showMoreTestimonials() {
-  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.style.display = ''; });
-  document.getElementById('show-more-testimonials').style.display = 'none';
-}
-</script>
 {% endif %}
 
 
