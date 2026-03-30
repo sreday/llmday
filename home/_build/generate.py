@@ -102,7 +102,9 @@ for _csv_path in glob.glob("../20*/_db/*.csv"):
                     _speakers.add(_name)
     except Exception:
         pass
-print(f"  Speakers: {len(_speakers)}")
+_spk_rem = len(_speakers) % 10
+_spk_rounded = (len(_speakers) + (10 - _spk_rem)) if _spk_rem >= 5 else (len(_speakers) - _spk_rem)
+print(f"  Speakers: {len(_speakers)} raw -> {_spk_rounded}+")
 
 # Attendees = sum of per-event attendee counts, rounded by remainder
 _att_total = 0
@@ -121,7 +123,7 @@ print(f"  Attendees: {_att_total} raw -> {_att_rounded}+")
 context["counts"] = {
     "events":     f"{_events_count}+",
     "countries":  f"{len(_countries)}+",
-    "speakers":   f"{len(_speakers)}+",
+    "speakers":   f"{_spk_rounded}+",
     "attendees":  f"{_att_rounded}+",
 }
 
