@@ -45,10 +45,13 @@ sponsors:
 
 # these get displayed at the top
 hero_pictures:
-- ../photos/london-2023-0.jpg
-- ../photos/london-2023-1.jpg
-- ../photos/london-2023-2.jpg
-- ../photos/london-2023-3.jpg
+- ../photos/warsaw-2026-0.jpg
+- ../photos/warsaw-2026-2.jpg
+- ../photos/warsaw-2026-3.jpg
+- ../photos/warsaw-2026-4.jpg
+- ../photos/warsaw-2026-5.jpg
+- ../photos/warsaw-2026-6.jpg
+- ../photos/warsaw-2026-7.jpg
 
 # brand identity
 brand_name: "LLMday"
