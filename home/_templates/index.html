@@ -242,15 +242,19 @@ function toggleNote(id) {
     </div>
     {% if testimonials|length > 8 %}
     <div class="text-center mt-3">
-      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-outline-secondary" onclick="showMoreTestimonials()">Show {{ testimonials|length - 8 }} more</a>
+      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-brand-primary" onclick="showMoreTestimonials()">Show {{ testimonials|length - 8 }} more</a>
     </div>
     {% endif %}
   </div>
 </section>
-<style>.testimonial-extra { display: none; }</style>
+<style>
+.testimonial-extra { display: none; }
+.btn-brand-primary { background: #26986A; color: #fff; border: none; }
+.btn-brand-primary:hover, .btn-brand-primary:focus { background: #2dae7a; color: #fff; }
+</style>
 <script>
 function showMoreTestimonials() {
-  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.style.display = ''; });
+  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.classList.remove('testimonial-extra'); });
   document.getElementById('show-more-testimonials').style.display = 'none';
 }
 </script>
