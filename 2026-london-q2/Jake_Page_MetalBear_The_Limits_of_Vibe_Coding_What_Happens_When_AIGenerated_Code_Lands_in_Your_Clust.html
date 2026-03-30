@@ -292,17 +292,6 @@ In this talk we'll break down the specific risks that AI-generated code introduc
 
 
 
-<div class="llama-divider text-center py-4">
-  <img class="llama-animated" src="/assets/llama GIF.gif" alt="LLMday Llama" style="height:300px;">
-  <img class="llama-static" src="/assets/llmday llama.png" alt="LLMday Llama" style="height:300px;">
-</div>
-<style>
-.llama-static { display: none; }
-@media (max-width: 767px) {
-  .llama-animated { display: none; }
-  .llama-static { display: inline; }
-}
-</style>
 
 
 
@@ -320,8 +309,16 @@ In this talk we'll break down the specific risks that AI-generated code introduc
             <li class="list-inline-item me-0"><a target="_blank" href="https://www.youtube.com/@llmday"><i class="fab fa-youtube fa-fw"></i></a></li>
         </ul>
         <div class="py-4 text-center">
-            <img src="/assets/llmday llama.png" alt="LLMday Llama" style="height:500px;">
+            <img class="llama-footer-gif" src="/assets/llama GIF.gif" alt="LLMday Llama" style="height:500px;">
+            <img class="llama-footer-png" src="/assets/llmday llama.png" alt="LLMday Llama" style="height:500px;">
         </div>
+        <style>
+        .llama-footer-png { display: none; }
+        @media (max-width: 767px) {
+            .llama-footer-gif { display: none; }
+            .llama-footer-png { display: block; }
+        }
+        </style>
 
 
         <!-- <ul class="footer-links list-inline mx-auto mb-4">
