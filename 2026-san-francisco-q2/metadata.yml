@@ -40,6 +40,8 @@ breaks:
 sponsors:
   - logo: harness.png
     url: https://www.harness.io/
+  - logo: cribl.png
+    url: https://cribl.io/
   - logo: arf.png
     url: https://github.com/petterjuan/agentic-reliability-framework
   - logo: ksug.ai.png
