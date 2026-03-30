@@ -801,8 +801,16 @@ function toggleNote(id) {
 
       
     </div>
+    
   </div>
 </section>
+<style>.testimonial-extra { display: none; }</style>
+<script>
+function showMoreTestimonials() {
+  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.style.display = ''; });
+  document.getElementById('show-more-testimonials').style.display = 'none';
+}
+</script>
 
 
 
