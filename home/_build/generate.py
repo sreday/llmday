@@ -44,6 +44,87 @@ with open('metadata.yml') as f:
 context["testimonials"] = read_csv("./_db/testimonials.csv")
 context["ambassadors"] = read_csv("./_db/ambassadors.csv")
 
+# DYNAMIC STATS
+print(DIVIDER)
+print("Calculating dynamic stats")
+
+# Events = total event + meetup entries in metadata
+_events_count = (
+    len(context.get("events") or []) +
+    len(context.get("events_past") or []) +
+    len(context.get("meetups") or []) +
+    len(context.get("meetups_past") or [])
+)
+print(f"  Events: {_events_count}")
+
+# Countries = unique countries derived from event folder names
+_CITY_COUNTRY = {
+    "london": "UK", "amsterdam": "Netherlands", "san-francisco": "USA",
+    "nyc": "USA", "paris": "France", "cologne": "Germany", "munich": "Germany",
+    "campinas": "Brazil", "chennai": "India", "bangalore": "India",
+    "lisbon": "Portugal", "barcelona": "Spain", "redmond": "USA",
+    "austin": "USA", "seattle": "USA", "warsaw": "Poland",
+    "brussels": "Belgium", "tokyo": "Japan", "berlin": "Germany",
+    "zurich": "Switzerland", "dublin": "Ireland", "stockholm": "Sweden",
+    "singapore": "Singapore", "sydney": "Australia",
+}
+_countries = set()
+for _mf in glob.glob("../20*/metadata.yml"):
+    _folder = os.path.basename(os.path.dirname(_mf))
+    _city_part = re.sub(r'^\d{4}-', '', _folder)
+    _city_part = re.sub(r'-q\d+$', '', _city_part)
+    _country = _CITY_COUNTRY.get(_city_part)
+    if not _country:
+        # fallback: parse location_string last segment
+        try:
+            _loc_data = yaml.load(open(_mf), Loader=yaml.FullLoader)
+            _loc = str(_loc_data.get("location_string") or "")
+            if _loc:
+                _last = _loc.split(",")[-1].strip()
+                _NORMALIZE = {"US": "USA", "UK": "UK", "NL": "Netherlands",
+                              "United States": "USA", "United Kingdom": "UK"}
+                _country = _NORMALIZE.get(_last, _last)
+        except Exception:
+            pass
+    if _country:
+        _countries.add(_country)
+print(f"  Countries: {len(_countries)} — {sorted(_countries)}")
+
+# Speakers = unique speaker names across all event _db CSVs
+_speakers = set()
+for _csv_path in glob.glob("../20*/_db/*.csv"):
+    try:
+        with open(_csv_path, "r", encoding="utf-8", errors="replace") as _cf:
+            _reader = csv.DictReader(_cf)
+            for _row in _reader:
+                _name = (_row.get("name") or _row.get("Name") or _row.get("speaker") or "").strip()
+                if _name and not _name.startswith("_"):
+                    _speakers.add(_name)
+    except Exception:
+        pass
+print(f"  Speakers: {len(_speakers)}")
+
+# Attendees = sum of per-event attendee counts, rounded by remainder
+_att_total = 0
+for _mf in glob.glob("../20*/metadata.yml"):
+    try:
+        _att_data = yaml.load(open(_mf), Loader=yaml.FullLoader)
+        _att_val = str(_att_data.get("attendees") or "0")
+        _att_num = int(re.sub(r'[^\d]', '', _att_val) or 0)
+        _att_total += _att_num
+    except Exception:
+        pass
+_att_rem = _att_total % 100
+_att_rounded = (_att_total + (100 - _att_rem)) if _att_rem >= 50 else (_att_total - _att_rem)
+print(f"  Attendees: {_att_total} raw -> {_att_rounded}+")
+
+context["counts"] = {
+    "events":     f"{_events_count}+",
+    "countries":  f"{len(_countries)}+",
+    "speakers":   f"{len(_speakers)}+",
+    "attendees":  f"{_att_rounded}+",
+}
+
 # SPONSOR LOGOS CAROUSEL
 # Scan all event subfolders (../20*) for sponsor logos, deduplicate, sort
 print(DIVIDER)
