@@ -149,7 +149,7 @@ function toggleNote(id) {
 
       {% for event in events_past %}
 
-      <div class="col-12 col-lg-6 mb-4">
+      <div class="col-12 col-lg-6 mb-4{% if loop.index > 10 %} past-conf-extra{% endif %}">
         <div class="card rounded">
           <a href="{{ event.url }}">
             <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
@@ -170,6 +170,11 @@ function toggleNote(id) {
 
       {% endfor %}
     </div>
+    {% if events_past|length > 10 %}
+    <div class="text-center mt-2 mb-4">
+      <a href="javascript:void(0);" id="show-more-past-conf" class="btn btn-past-more" onclick="showMorePastConf()">Show {{ events_past|length - 10 }} more</a>
+    </div>
+    {% endif %}
     {% endif %}
     {% if meetups_past %}
     <h3 class="section-heading text-center mb-3 text-white">Past meetups</h3>
@@ -177,7 +182,7 @@ function toggleNote(id) {
 
       {% for event in meetups_past %}
 
-      <div class="col-12 col-lg-6 mb-4">
+      <div class="col-12 col-lg-6 mb-4{% if loop.index > 10 %} past-meetup-extra{% endif %}">
         <div class="card rounded">
           <a href="./{{ event.url }}">
             <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
@@ -198,9 +203,29 @@ function toggleNote(id) {
 
       {% endfor %}
     </div>
+    {% if meetups_past|length > 10 %}
+    <div class="text-center mt-2">
+      <a href="javascript:void(0);" id="show-more-past-meetup" class="btn btn-past-more" onclick="showMorePastMeetup()">Show {{ meetups_past|length - 10 }} more</a>
+    </div>
+    {% endif %}
     {% endif %}
   </div>
 </section>
+<style>
+.past-conf-extra, .past-meetup-extra { display: none; }
+.btn-past-more { color: #fff; background: transparent; border: 2px solid #26986A; }
+.btn-past-more:hover, .btn-past-more:focus { background: #26986A; color: #fff; }
+</style>
+<script>
+function showMorePastConf() {
+  document.querySelectorAll('.past-conf-extra').forEach(function(el) { el.classList.remove('past-conf-extra'); });
+  document.getElementById('show-more-past-conf').style.display = 'none';
+}
+function showMorePastMeetup() {
+  document.querySelectorAll('.past-meetup-extra').forEach(function(el) { el.classList.remove('past-meetup-extra'); });
+  document.getElementById('show-more-past-meetup').style.display = 'none';
+}
+</script>
 {% endif %}
 
 
