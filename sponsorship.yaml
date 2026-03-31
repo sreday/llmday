@@ -55,7 +55,7 @@ tiers:
       - "Swag distributed to all attendees"
 
   - id: food
-    name: "Food & Beverages"
+    name: "Breakfast / Coffee / Lunch / Happy Hour"
     highlight: false
     price_label: "£1000 + £15pp"
     benefits:
