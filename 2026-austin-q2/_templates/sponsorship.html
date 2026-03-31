@@ -94,17 +94,13 @@
   border-radius: 999px;
   white-space: nowrap;
 }
-.sp-tier-name  { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
-.sp-tier-price { font-size: 2.2rem; font-weight: 800; color: var(--sp-accent); }
+.sp-tier-name    { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.sp-tier-price   { font-size: 2.2rem; font-weight: 800; color: var(--sp-accent); }
 .sp-tier-price sup { font-size: 1.1rem; vertical-align: super; }
+.sp-tier-tagline { font-size: .88rem; color: #555; margin-bottom: 4px; }
 .sp-tier-benefits { list-style: none; padding: 0; margin: 16px 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; }
 .sp-tier-benefits li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
-.sp-tier-details { font-size: .78rem; color: #777; }
-.sp-tier-details li { margin-bottom: 3px; }
-
-.sp-additional { font-size: .82rem; color: #666; }
-.sp-additional strong { color: #333; }
 
 /* Sister brands */
 .sp-sisters a { color: #555; text-decoration: none; margin: 0 12px; font-weight: 600; }
@@ -203,20 +199,14 @@ function showAllKeynotes(el) {
           {% endif %}
           <div class="sp-tier-name">{{ tier.name }}</div>
           <div class="sp-tier-price">
-            <sup>£</sup>{{ "{:,}".format(tier.price[event_size]) }}
+            {% if tier.price_label %}{{ tier.price_label }}{% else %}<sup>£</sup>{{ "{:,}".format(tier.price[event_size]) }}{% endif %}
           </div>
+          {% if tier.tagline %}<div class="sp-tier-tagline">{{ tier.tagline }}</div>{% endif %}
           <ul class="sp-tier-benefits">
             {% for b in tier.benefits %}
             <li>{{ b }}</li>
             {% endfor %}
           </ul>
-          {% if tier.details %}
-          <ul class="sp-tier-details list-unstyled">
-            {% for d in tier.details %}
-            <li>+ {{ d }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
           <div class="mt-3">
             <a href="{{ calendly_sponsor_url }}" target="_blank"
                class="btn btn-sm w-100 {% if tier.highlight %}btn-primary{% else %}btn-outline-secondary{% endif %}">
@@ -227,12 +217,6 @@ function showAllKeynotes(el) {
       </div>
       {% endfor %}
     </div>
-    {% if additional_options %}
-    <div class="text-center mt-4 sp-additional">
-      <strong>Additional options:</strong>
-      {{ additional_options | join(' &nbsp;·&nbsp; ') }}
-    </div>
-    {% endif %}
   </div>
 </section>
 
