@@ -238,12 +238,21 @@ for _t in _past_keynotes_raw:
         })
 _past_keynotes.sort(key=lambda x: x['name'])
 
+_seen_speaker_names = set()
+_past_speakers = []
+for _t in _all_past_speakers:
+    _name = _t.get('name', '').strip()
+    if _name and _name not in _seen_speaker_names:
+        _seen_speaker_names.add(_name)
+        _past_speakers.append({'name': _name, 'organization': _t.get('organization', '')})
+_past_speakers.sort(key=lambda x: x['name'])
+
 _company_counts = {}
 for _t in _all_past_speakers:
     _org = _t.get('organization', '').strip()
     if _org:
         _company_counts[_org] = _company_counts.get(_org, 0) + 1
-_top_companies = sorted(_company_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+_top_companies = sorted(_company_counts.items(), key=lambda x: x[1], reverse=True)[:10]
 
 _seen_logos = set()
 _past_sponsors = []
@@ -276,14 +285,14 @@ _additional_options = _sponsorship_config.get('additional_options', [])
 
 print(f"  City slug: {_city_slug}")
 print(f"  Past editions: {_past_editions}")
-print(f"  Past keynotes: {len(_past_keynotes)}, sponsors: {len(_past_sponsors)}, top cos: {len(_top_companies)}")
+print(f"  Past speakers: {len(_past_speakers)}, sponsors: {len(_past_sponsors)}, top cos: {len(_top_companies)}")
 
 _sp_template = env.get_template('sponsorship.html')
 with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
     _f.write(_sp_template.render(
         page='sponsorship.html',
         noindex=True,
-        past_keynotes=_past_keynotes,
+        past_speakers=_past_speakers,
         top_companies=_top_companies,
         past_sponsors=_past_sponsors,
         past_editions=_past_editions,
