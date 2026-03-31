@@ -1,0 +1,60 @@
+tiers:
+  - id: logo_swag
+    name: "Logo + Swag"
+    highlight: false
+    price:
+      small: 750
+      medium: 1000
+      large: 1500
+    benefits:
+      - "Company logo on the event website"
+      - "Branded swag item in every attendee bag"
+      - "1 complimentary ticket"
+    details:
+      - "Logo in post-event email recap"
+      - "Social media mention on event channels"
+
+  - id: booth
+    name: "Booth"
+    highlight: false
+    price:
+      small: 1500
+      medium: 2000
+      large: 3000
+    benefits:
+      - "Exhibition booth in the main networking area"
+      - "Lead scanning app access — capture attendee contacts"
+      - "Company logo on the event website"
+      - "Branded swag in attendee bags"
+      - "2 complimentary tickets"
+    details:
+      - "Social media mentions before and after the event"
+      - "Logo in post-event email recap"
+      - "1-minute intro slot during opening remarks"
+
+  - id: keynote
+    name: "Keynote"
+    highlight: true
+    price:
+      small: 2500
+      medium: 3000
+      large: 5000
+    benefits:
+      - "30-minute keynote speaking slot (main stage)"
+      - "Exhibition booth in the main networking area"
+      - "Lead scanning app access — capture attendee contacts"
+      - "Company logo on the event website (featured)"
+      - "Branded swag in attendee bags"
+      - "3 complimentary tickets"
+    details:
+      - "Featured in all pre-event email communications"
+      - "Dedicated social media campaign post"
+      - "Talk recording published on YouTube"
+      - "Logo on all printed materials"
+
+additional_options:
+  - "Coffee break naming rights"
+  - "Lanyard sponsorship"
+  - "Podcast episode sponsorship"
+  - "Email blast to attendee list"
+  - "After-party co-sponsorship"
