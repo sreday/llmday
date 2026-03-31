@@ -1,4 +1,17 @@
 tiers:
+  - id: leads
+    name: "Full Conference Leads"
+    highlight: false
+    requires: "Requires another sponsorship tier"
+    price:
+      small: 750
+      medium: 1000
+      large: 1000
+    tagline: "Capture all attendee contacts"
+    benefits:
+      - "Full attendee contact list post-event"
+      - "Must be combined with another tier"
+
   - id: logo_swag
     name: "Logo + Swag"
     highlight: false
@@ -6,55 +19,157 @@ tiers:
       small: 750
       medium: 1000
       large: 1500
+    tagline: "Website logo, mentions & swag distribution"
     benefits:
-      - "Company logo on the event website"
-      - "Branded swag item in every attendee bag"
-      - "1 complimentary ticket"
-    details:
-      - "Logo in post-event email recap"
-      - "Social media mention on event channels"
+      - "Logo on event website"
+      - "On-stage mentions"
+      - "Swag distribution to attendees"
+
+  - id: talk
+    name: "Regular Talk Slot"
+    highlight: false
+    price:
+      small: 1500
+      medium: 2000
+      large: 2500
+    tagline: "30' afternoon slot, may run alongside other tracks"
+    benefits:
+      - "30-minute speaking slot"
+      - "Logo on event website"
+      - "On-stage mentions"
 
   - id: booth
-    name: "Booth"
+    name: "Booth / Table"
     highlight: false
     price:
       small: 1500
       medium: 2000
       large: 3000
+    tagline: "Table, roll-up banner & monitor"
     benefits:
-      - "Exhibition booth in the main networking area"
-      - "Lead scanning app access — capture attendee contacts"
-      - "Company logo on the event website"
-      - "Branded swag in attendee bags"
-      - "2 complimentary tickets"
-    details:
-      - "Social media mentions before and after the event"
-      - "Logo in post-event email recap"
-      - "1-minute intro slot during opening remarks"
+      - "Exhibition table in networking area"
+      - "Roll-up banner space"
+      - "Monitor provided"
+      - "Logo on event website"
 
   - id: keynote
-    name: "Keynote"
+    name: "Keynote Session"
     highlight: true
     price:
       small: 2500
       medium: 3000
       large: 5000
+    tagline: "30' morning slot, no parallel talks — 100% audience"
     benefits:
-      - "30-minute keynote speaking slot (main stage)"
-      - "Exhibition booth in the main networking area"
-      - "Lead scanning app access — capture attendee contacts"
-      - "Company logo on the event website (featured)"
-      - "Branded swag in attendee bags"
-      - "3 complimentary tickets"
-    details:
-      - "Featured in all pre-event email communications"
-      - "Dedicated social media campaign post"
-      - "Talk recording published on YouTube"
-      - "Logo on all printed materials"
+      - "30-minute keynote speaking slot"
+      - "Full audience, no parallel tracks"
+      - "Logo on event website (featured)"
+      - "On-stage mentions"
 
-additional_options:
-  - "Coffee break naming rights"
-  - "Lanyard sponsorship"
-  - "Podcast episode sponsorship"
-  - "Email blast to attendee list"
-  - "After-party co-sponsorship"
+  - id: food
+    name: "Food & Drinks"
+    highlight: false
+    price_label: "£1,000 + £15pp"
+    tagline: "Happy hour, coffee, lunch or speaker dinner"
+    benefits:
+      - "Your logo on all food & drink signage"
+      - "On-stage mentions"
+      - "Social media shoutout"
+
+  - id: clothing
+    name: "Clothing"
+    highlight: false
+    price_label: "£1,000 + £15–30pp"
+    tagline: "T-shirts, socks, hoodies or caps with your logo"
+    benefits:
+      - "Your logo on wearable swag"
+      - "£15pp for t-shirts, £30pp for hoodies/caps"
+      - "On-stage mentions"
+
+  - id: tickets
+    name: "Discounted Ticket Pack"
+    highlight: false
+    price_label: "20% off 5+ tickets"
+    tagline: "Vouchers for colleagues, clients & co-founders"
+    benefits:
+      - "5 or more tickets at 20% discount"
+      - "Vouchers redeemable by anyone"
+
+  - id: coffee_break
+    name: "Coffee Break Naming Rights"
+    highlight: false
+    price_label: "On request"
+    tagline: "Your brand on the break everyone remembers"
+    benefits:
+      - "Named coffee break at the event"
+      - "Logo on signage and cups"
+      - "On-stage mention"
+
+  - id: lanyard
+    name: "Lanyard Sponsorship"
+    highlight: false
+    price_label: "On request"
+    tagline: "Your logo around every attendee's neck all day"
+    benefits:
+      - "Logo printed on all attendee lanyards"
+      - "On-stage mention"
+
+  - id: podcast
+    name: "Podcast Episode"
+    highlight: false
+    price_label: "On request"
+    tagline: "Featured episode on the SREday podcast"
+    benefits:
+      - "Dedicated podcast episode"
+      - "Promoted to full subscriber base"
+      - "Social media amplification"
+
+  - id: email_blast
+    name: "Email Blast"
+    highlight: false
+    price_label: "On request"
+    tagline: "Direct email to the full attendee list"
+    benefits:
+      - "One dedicated email to all attendees"
+      - "Your copy, your CTA"
+      - "Sent post-event"
+
+  - id: after_party
+    name: "After-Party Co-Sponsorship"
+    highlight: false
+    price_label: "On request"
+    tagline: "Co-host the drinks after the talks"
+    benefits:
+      - "Logo on all after-party communications"
+      - "On-stage mention"
+      - "Social media shoutout"
+
+  - id: meetup
+    name: "Post-Conference Meetup"
+    highlight: false
+    price_label: "On request"
+    tagline: "Host a meetup off the back of the conference"
+    benefits:
+      - "Your venue or ours"
+      - "Promoted to all attendees"
+      - "Logo on all communications"
+
+  - id: hackathon
+    name: "Hackathon Co-Sponsorship"
+    highlight: false
+    price_label: "On request"
+    tagline: "Co-sponsor a hands-on hackathon day"
+    benefits:
+      - "Logo on all hackathon materials"
+      - "On-stage mention"
+      - "Social media amplification"
+
+  - id: startup_discount
+    name: "Startup Discount"
+    highlight: false
+    price_label: "20% off any tier"
+    tagline: "Early-stage startups under $5M in funding"
+    benefits:
+      - "20% off any sponsorship opportunity"
+      - "For startups under $5M in funding"
+      - "Contact us to apply"
