@@ -79,29 +79,6 @@
 .sp-section { padding: 60px 0; }
 .sp-section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; }
 
-/* Keynote speaker avatars */
-.sp-avatar {
-  width: 64px; height: 64px; border-radius: 50%;
-  background: var(--sp-accent);
-  color: #fff; font-weight: 700; font-size: 1.1rem;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 8px;
-  flex-shrink: 0;
-}
-.sp-speaker-card { text-align: center; padding: 0 8px; }
-.sp-speaker-card .name { font-size: .82rem; font-weight: 600; }
-.sp-speaker-card .org  { font-size: .75rem; color: #666; }
-.sp-speakers-row { display: flex; flex-wrap: wrap; gap: 16px; }
-.sp-more-toggle { font-size: .82rem; color: var(--sp-accent); cursor: pointer; }
-
-/* Company list */
-.sp-company-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.sp-company-rank { width: 24px; text-align: right; color: #999; font-size: .85rem; }
-.sp-company-bar-wrap { flex: 1; background: #f0f0f0; border-radius: 4px; height: 8px; overflow: hidden; }
-.sp-company-bar { height: 100%; background: var(--sp-accent); border-radius: 4px; }
-.sp-company-name { font-size: .88rem; min-width: 140px; }
-.sp-company-count { font-size: .8rem; color: #666; min-width: 32px; text-align: right; }
-
 /* Sponsor pills */
 .sp-pill {
   display: inline-block;
@@ -113,6 +90,82 @@
   font-size: .82rem;
   margin: 4px;
   font-weight: 500;
+  text-decoration: none;
+}
+
+/* ── Conference stats toggle button ──────────────────── */
+.btn-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #e8614b;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 11px 28px;
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: .01em;
+  transition: background .2s, box-shadow .2s;
+}
+.btn-stats:hover  { background: #d04f3a; box-shadow: 0 4px 18px rgba(232,97,75,.4); }
+.btn-stats:active { transform: scale(.97); }
+.btn-stats-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+.btn-stats-chevron { transition: transform .3s ease; }
+.btn-stats.open .btn-stats-chevron { transform: rotate(180deg); }
+
+/* ── Conference stats panel ───────────────────────────── */
+.sp-stats-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .45s cubic-bezier(.4,0,.2,1);
+}
+.sp-stats-inner {
+  background: #fff;
+  border-radius: 16px;
+  margin-top: 20px;
+  padding: 36px 40px;
+  color: #111;
+}
+.sp-stats-block-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 16px;
+}
+.sp-stats-sep {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 28px 0;
+}
+/* Speaker grid */
+.sp-stats-speakers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 8px 20px;
+}
+.sp-stats-speaker-name { font-size: .88rem; font-weight: 500; color: #222; }
+.sp-stats-speaker-org  { font-size: .78rem; color: #999; }
+/* Company bar chart */
+.sp-stats-co-row   { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.sp-stats-co-rank  { width: 20px; text-align: right; color: #bbb; font-size: .8rem; flex-shrink: 0; }
+.sp-stats-co-name  { font-size: .88rem; color: #333; min-width: 120px; }
+.sp-stats-co-bars  { flex: 1; background: #f0f0f0; border-radius: 4px; height: 6px; overflow: hidden; }
+.sp-stats-co-bar   { height: 100%; background: var(--sp-accent); border-radius: 4px; }
+.sp-stats-co-count { font-size: .8rem; color: #aaa; min-width: 24px; text-align: right; }
+
+/* Pills inside white panel must override the dark-body pill rule */
+#sp-dark-body .sp-stats-inner .sp-pill {
+  background: #f0faf5;
+  color: var(--sp-accent);
+  border-color: #a7d9bf;
 }
 
 /* Custom / on-request catch-all card */
@@ -162,16 +215,8 @@
   gap: 6px 32px;
   align-content: center;
 }
-.sp-custom-ideas li {
-  font-size: .9rem;
-  color: #d0d0d0;
-  padding: 4px 0;
-}
-.sp-custom-ideas li::before {
-  content: "✓ ";
-  color: var(--sp-accent);
-  font-weight: 700;
-}
+.sp-custom-ideas li { font-size: .9rem; color: #d0d0d0; padding: 4px 0; }
+.sp-custom-ideas li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
 
 /* Pricing cards */
 .sp-tier-card {
@@ -200,10 +245,9 @@
   border-radius: 999px;
   white-space: nowrap;
 }
-.sp-tier-name    { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
-.sp-tier-price   { font-size: 2.2rem; font-weight: 800; color: var(--sp-accent); }
+.sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: var(--sp-accent); }
 .sp-tier-price sup { font-size: 1.1rem; vertical-align: super; }
-.sp-tier-tagline { font-size: .88rem; color: #555; margin-bottom: 4px; }
 .sp-tier-benefits { list-style: none; padding: 0; margin: 16px 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; }
 .sp-tier-benefits li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
@@ -216,14 +260,6 @@
 #sp-dark-body .sp-section     { background: #111; }
 #sp-dark-body .sp-section-alt { background: #1a1a1a; }
 #sp-dark-body .sp-section-title { color: #fff; }
-
-#sp-dark-body .sp-speaker-card .name { color: #e5e5e5; }
-#sp-dark-body .sp-speaker-card .org  { color: #888; }
-
-#sp-dark-body .sp-company-rank     { color: #666; }
-#sp-dark-body .sp-company-name     { color: #e5e5e5; }
-#sp-dark-body .sp-company-count    { color: #888; }
-#sp-dark-body .sp-company-bar-wrap { background: #2a2a2a; }
 
 #sp-dark-body .sp-pill {
   background: #1a2e24;
@@ -240,9 +276,8 @@
   border-color: var(--sp-accent);
   box-shadow: 0 4px 24px rgba(38,152,106,.2);
 }
-#sp-dark-body .sp-tier-name    { color: #fff; }
-#sp-dark-body .sp-tier-price   { color: #fff; }
-#sp-dark-body .sp-tier-tagline { color: #aaa; }
+#sp-dark-body .sp-tier-name  { color: #fff; }
+#sp-dark-body .sp-tier-price { color: #fff; }
 #sp-dark-body .sp-tier-benefits li { color: #d0d0d0; }
 
 #sp-dark-body .btn-outline-secondary {
@@ -442,54 +477,100 @@
 
 
 
-
-
-
-<section class="sp-section">
+<section class="sp-section" style="padding-top: 32px; padding-bottom: 40px;">
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-6">
-        <h2 class="sp-section-title text-center">Top companies sending speakers</h2>
+    <div class="text-center">
+      <button class="btn-stats" id="sp-stats-toggle" onclick="spToggleStats()" aria-expanded="false">
+        Show Conference Stats
+        <span class="btn-stats-icon" aria-hidden="true">
+          <svg width="18" height="5" viewBox="0 0 18 5" fill="currentColor">
+            <circle cx="1.5" cy="2.5" r="1.5"/>
+            <circle cx="9"   cy="2.5" r="1.5"/>
+            <circle cx="16.5" cy="2.5" r="1.5"/>
+          </svg>
+          <svg class="btn-stats-chevron" width="14" height="8" viewBox="0 0 14 8" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1,1 7,7 13,1"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <div class="sp-stats-panel" id="sp-stats-panel">
+      <div class="sp-stats-inner">
+
         
         
-        <div class="sp-company-row">
-          <span class="sp-company-rank">1</span>
-          <span class="sp-company-name">Cribl</span>
-          <div class="sp-company-bar-wrap">
-            <div class="sp-company-bar" style="width:100%"></div>
+        <div class="sp-stats-block">
+          <div class="sp-stats-block-title">Past sponsors at this location</div>
+          <div>
+            
+            <a href="https://www.microsoft.com/" target="_blank" class="sp-pill">Microsoft</a>
+            
+            <a href="https://www.hockeystick.show" target="_blank" class="sp-pill">Hockeystick</a>
+            
           </div>
-          <span class="sp-company-count">1</span>
+        </div>
+        <hr class="sp-stats-sep">
+        
+
+        
+        
+        <div class="sp-stats-block">
+          <div class="sp-stats-block-title">Past speakers at this location</div>
+          <div class="sp-stats-speakers">
+            
+            <div>
+              <div class="sp-stats-speaker-name">Aaron Zamora</div>
+              <div class="sp-stats-speaker-org">Cribl</div>
+            </div>
+            
+            <div>
+              <div class="sp-stats-speaker-name">Maciej Szymkowski</div>
+              <div class="sp-stats-speaker-org">Future Processing</div>
+            </div>
+            
+          </div>
+        </div>
+        <hr class="sp-stats-sep">
+        
+
+        
+        
+        <div class="sp-stats-block">
+          <div class="sp-stats-block-title">Top speaker companies</div>
+          
+          
+          <div class="sp-stats-co-row">
+            <span class="sp-stats-co-rank">1</span>
+            <span class="sp-stats-co-name">Cribl</span>
+            <div class="sp-stats-co-bars"><div class="sp-stats-co-bar" style="width:100%"></div></div>
+            <span class="sp-stats-co-count">1</span>
+          </div>
+          
+          <div class="sp-stats-co-row">
+            <span class="sp-stats-co-rank">2</span>
+            <span class="sp-stats-co-name">Future Processing</span>
+            <div class="sp-stats-co-bars"><div class="sp-stats-co-bar" style="width:100%"></div></div>
+            <span class="sp-stats-co-count">1</span>
+          </div>
+          
         </div>
         
-        <div class="sp-company-row">
-          <span class="sp-company-rank">2</span>
-          <span class="sp-company-name">Future Processing</span>
-          <div class="sp-company-bar-wrap">
-            <div class="sp-company-bar" style="width:100%"></div>
-          </div>
-          <span class="sp-company-count">1</span>
-        </div>
-        
+
       </div>
     </div>
   </div>
 </section>
-
-
-
-
-<section class="sp-section sp-section-alt">
-  <div class="container text-center">
-    <h2 class="sp-section-title">Companies that have sponsored here</h2>
-    <div>
-      
-      <a href="https://www.microsoft.com/" target="_blank" class="sp-pill" title="Microsoft">Microsoft</a>
-      
-      <a href="https://www.hockeystick.show" target="_blank" class="sp-pill" title="Hockeystick">Hockeystick</a>
-      
-    </div>
-  </div>
-</section>
+<script>
+function spToggleStats() {
+  var btn   = document.getElementById('sp-stats-toggle');
+  var panel = document.getElementById('sp-stats-panel');
+  var open  = btn.classList.toggle('open');
+  panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  btn.setAttribute('aria-expanded', String(open));
+}
+</script>
 
 
 
