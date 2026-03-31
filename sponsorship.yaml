@@ -82,7 +82,7 @@ tiers:
   - id: startup_discount
     name: "Startup Discount"
     highlight: false
-    price_label: "20% off any opportunity"
+    price_label: "20% off anything"
     benefits:
       - "Early-stage startups under $5M in funding"
       - "Contact us to apply"
