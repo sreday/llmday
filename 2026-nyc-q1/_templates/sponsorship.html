@@ -50,7 +50,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: #e8614b;
+  background: var(--sp-accent);
   color: #fff;
   border: none;
   border-radius: 999px;
@@ -61,7 +61,7 @@
   letter-spacing: .01em;
   transition: background .2s, box-shadow .2s;
 }
-.btn-stats:hover  { background: #d04f3a; box-shadow: 0 4px 18px rgba(232,97,75,.4); }
+.btn-stats:hover  { background: #1e7a55; box-shadow: 0 4px 18px rgba(38,152,106,.4); }
 .btn-stats:active { transform: scale(.97); }
 .btn-stats-icon { display: flex; align-items: center; flex-shrink: 0; }
 .btn-stats-chevron { transition: transform .3s ease; }
@@ -306,7 +306,7 @@
   <div class="container">
     <div class="text-center">
       <button class="btn-stats" id="sp-stats-toggle" onclick="spToggleStats()" aria-expanded="false">
-        Show Conference Stats
+        I need more stats
         <span class="btn-stats-icon" aria-hidden="true">
           <svg class="btn-stats-chevron" width="17" height="10" viewBox="0 0 14 8" fill="none"
                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
