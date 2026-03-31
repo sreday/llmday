@@ -49,13 +49,13 @@
 .btn-stats {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   background: #e8614b;
   color: #fff;
   border: none;
   border-radius: 999px;
-  padding: 11px 28px;
-  font-size: .95rem;
+  padding: 13px 34px;
+  font-size: 1.14rem;
   font-weight: 600;
   cursor: pointer;
   letter-spacing: .01em;
@@ -63,13 +63,7 @@
 }
 .btn-stats:hover  { background: #d04f3a; box-shadow: 0 4px 18px rgba(232,97,75,.4); }
 .btn-stats:active { transform: scale(.97); }
-.btn-stats-icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  flex-shrink: 0;
-}
+.btn-stats-icon { display: flex; align-items: center; flex-shrink: 0; }
 .btn-stats-chevron { transition: transform .3s ease; }
 .btn-stats.open .btn-stats-chevron { transform: rotate(180deg); }
 
@@ -260,19 +254,61 @@
 {% block content %}
 <div id="sp-dark-body">
 
+{# ── Conference stats button placeholder — rendered after pricing section ── #}
+{# (section appears below the "Something else in mind?" card) #}
+      <div class="sp-stats-inner">
+
+{# ── Pricing tiers ───────────────────────────────────── #}
+<section class="sp-section">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Sponsorship packages</h2>
+    <div class="row justify-content-center g-4 mt-2">
+      {% for tier in sponsorship_tiers %}
+      <div class="col-12 col-md-4">
+        <div class="sp-tier-card {% if tier.highlight %}sp-tier-highlight{% endif %}">
+          {% if tier.highlight %}
+          <div class="sp-popular-badge">⭐ Most popular</div>
+          {% endif %}
+          <div class="sp-tier-name">{{ tier.name }}</div>
+          <div class="sp-tier-price">
+            {% if tier.price_label %}{{ tier.price_label }}{% else %}<sup>£</sup>{{ "{:,}".format(tier.price[event_size]) }}{% endif %}
+          </div>
+          <ul class="sp-tier-benefits">
+            {% for b in tier.benefits %}
+            <li>{{ b }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endfor %}
+      {% if on_request_tiers %}
+      <div class="col-12">
+        <div class="sp-custom-card">
+          <div class="sp-custom-card-left">
+            <h3>Something else in mind?</h3>
+            <p class="sp-custom-subtitle">Let's figure it out together.</p>
+          </div>
+          <div class="sp-custom-divider"></div>
+          <ul class="sp-custom-ideas">
+            {% for tier in on_request_tiers %}
+            <li>{{ tier.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
 {# ── Conference stats button + expandable panel ──────────── #}
-<section class="sp-section" style="padding-top: 32px; padding-bottom: 40px;">
+<section class="sp-section" style="padding-top: 0; padding-bottom: 40px;">
   <div class="container">
     <div class="text-center">
       <button class="btn-stats" id="sp-stats-toggle" onclick="spToggleStats()" aria-expanded="false">
         Show Conference Stats
         <span class="btn-stats-icon" aria-hidden="true">
-          <svg width="18" height="5" viewBox="0 0 18 5" fill="currentColor">
-            <circle cx="1.5" cy="2.5" r="1.5"/>
-            <circle cx="9"   cy="2.5" r="1.5"/>
-            <circle cx="16.5" cy="2.5" r="1.5"/>
-          </svg>
-          <svg class="btn-stats-chevron" width="14" height="8" viewBox="0 0 14 8" fill="none"
+          <svg class="btn-stats-chevron" width="17" height="10" viewBox="0 0 14 8" fill="none"
                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="1,1 7,7 13,1"/>
           </svg>
@@ -347,49 +383,6 @@ function spToggleStats() {
   btn.setAttribute('aria-expanded', String(open));
 }
 </script>
-
-{# ── Pricing tiers ───────────────────────────────────── #}
-<section class="sp-section">
-  <div class="container">
-    <h2 class="sp-section-title text-center">Sponsorship packages</h2>
-    <div class="row justify-content-center g-4 mt-2">
-      {% for tier in sponsorship_tiers %}
-      <div class="col-12 col-md-4">
-        <div class="sp-tier-card {% if tier.highlight %}sp-tier-highlight{% endif %}">
-          {% if tier.highlight %}
-          <div class="sp-popular-badge">⭐ Most popular</div>
-          {% endif %}
-          <div class="sp-tier-name">{{ tier.name }}</div>
-          <div class="sp-tier-price">
-            {% if tier.price_label %}{{ tier.price_label }}{% else %}<sup>£</sup>{{ "{:,}".format(tier.price[event_size]) }}{% endif %}
-          </div>
-          <ul class="sp-tier-benefits">
-            {% for b in tier.benefits %}
-            <li>{{ b }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endfor %}
-      {% if on_request_tiers %}
-      <div class="col-12">
-        <div class="sp-custom-card">
-          <div class="sp-custom-card-left">
-            <h3>Something else in mind?</h3>
-            <p class="sp-custom-subtitle">Let's figure it out together.</p>
-          </div>
-          <div class="sp-custom-divider"></div>
-          <ul class="sp-custom-ideas">
-            {% for tier in on_request_tiers %}
-            <li>{{ tier.name }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %}
-    </div>
-  </div>
-</section>
 
 {# ── Get in touch ────────────────────────────────────── #}
 <section class="sp-section sp-section-alt">
