@@ -2,14 +2,13 @@ tiers:
   - id: leads
     name: "Conference Leads"
     highlight: false
-    requires: "Requires another sponsorship tier"
+    requires: "Cannot be purchased solo"
     price:
       small: 500
       medium: 1000
       large: 1000
     benefits:
       - "Full attendee contact list, shared pre/post"
-      - "Has to be purchased on top of another opportunity"
 
   - id: booth
     name: "Booth / Table"
