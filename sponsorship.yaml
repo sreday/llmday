@@ -34,7 +34,7 @@ tiers:
 
   - id: booth
     name: "Booth / Table"
-    highlight: true
+    highlight: false
     price:
       small: 1000
       medium: 2000
