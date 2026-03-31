@@ -202,7 +202,6 @@
 }
 .sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
 .sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; }
-.sp-tier-price sup { font-size: 1.1rem; vertical-align: super; }
 .sp-tier-benefits { list-style: none; padding: 0; margin: 16px 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
 .sp-tier-benefits li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
@@ -248,7 +247,7 @@
           {% endif %}
           <div class="sp-tier-name">{{ tier.name }}</div>
           <div class="sp-tier-price">
-            {% if tier.price_label %}{{ tier.price_label }}{% else %}<sup>£</sup>{{ "{:,}".format(tier.price[event_size]) }}{% endif %}
+            {% if tier.price_label %}{{ tier.price_label }}{% else %}£{{ tier.price[event_size] }}{% endif %}
           </div>
           <ul class="sp-tier-benefits">
             {% for b in tier.benefits %}
