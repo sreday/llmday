@@ -81,3 +81,7 @@ twitter_url: https://twitter.com/llmday_com
 linkedin_url: https://www.linkedin.com/company/llmday/
 youtube_url: https://www.youtube.com/@llmday
 mailto: "mailto:hello@llmday.com"
+
+venue_name: "CIC Warsaw"
+event_size: large
+calendly_sponsor_url: "https://calendly.com/llmday/30min"

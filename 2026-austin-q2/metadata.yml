@@ -73,3 +73,7 @@ hero_pictures:
 - ../photos/warsaw-2026-4.jpg
 - ../photos/warsaw-2026-5.jpg
 - ../photos/warsaw-2026-6.jpg
+
+venue_name: "The Sunset Room"
+event_size: small
+calendly_sponsor_url: "https://calendly.com/llmday/30min"
