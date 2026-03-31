@@ -37,7 +37,7 @@ def generate_talk_url(talk):
 def read_csv(path):
     """ Read the pre-process the CSV """
     items = []
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for item in reader:
             item = dict(item)
@@ -69,7 +69,7 @@ env.filters["dedupe"] = dedupe
 print(DIVIDER)
 print("Loading context")
 talks_raw = read_csv("./_db/talks.csv")
-with open('metadata.yml') as f:
+with open('metadata.yml', encoding='utf-8') as f:
     context = yaml.load(f, Loader=yaml.FullLoader)
     BASE_FOLDER = "./" + context.get("base_folder")
 
@@ -165,7 +165,7 @@ print(DIVIDER)
 pages = ["index.html"]
 print(f"Generating main pages: {pages}")
 for page in pages:
-    with open(BASE_FOLDER + "/" + page, "w") as f:
+    with open(BASE_FOLDER + "/" + page, "w", encoding="utf-8") as f:
         print("Writing out", page)
         template = env.get_template(page)
         f.write(template.render(page=page, **context))
@@ -175,15 +175,128 @@ for page in pages:
 # template each talk page for the event
 for talk in talks_raw:
     print("Generating talk subpage %s" % (talk.get("short_url")))
-    with open(BASE_FOLDER + "/" + talk.get("short_url").replace(".html","")  + ".html", "w") as f:
+    with open(BASE_FOLDER + "/" + talk.get("short_url").replace(".html","")  + ".html", "w", encoding="utf-8") as f:
         template = env.get_template("talk.html")
         f.write(template.render(talk=talk, **context))
         SITEMAP_URLS.append((talk.get("short_url").replace(".html",""), 0.75))
+
+# ── SPONSORSHIP PAGE ─────────────────────────────────────────────────────────
+import os as _os
+import glob as _glob
+
+print(DIVIDER)
+print("Generating sponsorship.html")
+
+_sponsorship_config = {}
+_sponsorship_yaml = '../sponsorship.yaml'
+if _os.path.exists(_sponsorship_yaml):
+    with open(_sponsorship_yaml, encoding='utf-8') as _f:
+        _sponsorship_config = yaml.load(_f, Loader=yaml.FullLoader)
+
+_current_folder = _os.path.basename(_os.getcwd())
+_parts = _current_folder.split('-')
+_city_parts = [p for p in _parts
+               if not re.match(r'^\d{4}$', p)
+               and not re.match(r'^q\d+$', p, re.IGNORECASE)]
+_city_slug = '-'.join(_city_parts)
+
+_all_siblings = sorted(_glob.glob('../20*/'))
+_same_city = [
+    f for f in _all_siblings
+    if _city_slug in _os.path.basename(_os.path.normpath(f))
+    and _os.path.basename(_os.path.normpath(f)) != _current_folder
+]
+
+_past_keynotes_raw, _all_past_speakers, _past_sponsors_raw = [], [], []
+for _folder in _same_city:
+    _talks_path = _os.path.join(_folder, '_db', 'talks.csv')
+    if _os.path.exists(_talks_path):
+        for _t in read_csv(_talks_path):
+            _status = _t.get('status', '').lower()
+            if 'keynote' in _status:
+                _past_keynotes_raw.append(_t)
+            if 'keynote' in _status or 'confirmed' in _status:
+                _all_past_speakers.append(_t)
+    _meta_path = _os.path.join(_folder, 'metadata.yml')
+    if _os.path.exists(_meta_path):
+        with open(_meta_path, encoding='utf-8') as _f:
+            _pm = yaml.load(_f, Loader=yaml.FullLoader)
+        _past_sponsors_raw.extend(_pm.get('sponsors', []) or [])
+
+_seen_names = set()
+_past_keynotes = []
+for _t in _past_keynotes_raw:
+    _name = _t.get('name', '').strip()
+    if _name and _name not in _seen_names:
+        _seen_names.add(_name)
+        _wparts = _name.split()
+        _initials = ''.join(p[0].upper() for p in _wparts[:2])
+        _past_keynotes.append({
+            'name': _name,
+            'organization': _t.get('organization', ''),
+            'initials': _initials,
+        })
+_past_keynotes.sort(key=lambda x: x['name'])
+
+_company_counts = {}
+for _t in _all_past_speakers:
+    _org = _t.get('organization', '').strip()
+    if _org:
+        _company_counts[_org] = _company_counts.get(_org, 0) + 1
+_top_companies = sorted(_company_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+
+_seen_logos = set()
+_past_sponsors = []
+for _s in _past_sponsors_raw:
+    _logo = _s.get('logo', '').strip()
+    if _logo and _logo not in _seen_logos:
+        _seen_logos.add(_logo)
+        _sname = re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title()
+        _past_sponsors.append({'logo': _logo, 'url': _s.get('url', ''), 'name': _sname})
+
+_talk_count = len(talks) + len(keynotes)
+_past_editions = len(_same_city)
+
+# Read size from home/metadata.yml (single source of truth), fall back to event metadata
+_event_size = context.get('event_size', 'medium')
+_home_meta_path = '../home/metadata.yml'
+if _os.path.exists(_home_meta_path):
+    with open(_home_meta_path, encoding='utf-8') as _hf:
+        _home_meta = yaml.load(_hf, Loader=yaml.FullLoader)
+    for _he in (_home_meta.get('events') or []) + (_home_meta.get('events_past') or []):
+        _he_url = _he.get('url', '').strip('./').rstrip('/')
+        if _he_url == _current_folder:
+            _event_size = _he.get('size', _event_size)
+            break
+
+_sponsorship_tiers = _sponsorship_config.get('tiers', [])
+_additional_options = _sponsorship_config.get('additional_options', [])
+
+print(f"  City slug: {_city_slug}")
+print(f"  Past editions: {_past_editions}")
+print(f"  Past keynotes: {len(_past_keynotes)}, sponsors: {len(_past_sponsors)}, top cos: {len(_top_companies)}")
+
+_sp_template = env.get_template('sponsorship.html')
+with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
+    _f.write(_sp_template.render(
+        page='sponsorship.html',
+        noindex=True,
+        past_keynotes=_past_keynotes,
+        top_companies=_top_companies,
+        past_sponsors=_past_sponsors,
+        past_editions=_past_editions,
+        talk_count=_talk_count,
+        sponsorship_tiers=_sponsorship_tiers,
+        additional_options=_additional_options,
+        **{**context, 'event_size': _event_size}
+    ))
+print("Done: sponsorship.html")
+# ── END SPONSORSHIP PAGE ─────────────────────────────────────────────────────
 
 # SITEMAP
 print(DIVIDER)
 print("Generating sitemap.xml with %d items" % len(SITEMAP_URLS))
 now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=datetime.timezone.utc).isoformat()
-with open(BASE_FOLDER + "/sitemap.xml", "w") as f:
+with open(BASE_FOLDER + "/sitemap.xml", "w", encoding="utf-8") as f:
     template = env.get_template("sitemap.xml")
     f.write(template.render(urls=SITEMAP_URLS, now=now, **context))

@@ -1,0 +1,313 @@
+{% extends "_base.html" %}
+
+{% block head_extra %}
+<meta name="robots" content="noindex, nofollow">
+<style>
+/* ── Sponsorship page styles ─────────────────────────── */
+:root { --sp-accent: #26986A; }
+
+.sp-hero {
+  background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+              url('{{ hero_pictures[0] if hero_pictures else "" }}') center/cover no-repeat;
+  padding: 80px 0 60px;
+  color: #fff;
+}
+.sp-badge-noindex {
+  display: inline-block;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.4);
+  color: #fff;
+  font-size: .72rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 1.2rem;
+}
+.sp-stat-bar { background: var(--sp-accent); color: #fff; padding: 20px 0; }
+.sp-stat-bar .number { font-size: 2rem; font-weight: 700; }
+.sp-stat-bar .unit   { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; }
+
+.sp-section { padding: 60px 0; }
+.sp-section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; }
+
+/* Keynote speaker avatars */
+.sp-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--sp-accent);
+  color: #fff; font-weight: 700; font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 8px;
+  flex-shrink: 0;
+}
+.sp-speaker-card { text-align: center; padding: 0 8px; }
+.sp-speaker-card .name { font-size: .82rem; font-weight: 600; }
+.sp-speaker-card .org  { font-size: .75rem; color: #666; }
+.sp-speakers-row { display: flex; flex-wrap: wrap; gap: 16px; }
+.sp-more-toggle { font-size: .82rem; color: var(--sp-accent); cursor: pointer; }
+
+/* Company list */
+.sp-company-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.sp-company-rank { width: 24px; text-align: right; color: #999; font-size: .85rem; }
+.sp-company-bar-wrap { flex: 1; background: #f0f0f0; border-radius: 4px; height: 8px; overflow: hidden; }
+.sp-company-bar { height: 100%; background: var(--sp-accent); border-radius: 4px; }
+.sp-company-name { font-size: .88rem; min-width: 140px; }
+.sp-company-count { font-size: .8rem; color: #666; min-width: 32px; text-align: right; }
+
+/* Sponsor pills */
+.sp-pill {
+  display: inline-block;
+  background: #f0faf5;
+  color: var(--sp-accent);
+  border: 1px solid #a7d9bf;
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: .82rem;
+  margin: 4px;
+  font-weight: 500;
+}
+
+/* Pricing cards */
+.sp-tier-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px 24px;
+  background: #fff;
+  height: 100%;
+  position: relative;
+}
+.sp-tier-card.sp-tier-highlight {
+  border-color: var(--sp-accent);
+  box-shadow: 0 4px 24px rgba(38,152,106,.12);
+}
+.sp-popular-badge {
+  position: absolute;
+  top: -13px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--sp-accent);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.sp-tier-name  { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.sp-tier-price { font-size: 2.2rem; font-weight: 800; color: var(--sp-accent); }
+.sp-tier-price sup { font-size: 1.1rem; vertical-align: super; }
+.sp-tier-benefits { list-style: none; padding: 0; margin: 16px 0 12px; }
+.sp-tier-benefits li { padding: 5px 0; font-size: .9rem; }
+.sp-tier-benefits li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
+.sp-tier-details { font-size: .78rem; color: #777; }
+.sp-tier-details li { margin-bottom: 3px; }
+
+.sp-additional { font-size: .82rem; color: #666; }
+.sp-additional strong { color: #333; }
+
+/* Sister brands */
+.sp-sisters a { color: #555; text-decoration: none; margin: 0 12px; font-weight: 600; }
+.sp-sisters a:hover { color: var(--sp-accent); }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Hero ────────────────────────────────────────────── #}
+<section class="sp-hero">
+  <div class="container text-center">
+    <div class="sp-badge-noindex">🔒 Not indexed on Google</div>
+    <h1 class="text-white mb-2" style="font-size:2.4rem;font-weight:800;">
+      Sponsor {{ brand_name }} {{ location_string }}
+    </h1>
+    <p class="text-white mb-4" style="font-size:1.1rem;opacity:.85;">
+      {{ date_string }} &nbsp;·&nbsp; {{ venue_name }}
+    </p>
+    <a href="{{ calendly_sponsor_url }}" target="_blank" class="btn btn-lg me-2"
+       style="background:#fff;color:var(--sp-accent);font-weight:700;">
+      📅 Book a call
+    </a>
+    <a href="{{ mailto }}" class="btn btn-lg"
+       style="background:transparent;border:2px solid #fff;color:#fff;font-weight:700;">
+      ✉ Email us
+    </a>
+  </div>
+</section>
+
+{# ── Stats bar ───────────────────────────────────────── #}
+<div class="sp-stat-bar text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-6 col-md-3">
+        <div class="number">{{ attendees }}</div>
+        <div class="unit">Attendees</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="number">{{ talk_count }}</div>
+        <div class="unit">Talks</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="number">{{ past_editions }}</div>
+        <div class="unit">Past editions here</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="number">{{ days }}</div>
+        <div class="unit">Day{{ 's' if days != 1 else '' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ── Past keynote speakers ───────────────────────────── #}
+{% if past_keynotes %}
+<section class="sp-section" style="background:#fafafa;">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Past keynote speakers at {{ location_string }}</h2>
+    <div class="sp-speakers-row justify-content-center" id="sp-keynotes-row">
+      {% for speaker in past_keynotes[:5] %}
+      <div class="sp-speaker-card">
+        <div class="sp-avatar">{{ speaker.initials }}</div>
+        <div class="name">{{ speaker.name }}</div>
+        <div class="org">{{ speaker.organization }}</div>
+      </div>
+      {% endfor %}
+      {% if past_keynotes|length > 5 %}
+      {% for speaker in past_keynotes[5:] %}
+      <div class="sp-speaker-card sp-keynote-extra" style="display:none;">
+        <div class="sp-avatar">{{ speaker.initials }}</div>
+        <div class="name">{{ speaker.name }}</div>
+        <div class="org">{{ speaker.organization }}</div>
+      </div>
+      {% endfor %}
+      <div class="sp-speaker-card" style="display:flex;align-items:center;">
+        <span class="sp-more-toggle" onclick="showAllKeynotes(this)">
+          +{{ past_keynotes|length - 5 }} more
+        </span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+<script>
+function showAllKeynotes(el) {
+  document.querySelectorAll('.sp-keynote-extra').forEach(function(e){ e.style.display=''; });
+  el.parentElement.style.display = 'none';
+}
+</script>
+{% endif %}
+
+{# ── Top speaker companies ───────────────────────────── #}
+{% if top_companies %}
+<section class="sp-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-6">
+        <h2 class="sp-section-title text-center">Top companies sending speakers</h2>
+        {% set max_count = top_companies[0][1] %}
+        {% for company, count in top_companies %}
+        <div class="sp-company-row">
+          <span class="sp-company-rank">{{ loop.index }}</span>
+          <span class="sp-company-name">{{ company }}</span>
+          <div class="sp-company-bar-wrap">
+            <div class="sp-company-bar" style="width:{{ (count / max_count * 100)|int }}%"></div>
+          </div>
+          <span class="sp-company-count">{{ count }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ── Past sponsors ───────────────────────────────────── #}
+{% if past_sponsors %}
+<section class="sp-section" style="background:#fafafa;">
+  <div class="container text-center">
+    <h2 class="sp-section-title">Companies that have sponsored here</h2>
+    <div>
+      {% for s in past_sponsors %}
+      <a href="{{ s.url }}" target="_blank" class="sp-pill" title="{{ s.name }}">{{ s.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ── Pricing tiers ───────────────────────────────────── #}
+<section class="sp-section">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Sponsorship packages</h2>
+    <div class="row justify-content-center g-4 mt-2">
+      {% for tier in sponsorship_tiers %}
+      <div class="col-12 col-md-4">
+        <div class="sp-tier-card {% if tier.highlight %}sp-tier-highlight{% endif %}">
+          {% if tier.highlight %}
+          <div class="sp-popular-badge">⭐ Most popular</div>
+          {% endif %}
+          <div class="sp-tier-name">{{ tier.name }}</div>
+          <div class="sp-tier-price">
+            <sup>£</sup>{{ "{:,}".format(tier.price[event_size]) }}
+          </div>
+          <ul class="sp-tier-benefits">
+            {% for b in tier.benefits %}
+            <li>{{ b }}</li>
+            {% endfor %}
+          </ul>
+          {% if tier.details %}
+          <ul class="sp-tier-details list-unstyled">
+            {% for d in tier.details %}
+            <li>+ {{ d }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <div class="mt-3">
+            <a href="{{ calendly_sponsor_url }}" target="_blank"
+               class="btn btn-sm w-100 {% if tier.highlight %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+              Book a call
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if additional_options %}
+    <div class="text-center mt-4 sp-additional">
+      <strong>Additional options:</strong>
+      {{ additional_options | join(' &nbsp;·&nbsp; ') }}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{# ── Get in touch ────────────────────────────────────── #}
+<section class="sp-section" style="background:#fafafa;">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Get in touch</h2>
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+        <div class="calendly-inline-widget"
+             data-url="{{ calendly_sponsor_url }}"
+             style="min-width:320px;height:700px;"></div>
+        <script type="text/javascript"
+                src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        <div class="text-center mt-3">
+          <a href="{{ mailto }}" class="btn btn-secondary btn-lg">Or email us directly</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── Sister brands ───────────────────────────────────── #}
+<section style="padding:30px 0;border-top:1px solid #eee;">
+  <div class="container text-center sp-sisters">
+    <small class="text-muted d-block mb-2">Sister brands</small>
+    <a href="https://sreday.com" target="_blank">SREday</a>
+    <a href="https://devopsnotdead.com" target="_blank">DevOpsNotDead</a>
+    <a href="https://conf42.com" target="_blank">Conf42</a>
+  </div>
+</section>
+
+{% endblock %}
