@@ -7,10 +7,9 @@ tiers:
       small: 750
       medium: 1000
       large: 1000
-    tagline: "Capture all attendee contacts"
     benefits:
       - "Full attendee contact list post-event"
-      - "Must be combined with another tier"
+      - "Requires another sponsorship tier"
 
   - id: logo_swag
     name: "Logo + Swag"
@@ -19,11 +18,9 @@ tiers:
       small: 750
       medium: 1000
       large: 1500
-    tagline: "Website logo, mentions & swag distribution"
     benefits:
-      - "Logo on event website"
-      - "On-stage mentions"
-      - "Swag distribution to attendees"
+      - "Logo on website, mentions & on-stage"
+      - "Swag distribution to all attendees"
 
   - id: talk
     name: "Regular Talk Slot"
@@ -32,11 +29,9 @@ tiers:
       small: 1500
       medium: 2000
       large: 2500
-    tagline: "30' afternoon slot, may run alongside other tracks"
     benefits:
-      - "30-minute speaking slot"
+      - "30' afternoon slot, may run in parallel"
       - "Logo on event website"
-      - "On-stage mentions"
 
   - id: booth
     name: "Booth / Table"
@@ -45,12 +40,9 @@ tiers:
       small: 1500
       medium: 2000
       large: 3000
-    tagline: "Table, roll-up banner & monitor"
     benefits:
-      - "Exhibition table in networking area"
-      - "Roll-up banner space"
-      - "Monitor provided"
-      - "Logo on event website"
+      - "Table, roll-up banner & monitor"
+      - "Exhibition space in networking area"
 
   - id: keynote
     name: "Keynote Session"
@@ -59,117 +51,94 @@ tiers:
       small: 2500
       medium: 3000
       large: 5000
-    tagline: "30' morning slot, no parallel talks — 100% audience"
     benefits:
-      - "30-minute keynote speaking slot"
-      - "Full audience, no parallel tracks"
-      - "Logo on event website (featured)"
-      - "On-stage mentions"
+      - "30' morning slot, 100% audience — no parallel talks"
+      - "Featured logo placement & on-stage mentions"
 
   - id: food
     name: "Food & Drinks"
     highlight: false
     price_label: "£1,000 + £15pp"
-    tagline: "Happy hour, coffee, lunch or speaker dinner"
     benefits:
-      - "Your logo on all food & drink signage"
-      - "On-stage mentions"
-      - "Social media shoutout"
+      - "Happy hour, coffee, lunch or speaker dinner"
+      - "Your logo on signage & on-stage mention"
 
   - id: clothing
     name: "Clothing"
     highlight: false
     price_label: "£1,000 + £15–30pp"
-    tagline: "T-shirts, socks, hoodies or caps with your logo"
     benefits:
-      - "Your logo on wearable swag"
-      - "£15pp for t-shirts, £30pp for hoodies/caps"
-      - "On-stage mentions"
+      - "T-shirts, socks, hoodies or caps with your logo"
+      - "£15pp t-shirts · £30pp hoodies & caps"
 
   - id: tickets
     name: "Discounted Ticket Pack"
     highlight: false
     price_label: "20% off 5+ tickets"
-    tagline: "Vouchers for colleagues, clients & co-founders"
     benefits:
-      - "5 or more tickets at 20% discount"
+      - "5+ tickets at 20% off for colleagues & clients"
       - "Vouchers redeemable by anyone"
 
   - id: coffee_break
     name: "Coffee Break Naming Rights"
     highlight: false
     price_label: "On request"
-    tagline: "Your brand on the break everyone remembers"
     benefits:
-      - "Named coffee break at the event"
-      - "Logo on signage and cups"
-      - "On-stage mention"
+      - "Your brand on the break everyone remembers"
+      - "Logo on signage & on-stage mention"
 
   - id: lanyard
     name: "Lanyard Sponsorship"
     highlight: false
     price_label: "On request"
-    tagline: "Your logo around every attendee's neck all day"
     benefits:
-      - "Logo printed on all attendee lanyards"
+      - "Your logo around every attendee's neck all day"
       - "On-stage mention"
 
   - id: podcast
     name: "Podcast Episode"
     highlight: false
     price_label: "On request"
-    tagline: "Featured episode on the SREday podcast"
     benefits:
-      - "Dedicated podcast episode"
-      - "Promoted to full subscriber base"
+      - "Dedicated episode promoted to full subscriber base"
       - "Social media amplification"
 
   - id: email_blast
     name: "Email Blast"
     highlight: false
     price_label: "On request"
-    tagline: "Direct email to the full attendee list"
     benefits:
       - "One dedicated email to all attendees"
       - "Your copy, your CTA"
-      - "Sent post-event"
 
   - id: after_party
     name: "After-Party Co-Sponsorship"
     highlight: false
     price_label: "On request"
-    tagline: "Co-host the drinks after the talks"
     benefits:
-      - "Logo on all after-party communications"
-      - "On-stage mention"
-      - "Social media shoutout"
+      - "Co-host the drinks after the talks"
+      - "Logo on communications & on-stage mention"
 
   - id: meetup
     name: "Post-Conference Meetup"
     highlight: false
     price_label: "On request"
-    tagline: "Host a meetup off the back of the conference"
     benefits:
-      - "Your venue or ours"
+      - "Host a meetup off the back of the conference"
       - "Promoted to all attendees"
-      - "Logo on all communications"
 
   - id: hackathon
     name: "Hackathon Co-Sponsorship"
     highlight: false
     price_label: "On request"
-    tagline: "Co-sponsor a hands-on hackathon day"
     benefits:
-      - "Logo on all hackathon materials"
-      - "On-stage mention"
-      - "Social media amplification"
+      - "Co-sponsor a hands-on hackathon day"
+      - "Logo on materials & social amplification"
 
   - id: startup_discount
     name: "Startup Discount"
     highlight: false
     price_label: "20% off any tier"
-    tagline: "Early-stage startups under $5M in funding"
     benefits:
-      - "20% off any sponsorship opportunity"
-      - "For startups under $5M in funding"
+      - "Early-stage startups under $5M in funding"
       - "Contact us to apply"
