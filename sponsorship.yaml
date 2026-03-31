@@ -10,17 +10,6 @@ tiers:
     benefits:
       - "Full attendee contact list, shared pre/post"
 
-  - id: booth
-    name: "Booth / Table"
-    highlight: true
-    price:
-      small: 1000
-      medium: 2000
-      large: 4000
-    benefits:
-      - "Table (150 x 100cm) with a 24-inch monitor"
-      - "Electricity, Wifi, space for a rollup banner"
-
   - id: keynote
     name: "Keynote Session"
     highlight: false
@@ -41,7 +30,18 @@ tiers:
       large: 2000
     benefits:
       - "30-minute afternoon slot"
-      - "May run with parallel tracks"
+      - "May run alongside parallel tracks"
+
+  - id: booth
+    name: "Booth / Table"
+    highlight: true
+    price:
+      small: 1000
+      medium: 2000
+      large: 4000
+    benefits:
+      - "Table (150 × 100cm) with a 24-inch monitor"
+      - "Electricity, Wi-Fi, space for a rollup banner"
 
   - id: logo_swag
     name: "Website Sponsor + Swag"
@@ -52,22 +52,22 @@ tiers:
       large: 1000
     benefits:
       - "Logo on website, on-stage mention"
-      - "Swag distribution to all attendees"
+      - "Swag distributed to all attendees"
 
   - id: food
-    name: "Breakfast / Coffee / Lunch / Happy Hour"
+    name: "Food & Beverages"
     highlight: false
-    price_label: "£1000 fee + £15 pp"
+    price_label: "£1000 + £15pp"
     benefits:
       - "Microphone time before the break"
-      - "Distributing your swag along food & beverages"
+      - "Distribute your swag alongside food & drinks"
 
   - id: clothing
     name: "Branded Wearables"
     highlight: false
-    price_label: "£1000 fee + variable"
+    price_label: "£1000 + variable"
     benefits:
-      - "T-shirts, socks, hoodies or caps with your big logo"
+      - "T-shirts, socks, hoodies or caps with your logo"
       - "£10–£30 per person, depending on the item"
 
   - id: tickets
@@ -75,7 +75,7 @@ tiers:
     highlight: false
     price_label: "20% off 5+ tickets"
     benefits:
-      - "Cheaper tickets when 5+ are purchased"
+      - "Buy 5 or more tickets at 20% off"
       - "Vouchers redeemable by anyone"
 
   - id: startup_discount
@@ -117,4 +117,3 @@ tiers:
     name: "Attendee Email Blast"
     highlight: false
     price_label: "On request"
-
