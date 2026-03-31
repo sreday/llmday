@@ -4,7 +4,7 @@ tiers:
     highlight: false
     requires: "Requires another sponsorship tier"
     price:
-      small: 1000
+      small: 500
       medium: 1000
       large: 1000
     benefits:
@@ -15,7 +15,7 @@ tiers:
     name: "Booth / Table"
     highlight: true
     price:
-      small: 500
+      small: 1000
       medium: 2000
       large: 4000
     benefits:
@@ -37,7 +37,7 @@ tiers:
     name: "Regular Session Slot"
     highlight: false
     price:
-      small: 1500
+      small: 500
       medium: 2000
       large: 2000
     benefits:
