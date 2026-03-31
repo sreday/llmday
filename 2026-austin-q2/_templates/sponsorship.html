@@ -114,51 +114,6 @@
 
 {% block content %}
 
-{# ── Hero ────────────────────────────────────────────── #}
-<section class="sp-hero">
-  <div class="container text-center">
-    <div class="sp-badge-noindex">🔒 Not indexed on Google</div>
-    <h1 class="text-white mb-2" style="font-size:2.4rem;font-weight:800;">
-      Sponsor {{ brand_name }} {{ location_string }}
-    </h1>
-    <p class="text-white mb-4" style="font-size:1.1rem;opacity:.85;">
-      {{ date_string }} &nbsp;·&nbsp; {{ venue_name }}
-    </p>
-    <a href="{{ calendly_sponsor_url }}" target="_blank" class="btn btn-lg me-2"
-       style="background:#fff;color:var(--sp-accent);font-weight:700;">
-      📅 Book a call
-    </a>
-    <a href="{{ mailto }}" class="btn btn-lg"
-       style="background:transparent;border:2px solid #fff;color:#fff;font-weight:700;">
-      ✉ Email us
-    </a>
-  </div>
-</section>
-
-{# ── Stats bar ───────────────────────────────────────── #}
-<div class="sp-stat-bar text-center">
-  <div class="container">
-    <div class="row">
-      <div class="col-6 col-md-3">
-        <div class="number">{{ attendees }}</div>
-        <div class="unit">Attendees</div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="number">{{ talk_count }}</div>
-        <div class="unit">Talks</div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="number">{{ past_editions }}</div>
-        <div class="unit">Past editions here</div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="number">{{ days }}</div>
-        <div class="unit">Day{{ 's' if days != 1 else '' }}</div>
-      </div>
-    </div>
-  </div>
-</div>
-
 {# ── Past keynote speakers ───────────────────────────── #}
 {% if past_keynotes %}
 <section class="sp-section" style="background:#fafafa;">
