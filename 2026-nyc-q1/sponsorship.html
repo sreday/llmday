@@ -115,6 +115,64 @@
   font-weight: 500;
 }
 
+/* Custom / on-request catch-all card */
+.sp-custom-card {
+  border-radius: 12px;
+  padding: 36px 32px;
+  background: #1c2a22;
+  border: 1px solid rgba(38,152,106,.3);
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.sp-custom-card-left {
+  flex: 0 0 230px;
+  padding-right: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sp-custom-card-left h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.sp-custom-card-left .sp-custom-subtitle {
+  font-size: 1rem;
+  color: #7bc49a;
+  margin-bottom: 0;
+}
+.sp-custom-divider {
+  width: 1px;
+  background: rgba(38,152,106,.3);
+  flex-shrink: 0;
+  margin: 0 32px;
+}
+.sp-custom-ideas {
+  flex: 1;
+  min-width: 200px;
+  list-style: none;
+  padding: 0;
+  margin: auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 32px;
+  align-content: center;
+}
+.sp-custom-ideas li {
+  font-size: .9rem;
+  color: #d0d0d0;
+  padding: 4px 0;
+}
+.sp-custom-ideas li::before {
+  content: "✓ ";
+  color: var(--sp-accent);
+  font-weight: 700;
+}
+
 /* Pricing cards */
 .sp-tier-card {
   border: 1px solid #e5e7eb;
@@ -447,7 +505,6 @@
           <div class="sp-tier-price">
             <sup>£</sup>1,000
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>Full attendee contact list post-event</li>
@@ -465,7 +522,6 @@
           <div class="sp-tier-price">
             <sup>£</sup>1,000
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>Logo on website, mentions & on-stage</li>
@@ -483,7 +539,6 @@
           <div class="sp-tier-price">
             <sup>£</sup>2,000
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>30' afternoon slot, may run in parallel</li>
@@ -501,7 +556,6 @@
           <div class="sp-tier-price">
             <sup>£</sup>2,000
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>Table, roll-up banner & monitor</li>
@@ -521,7 +575,6 @@
           <div class="sp-tier-price">
             <sup>£</sup>3,000
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>30' morning slot, 100% audience — no parallel talks</li>
@@ -539,7 +592,6 @@
           <div class="sp-tier-price">
             £1,000 + £15pp
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>Happy hour, coffee, lunch or speaker dinner</li>
@@ -557,7 +609,6 @@
           <div class="sp-tier-price">
             £1,000 + £15–30pp
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>T-shirts, socks, hoodies or caps with your logo</li>
@@ -575,7 +626,6 @@
           <div class="sp-tier-price">
             20% off 5+ tickets
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>5+ tickets at 20% off for colleagues & clients</li>
@@ -589,142 +639,43 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card ">
           
-          <div class="sp-tier-name">Coffee Break Naming Rights</div>
-          <div class="sp-tier-price">
-            On request
-          </div>
-          
-          <ul class="sp-tier-benefits">
-            
-            <li>Your brand on the break everyone remembers</li>
-            
-            <li>Logo on signage & on-stage mention</li>
-            
-          </ul>
-        </div>
-      </div>
-      
-      <div class="col-12 col-md-4">
-        <div class="sp-tier-card ">
-          
-          <div class="sp-tier-name">Lanyard Sponsorship</div>
-          <div class="sp-tier-price">
-            On request
-          </div>
-          
-          <ul class="sp-tier-benefits">
-            
-            <li>Your logo around every attendee's neck all day</li>
-            
-            <li>On-stage mention</li>
-            
-          </ul>
-        </div>
-      </div>
-      
-      <div class="col-12 col-md-4">
-        <div class="sp-tier-card ">
-          
-          <div class="sp-tier-name">Podcast Episode</div>
-          <div class="sp-tier-price">
-            On request
-          </div>
-          
-          <ul class="sp-tier-benefits">
-            
-            <li>Dedicated episode promoted to full subscriber base</li>
-            
-            <li>Social media amplification</li>
-            
-          </ul>
-        </div>
-      </div>
-      
-      <div class="col-12 col-md-4">
-        <div class="sp-tier-card ">
-          
-          <div class="sp-tier-name">Email Blast</div>
-          <div class="sp-tier-price">
-            On request
-          </div>
-          
-          <ul class="sp-tier-benefits">
-            
-            <li>One dedicated email to all attendees</li>
-            
-            <li>Your copy, your CTA</li>
-            
-          </ul>
-        </div>
-      </div>
-      
-      <div class="col-12 col-md-4">
-        <div class="sp-tier-card ">
-          
-          <div class="sp-tier-name">After-Party Co-Sponsorship</div>
-          <div class="sp-tier-price">
-            On request
-          </div>
-          
-          <ul class="sp-tier-benefits">
-            
-            <li>Co-host the drinks after the talks</li>
-            
-            <li>Logo on communications & on-stage mention</li>
-            
-          </ul>
-        </div>
-      </div>
-      
-      <div class="col-12 col-md-4">
-        <div class="sp-tier-card ">
-          
-          <div class="sp-tier-name">Post-Conference Meetup</div>
-          <div class="sp-tier-price">
-            On request
-          </div>
-          
-          <ul class="sp-tier-benefits">
-            
-            <li>Host a meetup off the back of the conference</li>
-            
-            <li>Promoted to all attendees</li>
-            
-          </ul>
-        </div>
-      </div>
-      
-      <div class="col-12 col-md-4">
-        <div class="sp-tier-card ">
-          
-          <div class="sp-tier-name">Hackathon Co-Sponsorship</div>
-          <div class="sp-tier-price">
-            On request
-          </div>
-          
-          <ul class="sp-tier-benefits">
-            
-            <li>Co-sponsor a hands-on hackathon day</li>
-            
-            <li>Logo on materials & social amplification</li>
-            
-          </ul>
-        </div>
-      </div>
-      
-      <div class="col-12 col-md-4">
-        <div class="sp-tier-card ">
-          
           <div class="sp-tier-name">Startup Discount</div>
           <div class="sp-tier-price">
             20% off any tier
           </div>
-          
           <ul class="sp-tier-benefits">
             
             <li>Early-stage startups under $5M in funding</li>
             
             <li>Contact us to apply</li>
+            
+          </ul>
+        </div>
+      </div>
+      
+      
+      <div class="col-12">
+        <div class="sp-custom-card">
+          <div class="sp-custom-card-left">
+            <h3>Something else in mind?</h3>
+            <p class="sp-custom-subtitle">Let's figure it out together.</p>
+          </div>
+          <div class="sp-custom-divider"></div>
+          <ul class="sp-custom-ideas">
+            
+            <li>Coffee Break Naming Rights</li>
+            
+            <li>Lanyard Sponsorship</li>
+            
+            <li>Podcast Episode</li>
+            
+            <li>Email Blast</li>
+            
+            <li>After-Party Co-Sponsorship</li>
+            
+            <li>Post-Conference Meetup</li>
+            
+            <li>Hackathon Co-Sponsorship</li>
             
           </ul>
         </div>
