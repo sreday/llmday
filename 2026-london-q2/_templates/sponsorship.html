@@ -241,15 +241,9 @@ function showAllKeynotes(el) {
   <div class="container">
     <h2 class="sp-section-title text-center">Get in touch</h2>
     <div class="row justify-content-center">
-      <div class="col-12 col-lg-8">
-        <div class="calendly-inline-widget"
-             data-url="{{ calendly_sponsor_url }}"
-             style="min-width:320px;height:700px;"></div>
-        <script type="text/javascript"
-                src="https://assets.calendly.com/assets/external/widget.js" async></script>
-        <div class="text-center mt-3">
-          <a href="{{ mailto }}" class="btn btn-secondary btn-lg">Or email us directly</a>
-        </div>
+      <div class="col-12 col-lg-8 text-center">
+        <a href="{{ calendly_sponsor_url }}" target="_blank" class="btn btn-secondary btn-lg me-2">📅 Book a call</a>
+        <a href="{{ mailto }}" class="btn btn-primary btn-lg">✉ Email us directly</a>
       </div>
     </div>
   </div>

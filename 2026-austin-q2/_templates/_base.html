@@ -149,8 +149,8 @@
 			<div class="hero-text-block text-center" style="max-width: 100%;">
 				{% if logo_image %}<h1 class="logo retro"><img src="{{ logo_image }}" alt="{{ brand_name }}" style="max-width: 350px; height: auto;" /></h1>{% else %}<h1 class="logo retro"><img src="/assets/LLMday Sticker.png" alt="LLMday" style="height: 200px;"></h1>{% endif %}
 				{% if noindex %}
-				<div style="display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:999px;margin-bottom:1.2rem;">🔒 Not indexed on Google</div>
 				<h2 class="text-white">Sponsor {{ brand_name }} {{ city_name }}</h2>
+				<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>{{ date_string }} <i class="fas fa-map-marker-alt mx-2"></i>{{ location_string }}</h3>
 				<div class="hero-cta mt-5">
 					<a class="btn btn-secondary btn-lg" href="{{ calendly_sponsor_url }}" target="_blank">📅 Book a call</a>
 					<a class="btn btn-primary btn-lg" href="{{ mailto }}">✉ Email us</a>
@@ -170,7 +170,7 @@
 
 	</div><!--//hero-block-->
 
-	{% if not noindex %}<div class="stats-block theme-bg-primary text-white py-4 text-center">
+	<div class="stats-block theme-bg-primary text-white py-4 text-center">
 		<div class="container">
 			<div class="row">
 				<div class="col-6 col-md-3">
@@ -199,7 +199,7 @@
 				</div><!--//col-->
 			</div>
 		</div><!--//container-->
-	</div><!--//stats-block-->{% endif %}
+	</div><!--//stats-block-->
 
 
 <!-- CONTENT -->
