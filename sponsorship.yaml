@@ -44,14 +44,14 @@ tiers:
       - "Electricity, Wi-Fi, space for a rollup banner"
 
   - id: logo_swag
-    name: "Website Sponsor + Swag"
+    name: "Logo Sponsor + Swag Distribution"
     highlight: false
     price:
       small: 500
       medium: 1000
       large: 1000
     benefits:
-      - "Logo on website, on-stage mention"
+      - "Logo on the website, on-stage mention"
       - "Swag distributed to all attendees"
 
   - id: food
@@ -59,7 +59,7 @@ tiers:
     highlight: false
     price_label: "£1000 + £15pp"
     benefits:
-      - "Microphone time before the break"
+      - "Microphone time before the selected break"
       - "Distribute your swag alongside food & drinks"
 
   - id: clothing
