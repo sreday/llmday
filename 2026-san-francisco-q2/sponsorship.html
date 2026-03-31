@@ -229,6 +229,8 @@
   height: 100%;
   position: relative;
   color: #d0d0d0;
+  display: flex;
+  flex-direction: column;
 }
 .sp-tier-card.sp-tier-highlight {
   border-color: var(--sp-accent);
@@ -250,17 +252,19 @@
 }
 .sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
 .sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; }
-.sp-tier-benefits { list-style: none; padding: 0; margin: 16px 0 12px; }
+.sp-tier-body     { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.sp-tier-benefits { list-style: none; padding: 0; margin: 0 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
 .sp-tier-benefits li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
 .sp-tier-requires {
   font-size: .9rem;
   color: #f5d800;
   margin-top: 8px;
-  padding: 6px 10px 6px 0;
+  padding: 6px 10px;
   background: rgba(245,216,0,.1);
   border: 1px solid rgba(245,216,0,.3);
   border-radius: 6px;
+  text-align: center;
 }
 
 /* ── Get in touch / CTA buttons ──────────────────────── */
@@ -478,16 +482,18 @@
           <div class="sp-tier-price">
             £1000
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>Full attendee contact list, shared before & after</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>Full attendee contact list, shared before & after</li>
+              
+            </ul>
             
-          </ul>
-          
-          
-          <div class="sp-tier-requires">⚠ Cannot be purchased solo</div>
-          
+            
+            <div class="sp-tier-requires">⚠ Cannot be purchased solo ⚠</div>
+            
+          </div>
         </div>
       </div>
       
@@ -498,16 +504,18 @@
           <div class="sp-tier-price">
             £3000
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>30-minute morning slot</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>30-minute morning slot</li>
+              
+              <li>100% audience — no parallel talks</li>
+              
+            </ul>
             
-            <li>100% audience — no parallel talks</li>
             
-          </ul>
-          
-          
+          </div>
         </div>
       </div>
       
@@ -518,16 +526,18 @@
           <div class="sp-tier-price">
             £2000
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>30-minute afternoon slot</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>30-minute afternoon slot</li>
+              
+              <li>May run alongside parallel tracks</li>
+              
+            </ul>
             
-            <li>May run alongside parallel tracks</li>
             
-          </ul>
-          
-          
+          </div>
         </div>
       </div>
       
@@ -538,16 +548,18 @@
           <div class="sp-tier-price">
             £2000
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>Table (150 × 100cm) with a 24-inch monitor</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>Table (150 × 100cm) with a 24-inch monitor</li>
+              
+              <li>Electricity, Wi-Fi, space for a rollup banner</li>
+              
+            </ul>
             
-            <li>Electricity, Wi-Fi, space for a rollup banner</li>
             
-          </ul>
-          
-          
+          </div>
         </div>
       </div>
       
@@ -558,16 +570,18 @@
           <div class="sp-tier-price">
             £1000
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>Logo on website, on-stage mention</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>Logo on website, on-stage mention</li>
+              
+              <li>Swag distributed to all attendees</li>
+              
+            </ul>
             
-            <li>Swag distributed to all attendees</li>
             
-          </ul>
-          
-          
+          </div>
         </div>
       </div>
       
@@ -578,16 +592,18 @@
           <div class="sp-tier-price">
             £1000 + £15pp
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>Microphone time before the break</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>Microphone time before the break</li>
+              
+              <li>Distribute your swag alongside food & drinks</li>
+              
+            </ul>
             
-            <li>Distribute your swag alongside food & drinks</li>
             
-          </ul>
-          
-          
+          </div>
         </div>
       </div>
       
@@ -598,16 +614,18 @@
           <div class="sp-tier-price">
             £1000 + variable
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>T-shirts, socks, hoodies or caps with your logo</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>T-shirts, socks, hoodies or caps with your logo</li>
+              
+              <li>£10–£30 per person, depending on the item</li>
+              
+            </ul>
             
-            <li>£10–£30 per person, depending on the item</li>
             
-          </ul>
-          
-          
+          </div>
         </div>
       </div>
       
@@ -618,16 +636,18 @@
           <div class="sp-tier-price">
             20% off 5+ tickets
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>Buy 5 or more tickets at 20% off</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>Buy 5 or more tickets at 20% off</li>
+              
+              <li>Vouchers redeemable by anyone</li>
+              
+            </ul>
             
-            <li>Vouchers redeemable by anyone</li>
             
-          </ul>
-          
-          
+          </div>
         </div>
       </div>
       
@@ -638,16 +658,18 @@
           <div class="sp-tier-price">
             20% off anything
           </div>
-          
-          <ul class="sp-tier-benefits">
+          <div class="sp-tier-body">
             
-            <li>Early-stage startups under $5M in funding</li>
+            <ul class="sp-tier-benefits">
+              
+              <li>Early-stage startups under $5M in funding</li>
+              
+              <li>Contact us to apply</li>
+              
+            </ul>
             
-            <li>Contact us to apply</li>
             
-          </ul>
-          
-          
+          </div>
         </div>
       </div>
       
