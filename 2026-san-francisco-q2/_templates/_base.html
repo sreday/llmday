@@ -176,25 +176,25 @@
 				<div class="col-6 col-md-3">
 					<div class="item">
 						<div class="number">{{ days }}</div>
-						<div class="unit">Days</div>
+						<div class="unit">{{ "Day" if days == 1 else "Days" }}</div>
 					</div><!--//item-->
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
 					<div class="item">
 						<div class="number">{{ speakers }}</div>
-						<div class="unit">Speakers</div>
+						<div class="unit">{{ "Speaker" if speakers == 1 else "Speakers" }}</div>
 					</div><!--//item-->
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
 					<div class="item">
 						<div class="number">{{ tracks | length }}</div>
-						<div class="unit">Tracks</div>
+						<div class="unit">{{ "Track" if tracks | length == 1 else "Tracks" }}</div>
 					</div><!--//item-->
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
 					<div class="item">
 						<div class="number">{{ attendees }}</div>
-						<div class="unit">Attendees</div>
+						<div class="unit">{{ "Attendee" if attendees == 1 else "Attendees" }}</div>
 					</div><!--//item-->
 				</div><!--//col-->
 			</div>
