@@ -150,6 +150,61 @@
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; }
 .sp-tier-benefits li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
 
+/* ── Dark mode (content only — hero/stats/nav/footer unaffected) ── */
+#sp-dark-body {
+  background: #111;
+  color: #d0d0d0;
+}
+#sp-dark-body .sp-section     { background: #111; }
+#sp-dark-body .sp-section-alt { background: #1a1a1a; }
+#sp-dark-body .sp-section-title { color: #fff; }
+
+#sp-dark-body .sp-speaker-card .name { color: #e5e5e5; }
+#sp-dark-body .sp-speaker-card .org  { color: #888; }
+
+#sp-dark-body .sp-company-rank     { color: #666; }
+#sp-dark-body .sp-company-name     { color: #e5e5e5; }
+#sp-dark-body .sp-company-count    { color: #888; }
+#sp-dark-body .sp-company-bar-wrap { background: #2a2a2a; }
+
+#sp-dark-body .sp-pill {
+  background: #1a2e24;
+  color: var(--sp-accent);
+  border-color: rgba(38,152,106,.35);
+}
+
+#sp-dark-body .sp-tier-card {
+  background: #1a1a1a;
+  border-color: rgba(255,255,255,.08);
+  color: #d0d0d0;
+}
+#sp-dark-body .sp-tier-card.sp-tier-highlight {
+  border-color: var(--sp-accent);
+  box-shadow: 0 4px 24px rgba(38,152,106,.2);
+}
+#sp-dark-body .sp-tier-name    { color: #fff; }
+#sp-dark-body .sp-tier-price   { color: #fff; }
+#sp-dark-body .sp-tier-tagline { color: #aaa; }
+#sp-dark-body .sp-tier-benefits li { color: #d0d0d0; }
+
+#sp-dark-body .btn-outline-secondary {
+  color: #ccc;
+  border-color: rgba(255,255,255,.3);
+}
+#sp-dark-body .btn-outline-secondary:hover {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border-color: rgba(255,255,255,.5);
+}
+
+#sp-dark-body .sp-sisters-section {
+  padding: 30px 0;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+#sp-dark-body .sp-sisters a       { color: #888; }
+#sp-dark-body .sp-sisters a:hover { color: var(--sp-accent); }
+#sp-dark-body .text-muted         { color: #555 !important; }
+
 /* Sister brands */
 .sp-sisters a { color: #555; text-decoration: none; margin: 0 12px; font-weight: 600; }
 .sp-sisters a:hover { color: var(--sp-accent); }
@@ -325,6 +380,7 @@
 
 <!-- CONTENT -->
 
+<div id="sp-dark-body">
 
 
 
@@ -364,7 +420,7 @@
 
 
 
-<section class="sp-section" style="background:#fafafa;">
+<section class="sp-section sp-section-alt">
   <div class="container text-center">
     <h2 class="sp-section-title">Companies that have sponsored here</h2>
     <div>
@@ -805,7 +861,7 @@
 </section>
 
 
-<section class="sp-section" style="background:#fafafa;">
+<section class="sp-section sp-section-alt">
   <div class="container">
     <h2 class="sp-section-title text-center">Get in touch</h2>
     <div class="row justify-content-center">
@@ -818,7 +874,7 @@
 </section>
 
 
-<section style="padding:30px 0;border-top:1px solid #eee;">
+<section class="sp-sisters-section">
   <div class="container text-center sp-sisters">
     <small class="text-muted d-block mb-2">Sister brands</small>
     <a href="https://sreday.com" target="_blank">SREday</a>
@@ -827,6 +883,7 @@
   </div>
 </section>
 
+</div><!-- /#sp-dark-body -->
 
 
 
