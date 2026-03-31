@@ -31,12 +31,22 @@
 .sp-section { padding: 60px 0; }
 .sp-section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; }
 
-/* Sponsor pills */
+/* ── Dark body ───────────────────────────────────────── */
+#sp-dark-body {
+  background: #111;
+  color: #d0d0d0;
+}
+#sp-dark-body .sp-section     { background: #111; }
+#sp-dark-body .sp-section-alt { background: #0d0d0d; }
+#sp-dark-body .sp-section-title { color: #fff; }
+#sp-dark-body .sp-gbp-note    { color: #666; }
+
+/* ── Sponsor pills ───────────────────────────────────── */
 .sp-pill {
   display: inline-block;
-  background: #f0faf5;
+  background: #1a2e24;
   color: var(--sp-accent);
-  border: 1px solid #a7d9bf;
+  border: 1px solid rgba(38,152,106,.35);
   border-radius: 999px;
   padding: 4px 14px;
   font-size: .82rem;
@@ -45,7 +55,7 @@
   text-decoration: none;
 }
 
-/* ── Conference stats toggle button ──────────────────── */
+/* ── Stats toggle button ─────────────────────────────── */
 .btn-stats {
   display: inline-flex;
   align-items: center;
@@ -67,7 +77,7 @@
 .btn-stats-chevron { transition: transform .3s ease; }
 .btn-stats.open .btn-stats-chevron { transform: rotate(180deg); }
 
-/* ── Conference stats panel ───────────────────────────── */
+/* ── Stats expandable panel (intentionally white) ────── */
 .sp-stats-panel {
   overflow: hidden;
   max-height: 0;
@@ -91,7 +101,6 @@
   border-top: 1px solid #e5e7eb;
   margin: 28px 0;
 }
-/* Speaker grid */
 .sp-stats-speakers {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
@@ -99,23 +108,21 @@
 }
 .sp-stats-speaker-name { font-size: .88rem; font-weight: 500; color: #222; }
 .sp-stats-speaker-org  { font-size: .78rem; color: #999; }
-/* Company bar chart */
 .sp-stats-co-row   { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .sp-stats-co-rank  { width: 20px; text-align: right; color: #bbb; font-size: .8rem; flex-shrink: 0; }
 .sp-stats-co-name  { font-size: .88rem; color: #333; min-width: 120px; }
 .sp-stats-co-bars  { flex: 1; background: #f0f0f0; border-radius: 4px; height: 6px; overflow: hidden; }
 .sp-stats-co-bar   { height: 100%; background: var(--sp-accent); border-radius: 4px; }
 .sp-stats-co-count { font-size: .8rem; color: #aaa; min-width: 24px; text-align: right; }
-.sp-stats-empty { color: #999; font-size: .9rem; margin: 0; }
-
-/* Pills inside white panel must override the dark-body pill rule */
+.sp-stats-empty    { color: #999; font-size: .9rem; margin: 0; }
+/* Pills inside white panel override the dark pill rule */
 #sp-dark-body .sp-stats-inner .sp-pill {
   background: #f0faf5;
   color: var(--sp-accent);
   border-color: #a7d9bf;
 }
 
-/* Custom / on-request catch-all card */
+/* ── Custom / on-request card ────────────────────────── */
 .sp-custom-card {
   border-radius: 12px;
   padding: 36px 32px;
@@ -165,18 +172,19 @@
 .sp-custom-ideas li { font-size: .9rem; color: #d0d0d0; padding: 4px 0; }
 .sp-custom-ideas li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
 
-/* Pricing cards */
+/* ── Pricing cards ───────────────────────────────────── */
 .sp-tier-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(255,255,255,.08);
   border-radius: 12px;
   padding: 32px 24px;
-  background: #fff;
+  background: #1e1e1e;
   height: 100%;
   position: relative;
+  color: #d0d0d0;
 }
 .sp-tier-card.sp-tier-highlight {
   border-color: var(--sp-accent);
-  box-shadow: 0 4px 24px rgba(38,152,106,.12);
+  box-shadow: 0 4px 24px rgba(38,152,106,.2);
 }
 .sp-popular-badge {
   position: absolute;
@@ -192,41 +200,14 @@
   border-radius: 999px;
   white-space: nowrap;
 }
-.sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
-.sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: var(--sp-accent); }
+.sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
+.sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; }
 .sp-tier-price sup { font-size: 1.1rem; vertical-align: super; }
 .sp-tier-benefits { list-style: none; padding: 0; margin: 16px 0 12px; }
-.sp-tier-benefits li { padding: 5px 0; font-size: .9rem; }
+.sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
 .sp-tier-benefits li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
 
-/* ── Dark mode (content only — hero/stats/nav/footer unaffected) ── */
-#sp-dark-body {
-  background: #111;
-  color: #d0d0d0;
-}
-#sp-dark-body .sp-section     { background: #111; }
-#sp-dark-body .sp-section-alt { background: #1a1a1a; }
-#sp-dark-body .sp-section-title { color: #fff; }
-
-#sp-dark-body .sp-pill {
-  background: #1a2e24;
-  color: var(--sp-accent);
-  border-color: rgba(38,152,106,.35);
-}
-
-#sp-dark-body .sp-tier-card {
-  background: #1a1a1a;
-  border-color: rgba(255,255,255,.08);
-  color: #d0d0d0;
-}
-#sp-dark-body .sp-tier-card.sp-tier-highlight {
-  border-color: var(--sp-accent);
-  box-shadow: 0 4px 24px rgba(38,152,106,.2);
-}
-#sp-dark-body .sp-tier-name  { color: #fff; }
-#sp-dark-body .sp-tier-price { color: #fff; }
-#sp-dark-body .sp-tier-benefits li { color: #d0d0d0; }
-
+/* ── Get in touch / CTA buttons ──────────────────────── */
 #sp-dark-body .btn-outline-secondary {
   color: #ccc;
   border-color: rgba(255,255,255,.3);
@@ -237,6 +218,7 @@
   border-color: rgba(255,255,255,.5);
 }
 
+/* ── Sister brands ───────────────────────────────────── */
 #sp-dark-body .sp-sisters-section {
   padding: 30px 0;
   border-top: 1px solid rgba(255,255,255,.08);
@@ -244,8 +226,6 @@
 #sp-dark-body .sp-sisters a       { color: #888; }
 #sp-dark-body .sp-sisters a:hover { color: var(--sp-accent); }
 #sp-dark-body .text-muted         { color: #555 !important; }
-
-/* Sister brands */
 .sp-sisters a { color: #555; text-decoration: none; margin: 0 12px; font-weight: 600; }
 .sp-sisters a:hover { color: var(--sp-accent); }
 </style>
@@ -254,15 +234,11 @@
 {% block content %}
 <div id="sp-dark-body">
 
-{# ── Conference stats button placeholder — rendered after pricing section ── #}
-{# (section appears below the "Something else in mind?" card) #}
-      <div class="sp-stats-inner">
-
 {# ── Pricing tiers ───────────────────────────────────── #}
 <section class="sp-section">
   <div class="container">
     <h2 class="sp-section-title text-center">Sponsorship opportunities</h2>
-    <p class="text-center" style="font-size:.8rem;color:#888;margin-top:-.8rem;margin-bottom:1.5rem;">Pricing in GBP — British Pound Sterling</p>
+    <p class="sp-gbp-note text-center" style="font-size:.8rem;margin-top:-.8rem;margin-bottom:1.5rem;">Pricing in GBP — British Pound Sterling</p>
     <div class="row justify-content-center g-4 mt-2">
       {% for tier in sponsorship_tiers %}
       <div class="col-12 col-md-4">
@@ -302,7 +278,7 @@
   </div>
 </section>
 
-{# ── Conference stats button + expandable panel ──────────── #}
+{# ── Conference stats button + expandable panel ──────── #}
 <section class="sp-section" style="padding-top: 0; padding-bottom: 40px;">
   <div class="container">
     <div class="text-center">
