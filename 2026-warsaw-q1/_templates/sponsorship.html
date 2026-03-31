@@ -67,6 +67,64 @@
   font-weight: 500;
 }
 
+/* Custom / on-request catch-all card */
+.sp-custom-card {
+  border-radius: 12px;
+  padding: 36px 32px;
+  background: #1c2a22;
+  border: 1px solid rgba(38,152,106,.3);
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.sp-custom-card-left {
+  flex: 0 0 230px;
+  padding-right: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sp-custom-card-left h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.sp-custom-card-left .sp-custom-subtitle {
+  font-size: 1rem;
+  color: #7bc49a;
+  margin-bottom: 0;
+}
+.sp-custom-divider {
+  width: 1px;
+  background: rgba(38,152,106,.3);
+  flex-shrink: 0;
+  margin: 0 32px;
+}
+.sp-custom-ideas {
+  flex: 1;
+  min-width: 200px;
+  list-style: none;
+  padding: 0;
+  margin: auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 32px;
+  align-content: center;
+}
+.sp-custom-ideas li {
+  font-size: .9rem;
+  color: #d0d0d0;
+  padding: 4px 0;
+}
+.sp-custom-ideas li::before {
+  content: "✓ ";
+  color: var(--sp-accent);
+  font-weight: 700;
+}
+
 /* Pricing cards */
 .sp-tier-card {
   border: 1px solid #e5e7eb;
@@ -257,7 +315,6 @@ function showAllKeynotes(el) {
           <div class="sp-tier-price">
             {% if tier.price_label %}{{ tier.price_label }}{% else %}<sup>£</sup>{{ "{:,}".format(tier.price[event_size]) }}{% endif %}
           </div>
-          {% if tier.tagline %}<div class="sp-tier-tagline">{{ tier.tagline }}</div>{% endif %}
           <ul class="sp-tier-benefits">
             {% for b in tier.benefits %}
             <li>{{ b }}</li>
@@ -266,6 +323,22 @@ function showAllKeynotes(el) {
         </div>
       </div>
       {% endfor %}
+      {% if on_request_tiers %}
+      <div class="col-12">
+        <div class="sp-custom-card">
+          <div class="sp-custom-card-left">
+            <h3>Something else in mind?</h3>
+            <p class="sp-custom-subtitle">Let's figure it out together.</p>
+          </div>
+          <div class="sp-custom-divider"></div>
+          <ul class="sp-custom-ideas">
+            {% for tier in on_request_tiers %}
+            <li>{{ tier.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 </section>

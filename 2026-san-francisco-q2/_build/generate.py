@@ -269,7 +269,9 @@ if _os.path.exists(_home_meta_path):
             _event_size = _he.get('size', _event_size)
             break
 
-_sponsorship_tiers = _sponsorship_config.get('tiers', [])
+_all_tiers          = _sponsorship_config.get('tiers', [])
+_sponsorship_tiers  = [t for t in _all_tiers if t.get('price_label') != 'On request']
+_on_request_tiers   = [t for t in _all_tiers if t.get('price_label') == 'On request']
 _additional_options = _sponsorship_config.get('additional_options', [])
 
 print(f"  City slug: {_city_slug}")
@@ -287,6 +289,7 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         past_editions=_past_editions,
         talk_count=_talk_count,
         sponsorship_tiers=_sponsorship_tiers,
+        on_request_tiers=_on_request_tiers,
         additional_options=_additional_options,
         **{**context, 'event_size': _event_size}
     ))
