@@ -245,7 +245,7 @@
     </div>
 
 {% for day in range(days) %}
-    <h4 class="section-heading text-center mb-5">Day {{ day + 1 }}</h4>
+    {% if days > 1 %}<h4 class="section-heading text-center mb-5">Day {{ day + 1 }}</h4>{% endif %}
 
     <!-- Track navigation -->
     <div class="track-nav">
