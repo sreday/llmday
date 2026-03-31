@@ -279,11 +279,17 @@
   padding: 30px 0;
   border-top: 1px solid rgba(255,255,255,.08);
 }
-#sp-dark-body .sp-sisters a       { color: #888; }
-#sp-dark-body .sp-sisters a:hover { color: var(--sp-accent); }
-#sp-dark-body .text-muted         { color: #555 !important; }
-.sp-sisters a { color: #555; text-decoration: none; margin: 0 12px; font-weight: 600; }
-.sp-sisters a:hover { color: var(--sp-accent); }
+#sp-dark-body .text-muted { color: #555 !important; }
+.sp-sisters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.sp-sisters a { display: inline-flex; text-decoration: none; opacity: .85; transition: opacity .2s; }
+.sp-sisters a:hover { opacity: 1; }
+.sp-sisters img { height: 56px; width: auto; border-radius: 8px; display: block; }
 </style>
 
 </head>
@@ -909,11 +915,19 @@ function spToggleStats() {
 
 
 <section class="sp-sisters-section">
-  <div class="container text-center sp-sisters">
-    <small class="text-muted d-block mb-2">Sister brands</small>
-    <a href="https://sreday.com" target="_blank">SREday</a>
-    <a href="https://devopsnotdead.com" target="_blank">DevOpsNotDead</a>
-    <a href="https://conf42.com" target="_blank">Conf42</a>
+  <div class="container">
+    <small class="text-muted d-block text-center mb-3">Sister brands</small>
+    <div class="sp-sisters">
+      <a href="https://sreday.com" target="_blank" rel="noopener noreferrer">
+        <img src="/assets/images/sreday_sticker.png" alt="SREday">
+      </a>
+      <a href="https://devopsnotdead.com" target="_blank" rel="noopener noreferrer">
+        <img src="/assets/images/devopsnotdead_sticker.png" alt="DevOps Not Dead">
+      </a>
+      <a href="https://conf42.com" target="_blank" rel="noopener noreferrer">
+        <img src="/assets/images/conf42_sticker.png" alt="Conf42">
+      </a>
+    </div>
   </div>
 </section>
 
