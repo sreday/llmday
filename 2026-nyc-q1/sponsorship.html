@@ -160,6 +160,7 @@
 .sp-stats-co-bars  { flex: 1; background: #f0f0f0; border-radius: 4px; height: 6px; overflow: hidden; }
 .sp-stats-co-bar   { height: 100%; background: var(--sp-accent); border-radius: 4px; }
 .sp-stats-co-count { font-size: .8rem; color: #aaa; min-width: 24px; text-align: right; }
+.sp-stats-empty { color: #999; font-size: .9rem; margin: 0; }
 
 /* Pills inside white panel must override the dark-body pill rule */
 #sp-dark-body .sp-stats-inner .sp-pill {
@@ -476,7 +477,6 @@
 <div id="sp-dark-body">
 
 
-
 <section class="sp-section" style="padding-top: 32px; padding-bottom: 40px;">
   <div class="container">
     <div class="text-center">
@@ -498,6 +498,8 @@
 
     <div class="sp-stats-panel" id="sp-stats-panel">
       <div class="sp-stats-inner">
+
+        
 
         
         
@@ -558,6 +560,8 @@
         </div>
         
 
+        
+
       </div>
     </div>
   </div>
@@ -571,7 +575,6 @@ function spToggleStats() {
   btn.setAttribute('aria-expanded', String(open));
 }
 </script>
-
 
 
 <section class="sp-section">
