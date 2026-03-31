@@ -97,13 +97,13 @@
 .btn-stats {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   background: #e8614b;
   color: #fff;
   border: none;
   border-radius: 999px;
-  padding: 11px 28px;
-  font-size: .95rem;
+  padding: 13px 34px;
+  font-size: 1.14rem;
   font-weight: 600;
   cursor: pointer;
   letter-spacing: .01em;
@@ -111,13 +111,7 @@
 }
 .btn-stats:hover  { background: #d04f3a; box-shadow: 0 4px 18px rgba(232,97,75,.4); }
 .btn-stats:active { transform: scale(.97); }
-.btn-stats-icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  flex-shrink: 0;
-}
+.btn-stats-icon { display: flex; align-items: center; flex-shrink: 0; }
 .btn-stats-chevron { transition: transform .3s ease; }
 .btn-stats.open .btn-stats-chevron { transform: rotate(180deg); }
 
@@ -477,45 +471,8 @@
 <div id="sp-dark-body">
 
 
-<section class="sp-section" style="padding-top: 32px; padding-bottom: 40px;">
-  <div class="container">
-    <div class="text-center">
-      <button class="btn-stats" id="sp-stats-toggle" onclick="spToggleStats()" aria-expanded="false">
-        Show Conference Stats
-        <span class="btn-stats-icon" aria-hidden="true">
-          <svg width="18" height="5" viewBox="0 0 18 5" fill="currentColor">
-            <circle cx="1.5" cy="2.5" r="1.5"/>
-            <circle cx="9"   cy="2.5" r="1.5"/>
-            <circle cx="16.5" cy="2.5" r="1.5"/>
-          </svg>
-          <svg class="btn-stats-chevron" width="14" height="8" viewBox="0 0 14 8" fill="none"
-               stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="1,1 7,7 13,1"/>
-          </svg>
-        </span>
-      </button>
-    </div>
 
-    <div class="sp-stats-panel" id="sp-stats-panel">
       <div class="sp-stats-inner">
-
-        
-        <p class="sp-stats-empty">This is the first LLMday at this location — stats will appear here after the event.</p>
-        
-
-      </div>
-    </div>
-  </div>
-</section>
-<script>
-function spToggleStats() {
-  var btn   = document.getElementById('sp-stats-toggle');
-  var panel = document.getElementById('sp-stats-panel');
-  var open  = btn.classList.toggle('open');
-  panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
-  btn.setAttribute('aria-expanded', String(open));
-}
-</script>
 
 
 <section class="sp-section">
@@ -709,6 +666,42 @@ function spToggleStats() {
     </div>
   </div>
 </section>
+
+
+<section class="sp-section" style="padding-top: 0; padding-bottom: 40px;">
+  <div class="container">
+    <div class="text-center">
+      <button class="btn-stats" id="sp-stats-toggle" onclick="spToggleStats()" aria-expanded="false">
+        Show Conference Stats
+        <span class="btn-stats-icon" aria-hidden="true">
+          <svg class="btn-stats-chevron" width="17" height="10" viewBox="0 0 14 8" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1,1 7,7 13,1"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <div class="sp-stats-panel" id="sp-stats-panel">
+      <div class="sp-stats-inner">
+
+        
+        <p class="sp-stats-empty">This is the first LLMday at this location — stats will appear here after the event.</p>
+        
+
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+function spToggleStats() {
+  var btn   = document.getElementById('sp-stats-toggle');
+  var panel = document.getElementById('sp-stats-panel');
+  var open  = btn.classList.toggle('open');
+  panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  btn.setAttribute('aria-expanded', String(open));
+}
+</script>
 
 
 <section class="sp-section sp-section-alt">
