@@ -58,7 +58,7 @@ tiers:
   - id: food
     name: "Breakfast / Coffee / Lunch / Happy Hour"
     highlight: false
-    price_label: "£1000 fee + £15 per person"
+    price_label: "£1000 fee + £15 pp"
     benefits:
       - "Microphone time before the break"
       - "Distributing your swag along food & beverages"
