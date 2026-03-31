@@ -112,6 +112,7 @@
 .sp-stats-co-bars  { flex: 1; background: #f0f0f0; border-radius: 4px; height: 6px; overflow: hidden; }
 .sp-stats-co-bar   { height: 100%; background: var(--sp-accent); border-radius: 4px; }
 .sp-stats-co-count { font-size: .8rem; color: #aaa; min-width: 24px; text-align: right; }
+.sp-stats-empty { color: #999; font-size: .9rem; margin: 0; }
 
 /* Pills inside white panel must override the dark-body pill rule */
 #sp-dark-body .sp-stats-inner .sp-pill {
@@ -260,7 +261,6 @@
 <div id="sp-dark-body">
 
 {# ── Conference stats button + expandable panel ──────────── #}
-{% if past_sponsors or past_speakers or top_companies %}
 <section class="sp-section" style="padding-top: 32px; padding-bottom: 40px;">
   <div class="container">
     <div class="text-center">
@@ -282,6 +282,8 @@
 
     <div class="sp-stats-panel" id="sp-stats-panel">
       <div class="sp-stats-inner">
+
+        {% if past_sponsors or past_speakers or top_companies %}
 
         {# ── Past sponsors ── #}
         {% if past_sponsors %}
@@ -328,6 +330,10 @@
         </div>
         {% endif %}
 
+        {% else %}
+        <p class="sp-stats-empty">This is the first LLMday at this location — stats will appear here after the event.</p>
+        {% endif %}
+
       </div>
     </div>
   </div>
@@ -341,7 +347,6 @@ function spToggleStats() {
   btn.setAttribute('aria-expanded', String(open));
 }
 </script>
-{% endif %}
 
 {# ── Pricing tiers ───────────────────────────────────── #}
 <section class="sp-section">
