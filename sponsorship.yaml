@@ -58,18 +58,18 @@ tiers:
   - id: food
     name: "Breakfast / Coffee / Lunch / Happy Hour"
     highlight: false
-    price_label: "£1000 + £15 pp"
+    price_label: "£1000 fee + £15 per person"
     benefits:
       - "Microphone time before the break"
       - "Distributing your swag along food & beverages"
 
   - id: clothing
-    name: "Branded clothing"
+    name: "Branded Wearables"
     highlight: false
-    price_label: "£1000 + £10–30pp"
+    price_label: "£1000 fee + variable"
     benefits:
       - "T-shirts, socks, hoodies or caps with your big logo"
-      - "variable pricing depending on the item"
+      - "£10–£30 per person, depending on the item"
 
   - id: tickets
     name: "Discounted Ticket Pack"
