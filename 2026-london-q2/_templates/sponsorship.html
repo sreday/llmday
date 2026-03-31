@@ -205,6 +205,15 @@
 .sp-tier-benefits { list-style: none; padding: 0; margin: 16px 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
 .sp-tier-benefits li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
+.sp-tier-requires {
+  font-size: .78rem;
+  color: #f0a040;
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: rgba(240,160,64,.1);
+  border: 1px solid rgba(240,160,64,.25);
+  border-radius: 6px;
+}
 
 /* ── Get in touch / CTA buttons ──────────────────────── */
 #sp-dark-body .btn-outline-secondary {
@@ -249,11 +258,16 @@
           <div class="sp-tier-price">
             {% if tier.price_label %}{{ tier.price_label }}{% else %}£{{ tier.price[event_size] }}{% endif %}
           </div>
+          {% if tier.benefits %}
           <ul class="sp-tier-benefits">
             {% for b in tier.benefits %}
             <li>{{ b }}</li>
             {% endfor %}
           </ul>
+          {% endif %}
+          {% if tier.requires %}
+          <div class="sp-tier-requires">⚠ {{ tier.requires }}</div>
+          {% endif %}
         </div>
       </div>
       {% endfor %}
