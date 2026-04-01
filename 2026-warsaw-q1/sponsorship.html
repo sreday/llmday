@@ -259,6 +259,13 @@
 .sp-stats-gif-wrap { margin-top: 32px; border-radius: 12px; overflow: hidden; width: 90%; margin-left: auto; margin-right: auto; }
 .sp-stats-gif-wrap img { width: 100%; display: block; }
 
+/* ── Header two-column layout ────────────────────────── */
+.sp-stats-header-row { display: flex; align-items: flex-start; gap: 28px; margin-bottom: 0; }
+.sp-stats-header-left { flex: 1; min-width: 0; }
+.sp-stats-header-gif { flex: 0 0 260px; width: 260px; border-radius: 12px; overflow: hidden; align-self: center; }
+.sp-stats-header-gif img { width: 100%; display: block; }
+@media (max-width: 640px) { .sp-stats-header-row { flex-direction: column; } .sp-stats-header-gif { width: 100%; flex: none; } }
+
 /* ── Custom / on-request card ────────────────────────── */
 .sp-custom-card {
   border-radius: 12px;
@@ -819,25 +826,32 @@
       <div class="sp-stats-inner">
 
         
-        <div class="sp-stats-s-title">Let's start with some numbers</div>
-        <div class="sp-stats-s-sub">Across all LLMday editions worldwide</div>
+        <div class="sp-stats-header-row">
+          <div class="sp-stats-header-left">
+            <div class="sp-stats-s-title">Let's start with some numbers</div>
+            <div class="sp-stats-s-sub">Across all LLMday editions worldwide</div>
 
-        <div class="sp-stats-big-numbers">
-          <div class="sp-stats-big-num">
-            <div class="sp-stats-big-num-value">690<sup>+</sup></div>
-            <div class="sp-stats-big-num-label">Attendees to date</div>
+            <div class="sp-stats-big-numbers">
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">690<sup>+</sup></div>
+                <div class="sp-stats-big-num-label">Attendees to date</div>
+              </div>
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">88<sup>+</sup></div>
+                <div class="sp-stats-big-num-label">Speakers to date</div>
+              </div>
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">6</div>
+                <div class="sp-stats-big-num-label">Events so far</div>
+              </div>
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">3</div>
+                <div class="sp-stats-big-num-label">Countries</div>
+              </div>
+            </div>
           </div>
-          <div class="sp-stats-big-num">
-            <div class="sp-stats-big-num-value">88<sup>+</sup></div>
-            <div class="sp-stats-big-num-label">Speakers to date</div>
-          </div>
-          <div class="sp-stats-big-num">
-            <div class="sp-stats-big-num-value">6</div>
-            <div class="sp-stats-big-num-label">Events so far</div>
-          </div>
-          <div class="sp-stats-big-num">
-            <div class="sp-stats-big-num-value">3</div>
-            <div class="sp-stats-big-num-label">Countries</div>
+          <div class="sp-stats-header-gif">
+            <img src="/assets/images/llama-conspiracy.gif" alt="llama conspiracy">
           </div>
         </div>
 
@@ -1088,12 +1102,6 @@
           </div>
         </div>
 
-        <hr class="sp-stats-sep">
-
-        
-        <div class="sp-stats-gif-wrap">
-          <img src="/assets/images/llama-gif.gif" alt="llama">
-        </div>
 
       </div>
     </div>
