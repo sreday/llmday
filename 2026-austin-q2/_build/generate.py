@@ -38,7 +38,8 @@ def read_csv(path):
     """ Read the pre-process the CSV """
     items = []
     with open(path, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
+        # strip NUL bytes that some editors (e.g. Excel UTF-16 export) leave in
+        reader = csv.DictReader(line.replace('\0', '') for line in f)
         for item in reader:
             item = dict(item)
             if "abstract" in item:
