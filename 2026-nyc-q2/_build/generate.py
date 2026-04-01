@@ -201,105 +201,128 @@ _city_parts = [p for p in _parts
 _city_slug = '-'.join(_city_parts)
 
 _all_siblings = sorted(_glob.glob('../20*/'))
+
+# ── Global stats: all events across all cities ──────────────────────────────
+_global_org_counts = {}
+_global_speaker_count = 0
+_global_sponsors_raw = []
+_total_attendees = 0
+_total_events = 0
+
+for _gf in _all_siblings:
+    # speaker orgs
+    _gt_path = _os.path.join(_gf, '_db', 'talks.csv')
+    if _os.path.exists(_gt_path):
+        for _t in read_csv(_gt_path):
+            _status = _t.get('status', '').lower()
+            if 'confirmed' in _status or 'keynote' in _status:
+                _global_speaker_count += 1
+                _org = _t.get('organization', '').strip()
+                _skip_orgs = {'stealth startup', 'sre author', ''}
+                if _org.lower() not in _skip_orgs:
+                    _global_org_counts[_org] = _global_org_counts.get(_org, 0) + 1
+    # sponsors & attendee counts
+    _gm_path = _os.path.join(_gf, 'metadata.yml')
+    if _os.path.exists(_gm_path):
+        with open(_gm_path, encoding='utf-8') as _gf2:
+            _gm = yaml.load(_gf2, Loader=yaml.FullLoader)
+        _global_sponsors_raw.extend(_gm.get('sponsors', []) or [])
+        _att_raw = str(_gm.get('attendees', 0)).replace('+', '').strip()
+        try:
+            _total_attendees += int(_att_raw)
+        except ValueError:
+            pass
+        _total_events += 1
+
+# top 10 speaker companies globally
+_global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+
+# global sponsors — deduplicated, filtering out small/niche logos
+_sp_exclude_logos = {'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png'}
+_seen_global_logos = set()
+_global_sponsors = []
+for _s in _global_sponsors_raw:
+    _logo = _s.get('logo', '').strip()
+    if _logo and _logo not in _seen_global_logos and _logo not in _sp_exclude_logos:
+        _seen_global_logos.add(_logo)
+        _sname = re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title()
+        _global_sponsors.append({'logo': _logo, 'url': _s.get('url', ''), 'name': _sname})
+
+# ── Timeline: all events from home/metadata.yml ──────────────────────────────
+_timeline_events = []
+_countries_seen = set()
+_home_meta_path = '../home/metadata.yml'
+_home_meta = {}
+if _os.path.exists(_home_meta_path):
+    with open(_home_meta_path, encoding='utf-8') as _hf:
+        _home_meta = yaml.load(_hf, Loader=yaml.FullLoader)
+    _all_home_events = (_home_meta.get('events_past') or []) + (_home_meta.get('events') or [])
+    for _he in _all_home_events:
+        _he_folder = _he.get('url', '').strip('./').rstrip('/')
+        _he_meta_path = f'../{_he_folder}/metadata.yml'
+        if not _os.path.exists(_he_meta_path):
+            continue
+        with open(_he_meta_path, encoding='utf-8') as _hf2:
+            _hem = yaml.load(_hf2, Loader=yaml.FullLoader)
+        _loc = (_hem.get('location_string', '') + ' ' + _hem.get('city_name', '')).lower()
+        if 'poland' in _loc or 'warsaw' in _loc:
+            _flag = '🇵🇱'; _countries_seen.add('PL')
+        elif 'london' in _loc or 'uk' in _loc or 'united kingdom' in _loc:
+            _flag = '🇬🇧'; _countries_seen.add('UK')
+        else:
+            _flag = '🇺🇸'; _countries_seen.add('US')
+        _timeline_events.append({
+            'name':        _he.get('name', ''),
+            'city':        _hem.get('city_name', ''),
+            'date_string': _hem.get('date_string', ''),
+            'attendees':   _hem.get('attendees', ''),
+            'url':         f'../{_he_folder}/',
+            'state':       _hem.get('event_state', 'before'),
+            'flag':        _flag,
+        })
+_total_countries = len(_countries_seen) or 1
+
+# ── Per-city stats (kept for backward compat) ────────────────────────────────
 _same_city = [
     f for f in _all_siblings
     if _city_slug in _os.path.basename(_os.path.normpath(f))
     and _os.path.basename(_os.path.normpath(f)) != _current_folder
 ]
-
-_past_keynotes_raw, _all_past_speakers, _past_sponsors_raw = [], [], []
-for _folder in _same_city:
-    _talks_path = _os.path.join(_folder, '_db', 'talks.csv')
-    if _os.path.exists(_talks_path):
-        for _t in read_csv(_talks_path):
-            _status = _t.get('status', '').lower()
-            if 'keynote' in _status:
-                _past_keynotes_raw.append(_t)
-            if 'keynote' in _status or 'confirmed' in _status:
-                _all_past_speakers.append(_t)
-    _meta_path = _os.path.join(_folder, 'metadata.yml')
-    if _os.path.exists(_meta_path):
-        with open(_meta_path, encoding='utf-8') as _f:
-            _pm = yaml.load(_f, Loader=yaml.FullLoader)
-        _past_sponsors_raw.extend(_pm.get('sponsors', []) or [])
-
-_seen_names = set()
-_past_keynotes = []
-for _t in _past_keynotes_raw:
-    _name = _t.get('name', '').strip()
-    if _name and _name not in _seen_names:
-        _seen_names.add(_name)
-        _wparts = _name.split()
-        _initials = ''.join(p[0].upper() for p in _wparts[:2])
-        _past_keynotes.append({
-            'name': _name,
-            'organization': _t.get('organization', ''),
-            'initials': _initials,
-        })
-_past_keynotes.sort(key=lambda x: x['name'])
-
-_seen_speaker_names = set()
-_past_speakers = []
-for _t in _all_past_speakers:
-    _name = _t.get('name', '').strip()
-    if _name and _name not in _seen_speaker_names:
-        _seen_speaker_names.add(_name)
-        _past_speakers.append({'name': _name, 'organization': _t.get('organization', '')})
-_past_speakers.sort(key=lambda x: x['name'])
-
-_company_counts = {}
-for _t in _all_past_speakers:
-    _org = _t.get('organization', '').strip()
-    if _org:
-        _company_counts[_org] = _company_counts.get(_org, 0) + 1
-_top_companies = sorted(_company_counts.items(), key=lambda x: x[1], reverse=True)[:10]
-
-_seen_logos = set()
-_past_sponsors = []
-for _s in _past_sponsors_raw:
-    _logo = _s.get('logo', '').strip()
-    if _logo and _logo not in _seen_logos:
-        _seen_logos.add(_logo)
-        _sname = re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title()
-        _past_sponsors.append({'logo': _logo, 'url': _s.get('url', ''), 'name': _sname})
-
-_talk_count = len(talks) + len(keynotes)
 _past_editions = len(_same_city)
+_talk_count = len(talks) + len(keynotes)
 
-# Read size from home/metadata.yml (single source of truth), fall back to event metadata
+# Read size from home/metadata.yml
 _event_size = context.get('event_size', 'medium')
-_home_meta_path = '../home/metadata.yml'
-if _os.path.exists(_home_meta_path):
-    with open(_home_meta_path, encoding='utf-8') as _hf:
-        _home_meta = yaml.load(_hf, Loader=yaml.FullLoader)
-    for _he in (_home_meta.get('events') or []) + (_home_meta.get('events_past') or []):
-        _he_url = _he.get('url', '').strip('./').rstrip('/')
-        if _he_url == _current_folder:
-            _event_size = _he.get('size', _event_size)
-            break
+for _he in (_home_meta.get('events') or []) + (_home_meta.get('events_past') or []):
+    _he_url = _he.get('url', '').strip('./').rstrip('/')
+    if _he_url == _current_folder:
+        _event_size = _he.get('size', _event_size)
+        break
 
-_all_tiers          = _sponsorship_config.get('tiers', [])
-_sponsorship_tiers  = [t for t in _all_tiers if t.get('price_label') != 'On request']
-_on_request_tiers   = [t for t in _all_tiers if t.get('price_label') == 'On request']
-_additional_options = _sponsorship_config.get('additional_options', [])
+_all_tiers         = _sponsorship_config.get('tiers', [])
+_sponsorship_tiers = [t for t in _all_tiers if t.get('price_label') != 'On request']
+_on_request_tiers  = [t for t in _all_tiers if t.get('price_label') == 'On request']
 
-print(f"  City slug: {_city_slug}")
-print(f"  Past editions: {_past_editions}")
-print(f"  Past speakers: {len(_past_speakers)}, sponsors: {len(_past_sponsors)}, top cos: {len(_top_companies)}")
+print(f"  Total events: {_total_events}, attendees: {_total_attendees}, speakers: {_global_speaker_count}")
+print(f"  Global top companies: {len(_global_top_companies)}, global sponsors: {len(_global_sponsors)}")
+print(f"  Timeline events: {len(_timeline_events)}, countries: {_total_countries}")
 
 _sp_template = env.get_template('sponsorship.html')
 with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
     _f.write(_sp_template.render(
         page='sponsorship.html',
         noindex=True,
-        past_speakers=_past_speakers,
-        top_companies=_top_companies,
-        past_sponsors=_past_sponsors,
-        past_editions=_past_editions,
-        talk_count=_talk_count,
+        # global dynamic data
+        global_top_companies=_global_top_companies,
+        global_sponsors=_global_sponsors,
+        timeline_events=_timeline_events,
+        total_attendees=_total_attendees,
+        total_speakers=_global_speaker_count,
+        total_events=_total_events,
+        total_countries=_total_countries,
+        # sponsorship tiers
         sponsorship_tiers=_sponsorship_tiers,
         on_request_tiers=_on_request_tiers,
-        additional_options=_additional_options,
         **{**context, 'event_size': _event_size}
     ))
 print("Done: sponsorship.html")
