@@ -1,5 +1,5 @@
 """
-analyze_attendees.py  —  Attendee Analysis Playbook
+analyze_attendees.py  -  Attendee Analysis Playbook
 =====================================================
 This is the attendee analysis playbook for the conference series.
 It reads Luma attendee CSV exports and produces audience profile stats
@@ -18,7 +18,7 @@ Output:
 The sponsorship template is patched automatically between the two sentinel
 comments below. Do not remove or rename them:
 
-    {# ── ATTENDEE PROFILE (static — update by running _build/analyze_attendees.py) ── #}
+    {# ── ATTENDEE PROFILE (static - update by running _build/analyze_attendees.py) ── #}
     ...
     {# ── SPEAKER COMPANIES (dynamic ...
 
@@ -36,7 +36,7 @@ Role labels are chosen to be accurate and professionally neutral:
       Distinct from "Researcher", who is employed to do research.
 
   "Researcher"
-      Professional researchers — employed at a university, lab, or
+      Professional researchers - employed at a university, lab, or
       company R&D unit. Distinct from students and from engineers
       whose job happens to involve some research component.
 
@@ -63,7 +63,7 @@ from pathlib import Path
 
 TLDR = (
     "A hands-on crowd of engineers, ML practitioners, and technical leaders "
-    "from startups and enterprises — people who are actively shipping AI products "
+    "from startups and enterprises - people who are actively shipping AI products "
     "into production. Senior practitioners who debate architecture and tooling choices, "
     "care deeply about reliability and cost, and are figuring out how to make agents "
     "actually work at scale."
@@ -72,7 +72,7 @@ TLDR = (
 # ── "What they are working on" topics ─────────────────────────────────────
 # Scored from talk titles + abstracts across all discovered talks.csv files.
 # Top WORKING_ON_HIGHLIGHT topics are highlighted on the page; the rest are
-# shown as plain pills. Review the output each season — keyword rules are a
+# shown as plain pills. Review the output each season - keyword rules are a
 # good starting point but can't reason about genuinely novel topics. Add new
 # keywords to WORKING_ON_KEYWORDS when the landscape shifts.
 WORKING_ON_HIGHLIGHT = 3   # top 3 highlighted, rest plain
@@ -419,7 +419,7 @@ def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, to
     topic_tags  = '\n'.join(tag(p['label'], p['highlight']) for p in topic_pills)
 
     return (
-        '{# ── ATTENDEE PROFILE (static — update by running _build/analyze_attendees.py) ── #}\n'
+        '{# ── ATTENDEE PROFILE (static - update by running _build/analyze_attendees.py) ── #}\n'
         '        <div class="sp-stats-s-title">Attendee profile</div>\n'
         '        <div class="sp-stats-s-sub">Based on past attendee information across sampled events</div>\n'
         '\n'
@@ -493,7 +493,7 @@ def patch_sponsorship_template(repo_root, tldr, role_stats, size_stats, senior_s
     template_path = repo_root / '_event_template' / '_templates' / 'sponsorship.html'
 
     if not template_path.exists():
-        print(f"\n  ⚠  Template not found at {template_path} — skipping patch.")
+        print(f"\n  ⚠  Template not found at {template_path} - skipping patch.")
         return
 
     original = template_path.read_text(encoding='utf-8')
@@ -505,7 +505,7 @@ def patch_sponsorship_template(repo_root, tldr, role_stats, size_stats, senior_s
     end_idx   = original.find(end_sentinel)
 
     if start_idx == -1 or end_idx == -1:
-        print("\n  ⚠  Sentinel comments not found in template — skipping patch.")
+        print("\n  ⚠  Sentinel comments not found in template - skipping patch.")
         print("     Expected markers:")
         print(f"       '{start_sentinel}...'")
         print(f"       '{end_sentinel}...'")
@@ -536,7 +536,7 @@ def main():
         print(f"  Loaded {len(loaded)} rows from {Path(p).name}")
         rows.extend(loaded)
 
-    # De-duplicate by name — treat all CSVs as one combined event.
+    # De-duplicate by name - treat all CSVs as one combined event.
     # Keep the first occurrence (earliest file loaded).
     seen_names = set()
     deduped = []
@@ -592,7 +592,7 @@ def main():
         if classify_role(r.get('Job Title', '')) == "Other"
     ]
     if unclassified:
-        print(f"\n  Unclassified job titles ({len(unclassified)}) — add rules for these:")
+        print(f"\n  Unclassified job titles ({len(unclassified)}) - add rules for these:")
         for t in sorted(set(unclassified)):
             print(f"    {t}")
 
@@ -607,7 +607,7 @@ def main():
     if talks_files:
         print(f"\n  Found {len(talks_files)} talks.csv file(s) for topic extraction.")
     else:
-        print("\n  No talks.csv files found — skipping topic extraction.")
+        print("\n  No talks.csv files found - skipping topic extraction.")
         print(f"  Expected location: {repo_root}/20*/_db/talks.csv")
 
     stats = {
@@ -633,7 +633,7 @@ def main():
         print(f"\n{'═'*52}")
         print("WHAT THEY ARE WORKING ON")
         print('═'*52)
-        print("  Review these — keyword rules are a starting point, not ground truth.")
+        print("  Review these - keyword rules are a starting point, not ground truth.")
         print("  Add missing emerging topics to WORKING_ON_KEYWORDS if needed.\n")
         for p in topic_pills:
             tag = "★ " if p['highlight'] else "  "
