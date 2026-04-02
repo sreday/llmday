@@ -386,7 +386,7 @@
 <div id="sp-dark-body">
 
 {# ── Pricing tiers ───────────────────────────────────── #}
-<section class="sp-section">
+<section class="sp-section" id="opportunities">
   <div class="container">
     <h2 class="sp-section-title text-center">Sponsorship opportunities</h2>
     <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">Pricing in GBP — British Pound Sterling</p>
@@ -437,7 +437,7 @@
 </section>
 
 {# ── Conference stats button + expandable panel ──────── #}
-<section class="sp-section" style="padding-top: 0; padding-bottom: 40px;">
+<section class="sp-section" id="stats" style="padding-top: 0; padding-bottom: 40px;">
   <div class="container">
     <div class="text-center">
       <button class="btn-stats" id="sp-stats-toggle" onclick="spToggleStats()" aria-expanded="false">
@@ -663,7 +663,7 @@
         </div>
 
         <div class="text-center" style="margin-top:32px;">
-          <button class="btn-stats-close" onclick="spToggleStats()">
+          <button class="btn-stats-close" onclick="spToggleStats(); window.location.hash='stats';">
             Close stats
             <span style="display:flex;align-items:center;">
               <svg width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);">
@@ -688,7 +688,7 @@ function spToggleStats() {
 </script>
 
 {# ── Get in touch ────────────────────────────────────── #}
-<section class="sp-section sp-section-alt">
+<section class="sp-section sp-section-alt" id="buy">
   <div class="container">
     <h2 class="sp-section-title text-center">Ready to give it a try?</h2>
     <p class="text-center" style="color:#aaa;margin-top:-.6rem;margin-bottom:1.5rem;">Secure your sponsorship with <a href="https://www.linkedin.com/in/marek-pawlikowski/" target="_blank" rel="noopener noreferrer" style="color:#7bc49a;">Mark Pawlikowski</a></p>
