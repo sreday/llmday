@@ -180,7 +180,7 @@
   background: var(--spi-green-light); color: #1a5c3a;
   text-decoration: none; transition: background .15s, border-color .15s;
 }
-.sp-stats-pill:hover { background: #d4f0e2; border-color: #8fcfb0; text-decoration: none; color: #1a5c3a; }
+.sp-stats-pill:hover { background: var(--spi-green-light); border-color: var(--spi-green-mid); color: #1a5c3a; cursor: default; }
 
 /* timeline */
 .sp-stats-timeline { position: relative; padding: 20px 0 8px; margin-bottom: 8px; }
@@ -590,7 +590,7 @@
 
         <div class="sp-stats-pill-grid">
           {% for s in global_sponsors %}
-          <a href="{{ s.url }}" target="_blank" rel="noopener noreferrer" class="sp-stats-pill">{{ s.name }}</a>
+          <span class="sp-stats-pill">{{ s.name }}</span>
           {% endfor %}
         </div>
 
