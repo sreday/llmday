@@ -81,8 +81,7 @@
 .sp-stats-panel {
   overflow: hidden;
   max-height: 0;
-  opacity: 0;
-  transition: max-height .585s cubic-bezier(.4,0,.2,1), opacity .585s ease;
+  transition: max-height .585s cubic-bezier(.4,0,.2,1);
 }
 .sp-stats-inner {
   background: #fff;
@@ -699,7 +698,6 @@ function spToggleStats() {
   var panel = document.getElementById('sp-stats-panel');
   var open  = btn.classList.toggle('open');
   panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
-  panel.style.opacity = open ? '1' : '0';
   btn.setAttribute('aria-expanded', String(open));
 }
 </script>
