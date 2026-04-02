@@ -1,0 +1,118 @@
+{
+  "total_attendees_sampled": 367,
+  "tldr": "A hands-on crowd of engineers, ML practitioners, and technical leaders from startups and enterprises - people who are actively shipping AI products into production. Senior practitioners who debate architecture and tooling choices, care deeply about reliability and cost, and are figuring out how to make agents actually work at scale.",
+  "role_breakdown": [
+    {
+      "label": "Software / Platform / DevOps",
+      "pct": 29
+    },
+    {
+      "label": "Executive / Founder / Leadership",
+      "pct": 23
+    },
+    {
+      "label": "ML / AI / Data",
+      "pct": 18
+    },
+    {
+      "label": "Business / Consulting / Product",
+      "pct": 17
+    },
+    {
+      "label": "Independent / Job Seeker",
+      "pct": 13
+    }
+  ],
+  "company_size": [
+    {
+      "label": "Startup (<50)",
+      "pct": 59
+    },
+    {
+      "label": "Enterprise (500+)",
+      "pct": 30
+    },
+    {
+      "label": "Solo Founder / Independent",
+      "pct": 6
+    },
+    {
+      "label": "Scale-up (50-500)",
+      "pct": 5
+    }
+  ],
+  "seniority": [
+    {
+      "label": "Mid-Level",
+      "pct": 43
+    },
+    {
+      "label": "Executive",
+      "pct": 22
+    },
+    {
+      "label": "Junior",
+      "pct": 14
+    },
+    {
+      "label": "Senior",
+      "pct": 11
+    },
+    {
+      "label": "Lead / Manager",
+      "pct": 10
+    }
+  ],
+  "working_on": [
+    {
+      "label": "Agents & Automation",
+      "highlight": true,
+      "count": 42
+    },
+    {
+      "label": "Applied / Product AI",
+      "highlight": true,
+      "count": 40
+    },
+    {
+      "label": "Production & Reliability",
+      "highlight": true,
+      "count": 38
+    },
+    {
+      "label": "LLM Infrastructure & Cost",
+      "highlight": false,
+      "count": 31
+    },
+    {
+      "label": "LLM Evaluation & Testing",
+      "highlight": false,
+      "count": 29
+    },
+    {
+      "label": "Open Source & Edge",
+      "highlight": false,
+      "count": 21
+    },
+    {
+      "label": "RAG & Retrieval",
+      "highlight": false,
+      "count": 17
+    },
+    {
+      "label": "Prompt & Context Engineering",
+      "highlight": false,
+      "count": 15
+    },
+    {
+      "label": "Multimodal & Specialized AI",
+      "highlight": false,
+      "count": 13
+    },
+    {
+      "label": "AI Ethics & Governance",
+      "highlight": false,
+      "count": 10
+    }
+  ]
+}
