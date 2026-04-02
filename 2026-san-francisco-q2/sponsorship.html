@@ -259,6 +259,8 @@
 .sp-stats-tl-date  { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
 .sp-stats-tl-seats { font-size: .75rem; color: #3a8a60; }
 .sp-stats-tl-past  { font-size: .7rem; color: #8fcfb0; font-style: italic; }
+.sp-stats-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 0; }
+.sp-stats-tl-pin { font-size: 1.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
 
 /* GIF */
 .sp-stats-gif-wrap { margin-top: 32px; border-radius: 12px; overflow: hidden; width: 90%; margin-left: auto; margin-right: auto; }
@@ -476,6 +478,7 @@
 	#home {
 		scroll-margin-top: 70px;
 	}
+	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
 </style>
 
 
@@ -1075,6 +1078,8 @@
           
           <div class="sp-stats-tl-events">
             
+            
+            
             <div class="sp-stats-tl-event">
               <div class="sp-stats-tl-dot past"></div>
               <a href="../2026-nyc-q1/" class="sp-stats-tl-chip past">
@@ -1085,6 +1090,7 @@
               </a>
             </div>
             
+            
             <div class="sp-stats-tl-event">
               <div class="sp-stats-tl-dot past"></div>
               <a href="../2026-warsaw-q1/" class="sp-stats-tl-chip past">
@@ -1093,6 +1099,12 @@
                 <div class="sp-stats-tl-date">February 12, 2026</div>
                 <div class="sp-stats-tl-seats">150+ seats</div>
               </a>
+            </div>
+            
+            
+            
+            <div class="sp-stats-tl-pin-event">
+              <div class="sp-stats-tl-pin">▼</div>
             </div>
             
             <div class="sp-stats-tl-event">
@@ -1105,6 +1117,7 @@
               </a>
             </div>
             
+            
             <div class="sp-stats-tl-event">
               <div class="sp-stats-tl-dot "></div>
               <a href="../2026-austin-q2/" class="sp-stats-tl-chip">
@@ -1115,6 +1128,7 @@
               </a>
             </div>
             
+            
             <div class="sp-stats-tl-event">
               <div class="sp-stats-tl-dot "></div>
               <a href="../2026-london-q2/" class="sp-stats-tl-chip">
@@ -1124,6 +1138,7 @@
                 <div class="sp-stats-tl-seats">150+ seats</div>
               </a>
             </div>
+            
             
             <div class="sp-stats-tl-event">
               <div class="sp-stats-tl-dot "></div>
