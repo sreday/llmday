@@ -281,13 +281,20 @@ if _os.path.exists(_home_meta_path):
             'city':        _hem.get('city_name', ''),
             'country':     _country,
             'date_string': _hem.get('date_string', ''),
-            'attendees':   _hem.get('attendees', ''),
+            'attendees':   (str(_hem.get('attendees', '')).rstrip('+') + '+') if _hem.get('attendees') else '',
             'url':         f'../{_he_folder}/',
             'state':       _hem.get('event_state', 'before'),
             'flag':        _flag,
         })
 _total_countries = len(_countries_seen) or 1
 _total_cities = len({ev['city'] for ev in _timeline_events if ev.get('city')})
+
+# cap timeline at 10 past + 10 upcoming
+_tl_past     = [e for e in _timeline_events if e['state'] in ('past', 'after')]
+_tl_upcoming = [e for e in _timeline_events if e['state'] not in ('past', 'after')]
+_hidden_past     = max(0, len(_tl_past) - 10)
+_hidden_upcoming = max(0, len(_tl_upcoming) - 10)
+_timeline_events = _tl_past[-10:] + _tl_upcoming[:10]
 
 _amb_path = _os.path.join('..', 'home', '_db', 'ambassadors.csv')
 _total_ambassadors = len(read_csv(_amb_path)) if _os.path.exists(_amb_path) else 0
@@ -326,6 +333,8 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         global_top_companies=_global_top_companies,
         global_sponsors=_global_sponsors,
         timeline_events=_timeline_events,
+        hidden_past=_hidden_past,
+        hidden_upcoming=_hidden_upcoming,
         total_attendees=_total_attendees,
         total_speakers=_global_speaker_count,
         total_events=_total_events,
