@@ -309,7 +309,7 @@ _past_editions = len(_same_city)
 _talk_count = len(talks) + len(keynotes)
 
 # Read size from home/metadata.yml
-_event_size = context.get('event_size', 'medium')
+_event_size = context.get('event_size', 'small')
 for _he in (_home_meta.get('events') or []) + (_home_meta.get('events_past') or []):
     _he_url = _he.get('url', '').strip('./').rstrip('/')
     if _he_url == _current_folder:
