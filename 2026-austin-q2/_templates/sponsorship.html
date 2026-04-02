@@ -680,13 +680,13 @@
             {% endif %}
             <div class="sp-stats-tl-event">
               <div class="sp-stats-tl-dot {% if ev.state == 'past' or ev.state == 'after' %}past{% endif %}"></div>
-              <div class="sp-stats-tl-chip{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">
+              <a href="{{ ev.url }}" class="sp-stats-tl-chip{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">
                 <div class="sp-stats-tl-city">{{ ev.city }}</div>
                 <div class="sp-stats-tl-date" style="font-style:normal;">{{ ev.country }}</div>
                 <div class="sp-stats-tl-date">{{ ev.date_string }}</div>
                 {% if ev.attendees %}<div class="sp-stats-tl-seats">{{ ev.attendees }} seats</div>{% endif %}
-                <a href="{{ ev.url }}sponsorship" class="sp-stats-tl-prospectus{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">Prospectus</a>
-              </div>
+              </a>
+              <a href="{{ ev.url }}sponsorship" class="sp-stats-tl-prospectus{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">Prospectus</a>
             </div>
             {% endfor %}
           </div>
