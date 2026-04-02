@@ -287,6 +287,10 @@ if _os.path.exists(_home_meta_path):
             'flag':        _flag,
         })
 _total_countries = len(_countries_seen) or 1
+_total_cities = len({ev['city'] for ev in _timeline_events if ev.get('city')})
+
+_amb_path = _os.path.join('..', 'home', '_db', 'ambassadors.csv')
+_total_ambassadors = len(read_csv(_amb_path)) if _os.path.exists(_amb_path) else 0
 
 # ── Per-city stats (kept for backward compat) ────────────────────────────────
 _same_city = [
@@ -309,7 +313,7 @@ _all_tiers         = _sponsorship_config.get('tiers', [])
 _sponsorship_tiers = [t for t in _all_tiers if t.get('price_label') != 'On request']
 _on_request_tiers  = [t for t in _all_tiers if t.get('price_label') == 'On request']
 
-print(f"  Total events: {_total_events}, attendees: {_total_attendees}, speakers: {_global_speaker_count}")
+print(f"  Total events: {_total_events}, attendees: {_total_attendees}, speakers: {_global_speaker_count}, cities: {_total_cities}, ambassadors: {_total_ambassadors}")
 print(f"  Global top companies: {len(_global_top_companies)}, global sponsors: {len(_global_sponsors)}")
 print(f"  Timeline events: {len(_timeline_events)}, countries: {_total_countries}")
 
@@ -326,6 +330,8 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         total_speakers=_global_speaker_count,
         total_events=_total_events,
         total_countries=_total_countries,
+        total_cities=_total_cities,
+        total_ambassadors=_total_ambassadors,
         # sponsorship tiers
         sponsorship_tiers=_sponsorship_tiers,
         on_request_tiers=_on_request_tiers,
