@@ -10,9 +10,17 @@ Drop in CSV files from any Luma event export and run:
 
     python3 _build/analyze_attendees.py path/to/event1.csv path/to/event2.csv ...
 
-Output: human-readable stats printed to stdout + attendee_stats.json written
-next to this script. Copy the numbers into the hardcoded static section of
-sponsorship.html.
+Output:
+  - Human-readable stats printed to stdout
+  - attendee_stats.json written next to this script
+  - _event_template/_templates/sponsorship.html patched in place
+
+The sponsorship template is patched automatically between the two sentinel
+comments below. Do not remove or rename them:
+
+    {# ── ATTENDEE PROFILE (static — update by running _build/analyze_attendees.py) ── #}
+    ...
+    {# ── SPEAKER COMPANIES (dynamic ...
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CATEGORY DESIGN NOTES
@@ -46,8 +54,6 @@ from pathlib import Path
 # PER-CONFERENCE CONTENT
 # Update TLDR when running for a new brand or after a significant
 # shift in audience composition.
-# "What they are working on" pills are NOT here — they are generated
-# dynamically at build time from talks.csv by generate.py.
 #
 # TLDR writing rules:
 #   - Focus on what attendees come for and enjoy, not what they don't
@@ -56,9 +62,11 @@ from pathlib import Path
 # ══════════════════════════════════════════════════════════════
 
 TLDR = (
-    "A hands-on crowd of engineers and technical leaders from startups and enterprises, "
-    "people who are actively shipping AI products. "
-    "Senior practitioners who choose their own tools and shape how their teams work."
+    "A hands-on crowd of engineers, ML practitioners, and technical leaders "
+    "from startups and enterprises — people who are actively shipping AI products "
+    "into production. Senior practitioners who debate architecture and tooling choices, "
+    "care deeply about reliability and cost, and are figuring out how to make agents "
+    "actually work at scale."
 )
 
 # ── "What they are working on" topics ─────────────────────────────────────
@@ -74,9 +82,9 @@ WORKING_ON_KEYWORDS = {
     "Agents & Automation":          ['agent', 'agentic', 'autonomous agent', 'orchestrat', 'multi-agent', 'autonom'],
     "Applied / Product AI":         ['product', 'ux', 'user interface', 'human-in-the-loop', 'coaching', 'application'],
     "Production & Reliability":     ['production', 'reliability', 'failure', 'incident', 'on-call', 'slo', 'sla', 'resilience'],
-    "LLM Infrastructure & Cost":   ['infrastructure', 'gpu', 'cluster', 'cost', 'capacity', 'compute', 'latency', 'throughput'],
+    "LLM Infrastructure & Cost":    ['infrastructure', 'gpu', 'cluster', 'cost', 'capacity', 'compute', 'latency', 'throughput'],
     "RAG & Retrieval":              ['rag', 'retrieval', 'knowledge graph', 'graphrag', 'vector search', 'retriev'],
-    "LLM Evaluation & Testing":    ['evaluat', 'benchmark', 'testing', 'evals', 'verification', 'hallucin'],
+    "LLM Evaluation & Testing":     ['evaluat', 'benchmark', 'testing', 'evals', 'verification', 'hallucin'],
     "Open Source & Edge":           ['open.source', 'open source', 'edge', 'on.prem', 'private.*llm', 'local model', 'self-host'],
     "Prompt & Context Engineering": ['prompt', 'context engineering', 'context window', 'few-shot', 'system prompt'],
     "Multimodal & Specialized AI":  ['multimodal', 'vision', 'vlm', 'voice', 'neural', 'wearable', 'medical', 'healthcare', 'radiolog'],
@@ -88,10 +96,6 @@ WORKING_ON_KEYWORDS = {
 }
 
 # ── Role display merge ─────────────────────────────────────────────────────
-# The classifier produces ~12 granular role buckets (useful for debugging and
-# catching edge cases). For the sponsorship page we cap at 6 display categories
-# — marketing readers don't need that level of detail.
-# Map granular label → display label. Anything not listed passes through as-is.
 ROLE_DISPLAY_MERGE = {
     "Software Engineer":          "Software / Platform / DevOps",
     "DevOps / SRE / Platform":    "Software / Platform / DevOps",
@@ -102,23 +106,15 @@ ROLE_DISPLAY_MERGE = {
     "Operations / Business":      "Business / Consulting / Product",
     "Consultant / Investor":      "Business / Consulting / Product",
     "Product Manager":            "Business / Consulting / Product",
-    # "ML / AI / Data"            → keep as-is
-    # "Independent / Job Seeker"  → keep as-is
-    # "Researcher"                → keep as-is
 }
 
-# ── Under-5% merge-up rules ────────────────────────────────────────────────
-# Any display category that ends up below 5% of total is absorbed into the
-# specified target. Applied after ROLE_DISPLAY_MERGE. Add entries here
-# whenever a new small bucket appears in future data.
 ROLE_UNDER5_FALLBACK = {
     "Researcher":               "ML / AI / Data",
     "Independent / Job Seeker": "Business / Consulting / Product",
 }
 
-# Same rule for company size: if a bucket falls under 5%, absorb it here.
 SIZE_UNDER5_FALLBACK = {
-    "Scale-up (50-500)":        "Startup (<50)",
+    "Scale-up (50-500)":          "Startup (<50)",
     "Solo Founder / Independent": "Startup (<50)",
 }
 
@@ -129,9 +125,6 @@ SIZE_UNDER5_FALLBACK = {
 # ══════════════════════════════════════════════════════════════
 
 ROLE_RULES = [
-
-    # ── ML / AI / Data ─────────────────────────────────────────
-    # Check before the generic software-engineer catch-all below.
     ("ML / AI / Data", lambda t: any(x in t for x in [
         'ml engineer', 'machine learning', 'mlops', 'nlp',
         'ai engineer', 'ai developer', 'ai software', 'ai security',
@@ -145,20 +138,12 @@ ROLE_RULES = [
     ]) and not any(x in t for x in [
         'product manager', 'director of', 'head of', 'vp of',
     ])),
-
-    # ── Independent / Job Seeker ───────────────────────────────
-    # Attendees who are in full-time education, actively seeking
-    # their next role, or otherwise unaffiliated with an employer.
     ("Independent / Job Seeker", lambda t: any(x in t for x in [
         'student', 'phd', 'mba', 'masters', "master's", 'ms cs',
         'grad assistant', 'graduate research', 'open to work',
         'job search', 'alumni engagement', 'data science ra',
         'freelance artist', 'unemployed',
     ]) or t.strip() in ['none']),
-
-    # ── Researcher ─────────────────────────────────────────────
-    # Professional researchers at universities, labs, or R&D units.
-    # Does not include engineers whose role involves some research.
     ("Researcher", lambda t: any(x in t for x in [
         'research scientist', 'ai researcher', 'senior research',
         'graduate research assistant', 'research engineer',
@@ -167,37 +152,25 @@ ROLE_RULES = [
     ]) and not any(x in t for x in [
         'product', 'software engineer', 'ml engineer', 'data scientist',
     ])),
-
-    # ── Founder / Entrepreneur ─────────────────────────────────
     ("Founder / Entrepreneur", lambda t: bool(
         re.search(r'\bfounder\b|co-founder|cofounder', t)
     )),
-
-    # ── C-Suite Executive ──────────────────────────────────────
     ("C-Suite Executive", lambda t: any(x in t for x in [
         'ceo', 'cto', 'cio', 'cpo', 'chief', 'wiceprezes',
     ])),
-
-    # ── Director / VP / Head ───────────────────────────────────
     ("Director / VP / Head", lambda t: any(x in t for x in [
         'vp ', 'vp of', ' vp', 'vice president', 'director',
         'head of', 'gm &', 'general manager',
     ])),
-
-    # ── Engineering Lead / Manager ─────────────────────────────
     ("Engineering Lead / Manager", lambda t: any(x in t for x in [
         'engineering manager', 'platform engineering manager',
         'tech lead', 'team lead', 'sdm', 'engineering lead',
     ])),
-
-    # ── DevOps / SRE / Platform ────────────────────────────────
     ("DevOps / SRE / Platform", lambda t: any(x in t for x in [
         'devops', 'sre', 'site reliability', 'dev sec ops', 'devsecops',
         'platform engineer', 'developer / sre', 'principal devops',
         'senior devops',
     ])),
-
-    # ── Software Engineer ──────────────────────────────────────
     ("Software Engineer", lambda t: any(x in t for x in [
         'software engineer', 'software developer', 'software architect',
         'full stack', 'backend', 'frontend', 'front-end', 'front end',
@@ -221,15 +194,11 @@ ROLE_RULES = [
         'data engineer', 'ai engineer', 'ml engineer',
         'machine learning', 'prompt engineer',
     ])),
-
-    # ── Product Manager ────────────────────────────────────────
     ("Product Manager", lambda t: any(x in t for x in [
         'product manager', 'product owner', 'chief product',
         'senior product', 'ai product manager', 'product partnerships',
         'product developer', 'product engineer',
     ]) or t.strip() in ['pm', 'cpo']),
-
-    # ── Consultant / Investor ──────────────────────────────────
     ("Consultant / Investor", lambda t: any(x in t for x in [
         'consultant', 'investor', 'angel investor', 'investment',
         'business analyst', 'deal origination', 'scout', 'funding',
@@ -239,8 +208,6 @@ ROLE_RULES = [
         'principal', 'partner', 'sr associate', 'owner',
         'analyst', 'architect',
     ]),
-
-    # ── Operations / Business ──────────────────────────────────
     ("Operations / Business", lambda t: any(x in t for x in [
         'operations', 'coordinator', 'admin', 'specialist',
         'project manager', 'project coordinator', 'psycholog',
@@ -268,7 +235,6 @@ def classify_role(raw_title):
 # COMPANY SIZE CLASSIFIER
 # ══════════════════════════════════════════════════════════════
 
-# Well-known organisations reliably above ~500 employees.
 KNOWN_ENTERPRISE = {
     'google', 'microsoft', 'amazon', 'aws', 'meta', 'apple', 'ibm',
     'oracle', 'salesforce', 'cisco', 'intel', 'nvidia', 'adobe', 'sap',
@@ -294,16 +260,13 @@ KNOWN_SCALEUP = {
     '365 data', 'mirantis', 'digitalocean', 'n-able', 'liveperson',
 }
 
-# Values that indicate the person did not supply a company name.
 NO_COMPANY_VALUES = {
     'n/a', 'na', 'n\\a', '-', 'none', 'tbd', 'private', 'it company',
     'student', 'job searching', 'looking for', 'unemployed', 'job seeker',
     'self', '',
 }
 
-SOLO_SIGNALS = [
-    'freelance', 'independent', 'self-employed',
-]
+SOLO_SIGNALS = ['freelance', 'independent', 'self-employed']
 
 
 def classify_company_size(company):
@@ -427,6 +390,137 @@ def print_section(title, items):
 
 
 # ══════════════════════════════════════════════════════════════
+# SPONSORSHIP TEMPLATE PATCHER
+# ══════════════════════════════════════════════════════════════
+
+def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, topic_pills):
+    """Render the static attendee profile HTML block."""
+
+    def bar_item(label, p):
+        label_html = label.replace('<', '&lt;')
+        return (
+            f'              <li class="sp-stats-bar-item">\n'
+            f'                <div class="sp-stats-bar-header">'
+            f'<span class="sp-stats-bar-name">{label_html}</span>'
+            f'<span class="sp-stats-bar-count">{p}%</span></div>\n'
+            f'                <div class="sp-stats-bar-track">'
+            f'<div class="sp-stats-bar-fill" style="width:{p}%"></div></div>\n'
+            f'              </li>'
+        )
+
+    def tag(label, hot):
+        cls = 'sp-stats-tag hot' if hot else 'sp-stats-tag'
+        label_html = label.replace('&', '&amp;')
+        return f'              <span class="{cls}">{label_html}</span>'
+
+    role_bars   = '\n'.join(bar_item(r['label'], r['pct']) for r in role_stats)
+    size_bars   = '\n'.join(bar_item(r['label'], r['pct']) for r in size_stats)
+    senior_bars = '\n'.join(bar_item(r['label'], r['pct']) for r in senior_stats)
+    topic_tags  = '\n'.join(tag(p['label'], p['highlight']) for p in topic_pills)
+
+    return (
+        '{# ── ATTENDEE PROFILE (static — update by running _build/analyze_attendees.py) ── #}\n'
+        '        <div class="sp-stats-s-title">Attendee profile</div>\n'
+        '        <div class="sp-stats-s-sub">Based on past attendee information across sampled events</div>\n'
+        '\n'
+        '        <div class="sp-stats-tldr">\n'
+        f'          <strong>TLDR:</strong> {tldr}\n'
+        '        </div>\n'
+        '\n'
+        '        <div class="sp-stats-grid-2">\n'
+        '\n'
+        '          <div class="sp-stats-card">\n'
+        '            <div class="sp-stats-card-title">Role breakdown</div>\n'
+        '            <ul class="sp-stats-bar-list">\n'
+        f'{role_bars}\n'
+        '            </ul>\n'
+        '          </div>\n'
+        '\n'
+        '          <div class="sp-stats-card">\n'
+        '            <div class="sp-stats-card-title">Company size</div>\n'
+        '            <ul class="sp-stats-bar-list">\n'
+        f'{size_bars}\n'
+        '            </ul>\n'
+        '          </div>\n'
+        '\n'
+        '          <div class="sp-stats-card">\n'
+        '            <div class="sp-stats-card-title">What they are working on</div>\n'
+        '            <div class="sp-stats-tag-cloud">\n'
+        f'{topic_tags}\n'
+        '            </div>\n'
+        '          </div>\n'
+        '\n'
+        '          <div class="sp-stats-card">\n'
+        '            <div class="sp-stats-card-title">Attendee seniority</div>\n'
+        '            <ul class="sp-stats-bar-list">\n'
+        f'{senior_bars}\n'
+        '            </ul>\n'
+        '          </div>\n'
+        '\n'
+        '        </div>\n'
+        '\n'
+        '        <div class="sp-stats-card" style="margin-bottom:32px">\n'
+        '          <div class="sp-stats-card-title">Top attendee companies</div>\n'
+        '          <div class="sp-stats-pill-grid" style="margin-bottom:0">\n'
+        '            <span class="sp-stats-pill">AWS</span>\n'
+        '            <span class="sp-stats-pill">Google</span>\n'
+        '            <span class="sp-stats-pill">Roche</span>\n'
+        '            <span class="sp-stats-pill">Adobe</span>\n'
+        '            <span class="sp-stats-pill">Thoughtworks</span>\n'
+        '            <span class="sp-stats-pill">Snowflake</span>\n'
+        '            <span class="sp-stats-pill">Monday.com</span>\n'
+        '            <span class="sp-stats-pill">N26</span>\n'
+        '            <span class="sp-stats-pill">Harness</span>\n'
+        '            <span class="sp-stats-pill">OpenX</span>\n'
+        '          </div>\n'
+        '        </div>\n'
+        '\n'
+        '        <hr class="sp-stats-sep">\n'
+        '\n'
+        '        '
+    )
+
+
+def patch_sponsorship_template(repo_root, tldr, role_stats, size_stats, senior_stats, topic_pills):
+    """
+    Patch the static attendee profile block in
+    _event_template/_templates/sponsorship.html in place.
+
+    Rewrites content between the two sentinel comments:
+      START: {# ── ATTENDEE PROFILE (static ...
+      END:   {# ── SPEAKER COMPANIES (dynamic ...
+    """
+    template_path = repo_root / '_event_template' / '_templates' / 'sponsorship.html'
+
+    if not template_path.exists():
+        print(f"\n  ⚠  Template not found at {template_path} — skipping patch.")
+        return
+
+    original = template_path.read_text(encoding='utf-8')
+
+    start_sentinel = '{# ── ATTENDEE PROFILE'
+    end_sentinel   = '{# ── SPEAKER COMPANIES'
+
+    start_idx = original.find(start_sentinel)
+    end_idx   = original.find(end_sentinel)
+
+    if start_idx == -1 or end_idx == -1:
+        print("\n  ⚠  Sentinel comments not found in template — skipping patch.")
+        print("     Expected markers:")
+        print(f"       '{start_sentinel}...'")
+        print(f"       '{end_sentinel}...'")
+        return
+
+    new_block = render_attendee_profile_block(
+        tldr, role_stats, size_stats, senior_stats, topic_pills
+    )
+
+    patched = original[:start_idx] + new_block + original[end_idx:]
+    template_path.write_text(patched, encoding='utf-8')
+    print(f"\n  ✓  Sponsorship template patched: {template_path}")
+
+
+# ══════════════════════════════════════════════════════════════
 # MAIN
 # ══════════════════════════════════════════════════════════════
 
@@ -442,8 +536,8 @@ def main():
         print(f"  Loaded {len(loaded)} rows from {Path(p).name}")
         rows.extend(loaded)
 
-    # De-duplicate by name — the same person may attend multiple events.
-    # Keep the first occurrence (earliest event loaded).
+    # De-duplicate by name — treat all CSVs as one combined event.
+    # Keep the first occurrence (earliest file loaded).
     seen_names = set()
     deduped = []
     dupes = 0
@@ -461,17 +555,15 @@ def main():
     print(f"\nTotal attendees: {total} unique ({dupes} duplicate(s) removed)")
 
     # ── Classify ──────────────────────────────────────────────
-    raw_role_counts = Counter(classify_role(r.get('Job Title', ''))      for r in rows)
+    raw_role_counts = Counter(classify_role(r.get('Job Title', ''))       for r in rows)
     size_counts     = Counter(classify_company_size(r.get('Company', '')) for r in rows)
-    senior_counts   = Counter(classify_seniority(r.get('Job Title', '')) for r in rows)
+    senior_counts   = Counter(classify_seniority(r.get('Job Title', ''))  for r in rows)
 
-    # Merge granular roles into display categories (max 6 for the page)
     role_counts = Counter()
     for label, count in raw_role_counts.items():
         display_label = ROLE_DISPLAY_MERGE.get(label, label)
         role_counts[display_label] += count
 
-    # Merge up any display category that falls under 5%
     def merge_under5(counts, fallback_map):
         changed = True
         while changed:
@@ -551,11 +643,13 @@ def main():
     out_path = Path(__file__).parent / "attendee_stats.json"
     with open(out_path, "w") as f:
         json.dump(stats, f, indent=2)
-
     print(f"\n  Stats written to {out_path}")
-    print("  Copy numbers into the static section of sponsorship.html.")
-    print("  Update TLDR at the top of this file when audience composition")
-    print("  changes significantly between seasons.\n")
+
+    # ── Patch sponsorship template in place ───────────────────
+    patch_sponsorship_template(
+        repo_root, TLDR, role_stats, size_stats, senior_stats, topic_pills
+    )
+    print("  Done. Commit and push to deploy.\n")
 
 
 if __name__ == "__main__":
