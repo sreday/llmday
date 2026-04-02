@@ -247,14 +247,14 @@
   padding: 36px 32px;
   background: #1c2a22;
   border: 1px solid rgba(38,152,106,.3);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 0;
-  align-items: stretch;
-  flex-wrap: wrap;
+  align-items: center;
 }
 .sp-custom-card-left {
-  flex: 0 0 230px;
   padding-right: 32px;
+  border-right: 1px solid rgba(38,152,106,.3);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -271,22 +271,14 @@
   color: #7bc49a;
   margin-bottom: 0;
 }
-.sp-custom-divider {
-  width: 1px;
-  background: rgba(38,152,106,.3);
-  flex-shrink: 0;
-  margin: 0 32px;
-}
+.sp-custom-divider { display: none; }
 .sp-custom-ideas {
-  flex: 1;
-  min-width: 200px;
   list-style: none;
-  padding: 0;
-  margin: auto 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 6px 32px;
-  align-content: center;
+  padding: 0 0 0 32px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 .sp-custom-ideas li { font-size: .9rem; color: #d0d0d0; padding: 4px 0; }
 .sp-custom-ideas li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
@@ -444,9 +436,13 @@
             <h3>Something else in mind?</h3>
             <p class="sp-custom-subtitle">Let's figure it out together.</p>
           </div>
-          <div class="sp-custom-divider"></div>
           <ul class="sp-custom-ideas">
-            {% for tier in on_request_tiers %}
+            {% for tier in on_request_tiers[:3] %}
+            <li>{{ tier.name }}</li>
+            {% endfor %}
+          </ul>
+          <ul class="sp-custom-ideas">
+            {% for tier in on_request_tiers[3:] %}
             <li>{{ tier.name }}</li>
             {% endfor %}
           </ul>
