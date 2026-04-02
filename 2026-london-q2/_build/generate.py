@@ -205,9 +205,9 @@ _all_siblings = sorted(_glob.glob('../20*/'))
 
 # ── Global stats: all events across all cities ──────────────────────────────
 _global_org_counts = {}
-_global_speaker_count = 0
+_global_speaker_names = set()
 _global_sponsors_raw = []
-_total_attendees = 0
+_total_attendees_raw = 0
 _total_events = 0
 
 for _gf in _all_siblings:
@@ -217,7 +217,9 @@ for _gf in _all_siblings:
         for _t in read_csv(_gt_path):
             _status = _t.get('status', '').lower()
             if 'confirmed' in _status or 'keynote' in _status:
-                _global_speaker_count += 1
+                _spk_name = (_t.get('name') or _t.get('Name') or '').strip()
+                if _spk_name:
+                    _global_speaker_names.add(_spk_name)
                 _org = _t.get('organization', '').strip()
                 _skip_orgs = {'stealth startup', 'sre author', ''}
                 if _org.lower() not in _skip_orgs:
@@ -230,10 +232,20 @@ for _gf in _all_siblings:
         _global_sponsors_raw.extend(_gm.get('sponsors', []) or [])
         _att_raw = str(_gm.get('attendees', 0)).replace('+', '').strip()
         try:
-            _total_attendees += int(_att_raw)
+            _total_attendees_raw += int(_att_raw)
         except ValueError:
             pass
         _total_events += 1
+
+# round speakers (same as home page banner: remainder ≤4 → down, ≥5 → up to next 10)
+_global_speaker_count = len(_global_speaker_names)
+_spk_rem = _global_speaker_count % 10
+_spk_rounded = (_global_speaker_count - _spk_rem) if _spk_rem <= 4 else (_global_speaker_count + (10 - _spk_rem))
+
+# round attendees (same as home page banner: remainder ≥50 → up to next 100, <50 → down)
+_att_rem = _total_attendees_raw % 100
+_att_rounded = (_total_attendees_raw + (100 - _att_rem)) if _att_rem >= 50 else (_total_attendees_raw - _att_rem)
+_total_attendees = f"{_att_rounded}+"
 
 # top speaker companies globally — slice after sponsor filtering below
 _global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], reverse=True)
@@ -320,7 +332,7 @@ _all_tiers         = _sponsorship_config.get('tiers', [])
 _sponsorship_tiers = [t for t in _all_tiers if t.get('price_label') != 'On request']
 _on_request_tiers  = [t for t in _all_tiers if t.get('price_label') == 'On request']
 
-print(f"  Total events: {_total_events}, attendees: {_total_attendees}, speakers: {_global_speaker_count}, cities: {_total_cities}, ambassadors: {_total_ambassadors}")
+print(f"  Total events: {_total_events}, attendees: {_total_attendees} (raw {_total_attendees_raw}), speakers: {_spk_rounded}+ (raw {_global_speaker_count}), cities: {_total_cities}, ambassadors: {_total_ambassadors}")
 print(f"  Global top companies: {len(_global_top_companies)}, global sponsors: {len(_global_sponsors)}")
 print(f"  Timeline events: {len(_timeline_events)}, countries: {_total_countries}")
 
@@ -336,7 +348,7 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         hidden_past=_hidden_past,
         hidden_upcoming=_hidden_upcoming,
         total_attendees=_total_attendees,
-        total_speakers=_global_speaker_count,
+        total_speakers=f"{_spk_rounded}+",
         total_events=_total_events,
         total_countries=_total_countries,
         total_cities=_total_cities,
