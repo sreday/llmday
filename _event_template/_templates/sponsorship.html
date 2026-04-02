@@ -336,7 +336,23 @@
   text-decoration: none;
 }
 .btn-whatsapp:hover { background: #1daa52; color: #fff; text-decoration: none; }
-.sp-cta-btn { font-size: 1.05rem !important; padding: .42rem .84rem !important; }
+.sp-cta-btn { font-size: 1.26rem !important; padding: .5rem 1rem !important; }
+.btn-stats-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 34px;
+  font-size: 1.14rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: .01em;
+  transition: background .2s;
+}
+.btn-stats-close:hover { background: #333; }
 
 /* ── Sister brands ───────────────────────────────────── */
 #sp-dark-body .sp-sisters-section {
@@ -637,6 +653,16 @@
           {% endif %}
         </div>
 
+        <div class="text-center" style="margin-top:32px;">
+          <button class="btn-stats-close" onclick="spToggleStats()">
+            Close stats
+            <span style="display:flex;align-items:center;">
+              <svg width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);">
+                <polyline points="1,1 7,7 13,1"/>
+              </svg>
+            </span>
+          </button>
+        </div>
 
       </div>
     </div>
@@ -655,7 +681,7 @@ function spToggleStats() {
 {# ── Get in touch ────────────────────────────────────── #}
 <section class="sp-section sp-section-alt">
   <div class="container">
-    <h2 class="sp-section-title text-center">Ready to seal the deal?</h2>
+    <h2 class="sp-section-title text-center">Ready to give it a try?</h2>
     <p class="text-center" style="color:#aaa;margin-top:-.6rem;margin-bottom:1.5rem;">Secure your sponsorship with <a href="https://www.linkedin.com/in/marek-pawlikowski/" target="_blank" rel="noopener noreferrer" style="color:#7bc49a;">Mark Pawlikowski</a></p>
     <div class="row justify-content-center">
       <div class="col-12 col-lg-10 d-flex flex-wrap justify-content-center gap-3">
