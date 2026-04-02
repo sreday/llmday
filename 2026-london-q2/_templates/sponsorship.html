@@ -188,7 +188,7 @@
   position: absolute; top: 32px; left: 0; right: 0; height: 2px;
   background: var(--spi-green-mid);
 }
-.sp-stats-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; }
+.sp-stats-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
 .sp-stats-tl-event  { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
 .sp-stats-tl-dot {
   width: 12px; height: 12px; border-radius: 50%; background: var(--spi-green);
@@ -240,6 +240,7 @@
 .sp-stats-header-gif { flex: 0 0 260px; width: 260px; border-radius: 12px; overflow: hidden; align-self: center; }
 .sp-stats-header-gif img { width: 100%; display: block; }
 @media (max-width: 640px) { .sp-stats-header-row { flex-direction: column; } .sp-stats-header-gif { width: 100%; flex: none; } }
+@media (min-width: 768px) { .sp-stats-header-gif-img { display:block !important; } }
 
 /* ── Custom / on-request card ────────────────────────── */
 .sp-custom-card {
@@ -282,6 +283,11 @@
 }
 .sp-custom-ideas li { font-size: .9rem; color: #d0d0d0; padding: 4px 0; }
 .sp-custom-ideas li::before { content: "✓ "; color: var(--sp-accent); font-weight: 700; }
+@media (max-width: 640px) {
+  .sp-custom-card { grid-template-columns: 1fr; }
+  .sp-custom-card-left { border-right: none; border-bottom: 1px solid rgba(38,152,106,.3); padding-right: 0; padding-bottom: 20px; margin-bottom: 20px; }
+  .sp-custom-ideas { padding-left: 0; }
+}
 
 /* ── Pricing cards ───────────────────────────────────── */
 .sp-tier-card {
@@ -505,7 +511,7 @@
               </div>
             </div>
           </div>
-          <img src="assets/images/llama-conspiracy.gif" alt="llama" style="width:490px; border-radius:12px; flex-shrink:0; align-self:stretch; object-fit:cover;">
+          <img src="assets/images/llama-conspiracy.gif" alt="llama" class="sp-stats-header-gif-img" style="width:490px; border-radius:12px; flex-shrink:0; align-self:stretch; object-fit:cover; display:none;">
         </div>
 
         <hr class="sp-stats-sep">
