@@ -290,10 +290,10 @@ _total_countries = len(_countries_seen) or 1
 _total_cities = len({ev['city'] for ev in _timeline_events if ev.get('city')})
 
 # cap timeline at 10 past + 10 upcoming
-_tl_past     = [e for e in _timeline_events if e['state'] in ('past', 'after')]
-_tl_upcoming = [e for e in _timeline_events if e['state'] not in ('past', 'after')]
-_hidden_past     = max(0, len(_tl_past) - 10)
-_hidden_upcoming = max(0, len(_tl_upcoming) - 10)
+_tl_past         = [e for e in _timeline_events if e['state'] in ('past', 'after')]
+_tl_upcoming     = [e for e in _timeline_events if e['state'] not in ('past', 'after')]
+_hidden_past     = max(0, len(_tl_past) - 10) if _timeline_events else 0
+_hidden_upcoming = max(0, len(_tl_upcoming) - 10) if _timeline_events else 0
 _timeline_events = _tl_past[-10:] + _tl_upcoming[:10]
 
 _amb_path = _os.path.join('..', 'home', '_db', 'ambassadors.csv')
