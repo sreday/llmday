@@ -267,14 +267,15 @@ if _os.path.exists(_home_meta_path):
             _hem = yaml.load(_hf2, Loader=yaml.FullLoader)
         _loc = (_hem.get('location_string', '') + ' ' + _hem.get('city_name', '')).lower()
         if 'poland' in _loc or 'warsaw' in _loc:
-            _flag = '🇵🇱'; _countries_seen.add('PL')
+            _flag = '🇵🇱'; _countries_seen.add('PL'); _country = 'Poland'
         elif 'london' in _loc or 'uk' in _loc or 'united kingdom' in _loc:
-            _flag = '🇬🇧'; _countries_seen.add('UK')
+            _flag = '🇬🇧'; _countries_seen.add('UK'); _country = 'United Kingdom'
         else:
-            _flag = '🇺🇸'; _countries_seen.add('US')
+            _flag = '🇺🇸'; _countries_seen.add('US'); _country = 'United States'
         _timeline_events.append({
             'name':        _he.get('name', ''),
             'city':        _hem.get('city_name', ''),
+            'country':     _country,
             'date_string': _hem.get('date_string', ''),
             'attendees':   _hem.get('attendees', ''),
             'url':         f'../{_he_folder}/',

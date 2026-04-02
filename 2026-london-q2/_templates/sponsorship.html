@@ -195,7 +195,11 @@
   border: 2px solid #fff; box-shadow: 0 0 0 2px var(--spi-green);
   margin-bottom: 10px; flex-shrink: 0; z-index: 1;
 }
-.sp-stats-tl-dot.past { background: #b6dfc9; box-shadow: 0 0 0 2px #b6dfc9; }
+.sp-stats-tl-dot.past { background: #ccc; box-shadow: 0 0 0 2px #ccc; }
+.sp-stats-tl-chip.past { background: #f0f0f0; border-color: #ddd; }
+.sp-stats-tl-chip.past .sp-stats-tl-city { color: #999; }
+.sp-stats-tl-chip.past .sp-stats-tl-date { color: #bbb; }
+.sp-stats-tl-chip.past .sp-stats-tl-seats { color: #bbb; }
 .sp-stats-tl-chip {
   background: var(--spi-green-light); border: 1px solid var(--spi-green-mid);
   border-radius: 8px; padding: 8px 10px; text-align: center;
@@ -606,11 +610,11 @@
             {% for ev in timeline_events %}
             <div class="sp-stats-tl-event">
               <div class="sp-stats-tl-dot {% if ev.state == 'past' or ev.state == 'after' %}past{% endif %}"></div>
-              <a href="{{ ev.url }}" class="sp-stats-tl-chip">
-                <div class="sp-stats-tl-city">{{ ev.flag }} {{ ev.city }}</div>
+              <a href="{{ ev.url }}" class="sp-stats-tl-chip{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">
+                <div class="sp-stats-tl-city">{{ ev.city }}</div>
+                <div class="sp-stats-tl-date" style="font-style:normal;">{{ ev.country }}</div>
                 <div class="sp-stats-tl-date">{{ ev.date_string }}</div>
                 {% if ev.attendees %}<div class="sp-stats-tl-seats">{{ ev.attendees }} seats</div>{% endif %}
-                {% if ev.state == 'past' or ev.state == 'after' %}<div class="sp-stats-tl-past">past</div>{% endif %}
               </a>
             </div>
             {% endfor %}
