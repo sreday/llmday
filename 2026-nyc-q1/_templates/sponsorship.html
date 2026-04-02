@@ -663,7 +663,7 @@
         </div>
 
         <div class="text-center" style="margin-top:32px;">
-          <button class="btn-stats-close" onclick="spToggleStats(); window.location.hash='stats';">
+          <button class="btn-stats-close" onclick="spToggleStats(); setTimeout(function(){ window.location.hash='stats'; }, 10);">
             Close stats
             <span style="display:flex;align-items:center;">
               <svg width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);">
