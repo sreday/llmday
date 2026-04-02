@@ -211,6 +211,8 @@
 .sp-stats-tl-date  { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
 .sp-stats-tl-seats { font-size: .75rem; color: #3a8a60; }
 .sp-stats-tl-past  { font-size: .7rem; color: #8fcfb0; font-style: italic; }
+.sp-stats-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 0; }
+.sp-stats-tl-pin { font-size: 1.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
 
 /* GIF */
 .sp-stats-gif-wrap { margin-top: 32px; border-radius: 12px; overflow: hidden; width: 90%; margin-left: auto; margin-right: auto; }
@@ -646,7 +648,14 @@
           <div style="font-size:.82rem; color:#999; margin-bottom:8px;">{{ hidden_past }} older event{{ 's' if hidden_past > 1 else '' }} not shown</div>
           {% endif %}
           <div class="sp-stats-tl-events">
+            {% set ns = namespace(pin_shown=false) %}
             {% for ev in timeline_events %}
+            {% if not ns.pin_shown and ev.state != 'past' and ev.state != 'after' %}
+            {% set ns.pin_shown = true %}
+            <div class="sp-stats-tl-pin-event">
+              <div class="sp-stats-tl-pin">▼</div>
+            </div>
+            {% endif %}
             <div class="sp-stats-tl-event">
               <div class="sp-stats-tl-dot {% if ev.state == 'past' or ev.state == 'after' %}past{% endif %}"></div>
               <a href="{{ ev.url }}" class="sp-stats-tl-chip{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">
