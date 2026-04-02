@@ -38,7 +38,7 @@ python3 _build/analyze_attendees.py "C:\Users\you\Desktop\event1.csv" "C:\Users\
 ```
 
 You can pass as many CSVs as you like. Attendees appearing in multiple files are
-deduplicated by name so each person is counted once.
+deduplicated so each person is counted once.
 
 ## What the script produces
 
