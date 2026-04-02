@@ -632,7 +632,7 @@
 
         <div class="sp-stats-timeline">
           <div class="sp-stats-tl-line"></div>
-          {% if hidden_past > 0 %}
+          {% if hidden_past is defined and hidden_past > 0 %}
           <div style="font-size:.82rem; color:#999; margin-bottom:8px;">{{ hidden_past }} older event{{ 's' if hidden_past > 1 else '' }} not shown</div>
           {% endif %}
           <div class="sp-stats-tl-events">
@@ -648,7 +648,7 @@
             </div>
             {% endfor %}
           </div>
-          {% if hidden_upcoming > 0 %}
+          {% if hidden_upcoming is defined and hidden_upcoming > 0 %}
           <div style="font-size:.82rem; color:#999; margin-top:8px;">{{ hidden_upcoming }} more event{{ 's' if hidden_upcoming > 1 else '' }} announced</div>
           {% endif %}
         </div>
