@@ -103,7 +103,7 @@ for _csv_path in glob.glob("../20*/_db/*.csv"):
     except Exception:
         pass
 _spk_rem = len(_speakers) % 10
-_spk_rounded = (len(_speakers) + (10 - _spk_rem)) if _spk_rem >= 5 else (len(_speakers) - _spk_rem)
+_spk_rounded = len(_speakers) if _spk_rem == 0 else (len(_speakers) + (10 - _spk_rem))
 print(f"  Speakers: {len(_speakers)} raw -> {_spk_rounded}+")
 
 # Attendees = sum of per-event attendee counts, rounded by remainder
