@@ -426,11 +426,10 @@
       <div class="sp-stats-inner">
 
         {# ── HEADLINE NUMBERS (dynamic from generate.py) ── #}
-        <div class="sp-stats-header-row">
-          <div class="sp-stats-header-left">
+        <div style="display:flex; align-items:flex-start; gap:24px; margin-bottom:0;">
+          <div style="flex:1">
             <div class="sp-stats-s-title">Let's start with some numbers</div>
             <div class="sp-stats-s-sub">Across all LLMday editions worldwide</div>
-
             <div class="sp-stats-big-numbers">
               <div class="sp-stats-big-num">
                 <div class="sp-stats-big-num-value">{{ total_attendees }}<sup>+</sup></div>
@@ -450,9 +449,7 @@
               </div>
             </div>
           </div>
-          <div class="sp-stats-header-gif">
-            <img src="/assets/images/llama-conspiracy.gif" alt="llama conspiracy">
-          </div>
+          <img src="/assets/images/llama-conspiracy.gif" alt="llama" style="width:220px; border-radius:12px; flex-shrink:0; margin-top:4px;">
         </div>
 
         <hr class="sp-stats-sep">
