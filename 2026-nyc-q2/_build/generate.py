@@ -235,8 +235,8 @@ for _gf in _all_siblings:
             pass
         _total_events += 1
 
-# top 10 speaker companies globally
-_global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+# top speaker companies globally — slice after sponsor filtering below
+_global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], reverse=True)
 
 # global sponsors — deduplicated, filtering out small/niche logos
 _sp_exclude_logos = {'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png'}
@@ -248,6 +248,10 @@ for _s in _global_sponsors_raw:
         _seen_global_logos.add(_logo)
         _sname = re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title()
         _global_sponsors.append({'logo': _logo, 'url': _s.get('url', ''), 'name': _sname})
+
+# filter sponsors out of top companies, then take top 10
+_sponsor_names = {s['name'].strip().lower() for s in _global_sponsors if s.get('name')}
+_global_top_companies = [(co, cnt) for co, cnt in _global_top_companies if co.strip().lower() not in _sponsor_names][:10]
 
 # ── Timeline: all events from home/metadata.yml ──────────────────────────────
 _timeline_events = []
