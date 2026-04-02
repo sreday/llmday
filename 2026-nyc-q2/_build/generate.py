@@ -245,7 +245,7 @@ _spk_rounded = (_global_speaker_count - _spk_rem) if _spk_rem <= 4 else (_global
 # round attendees (same as home page banner: remainder ≥50 → up to next 100, <50 → down)
 _att_rem = _total_attendees_raw % 100
 _att_rounded = (_total_attendees_raw + (100 - _att_rem)) if _att_rem >= 50 else (_total_attendees_raw - _att_rem)
-_total_attendees = f"{_att_rounded}+"
+_total_attendees = f"{_att_rounded}"
 
 # top speaker companies globally — slice after sponsor filtering below
 _global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], reverse=True)
@@ -348,7 +348,7 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         hidden_past=_hidden_past,
         hidden_upcoming=_hidden_upcoming,
         total_attendees=_total_attendees,
-        total_speakers=f"{_spk_rounded}+",
+        total_speakers=f"{_spk_rounded}",
         total_events=_total_events,
         total_countries=_total_countries,
         total_cities=_total_cities,
