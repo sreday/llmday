@@ -75,8 +75,8 @@ tiers:
     highlight: false
     price_label: "20% off 5+ tickets"
     benefits:
-      - "Buy 5 or more tickets at 20% off"
-      - "Vouchers redeemable by anyone"
+      - "Sponsor 5 or more tickets at a discount"
+      - "Share your vouchers with anyone"
 
   - id: startup_discount
     name: "Startup Discount"
