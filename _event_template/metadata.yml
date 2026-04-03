@@ -54,8 +54,8 @@ hero_pictures:
 # brand identity
 brand_name: "LLMday"
 brand_domain: "llmday.com"
-brand_description: "Conference on Large Language Models, AI and Machine Learning"
-brand_tagline: "Large Language Models, AI and Machine Learning"
+brand_description: "Conference on Large Language Models, AI & ML"
+brand_tagline: "Large Language Models, AI & ML"
 brand_og_pitch: "Probably the most awesome LLM conference!"
 brand_color: "#26986A"
 brand_twitter: "@llmday_com"
@@ -71,3 +71,4 @@ twitter_url: https://twitter.com/llmday_com
 linkedin_url: https://www.linkedin.com/company/llmday/
 youtube_url: https://www.youtube.com/@llmday
 mailto: "mailto:hello@llmday.com"
+youtube_playlist:
