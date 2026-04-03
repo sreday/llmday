@@ -513,7 +513,7 @@
         <div style="display:flex; align-items:flex-start; gap:32px; margin-bottom:0;">
           <div style="flex:1; min-width:0;">
             <div class="sp-stats-s-title">Let's start with some numbers</div>
-            <div class="sp-stats-s-sub">Across all LLMday editions worldwide</div>
+            <div class="sp-stats-s-sub">Across all {{ brand_name }} editions worldwide</div>
             <div class="sp-stats-big-numbers">
               <div class="sp-stats-big-num">
                 <div class="sp-stats-big-num-value">{{ total_attendees }}</div>
@@ -840,15 +840,11 @@ function spToggleFaq() {
     <h2 class="sp-section-title text-center">Sister brands</h2>
     <p class="text-center" style="color:#aaa;margin-top:-.6rem;margin-bottom:1.5rem;">Other conferences we organize: in-person & online</p>
     <div class="sp-sisters">
-      <a href="https://sreday.com" target="_blank" rel="noopener noreferrer">
-        <img src="/assets/images/sreday_sticker.png" alt="SREday">
+      {% for brand in sister_brands %}
+      <a href="{{ brand.url }}" target="_blank" rel="noopener noreferrer">
+        <img src="{{ brand.logo }}" alt="{{ brand.name }}">
       </a>
-      <a href="https://devopsnotdead.com" target="_blank" rel="noopener noreferrer">
-        <img src="/assets/images/devopsnotdead_sticker.png" alt="DevOps Not Dead">
-      </a>
-      <a href="https://conf42.com" target="_blank" rel="noopener noreferrer">
-        <img src="/assets/images/conf42_sticker.png" alt="Conf42">
-      </a>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -858,12 +854,11 @@ function spToggleFaq() {
     <h2 class="sp-section-title text-center">Our Open Source Tools</h2>
     <p class="text-center" style="color:#aaa;margin-top:-.6rem;margin-bottom:1.5rem;">To help fellow community builders</p>
     <div class="sp-sisters">
-      <a href="https://cfp.ninja/" target="_blank" rel="noopener noreferrer">
-        <img src="/assets/images/cfpninja sticker.png" alt="CFP Ninja">
+      {% for tool in open_source_tools %}
+      <a href="{{ tool.url }}" target="_blank" rel="noopener noreferrer">
+        <img src="{{ tool.logo }}" alt="{{ tool.name }}">
       </a>
-      <a href="https://certified.fyi/" target="_blank" rel="noopener noreferrer">
-        <img src="/assets/images/certified fyi sticker.png" alt="Certified FYI">
-      </a>
+      {% endfor %}
     </div>
   </div>
 </section>
