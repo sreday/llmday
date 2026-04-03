@@ -364,6 +364,8 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         # sponsorship tiers
         sponsorship_tiers=_sponsorship_tiers,
         on_request_tiers=_on_request_tiers,
+        sister_brands=_sponsorship_config.get('sister_brands', []),
+        open_source_tools=_sponsorship_config.get('open_source_tools', []),
         **{**context, 'event_size': _event_size}
     ))
 print("Done: sponsorship.html")

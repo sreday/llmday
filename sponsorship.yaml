@@ -1,7 +1,7 @@
 tiers:
   - id: leads
     name: "Conference Leads"
-    highlight: false
+    highlight: true
     requires: "Cannot be purchased solo"
     price:
       small: 500
@@ -117,3 +117,22 @@ tiers:
     name: "Attendee Email Blast"
     highlight: false
     price_label: "On request"
+
+sister_brands:
+  - name: "SREday"
+    url: "https://sreday.com"
+    logo: "/assets/images/sreday_sticker.png"
+  - name: "DevOps Not Dead"
+    url: "https://devopsnotdead.com"
+    logo: "/assets/images/devopsnotdead_sticker.png"
+  - name: "Conf42"
+    url: "https://conf42.com"
+    logo: "/assets/images/conf42_sticker.png"
+
+open_source_tools:
+  - name: "CFP Ninja"
+    url: "https://cfp.ninja/"
+    logo: "/assets/images/cfpninja sticker.png"
+  - name: "Certified FYI"
+    url: "https://certified.fyi/"
+    logo: "/assets/images/certified fyi sticker.png"
