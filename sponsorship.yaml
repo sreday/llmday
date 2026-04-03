@@ -1,7 +1,7 @@
 tiers:
   - id: leads
     name: "Conference Leads"
-    highlight: true
+
     requires: "Cannot be purchased solo"
     price:
       small: 500
@@ -12,7 +12,7 @@ tiers:
 
   - id: keynote
     name: "Keynote Session"
-    highlight: false
+
     price:
       small: 1000
       medium: 3000
@@ -23,7 +23,7 @@ tiers:
 
   - id: talk
     name: "Regular Session Slot"
-    highlight: false
+
     price:
       small: 500
       medium: 2000
@@ -34,7 +34,7 @@ tiers:
 
   - id: booth
     name: "Booth / Table"
-    highlight: false
+
     price:
       small: 1000
       medium: 2000
@@ -45,7 +45,7 @@ tiers:
 
   - id: logo_swag
     name: "Logo Sponsor + Swag Distribution"
-    highlight: false
+
     price:
       small: 500
       medium: 1000
@@ -56,7 +56,7 @@ tiers:
 
   - id: food
     name: "Breakfast / Coffee / Lunch / Happy Hour"
-    highlight: false
+
     price_label: "£1000 + £15pp"
     benefits:
       - "Microphone time before the selected break"
@@ -64,7 +64,7 @@ tiers:
 
   - id: clothing
     name: "Branded Wearables"
-    highlight: false
+
     price_label: "£1000 + variable"
     benefits:
       - "T-shirts, socks, hoodies or caps with your logo"
@@ -72,7 +72,7 @@ tiers:
 
   - id: tickets
     name: "Discounted Ticket Pack"
-    highlight: false
+
     price_label: "20% off 5+ tickets"
     benefits:
       - "Sponsor 5 or more tickets at a discount"
@@ -80,7 +80,7 @@ tiers:
 
   - id: startup_discount
     name: "Startup Discount"
-    highlight: false
+
     price_label: "20% off anything"
     benefits:
       - "Early-stage startups under $5M in funding"
@@ -90,32 +90,32 @@ tiers:
 
   - id: host
     name: "Bring the conference to your city"
-    highlight: false
+
     price_label: "On request"
 
   - id: co_located
     name: "Co-Located Event"
-    highlight: false
+
     price_label: "On request"
 
   - id: workshop
     name: "Workshop"
-    highlight: false
+
     price_label: "On request"
 
   - id: hackathon
     name: "Hackathon"
-    highlight: false
+
     price_label: "On request"
 
   - id: meetup
     name: "Post-Conference Meetup"
-    highlight: false
+
     price_label: "On request"
 
   - id: email_blast
     name: "Attendee Email Blast"
-    highlight: false
+
     price_label: "On request"
 
 sister_brands:

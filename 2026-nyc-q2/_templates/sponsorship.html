@@ -316,28 +316,6 @@
   border-color: rgba(180, 130, 20, .5);
   box-shadow: 0 0 22px rgba(180, 130, 20, .22), 0 0 50px rgba(180, 130, 20, .08);
 }
-.sp-tier-card.sp-tier-highlight {
-  border-color: var(--sp-accent);
-  box-shadow: 0 4px 24px rgba(38,152,106,.2);
-}
-.sp-tier-card.sp-tier-highlight:hover {
-  border-color: rgba(180, 130, 20, .7);
-  box-shadow: 0 0 30px rgba(180, 130, 20, .30), 0 0 70px rgba(180, 130, 20, .10);
-}
-.sp-popular-badge {
-  position: absolute;
-  top: -13px; left: 50%;
-  transform: translateX(-50%);
-  background: var(--sp-accent);
-  color: #fff;
-  font-size: .72rem;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  padding: 3px 14px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
 .sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
 .sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; }
 .sp-tier-body     { flex: 1; display: flex; flex-direction: column; justify-content: center; }
@@ -444,10 +422,7 @@
     <div class="row justify-content-center g-4 mt-2">
       {% for tier in sponsorship_tiers %}
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card {% if tier.highlight %}sp-tier-highlight{% endif %}">
-          {% if tier.highlight %}
-          <div class="sp-popular-badge">⭐ Most popular</div>
-          {% endif %}
+        <div class="sp-tier-card">
           <div class="sp-tier-name">{{ tier.name }}</div>
           <div class="sp-tier-price">
             {% if tier.price_label %}{{ tier.price_label }}{% else %}£{{ tier.price[event_size] }}{% endif %}

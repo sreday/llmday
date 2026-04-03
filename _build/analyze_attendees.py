@@ -380,6 +380,39 @@ def top_n(counts, total, exclude_other=True):
     return [{"label": k, "pct": pct(v, total)} for k, v in items]
 
 
+TOP_COMPANIES_MAX = 10
+
+# Display names for companies whose CSV values don't title-case cleanly
+COMPANY_DISPLAY_NAMES = {
+    'aws': 'AWS',
+    'ibm': 'IBM',
+    'pwc': 'PwC',
+    'ey': 'EY',
+    'n26': 'N26',
+    'monday.com': 'Monday.com',
+    'gog.com': 'GOG.com',
+    'sap': 'SAP',
+    'hp': 'HP',
+    'lg': 'LG',
+}
+
+
+def extract_top_companies(rows):
+    """Return top attendee companies by headcount, excluding solo/empty."""
+    counts = Counter()
+    for r in rows:
+        company = r.get('Company', '').strip()
+        c_lower = company.lower()
+        if not c_lower or c_lower in NO_COMPANY_VALUES or c_lower.startswith('looking for'):
+            continue
+        if any(x in c_lower for x in SOLO_SIGNALS):
+            continue
+        # Normalize to a display name
+        display = COMPANY_DISPLAY_NAMES.get(c_lower, company)
+        counts[display] += 1
+    return [name for name, _ in counts.most_common(TOP_COMPANIES_MAX)]
+
+
 def print_section(title, items):
     print(f"\n{'═'*52}")
     print(title)
@@ -393,7 +426,7 @@ def print_section(title, items):
 # SPONSORSHIP TEMPLATE PATCHER
 # ══════════════════════════════════════════════════════════════
 
-def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, topic_pills):
+def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, topic_pills, top_companies):
     """Render the static attendee profile HTML block."""
 
     def bar_item(label, p):
@@ -418,10 +451,15 @@ def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, to
     senior_bars = '\n'.join(bar_item(r['label'], r['pct']) for r in senior_stats)
     topic_tags  = '\n'.join(tag(p['label'], p['highlight']) for p in topic_pills)
 
+    company_pills = '\n'.join(
+        f'            <span class="sp-stats-pill">{name}</span>'
+        for name in top_companies
+    )
+
     return (
         '{# ── ATTENDEE PROFILE (static - update by running _build/analyze_attendees.py) ── #}\n'
         '        <div class="sp-stats-s-title">Attendee profile</div>\n'
-        '        <div class="sp-stats-s-sub">Based on past attendee information across sampled events</div>\n'
+        '        <div class="sp-stats-s-sub">Based on anonymized past attendee stats</div>\n'
         '\n'
         '        <div class="sp-stats-tldr">\n'
         f'          <strong>TLDR:</strong> {tldr}\n'
@@ -433,6 +471,13 @@ def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, to
         '            <div class="sp-stats-card-title">Role breakdown</div>\n'
         '            <ul class="sp-stats-bar-list">\n'
         f'{role_bars}\n'
+        '            </ul>\n'
+        '          </div>\n'
+        '\n'
+        '          <div class="sp-stats-card">\n'
+        '            <div class="sp-stats-card-title">Attendee seniority</div>\n'
+        '            <ul class="sp-stats-bar-list">\n'
+        f'{senior_bars}\n'
         '            </ul>\n'
         '          </div>\n'
         '\n'
@@ -450,28 +495,12 @@ def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, to
         '            </div>\n'
         '          </div>\n'
         '\n'
-        '          <div class="sp-stats-card">\n'
-        '            <div class="sp-stats-card-title">Attendee seniority</div>\n'
-        '            <ul class="sp-stats-bar-list">\n'
-        f'{senior_bars}\n'
-        '            </ul>\n'
-        '          </div>\n'
-        '\n'
         '        </div>\n'
         '\n'
         '        <div class="sp-stats-card" style="margin-bottom:32px">\n'
         '          <div class="sp-stats-card-title">Top attendee companies</div>\n'
         '          <div class="sp-stats-pill-grid" style="margin-bottom:0">\n'
-        '            <span class="sp-stats-pill">AWS</span>\n'
-        '            <span class="sp-stats-pill">Google</span>\n'
-        '            <span class="sp-stats-pill">Roche</span>\n'
-        '            <span class="sp-stats-pill">Adobe</span>\n'
-        '            <span class="sp-stats-pill">Thoughtworks</span>\n'
-        '            <span class="sp-stats-pill">Snowflake</span>\n'
-        '            <span class="sp-stats-pill">Monday.com</span>\n'
-        '            <span class="sp-stats-pill">N26</span>\n'
-        '            <span class="sp-stats-pill">Harness</span>\n'
-        '            <span class="sp-stats-pill">OpenX</span>\n'
+        f'{company_pills}\n'
         '          </div>\n'
         '        </div>\n'
         '\n'
@@ -481,7 +510,7 @@ def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, to
     )
 
 
-def patch_sponsorship_template(repo_root, tldr, role_stats, size_stats, senior_stats, topic_pills):
+def patch_sponsorship_template(repo_root, tldr, role_stats, size_stats, senior_stats, topic_pills, top_companies):
     """
     Patch the static attendee profile block in
     _event_template/_templates/sponsorship.html in place.
@@ -512,7 +541,7 @@ def patch_sponsorship_template(repo_root, tldr, role_stats, size_stats, senior_s
         return
 
     new_block = render_attendee_profile_block(
-        tldr, role_stats, size_stats, senior_stats, topic_pills
+        tldr, role_stats, size_stats, senior_stats, topic_pills, top_companies
     )
 
     patched = original[:start_idx] + new_block + original[end_idx:]
@@ -601,6 +630,9 @@ def main():
     size_stats   = top_n(size_counts,   total)
     senior_stats = top_n(senior_counts, total)
 
+    # ── Top attendee companies ────────────────────────────────
+    top_companies = extract_top_companies(rows)
+
     # ── Topics from talks.csv ─────────────────────────────────
     repo_root = Path(__file__).parent.parent
     topic_pills, talks_files = extract_topics(repo_root)
@@ -612,11 +644,12 @@ def main():
 
     stats = {
         "total_attendees_sampled": total,
-        "tldr":           TLDR,
-        "role_breakdown": role_stats,
-        "company_size":   size_stats,
-        "seniority":      senior_stats,
-        "working_on":     topic_pills,
+        "tldr":            TLDR,
+        "role_breakdown":  role_stats,
+        "company_size":    size_stats,
+        "seniority":       senior_stats,
+        "working_on":      topic_pills,
+        "top_companies":   top_companies,
     }
 
     # ── Print summary ─────────────────────────────────────────
@@ -639,6 +672,12 @@ def main():
             tag = "★ " if p['highlight'] else "  "
             print(f"  {tag}{p['label']:<38} {p['count']} talks")
 
+    print(f"\n{'═'*52}")
+    print("TOP ATTENDEE COMPANIES")
+    print('═'*52)
+    for i, name in enumerate(top_companies, 1):
+        print(f"  {i:>2}. {name}")
+
     # ── Write JSON ────────────────────────────────────────────
     out_path = Path(__file__).parent / "attendee_stats.json"
     with open(out_path, "w") as f:
@@ -647,7 +686,7 @@ def main():
 
     # ── Patch sponsorship template in place ───────────────────
     patch_sponsorship_template(
-        repo_root, TLDR, role_stats, size_stats, senior_stats, topic_pills
+        repo_root, TLDR, role_stats, size_stats, senior_stats, topic_pills, top_companies
     )
     print("  Done. Commit and push to deploy.\n")
 
