@@ -398,6 +398,28 @@
 .sp-sisters a { display: inline-flex; text-decoration: none; opacity: .85; transition: opacity .2s; }
 .sp-sisters a:hover { opacity: 1; }
 .sp-sisters img { height: 150px; width: auto; border-radius: 8px; display: block; }
+
+/* ── FAQ expandable panel ────────────────────────────── */
+.sp-faq-inner {
+  background: #edf5ff;
+  border-radius: 16px;
+  margin-top: 20px;
+  padding: 36px 40px;
+  color: #111;
+}
+.sp-faq-q {
+  font-weight: 700;
+  color: #1a6e4a;
+  margin-bottom: 6px;
+  font-size: .95rem;
+}
+.sp-faq-a {
+  color: #333;
+  margin-bottom: 24px;
+  font-size: .92rem;
+  line-height: 1.6;
+}
+.sp-faq-a:last-child { margin-bottom: 0; }
 </style>
 {% endblock %}
 
@@ -734,6 +756,53 @@ function spToggleStats() {
     </div>
   </div>
 </section>
+
+{# ── FAQ button + expandable panel ──────────────────── #}
+<section class="sp-section" style="padding-top: 0; padding-bottom: 40px;">
+  <div class="container">
+    <div class="text-center">
+      <button class="btn-stats" id="sp-faq-toggle" onclick="spToggleFaq()" aria-expanded="false">
+        FAQ
+        <span class="btn-stats-icon" aria-hidden="true">
+          <svg class="btn-stats-chevron" width="17" height="10" viewBox="0 0 14 8" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1,1 7,7 13,1"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <div class="sp-stats-panel" id="sp-faq-panel">
+      <div class="sp-faq-inner">
+
+        <p class="sp-faq-q">1. What does the sponsorship package include, and how is value delivered to sponsors?</p>
+        <p class="sp-faq-a">Our sponsorship packages combine brand visibility, audience engagement, and content-driven exposure. This typically includes logo placement across event assets, speaking or thought leadership opportunities, lead generation, and digital promotion. The goal is to align your brand with relevant moments where attendees are actively paying attention, not just passively seeing a logo.</p>
+
+        <p class="sp-faq-q">2. Who is the target audience, and what kind of reach or engagement can sponsors expect?</p>
+        <p class="sp-faq-a">Our audience consists of engineers. Sponsors can expect a highly relevant, niche group rather than broad but low-intent traffic. We share projected attendance, registration data, and historical engagement metrics so you have a realistic view of reach and interaction levels.</p>
+
+        <p class="sp-faq-q">3. What branding and visibility opportunities are available before, during, and after the event?</p>
+        <p class="sp-faq-a">Sponsors are featured across the full event lifecycle. This includes pre-event promotion (email, social, landing pages), live visibility (stage mentions, booths, session branding), and post-event distribution (on-demand content, recap campaigns). This ensures your brand isn't limited to a single moment but benefits from extended exposure.</p>
+
+        <p class="sp-faq-q">4. Are there options to customize sponsorship packages based on specific goals or budgets?</p>
+        <p class="sp-faq-a">Yes. While we offer structured tiers, we regularly tailor packages based on your objectives such as lead generation, brand awareness, or product launches. Custom options might include exclusive session ownership, co-branded content, or deeper audience integrations.</p>
+
+        <p class="sp-faq-q">5. How is sponsor success measured, and what reporting or analytics are provided post-event?</p>
+        <p class="sp-faq-a">We provide a post-event report covering key metrics such as leads generated, session attendance, engagement rates, and content performance. Depending on the package, this may also include attendee insights and campaign-level analytics, giving you a clear view of ROI and areas for follow-up.</p>
+
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+function spToggleFaq() {
+  var btn   = document.getElementById('sp-faq-toggle');
+  var panel = document.getElementById('sp-faq-panel');
+  var open  = btn.classList.toggle('open');
+  panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  btn.setAttribute('aria-expanded', String(open));
+}
+</script>
 
 {# ── Sister brands ───────────────────────────────────── #}
 <section class="sp-sisters-section">
