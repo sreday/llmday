@@ -56,8 +56,8 @@ hero_pictures:
 # brand identity
 brand_name: "LLMday"
 brand_domain: "llmday.com"
-brand_description: "Conference on Large Language Models, AI and Machine Learning"
-brand_tagline: "Large Language Models, AI and Machine Learning"
+brand_description: "Conference on Large Language Models, AI & ML"
+brand_tagline: "Large Language Models, AI & ML"
 brand_og_pitch: "Probably the most awesome LLM conference in"
 brand_color: "#26986A"
 brand_twitter: "@llmday_com"
@@ -77,3 +77,4 @@ mailto: "mailto:hello@llmday.com"
 venue_name: "VIAM office"
 calendly_sponsor_url: "https://calendly.com/mark-llmday/30-sponsor"
 city_name: "NYC"
+youtube_playlist:

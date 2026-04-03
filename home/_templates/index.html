@@ -164,6 +164,9 @@ function toggleNote(id) {
             {% else %}
             Details coming soon...
             {% endif %}
+            {% if event.youtube_playlist %}
+            <a href="{{ event.youtube_playlist }}" class="yt-playlist-btn" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="white" style="vertical-align:middle;margin-right:5px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>YouTube Playlist</a>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -215,6 +218,8 @@ function toggleNote(id) {
 .past-conf-extra, .past-meetup-extra { display: none; }
 .btn-past-more { color: #000; background: #fff; border: 2px solid #fff; }
 .btn-past-more:hover, .btn-past-more:focus { background: #f0f0f0; color: #000; border-color: #f0f0f0; }
+.yt-playlist-btn { display: inline-block; margin-top: 0.5rem; padding: 0.3rem 0.75rem; background: #FF0000; color: #fff; border-radius: 4px; text-decoration: none; font-size: 0.85rem; }
+.yt-playlist-btn:hover, .yt-playlist-btn:focus { background: #cc0000; color: #fff; text-decoration: none; }
 </style>
 <script>
 function showMorePastConf() {

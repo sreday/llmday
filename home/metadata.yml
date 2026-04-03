@@ -29,24 +29,28 @@ events:
     photo_url: ./assets/images/events/llmday-2026-san-francisco-q2.png
     url: ./2026-san-francisco-q2/
     size: medium
+    youtube_playlist:
 
   - name: LLMday Austin 2026 Q2
     location: Austin, Texas, United States
     photo_url: ./assets/images/events/llmday-2026-austin-q2.png
     url: ./2026-austin-q2/
     size: medium
+    youtube_playlist:
 
   - name: LLMday London 2026 Q2
     location: Everyman Canary Wharf, London, UK
     photo_url: ./assets/images/events/llmday-2026-london-q2.png
     url: ./2026-london-q2/
     size: large
+    youtube_playlist:
 
   - name: LLMday NYC 2026 Q2
     location: Microsoft Experience Center NYC, New York, United States
     photo_url: ./assets/images/events/llmday-2026-nyc-q2.png
     url: ./2026-nyc-q2/
     size: medium
+    youtube_playlist:
 
 events_past:
 
@@ -55,12 +59,14 @@ events_past:
     photo_url: ./assets/images/events/llmday-2026-nyc-q1.png
     url: ./2026-nyc-q1/
     size: medium
+    youtube_playlist:
 
   - name: LLMday Warsaw 2026 Q1
     location: CIC Warsaw, Poland
     photo_url: ./assets/images/events/llmday-2026-warsaw-q1.png
     url: ./2026-warsaw-q1/
     size: medium
+    youtube_playlist: https://www.youtube.com/playlist?list=PLABWk6YlOnWmcsTPJ9wTDtLbx99Y6RT5L
 
 meetups: []
 
