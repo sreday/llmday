@@ -252,14 +252,19 @@ _global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], r
 
 # global sponsors — deduplicated, filtering out small/niche logos
 _sp_exclude_logos = {'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png'}
-_seen_global_logos = set()
-_global_sponsors = []
+_sp_logo_counts = {}
+_sp_logo_meta = {}
 for _s in _global_sponsors_raw:
     _logo = _s.get('logo', '').strip()
-    if _logo and _logo not in _seen_global_logos and _logo not in _sp_exclude_logos:
-        _seen_global_logos.add(_logo)
-        _sname = re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title()
-        _global_sponsors.append({'logo': _logo, 'url': _s.get('url', ''), 'name': _sname})
+    if _logo and _logo not in _sp_exclude_logos:
+        _sp_logo_counts[_logo] = _sp_logo_counts.get(_logo, 0) + 1
+        if _logo not in _sp_logo_meta:
+            _sp_logo_meta[_logo] = _s
+_global_sponsors = []
+for _logo, _count in sorted(_sp_logo_counts.items(), key=lambda x: -x[1])[:20]:
+    _s = _sp_logo_meta[_logo]
+    _sname = re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title()
+    _global_sponsors.append({'logo': _logo, 'url': _s.get('url', ''), 'name': _sname})
 
 # filter sponsors out of top companies, then take top 10
 _sponsor_names = {s['name'].strip().lower() for s in _global_sponsors if s.get('name')}
