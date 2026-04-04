@@ -39,6 +39,8 @@ breaks:
   talks_before: 4
 
 sponsors:
+  - logo: altinity.png
+    url: https://altinity.com/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
   - logo: ksug.ai.png
