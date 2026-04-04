@@ -343,7 +343,8 @@ if _os.path.exists(_home_meta_path):
 _total_countries = len(_countries_seen) or 1
 _total_cities = len({ev['city'] for ev in _timeline_events if ev.get('city')})
 
-# cap timeline at 4 past + 4 upcoming
+# exclude events before 2025 and cap timeline at 4 past + 4 upcoming
+_timeline_events = [e for e in _timeline_events if e.get('sort_key', '') >= '2025']
 _tl_past         = [e for e in _timeline_events if e['state'] in ('past', 'after')]
 _tl_upcoming     = [e for e in _timeline_events if e['state'] not in ('past', 'after')]
 _hidden_past     = max(0, len(_tl_past) - 4) if _timeline_events else 0
