@@ -200,10 +200,10 @@
 .sp-stats-tl-event  { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
 .sp-stats-tl-dot {
   width: 12px; height: 12px; border-radius: 50%; background: var(--spi-green);
-  border: 2px solid #fff; box-shadow: 0 0 0 2px var(--spi-green);
+  border: 2px solid #fff; outline: 2px solid var(--spi-green);
   margin-bottom: 10px; flex-shrink: 0; z-index: 1;
 }
-.sp-stats-tl-dot.past { background: #999; box-shadow: 0 0 0 2px #999; }
+.sp-stats-tl-dot.past { background: #999; outline-color: #999; }
 .sp-stats-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
 .sp-stats-tl-chip.past .sp-stats-tl-city { color: #555; }
 .sp-stats-tl-chip.past .sp-stats-tl-date { color: #777; }
@@ -236,7 +236,7 @@
 .sp-stats-tl-seats { font-size: .75rem; color: #3a8a60; }
 .sp-stats-tl-past  { font-size: .7rem; color: #8fcfb0; font-style: italic; }
 .sp-stats-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 0; }
-.sp-stats-tl-pin { font-size: 1.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
+.sp-stats-tl-pin { font-size: 3.75rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
 
 /* GIF */
 .sp-stats-gif-wrap { margin-top: 32px; border-radius: 12px; overflow: hidden; width: 90%; margin-left: auto; margin-right: auto; }
