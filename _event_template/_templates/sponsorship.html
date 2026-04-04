@@ -193,8 +193,8 @@
 /* timeline */
 .sp-stats-timeline { position: relative; padding: 20px 0 8px; margin-bottom: 8px; }
 .sp-stats-tl-line {
-  position: absolute; top: 32px; left: 0; right: 0; height: 2px;
-  background: var(--spi-green-mid);
+  position: absolute; top: 26px; left: 0; right: 0; height: 2px;
+  background: var(--spi-green-mid); z-index: 0;
 }
 .sp-stats-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
 .sp-stats-tl-event  { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
@@ -351,8 +351,6 @@
 }
 .btn-whatsapp:hover { background: #1daa52; color: #fff; text-decoration: none; }
 .sp-cta-btn { font-size: 1.26rem !important; padding: .5rem 1rem !important; }
-.sp-stats-tl-show-more { display: inline-block; font-size: 1.0rem; padding: .4rem .8rem; border: 1px solid #ccc; border-radius: 6px; color: #999; background: transparent; text-decoration: none; cursor: pointer; }
-.sp-stats-tl-show-more:hover { background: #f0f0f0; text-decoration: none; }
 .btn-stats-close {
   display: inline-flex;
   align-items: center;
@@ -669,13 +667,10 @@
 
         {# ── TIMELINE (dynamic — from home/metadata.yml) ── #}
         <div class="sp-stats-s-title">Where we meet</div>
-        <div class="sp-stats-s-sub">{{ total_events }} events across {{ total_countries }} {{ "country" if total_countries == 1 else "countries" }}</div>
+        <div class="sp-stats-s-sub">4 past and 4 upcoming {{ brand_name }} conferences</div>
 
         <div class="sp-stats-timeline">
           <div class="sp-stats-tl-line"></div>
-          {% if hidden_past is defined and hidden_past > 0 %}
-          <div style="margin-bottom:10px;"><a href="https://{{ brand_domain }}/#past-events" class="sp-stats-tl-show-more" target="_blank">{{ hidden_past }} more past</a></div>
-          {% endif %}
           <div class="sp-stats-tl-events">
             {% set ns = namespace(pin_shown=false) %}
             {% for ev in timeline_events %}
@@ -697,9 +692,6 @@
             </div>
             {% endfor %}
           </div>
-          {% if hidden_upcoming is defined and hidden_upcoming > 0 %}
-          <div style="margin-top:10px;"><a href="https://{{ brand_domain }}/#events" class="sp-stats-tl-show-more" target="_blank">{{ hidden_upcoming }} more planned</a></div>
-          {% endif %}
         </div>
 
         <div class="text-center" style="margin-top:32px;">

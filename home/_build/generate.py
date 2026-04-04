@@ -48,12 +48,10 @@ context["ambassadors"] = read_csv("./_db/ambassadors.csv")
 print(DIVIDER)
 print("Calculating dynamic stats")
 
-# Events = total event + meetup entries in metadata
+# Events = total event entries in metadata (excludes meetups)
 _events_count = (
     len(context.get("events") or []) +
-    len(context.get("events_past") or []) +
-    len(context.get("meetups") or []) +
-    len(context.get("meetups_past") or [])
+    len(context.get("events_past") or [])
 )
 print(f"  Events: {_events_count}")
 
