@@ -241,8 +241,8 @@
 /* timeline */
 .sp-stats-timeline { position: relative; padding: 20px 0 8px; margin-bottom: 8px; }
 .sp-stats-tl-line {
-  position: absolute; top: 32px; left: 0; right: 0; height: 2px;
-  background: var(--spi-green-mid);
+  position: absolute; top: 26px; left: 0; right: 0; height: 2px;
+  background: var(--spi-green-mid); z-index: 0;
 }
 .sp-stats-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
 .sp-stats-tl-event  { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
@@ -399,8 +399,6 @@
 }
 .btn-whatsapp:hover { background: #1daa52; color: #fff; text-decoration: none; }
 .sp-cta-btn { font-size: 1.26rem !important; padding: .5rem 1rem !important; }
-.sp-stats-tl-show-more { display: inline-block; font-size: 1.0rem; padding: .4rem .8rem; border: 1px solid #ccc; border-radius: 6px; color: #999; background: transparent; text-decoration: none; cursor: pointer; }
-.sp-stats-tl-show-more:hover { background: #f0f0f0; text-decoration: none; }
 .btn-stats-close {
   display: inline-flex;
   align-items: center;
@@ -1098,11 +1096,10 @@
 
         
         <div class="sp-stats-s-title">Where we meet</div>
-        <div class="sp-stats-s-sub">6 events across 3 countries</div>
+        <div class="sp-stats-s-sub">4 past and 4 upcoming LLMday conferences</div>
 
         <div class="sp-stats-timeline">
           <div class="sp-stats-tl-line"></div>
-          
           <div class="sp-stats-tl-events">
             
             
@@ -1184,7 +1181,6 @@
             </div>
             
           </div>
-          
         </div>
 
         <div class="text-center" style="margin-top:32px;">
