@@ -220,10 +220,11 @@ for _gf in _all_siblings:
                 _spk_name = (_t.get('name') or _t.get('Name') or '').strip()
                 if _spk_name:
                     _global_speaker_names.add(_spk_name)
-                _org = _t.get('organization', '').strip()
+                _org_raw = _t.get('organization', '').strip()
                 _skip_orgs = {'stealth startup', 'sre author', ''}
-                if _org.lower() not in _skip_orgs:
-                    _global_org_counts[_org] = _global_org_counts.get(_org, 0) + 1
+                for _org in (o.strip() for o in _org_raw.split('&')):
+                    if _org and _org.lower() not in _skip_orgs:
+                        _global_org_counts[_org] = _global_org_counts.get(_org, 0) + 1
     # sponsors & attendee counts
     _gm_path = _os.path.join(_gf, 'metadata.yml')
     if _os.path.exists(_gm_path):
