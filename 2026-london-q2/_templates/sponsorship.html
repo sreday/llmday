@@ -351,8 +351,8 @@
 }
 .btn-whatsapp:hover { background: #1daa52; color: #fff; text-decoration: none; }
 .sp-cta-btn { font-size: 1.26rem !important; padding: .5rem 1rem !important; }
-.sp-stats-tl-show-more { display: inline-block; font-size: 1.0rem; padding: .4rem .8rem; border: 1px solid #ccc; border-radius: 6px; color: #999; background: transparent; text-decoration: none; cursor: default; }
-.sp-stats-tl-show-more:hover { text-decoration: none; }
+.sp-stats-tl-show-more { display: inline-block; font-size: 1.0rem; padding: .4rem .8rem; border: 1px solid #ccc; border-radius: 6px; color: #999; background: transparent; text-decoration: none; cursor: pointer; }
+.sp-stats-tl-show-more:hover { background: #f0f0f0; text-decoration: none; }
 .btn-stats-close {
   display: inline-flex;
   align-items: center;
@@ -674,7 +674,7 @@
         <div class="sp-stats-timeline">
           <div class="sp-stats-tl-line"></div>
           {% if hidden_past is defined and hidden_past > 0 %}
-          <div style="margin-bottom:10px;"><span class="sp-stats-tl-show-more">{{ hidden_past }} older event{{ 's' if hidden_past > 1 else '' }} not shown</span></div>
+          <div style="margin-bottom:10px;"><a href="https://{{ brand_domain }}/#past-events" class="sp-stats-tl-show-more" target="_blank">{{ hidden_past }} more past</a></div>
           {% endif %}
           <div class="sp-stats-tl-events">
             {% set ns = namespace(pin_shown=false) %}
@@ -698,7 +698,7 @@
             {% endfor %}
           </div>
           {% if hidden_upcoming is defined and hidden_upcoming > 0 %}
-          <div style="margin-top:10px;"><span class="sp-stats-tl-show-more">{{ hidden_upcoming }} more event{{ 's' if hidden_upcoming > 1 else '' }} announced</span></div>
+          <div style="margin-top:10px;"><a href="https://{{ brand_domain }}/#events" class="sp-stats-tl-show-more" target="_blank">{{ hidden_upcoming }} more planned</a></div>
           {% endif %}
         </div>
 
