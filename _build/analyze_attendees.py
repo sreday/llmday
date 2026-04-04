@@ -63,11 +63,11 @@ from pathlib import Path
 
 TLDR = (
     "A hands-on crowd of engineers, ML practitioners, and technical leaders "
-    "from startups and enterprises - people who are actively shipping AI products "
-    "into production. Senior practitioners who debate architecture and tooling choices, "
-    "care deeply about reliability and cost, and are figuring out how to make agents "
-    "actually work at scale."
+    "from startups and enterprises \u2014 actively shipping AI products into production. "
+    "Senior practitioners who care about architecture, reliability, and cost, "
+    "figuring out how to make agents work at scale."
 )
+assert len(TLDR) <= 300, f"TLDR is {len(TLDR)} chars \u2014 must be \u2264 300"
 
 # ── "What they are working on" topics ─────────────────────────────────────
 # Scored from talk titles + abstracts across all discovered talks.csv files.
