@@ -143,8 +143,25 @@ for logo_path in sorted(glob.glob("../sponsors/*.png") + glob.glob("../sponsors/
         sponsor_logos.append(filename)
         print(f"  {filename}")
 sponsor_logos.sort(key=lambda x: x.lower())
+
+# Split sponsors from community partners / sister conferences
+_sp_exclude_logos = {
+    'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png',
+    'jug-amsterdam.png', 'k8sug.png',
+    'kube-events.png', 'kube_events.png', 'kube_careers.png', 'kubespaces.png',
+    'gdg_london.png', 'NL_MEETUP.png',
+    'chennaisre.png', 'srecommunitycoimbatore.png', 'aigeeks.png',
+    'cloud native lisbon.png', 'cloud native porto.png',
+    'devops braga.png', 'devops lisbon.png',
+    'kcd porto.png', 'leiria tech talks.png', 'viseu tech talks.png',
+    'lisbon genai community.png', 'aws porto.png',
+    'IacConf.png', 'DevIT.png', 'DevIT_black.png',
+}
+partner_logos = sorted([l for l in sponsor_logos if l in _sp_exclude_logos], key=lambda x: x.lower())
+sponsor_logos = sorted([l for l in sponsor_logos if l not in _sp_exclude_logos], key=lambda x: x.lower())
 context["sponsor_logos"] = sponsor_logos
-print(f"  Total: {len(sponsor_logos)} unique sponsor logos")
+context["partner_logos"] = partner_logos
+print(f"  Total: {len(sponsor_logos)} sponsor logos, {len(partner_logos)} partner logos")
 
 # MAIN PAGES
 print(DIVIDER)
