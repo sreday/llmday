@@ -660,6 +660,7 @@ section[id] {
             </div>
             
         </div>
+        
     </div>
 </section>
 
@@ -739,7 +740,7 @@ function toggleNote(id) {
   </div>
 </section>
 <style>
-.past-conf-extra, .past-meetup-extra { display: none; }
+.past-conf-extra, .past-meetup-extra, .amb-extra { display: none; }
 .btn-past-more { color: #000; background: #fff; border: 2px solid #fff; }
 .btn-past-more:hover, .btn-past-more:focus { background: #f0f0f0; color: #000; border-color: #f0f0f0; }
 .yt-playlist-btn { display: inline-block; margin-left: 12px; padding: 8px 18px; background: #EC645E; color: #fff; border-radius: 6px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 700; transition: background 0.2s ease; }
@@ -748,6 +749,10 @@ function toggleNote(id) {
 .event-read-more-btn:hover, .event-read-more-btn:focus { background: #3db07f; color: #fff; text-decoration: none; }
 </style>
 <script>
+function showMoreAmb() {
+  document.querySelectorAll('.amb-extra').forEach(function(el) { el.classList.remove('amb-extra'); });
+  document.getElementById('show-more-amb').style.display = 'none';
+}
 function showMorePastConf() {
   document.querySelectorAll('.past-conf-extra').forEach(function(el) { el.classList.remove('past-conf-extra'); });
   document.getElementById('show-more-past-conf').style.display = 'none';
