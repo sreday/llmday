@@ -185,6 +185,24 @@ for talk in talks_raw:
 import os as _os
 import glob as _glob
 
+# Keep in sync with _build/analyze_attendees.py
+COMPANY_DISPLAY_NAMES = {
+    # Acronyms / all-caps
+    'aws': 'AWS', 'ibm': 'IBM', 'ing': 'ING', 'sap': 'SAP', 'hp': 'HP',
+    'hcltech': 'HCLTech', 'iacconf': 'IaCConf',
+    # Brand casing
+    'cast ai': 'CAST AI', 'pagerduty': 'PagerDuty', 'clickhouse': 'ClickHouse',
+    'datadog': 'Datadog', 'openobserve': 'OpenObserve', 'maibornwolff': 'MaibornWolff',
+    'stormforge': 'StormForge', 'env0': 'env0', 'posthog': 'PostHog',
+    'ilert': 'iLert', 'rootly': 'Rootly', 'spacelift': 'Spacelift',
+    'new relic': 'New Relic', 'monday.com': 'Monday.com', 'devit': 'DevIT',
+    'devitjobs': 'DevITjobs', 'victoriametrics': 'VictoriaMetrics',
+    'linearb': 'LinearB',
+}
+
+def _normalize_company_name(raw):
+    return COMPANY_DISPLAY_NAMES.get(raw.strip().lower(), raw.strip())
+
 print(DIVIDER)
 print("Generating sponsorship.html")
 
@@ -221,10 +239,12 @@ for _gf in _all_siblings:
                 if _spk_name:
                     _global_speaker_names.add(_spk_name)
                 _org_raw = _t.get('organization', '').strip()
-                _skip_orgs = {'stealth startup', 'sre author', ''}
+                _skip_orgs = {'stealth startup', 'sre author', '',
+                              'independent', 'freelance', 'self-employed', 'consultant'}
                 for _org in (o.strip() for o in _org_raw.split('&')):
                     if _org and _org.lower() not in _skip_orgs:
-                        _global_org_counts[_org] = _global_org_counts.get(_org, 0) + 1
+                        _org_display = _normalize_company_name(_org)
+                        _global_org_counts[_org_display] = _global_org_counts.get(_org_display, 0) + 1
     # sponsors & attendee counts
     _gm_path = _os.path.join(_gf, 'metadata.yml')
     if _os.path.exists(_gm_path):
@@ -252,7 +272,22 @@ _total_attendees = f"{_att_rounded}"
 _global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], reverse=True)
 
 # global sponsors — deduplicated, filtering out small/niche logos
-_sp_exclude_logos = {'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png'}
+_sp_exclude_logos = {
+    # Non-sponsor orgs
+    'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png',
+    # Community partners / meetup groups
+    'jug-amsterdam.png', 'k8sug.png',
+    'kube-events.png', 'kube_events.png', 'kube_careers.png', 'kubespaces.png',
+    'gdg_london.png', 'NL_MEETUP.png',
+    'chennaisre.png', 'srecommunitycoimbatore.png', 'aigeeks.png',
+    'cloud native lisbon.png', 'cloud native porto.png',
+    'devops braga.png', 'devops lisbon.png',
+    'kcd porto.png', 'leiria tech talks.png', 'viseu tech talks.png',
+    'lisbon genai community.png',
+    'aws porto.png',
+    # Sister conferences
+    'IacConf.png', 'DevIT.png', 'DevIT_black.png',
+}
 _sp_logo_counts = {}
 _sp_logo_meta = {}
 for _s in _global_sponsors_raw:
@@ -264,7 +299,7 @@ for _s in _global_sponsors_raw:
 _global_sponsors = []
 for _logo, _count in sorted(_sp_logo_counts.items(), key=lambda x: -x[1])[:20]:
     _s = _sp_logo_meta[_logo]
-    _sname = re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title()
+    _sname = _normalize_company_name(re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title())
     _global_sponsors.append({'logo': _logo, 'url': _s.get('url', ''), 'name': _sname})
 
 # filter sponsors out of top companies, then take top 10

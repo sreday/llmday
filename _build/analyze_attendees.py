@@ -384,16 +384,18 @@ TOP_COMPANIES_MAX = 10
 
 # Display names for companies whose CSV values don't title-case cleanly
 COMPANY_DISPLAY_NAMES = {
-    'aws': 'AWS',
-    'ibm': 'IBM',
-    'pwc': 'PwC',
-    'ey': 'EY',
-    'n26': 'N26',
-    'monday.com': 'Monday.com',
-    'gog.com': 'GOG.com',
-    'sap': 'SAP',
-    'hp': 'HP',
-    'lg': 'LG',
+    # Acronyms / all-caps
+    'aws': 'AWS', 'ibm': 'IBM', 'ing': 'ING', 'sap': 'SAP', 'hp': 'HP',
+    'hcltech': 'HCLTech',
+    # Brand casing
+    'cast ai': 'CAST AI', 'pagerduty': 'PagerDuty', 'clickhouse': 'ClickHouse',
+    'datadog': 'Datadog', 'openobserve': 'OpenObserve',
+    'posthog': 'PostHog', 'ilert': 'iLert', 'rootly': 'Rootly',
+    'spacelift': 'Spacelift', 'new relic': 'New Relic',
+    'monday.com': 'Monday.com', 'victoriametrics': 'VictoriaMetrics',
+    'linearb': 'LinearB',
+    # Attendee-specific
+    'pwc': 'PwC', 'ey': 'EY', 'n26': 'N26', 'lg': 'LG', 'gog.com': 'GOG.com',
 }
 
 
