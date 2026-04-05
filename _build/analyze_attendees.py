@@ -43,6 +43,48 @@ Role labels are chosen to be accurate and professionally neutral:
   "Other" must stay under 5% in every dimension.
       If it creeps above that, check the UNCLASSIFIED output printed
       at runtime and add new keyword rules to the relevant classifier.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INFLATION GUARDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Three rules prevent company-level spikes from distorting the
+TOP ATTENDEE COMPANIES ranking and the COMPANY SIZE breakdown.
+Priority order (first match wins):
+
+  0.5x  Host companies (HOST_COMPANIES / _HOST_RE)
+        Companies that host our conferences at their offices naturally
+        have inflated attendance — their employees are "at home".
+        Derived from location_string in event metadata.yml files.
+        When a new venue host is added, add it to HOST_COMPANIES.
+
+  0.5x  Single-event domination (_find_single_event_companies)
+        If a company's attendees all come from a single CSV (one event)
+        while multiple CSVs are loaded, they get 0.5x weight. This
+        prevents a local company sending 30 people to one conference
+        from dominating the ranking over companies with steady presence
+        across multiple events. The rule is skipped when only one CSV
+        is loaded so it doesn't penalise every company.
+
+  0.8x  Vendor companies (VENDOR_COMPANIES / _VENDOR_RE)
+        Companies selling DevOps, SRE, LLM, observability, or cloud
+        tools. Their employees attend partly for business development,
+        slightly inflating headcount versus end-user companies.
+        When a new tool vendor starts sponsoring, add it to
+        VENDOR_COMPANIES.
+
+  1.0x  Everyone else (end-user companies, consultancies, etc.)
+
+Affected metrics: TOP ATTENDEE COMPANIES and COMPANY SIZE only.
+Role breakdown, seniority, and all other stats are unweighted.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEDUPLICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Attendees are deduplicated by name (lowercased, stripped).
+Email addresses must NEVER be used for deduplication or appear
+anywhere in this script — attendee privacy is non-negotiable.
 """
 
 import csv, re, sys, json, glob
@@ -394,6 +436,38 @@ _HOST_RE = re.compile(
     r'\b(?:' + '|'.join(re.escape(h) for h in HOST_COMPANIES) + r')\b'
 )
 
+# Vendor companies — they sell DevOps / SRE / LLM / observability / cloud
+# tools and attend conferences partly for business development. Counted at
+# 0.8× weight. Host/single-event (0.5×) takes precedence when both apply.
+VENDOR_COMPANIES = {
+    # Observability & monitoring
+    'datadog', 'splunk', 'elastic', 'new relic', 'newrelic', 'dynatrace',
+    'grafana', 'honeycomb', 'coralogix', 'lightstep', 'sentry',
+    'openobserve', 'victoriametrics',
+    # Incident management & reliability
+    'pagerduty', 'rootly', 'ilert', 'incidentfox', 'firehydrant',
+    'jeli', 'xurrent', 'opsgenie',
+    # DevOps, CI/CD & infrastructure
+    'harness', 'cribl', 'hashicorp', 'spacelift', 'env0', 'circleci',
+    'gitlab', 'jfrog', 'docker', 'red hat', 'redhat', 'vmware',
+    # Cloud, data & platforms
+    'cloudflare', 'mongodb', 'snowflake', 'databricks', 'cockroach',
+    'aiven', 'clickhouse', 'confluent', 'imply',
+    # Security
+    'crowdstrike', 'snyk', 'chainguard', 'gitguardian', 'okta', 'synopsys',
+    # Platform, cost & developer tools
+    'cast ai', 'komodor', 'stormforge', 'port', 'cortex',
+    'servicenow', 'jetbrains',
+    # AI / LLM tools
+    'anthropic', 'together ai', 'anyscale', 'huggingface',
+    # Other sponsors / tool vendors
+    'neubird', 'wildmoose', 'traversal', 'pomerium', 'kerno',
+    'runwhen', 'mezmo', 'posthog', 'linearb', 'virtana',
+}
+_VENDOR_RE = re.compile(
+    r'\b(?:' + '|'.join(re.escape(v) for v in VENDOR_COMPANIES) + r')\b'
+)
+
 # Display names for companies whose CSV values don't title-case cleanly
 COMPANY_DISPLAY_NAMES = {
     # Acronyms / all-caps
@@ -431,8 +505,12 @@ def _find_single_event_companies(rows):
 
 
 def _company_weight(c_lower, display, single_event):
-    """0.5x for host companies or single-event-only companies, else 1."""
-    return 0.5 if (_HOST_RE.search(c_lower) or display in single_event) else 1
+    """0.5x for host/single-event companies, 0.8x for vendors, else 1."""
+    if _HOST_RE.search(c_lower) or display in single_event:
+        return 0.5
+    if _VENDOR_RE.search(c_lower):
+        return 0.8
+    return 1
 
 
 def extract_top_companies(rows, single_event):
