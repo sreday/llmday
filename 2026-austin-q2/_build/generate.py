@@ -275,6 +275,7 @@ _global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], r
 _sp_exclude_logos = {
     # Non-sponsor orgs
     'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png',
+    'starterai.png',
     # Community partners / meetup groups
     'jug-amsterdam.png', 'k8sug.png',
     'kube-events.png', 'kube_events.png', 'kube_careers.png', 'kubespaces.png',
