@@ -382,6 +382,18 @@ def top_n(counts, total, exclude_other=True):
 
 TOP_COMPANIES_MAX = 10
 
+# Conference host companies — their attendees are "at home" so we count
+# them at 0.5× weight to avoid inflating the top-companies ranking.
+# Patterns are matched with word boundaries against the lowercased company field.
+HOST_COMPANIES = {
+    'catawiki', 'ing', 'kyndryl', 'hcltech', 'ilert',
+    'pagerduty', 'viam', 'criteo', 'xurrent', 'dynatrace',
+    'maibornwolff', 'harness', 'datadog', 'gable', 'microsoft',
+}
+_HOST_RE = re.compile(
+    r'\b(?:' + '|'.join(re.escape(h) for h in HOST_COMPANIES) + r')\b'
+)
+
 # Display names for companies whose CSV values don't title-case cleanly
 COMPANY_DISPLAY_NAMES = {
     # Acronyms / all-caps
@@ -400,7 +412,8 @@ COMPANY_DISPLAY_NAMES = {
 
 
 def extract_top_companies(rows):
-    """Return top attendee companies by headcount, excluding solo/empty."""
+    """Return top attendee companies by headcount, excluding solo/empty.
+    Host companies are counted at 0.5x to avoid inflated numbers."""
     counts = Counter()
     for r in rows:
         company = r.get('Company', '').strip()
@@ -411,7 +424,8 @@ def extract_top_companies(rows):
             continue
         # Normalize to a display name
         display = COMPANY_DISPLAY_NAMES.get(c_lower, company)
-        counts[display] += 1
+        weight = 0.5 if _HOST_RE.search(c_lower) else 1
+        counts[display] += weight
     return [name for name, _ in counts.most_common(TOP_COMPANIES_MAX)]
 
 
@@ -467,6 +481,13 @@ def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, to
         f'          <strong>TLDR:</strong> {tldr}\n'
         '        </div>\n'
         '\n'
+        '        <div class="sp-stats-card" style="margin-bottom:32px">\n'
+        '          <div class="sp-stats-card-title">Top attendee companies</div>\n'
+        '          <div class="sp-stats-pill-grid" style="margin-bottom:0">\n'
+        f'{company_pills}\n'
+        '          </div>\n'
+        '        </div>\n'
+        '\n'
         '        <div class="sp-stats-grid-2">\n'
         '\n'
         '          <div class="sp-stats-card">\n'
@@ -497,13 +518,6 @@ def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, to
         '            </div>\n'
         '          </div>\n'
         '\n'
-        '        </div>\n'
-        '\n'
-        '        <div class="sp-stats-card" style="margin-bottom:32px">\n'
-        '          <div class="sp-stats-card-title">Top attendee companies</div>\n'
-        '          <div class="sp-stats-pill-grid" style="margin-bottom:0">\n'
-        f'{company_pills}\n'
-        '          </div>\n'
         '        </div>\n'
         '\n'
         '        <hr class="sp-stats-sep">\n'
