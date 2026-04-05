@@ -411,13 +411,35 @@ COMPANY_DISPLAY_NAMES = {
 }
 
 
-def extract_top_companies(rows):
+def _find_single_event_companies(rows):
+    """Return the set of display-name companies whose attendees all come from
+    a single event CSV. Only meaningful when multiple CSVs are loaded."""
+    all_events = {r.get('_source', '') for r in rows}
+    if len(all_events) <= 1:
+        return set()
+    company_events = {}
+    for r in rows:
+        company = r.get('Company', '').strip()
+        c_lower = company.lower()
+        if not c_lower or c_lower in NO_COMPANY_VALUES or c_lower.startswith('looking for'):
+            continue
+        if any(x in c_lower for x in SOLO_SIGNALS):
+            continue
+        display = COMPANY_DISPLAY_NAMES.get(c_lower, company)
+        company_events.setdefault(display, set()).add(r.get('_source', ''))
+    return {d for d, evts in company_events.items() if len(evts) == 1}
+
+
+def _company_weight(c_lower, display, single_event):
+    """0.5x for host companies or single-event-only companies, else 1."""
+    return 0.5 if (_HOST_RE.search(c_lower) or display in single_event) else 1
+
+
+def extract_top_companies(rows, single_event):
     """Return top attendee companies by headcount, excluding solo/empty.
     Host companies and single-event-only companies are counted at 0.5x
     to avoid inflated numbers from venue hosts or one-off spikes."""
-    # First pass: map each company to the set of events it appears in
-    company_events = {}
-    valid_rows = []
+    counts = Counter()
     for r in rows:
         company = r.get('Company', '').strip()
         c_lower = company.lower()
@@ -427,21 +449,7 @@ def extract_top_companies(rows):
             continue
         # Normalize to a display name
         display = COMPANY_DISPLAY_NAMES.get(c_lower, company)
-        source = r.get('_source', '')
-        company_events.setdefault(display, set()).add(source)
-        valid_rows.append((c_lower, display))
-
-    # Identify single-event companies (only when multiple events loaded)
-    all_events = {r.get('_source', '') for r in rows}
-    single_event = set()
-    if len(all_events) > 1:
-        single_event = {d for d, evts in company_events.items() if len(evts) == 1}
-
-    # Second pass: count with 0.5x weight for host or single-event companies
-    counts = Counter()
-    for c_lower, display in valid_rows:
-        weight = 0.5 if (_HOST_RE.search(c_lower) or display in single_event) else 1
-        counts[display] += weight
+        counts[display] += _company_weight(c_lower, display, single_event)
     return [name for name, _ in counts.most_common(TOP_COMPANIES_MAX)]
 
 
@@ -617,30 +625,43 @@ def main():
     total = len(rows)
     print(f"\nTotal attendees: {total} unique ({dupes} duplicate(s) removed)")
 
+    # ── Identify inflated companies (host / single-event) ──────
+    single_event = _find_single_event_companies(rows)
+
     # ── Classify ──────────────────────────────────────────────
     raw_role_counts = Counter(classify_role(r.get('Job Title', ''))       for r in rows)
-    size_counts     = Counter(classify_company_size(r.get('Company', '')) for r in rows)
     senior_counts   = Counter(classify_seniority(r.get('Job Title', ''))  for r in rows)
+
+    # Company size uses 0.5x weight for host / single-event companies
+    size_counts = Counter()
+    for r in rows:
+        company = r.get('Company', '').strip()
+        c_lower = company.lower()
+        display = COMPANY_DISPLAY_NAMES.get(c_lower, company)
+        label = classify_company_size(company)
+        size_counts[label] += _company_weight(c_lower, display, single_event)
 
     role_counts = Counter()
     for label, count in raw_role_counts.items():
         display_label = ROLE_DISPLAY_MERGE.get(label, label)
         role_counts[display_label] += count
 
-    def merge_under5(counts, fallback_map):
+    def merge_under5(counts, fallback_map, denom=None):
+        if denom is None:
+            denom = total
         changed = True
         while changed:
             changed = False
             for label, count in list(counts.items()):
-                if pct(count, total) < 5 and label in fallback_map:
+                if pct(count, denom) < 5 and label in fallback_map:
                     target = fallback_map[label]
                     counts[target] += counts.pop(label)
-                    print(f"  Merged '{label}' ({pct(count, total)}%) into '{target}' (under 5% rule)")
+                    print(f"  Merged '{label}' ({pct(count, denom)}%) into '{target}' (under 5% rule)")
                     changed = True
         return counts
 
     role_counts = merge_under5(role_counts, ROLE_UNDER5_FALLBACK)
-    size_counts = merge_under5(size_counts, SIZE_UNDER5_FALLBACK)
+    size_counts = merge_under5(size_counts, SIZE_UNDER5_FALLBACK, sum(size_counts.values()))
 
     # ── Warn if Other > 5% ────────────────────────────────────
     other_count = raw_role_counts.get("Other", 0)
@@ -661,11 +682,12 @@ def main():
 
     # ── Build stats ───────────────────────────────────────────
     role_stats   = top_n(role_counts,   total)
-    size_stats   = top_n(size_counts,   total)
+    size_total   = sum(size_counts.values())
+    size_stats   = top_n(size_counts,   size_total)
     senior_stats = top_n(senior_counts, total)
 
     # ── Top attendee companies ────────────────────────────────
-    top_companies = extract_top_companies(rows)
+    top_companies = extract_top_companies(rows, single_event)
 
     # ── Topics from talks.csv ─────────────────────────────────
     repo_root = Path(__file__).parent.parent
