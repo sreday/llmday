@@ -413,8 +413,11 @@ COMPANY_DISPLAY_NAMES = {
 
 def extract_top_companies(rows):
     """Return top attendee companies by headcount, excluding solo/empty.
-    Host companies are counted at 0.5x to avoid inflated numbers."""
-    counts = Counter()
+    Host companies and single-event-only companies are counted at 0.5x
+    to avoid inflated numbers from venue hosts or one-off spikes."""
+    # First pass: map each company to the set of events it appears in
+    company_events = {}
+    valid_rows = []
     for r in rows:
         company = r.get('Company', '').strip()
         c_lower = company.lower()
@@ -424,7 +427,20 @@ def extract_top_companies(rows):
             continue
         # Normalize to a display name
         display = COMPANY_DISPLAY_NAMES.get(c_lower, company)
-        weight = 0.5 if _HOST_RE.search(c_lower) else 1
+        source = r.get('_source', '')
+        company_events.setdefault(display, set()).add(source)
+        valid_rows.append((c_lower, display))
+
+    # Identify single-event companies (only when multiple events loaded)
+    all_events = {r.get('_source', '') for r in rows}
+    single_event = set()
+    if len(all_events) > 1:
+        single_event = {d for d, evts in company_events.items() if len(evts) == 1}
+
+    # Second pass: count with 0.5x weight for host or single-event companies
+    counts = Counter()
+    for c_lower, display in valid_rows:
+        weight = 0.5 if (_HOST_RE.search(c_lower) or display in single_event) else 1
         counts[display] += weight
     return [name for name, _ in counts.most_common(TOP_COMPANIES_MAX)]
 
@@ -579,6 +595,8 @@ def main():
     for p in paths:
         loaded = read_csv(p)
         print(f"  Loaded {len(loaded)} rows from {Path(p).name}")
+        for r in loaded:
+            r['_source'] = Path(p).stem
         rows.extend(loaded)
 
     # De-duplicate by name - treat all CSVs as one combined event.
