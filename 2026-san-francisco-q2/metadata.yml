@@ -48,10 +48,10 @@ sponsors:
     url: https://ksug.ai/?ref=sre
   - logo: packt.png
     url: https://www.packtpub.com/en-gb
-  - logo: hockeystick.png
-    url: https://www.hockeystick.show
   - logo: AIFRONTIERS.png
     url: https://aifrontiersforum.org/
+  - logo: hockeystick.png
+    url: https://www.hockeystick.show
 
 # these get displayed at the top
 hero_pictures:
