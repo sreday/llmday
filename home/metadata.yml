@@ -6,6 +6,8 @@ linkedin_url: https://www.linkedin.com/company/llmday/
 youtube_url: https://www.youtube.com/@llmday
 mailto: "mailto:hello@llmday.com"
 
+hero_video: ../videos/hero.mp4
+
 hero_pictures:
 - ../photos/warsaw-2026-0.jpg
 - ../photos/warsaw-2026-1.jpg

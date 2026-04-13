@@ -139,18 +139,11 @@ section[id] {
 	</header><!--//header-->
 	
 	<div id="home" class="hero-block">
-		<div id="hero-carousel" class="hero-carousel carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
-			<div class="carousel-inner">
-				{% for pic in hero_pictures %}
-				<div class="carousel-item tinted {{ 'active' if loop.index == 1 else ''}}" style="background:url('{{ pic }}') no-repeat center; background-size: cover;"></div>
-				{% endfor %}
-			</div>
-
-			<div class="carousel-indicators">
-				{% for pic in hero_pictures %}
-				<button type="button" data-bs-target="#hero-carousel" class="{{ 'active' if loop.index == 1 else ''}}" data-bs-slide-to="{{loop.index0}}"></button>
-				{% endfor %}
-			</div>
+		<div class="hero-video-wrapper">
+			<video autoplay muted loop playsinline poster="{{ hero_pictures[0] }}">
+				<source src="{{ hero_video }}" type="video/mp4">
+			</video>
+			<div class="hero-video-overlay"></div>
 		</div>
 		<div class="container">
 			<div class="hero-text-block text-center" style="max-width: 100%;">
