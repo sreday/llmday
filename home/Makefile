@@ -11,6 +11,7 @@ theme:
 	cp -r template/assets static/assets
 	cp -r template/favicon.ico static
 	cp -r assets static
+	mkdir -p static/videos && cp -r ../videos/* static/videos/ 2>/dev/null || true
 
 serve:
 	python _build/serve.py
