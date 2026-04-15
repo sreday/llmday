@@ -423,7 +423,7 @@
         <div class="sp-tier-card">
           <div class="sp-tier-name">{{ tier.name }}</div>
           <div class="sp-tier-price">
-            {% if tier.price_label is mapping %}{{ tier.price_label[event_size] }}{% elif tier.price_label %}{{ tier.price_label }}{% else %}£{{ tier.price[event_size] }}{% endif %}
+            {% if tier.price_label %}{{ tier.price_label }}{% else %}£{{ tier.price[event_size] }}{% endif %}
           </div>
           <div class="sp-tier-body">
             {% if tier.benefits %}
