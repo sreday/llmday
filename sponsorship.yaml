@@ -8,7 +8,7 @@ tiers:
       medium: 1000
       large: 1000
     benefits:
-      - "Full attendee contact list, shared before & after"
+      - "Sharing full attendee contact list"
 
   - id: keynote
     name: "Keynote Session"
