@@ -39,6 +39,28 @@ breaks:
   talks_before: 3
 
 sponsors:
+  - logo: pagerduty.png
+    url: https://careers.pagerduty.com/portugal
+  - logo: cloud native lisbon.png
+    url: https://community.cncf.io/cloud-native-lisbon/
+  - logo: leiria tech talks.png
+    url: https://www.meetup.com/leiria-tech-talks/
+  - logo: devops braga.png
+    url: https://www.meetup.com/devops-braga/
+  - logo: aws porto.png
+    url: https://www.meetup.com/aws-porto-user-group/
+  - logo: synvert xgeeks.png
+    url: https://xgeeks.com/
+  - logo: viseu tech talks.png
+    url: https://www.meetup.com/viseu-tech-talks/
+  - logo: cloud native porto.png
+    url: https://community.cncf.io/cloud-native-porto/
+  - logo: kcd porto.png
+    url: https://community.cncf.io/events/details/cncf-kcd-porto-presents-kcd-porto-2025/
+  - logo: devops lisbon.png
+    url: https://www.meetup.com/devops-lisbon/
+  - logo: lisbon genai community.png
+    url: https://www.meetup.com/lisbon-genai-community/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
 
