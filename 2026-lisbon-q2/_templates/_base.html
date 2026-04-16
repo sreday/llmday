@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{{ brand_name }} - {{ location_string }}, {{ date_string }}</title>
+
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="{{ brand_name }} conference">
+
+	<link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png">
+	<link rel="manifest" href="./assets/site.webmanifest">
+
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800|Roboto:300,400,700&display=swap" rel="stylesheet">
+
+	<!-- FontAwesome JS-->
+	<script defer src="assets/fontawesome/js/all.min.js"></script>
+
+	<!-- Theme CSS -->
+	<link id="theme-style" rel="stylesheet" href="assets/css/theme.css">
+
+    <meta name="image" property="og:image" content="https://{{ brand_domain }}/photos/{{ hero_pictures[0].split('/')[-1] }}">
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="{{ brand_name }} - {{ location_string }} - {{ date_string }}"/>
+    <meta property="og:description" content="{{ brand_description }}. {{ brand_og_pitch }} {{ location_string }}!"/>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="{{ brand_twitter }}">
+	<meta name="twitter:creator" content="{{ brand_twitter }}">
+    <meta name="twitter:title" content="{{ brand_name }} - {{ location_string }} - {{ date_string }}"/>
+    <meta name="twitter:description" content="{{ brand_description }}. {{ brand_og_pitch }} {{ location_string }}!"/>
+    <meta name="twitter:image" content="https://{{ brand_domain }}/photos/{{ hero_pictures[0].split('/')[-1] }}">
+
+
+<!-- Twitter conversion tracking base code -->
+<script>
+	!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+	},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+	a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+	twq('config','{{ brand_twt_pixel }}');
+	</script>
+	<!-- End Twitter conversion tracking base code -->
+	{% block head_extra %}{% endblock %}
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ brand_ga_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{ brand_ga_id }}');
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ brand_gads_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{ brand_gads_id }}');
+</script>
+
+<style>
+	.tinted {
+		box-shadow: 0 3000px rgba(0, 0, 0, 0.5) inset;
+	}
+	.retro {
+		font-family: 'Monoton', sans-serif;
+	}
+	.logo {
+		font-size: 5rem;
+		color: white;
+		font-weight: 400;
+	}
+	.theme-bg-primary {
+		background: {{ brand_color }};
+	}
+	.social-list li{
+		font-size: 1.75rem;
+	}
+	.social-list li a{
+		color: white;
+	}
+	html {
+		scroll-behavior: smooth;
+	}
+	section[id] {
+		scroll-margin-top: 70px;
+	}
+	#home {
+		scroll-margin-top: 70px;
+	}
+	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+</style>
+
+
+<body>
+	<header id="header" class="header fixed-top">
+		<div class="branding">
+			<div class="container-fluid">
+				<nav class="main-nav navbar navbar-expand-lg">
+					<div class="site-logo"><a href="{{ 'index.html' if page != 'index.html' else '/' }}">
+                        <!-- <img class="logo-icon" src="assets/images/logo-white.svg" alt="logo"></a> -->
+                    </div>
+
+					<div class="navbar-btn order-lg-2">{% if noindex %}<a class="btn btn-danger" href="#buy">Buy</a>{% else %}<a class="btn btn-secondary" href="#tickets">Tickets</a>{% endif %}</div>
+
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div id="navigation" class="navbar-collapse collapse  justify-content-lg-end me-lg-3">
+						{% if noindex %}
+						<ul class="nav navbar-nav">
+							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="#opportunities">Opportunities</a></li>
+							<li class="nav-item"><a class="nav-link" href="#stats">Stats</a></li>
+							<li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+						</ul><!--//nav-->
+						{% else %}
+						<ul class="nav navbar-nav">
+
+							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#tickets">Tickets</a></li>
+							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#schedule">Schedule</a></li>
+							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#speakers">Speakers</a></li>
+							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#venue">Venue</a></li>
+							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#sponsors">Sponsors</a></li>
+						</ul><!--//nav-->
+						{% endif %}
+					</div><!--//navabr-collapse-->
+
+				</nav><!--//main-nav-->
+
+			</div><!--//container-->
+		</div><!--//branding-->
+	</header><!--//header-->
+
+	<div id="home" class="hero-block">
+		<div id="hero-carousel" class="hero-carousel carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+			<div class="carousel-inner">
+				{% for pic in hero_pictures %}
+				<div class="carousel-item tinted {{ 'active' if loop.index == 1 else ''}}" style="background:url('{{ pic }}') no-repeat center; background-size: cover;"></div>
+				{% endfor %}
+			</div>
+
+			<div class="carousel-indicators">
+				{% for pic in hero_pictures %}
+				<button type="button" data-bs-target="#hero-carousel" class="{{ 'active' if loop.index == 1 else ''}}" data-bs-slide-to="{{loop.index0}}"></button>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="container">
+			<div class="hero-text-block text-center" style="max-width: 100%;">
+				{% if logo_image %}<h1 class="logo retro"><img src="{{ logo_image }}" alt="{{ brand_name }}" style="max-width: 350px; height: auto;" /></h1>{% else %}<h1 class="logo retro"><img src="/assets/LLMday Sticker.png" alt="LLMday" style="height: 200px;"></h1>{% endif %}
+				{% if noindex %}
+				<h2 class="text-white">Sponsorship Prospectus - {{ brand_name }} {{ city_name }}</h2>
+				<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>{{ date_string }} <i class="fas fa-map-marker-alt mx-2"></i>{{ location_string }}</h3>
+				<div class="hero-cta mt-5">
+					<a class="btn btn-danger btn-lg" href="#buy">Secure your Sponsorship</a>
+				</div>
+				{% else %}
+				<h2 class="text-white">{{ brand_tagline }}</h2>
+				<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>{{ date_string }} <i class="fas fa-map-marker-alt mx-2"></i>{{ location_string }}</h3>
+				<div class="hero-cta mt-5">
+					{% if youtube_playlist %}
+					<a class="btn btn-secondary btn-lg" href="{{ youtube_playlist }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="white" style="vertical-align:middle;margin-right:6px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Playlist</a>
+					{% else %}
+					<a class="btn btn-secondary btn-lg" href="#tickets">Get Tickets</a>
+					{% endif %}
+					{% if event_state != 'after' %}
+					<a class="btn btn-primary btn-lg" href="{{ cfp_url }}" target="_blank">CFP</a>
+					{% endif %}
+			    </div>
+				{% endif %}
+			</div><!--//hero-text-block-->
+		</div><!--//container-->
+
+	</div><!--//hero-block-->
+
+	<div class="stats-block theme-bg-primary text-white py-4 text-center">
+		<div class="container">
+			<div class="row">
+				<div class="col-6 col-md-3">
+					<div class="item">
+						<div class="number">{{ days }}</div>
+						<div class="unit">{{ "Day" if days == 1 else "Days" }}</div>
+					</div><!--//item-->
+				</div><!--//col-->
+				<div class="col-6 col-md-3">
+					<div class="item">
+						<div class="number">{{ speakers }}</div>
+						<div class="unit">{{ "Speaker" if speakers == 1 else "Speakers" }}</div>
+					</div><!--//item-->
+				</div><!--//col-->
+				<div class="col-6 col-md-3">
+					<div class="item">
+						<div class="number">{{ tracks | length }}</div>
+						<div class="unit">{{ "Track" if tracks | length == 1 else "Tracks" }}</div>
+					</div><!--//item-->
+				</div><!--//col-->
+				<div class="col-6 col-md-3">
+					<div class="item">
+						<div class="number">{{ attendees }}+</div>
+						<div class="unit">{{ "Attendee" if attendees == 1 else "Attendees" }}</div>
+					</div><!--//item-->
+				</div><!--//col-->
+			</div>
+		</div><!--//container-->
+	</div><!--//stats-block-->
+
+
+<!-- CONTENT -->
+{% block content %}{% endblock %}
+
+
+
+
+<footer class="footer py-5 theme-bg-primary">
+    <div class="container text-center">
+
+        <ul class="social-list list-inline mb-4">
+            <li class="list-inline-item me-3"><a target="_blank" href="https://luma.com/sre" style="text-decoration:none;">✦</a></li>
+            <li class="list-inline-item me-3"><a target="_blank" href="https://chat.whatsapp.com/KS1ce0jAHmNGAiOAoZG6zo"><i class="fab fa-whatsapp fa-fw"></i></a></li>
+            <li class="list-inline-item me-3"><a target="_blank" href="{{ linkedin_url }}"><i class="fab fa-linkedin fa-fw"></i></a></li>
+            <li class="list-inline-item me-3"><a href="mailto:hello@llmday.com"><i class="fas fa-envelope fa-fw"></i></a></li>
+            <li class="list-inline-item me-0"><a target="_blank" rel="noopener noreferrer" href="{{ youtube_url }}"><i class="fab fa-youtube fa-fw"></i></a></li>
+        </ul>
+        <div class="py-4 text-center">
+            <img src="assets/images/llama-gif.gif" alt="LLMday Llama" style="height:400px;">
+        </div>
+
+
+
+    </div><!--//container-->
+</footer>
+
+
+<!-- Javascript -->
+<script src="assets/plugins/popper.min.js"></script>
+<script src="assets/plugins/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="assets/plugins/smoothscroll.min.js"></script>
+<script src="assets/plugins/gumshoe/gumshoe.polyfills.min.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>
