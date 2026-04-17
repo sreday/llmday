@@ -8,7 +8,7 @@ tiers:
       medium: 1000
       large: 1000
     benefits:
-      - "Full attendee contact list, shared before & after"
+      - "Receive full attendee contact list"
 
   - id: keynote
     name: "Keynote Session"
@@ -55,9 +55,9 @@ tiers:
       - "Swag distributed to all attendees"
 
   - id: food
-    name: "Breakfast / Coffee / Lunch / Happy Hour"
+    name: "Coffee Break / Lunch / Happy Hour"
 
-    price_label: "£1000 + £15pp"
+    price_label: "£500 + £10pp"
     benefits:
       - "Microphone time before the selected break"
       - "Distribute your swag alongside food & drinks"
@@ -65,9 +65,9 @@ tiers:
   - id: clothing
     name: "Branded Wearables"
 
-    price_label: "£1000 + variable"
+    price_label: "£500 + variable"
     benefits:
-      - "T-shirts, socks, hoodies or caps with your logo"
+      - "Your logo on t-shirts, hoodies, socks, etc."
       - "£10–£30 per person, depending on the item"
 
   - id: tickets
@@ -75,7 +75,7 @@ tiers:
 
     price_label: "20% off 5+ tickets"
     benefits:
-      - "Sponsor 5 or more tickets at a discount"
+      - "Purchase 5 or more tickets at a discount"
       - "Share your vouchers with anyone"
 
   - id: startup_discount
