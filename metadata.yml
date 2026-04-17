@@ -54,6 +54,13 @@ events:
     size: medium
     youtube_playlist:
 
+  - name: LLMday Hamburg 2026 Q2
+    location: House of AI, Hamburg, Germany
+    photo_url: ./assets/images/events/llmday-2026-hamburg-q2.png
+    url: ./2026-hamburg-q2/
+    size: medium
+    youtube_playlist:
+
   - name: LLMday Lisbon 2026 Q2
     location: PagerDuty, Lisbon, Portugal
     photo_url: ./assets/images/events/llmday-2026-lisbon-q2.png
