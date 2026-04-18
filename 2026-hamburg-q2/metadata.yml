@@ -37,6 +37,8 @@ breaks:
   talks_before: 4
 
 sponsors:
+  - logo: houseofai.png
+    url: https://house-of-ai.org/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
 
