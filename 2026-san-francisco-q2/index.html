@@ -189,8 +189,6 @@
 					<a class="btn btn-secondary btn-lg" href="#tickets">Get Tickets</a>
 					
 					
-					<a class="btn btn-primary btn-lg" href="hhttps://cfp.ninja/e/llmday-2026-san-francisco-q2" target="_blank">CFP</a>
-					
 			    </div>
 				
 			</div><!--//hero-text-block-->
@@ -238,8 +236,7 @@
   <div class="container">
     <div class="event-countdown text-center mb-3">
     
-      <h4 class="countdown-intro mb-2 text-center mb-3">Event Starts In:</h4>
-      <div id="countdown-box" class="countdown-box"></div>
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished</h4>
     
     </div>
   </div>
@@ -297,71 +294,6 @@
   <div class="container">
     <h3 class="section-heading text-center mb-3">Tickets</h3>
 
-    
-    <div class="row pricing mb-5 mt-10">
-      <div class="col-12 text-center">
-        <iframe
-  id="luma-tickets-iframe"
-  src="https://lu.ma/embed/event/evt-6PPnLrXPdXBVfdl/simple"
-  width="100%"
-  frameborder="0"
-  style="border: 1px solid #bfcbda88; border-radius: 4px; display: block; height: 1000px; min-height: 1000px;"
-  allowfullscreen=""
-  aria-hidden="false"
-  tabindex="0"
-></iframe>
-
-<div class="text-center mt-4">
-  <a
-    href="https://lu.ma/event/evt-6PPnLrXPdXBVfdl"
-    class="luma-checkout--button btn btn-secondary btn-lg"
-    data-luma-action="checkout"
-    data-luma-event-id="evt-6PPnLrXPdXBVfdl"
-  >
-    Register on Luma
-  </a>
-</div>
-
-<script id="luma-checkout" src="https://embed.lu.ma/checkout-button.js"></script>
-<script>
-  (function() {
-    var params = window.location.search;
-    var iframe = document.getElementById('luma-tickets-iframe');
-
-    // Append query params to iframe src
-    if (iframe && params) {
-      var src = iframe.getAttribute('src');
-      var sep = src.indexOf('?') > -1 ? '&' : '?';
-      iframe.setAttribute('src', src + sep + params.substring(1));
-    }
-
-    // Append query params to button
-    if (params) {
-      var btn = document.querySelector('.luma-checkout--button');
-      if (btn) {
-        var href = btn.getAttribute('href');
-        var sep = href.indexOf('?') > -1 ? '&' : '?';
-        btn.setAttribute('href', href + sep + params.substring(1));
-      }
-    }
-
-    // Auto-resize iframe via Luma postMessage (overrides fixed height if received)
-    window.addEventListener('message', function(e) {
-      if (!iframe) return;
-      var d = e.data;
-      if (!d) return;
-      // Handle multiple possible Luma message formats
-      var h = null;
-      if (typeof d.height === 'number' && d.height > 100) h = d.height;
-      else if (typeof d.height === 'string' && parseInt(d.height) > 100) h = parseInt(d.height);
-      if (h !== null) {
-        iframe.style.height = h + 'px';
-      }
-    });
-  })();
-</script> 
-      </div>
-    </div>
     
 
   </div>

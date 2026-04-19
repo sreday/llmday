@@ -5,7 +5,7 @@ start_time: "2026-04-16T09:00:00+08:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
-event_state: active
+event_state: after
 date_string: "April 16, 2026"
 location_string: "Harness, San Francisco, United States"
 # get this from the event url
