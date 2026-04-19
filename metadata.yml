@@ -26,13 +26,6 @@ counts:
 
 events:
 
-  - name: LLMday San Francisco 2026 Q2
-    location: Harness, San Francisco, United States
-    photo_url: ./assets/images/events/llmday-2026-san-francisco-q2.png
-    url: ./2026-san-francisco-q2/
-    size: medium
-    youtube_playlist:
-
   - name: LLMday Austin 2026 Q2
     location: Austin, Texas, United States
     photo_url: ./assets/images/events/llmday-2026-austin-q2.png
@@ -69,6 +62,13 @@ events:
     youtube_playlist:
 
 events_past:
+
+  - name: LLMday San Francisco 2026 Q2
+    location: Harness, San Francisco, United States
+    photo_url: ./assets/images/events/llmday-2026-san-francisco-q2.png
+    url: ./2026-san-francisco-q2/
+    size: medium
+    youtube_playlist:
 
   - name: LLMday NYC 2026 Q1
     location: VIAM, New York, United States
