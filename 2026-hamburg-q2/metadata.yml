@@ -10,7 +10,7 @@ date_string: "June 18, 2026"
 location_string: "House of AI - Hongkongstraße 2, 20457 Hamburg, Germany"
 # get this from the event url
 luma_evt: evt-4zvCAzI2QDBdb3n
-cfp_url: https://www.papercall.io/llmday-amsterdam-2025-q4
+cfp_url: https://cfp.ninja/e/llmday-2026-hamburg-q2
 
 # the number of tracks needs to be the same per day
 # the tracks will be taken in the order they appear in the CSV file
