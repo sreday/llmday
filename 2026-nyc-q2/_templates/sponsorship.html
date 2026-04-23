@@ -7,10 +7,22 @@
 :root { --sp-accent: #26986A; }
 
 .sp-hero {
-  background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
-              url('{{ hero_pictures[0] if hero_pictures else "" }}') center/cover no-repeat;
-  padding: 80px 0 60px;
-  color: #fff;
+  position: relative;
+  height: 620px;
+  padding-top: 125px;
+  overflow: hidden;
+  background: url('../photos/llmday-paint.png') center/cover no-repeat;
+}
+.sp-hero-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,.45);
+  z-index: 1;
+}
+.sp-hero .container {
+  position: relative;
+  z-index: 2;
 }
 .sp-badge-noindex {
   display: inline-block;
@@ -407,6 +419,22 @@
 }
 .sp-faq-a:last-child { margin-bottom: 0; }
 </style>
+{% endblock %}
+
+{% block hero %}
+<div id="home" class="hero-block sp-hero">
+	<div class="sp-hero-overlay"></div>
+	<div class="container">
+		<div class="hero-text-block text-center" style="max-width: 100%;">
+			{% if logo_image %}<h1 class="logo retro"><img src="{{ logo_image }}" alt="{{ brand_name }}" style="max-width: 350px; height: auto;" /></h1>{% else %}<h1 class="logo retro"><img src="/assets/LLMday Sticker.png" alt="LLMday" style="height: 200px;"></h1>{% endif %}
+			<h2 class="text-white">Sponsorship Prospectus - {{ brand_name }} {{ city_name }}</h2>
+			<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>{{ date_string }} <i class="fas fa-map-marker-alt mx-2"></i>{{ location_string }}</h3>
+			<div class="hero-cta mt-5">
+				<a class="btn btn-danger btn-lg" href="#buy" style="text-decoration:none;">Secure your Sponsorship</a>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
 
 {% block content %}
