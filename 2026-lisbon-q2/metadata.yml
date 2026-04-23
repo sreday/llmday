@@ -1,12 +1,12 @@
 # TODO - change these
 
 # start time includes timezone at the end relative to UTC
-start_time: "2026-06-24T09:30:00+01:00"
+start_time: "2026-06-23T09:30:00+01:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
 event_state: before
-date_string: "June 24, 2026"
+date_string: "June 23, 2026"
 location_string: "PagerDuty, Lisbon, Portugal"
 city_name: "Lisbon"
 venue_name: "PagerDuty"
