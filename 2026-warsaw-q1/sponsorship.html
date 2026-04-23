@@ -55,10 +55,22 @@
 :root { --sp-accent: #26986A; }
 
 .sp-hero {
-  background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
-              url('../photos/warsaw-2026-0.jpg') center/cover no-repeat;
-  padding: 80px 0 60px;
-  color: #fff;
+  position: relative;
+  height: 620px;
+  padding-top: 125px;
+  overflow: hidden;
+  background: url('../photos/llmday-paint.png') center/cover no-repeat;
+}
+.sp-hero-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,.45);
+  z-index: 1;
+}
+.sp-hero .container {
+  position: relative;
+  z-index: 2;
 }
 .sp-badge-noindex {
   display: inline-block;
@@ -544,58 +556,21 @@
 		</div><!--//branding-->
 	</header><!--//header-->
 
-	<div id="home" class="hero-block">
-		<div id="hero-carousel" class="hero-carousel carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
-			<div class="carousel-inner">
-				
-				<div class="carousel-item tinted active" style="background:url('../photos/warsaw-2026-0.jpg') no-repeat center; background-size: cover;"></div>
-				
-				<div class="carousel-item tinted " style="background:url('../photos/warsaw-2026-1.jpg') no-repeat center; background-size: cover;"></div>
-				
-				<div class="carousel-item tinted " style="background:url('../photos/warsaw-2026-2.jpg') no-repeat center; background-size: cover;"></div>
-				
-				<div class="carousel-item tinted " style="background:url('../photos/warsaw-2026-3.jpg') no-repeat center; background-size: cover;"></div>
-				
-				<div class="carousel-item tinted " style="background:url('../photos/warsaw-2026-4.jpg') no-repeat center; background-size: cover;"></div>
-				
-				<div class="carousel-item tinted " style="background:url('../photos/warsaw-2026-5.jpg') no-repeat center; background-size: cover;"></div>
-				
-				<div class="carousel-item tinted " style="background:url('../photos/warsaw-2026-6.jpg') no-repeat center; background-size: cover;"></div>
-				
-			</div>
-
-			<div class="carousel-indicators">
-				
-				<button type="button" data-bs-target="#hero-carousel" class="active" data-bs-slide-to="0"></button>
-				
-				<button type="button" data-bs-target="#hero-carousel" class="" data-bs-slide-to="1"></button>
-				
-				<button type="button" data-bs-target="#hero-carousel" class="" data-bs-slide-to="2"></button>
-				
-				<button type="button" data-bs-target="#hero-carousel" class="" data-bs-slide-to="3"></button>
-				
-				<button type="button" data-bs-target="#hero-carousel" class="" data-bs-slide-to="4"></button>
-				
-				<button type="button" data-bs-target="#hero-carousel" class="" data-bs-slide-to="5"></button>
-				
-				<button type="button" data-bs-target="#hero-carousel" class="" data-bs-slide-to="6"></button>
-				
+	
+<div id="home" class="hero-block sp-hero">
+	<div class="sp-hero-overlay"></div>
+	<div class="container">
+		<div class="hero-text-block text-center" style="max-width: 100%;">
+			<h1 class="logo retro"><img src="/assets/LLMday Sticker.png" alt="LLMday" style="height: 200px;"></h1>
+			<h2 class="text-white">Sponsorship Prospectus - LLMday Warsaw</h2>
+			<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>February 12, 2026 <i class="fas fa-map-marker-alt mx-2"></i>CIC Warsaw, Poland</h3>
+			<div class="hero-cta mt-5">
+				<a class="btn btn-danger btn-lg" href="#buy" style="text-decoration:none;">Secure your Sponsorship</a>
 			</div>
 		</div>
-		<div class="container">
-			<div class="hero-text-block text-center" style="max-width: 100%;">
-				<h1 class="logo retro"><img src="/assets/LLMday Sticker.png" alt="LLMday" style="height: 200px;"></h1>
-				
-				<h2 class="text-white">Sponsorship Prospectus - LLMday Warsaw</h2>
-				<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>February 12, 2026 <i class="fas fa-map-marker-alt mx-2"></i>CIC Warsaw, Poland</h3>
-				<div class="hero-cta mt-5">
-					<a class="btn btn-danger btn-lg" href="#buy">Secure your Sponsorship</a>
-				</div>
-				
-			</div><!--//hero-text-block-->
-		</div><!--//container-->
+	</div>
+</div>
 
-	</div><!--//hero-block-->
 
 	<div class="stats-block theme-bg-primary text-white py-4 text-center">
 		<div class="container">
