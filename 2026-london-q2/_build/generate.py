@@ -308,6 +308,116 @@ _sponsor_names = {s['name'].strip().lower() for s in _global_sponsors if s.get('
 _global_top_companies = [(co, cnt) for co, cnt in _global_top_companies if co.strip().lower() not in _sponsor_names][:10]
 
 # ── Timeline: all events from home/metadata.yml ──────────────────────────────
+_flag_map = {
+    'afghanistan': ('🇦🇫', 'AF', 'Afghanistan'),
+    'albania': ('🇦🇱', 'AL', 'Albania'),
+    'algeria': ('🇩🇿', 'DZ', 'Algeria'),
+    'argentina': ('🇦🇷', 'AR', 'Argentina'),
+    'armenia': ('🇦🇲', 'AM', 'Armenia'),
+    'australia': ('🇦🇺', 'AU', 'Australia'),
+    'austria': ('🇦🇹', 'AT', 'Austria'),
+    'azerbaijan': ('🇦🇿', 'AZ', 'Azerbaijan'),
+    'bahrain': ('🇧🇭', 'BH', 'Bahrain'),
+    'bangladesh': ('🇧🇩', 'BD', 'Bangladesh'),
+    'belarus': ('🇧🇾', 'BY', 'Belarus'),
+    'belgium': ('🇧🇪', 'BE', 'Belgium'),
+    'bolivia': ('🇧🇴', 'BO', 'Bolivia'),
+    'bosnia': ('🇧🇦', 'BA', 'Bosnia and Herzegovina'),
+    'brazil': ('🇧🇷', 'BR', 'Brazil'),
+    'bulgaria': ('🇧🇬', 'BG', 'Bulgaria'),
+    'cambodia': ('🇰🇭', 'KH', 'Cambodia'),
+    'canada': ('🇨🇦', 'CA', 'Canada'),
+    'chile': ('🇨🇱', 'CL', 'Chile'),
+    'china': ('🇨🇳', 'CN', 'China'),
+    'colombia': ('🇨🇴', 'CO', 'Colombia'),
+    'costa rica': ('🇨🇷', 'CR', 'Costa Rica'),
+    'croatia': ('🇭🇷', 'HR', 'Croatia'),
+    'cyprus': ('🇨🇾', 'CY', 'Cyprus'),
+    'czech': ('🇨🇿', 'CZ', 'Czech Republic'),
+    'denmark': ('🇩🇰', 'DK', 'Denmark'),
+    'ecuador': ('🇪🇨', 'EC', 'Ecuador'),
+    'egypt': ('🇪🇬', 'EG', 'Egypt'),
+    'estonia': ('🇪🇪', 'EE', 'Estonia'),
+    'ethiopia': ('🇪🇹', 'ET', 'Ethiopia'),
+    'finland': ('🇫🇮', 'FI', 'Finland'),
+    'france': ('🇫🇷', 'FR', 'France'),
+    'georgia': ('🇬🇪', 'GE', 'Georgia'),
+    'germany': ('🇩🇪', 'DE', 'Germany'),
+    'ghana': ('🇬🇭', 'GH', 'Ghana'),
+    'greece': ('🇬🇷', 'GR', 'Greece'),
+    'guatemala': ('🇬🇹', 'GT', 'Guatemala'),
+    'hong kong': ('🇭🇰', 'HK', 'Hong Kong'),
+    'hungary': ('🇭🇺', 'HU', 'Hungary'),
+    'iceland': ('🇮🇸', 'IS', 'Iceland'),
+    'india': ('🇮🇳', 'IN', 'India'),
+    'indonesia': ('🇮🇩', 'ID', 'Indonesia'),
+    'iran': ('🇮🇷', 'IR', 'Iran'),
+    'iraq': ('🇮🇶', 'IQ', 'Iraq'),
+    'ireland': ('🇮🇪', 'IE', 'Ireland'),
+    'israel': ('🇮🇱', 'IL', 'Israel'),
+    'italy': ('🇮🇹', 'IT', 'Italy'),
+    'japan': ('🇯🇵', 'JP', 'Japan'),
+    'jordan': ('🇯🇴', 'JO', 'Jordan'),
+    'kazakhstan': ('🇰🇿', 'KZ', 'Kazakhstan'),
+    'kenya': ('🇰🇪', 'KE', 'Kenya'),
+    'korea': ('🇰🇷', 'KR', 'South Korea'),
+    'kuwait': ('🇰🇼', 'KW', 'Kuwait'),
+    'latvia': ('🇱🇻', 'LV', 'Latvia'),
+    'lebanon': ('🇱🇧', 'LB', 'Lebanon'),
+    'lithuania': ('🇱🇹', 'LT', 'Lithuania'),
+    'luxembourg': ('🇱🇺', 'LU', 'Luxembourg'),
+    'malaysia': ('🇲🇾', 'MY', 'Malaysia'),
+    'malta': ('🇲🇹', 'MT', 'Malta'),
+    'mexico': ('🇲🇽', 'MX', 'Mexico'),
+    'moldova': ('🇲🇩', 'MD', 'Moldova'),
+    'mongolia': ('🇲🇳', 'MN', 'Mongolia'),
+    'montenegro': ('🇲🇪', 'ME', 'Montenegro'),
+    'morocco': ('🇲🇦', 'MA', 'Morocco'),
+    'nepal': ('🇳🇵', 'NP', 'Nepal'),
+    'netherlands': ('🇳🇱', 'NL', 'Netherlands'),
+    'new zealand': ('🇳🇿', 'NZ', 'New Zealand'),
+    'nigeria': ('🇳🇬', 'NG', 'Nigeria'),
+    'north macedonia': ('🇲🇰', 'MK', 'North Macedonia'),
+    'norway': ('🇳🇴', 'NO', 'Norway'),
+    'oman': ('🇴🇲', 'OM', 'Oman'),
+    'pakistan': ('🇵🇰', 'PK', 'Pakistan'),
+    'panama': ('🇵🇦', 'PA', 'Panama'),
+    'paraguay': ('🇵🇾', 'PY', 'Paraguay'),
+    'peru': ('🇵🇪', 'PE', 'Peru'),
+    'philippines': ('🇵🇭', 'PH', 'Philippines'),
+    'poland': ('🇵🇱', 'PL', 'Poland'),
+    'portugal': ('🇵🇹', 'PT', 'Portugal'),
+    'qatar': ('🇶🇦', 'QA', 'Qatar'),
+    'romania': ('🇷🇴', 'RO', 'Romania'),
+    'russia': ('🇷🇺', 'RU', 'Russia'),
+    'saudi arabia': ('🇸🇦', 'SA', 'Saudi Arabia'),
+    'senegal': ('🇸🇳', 'SN', 'Senegal'),
+    'serbia': ('🇷🇸', 'RS', 'Serbia'),
+    'singapore': ('🇸🇬', 'SG', 'Singapore'),
+    'slovakia': ('🇸🇰', 'SK', 'Slovakia'),
+    'slovenia': ('🇸🇮', 'SI', 'Slovenia'),
+    'south africa': ('🇿🇦', 'ZA', 'South Africa'),
+    'spain': ('🇪🇸', 'ES', 'Spain'),
+    'sri lanka': ('🇱🇰', 'LK', 'Sri Lanka'),
+    'sweden': ('🇸🇪', 'SE', 'Sweden'),
+    'switzerland': ('🇨🇭', 'CH', 'Switzerland'),
+    'taiwan': ('🇹🇼', 'TW', 'Taiwan'),
+    'tanzania': ('🇹🇿', 'TZ', 'Tanzania'),
+    'thailand': ('🇹🇭', 'TH', 'Thailand'),
+    'tunisia': ('🇹🇳', 'TN', 'Tunisia'),
+    'turkey': ('🇹🇷', 'TR', 'Turkey'),
+    'uae': ('🇦🇪', 'AE', 'United Arab Emirates'),
+    'united arab emirates': ('🇦🇪', 'AE', 'United Arab Emirates'),
+    'uganda': ('🇺🇬', 'UG', 'Uganda'),
+    'ukraine': ('🇺🇦', 'UA', 'Ukraine'),
+    'united kingdom': ('🇬🇧', 'GB', 'United Kingdom'),
+    'united states': ('🇺🇸', 'US', 'United States'),
+    'uruguay': ('🇺🇾', 'UY', 'Uruguay'),
+    'uzbekistan': ('🇺🇿', 'UZ', 'Uzbekistan'),
+    'venezuela': ('🇻🇪', 'VE', 'Venezuela'),
+    'vietnam': ('🇻🇳', 'VN', 'Vietnam'),
+}
+
 _timeline_events = []
 _countries_seen = set()
 _home_meta_path = '../home/metadata.yml'
@@ -324,12 +434,12 @@ if _os.path.exists(_home_meta_path):
         with open(_he_meta_path, encoding='utf-8') as _hf2:
             _hem = yaml.load(_hf2, Loader=yaml.FullLoader)
         _loc = (_hem.get('location_string', '') + ' ' + _hem.get('city_name', '')).lower()
-        if 'poland' in _loc or 'warsaw' in _loc:
-            _flag = '🇵🇱'; _countries_seen.add('PL'); _country = 'Poland'
-        elif 'london' in _loc or 'uk' in _loc or 'united kingdom' in _loc:
-            _flag = '🇬🇧'; _countries_seen.add('UK'); _country = 'United Kingdom'
-        else:
-            _flag = '🇺🇸'; _countries_seen.add('US'); _country = 'United States'
+        _flag = '🇺🇸'; _country_code = 'US'; _country = 'United States'
+        for _kw, (_kf, _kc, _cn) in _flag_map.items():
+            if _kw in _loc:
+                _flag = _kf; _country_code = _kc; _country = _cn
+                break
+        _countries_seen.add(_country_code)
         _timeline_events.append({
             'name':        _he.get('name', ''),
             'city':        _hem.get('city_name', ''),
