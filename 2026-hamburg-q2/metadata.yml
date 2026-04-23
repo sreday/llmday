@@ -8,6 +8,7 @@ start_time: "2026-06-18T09:00:00+02:00"
 event_state: before
 date_string: "June 18, 2026"
 location_string: "House of AI - Hongkongstraße 2, 20457 Hamburg, Germany"
+city_name: "Hamburg"
 # get this from the event url
 luma_evt: evt-4zvCAzI2QDBdb3n
 cfp_url: https://cfp.ninja/e/llmday-2026-hamburg-q2
