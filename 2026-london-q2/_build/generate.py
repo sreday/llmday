@@ -410,6 +410,7 @@ _flag_map = {
     'united arab emirates': ('🇦🇪', 'AE', 'United Arab Emirates'),
     'uganda': ('🇺🇬', 'UG', 'Uganda'),
     'ukraine': ('🇺🇦', 'UA', 'Ukraine'),
+    'uk': ('🇬🇧', 'GB', 'United Kingdom'),
     'united kingdom': ('🇬🇧', 'GB', 'United Kingdom'),
     'united states': ('🇺🇸', 'US', 'United States'),
     'uruguay': ('🇺🇾', 'UY', 'Uruguay'),
