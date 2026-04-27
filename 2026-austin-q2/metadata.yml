@@ -39,10 +39,6 @@ breaks:
   duration: 30
   comment: Main lobby
   talks_before: 3
-- title: Wrap up
-  duration: 30
-  comment: Main lobby
-  talks_before: 4
 
 sponsors:
   - logo: hockeystick.png
