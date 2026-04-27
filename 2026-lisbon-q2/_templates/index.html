@@ -324,7 +324,14 @@
 {% if ns.titles|unique|list|length == 1 and ns.titles[0] != '' %}
           <tr>
             <td class="time-cell">{{ time }}</td>
-            <td class="talk-cell merged-cell" colspan="{{ (tracks|length) // days }}">{{ ns.titles[0] }}</td>
+            <td class="talk-cell merged-cell" colspan="{{ (tracks|length) // days }}">
+{% if ns.talks_at_time[0].name %}
+              <a href="#modal-speaker-{{ ns.talks_at_time[0].id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ ns.talks_at_time[0].id }}">{{ ns.titles[0] }}</a>
+              <div class="speaker-info">{{ ns.talks_at_time[0].name }}{% if ns.talks_at_time[0].organization %} <span class="affiliation">• {{ ns.talks_at_time[0].organization }}</span>{% endif %}</div>
+{% else %}
+              {{ ns.titles[0] }}
+{% endif %}
+            </td>
           </tr>
 {% else %}
           <tr>
