@@ -242,7 +242,7 @@
     <div class="schedule-meta">
       <span class="schedule-meta-item">{{ date_string }}</span>
       <span class="schedule-meta-divider">•</span>
-      <span class="schedule-meta-item">{{ tracks|length }} parallel tracks</span>
+      <span class="schedule-meta-item">{% if tracks|length == 1 %}single track{% else %}{{ tracks|length }} parallel tracks{% endif %}</span>
     </div>
 
 {% for day in range(days) %}
