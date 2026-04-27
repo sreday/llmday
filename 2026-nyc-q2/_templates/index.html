@@ -79,6 +79,35 @@
   </div>
 </section>
 
+<style>
+  .speakers-section .card {
+    height: 100%;
+  }
+  .speakers-section .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .event-read-more-btn {
+    display: inline-block;
+    padding: 8px 18px;
+    background: #51AD88;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: background 0.2s ease;
+    margin-top: auto;
+    align-self: flex-start;
+  }
+  .event-read-more-btn:hover,
+  .event-read-more-btn:focus {
+    background: #67B797;
+    color: #fff;
+    text-decoration: none;
+  }
+</style>
+
 {% if event_state == 'before' %}
 <section id="schedule" class="schedule-section section theme-bg-light">
   <div class="container">
@@ -121,32 +150,6 @@
   .track-nav-links a:hover {
     background: #1f7d57;
     color: white;
-  }
-  .speakers-section .card {
-    height: 100%;
-  }
-  .speakers-section .card-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .event-read-more-btn {
-    display: inline-block;
-    padding: 8px 18px;
-    background: #51AD88;
-    color: #fff;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: background 0.2s ease;
-    margin-top: auto;
-    align-self: flex-start;
-  }
-  .event-read-more-btn:hover,
-  .event-read-more-btn:focus {
-    background: #67B797;
-    color: #fff;
-    text-decoration: none;
   }
   .view-toggle-link {
     color: #26986A;
