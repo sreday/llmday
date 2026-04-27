@@ -92,6 +92,7 @@
   .track-nav {
     padding: 0.75rem 0;
     margin-bottom: 1.5rem;
+    scroll-margin-top: 60px;
   }
   .track-nav-inner {
     display: flex;
@@ -252,7 +253,6 @@
     border-radius: 4px 4px 0 0;
     font-size: 1.25rem;
     font-weight: 700;
-    scroll-margin-top: 80px;
   }
   .track-section-header:first-of-type {
     margin-top: 0;
@@ -278,11 +278,11 @@
     {% if days > 1 %}<h4 class="section-heading text-center mb-5">Day {{ day + 1 }}</h4>{% endif %}
 
     <!-- Track navigation -->
-    <div class="track-nav">
+    <div class="track-nav" id="track-nav-{{ day }}">
       <div class="track-nav-inner">
         <div class="track-nav-links" id="track-links-{{ day }}">
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-          <a href="#track-{{ day }}-{{ loop.index }}">{{ rooms[loop.index0] }}</a>
+          <a href="#track-nav-{{ day }}">{{ rooms[loop.index0] }}</a>
 {% endfor %}
         </div>
         <span class="view-toggle-link" id="view-toggle-{{ day }}" onclick="toggleView({{ day }})">view as table</span>
@@ -292,7 +292,7 @@
     <!-- Timeline View (default) -->
     <div id="timeline-view-{{ day }}" class="schedule-timeline-view">
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-      <div class="track-section-header" id="track-{{ day }}-{{ loop.index }}">{{ rooms[loop.index0] }} &bull; Track {{ track }}</div>
+      <div class="track-section-header">{{ rooms[loop.index0] }} &bull; Track {{ track }}</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 {% for talk in talks_by_tracks[track] %}
