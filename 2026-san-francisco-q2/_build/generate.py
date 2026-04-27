@@ -126,7 +126,8 @@ for track in tracks_ordered:
         offset += 1
     new_order.append(dict(
         title="Wrap up",
-        comment="Scan each other's QR codes & head to a nearby pub!"
+        comment="Scan each other's QR codes & head to a nearby pub!",
+        duration=0,
     ))
     tracks[track] = new_order
 
@@ -149,7 +150,8 @@ for i, track in enumerate(tracks_ordered):
 for track in tracks:
     current_time = datetime.datetime.fromisoformat(context.get("start_time"))
     for talk in tracks[track]:
-        talk["duration"] = int(talk.get("duration") or DEFAULT_TALK_DURATION)
+        raw = talk.get("duration")
+        talk["duration"] = int(raw) if raw is not None and raw != "" else DEFAULT_TALK_DURATION
         talk["start_time"] = current_time
         current_time += timedelta(minutes=talk["duration"])
 
