@@ -153,6 +153,20 @@ for track in tracks:
         talk["start_time"] = current_time
         current_time += timedelta(minutes=talk["duration"])
 
+# compute schedule time bracket
+schedule_start = datetime.datetime.fromisoformat(context.get("start_time"))
+schedule_end = schedule_start
+for track in tracks:
+    for talk in tracks[track]:
+        end = talk["start_time"] + timedelta(minutes=talk["duration"])
+        if end > schedule_end:
+            schedule_end = end
+context["schedule_time_bracket"] = (
+    schedule_start.strftime('%-I:%M%p').replace(':00', '')
+    + " - "
+    + schedule_end.strftime('%-I:%M%p').replace(':00', '')
+)
+
 # remove placeholders
 for track in tracks:
     tracks[track] = [t for t in tracks[track] if not t.get("placeholder")]
