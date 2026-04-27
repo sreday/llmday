@@ -369,13 +369,41 @@
   </div>
 </section>
 
+<style>
+  .speakers-section .card {
+    height: 100%;
+  }
+  .speakers-section .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .event-read-more-btn {
+    display: inline-block;
+    padding: 8px 18px;
+    background: #51AD88;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: background 0.2s ease;
+    margin-top: auto;
+    align-self: flex-start;
+  }
+  .event-read-more-btn:hover,
+  .event-read-more-btn:focus {
+    background: #67B797;
+    color: #fff;
+    text-decoration: none;
+  }
+</style>
+
 
 <style>
   /* Track navigation */
   .track-nav {
     padding: 0.75rem 0;
     margin-bottom: 1.5rem;
-    scroll-margin-top: 60px;
   }
   .track-nav-inner {
     display: flex;
@@ -404,32 +432,6 @@
   .track-nav-links a:hover {
     background: #1f7d57;
     color: white;
-  }
-  .speakers-section .card {
-    height: 100%;
-  }
-  .speakers-section .card-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .event-read-more-btn {
-    display: inline-block;
-    padding: 8px 18px;
-    background: #51AD88;
-    color: #fff;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: background 0.2s ease;
-    margin-top: auto;
-    align-self: flex-start;
-  }
-  .event-read-more-btn:hover,
-  .event-read-more-btn:focus {
-    background: #67B797;
-    color: #fff;
-    text-decoration: none;
   }
   .view-toggle-link {
     color: #26986A;
@@ -561,15 +563,15 @@
     
 
     <!-- Track navigation -->
-    <div class="track-nav" id="track-nav-0">
+    <div class="track-nav">
       <div class="track-nav-inner">
         <div class="track-nav-links" id="track-links-0">
 
-          <a href="#track-nav-0">screen 1</a>
+          <a href="#track-0-1">screen 1</a>
 
-          <a href="#track-nav-0">screen 2</a>
+          <a href="#track-0-2">screen 2</a>
 
-          <a href="#track-nav-0">screen 3</a>
+          <a href="#track-0-3">screen 3</a>
 
         </div>
         <span class="view-toggle-link" id="view-toggle-0" onclick="toggleView(0)">view as table</span>
@@ -579,7 +581,7 @@
     <!-- Timeline View (default) -->
     <div id="timeline-view-0" class="schedule-timeline-view">
 
-      <div class="track-section-header">screen 1 &bull; Track 1</div>
+      <div class="track-section-header" id="track-0-1">screen 1 &bull; Track 1</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 
@@ -824,7 +826,7 @@
         </div>
       </div>
 
-      <div class="track-section-header">screen 2 &bull; Track 2</div>
+      <div class="track-section-header" id="track-0-2">screen 2 &bull; Track 2</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 
@@ -1086,7 +1088,7 @@
         </div>
       </div>
 
-      <div class="track-section-header">screen 3 &bull; Track 3</div>
+      <div class="track-section-header" id="track-0-3">screen 3 &bull; Track 3</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 
