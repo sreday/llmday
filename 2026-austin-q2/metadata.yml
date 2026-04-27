@@ -41,6 +41,8 @@ breaks:
   talks_before: 3
 
 sponsors:
+  - logo: harness.png
+    url: https://www.harness.io/
   - logo: hockeystick.png
     url: https://www.hockeystick.show/
   - logo: ksug.ai.png
