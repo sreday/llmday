@@ -155,6 +155,26 @@ for track in tracks:
         talk["start_time"] = current_time
         current_time += timedelta(minutes=talk["duration"])
 
+# synchronize break times across tracks
+for brk in context.get("breaks"):
+    brk_title = brk["title"]
+    max_time = None
+    for track in tracks:
+        for talk in tracks[track]:
+            if talk.get("title") == brk_title and not talk.get("name"):
+                if max_time is None or talk["start_time"] > max_time:
+                    max_time = talk["start_time"]
+    if max_time is not None:
+        for track in tracks:
+            for i, talk in enumerate(tracks[track]):
+                if talk.get("title") == brk_title and not talk.get("name"):
+                    talk["start_time"] = max_time
+                    current = max_time + timedelta(minutes=talk["duration"])
+                    for j in range(i + 1, len(tracks[track])):
+                        tracks[track][j]["start_time"] = current
+                        current += timedelta(minutes=tracks[track][j]["duration"])
+                    break
+
 # compute schedule time bracket
 schedule_start = datetime.datetime.fromisoformat(context.get("start_time"))
 schedule_end = schedule_start
