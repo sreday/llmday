@@ -40,6 +40,8 @@ breaks:
 sponsors:
   - logo: microsoft.png
     url: https://www.microsoft.com/
+  - logo: harness.png
+    url: https://www.harness.io/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
 
