@@ -307,6 +307,7 @@
   .track-nav {
     padding: 0.75rem 0;
     margin-bottom: 1.5rem;
+    scroll-margin-top: 60px;
   }
   .track-nav-inner {
     display: flex;
@@ -492,11 +493,11 @@
     
 
     <!-- Track navigation -->
-    <div class="track-nav">
+    <div class="track-nav" id="track-nav-0">
       <div class="track-nav-inner">
         <div class="track-nav-links" id="track-links-0">
 
-          <a href="#track-0-1">main room</a>
+          <a href="#track-nav-0">main room</a>
 
         </div>
         <span class="view-toggle-link" id="view-toggle-0" onclick="toggleView(0)">view as table</span>
@@ -506,7 +507,7 @@
     <!-- Timeline View (default) -->
     <div id="timeline-view-0" class="schedule-timeline-view">
 
-      <div class="track-section-header" id="track-0-1">main room &bull; Track 1</div>
+      <div class="track-section-header">main room &bull; Track 1</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 
