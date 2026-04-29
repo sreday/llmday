@@ -747,6 +747,20 @@ function spToggleStats() {
 }
 </script>
 
+{# ── Already sponsoring ─────────────────────────────── #}
+{% if sponsors %}
+<section class="sp-section" id="already-sponsoring" style="background:#1a1a1a;">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Already sponsoring</h2>
+    <div class="d-flex flex-wrap justify-content-center align-items-center gap-3" style="background:#fff;border-radius:16px;padding:20px 28px;max-width:720px;margin:0 auto;">
+      {% for sponsor in sponsors %}
+      <a href="{{ sponsor.url }}" target="_blank" style="display:inline-block;"><img src="../sponsors/{{ sponsor.logo }}" alt="" style="height:28px;width:auto;"></a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
 {# ── Get in touch ────────────────────────────────────── #}
 <section class="sp-section sp-section-alt" id="buy">
   <div class="container">
@@ -761,20 +775,6 @@ function spToggleStats() {
     </div>
   </div>
 </section>
-
-{# ── Already sponsoring ─────────────────────────────── #}
-{% if sponsors %}
-<section class="sp-section sp-section-alt" id="already-sponsoring" style="padding-top:0;">
-  <div class="container">
-    <h2 class="sp-section-title text-center">Already sponsoring</h2>
-    <div class="d-flex flex-wrap justify-content-center align-items-center gap-3" style="background:#fff;border-radius:16px;padding:20px 28px;max-width:720px;margin:0 auto;">
-      {% for sponsor in sponsors %}
-      <a href="{{ sponsor.url }}" target="_blank" style="display:inline-block;"><img src="../sponsors/{{ sponsor.logo }}" alt="" style="height:28px;width:auto;"></a>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
 
 {# ── FAQ button + expandable panel ──────────────────── #}
 <section class="sp-section" id="faq" style="padding-top: 0; padding-bottom: 40px;">
