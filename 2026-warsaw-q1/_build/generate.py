@@ -529,6 +529,9 @@ print(f"  Total events: {_total_events}, attendees: {_total_attendees} (raw {_to
 print(f"  Global top companies: {len(_global_top_companies)}, global sponsors: {len(_global_sponsors)}")
 print(f"  Timeline events: {len(_timeline_events)}, countries: {_total_countries}")
 
+# filter out partners/community orgs from event sponsors for sponsorship page
+_confirmed_sponsors = [s for s in context.get('sponsors', []) or [] if s.get('logo', '').strip() not in _sp_exclude_logos]
+
 _sp_template = env.get_template('sponsorship.html')
 with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
     _f.write(_sp_template.render(
@@ -551,7 +554,7 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         on_request_tiers=_on_request_tiers,
         sister_brands=_sponsorship_config.get('sister_brands', []),
         open_source_tools=_sponsorship_config.get('open_source_tools', []),
-        **{**context, 'event_size': _event_size}
+        **{**context, 'event_size': _event_size, 'sponsors': _confirmed_sponsors}
     ))
 print("Done: sponsorship.html")
 # ── END SPONSORSHIP PAGE ─────────────────────────────────────────────────────
