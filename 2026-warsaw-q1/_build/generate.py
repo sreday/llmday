@@ -453,6 +453,20 @@ _flag_map = {
     'uzbekistan': ('🇺🇿', 'UZ', 'Uzbekistan'),
     'venezuela': ('🇻🇪', 'VE', 'Venezuela'),
     'vietnam': ('🇻🇳', 'VN', 'Vietnam'),
+    # city aliases for timeline country detection
+    'amsterdam': ('🇳🇱', 'NL', 'Netherlands'),
+    'bangalore': ('🇮🇳', 'IN', 'India'),
+    'barcelona': ('🇪🇸', 'ES', 'Spain'),
+    'campinas': ('🇧🇷', 'BR', 'Brazil'),
+    'chennai': ('🇮🇳', 'IN', 'India'),
+    'cologne': ('🇩🇪', 'DE', 'Germany'),
+    'hyderabad': ('🇮🇳', 'IN', 'India'),
+    'lisbon': ('🇵🇹', 'PT', 'Portugal'),
+    'london': ('🇬🇧', 'GB', 'United Kingdom'),
+    'munich': ('🇩🇪', 'DE', 'Germany'),
+    'paris': ('🇫🇷', 'FR', 'France'),
+    'warsaw': ('🇵🇱', 'PL', 'Poland'),
+    'hamburg': ('🇩🇪', 'DE', 'Germany'),
 }
 
 _timeline_events = []
