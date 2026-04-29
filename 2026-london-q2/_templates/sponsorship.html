@@ -752,9 +752,9 @@ function spToggleStats() {
 <section class="sp-section" id="already-sponsoring" style="background:#1a1a1a;">
   <div class="container">
     <h2 class="sp-section-title text-center">Already sponsoring</h2>
-    <div class="d-flex flex-wrap justify-content-center align-items-center gap-3" style="background:#fff;border-radius:16px;padding:20px 28px;max-width:720px;margin:0 auto;">
+    <div class="row logos justify-content-center" style="background:#fff;border-radius:16px;padding:20px 28px;max-width:{{ [sponsors|length * 150, 320]|max }}px;margin:0 auto;">
       {% for sponsor in sponsors %}
-      <a href="{{ sponsor.url }}" target="_blank" style="display:inline-block;"><img src="../sponsors/{{ sponsor.logo }}" alt="" style="height:40px;width:auto;"></a>
+      <div class="logo-item col-{{ [12 // sponsors|length, 4]|max }} d-flex align-items-center justify-content-center"><a href="{{ sponsor.url }}" target="_blank"><img src="../sponsors/{{ sponsor.logo }}" alt="" style="max-width:100%;"></a></div>
       {% endfor %}
     </div>
   </div>
