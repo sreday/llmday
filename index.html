@@ -821,6 +821,9 @@ function toggleNote(id) {
 .yt-playlist-btn:hover, .yt-playlist-btn:focus { background: #f08580; color: #fff; text-decoration: none; }
 .event-read-more-btn { display: inline-block; padding: 8px 18px; background: #26986A; color: #fff; border-radius: 6px; text-decoration: none; transition: background 0.2s ease; font-family: 'Montserrat', sans-serif; font-weight: 700; }
 .event-read-more-btn:hover, .event-read-more-btn:focus { background: #3db07f; color: #fff; text-decoration: none; }
+.card { transition: box-shadow .4s ease, border-color .4s ease; border: 1px solid transparent; }
+#events .card:hover { border-color: rgba(60,180,130,.35); box-shadow: 0 0 20px rgba(60,180,130,.18), 0 0 48px rgba(60,180,130,.07); }
+#past-events .card:hover { border-color: rgba(255,255,255,.25); box-shadow: 0 0 20px rgba(255,255,255,.12), 0 0 48px rgba(255,255,255,.05); }
 </style>
 <script>
 function showMoreAmb() {
