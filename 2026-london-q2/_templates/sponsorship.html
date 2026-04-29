@@ -762,6 +762,20 @@ function spToggleStats() {
   </div>
 </section>
 
+{# ── Already sponsoring ─────────────────────────────── #}
+{% if sponsors %}
+<section class="sp-section sp-section-alt" id="already-sponsoring" style="padding-top:0;">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Already sponsoring</h2>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      {% for sponsor in sponsors %}
+      <a href="{{ sponsor.url }}" target="_blank" style="display:inline-block;background:#fff;border-radius:12px;padding:10px 18px;transform:scale(0.7);"><img src="./assets/images/sponsors/{{ sponsor.logo }}" alt="" style="height:40px;width:auto;"></a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
 {# ── FAQ button + expandable panel ──────────────────── #}
 <section class="sp-section" id="faq" style="padding-top: 0; padding-bottom: 40px;">
   <div class="container">
