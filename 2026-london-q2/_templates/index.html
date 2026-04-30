@@ -10,7 +10,47 @@
       <h4 class="countdown-intro mb-2 text-center mb-3">Event Starts In:</h4>
       <div id="countdown-box" class="countdown-box"></div>
     {% else %}
-      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished</h4>
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished, what's next?</h4>
+      {% if timeline_events %}
+      <style>
+        .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: #b6dfc9; z-index: 0; }
+        .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+        .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #26986A; border: 2px solid #fff; outline: 2px solid #26986A; margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
+        .idx-tl-dot.past { background: #999; outline-color: #999; }
+        .idx-tl-chip { background: #e8f7ef; border: 1px solid #b6dfc9; border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; }
+        .idx-tl-chip:hover { background: #d4f0e2; text-decoration: none; }
+        .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
+        .idx-tl-chip.past:hover { background: #d8d8d8; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: #1a5c3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .idx-tl-chip.past .idx-tl-city { color: #555; }
+        .idx-tl-date { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
+        .idx-tl-chip.past .idx-tl-date { color: #777; }
+        .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
+      </style>
+      <div class="idx-tl">
+        <div class="idx-tl-line"></div>
+        <div class="idx-tl-events">
+          {% set ns = namespace(pin_shown=false) %}
+          {% for ev in timeline_events %}
+          {% if not ns.pin_shown and ev.state != 'past' and ev.state != 'after' %}
+          {% set ns.pin_shown = true %}
+          <div class="idx-tl-pin-event"><div class="idx-tl-pin">▼</div></div>
+          {% endif %}
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot {% if ev.state == 'past' or ev.state == 'after' %}past{% endif %}"></div>
+            <a href="{{ ev.url }}" class="idx-tl-chip{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">
+              <div class="idx-tl-city">{{ ev.city }}</div>
+              <div class="idx-tl-date" style="font-style:normal;">{{ ev.country }}</div>
+              <div class="idx-tl-date">{{ ev.date_string }}</div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
     {% endif %}
     </div>
   </div>
@@ -138,7 +178,7 @@
   }
   .schedule-abstract {
     position: relative;
-    max-height: 4.8em;
+    max-height: 3.2em;
     line-height: 1.6;
     overflow: hidden;
     text-align: justify;
@@ -147,17 +187,11 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    padding-left: 2em;
-    background: linear-gradient(to right, transparent, #e8f8f0 40%);
+    padding-left: 3em;
+    background: linear-gradient(to right, transparent, #e8f8f0 30%);
     font-weight: 700;
     color: #26986A;
     text-decoration: underline;
-  }
-  .schedule-section .item .meta .time {
-    color: #26986A;
-  }
-  .schedule-section .item:after {
-    border-color: #26986A;
   }
 </style>
 
@@ -367,7 +401,7 @@
                 <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
               </h3>
               <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}{% if talk.YouTube %}<a class="event-watch-btn event-watch-btn-sm" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}</div>
-              <div class="desc schedule-abstract">{{ talk.abstract }}<a class="schedule-abstract-read-more" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">Read more</a></div>
+              <div class="desc schedule-abstract">{{ talk.abstract }}<a class="schedule-abstract-read-more" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">... Read more</a></div>
               {% else %}
               <h3 class="title mb-3" style="color:#26986A;">{{ talk.title }}</h3>
               {% if talk.comment %}<div class="location mb-3" style="color:#26986A;">{{ talk.comment }}</div>{% endif %}
@@ -524,7 +558,7 @@
       {% endif %}
 
     </div><!--//row-->
-    <div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>
+    {% if event_state != 'after' %}<div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>{% endif %}
   </div><!--//container-->
 
 </section><!--//speakers-section-->
@@ -542,7 +576,7 @@
       <div class="logo-item col-6 col-md-4 col-lg-2"><a href="{{sponsor.url}}" target="_blank"><img src="../sponsors/{{ sponsor.logo }}" alt=""></a></div>
       {% endfor %}
     </div><!--//row-->
-    <div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="{{ mailto }}">Become A Sponsor</a></div>
+    {% if event_state != 'after' %}<div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="{{ mailto }}">Become A Sponsor</a></div>{% endif %}
   </div><!--//container-->
 </section><!--//sponsors-section-->
 {% endif %}
