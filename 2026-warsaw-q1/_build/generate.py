@@ -171,6 +171,7 @@ for track in tracks:
         raw = talk.get("duration")
         talk["duration"] = int(raw) if raw is not None and raw != "" else DEFAULT_TALK_DURATION
         talk["start_time"] = current_time
+        talk["end_time"] = current_time + timedelta(minutes=talk["duration"])
         current_time += timedelta(minutes=talk["duration"])
 
 # synchronize break times across tracks
