@@ -10,7 +10,47 @@
       <h4 class="countdown-intro mb-2 text-center mb-3">Event Starts In:</h4>
       <div id="countdown-box" class="countdown-box"></div>
     {% else %}
-      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished</h4>
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished, what's next?</h4>
+      {% if timeline_events %}
+      <style>
+        .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: var(--brand-lighter); z-index: 0; }
+        .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+        .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); border: 2px solid #fff; outline: 2px solid var(--brand); margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
+        .idx-tl-dot.past { background: #999; outline-color: #999; }
+        .idx-tl-chip { background: var(--brand-lightest); border: 1px solid var(--brand-lighter); border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
+        .idx-tl-chip:hover { background: var(--brand-pale); text-decoration: none; }
+        .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
+        .idx-tl-chip.past:hover { background: #d8d8d8; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .idx-tl-chip.past .idx-tl-city { color: #555; }
+        .idx-tl-date { font-size: .75rem; color: var(--brand-light); margin-top: 2px; }
+        .idx-tl-chip.past .idx-tl-date { color: #777; }
+        .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: var(--brand-dark); margin-bottom: 10px; position: relative; top: -4px; }
+      </style>
+      <div class="idx-tl">
+        <div class="idx-tl-line"></div>
+        <div class="idx-tl-events">
+          {% set ns = namespace(pin_shown=false) %}
+          {% for ev in timeline_events %}
+          {% if not ns.pin_shown and ev.state != 'past' and ev.state != 'after' %}
+          {% set ns.pin_shown = true %}
+          <div class="idx-tl-pin-event"><div class="idx-tl-pin">▼</div></div>
+          {% endif %}
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot {% if ev.state == 'past' or ev.state == 'after' %}past{% endif %}"></div>
+            <a href="{{ ev.url }}" class="idx-tl-chip{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">
+              <div class="idx-tl-city">{{ ev.city }}</div>
+              <div class="idx-tl-date" style="font-style:normal;">{{ ev.country }}</div>
+              <div class="idx-tl-date">{{ ev.date_string }}</div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
     {% endif %}
     </div>
   </div>
@@ -64,20 +104,20 @@
     </script>
 </section>
 
+{% if event_state != 'after' %}
 <section id="tickets" class="tickets-section section">
   <div class="container">
     <h3 class="section-heading text-center mb-3">Tickets</h3>
 
-    {% if event_state != 'after' %}
     <div class="row pricing mb-5 mt-10">
       <div class="col-12 text-center">
-        {% include 'tickets.html' %} 
+        {% include 'tickets.html' %}
       </div>
     </div>
-    {% endif %}
 
   </div>
 </section>
+{% endif %}
 
 <style>
   .speakers-section .card {
@@ -90,24 +130,82 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    font-size: 0.9rem;
+  }
+  .speakers-section .card-title {
+    font-size: 1.1rem;
+  }
+  .event-card-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin-top: auto;
+    width: 100%;
+  }
+  .speakers-section .event-card-buttons a {
+    flex: 0 1 50%;
+    text-align: center;
+    min-width: 0;
+    display: block;
   }
   .event-read-more-btn {
     display: inline-block;
-    padding: 8px 18px;
-    background: #51AD88;
+    padding: 6px 12px;
+    background: var(--brand-light);
     color: #fff;
     border-radius: 6px;
     text-decoration: none;
     font-weight: 700;
+    font-size: 0.8rem;
     transition: background 0.2s ease;
-    margin-top: auto;
-    align-self: flex-start;
   }
   .event-read-more-btn:hover,
   .event-read-more-btn:focus {
-    background: #67B797;
+    background: var(--brand-lighter);
     color: #fff;
     text-decoration: none;
+  }
+  .event-watch-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #EC645E;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.8rem;
+    transition: background 0.2s ease;
+  }
+  .event-watch-btn:hover,
+  .event-watch-btn:focus {
+    background: #F28B87;
+    color: #fff;
+    text-decoration: none;
+  }
+  .event-watch-btn-sm {
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    margin-left: 12px;
+  }
+  .schedule-abstract {
+    position: relative;
+    max-height: 3.2em;
+    line-height: 1.6;
+    overflow: hidden;
+    text-align: justify;
+  }
+  .schedule-abstract-read-more {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-left: 3em;
+    background: linear-gradient(to right, transparent, #e8f8f0 30%);
+    font-weight: 700;
+    color: var(--brand);
+    text-decoration: underline;
+  }
+  .schedule-section .item {
+    margin-bottom: 4.5rem;
   }
 </style>
 
@@ -141,7 +239,7 @@
   .track-nav-links a {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: #26986A;
+    background: var(--brand);
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -150,25 +248,25 @@
     transition: background 0.2s;
   }
   .track-nav-links a:hover {
-    background: #1f7d57;
+    background: var(--brand-dark);
     color: white;
   }
   .view-toggle-link {
-    color: #26986A;
+    color: var(--brand);
     text-decoration: none;
     font-size: 0.9rem;
     cursor: pointer;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #26986A;
+    border: 1px solid var(--brand);
     border-radius: 4px;
     transition: all 0.2s;
   }
   .view-toggle-link:hover {
-    background: #26986A;
+    background: var(--brand);
     color: white;
   }
   .view-toggle-link.active {
-    background: #26986A;
+    background: var(--brand);
     color: white;
   }
   /* Table view */
@@ -185,7 +283,7 @@
     table-layout: fixed;
   }
   .schedule-grid-table th {
-    background: linear-gradient(135deg, #26986A 0%, #1f7d57 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
     padding: 0.75rem 1rem;
     text-align: left;
@@ -197,17 +295,17 @@
   }
   .schedule-grid-table td {
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid #e5f4ec;
+    border-bottom: 1px solid var(--brand-lightest);
     vertical-align: top;
   }
   .schedule-grid-table td.merged-cell {
     text-align: center;
     font-weight: 500;
     color: #555;
-    background: #e5f4ec;
+    background: var(--brand-lightest);
   }
   .schedule-grid-table .time-cell {
-    color: #26986A;
+    color: var(--brand);
     font-weight: 600;
     white-space: nowrap;
   }
@@ -217,7 +315,7 @@
     font-weight: 500;
   }
   .schedule-grid-table .talk-cell a:hover {
-    color: #26986A;
+    color: var(--brand);
   }
   .schedule-grid-table .speaker-info {
     color: #444;
@@ -226,6 +324,13 @@
   }
   .schedule-grid-table .speaker-info .affiliation {
     color: #666;
+  }
+  .speaker-linkedin-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .speaker-linkedin-link:hover {
+    color: #098dcf;
   }
   .schedule-meta {
     display: flex;
@@ -251,7 +356,7 @@
   }
   /* Track section header */
   .track-section-header {
-    background: linear-gradient(135deg, #26986A 0%, #1f7d57 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
     padding: 1rem 1.5rem;
     margin: 2rem 0 0 0;
@@ -277,6 +382,8 @@
       <span class="schedule-meta-item">{% if tracks|length == 1 %}single track{% else %}{{ tracks|length }} parallel tracks{% endif %}</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">{{ schedule_time_bracket }}</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">{{ city_name }}, in-person</span>
     </div>
 
 {% for day in range(days) %}
@@ -306,15 +413,20 @@
               <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
               <div class="profile">
                 <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img class="profile-image rounded-circle mb-2" src="{{ talk.photo_url }}" alt=""></a>
-                <div class="name"><a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.name }}</a></div>
+                <div class="name">{{ talk.name }}</div>
               </div>
             </div>
             <div class="content">
+              {% if talk.name %}
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
               </h3>
-              <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}</div>
-              <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
+              <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}{% if talk.YouTube %}<a class="event-watch-btn event-watch-btn-sm" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}</div>
+              <div class="desc schedule-abstract">{{ talk.abstract }}<a class="schedule-abstract-read-more" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">... Read more</a></div>
+              {% else %}
+              <h3 class="title mb-3" style="color:#098dcf;">{{ talk.title }}</h3>
+              {% if talk.comment %}<div class="location mb-3" style="color:#098dcf;">{{ talk.comment }}</div>{% endif %}
+              {% endif %}
             </div>
           </div>
 {% endfor %}
@@ -368,15 +480,25 @@
             </td>
           </tr>
 {% else %}
+{% set ns_row = namespace(all_breaks=true) %}
+{% for talk in ns.talks_at_time if talk and talk.name %}{% set ns_row.all_breaks = false %}{% endfor %}
           <tr>
-            <td class="time-cell">{{ time }}</td>
+            <td class="time-cell{% if ns_row.all_breaks %} merged-cell{% endif %}">{{ time }}</td>
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-            <td class="talk-cell">
+{% set ns2 = namespace(cell_talk=none) %}
 {% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
-              <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
-              <div class="speaker-info">{{ talk.name }}{% if talk.organization %} <span class="affiliation">• {{ talk.organization }}</span>{% endif %}</div>
+{% set ns2.cell_talk = talk %}
 {% endfor %}
+{% if ns2.cell_talk and ns2.cell_talk.name %}
+            <td class="talk-cell">
+              <a href="#modal-speaker-{{ ns2.cell_talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ ns2.cell_talk.id }}">{{ ns2.cell_talk.title }}</a>
+              <div class="speaker-info">{% if ns2.cell_talk.linkedin %}<a href="{{ ns2.cell_talk.linkedin }}" target="_blank" rel="noopener" class="speaker-linkedin-link">{{ ns2.cell_talk.name }}</a>{% else %}{{ ns2.cell_talk.name }}{% endif %}{% if ns2.cell_talk.organization %} <span class="affiliation">• {{ ns2.cell_talk.organization }}</span>{% endif %}</div>
             </td>
+{% elif ns2.cell_talk %}
+            <td class="talk-cell merged-cell">{{ ns2.cell_talk.title }}</td>
+{% else %}
+            <td class="talk-cell{% if ns_row.all_breaks %} merged-cell{% endif %}"></td>
+{% endif %}
 {% endfor %}
           </tr>
 {% endif %}
@@ -410,7 +532,11 @@
     }
     </script>
 
+    {% if event_state == 'after' %}
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="https://luma.com/sre" target="_blank" rel="noopener" class="btn btn-secondary btn-lg d-block d-md-inline-block">Upcoming conferences on LUMA</a></div>
+    {% else %}
     <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    {% endif %}
   </div>
 </section>
 {% endif %}
@@ -420,19 +546,22 @@
 <section id="speakers" class="speakers-section section">
   <div class="container">
     <h3 class="section-heading text-center mb-3">Speakers</h3>
-    <div class="row">
+    <div class="row row-cols-2 row-cols-lg-5">
 
       {% for talk in (talks + keynotes)|sort(attribute='name')|dedupe %}
 
-      <div class="col-6 col-lg-3 mb-4">
+      <div class="col mb-4">
         <div class="card rounded">
           <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">{{ talk.name }}</h5>
+            <h5 class="card-title mb-2">{{ talk.display_name }}</h5>
             <div class="card-text mb-3">
               <div class="meta">{{ talk.organization }}</div>
             </div><!--//card-text-->
-            <a href="./{{ talk.short_url }}#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+            <div class="event-card-buttons">
+              <a href="./{{ talk.short_url }}#speakers-section" class="event-read-more-btn">Read more</a>
+              {% if talk.YouTube %}<a class="event-watch-btn" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -449,7 +578,7 @@
 
       {% if event_state == 'before' %}
 
-      <div class="col-6 col-lg-3 mb-4">
+      <div class="col mb-4">
         <div class="card">
           <div class="card-body">
             <h4>More coming soon</h4>
@@ -460,7 +589,7 @@
       {% endif %}
 
     </div><!--//row-->
-    <div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>
+    {% if event_state != 'after' %}<div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>{% endif %}
   </div><!--//container-->
 
 </section><!--//speakers-section-->
@@ -483,6 +612,21 @@
 </section><!--//sponsors-section-->
 {% endif %}
 
+
+<style>
+  .modal-speaker .desc p,
+  .modal-speaker .desc li {
+    text-align: justify;
+    line-height: 1.75;
+    color: #444;
+    font-size: 0.95rem;
+  }
+  .modal-speaker .desc {
+    padding-bottom: 0.25rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+</style>
 
 {% for talk in talks + keynotes %}
 <!-- Modal Speaker {{ talk.id }} -->
@@ -514,12 +658,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p>{{ talk.abstract | markdown }}</p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p>{{ talk.description | markdown }}</p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p>{{ talk.bio | markdown }}</p>
               </div>
           </div><!--//modal-body-->

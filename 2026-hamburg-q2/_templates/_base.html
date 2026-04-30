@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: {{ brand_color }};
+		--brand-light: color-mix(in srgb, {{ brand_color }} 55%, white);
+		--brand-lighter: color-mix(in srgb, {{ brand_color }} 35%, white);
+		--brand-lightest: color-mix(in srgb, {{ brand_color }} 12%, white);
+		--brand-pale: color-mix(in srgb, {{ brand_color }} 8%, white);
+		--brand-dark: color-mix(in srgb, {{ brand_color }} 100%, black 20%);
+		--brand-darker: color-mix(in srgb, {{ brand_color }} 100%, black 35%);
+	}
 </style>
 
 
@@ -108,7 +117,7 @@
                         <!-- <img class="logo-icon" src="assets/images/logo-white.svg" alt="logo"></a> -->
                     </div>
 
-					<div class="navbar-btn order-lg-2">{% if noindex %}<a class="btn btn-danger" href="#buy">Buy</a>{% else %}<a class="btn btn-secondary" href="#tickets">Tickets</a>{% endif %}</div>
+					{% if event_state != 'after' %}<div class="navbar-btn order-lg-2">{% if noindex %}<a class="btn btn-danger" href="#buy">Buy</a>{% else %}<a class="btn btn-secondary" href="#tickets">Tickets</a>{% endif %}</div>{% endif %}
 
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
@@ -126,7 +135,7 @@
 						<ul class="nav navbar-nav">
 
 							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#tickets">Tickets</a></li>
+							{% if event_state != 'after' %}<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#tickets">Tickets</a></li>{% endif %}
 							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#schedule">Schedule</a></li>
 							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#speakers">Speakers</a></li>
 							<li class="nav-item"><a class="nav-link" href="{{ 'index.html' if page != 'index.html' else '' }}#venue">Venue</a></li>
@@ -208,7 +217,7 @@
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
 					<div class="item">
-						<div class="number">{{ attendees }}+</div>
+						<div class="number">{{ attendees }}{% if '+' not in attendees|string %}+{% endif %}</div>
 						<div class="unit">{{ "Attendee" if attendees == 1 else "Attendees" }}</div>
 					</div><!--//item-->
 				</div><!--//col-->

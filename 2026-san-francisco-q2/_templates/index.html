@@ -14,21 +14,21 @@
       {% if timeline_events %}
       <style>
         .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: #b6dfc9; z-index: 0; }
+        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: var(--brand-lighter); z-index: 0; }
         .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
         .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
-        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #26986A; border: 2px solid #fff; outline: 2px solid #26986A; margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
+        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); border: 2px solid #fff; outline: 2px solid var(--brand); margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
         .idx-tl-dot.past { background: #999; outline-color: #999; }
-        .idx-tl-chip { background: #e8f7ef; border: 1px solid #b6dfc9; border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
-        .idx-tl-chip:hover { background: #d4f0e2; text-decoration: none; }
+        .idx-tl-chip { background: var(--brand-lightest); border: 1px solid var(--brand-lighter); border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
+        .idx-tl-chip:hover { background: var(--brand-pale); text-decoration: none; }
         .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
         .idx-tl-chip.past:hover { background: #d8d8d8; }
-        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: #1a5c3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .idx-tl-chip.past .idx-tl-city { color: #555; }
-        .idx-tl-date { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
+        .idx-tl-date { font-size: .75rem; color: var(--brand-light); margin-top: 2px; }
         .idx-tl-chip.past .idx-tl-date { color: #777; }
         .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
+        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: var(--brand-dark); margin-bottom: 10px; position: relative; top: -4px; }
       </style>
       <div class="idx-tl">
         <div class="idx-tl-line"></div>
@@ -151,7 +151,7 @@
   .event-read-more-btn {
     display: inline-block;
     padding: 6px 12px;
-    background: #51AD88;
+    background: var(--brand-light);
     color: #fff;
     border-radius: 6px;
     text-decoration: none;
@@ -161,7 +161,7 @@
   }
   .event-read-more-btn:hover,
   .event-read-more-btn:focus {
-    background: #67B797;
+    background: var(--brand-lighter);
     color: #fff;
     text-decoration: none;
   }
@@ -201,7 +201,7 @@
     padding-left: 3em;
     background: linear-gradient(to right, transparent, #e8f8f0 30%);
     font-weight: 700;
-    color: #26986A;
+    color: var(--brand);
     text-decoration: underline;
   }
   .schedule-section .item {
@@ -239,7 +239,7 @@
   .track-nav-links a {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: #26986A;
+    background: var(--brand);
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -248,25 +248,25 @@
     transition: background 0.2s;
   }
   .track-nav-links a:hover {
-    background: #1f7d57;
+    background: var(--brand-dark);
     color: white;
   }
   .view-toggle-link {
-    color: #26986A;
+    color: var(--brand);
     text-decoration: none;
     font-size: 0.9rem;
     cursor: pointer;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #26986A;
+    border: 1px solid var(--brand);
     border-radius: 4px;
     transition: all 0.2s;
   }
   .view-toggle-link:hover {
-    background: #26986A;
+    background: var(--brand);
     color: white;
   }
   .view-toggle-link.active {
-    background: #26986A;
+    background: var(--brand);
     color: white;
   }
   /* Table view */
@@ -283,7 +283,7 @@
     table-layout: fixed;
   }
   .schedule-grid-table th {
-    background: linear-gradient(135deg, #26986A 0%, #1f7d57 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
     padding: 0.75rem 1rem;
     text-align: left;
@@ -295,17 +295,17 @@
   }
   .schedule-grid-table td {
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid #e5f4ec;
+    border-bottom: 1px solid var(--brand-lightest);
     vertical-align: top;
   }
   .schedule-grid-table td.merged-cell {
     text-align: center;
     font-weight: 500;
     color: #555;
-    background: #e5f4ec;
+    background: var(--brand-lightest);
   }
   .schedule-grid-table .time-cell {
-    color: #26986A;
+    color: var(--brand);
     font-weight: 600;
     white-space: nowrap;
   }
@@ -315,7 +315,7 @@
     font-weight: 500;
   }
   .schedule-grid-table .talk-cell a:hover {
-    color: #26986A;
+    color: var(--brand);
   }
   .schedule-grid-table .speaker-info {
     color: #444;
@@ -356,7 +356,7 @@
   }
   /* Track section header */
   .track-section-header {
-    background: linear-gradient(135deg, #26986A 0%, #1f7d57 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
     padding: 1rem 1.5rem;
     margin: 2rem 0 0 0;
@@ -658,14 +658,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p>{{ talk.abstract | markdown }}</p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p>{{ talk.description | markdown }}</p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p>{{ talk.bio | markdown }}</p>
               </div>
           </div><!--//modal-body-->
