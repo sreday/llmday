@@ -33,10 +33,6 @@ breaks:
   duration: 60
   comment: Main lobby
   talks_before: 4
-- title: Networking & sponsor crawl
-  duration: 30
-  comment: Main lobby
-  talks_before: 4
 
 sponsors:
   - logo: altinity.png
