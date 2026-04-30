@@ -227,18 +227,6 @@ for track in tracks:
 context["talks_by_tracks"] = tracks
 print("Loaded %d confirmed talks in %d tracks: %s" % (len(context["talks"]), len(tracks), tracks.keys()))
 
-# MAIN PAGES
-print(DIVIDER)
-pages = ["index.html"]
-print(f"Generating main pages: {pages}")
-for page in pages:
-    with open(BASE_FOLDER + "/" + page, "w", encoding="utf-8") as f:
-        print("Writing out", page)
-        template = env.get_template(page)
-        f.write(template.render(page=page, **context))
-        if page != "index.html":
-            SITEMAP_URLS.append((page.replace(".html",""), 0.75))
-
 # template each talk page for the event
 for talk in talks_raw:
     print("Generating talk subpage %s" % (talk.get("short_url")))
@@ -602,6 +590,19 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
     ))
 print("Done: sponsorship.html")
 # ── END SPONSORSHIP PAGE ─────────────────────────────────────────────────────
+
+# MAIN PAGES (rendered after sponsorship so timeline_events is available)
+context["timeline_events"] = _timeline_events
+print(DIVIDER)
+pages = ["index.html"]
+print(f"Generating main pages: {pages}")
+for page in pages:
+    with open(BASE_FOLDER + "/" + page, "w", encoding="utf-8") as f:
+        print("Writing out", page)
+        template = env.get_template(page)
+        f.write(template.render(page=page, **context))
+        if page != "index.html":
+            SITEMAP_URLS.append((page.replace(".html",""), 0.75))
 
 # SITEMAP
 print(DIVIDER)
