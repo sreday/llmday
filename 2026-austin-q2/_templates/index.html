@@ -469,8 +469,10 @@
             </td>
           </tr>
 {% else %}
+{% set ns_row = namespace(all_breaks=true) %}
+{% for talk in ns.talks_at_time if talk and talk.name %}{% set ns_row.all_breaks = false %}{% endfor %}
           <tr>
-            <td class="time-cell">{{ time }}</td>
+            <td class="time-cell{% if ns_row.all_breaks %} merged-cell{% endif %}">{{ time }}</td>
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
 {% set ns2 = namespace(cell_talk=none) %}
 {% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
@@ -484,7 +486,7 @@
 {% elif ns2.cell_talk %}
             <td class="talk-cell merged-cell">{{ ns2.cell_talk.title }}</td>
 {% else %}
-            <td class="talk-cell"></td>
+            <td class="talk-cell{% if ns_row.all_breaks %} merged-cell{% endif %}"></td>
 {% endif %}
 {% endfor %}
           </tr>
