@@ -472,7 +472,7 @@
 {% if ns2.cell_talk and ns2.cell_talk.name %}
             <td class="talk-cell">
               <a href="#modal-speaker-{{ ns2.cell_talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ ns2.cell_talk.id }}">{{ ns2.cell_talk.title }}</a>
-              <div class="speaker-info">{{ ns2.cell_talk.name }}{% if ns2.cell_talk.organization %} <span class="affiliation">• {{ ns2.cell_talk.organization }}</span>{% endif %}</div>
+              <div class="speaker-info">{% if ns2.cell_talk.linkedin %}<a href="{{ ns2.cell_talk.linkedin }}" target="_blank" rel="noopener" style="color:#098dcf;text-decoration:none;">{{ ns2.cell_talk.name }}</a>{% else %}{{ ns2.cell_talk.name }}{% endif %}{% if ns2.cell_talk.organization %} <span class="affiliation">• {{ ns2.cell_talk.organization }}</span>{% endif %}</div>
             </td>
 {% elif ns2.cell_talk %}
             <td class="talk-cell merged-cell">{{ ns2.cell_talk.title }}</td>
