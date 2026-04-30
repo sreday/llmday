@@ -259,14 +259,18 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>At the end of the month, your AI bill tells you what you spent, not whether you spent it well. Which queries were expensive? Which ones kept repeating? Are users even happy with the responses? Most teams have no idea. In this talk, I walk through a function that answers all three questions, even as AI logs flow through the telemetry pipeline. It extracts token counts, calculates per-query costs, flags cache candidates, and runs lightweight sentiment scoring on responses. Sentiment matters here - cheap queries that frustrate users aren't worth caching. Expensive queries with happy users might be worth keeping as-is. Then I show how this visibility reveals patterns. In one environment, a particular query might show up constantly: high frequency, low cost per query, and consistently positive sentiment - an obvious cache candidate. Meanwhile, other queries are expensive and generate frustrated responses. That's not a caching problem, that's a signal the model needs help. I'll walk through the function and code and show how it fits into any telemetry pipeline that supports in-flight transformation. Attendees leave with a working pattern they can adapt to their own stack. This session is for engineers who are suddenly responsible for AI infrastructure and need visibility before they can take action.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Aaron Zamora is a Principal Technical Marketing Engineer at Cribl and recovering Splunk engineer who likes shipping things more than talking about shipping things. He’s built demos, pipelines, and one fictional coffee company that became a company-wide Brand / Story. He’s also optimized Grafana monitoring to cut alert fatigue by 40%. When not wrangling telemetry, he’s using Grafana to figure out why some runs feel awful. Usually it’s sleep, heat, or beer. Sometimes all three.</p></p>
               </div>
+
+              
 
           </div><!--//card-->
           <div class="card-footer text-muted">

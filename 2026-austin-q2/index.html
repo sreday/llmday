@@ -375,6 +375,13 @@
     display: flex;
     flex-direction: column;
   }
+  .event-card-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    align-self: flex-start;
+  }
   .event-read-more-btn {
     display: inline-block;
     padding: 8px 18px;
@@ -384,14 +391,34 @@
     text-decoration: none;
     font-weight: 700;
     transition: background 0.2s ease;
-    margin-top: auto;
-    align-self: flex-start;
   }
   .event-read-more-btn:hover,
   .event-read-more-btn:focus {
     background: #67B797;
     color: #fff;
     text-decoration: none;
+  }
+  .event-watch-btn {
+    display: inline-block;
+    padding: 8px 18px;
+    background: #EC645E;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: inherit;
+    transition: background 0.2s ease;
+  }
+  .event-watch-btn:hover,
+  .event-watch-btn:focus {
+    background: #F28B87;
+    color: #fff;
+    text-decoration: none;
+  }
+  .event-watch-btn-sm {
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    margin-left: 12px;
   }
 </style>
 
@@ -1303,8 +1330,10 @@
             <div class="card-text mb-3">
               <div class="meta">Red Hat</div>
             </div><!--//card-text-->
-            <a href="./Alfonso_Cancellara_Red_Hat_Beyond_the_Hype_Navigating_Openwashing_and_the_Real_Open_Source_AI#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Alfonso_Cancellara_Red_Hat_Beyond_the_Hype_Navigating_Openwashing_and_the_Real_Open_Source_AI#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1327,8 +1356,10 @@
             <div class="card-text mb-3">
               <div class="meta">HCA Healthcare</div>
             </div><!--//card-text-->
-            <a href="./Chaithanya_Reddy_Pandirlapalli_HCA_Healthcare_From_Prototype_to_Production_Practical_LLMOps_Patterns#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Chaithanya_Reddy_Pandirlapalli_HCA_Healthcare_From_Prototype_to_Production_Practical_LLMOps_Patterns#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1351,8 +1382,10 @@
             <div class="card-text mb-3">
               <div class="meta">The Austin Consulting Group</div>
             </div><!--//card-text-->
-            <a href="./Jim_Markunas_The_Austin_Consulting_Group_From_Copilots_to_Agents_Designing_LLM_Workflows_for_Real_Or#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Jim_Markunas_The_Austin_Consulting_Group_From_Copilots_to_Agents_Designing_LLM_Workflows_for_Real_Or#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1375,8 +1408,10 @@
             <div class="card-text mb-3">
               <div class="meta">KodeKloud</div>
             </div><!--//card-text-->
-            <a href="./Michael_Forrester_KodeKloud_Your_MLOps_Pipeline_is_your_Agentic_AI_Guardrail#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Michael_Forrester_KodeKloud_Your_MLOps_Pipeline_is_your_Agentic_AI_Guardrail#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1399,8 +1434,10 @@
             <div class="card-text mb-3">
               <div class="meta">SRE Author</div>
             </div><!--//card-text-->
-            <a href="./Miko_Pawlikowski_SRE_Author_Keynote_7_Deadly_Traps_ofSRE#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Miko_Pawlikowski_SRE_Author_Keynote_7_Deadly_Traps_ofSRE#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1423,8 +1460,10 @@
             <div class="card-text mb-3">
               <div class="meta">IBM</div>
             </div><!--//card-text-->
-            <a href="./Mingxuan_Zhao_IBM_Unlocking_Document_Intelligence_with_OpenSource_AI#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Mingxuan_Zhao_IBM_Unlocking_Document_Intelligence_with_OpenSource_AI#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1447,8 +1486,10 @@
             <div class="card-text mb-3">
               <div class="meta">Salesforce & AWS</div>
             </div><!--//card-text-->
-            <a href="./Nikita_Kothari__Varun_Joshi_Salesforce__AWS_Why_Most_LLM_Systems_Fail_in_Production_and_How_to_Fix_T#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Nikita_Kothari__Varun_Joshi_Salesforce__AWS_Why_Most_LLM_Systems_Fail_in_Production_and_How_to_Fix_T#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1471,8 +1512,10 @@
             <div class="card-text mb-3">
               <div class="meta">Align Technology</div>
             </div><!--//card-text-->
-            <a href="./Nilima_Rodrigues_Align_Technology_LLMs_and_Data_in_MedTech_Building_Smarter__Safer_Healthcare#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Nilima_Rodrigues_Align_Technology_LLMs_and_Data_in_MedTech_Building_Smarter__Safer_Healthcare#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1495,8 +1538,10 @@
             <div class="card-text mb-3">
               <div class="meta">AWS</div>
             </div><!--//card-text-->
-            <a href="./Sandhya_Subramani_AWS_Towards_SelfEvolving_Autonomous_AI_Agents#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Sandhya_Subramani_AWS_Towards_SelfEvolving_Autonomous_AI_Agents#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1519,8 +1564,10 @@
             <div class="card-text mb-3">
               <div class="meta">Caesars Entertainment</div>
             </div><!--//card-text-->
-            <a href="./Sivakumar_Selvaraj_Caesars_Entertainment_AML_Detection_using_Agentic_AI#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Sivakumar_Selvaraj_Caesars_Entertainment_AML_Detection_using_Agentic_AI#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1543,8 +1590,10 @@
             <div class="card-text mb-3">
               <div class="meta">AWS</div>
             </div><!--//card-text-->
-            <a href="./Srinivas_Pochincharla_AWS_From_Automation_to_Autonomy_Building_ProductLed_Agentic_AI_Systems_That_Sc#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Srinivas_Pochincharla_AWS_From_Automation_to_Autonomy_Building_ProductLed_Agentic_AI_Systems_That_Sc#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1567,8 +1616,10 @@
             <div class="card-text mb-3">
               <div class="meta">Datadog</div>
             </div><!--//card-text-->
-            <a href="./Whitney_Lee_Datadog_The_Best_Laid_Spans_An_AI_Agent_That_Instruments_Your_Code_with_OpenTelemetry#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Whitney_Lee_Datadog_The_Best_Laid_Spans_An_AI_Agent_That_Instruments_Your_Code_with_OpenTelemetry#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -1675,12 +1726,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>What happens when AI agents encounter tasks they cannot solve?  Most agents fail because their capabilities are fixed. This talk explores a new approach using only open-source frameworks where agents can now adapt themselves by dynamically generating and integrating new tools at runtime. We will examine the architectural mechanisms that enable this, including how new functionality is validated and incorporated safely during execution. Through a live demo, attendees will see an agent encounter a novel task, build the required capability, and complete the workflow without redeployment. Attendees will additionally gain practical engineering insights into the tradeoffs and design considerations involved in building autonomous agentic systems that evolve beyond their original design.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Sandhya Subramani is a Senior Developer Advocate for Generative AI at Amazon Web Services, specializing in applied AI research and production-grade machine learning systems. She previously served as a Lead Applied AI Scientist at a stealth AI startup and as a Data Scientist at Warner Bros. Discovery, where she focused on applied AI/ML research and data-driven product development. Earlier in her career, she worked as an AI Engineer at Fidelity Investments within enterprise cybersecurity. Sandhya’s expertise spans generative AI, NLP, applied machine learning research, and translating advanced AI capabilities into real-world applications.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -1717,12 +1770,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Every team says they want better observability, but adding OpenTelemetry instrumentation is repetitive, tedious, convention-heavy work. Wah wah wahhhh, what a drag. Enter Spinybacked Orbweaver to save the day! Spinybacked Orbweaver is an AI-powered telemetry agent that can analyze your code, add the instrumentation, check its own work, and open a pull request. And it can do it consistently well, following your company's telemetry standards! This speaker built it, and she'll demo it live. Sparkles and rainbows! But here's where it gets interesting: how does the agent know if it did a good job? Two things. First, the OpenTelemetry project has a tool called Weaver that lets you define your team's telemetry standards as a machine-readable schema. Second, there's an emerging open specification called the Instrumentation Score that rates instrumentation quality on a 0-to-100 scale using standardized rules. The agent validates against both of these, plus some custom rules. When the agent fails its own checks, it gets the feedback and tries again. Generate, validate, learn, retry. You'll watch the whole thing happen against a real codebase. The agent discovers what to instrument, writes the code, gets rejected by its own quality checks, fixes its mistakes, and produces a PR. Along the way, you'll get grounded in what OpenTelemetry, Weaver, and the Instrumentation Score are, why they exist, and why good telemetry is worth caring about... but not enough to suffer the tedium of manual code instrumentation.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Whitney Lee is a creator and systems thinker who explores how observability, AI, and platform engineering connect across the cloud native ecosystem. She brings humor, depth, and clarity to complex technologies while building original frameworks that help others understand how systems fit together. She runs a vibrant YouTube channel, hosts Datadog Illuminated and Software Defined Interviews, has delivered two KubeCon keynotes and countless breakout talks, and combines storytelling and technical rigor to illuminate the human side of cloud native engineering.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -1759,12 +1814,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>As AI moves from experimental pilots to production MLOps pipelines, defining what truly constitutes <strong>"Open Source AI"</strong> has become a critical engineering challenge. This session cuts through the hype to provide ML engineers, data scientists, and infrastructure architects with practical frameworks to evaluate model transparency, mitigate licensing risks, and navigate the complexities of deploying "open" foundation models. Attendees will walk away with the skills to: - <strong>Deconstruct the AI Stack</strong>: Understand the core differences between traditional open-source software and the AI triad. - <strong>Evaluate True Openness</strong>: Apply frameworks like the Open Source AI Definition (OSAID) to assess model viability for fine-tuning. - <strong>Spot "Openwashing"</strong>: Identify the operational risks and licensing traps hidden behind "open weights" models to protect your deployment pipelines and long-term infrastructure.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Alfonso Cancellara is an OpenShift-focused Red Hat Technical Account Manager. Beyond his day-to-day role, he's a passionate Open Source advocate and a speaker at conferences and industry events, exploring how Open Source Software fuels innovation.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -1801,12 +1858,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>The medical technology sector is undergoing a paradigm shift powered by clinical, operational, and real-world data—and increasingly, by large language models (LLMs). At LLMday Austin, this session explores how data and AI are reshaping MedTech innovation, operational excellence, and personalized care at scale. From device development to clinical deployment, mining EHRs, claims data, and registries reveals unmet needs and enables measurable patient impact. LLMs enhance this process by extracting insights from unstructured clinical notes, regulatory documents, and post-market surveillance data—accelerating research, improving documentation, and supporting compliance. Computational modeling and digital twins reduce time-to-market and manufacturing waste, while analytics-driven usability improvements reduce device error rates. In clinical settings, real-time monitoring systems—such as closed-loop insulin platforms—integrate multimodal data to improve chronic disease outcomes. AI imaging systems now match specialist-level performance in areas like diabetic retinopathy detection, while predictive analytics such as sepsis forecasting enable earlier interventions. Operational excellence is achieved through predictive quality, AI-driven supply chain forecasting, condition-based maintenance, and capacity optimization. Strong governance frameworks—including FHIR, TEFCA, and SNOMED CT—ensure interoperability, while privacy-by-design, federated learning, SBOMs, and secure development lifecycles safeguard sensitive health data. By combining LLM capabilities with robust data governance, MedTech organizations can deliver smarter, safer, and more sustainable healthcare systems. This session provides a practical, data-driven roadmap grounded in real-world outcomes.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Nilima Rodrigues is a seasoned data engineering and analytics leader with over 19 years of experience delivering transformative data strategies for Fortune 500 organizations. As Senior Manager of Systems and Reporting at Align Technology, she drives high-impact initiatives across data, finance, and technology, generating multimillion-dollar efficiencies across global operations. Nilima specializes in architecting enterprise-grade data platforms, leading cross-functional teams, and converting complex data into actionable insights that shape business strategy. She successfully delivered a $1.5M+ SAP Datasphere and OneStream integration, optimized AI-driven ETL pipelines to reduce latency by 40%, and designed a FinOps platform that achieved $500K in freight savings. Her automation and resource optimization initiatives have improved operational efficiency by 65% and reduced costs by 50%. At Align, she founded the Finance Analytics Center of Excellence and launched 100+ interactive Power BI dashboards across global business units. She has led data governance, compliance, large-scale migrations, and financial transformation programs. Previously at Deloitte and Capgemini, she delivered landmark implementations, including the first SAP ERP-based Public Sector Collection platform for the Florida Department of Revenue and the first SAP Bank Analyzer integration at PayPal. Nilima holds a Bachelor’s in Information Technology from Mumbai and certifications in Google Advanced Data Analytics and SAP BTP Datasphere. She brings deep expertise in SAP BW/HANA, Azure Data Lake, Power BI, Python, and AI-driven analytics, combining technical excellence with strategic leadership.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -1843,12 +1902,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p><strong><a href="https://www.linkedin.com/in/nikita-kothari3/">Nikita Kothari</a></strong> is a Senior Member of Technical Staff at Salesforce with prior experience at LinkedIn and Amazon, where she has built and scaled large distributed systems powering user facing applications. She holds a Master’s degree in Computer Science from The University of Texas at Dallas. Her work focuses on designing reliable backend platforms and applying AI driven solutions in real world systems. She is particularly interested in how large language models can be integrated into production environments with strong guarantees around performance, scalability, and reliability. Nikita is also an active contributor to the tech community as a speaker, reviewer, and judge, and is passionate about sharing practical insights that help engineers move from experimentation to production with modern AI systems.</p>
 <p><a href="https://www.linkedin.com/in/varun-joshi-1b165685/">Varun Joshi</a>** is a Senior Data Engineer at Amazon Web Services (AWS) based in the Greater Seattle Area, with over 12 years of experience in data integration, data modeling, optimization, and engineering. He is an alumnus of the University of South Florida and has built a strong professional network with 4,500+ followers on LinkedIn.</p></p>
               </div>
@@ -1886,12 +1947,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Principal Training Architect with 30 years of infrastructure experience across federal, Fortune 50, and startup environments. Has personally taught over 100,000 engineers platform engineering and AI/ML infrastructure. Workshop ranked third most-selected at KCD Texas 2026. Speaker at KubeCon EU Cloud Native University and KubeAuto AI Day Europe, Amsterdam. The cluster deletion incident described in this talk actually happened.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -1928,12 +1991,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>LLMs are useful as copilots, but the real shift begins when they coordinate work across people, systems, and decisions. This talk shows how organizations design agentic workflows with guardrails, escalation paths, and real operational value.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Jim Markunas is a Senior Technical Program and Project Manager and Technical Product Owner who specializes in helping enterprise teams deliver reliable eCommerce and SDLC releases. With experience at organizations like DIRECTV, CPS Energy, and New York Life, he leads complex platform modernization and integration initiatives, bringing structure and clarity to teams facing delivery challenges. Known for his data-driven approach, he focuses on restoring stakeholder confidence and ensuring predictable, high-quality product launches.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -1970,12 +2035,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Anti-money laundering systems often fail due to static rules that cannot reason across complex contexts, leading to high false-positive rates. This talk presents a five-stage agentic AI pipeline where specialized LLM agents handle graph traversal, typology matching, narrative reasoning, and automated SAR drafting. In a 30-day production evaluation, this system achieved 94.2% precision, reduced false positives to 2.1%, and cut SAR filing time to under two minutes.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Sivakumar Selvaraj is a Senior Manager and Data Engineering Lead with over 16 years of experience building and scaling cloud-based data platforms. He specializes in AI-driven data solutions, machine learning pipelines, and real-time data processing using technologies like Snowflake, AWS, Azure, and Spark. Currently at Caesars Entertainment, he leads initiatives across data engineering and AI, partnering with business and technical teams to deliver scalable, high-impact data systems. He holds a Master’s degree in Computer Science (Big Data Systems) from Arizona State University and is AWS Certified in AI.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2012,6 +2079,7 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.</p>
 <p>In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
 We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI &amp; Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.</p>
@@ -2021,6 +2089,7 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Mingxuan Zhao is a Software Developer II at IBM working in Open Technology. A graduate of the Cockrell School of Engineering at the University of Texas at Austin, Mingxuan focuses on building developer-focused tools and contributing to modern web and cloud technologies. Based in New York, Mingxuan works on open and collaborative engineering initiatives within IBM.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2057,12 +2126,14 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Modern enterprises face a critical paradox: despite processing billions of records and building sophisticated data infrastructure, business users often remain trapped in manual spreadsheets and wait days for simple insights. I solved this challenge by implementing agentic AI on top of an AWS data pipeline processing 45 billion records per month, enabling over 2,000 users across 37 teams to perform autonomous natural language analysis. This implementation achieved 25-40% productivity gains and a 60% reduction in time-to-insight. This talk explores the evolution from traditional BI dashboards to AI copilots and fully autonomous agents, demonstrating how agentic AI transforms data accessibility and shifts data teams from report factories to strategic partners.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Srinivas Pochincharla is a Senior Technical Program Manager at AWS, focused on building and scaling large enterprise data platforms. He specializes in data architecture and agile program delivery, leading initiatives like high-volume data pipelines that process billions of records to support cost allocation and forecasting.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2099,12 +2170,14 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Building LLM systems in enterprise healthcare requires more than a successful prototype. It requires repeatable delivery paths, clear platform boundaries, reproducible workflows, and operational guardrails that let teams move quickly without creating chaos in production. In this talk, I’ll share practical lessons from building AI platform patterns that help teams move from experimentation to governed production. I’ll cover how we think about separating user code from platform code, standardizing build and release workflows, improving portability, and creating consistent deployment paths for ML and LLM workloads. I’ll also discuss trade-offs we encountered around developer experience, platform control, and scaling adoption across teams. This is a practitioner-focused talk for engineers working on LLMOps, MLOps, infrastructure, or AI platform engineering. It will be slides-based, architecture-focused, and centered on reusable lessons learned rather than product promotion or sensitive internal details. 3 takeaways How to create a governed path from prototype to production for ML/LLM systems Why platform boundaries matter for portability, control, and team scalability Practical lessons for balancing developer velocity with reproducibility and operational guardrails</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Chaithanya Pandirlapalli is a Lead AI/ML Platform Engineer on the AI Platform Engineering team at HCA Healthcare. His work focuses on building reusable platform patterns, delivery workflows, and operational guardrails that help teams move AI workloads from experimentation into production in a regulated healthcare environment.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2141,6 +2214,7 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Site Reliability Engineering was never meant to be about firefighting, yet too many teams find themselves stuck in an endless cycle of pages, postmortems, and quick fixes. Why? Because SRE is full of hidden traps — patterns that look like best practices on the surface but slowly erode reliability, burn out engineers, and stall progress.</p>
 <p>In this talk, we’ll expose the 7 Deadly Traps of SRE, from the obsession with chasing “five nines,” to the cult of on-call heroism, to the false comfort of tooling and checklists. For each trap, we’ll unpack why it’s so seductive, how it quietly sabotages your team, and what to do instead.</p>
 <p>You’ll walk away with a clearer lens on the pitfalls holding SRE organizations back, and a practical playbook to help your team escape firefighting mode and reclaim the true purpose of SRE: building systems - and cultures - that are resilient, scalable, and human-friendly.</p></p>
@@ -2149,6 +2223,7 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Miko Pawlikowski is an SRE Author and a platform engineer at Quadrature. He has led large-scale infrastructure and SRE initiatives at Citadel and Bloomberg, with deep expertise in Kubernetes, cloud computing, and chaos engineering. Passionate about building resilient systems and communities, he brings together engineers worldwide through conferences and media projects.</p></p>
               </div>
           </div><!--//modal-body-->

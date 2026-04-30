@@ -375,6 +375,13 @@
     display: flex;
     flex-direction: column;
   }
+  .event-card-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    align-self: flex-start;
+  }
   .event-read-more-btn {
     display: inline-block;
     padding: 8px 18px;
@@ -384,14 +391,34 @@
     text-decoration: none;
     font-weight: 700;
     transition: background 0.2s ease;
-    margin-top: auto;
-    align-self: flex-start;
   }
   .event-read-more-btn:hover,
   .event-read-more-btn:focus {
     background: #67B797;
     color: #fff;
     text-decoration: none;
+  }
+  .event-watch-btn {
+    display: inline-block;
+    padding: 8px 18px;
+    background: #EC645E;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: inherit;
+    transition: background 0.2s ease;
+  }
+  .event-watch-btn:hover,
+  .event-watch-btn:focus {
+    background: #F28B87;
+    color: #fff;
+    text-decoration: none;
+  }
+  .event-watch-btn-sm {
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    margin-left: 12px;
   }
 </style>
 
@@ -2162,8 +2189,10 @@
             <div class="card-text mb-3">
               <div class="meta">Full Stack Engineer</div>
             </div><!--//card-text-->
-            <a href="./Adefisayo_Adejumo_Full_Stack_Engineer_I_Locked_My_Laptop_My_Agent_Never_Did#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Adefisayo_Adejumo_Full_Stack_Engineer_I_Locked_My_Laptop_My_Agent_Never_Did#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2186,8 +2215,10 @@
             <div class="card-text mb-3">
               <div class="meta">Social Discovery Group</div>
             </div><!--//card-text-->
-            <a href="./Andrei_Shcherbinin_Social_Discovery_Group_Hybrid_RuleMLLLM_Moderation_at_Scale#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Andrei_Shcherbinin_Social_Discovery_Group_Hybrid_RuleMLLLM_Moderation_at_Scale#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2210,8 +2241,10 @@
             <div class="card-text mb-3">
               <div class="meta">Platform Engineer</div>
             </div><!--//card-text-->
-            <a href="./Andy_Burgin_Platform_Engineer_Llama_Watching__Visualising_an_LLM_in_Action#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Andy_Burgin_Platform_Engineer_Llama_Watching__Visualising_an_LLM_in_Action#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2234,8 +2267,10 @@
             <div class="card-text mb-3">
               <div class="meta">AWS</div>
             </div><!--//card-text-->
-            <a href="./Arnaud_Jean_AWS_Create_Your_Own_RolePlaying_Game_with_Agentic_AI_using_Strands_Agents#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Arnaud_Jean_AWS_Create_Your_Own_RolePlaying_Game_with_Agentic_AI_using_Strands_Agents#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2258,8 +2293,10 @@
             <div class="card-text mb-3">
               <div class="meta">SeRP</div>
             </div><!--//card-text-->
-            <a href="./Arthur_Zinnurov_SeRP_The_Future_of_the_Subscription_Economy_How_AI_Will_Learn_to_Optimise_Our_Spendi#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Arthur_Zinnurov_SeRP_The_Future_of_the_Subscription_Economy_How_AI_Will_Learn_to_Optimise_Our_Spendi#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2282,8 +2319,10 @@
             <div class="card-text mb-3">
               <div class="meta">Skipton Building Society</div>
             </div><!--//card-text-->
-            <a href="./Chukwunonso_Ikemba_Skipton_Building_Society_Telepathy_Is_Just_Pattern_Recognition_Why_Brain_Signals_#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Chukwunonso_Ikemba_Skipton_Building_Society_Telepathy_Is_Just_Pattern_Recognition_Why_Brain_Signals_#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2306,8 +2345,10 @@
             <div class="card-text mb-3">
               <div class="meta">The Mental Health Foundation</div>
             </div><!--//card-text-->
-            <a href="./Dr_David_CrepazKeay_The_Mental_Health_Foundation_Building_a_Safe_and_Effective_Mental_Health_Support#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Dr_David_CrepazKeay_The_Mental_Health_Foundation_Building_a_Safe_and_Effective_Mental_Health_Support#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2330,8 +2371,10 @@
             <div class="card-text mb-3">
               <div class="meta">Provio</div>
             </div><!--//card-text-->
-            <a href="./Emily_Phuong_Nghiem_Provio_Teaching_RAG_to_read_making_charts__tables_and_equations_reliable_on_indi#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Emily_Phuong_Nghiem_Provio_Teaching_RAG_to_read_making_charts__tables_and_equations_reliable_on_indi#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2354,8 +2397,10 @@
             <div class="card-text mb-3">
               <div class="meta">TheAiExpert.ai</div>
             </div><!--//card-text-->
-            <a href="./Erik_Schwartz_TheAiExpertai_From_Context_To_Impact_How_To_Ship_An_AI_App_In_A_Day#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Erik_Schwartz_TheAiExpertai_From_Context_To_Impact_How_To_Ship_An_AI_App_In_A_Day#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2378,8 +2423,10 @@
             <div class="card-text mb-3">
               <div class="meta">Great Wave AI</div>
             </div><!--//card-text-->
-            <a href="./Harrison_Kirby_Great_Wave_AI_Operating_LLMs_Where_Failure_Isnt_an_Option#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Harrison_Kirby_Great_Wave_AI_Operating_LLMs_Where_Failure_Isnt_an_Option#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2402,8 +2449,10 @@
             <div class="card-text mb-3">
               <div class="meta">Altinity</div>
             </div><!--//card-text-->
-            <a href="./Josh_Lee_Altinity_Keynote_Designing_Data_Systems_That_Keep_Up_with_AI#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Josh_Lee_Altinity_Keynote_Designing_Data_Systems_That_Keep_Up_with_AI#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2426,8 +2475,10 @@
             <div class="card-text mb-3">
               <div class="meta">Wayve</div>
             </div><!--//card-text-->
-            <a href="./Kaan_Ozdogru_Wayve_What_breaks_in_production_ML_systems__even_when_all_metrics_look_healthy#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Kaan_Ozdogru_Wayve_What_breaks_in_production_ML_systems__even_when_all_metrics_look_healthy#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2450,8 +2501,10 @@
             <div class="card-text mb-3">
               <div class="meta">Infonetica</div>
             </div><!--//card-text-->
-            <a href="./Kate_Tertiienko_Infonetica_When_Engineers_Stop_Thinking_How_to_Make_AI_Serve_Us__Not_Replace_Us#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Kate_Tertiienko_Infonetica_When_Engineers_Stop_Thinking_How_to_Make_AI_Serve_Us__Not_Replace_Us#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2474,8 +2527,10 @@
             <div class="card-text mb-3">
               <div class="meta">Chattermill</div>
             </div><!--//card-text-->
-            <a href="./Maciej_Rzasa__Aji_Ghose_Chattermill_Growing_AI_Projects_Where_Science_Meets_Engineering#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Maciej_Rzasa__Aji_Ghose_Chattermill_Growing_AI_Projects_Where_Science_Meets_Engineering#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2498,8 +2553,10 @@
             <div class="card-text mb-3">
               <div class="meta">Future Processing</div>
             </div><!--//card-text-->
-            <a href="./Maciej_Szymkowski_Future_Processing_Battle_of_VLMs_and_Traditional_Pipelines_in_Automatic_Vehicle_Ty#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Maciej_Szymkowski_Future_Processing_Battle_of_VLMs_and_Traditional_Pipelines_in_Automatic_Vehicle_Ty#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2522,8 +2579,10 @@
             <div class="card-text mb-3">
               <div class="meta">Simple App</div>
             </div><!--//card-text-->
-            <a href="./Max_Borodin_Simple_App_Building_Production_AI_Coaches_Architecture__UX__and_Iteration_at_Scale#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Max_Borodin_Simple_App_Building_Production_AI_Coaches_Architecture__UX__and_Iteration_at_Scale#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2546,8 +2605,10 @@
             <div class="card-text mb-3">
               <div class="meta">Northslope Technologies</div>
             </div><!--//card-text-->
-            <a href="./Max_Helzberg_Northslope_Technologies_PurposeBuilt_AI_Ontologies_Why_Data_Modeling_Determines_LLM_Per#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Max_Helzberg_Northslope_Technologies_PurposeBuilt_AI_Ontologies_Why_Data_Modeling_Determines_LLM_Per#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2570,8 +2631,10 @@
             <div class="card-text mb-3">
               <div class="meta">Doubleword</div>
             </div><!--//card-text-->
-            <a href="./Meryem_Arik_Doubleword_Async_Agents_in_Production_Failure_Modes_and_Fixes#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Meryem_Arik_Doubleword_Async_Agents_in_Production_Failure_Modes_and_Fixes#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2594,8 +2657,10 @@
             <div class="card-text mb-3">
               <div class="meta">Nuvolaris</div>
             </div><!--//card-text-->
-            <a href="./Michele_Sciabarra_Nuvolaris_Trustable_building_a_private_Lovablelike_AI_using_only_open_source#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Michele_Sciabarra_Nuvolaris_Trustable_building_a_private_Lovablelike_AI_using_only_open_source#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2618,8 +2683,10 @@
             <div class="card-text mb-3">
               <div class="meta">1Feed</div>
             </div><!--//card-text-->
-            <a href="./Nikolai_Iusiumbeli_1Feed_Building_a_Safe_AI_Action_Engine_How_We_Classify_Risk_When_AI_Agents_Act_on#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Nikolai_Iusiumbeli_1Feed_Building_a_Safe_AI_Action_Engine_How_We_Classify_Risk_When_AI_Agents_Act_on#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2642,8 +2709,10 @@
             <div class="card-text mb-3">
               <div class="meta">AWS</div>
             </div><!--//card-text-->
-            <a href="./Ricardo_Sueiras_AWS_From_Vibe_to_Viable__an_introduction_to_spec_driven_development#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Ricardo_Sueiras_AWS_From_Vibe_to_Viable__an_introduction_to_spec_driven_development#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2666,8 +2735,10 @@
             <div class="card-text mb-3">
               <div class="meta">OctaTech</div>
             </div><!--//card-text-->
-            <a href="./Richard_Dosumu_OctaTech_LLM_Evals_in_Production_How_to_Know_When_Your_Model_Is_Lying_to_You#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Richard_Dosumu_OctaTech_LLM_Evals_in_Production_How_to_Know_When_Your_Model_Is_Lying_to_You#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2690,8 +2761,10 @@
             <div class="card-text mb-3">
               <div class="meta">ClearBank</div>
             </div><!--//card-text-->
-            <a href="./Russell_Miles_ClearBank_Does_AI_Deliver_Waterfall_An_exploration_of_the_metaphors_we_still_live_by_a#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Russell_Miles_ClearBank_Does_AI_Deliver_Waterfall_An_exploration_of_the_metaphors_we_still_live_by_a#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2714,8 +2787,10 @@
             <div class="card-text mb-3">
               <div class="meta">Bolt EU</div>
             </div><!--//card-text-->
-            <a href="./Sergey_Konstantinov__Alena_Panshina_Bolt_EU_The_Long_Road_to_SelfEvolving_Agents#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Sergey_Konstantinov__Alena_Panshina_Bolt_EU_The_Long_Road_to_SelfEvolving_Agents#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2738,8 +2813,10 @@
             <div class="card-text mb-3">
               <div class="meta">Typeform</div>
             </div><!--//card-text-->
-            <a href="./Susanna_Wong_Typeform_When_Software_Stops_Being_Deterministic_Rethinking_Architecture_for_RAG_and_LL#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Susanna_Wong_Typeform_When_Software_Stops_Being_Deterministic_Rethinking_Architecture_for_RAG_and_LL#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2762,8 +2839,10 @@
             <div class="card-text mb-3">
               <div class="meta">Redis</div>
             </div><!--//card-text-->
-            <a href="./Vishal_Bala_Redis_Context_Matters#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Vishal_Bala_Redis_Context_Matters#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2786,8 +2865,10 @@
             <div class="card-text mb-3">
               <div class="meta">Data Engineer</div>
             </div><!--//card-text-->
-            <a href="./Vsevolod_Voropaev_Data_Engineer_Stop_Building_Agents_Build_Sandboxes#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Vsevolod_Voropaev_Data_Engineer_Stop_Building_Agents_Build_Sandboxes#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2810,8 +2891,10 @@
             <div class="card-text mb-3">
               <div class="meta">Pegasystems</div>
             </div><!--//card-text-->
-            <a href="./Wojciech_Tomasiewicz_Pegasystems_Whats_Wrong_With_Them_How_Misunderstandings_and_AI_Can_Become_Inter#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
-            
+            <div class="event-card-buttons">
+              <a href="./Wojciech_Tomasiewicz_Pegasystems_Whats_Wrong_With_Them_How_Misunderstandings_and_AI_Can_Become_Inter#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              
+            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -2926,6 +3009,7 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>The waterfall debate isn’t dead. It just changed shape. When AI entered software engineering, it brought with it the oldest metaphor in the industry: the factory. Developers prompt. AI produces. Code ships. Faster, cheaper, more. The conveyor belt is back, and this time it’s powered by something that sounds like it understands you.</p>
 <p>But the factory metaphor was wrong in 1970, and it is wrong now. Software engineering was never manufacturing. It was never an assembly line. Peter Naur told us in 1985 that programming is theory building. A fundamentally cognitive, creative, collaborative act. The code was never the whole value. The understanding was.</p>
 <p>This keynote takes a deliberately contentious proposition and uses it to crack open the metaphors that still govern how teams think about software, collaboration, and intelligence. Drawing from the AI Literacy for Software Engineers framework, cognitive science, philosophy of mind, and 500 years of technology panics, you’ll take away practical tools to see your own metaphors, challenge them, and begin designing collaboration spaces where human and artificial intelligence actually thrive together.</p>
@@ -2935,6 +3019,7 @@
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Platforms Were Always the (Sword) Point</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2971,12 +3056,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>AI-assisted development is quickly becoming an expectation rather than a choice. Under constant pressure to deliver faster, engineers increasingly delegate not just implementation, but exploration, learning, and design thinking to AI tools. While this can create short-term productivity gains, it also introduces quieter risks: declining system understanding, reduced curiosity, and an explosion of AI-generated code and documentation that shifts cognitive load onto reviewers and senior engineers. Drawing on two decades of experience building and scaling systems across multiple countries, startups, and regulated domains, the speaker examines how this dynamic affects engineers at different stages of their careers. Experienced engineers may still recognise when to question or override AI-generated solutions, but those entering the industry risk shipping systems they have never fully reasoned about. Rather than arguing for restricting AI usage, this talk focuses on the harder problem: how to build an engineering culture where judgment, ownership, and understanding remain first-class expectations, even when AI is everywhere. Attendees will leave with practical cultural and leadership patterns for ensuring AI amplifies engineering capability instead of eroding it.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>20 years of hands-on engineering experience building and scaling real production systems across startups and regulated industries. Led and reviewed systems under sustained delivery pressure, with long-term ownership of code quality, reliability, and maintainability. Scaled engineering teams in resource-constrained environments, balancing speed with sustainable engineering practices. First-hand experience using multiple AI development tools in production, with a clear view of their impact on learning, judgment, and system understanding.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3013,12 +3100,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Case study on scaling hybrid moderation pipelines, blending rules, MLLLM classifiers for gray-area chats, and routing to reviewer queues. Andrei will provide end-to-end workflows with policy-aligned labeling, imbalance-aware evaluation beyond accuracy, precise thresholding, and moderator feedback loops to detect drift and adapt to shifting abuse tactics in production.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Andrei Shcherbinin is a Machine Learning Team Lead at Social Discovery Group with a background in building and scaling production ML systems for real-world products. He leads cross-functional teams delivering machine learning solutions across attribution, recommendations, automation, and monitoring, with a focus on reliable ML infrastructure and measurable business impact.</p>
 <p>Previously a Senior ML Engineer at the same company, he developed ML monitoring platforms, marketing attribution models, and high-precision NLP systems including automated support chatbots. Earlier roles include Data Scientist positions at Simple App and FunBox, where he worked on LLM applications, personalization systems, telecom analytics, and large-scale data pipelines.</p>
 <p>His work spans technologies such as Python, Kubernetes, AWS, Airflow, Spark, and modern LLM tooling, with an emphasis on production ML, automation, and scalable data workflows.</p></p>
@@ -3057,12 +3146,14 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Early in my backend career, I worked alone on systems handling real money and real users. I locked my laptop before leaving my desk, not because a policy required it, but because an unattended terminal with database access is an unguarded door. Then we started deploying LLM agents, and nobody locked anything. Today, many agents operate as permanent unattended sessions with production credentials. They call APIs, read data, and execute actions inside real systems without scoped identity, attribution, or runtime approval. In practice, an LLM agent connected to tools is an unattended session with system access. The engineers wiring agents to production systems are making security decisions by default. This talk makes those decisions deliberate. It introduces the LAR framework: Lock, Attribute, Require — three practical backend patterns for governing LLM agents at runtime. Lock. Agents should not hold standing credentials. Instead, systems generate dynamic, task-scoped credentials that exist only for the duration of an agent session. This reduces the blast radius of a compromised agent and applies the same principle engineers follow when locking their terminals. Attribute. Every agent action must be traceable. Using OAuth identity federation and delegated scopes, tool calls carry identity context so that logs clearly show which user initiated the request, which agent executed it, and what permissions were granted at that moment. Require. Certain actions should never be executed automatically. Destructive changes, financial transactions, or sensitive operations should pause until a human explicitly authorises them. Using approval flows such as Client-Initiated Backchannel Authentication, agents can request permission before completing irreversible tasks. The talk includes a live Python demonstration comparing two versions of the same LLM-powered backend agent. The first runs with permanent credentials, broad access, and no attribution. The second operates under the LAR framework with session-scoped credentials, identity propagation through tool calls, and human approval for sensitive operations. Attendees see the difference between an ungoverned agent and a governed one interacting with the same production-like environment. Key takeaways for attendees: - A clear mental model for governing LLM agents using the LAR framework: Lock, Attribute, Require - Practical patterns for implementing session-scoped credentials for agents in Python to avoid long-lived access tokens - How to use OAuth identity federation to attribute agent tool calls to the initiating user and agent identity - How to introduce human-in-the-loop approval for high-risk agent actions before execution - A practical understanding of the architectural difference between an ungoverned agent and a governed production agent A practical understanding of the architectural difference between an ungoverned agent and a governed production agent I locked my laptop. It is time we built systems that do the same.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Ayo is a London-based backend engineer who has built distributed systems across fintech and SaaS, where the cost of an ungoverned credential is not theoretical. A Software engineer and Educator, she holds an MSc in Software Engineering with Distinction from Kingston University, speaks at DevFest and JSMonthly, and mentors at Codebar and Code Your Future.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3099,6 +3190,7 @@
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Come discover how to code a Game Master that will orchestrate multiple AI agents, each specialized in a particular task.
 We'll explore concepts like agent tools, the MCP (Model Context Protocol), A2A (Agent to Agent), and RAG (Retrieval-augmented generation) to create agents and/or MCP servers that roll dice, verify DnD rules, and generate the story as it unfolds.
 Whether you're a role-playing game fan or not, there will be things to learn during this workshop :)</p></p>
@@ -3107,6 +3199,7 @@ Whether you're a role-playing game fan or not, there will be things to learn dur
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Helping Devs build cool stuff, learn faster, and laugh along the way — one bug at a time.
 𝘈𝘭𝘭 𝘷𝘪𝘦𝘸𝘴 𝘦𝘹𝘱𝘳𝘦𝘴𝘴𝘦𝘥 𝘢𝘳𝘦 𝘮𝘺 𝘰𝘸𝘯.</p></p>
               </div>
@@ -3144,12 +3237,14 @@ Whether you're a role-playing game fan or not, there will be things to learn dur
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Your brain produces consistent neural patterns for every action, 'raise hand' fires the same core pathways regardless of why. If AI can decode languages, it can decode brain signals as language. I'll show why 'raise hand' may just be the foundation for the next level in human technological advance.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>I’m an AI researcher working across healthcare, human–computer interaction, and next-gen neural interfaces. My work includes collaborating with NHS personnel on how AI can improve health literacy in the UK, focusing on real-world impact rather than hype.
 I’m also developing a long-term exploratory project on AI-mediated communication between biological signals and digital systems, investigating how neural activity patterns might one day translate into meaningful computer instructions.
 My speaking experience is growing, but my sessions are known for being clear, practical, and grounded. No buzzwords, just solid insight into what AI can actually do today and what it might unlock tomorrow.</p></p>
@@ -3188,6 +3283,7 @@ My speaking experience is growing, but my sessions are known for being clear, pr
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>As generative AI is increasingly applied to mental health, the risks of harm, misinformation, and inappropriate support grow alongside its potential benefits. This presentation describes the Mental Health Foundation’s approach to building a mental health support bot that is safe, ethical, and effective—placing mental health expertise at the centre of prompt engineering.
 The work builds on the speaker’s experience developing the original Public Health England Mind Plan tool, now hosted by NHS England, and applies established public mental health principles to large language model design. The talk explores how prompt engineering can be used to define clear role boundaries, prevent diagnostic or therapeutic overreach, respond appropriately to distress, and ensure consistent signposting to human support.
 Rather than optimising for fluency alone, the Mental Health Foundation’s approach uses prompt constraints, tone guidance, and escalation logic to prioritise safety, trust, and real-world use in sensitive contexts. The session also reflects on collaboration between mental health specialists and technical teams, demonstrating how domain-led prompt design reduces risk while enabling genuinely supportive interactions.
@@ -3197,6 +3293,7 @@ This presentation offers a practical case study in building mental health bots t
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Dr David Crepaz-Keay, FRSPH, is Head of Research and Applied Learning at the Mental Health Foundation, a 75 year old public mental health NGO. He leads the London based research team and is responsible AI, LLMs and knowledge management systems for the organisation.
 Dr Crepaz-Keay is a former co-chair and now member of the ethics, policy and position committee of the International Society for Psychiatric Genetics and a fellow of the Royal Society for Public Health. He is an editor of the Journal of Mental Health Training, Education and Practice; the Oxford Handbook of Philosophy and Public Mental Health and the Handbook of Phenomenology, Values and Clinical Decision-Making in Personalised Mental Health Care. He has been a technical advisor for the World Health Organisation, senior mental health advisor to Public Health England, written a mental health module for the Open University, written, spoken and campaigned for improvements in mental health services.</p></p>
               </div>
@@ -3234,6 +3331,7 @@ Dr Crepaz-Keay is a former co-chair and now member of the ethics, policy and pos
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>This year I argued that context engineering is the real power tool behind great prompts. Next year I want to show what happens when you take that seriously and push it all the way to shipping real software in a single day.
 In this session we will move from theory to practice. I will unpack the context patterns that actually hold up once you leave the playground and build for real users. Multi layer memory, data boundaries, llms.txt style controls, retrieval patterns that survive messy SharePoint and inboxes, and the review loops you need so legal, compliance and IT can sleep at night.
 Then I will connect it to something very practical. My “Ship Your First App In A Day” workshops, where non technical leaders go from “what is a terminal” to a deployed, context aware AI app by 5pm. I will break down the scaffolding that makes that possible. How we design prompts around specific jobs to be done, how we shape context so models stay on track, and how we hand these experiments over to professional engineering teams without losing the magic.
@@ -3243,6 +3341,7 @@ You will leave with a concrete blueprint to take your own prompt engineering pra
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Erik Schwartz is a technology leader, entrepreneur, and founder of theAiExpert.ai, with over 25 years at the intersection of search, knowledge discovery, and artificial intelligence. He has held senior roles at Comcast, Elsevier, and Microsoft, where he pioneered large-scale platforms and introduced generative AI into mission-critical products used by millions.
 At Elsevier, Erik spearheaded ScopusAI, a breakthrough generative AI solution that transformed how researchers discover and evaluate knowledge — a project that exemplifies his talent for turning cutting-edge innovation into measurable business value.
 Today, through theAiExpert.ai, Erik acts as a Fractional Chief AI Officer (CAIO), helping organisations move from AI-curious to AI-powered. He designs agentic workflows, compliance accelerators, and adaptive AI systems that cut costs, reclaim time, and unlock growth.
@@ -3282,12 +3381,14 @@ A regular speaker, writer, and host of the London AI Dinner, Erik is recognised 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Large Language Models are inherently probabilistic systems, yet many of the environments adopting them demand determinism, auditability, and accountability. In these contexts, “mostly correct” is indistinguishable from failure, and reliability cannot be achieved through prompt tuning or model alignment alone. This talk argues that determinism is not a model property but an architectural one: control must be engineered through orchestration, validation layers, policy enforcement, and structured human oversight. It further explores how scaling reliable AI systems is less about adding workflow branches and more about standardizing governed agent primitives, shared contracts, constraints, and evaluation frameworks that allow flexibility within certified boundaries.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Harrison Kirby is CTO and Co-Founder of Great Wave AI and Founding Director of the Centre for GenAIOps. With over 15 years of experience across engineering, operations, and technical leadership, he focuses on building and scaling AI systems that bridge research and real-world deployment. Based in the UK, he works at the intersection of GenAI, platform architecture, and applied innovation.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3324,12 +3425,14 @@ A regular speaker, writer, and host of the London AI Dinner, Erik is recognised 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>LLM prototype is easy, building robust product is hard. And it's as much about people as about tech. To deliver AI to production we need to aligning two cultures: backend engineering that wants robustness and data science - navigating uncertainty. We'll tell you how to bridge this gap.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p><strong><a href="https://www.linkedin.com/in/maciejrzasa/">Maciej Rząsa</a></strong> is a Software engineer with 10+ years under his belt. At Chattermill, he turns AI research into real-world products. A fan of diving deep into black boxes, he has unusual hobby of writing regular expressions by hand and arguing about their speed. When he’s not coding, he shares knowledge as a university instructor, speaker, and meetup organiser. Bookworm, hiker, history nerd - ask him about Napoleon!</p>
 <p><strong><a href="https://www.linkedin.com/in/aji-ghose-32bb10353/">Aji Ghose</a></strong> is Chief Scientist at Chattermill, where he leads AI research and NLP applied to large-scale customer feedback. He holds a PhD in Computational Cognitive Science focused on grounding deep learning models, and has over 15 years of experience building and deploying machine learning systems in industry. His work spans data science, large language models, semantic modelling, and human-centred AI.</p></p>
               </div>
@@ -3367,12 +3470,14 @@ A regular speaker, writer, and host of the London AI Dinner, Erik is recognised 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>A model can sound fluent, confident, and authoritative while being factually wrong, dangerously ungrounded, or silently broken. Recent failures, from AI-generated legal citations appearing before the England and Wales High Court to Air Canada being held liable after its chatbot gave incorrect bereavement fare information, show the same uncomfortable pattern: the output looked usable, but the evaluation layer failed. Most LLM failures in production are not only model failures. They are measurement failures. Teams swap prompts, upgrade models, and adjust retrieval logic without a systematic way of knowing what quietly got worse. This talk introduces a lightweight evaluation framework across six layers: correctness, grounding, format compliance, safety, refusal quality, and regression. Through a practical walkthrough of a lightweight 20-test evaluation harness, attendees will learn how to catch breakage before users do and treat evals like CI/CD for LLM behaviour.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Richard Dosumu is a cybersecurity practitioner, Founder at OctaTech, and an independent researcher focused on practical security in real-world environments. He holds an MSc in Cyber Security &amp; Human Factors and writes educational cybersecurity content on Medium and LinkedIn, with a particular interest in making security guidance usable under operational pressure. His published research spans the intersection of AI, cybersecurity, and Industry 4.0/manufacturing, exploring how modern systems introduce new risks and control challenges. He is also involved with the OWASP Bristol organising community and is committed to sharing actionable, defensible approaches that teams can implement without disrupting critical operations.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3409,6 +3514,7 @@ A regular speaker, writer, and host of the London AI Dinner, Erik is recognised 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.</p>
 <p>This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.</p></p>
               </div>
@@ -3416,6 +3522,7 @@ A regular speaker, writer, and host of the London AI Dinner, Erik is recognised 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Vishal Bala is a Senior Applied AI Engineer at Redis based in Berlin, with experience spanning applied AI, machine learning, data engineering, and analytics. He has held senior data science and leadership roles at companies including Scoutbee, resourcly, and Automation Hero, where he focused on LLMs, MLOps, generative AI products, and scalable production systems. Originally trained as an astrophysicist, he earned honors in Astronomy &amp; Physics from Boston University and has published peer-reviewed research before transitioning into industry AI.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3452,12 +3559,14 @@ A regular speaker, writer, and host of the London AI Dinner, Erik is recognised 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Battle of the bots: VLMs (Qwen 3, InternVL-3.5) vs. YOLOv11 + PaddleOCR. Using 2,500 toll booth images of vehicles, the task covers car vs. truck classification and license plate recognition. Evaluation includes accuracy, precision, and Levenshtein distance to determine which pipeline truly owns the road. Who wins?</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Maciej Szymkowski holds a PhD in Computer Science. Since April 2025, he has been working at Future Processing as a Senior Machine Learning Engineer. Previously, he was affiliated with Bialystok University of Technology (Faculty of Computer Science, 2018–2026), Warsaw University of Technology (Faculty of Electronics and Information Technology, 2021–2022), and AGH University of Science and Technology in Cracow (Faculty of Physics and Applied Computer Science, 2021–2022).
 He has also gained experience as a researcher on diverse projects and as a software developer and engineer in multiple companies, including SoftServe, Symmetra, Transition Technologies, and Hemolens Diagnostics. From 2022 to 2024, he worked at the Łukasiewicz Research Network, Poznan Institute of Technology, where he served as Head of the AI Development section.
 Maciej Szymkowski is the author or co author of more than 45 research papers published in JCR journals, book chapters, and international conference proceedings. His primary research interests lie in computer vision, particularly in medicine and transport, as well as Vision Language Models, Large Language Models, and machine learning algorithms.
@@ -3497,6 +3606,7 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>AI chatbots are everywhere, but most get ignored after a week. This talk shares the production architecture and practical patterns behind a successful AI Coach in a health &amp; fitness app with 21M downloads — winner of MedTech's Best Virtual Health Coach 2025.
 Max Borodin walks through the end-to-end design: defining the core "jobs" a coach must do for users, structuring scenarios with memory and context engineering (beyond simple prompts), and embedding coaching into product flows with UX rituals that feel natural rather than bolted-on. He contrasts agentic architectures (multi-step reasoning, tool calling) vs completion-centric (single-turn responses) and their trade-offs for latency, cost, and reliability.
 The session dives into measurement and iteration: quantitative engagement metrics (daily active conversations, session length), qualitative evals (ratings, transcript review), pre-testing frameworks, and rapid scenario management to continuously improve personality, tone, and outcomes. Attendees will leave with a checklist for building their own coach: specific patterns, pitfalls to avoid, and optimisation techniques that make AI sustainable at scale. Perfect for developers and PMs turning LLMs into product features that stick.</p></p>
@@ -3505,6 +3615,7 @@ The session dives into measurement and iteration: quantitative engagement metric
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Max Borodin is a Senior Product Manager at Simple App, where he leads AI coaching and gamification initiatives. He has a background in economics from Lomonosov Moscow State University and experience spanning product management and consulting, including an early role at McKinsey &amp; Company.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3541,6 +3652,7 @@ The session dives into measurement and iteration: quantitative engagement metric
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>As models improve, we are starting to build long-running, asynchronous agents such as deep research agents and browser agents that can execute multi-step workflows autonomously. These systems unlock new use cases, but they fail in ways that short-lived agents do not.
 The longer an agent runs, the more early mistakes compound, and the more token usage grows through extended reasoning, retries, and tool calls. Patterns that work for request-response agents often break down, leading to unreliable behaviour and unpredictable costs.
 This talk is aimed at use case developers, with secondary relevance for platform engineers. It covers the most common failure modes in async agents and practical design patterns for reducing error compounding and keeping token costs bounded in production.</p></p>
@@ -3549,6 +3661,7 @@ This talk is aimed at use case developers, with secondary relevance for platform
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Meryem Arik is the co-founder and CEO of Doubleword, where she works on large-scale LLM inference and production AI systems. She studied theoretical physics and philosophy at the University of Oxford. Meryem is a frequent conference speaker, including a TEDx speaker and a four-time highly rated speaker at QCon conferences. She was named to the Forbes 30 Under 30 list for her work in AI infrastructure.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3585,6 +3698,7 @@ This talk is aimed at use case developers, with secondary relevance for platform
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>In this talk we show how we built Trustable, a fully private AI platform that delivers an experience similar to Lovable, while keeping everything under the company’s control.
 No opaque clouds. No closed models. No external AI services quietly siphoning your data.
 Starting from Apache OpenServerless and OpenCode, we walk through how to design and implement a system that:
@@ -3599,6 +3713,7 @@ A practical story about building AI that feels lovable to users, but is genuinel
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Michele Sciabarrà is the Founder and CEO of Nuvolaris.io, where he focuses on building secure Private AI and serverless platforms that balance innovation, risk control, and real business impact. He is a long time open source contributor, an Apache Software Foundation PMC member for OpenWhisk, and a published author and trainer with decades of experience in cloud, serverless, and distributed systems.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3635,12 +3750,14 @@ A practical story about building AI that feels lovable to users, but is genuinel
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Spec driven development (SDD) emphasises defining clear specifications before writing any code, helping address some of the limitations we have seen with AI coding tools. After this talk, you will understand the key elements of SDD and how it might be the missing piece in your workflow.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>I am a developer advocate for open source, currently working at AWS. I am passionate about, and help customers be successful in using open source.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3677,12 +3794,14 @@ A practical story about building AI that feels lovable to users, but is genuinel
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>“AI agents” and “agentic pipelines” have quickly become this year’s favorite buzzwords. Every product claims to have them. Few teams can clearly explain what actually distinguishes an agent from a prompt chain — or why one agent is fundamentally more capable than another.  This talk offers a structured way to think about agent systems using the five levels of AI agents outlined in Google’s Introduction to Agents (Gulli et al.). But instead of treating the framework as gospel, we’ll stress-test it against real implementation scenarios.  * What really changes between levels? * Where does orchestration stop and autonomy begin? * At what point does an LLM wrapper become a system?  We’ll move through progressively more sophisticated architectures — from deterministic pipelines to systems that plan, reflect, and act with increasing independence. Along the way, we’ll examine the engineering implications: state management, tool integration, evaluation loops, failure modes, and operational complexity.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Sergey is an experienced web developer with over 15 years in the field, from heading a 50M DAU API service to working as a tech lead in a startup environment. He is particularly interested in APIs as a broad discipline, a topic on which he has given numerous talks and authored two books.  In recent years, he has been deeply involved in applied AI — integrating AI into software engineering workflows, designing general-purpose AI pipelines, and exploring deep research workflows powered by large language models.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3719,6 +3838,7 @@ A practical story about building AI that feels lovable to users, but is genuinel
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>For decades, we have built deterministic software systems - our architectures, tools, and mental models are optimized for this world.
 AI software development breaks that mindset.
 In AI products, software architecture is only the tip of the iceberg. Beneath it lies an evolving data architecture: prompts, retrieval strategies, eval loops, and knowledge graphs that directly shape system behavior over time. Shipping code is only the start of that lifecycle.
@@ -3729,6 +3849,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Susanna Wong is a Staff Engineer at V7 Labs and a Google Developer Expert with a focus on JavaScript, web technologies, and machine learning. She is a member of the Google Developer Advisory Board and is known for bridging front end engineering with practical ML applications through speaking, teaching, and community work.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3765,12 +3886,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>When humans misread each other across cultures, we blame personality. When AI does it, we call it “hallucination.” Both are cultural blind spots, and are fixable. The real opportunity isn’t to make AI neutral, but to make it culturally intelligent, because in a global world, context is everything.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>In my career I've been in a leadership positions in 3 different continents working with people from around the world. They were coming to me with their aspirations and problems and I wanted to address them as best as I could. I've read much in this topic and it made me such an expert that I've lead multiple trainings and workshops with developers and managers of broad seniority (from juniors to senior directors).</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3807,12 +3930,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Standard RAG fails silently on the content that matters most in textbooks and financial documents, a chart becomes an empty image tag, a table of financial ratios disappears, an equation becomes garbled text. This talk covers our lessons learned making a learning product reliable on multimodal content, using Chinese open-source vision models that cost a fraction of proprietary alternatives.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>I'm Emily Nghiem, CEO and founder of Provio, a learner-centric platform built to help individuals and professionals own their materials and re-skill fast including difficult fields such as investment and banking. I've spent 10 years building B2B AI products at Bloomberg and Meta.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3849,12 +3974,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Most AI products today only answer questions—they read but do not act. The next generation of AI consists of Agents that perform tasks autonomously: sending emails, declining calendar invites, or approving invoices. This is a massive market, but it carries immense risk. In this talk, I will share the design of the Action Engine I built at 1feed. I will detail an architecture that defines which actions an agent can perform autonomously and which require human-in-the-loop confirmation, including: Risk Classification: A 4-level framework ranging from Level 0 (safe/read-only) to Level 3 (high-stakes/sending emails). Confidence Scoring: Calculating scores by combining AI model evaluation, deterministic business rules, and historical accuracy data. Progressive Trust: How agents "earn" responsibility over time as accuracy is proven. This session provides a practical solution to the "Agent Dilemma"—how to make AI useful without making it dangerous.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Nikolai is a Principal Engineer with 12 years of experience in backend development for high-scale financial systems (including Revolut, 30M+ users). He is currently the Principal Engineer at 1feed, an AI startup in London, where he applies rigorous engineering principles to the next generation of AI systems.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3891,12 +4018,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>The enterprise conversation about agentic AI is obsessed with the agent's logic. This session argues that the agent is the easy part—the sandbox it runs in is what actually determines whether the deployment survives contact with reality. Drawing on the Probe/Sandbox/Executor architecture, we will discuss why teams that invest in the environment ship reliable agents, while those focusing solely on the agent ship demos. We'll explore why reliability, safety, and cost control are properties of the environment, not the model. Key Takeaways: Environment First: Why the sandbox environment matters more than the agent's logic for security. Probe/Sandbox/Executor: Implementing this default framework for enterprise agents. Constraint Design: Using environment design to naturally prevent failure modes. Reproducibility: Ensuring reliability across deployments by standardizing the sandbox.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Vsevolod is the Founding Engineer at Olo din, where he architects advanced autonomous agentic systems. He was previously a Data Engineer at Thrad.ai, developing end-to-end algorithms for conversational ad networks. His work focuses on the intersection of quantitative modeling and LLM infrastructure, specifically building secure execution environments and advanced memory architectures for production-grade AI.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3933,12 +4062,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>In this talk we'll be taking a look at the inner workings of the Llama 3.2 model. First we'll look at the parameters that make up the model and then run through a visualisation of the 3.2 3B model in action. Showing everything from the embeddings and how they change as they move through the layers of the model, seeing which parameters are used in the attention mechanism and then the multi layer perceptron. You'll actually see how the layers affect original embeddings and how that is then used to predict the next token. As a bonus I'll also be running through the way the model was trained and explain a few unique features of the smallest Llama model that speed up prediction.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Andy is by day a Principal Platform Engineer at a gambling firm, by night an opensource AI contributor working with LLMs and AI applications running in Kubernetes. Currently working with K8sGPT to help analyse and diagnose faults on Kubernetes clusters. He also is a small part of the organising team for DevOpsDays London and ran the DevOps meetup in Leeds for almost a decade hosting over 50 events. He’s attended and has spoken at a bunch of DevOps conferences and in his own words is "an all-round DevOps nuisance".</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3975,12 +4106,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>The talk will describe how an AI solution can help B2B and B2C customers to restore visibility and control in the rapidly growing subscription economy. The speech will demonstrate how AI can automatically detect and track recurring payments by analysing receipts files and emails, with user consent, helping to forecasting upcoming renewals, and help to categorise spending across AI and other SaaS services. There will be several tools and techniques discussed include OCR for receipt processing, email parsing, and financial insights predictions. The talk focuses on practical AI applications that help optimise spending before unnecessary costs accumulate.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Founded and actively developed Renewly AI, an AI-driven subscription management project exploring how intelligent systems can proactively optimise recurring spending through OCR, email analysis, and automated financial insight generation. Played a key role in enabling secure medical research by delivering data processing pipelines, notification systems, and standardisation solutions adopted by multiple major UK medical organisations and universities, including collaboration linked to Oxford University initiatives. Led the design and implementation of critical backend and infrastructure components, including CI/CD pipelines that reduced development-stage bugs by 80%, and performance monitoring systems that improved platform efficiency by 12% in production environments. Demonstrated leadership through mentoring and supervising three summer interns, guiding them through real-world software engineering practices such as code reviews, system design, and production-ready development. This mentorship directly contributed to improved team productivity and resulted in one intern being successfully recommended for further industry roles. Authored and co-authored peer-reviewed publications focused on healthcare data systems, phenotyping platforms, and autonomous testing practices, contributing original technical knowledge to the UK health data and software engineering ecosystem.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -4017,12 +4150,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>Large language models are often treated as the center of modern AI systems, but in enterprise deployments the real performance ceiling is set much earlier — at the data modeling layer. In this talk, Max Helzberg draws on experience building operational AI systems in complex environments to show why domain-specific ontologies and semantic data models are critical for reliable LLM and agent performance. When models interact with messy operational data, poorly structured schemas lead to hallucinations, brittle reasoning, and systems that fail in production. The session explores how purpose-built ontologies differ from traditional data warehouses, and how those differences influence downstream model behavior. Topics include entity resolution at scale, semantic relationships between operational objects, and how structured action hierarchies enable reliable agent workflows. Through real-world examples from sectors such as energy, finance, and national security, the talk highlights common failure modes in enterprise AI systems and shows how carefully designed semantic layers dramatically improve reasoning quality, traceability, and auditability. Attendees will leave with practical insights into how data architecture choices influence the success of LLM applications — and why the most important design decisions for AI systems often happen long before model training begins.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Max Helzberg is an Applied AI practitioner with more than a decade of experience deploying data and machine learning systems in complex enterprise environments. He previously worked as a Forward Deployed Engineer at Palantir Technologies, where he built operational AI systems across sectors including energy, finance, and government. His work focuses on bridging the gap between cutting-edge AI capabilities and real-world production systems, with particular interest in data architecture, semantic modeling, and large-scale operational AI deployments.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -4059,12 +4194,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p><p>The talk explores the failure modes that emerge only after deployment, why traditional metrics miss them, and how teams can start tracking behavioural bugs that actually impact system reliability.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Kaan Ozdogru is a machine learning engineer at Wayve, working on end to end AI for autonomous driving. Based in London, he focuses on building and scaling learning driven systems for real world autonomy.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -4101,12 +4238,14 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:#26986A;font-weight:700;">Speaker's bio</h5>
                 <p><p>Robert Hodges is the CEO of Altinity, a company specializing in open-source database solutions, particularly ClickHouse. Based in Berkeley, California, he brings deep expertise in database technology, distributed systems, and open-source development. A graduate of the University of Washington, Robert is an active voice in the data engineering community, frequently sharing insights and engaging with industry professionals.</p></p>
               </div>
           </div><!--//modal-body-->
