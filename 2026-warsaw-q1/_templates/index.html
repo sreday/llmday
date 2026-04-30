@@ -64,20 +64,20 @@
     </script>
 </section>
 
+{% if event_state != 'after' %}
 <section id="tickets" class="tickets-section section">
   <div class="container">
     <h3 class="section-heading text-center mb-3">Tickets</h3>
 
-    {% if event_state != 'after' %}
     <div class="row pricing mb-5 mt-10">
       <div class="col-12 text-center">
-        {% include 'tickets.html' %} 
+        {% include 'tickets.html' %}
       </div>
     </div>
-    {% endif %}
 
   </div>
 </section>
+{% endif %}
 
 <style>
   .speakers-section .card {
@@ -333,7 +333,7 @@
               <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
               <div class="profile">
                 <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img class="profile-image rounded-circle mb-2" src="{{ talk.photo_url }}" alt=""></a>
-                <div class="name"><a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.name }}</a></div>
+                <div class="name">{{ talk.name }}</div>
               </div>
             </div>
             <div class="content">
@@ -341,7 +341,7 @@
                 <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
               </h3>
               <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}{% if talk.YouTube %}<a class="event-watch-btn event-watch-btn-sm" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}</div>
-              <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
+              <div class="desc">{{ talk.abstract_s }} <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
             </div>
           </div>
 {% endfor %}
@@ -460,7 +460,7 @@
               <div class="meta">{{ talk.organization }}</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./{{ talk.short_url }}#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+              <a href="./{{ talk.short_url }}#speakers-section" class="event-read-more-btn">Read more</a>
               {% if talk.YouTube %}<a class="event-watch-btn" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}
             </div>
           </div><!--//card-->
@@ -513,6 +513,19 @@
 </section><!--//sponsors-section-->
 {% endif %}
 
+
+<style>
+  .modal-speaker .desc p,
+  .modal-speaker .desc li {
+    text-align: justify;
+    line-height: 1.75;
+    color: #444;
+    font-size: 0.95rem;
+  }
+  .modal-speaker .desc {
+    padding-bottom: 0.25rem;
+  }
+</style>
 
 {% for talk in talks + keynotes %}
 <!-- Modal Speaker {{ talk.id }} -->
