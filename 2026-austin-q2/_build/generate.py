@@ -101,6 +101,28 @@ for i, talk in enumerate(talks_raw):
         talk["youtube_embed_url"] = "https://www.youtube.com/embed/" + m.group(1) if m else ""
     else:
         talk["youtube_embed_url"] = ""
+    # smart line-breaking for speaker names on cards
+    name = (talk.get("name") or "").strip()
+    MAX_SINGLE = 20  # if any part exceeds this, skip formatting
+    if " & " in name:
+        parts = name.split(" & ")
+        if all(len(p.strip()) <= MAX_SINGLE for p in parts):
+            # handle commas within parts: break after comma too
+            formatted = []
+            for j, part in enumerate(parts):
+                if "," in part:
+                    sub = part.split(",", 1)
+                    formatted.append(sub[0].strip() + ",")
+                    formatted.append(sub[1].strip())
+                else:
+                    formatted.append(part.strip())
+                if j < len(parts) - 1:
+                    formatted[-1] += "<br>&amp; "
+            talk["display_name"] = "".join(formatted)
+        else:
+            talk["display_name"] = name
+    else:
+        talk["display_name"] = name
 
 # sort into talks and keynotes
 talks = [
