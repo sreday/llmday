@@ -136,6 +136,29 @@
     font-size: 0.85rem;
     margin-left: 12px;
   }
+  .schedule-abstract {
+    position: relative;
+    max-height: 4.8em;
+    line-height: 1.6;
+    overflow: hidden;
+    text-align: justify;
+  }
+  .schedule-abstract-read-more {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-left: 2em;
+    background: linear-gradient(to right, transparent, #e8f8f0 40%);
+    font-weight: 700;
+    color: #26986A;
+    text-decoration: underline;
+  }
+  .schedule-section .item .meta .time {
+    color: #26986A;
+  }
+  .schedule-section .item:after {
+    border-color: #26986A;
+  }
 </style>
 
 {% if event_state == 'before' %}
@@ -304,6 +327,8 @@
       <span class="schedule-meta-item">{% if tracks|length == 1 %}single track{% else %}{{ tracks|length }} parallel tracks{% endif %}</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">{{ schedule_time_bracket }}</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">{{ city_name }}, in-person</span>
     </div>
 
 {% for day in range(days) %}
@@ -337,11 +362,16 @@
               </div>
             </div>
             <div class="content">
+              {% if talk.name %}
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
               </h3>
               <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}{% if talk.YouTube %}<a class="event-watch-btn event-watch-btn-sm" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}</div>
-              <div class="desc">{{ talk.abstract_s }} <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">{{ talk.abstract }}<a class="schedule-abstract-read-more" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">Read more</a></div>
+              {% else %}
+              <h3 class="title mb-3" style="color:#26986A;">{{ talk.title }}</h3>
+              {% if talk.comment %}<div class="location mb-3" style="color:#26986A;">{{ talk.comment }}</div>{% endif %}
+              {% endif %}
             </div>
           </div>
 {% endfor %}
@@ -437,7 +467,11 @@
     }
     </script>
 
+    {% if event_state == 'after' %}
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="https://luma.com/sre" target="_blank" rel="noopener" class="btn btn-secondary btn-lg d-block d-md-inline-block">Other {{ brand_name }} conferences</a></div>
+    {% else %}
     <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    {% endif %}
   </div>
 </section>
 {% endif %}

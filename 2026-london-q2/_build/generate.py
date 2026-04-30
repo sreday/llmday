@@ -54,7 +54,19 @@ file_loader = FileSystemLoader("_templates")
 env = Environment(loader=file_loader)
 env.add_extension(MarkdownExtension)
 env.filters["short_url"] = generate_short_url
-env.filters["markdown"] = lambda x: markdown.markdown(x)
+def _markdown_no_headers(text):
+    lines = text.split('\n')
+    cleaned = []
+    for line in lines:
+        stripped = line.lstrip()
+        if stripped.startswith('#'):
+            # convert "#### Heading" → "**Heading**"
+            heading_text = stripped.lstrip('#').strip()
+            cleaned.append('**%s**' % heading_text)
+        else:
+            cleaned.append(line)
+    return markdown.markdown('\n'.join(cleaned))
+env.filters["markdown"] = _markdown_no_headers
 def dedupe(items):
      present = set()
      output = []
@@ -199,6 +211,18 @@ context["schedule_time_bracket"] = (
 for track in tracks:
     tracks[track] = [t for t in tracks[track] if not t.get("placeholder")]
 
+# merge consecutive identical talks (e.g. 2x30min workshop → 1x60min)
+for track in tracks:
+    merged = []
+    for talk in tracks[track]:
+        if (merged
+            and merged[-1].get("title") == talk.get("title")
+            and merged[-1].get("name") == talk.get("name")
+            and merged[-1].get("title")):
+            merged[-1]["duration"] += talk["duration"]
+        else:
+            merged.append(talk)
+    tracks[track] = merged
 
 context["talks_by_tracks"] = tracks
 print("Loaded %d confirmed talks in %d tracks: %s" % (len(context["talks"]), len(tracks), tracks.keys()))
