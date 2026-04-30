@@ -1,5 +1,5 @@
 YouTube,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
-,keynote,Jakub Rohleder,1,1,Monday.com,Jakub Rohleder.png,https://www.linkedin.com/in/jakub-rohleder-35a0b16b/,,,,"Keynote: Stop Making Your Agents More Expensive, Make Your Retrieval Better","Everyone is racing to build stronger AI agents. But a harder question is how to make them economically viable at scale. The industry tends to focus on adding more capabilities and bigger models, while costs quietly explode across dimensions most teams do not think about early on.
+https://youtu.be/AHyzpxbzs_A,keynote,Jakub Rohleder,1,1,Monday.com,Jakub Rohleder.png,https://www.linkedin.com/in/jakub-rohleder-35a0b16b/,,,,"Keynote: Stop Making Your Agents More Expensive, Make Your Retrieval Better","Everyone is racing to build stronger AI agents. But a harder question is how to make them economically viable at scale. The industry tends to focus on adding more capabilities and bigger models, while costs quietly explode across dimensions most teams do not think about early on.
 
 In practice, many teams start with an LLM plus tools, keep layering on features, and end up with systems that do not scale economically. Poor architectural decisions and missing optimizations compound across database operations, embedding computation, and agent inference.
 
