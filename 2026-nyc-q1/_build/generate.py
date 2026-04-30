@@ -83,6 +83,12 @@ for i, talk in enumerate(talks_raw):
     else:
         talk["photo_url"] = talk.get("avatar")
     talk["short_url"] = generate_talk_url(talk)
+    yt = (talk.get("YouTube") or "").strip()
+    if yt:
+        m = re.search(r'(?:youtu\.be/|youtube\.com/watch\?v=|youtube\.com/embed/)([\w-]+)', yt)
+        talk["youtube_embed_url"] = "https://www.youtube.com/embed/" + m.group(1) if m else ""
+    else:
+        talk["youtube_embed_url"] = ""
 
 # sort into talks and keynotes
 talks = [
