@@ -102,25 +102,23 @@ for i, talk in enumerate(talks_raw):
     else:
         talk["youtube_embed_url"] = ""
     # smart line-breaking for speaker names on cards
+    # split on ", " and " & " keeping separators, one name per line
     name = (talk.get("name") or "").strip()
     MAX_SINGLE = 20  # if any part exceeds this, skip formatting
-    if " & " in name:
-        parts = name.split(" & ")
-        if all(len(p.strip()) <= MAX_SINGLE for p in parts):
-            # handle commas within parts: break after comma too
-            formatted = []
-            for j, part in enumerate(parts):
-                if "," in part:
-                    sub = part.split(",", 1)
-                    formatted.append(sub[0].strip() + ",")
-                    formatted.append(sub[1].strip())
-                else:
-                    formatted.append(part.strip())
-                if j < len(parts) - 1:
-                    formatted[-1] += "<br>&amp; "
-            talk["display_name"] = "".join(formatted)
-        else:
-            talk["display_name"] = name
+    # split into tokens: [name, separator, name, separator, name, ...]
+    tokens = re.split(r'(,\s+|\s+&\s+)', name)
+    names = [tokens[k] for k in range(0, len(tokens), 2)]
+    seps = [tokens[k] for k in range(1, len(tokens), 2)]
+    if len(names) > 1 and all(len(n.strip()) <= MAX_SINGLE for n in names):
+        result = names[0]
+        for k, sep in enumerate(seps):
+            sep = sep.strip()
+            if sep == '&':
+                result += "<br>&amp; " + names[k + 1]
+            else:
+                # comma: put comma on current line, next name on new line
+                result += ",<br>" + names[k + 1]
+        talk["display_name"] = result
     else:
         talk["display_name"] = name
 
