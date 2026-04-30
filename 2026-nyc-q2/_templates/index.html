@@ -193,6 +193,9 @@
     color: #26986A;
     text-decoration: underline;
   }
+  .schedule-section .item {
+    margin-bottom: 3.5rem;
+  }
 </style>
 
 {% if event_state == 'before' %}
@@ -387,7 +390,7 @@
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 {% for talk in talks_by_tracks[track] %}
-          <div class="item item-talk">
+          <div class="item item-talk"{% if talk.duration > 30 %} style="min-height:{{ (talk.duration / 30 * 165)|int }}px;"{% endif %}>
             <div class="meta">
               <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
               <div class="profile">
@@ -403,8 +406,8 @@
               <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}{% if talk.YouTube %}<a class="event-watch-btn event-watch-btn-sm" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}</div>
               <div class="desc schedule-abstract">{{ talk.abstract }}<a class="schedule-abstract-read-more" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">... Read more</a></div>
               {% else %}
-              <h3 class="title mb-3" style="color:#26986A;">{{ talk.title }}</h3>
-              {% if talk.comment %}<div class="location mb-3" style="color:#26986A;">{{ talk.comment }}</div>{% endif %}
+              <h3 class="title mb-3" style="color:#098dcf;">{{ talk.title }}</h3>
+              {% if talk.comment %}<div class="location mb-3" style="color:#098dcf;">{{ talk.comment }}</div>{% endif %}
               {% endif %}
             </div>
           </div>
@@ -462,12 +465,20 @@
           <tr>
             <td class="time-cell">{{ time }}</td>
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-            <td class="talk-cell">
+{% set ns2 = namespace(cell_talk=none) %}
 {% for talk in talks_by_tracks[track] if talk.start_time.strftime('%H:%M') == time %}
-              <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
-              <div class="speaker-info">{{ talk.name }}{% if talk.organization %} <span class="affiliation">• {{ talk.organization }}</span>{% endif %}</div>
+{% set ns2.cell_talk = talk %}
 {% endfor %}
+{% if ns2.cell_talk and ns2.cell_talk.name %}
+            <td class="talk-cell">
+              <a href="#modal-speaker-{{ ns2.cell_talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ ns2.cell_talk.id }}">{{ ns2.cell_talk.title }}</a>
+              <div class="speaker-info">{{ ns2.cell_talk.name }}{% if ns2.cell_talk.organization %} <span class="affiliation">• {{ ns2.cell_talk.organization }}</span>{% endif %}</div>
             </td>
+{% elif ns2.cell_talk %}
+            <td class="talk-cell merged-cell">{{ ns2.cell_talk.title }}</td>
+{% else %}
+            <td class="talk-cell"></td>
+{% endif %}
 {% endfor %}
           </tr>
 {% endif %}
