@@ -54,7 +54,19 @@ file_loader = FileSystemLoader("_templates")
 env = Environment(loader=file_loader)
 env.add_extension(MarkdownExtension)
 env.filters["short_url"] = generate_short_url
-env.filters["markdown"] = lambda x: markdown.markdown(x)
+def _markdown_no_headers(text):
+    lines = text.split('\n')
+    cleaned = []
+    for line in lines:
+        stripped = line.lstrip()
+        if stripped.startswith('#'):
+            # convert "#### Heading" → "**Heading**"
+            heading_text = stripped.lstrip('#').strip()
+            cleaned.append('**%s**' % heading_text)
+        else:
+            cleaned.append(line)
+    return markdown.markdown('\n'.join(cleaned))
+env.filters["markdown"] = _markdown_no_headers
 def dedupe(items):
      present = set()
      output = []
@@ -83,6 +95,32 @@ for i, talk in enumerate(talks_raw):
     else:
         talk["photo_url"] = talk.get("avatar")
     talk["short_url"] = generate_talk_url(talk)
+    yt = (talk.get("YouTube") or "").strip()
+    if yt:
+        m = re.search(r'(?:youtu\.be/|youtube\.com/watch\?v=|youtube\.com/embed/)([\w-]+)', yt)
+        talk["youtube_embed_url"] = "https://www.youtube.com/embed/" + m.group(1) if m else ""
+    else:
+        talk["youtube_embed_url"] = ""
+    # smart line-breaking for speaker names on cards
+    # split on ", " and " & " keeping separators, one name per line
+    name = (talk.get("name") or "").strip()
+    MAX_SINGLE = 20  # if any part exceeds this, skip formatting
+    # split into tokens: [name, separator, name, separator, name, ...]
+    tokens = re.split(r'(,\s+|\s+&\s+)', name)
+    names = [tokens[k] for k in range(0, len(tokens), 2)]
+    seps = [tokens[k] for k in range(1, len(tokens), 2)]
+    if len(names) > 1 and all(len(n.strip()) <= MAX_SINGLE for n in names):
+        result = names[0]
+        for k, sep in enumerate(seps):
+            sep = sep.strip()
+            if sep == '&':
+                result += "<br>&amp; " + names[k + 1]
+            else:
+                # comma: put comma on current line, next name on new line
+                result += ",<br>" + names[k + 1]
+        talk["display_name"] = result
+    else:
+        talk["display_name"] = name
 
 # sort into talks and keynotes
 talks = [
@@ -153,6 +191,7 @@ for track in tracks:
         raw = talk.get("duration")
         talk["duration"] = int(raw) if raw is not None and raw != "" else DEFAULT_TALK_DURATION
         talk["start_time"] = current_time
+        talk["end_time"] = current_time + timedelta(minutes=talk["duration"])
         current_time += timedelta(minutes=talk["duration"])
 
 # synchronize break times across tracks
@@ -193,21 +232,8 @@ context["schedule_time_bracket"] = (
 for track in tracks:
     tracks[track] = [t for t in tracks[track] if not t.get("placeholder")]
 
-
 context["talks_by_tracks"] = tracks
 print("Loaded %d confirmed talks in %d tracks: %s" % (len(context["talks"]), len(tracks), tracks.keys()))
-
-# MAIN PAGES
-print(DIVIDER)
-pages = ["index.html"]
-print(f"Generating main pages: {pages}")
-for page in pages:
-    with open(BASE_FOLDER + "/" + page, "w", encoding="utf-8") as f:
-        print("Writing out", page)
-        template = env.get_template(page)
-        f.write(template.render(page=page, **context))
-        if page != "index.html":
-            SITEMAP_URLS.append((page.replace(".html",""), 0.75))
 
 # template each talk page for the event
 for talk in talks_raw:
@@ -572,6 +598,19 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
     ))
 print("Done: sponsorship.html")
 # ── END SPONSORSHIP PAGE ─────────────────────────────────────────────────────
+
+# MAIN PAGES (rendered after sponsorship so timeline_events is available)
+context["timeline_events"] = _timeline_events
+print(DIVIDER)
+pages = ["index.html"]
+print(f"Generating main pages: {pages}")
+for page in pages:
+    with open(BASE_FOLDER + "/" + page, "w", encoding="utf-8") as f:
+        print("Writing out", page)
+        template = env.get_template(page)
+        f.write(template.render(page=page, **context))
+        if page != "index.html":
+            SITEMAP_URLS.append((page.replace(".html",""), 0.75))
 
 # SITEMAP
 print(DIVIDER)
