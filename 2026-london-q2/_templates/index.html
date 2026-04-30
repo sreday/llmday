@@ -313,7 +313,7 @@
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
               </h3>
-              <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}</div>
+              <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}{% if talk.YouTube %} <a class="btn btn-secondary btn-sm" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}</div>
               <div class="desc">{{ talk.abstract_s }}<br /><br /></div>
             </div>
           </div>
@@ -433,6 +433,7 @@
               <div class="meta">{{ talk.organization }}</div>
             </div><!--//card-text-->
             <a href="./{{ talk.short_url }}#speakers-section" class="event-read-more-btn">Read more &rarr;</a>
+            {% if talk.YouTube %}<a class="btn btn-secondary btn-sm" href="{{ talk.YouTube }}" target="_blank" rel="noopener" style="margin-top:8px;align-self:flex-start;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
