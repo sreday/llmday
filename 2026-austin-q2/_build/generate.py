@@ -212,19 +212,6 @@ context["schedule_time_bracket"] = (
 for track in tracks:
     tracks[track] = [t for t in tracks[track] if not t.get("placeholder")]
 
-# merge consecutive identical talks (e.g. 2x30min workshop → 1x60min)
-for track in tracks:
-    merged = []
-    for talk in tracks[track]:
-        if (merged
-            and merged[-1].get("title") == talk.get("title")
-            and merged[-1].get("name") == talk.get("name")
-            and merged[-1].get("title")):
-            merged[-1]["duration"] += talk["duration"]
-        else:
-            merged.append(talk)
-    tracks[track] = merged
-
 context["talks_by_tracks"] = tracks
 print("Loaded %d confirmed talks in %d tracks: %s" % (len(context["talks"]), len(tracks), tracks.keys()))
 

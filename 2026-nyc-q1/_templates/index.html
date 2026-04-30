@@ -194,7 +194,7 @@
     text-decoration: underline;
   }
   .schedule-section .item {
-    margin-bottom: 3.5rem;
+    margin-bottom: 4rem;
   }
 </style>
 
@@ -390,7 +390,7 @@
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 {% for talk in talks_by_tracks[track] %}
-          <div class="item item-talk"{% if talk.duration > 30 %} style="min-height:{{ (talk.duration / 30 * 165)|int }}px;"{% endif %}>
+          <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">{{ talk.start_time.strftime('%H:%M') }}</h4>
               <div class="profile">
