@@ -420,6 +420,29 @@
     font-size: 0.85rem;
     margin-left: 12px;
   }
+  .schedule-abstract {
+    position: relative;
+    max-height: 4.8em;
+    line-height: 1.6;
+    overflow: hidden;
+    text-align: justify;
+  }
+  .schedule-abstract-read-more {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-left: 2em;
+    background: linear-gradient(to right, transparent, #e8f8f0 40%);
+    font-weight: 700;
+    color: #26986A;
+    text-decoration: underline;
+  }
+  .schedule-section .item .meta .time {
+    color: #26986A;
+  }
+  .schedule-section .item:after {
+    border-color: #26986A;
+  }
 </style>
 
 
@@ -581,6 +604,8 @@
       <span class="schedule-meta-item">single track</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">10AM - 6PM</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">Austin, in-person</span>
     </div>
 
 
@@ -614,11 +639,17 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: 7 Deadly Traps of SRE</a>
               </h3>
               <div class="location mb-3">SRE Author</div>
-              <div class="desc">Site Reliability Engineering was never meant to be about firefighting, yet too many teams find themselves stuck in an endless cycle of pages, postmortems, and quick fixes. Why? Because SRE is full of hidden traps — patterns that look like best practices on the surface but slowly erode... <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Site Reliability Engineering was never meant to be about firefighting, yet too many teams find themselves stuck in an endless cycle of pages, postmortems, and quick fixes. Why? Because SRE is full of hidden traps — patterns that look like best practices on the surface but slowly erode reliability, burn out engineers, and stall progress.
+
+In this talk, we’ll expose the 7 Deadly Traps of SRE, from the obsession with chasing “five nines,” to the cult of on-call heroism, to the false comfort of tooling and checklists. For each trap, we’ll unpack why it’s so seductive, how it quietly sabotages your team, and what to do instead.
+
+You’ll walk away with a clearer lens on the pitfalls holding SRE organizations back, and a practical playbook to help your team escape firefighting mode and reclaim the true purpose of SRE: building systems - and cultures - that are resilient, scalable, and human-friendly.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Read more</a></div>
+              
             </div>
           </div>
 
@@ -631,11 +662,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Coffee break</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Coffee break</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -648,11 +678,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Towards Self-Evolving Autonomous AI Agents</a>
               </h3>
               <div class="location mb-3">AWS</div>
-              <div class="desc">What happens when AI agents encounter tasks they cannot solve? Most agents fail because their capabilities are fixed. This talk explores a new approach using only open-source frameworks where agents can now adapt themselves by dynamically generating and integrating new tools at runtime. We will... <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">What happens when AI agents encounter tasks they cannot solve?  Most agents fail because their capabilities are fixed. This talk explores a new approach using only open-source frameworks where agents can now adapt themselves by dynamically generating and integrating new tools at runtime. We will examine the architectural mechanisms that enable this, including how new functionality is validated and incorporated safely during execution. Through a live demo, attendees will see an agent encounter a novel task, build the required capability, and complete the workflow without redeployment. Attendees will additionally gain practical engineering insights into the tradeoffs and design considerations involved in building autonomous agentic systems that evolve beyond their original design.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Read more</a></div>
+              
             </div>
           </div>
 
@@ -665,11 +697,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">The Best Laid Spans: An AI Agent That Instruments Your Code with OpenTelemetry</a>
               </h3>
               <div class="location mb-3">Datadog</div>
-              <div class="desc">Every team says they want better observability, but adding OpenTelemetry instrumentation is repetitive, tedious, convention-heavy work. Wah wah wahhhh, what a drag. Enter Spinybacked Orbweaver to save the day! Spinybacked Orbweaver is an AI-powered telemetry agent that can analyze your code, add... <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Every team says they want better observability, but adding OpenTelemetry instrumentation is repetitive, tedious, convention-heavy work. Wah wah wahhhh, what a drag. Enter Spinybacked Orbweaver to save the day! Spinybacked Orbweaver is an AI-powered telemetry agent that can analyze your code, add the instrumentation, check its own work, and open a pull request. And it can do it consistently well, following your company's telemetry standards! This speaker built it, and she'll demo it live. Sparkles and rainbows! But here's where it gets interesting: how does the agent know if it did a good job? Two things. First, the OpenTelemetry project has a tool called Weaver that lets you define your team's telemetry standards as a machine-readable schema. Second, there's an emerging open specification called the Instrumentation Score that rates instrumentation quality on a 0-to-100 scale using standardized rules. The agent validates against both of these, plus some custom rules. When the agent fails its own checks, it gets the feedback and tries again. Generate, validate, learn, retry. You'll watch the whole thing happen against a real codebase. The agent discovers what to instrument, writes the code, gets rejected by its own quality checks, fixes its mistakes, and produces a PR. Along the way, you'll get grounded in what OpenTelemetry, Weaver, and the Instrumentation Score are, why they exist, and why good telemetry is worth caring about... but not enough to suffer the tedium of manual code instrumentation.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Read more</a></div>
+              
             </div>
           </div>
 
@@ -682,11 +716,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Beyond the Hype: Navigating "Openwashing" and the Real Open Source AI</a>
               </h3>
               <div class="location mb-3">Red Hat</div>
-              <div class="desc">As AI moves from experimental pilots to production MLOps pipelines, defining what truly constitutes **"Open Source AI"** has become a critical engineering challenge. This session cuts through the hype to provide ML engineers, data scientists, and infrastructure architects with practical... <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">As AI moves from experimental pilots to production MLOps pipelines, defining what truly constitutes **"Open Source AI"** has become a critical engineering challenge. This session cuts through the hype to provide ML engineers, data scientists, and infrastructure architects with practical frameworks to evaluate model transparency, mitigate licensing risks, and navigate the complexities of deploying "open" foundation models. Attendees will walk away with the skills to: - **Deconstruct the AI Stack**: Understand the core differences between traditional open-source software and the AI triad. - **Evaluate True Openness**: Apply frameworks like the Open Source AI Definition (OSAID) to assess model viability for fine-tuning. - **Spot "Openwashing"**: Identify the operational risks and licensing traps hidden behind "open weights" models to protect your deployment pipelines and long-term infrastructure.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Read more</a></div>
+              
             </div>
           </div>
 
@@ -699,11 +735,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Lunch & networking</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Lunch & networking</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -716,11 +751,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">LLMs and Data in MedTech: Building Smarter, Safer Healthcare</a>
               </h3>
               <div class="location mb-3">Align Technology</div>
-              <div class="desc">The medical technology sector is undergoing a paradigm shift powered by clinical, operational, and real-world data—and increasingly, by large language models (LLMs). At LLMday Austin, this session explores how data and AI are reshaping MedTech innovation, operational excellence, and personalized... <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">The medical technology sector is undergoing a paradigm shift powered by clinical, operational, and real-world data—and increasingly, by large language models (LLMs). At LLMday Austin, this session explores how data and AI are reshaping MedTech innovation, operational excellence, and personalized care at scale. From device development to clinical deployment, mining EHRs, claims data, and registries reveals unmet needs and enables measurable patient impact. LLMs enhance this process by extracting insights from unstructured clinical notes, regulatory documents, and post-market surveillance data—accelerating research, improving documentation, and supporting compliance. Computational modeling and digital twins reduce time-to-market and manufacturing waste, while analytics-driven usability improvements reduce device error rates. In clinical settings, real-time monitoring systems—such as closed-loop insulin platforms—integrate multimodal data to improve chronic disease outcomes. AI imaging systems now match specialist-level performance in areas like diabetic retinopathy detection, while predictive analytics such as sepsis forecasting enable earlier interventions. Operational excellence is achieved through predictive quality, AI-driven supply chain forecasting, condition-based maintenance, and capacity optimization. Strong governance frameworks—including FHIR, TEFCA, and SNOMED CT—ensure interoperability, while privacy-by-design, federated learning, SBOMs, and secure development lifecycles safeguard sensitive health data. By combining LLM capabilities with robust data governance, MedTech organizations can deliver smarter, safer, and more sustainable healthcare systems. This session provides a practical, data-driven roadmap grounded in real-world outcomes.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Read more</a></div>
+              
             </div>
           </div>
 
@@ -733,11 +770,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Why Most LLM Systems Fail in Production and How to Fix Them</a>
               </h3>
               <div class="location mb-3">Salesforce & AWS</div>
-              <div class="desc">Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk... <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Read more</a></div>
+              
             </div>
           </div>
 
@@ -750,11 +789,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Your MLOps Pipeline is your Agentic AI Guardrail</a>
               </h3>
               <div class="location mb-3">KodeKloud</div>
-              <div class="desc">In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad... <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Read more</a></div>
+              
             </div>
           </div>
 
@@ -767,11 +808,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Networking & sponsor crawl</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Networking & sponsor crawl</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -784,11 +824,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">From Copilots to Agents: Designing LLM Workflows for Real Organizations</a>
               </h3>
               <div class="location mb-3">The Austin Consulting Group</div>
-              <div class="desc">LLMs are useful as copilots, but the real shift begins when they coordinate work across people, systems, and decisions. This talk shows how organizations design agentic workflows with guardrails, escalation paths, and real operational value. <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">LLMs are useful as copilots, but the real shift begins when they coordinate work across people, systems, and decisions. This talk shows how organizations design agentic workflows with guardrails, escalation paths, and real operational value.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Read more</a></div>
+              
             </div>
           </div>
 
@@ -801,11 +843,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">AML Detection using Agentic AI</a>
               </h3>
               <div class="location mb-3">Caesars Entertainment</div>
-              <div class="desc">Anti-money laundering systems often fail due to static rules that cannot reason across complex contexts, leading to high false-positive rates. This talk presents a five-stage agentic AI pipeline where specialized LLM agents handle graph traversal, typology matching, narrative reasoning, and... <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Anti-money laundering systems often fail due to static rules that cannot reason across complex contexts, leading to high false-positive rates. This talk presents a five-stage agentic AI pipeline where specialized LLM agents handle graph traversal, typology matching, narrative reasoning, and automated SAR drafting. In a 30-day production evaluation, this system achieved 94.2% precision, reduced false positives to 2.1%, and cut SAR filing time to under two minutes.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Read more</a></div>
+              
             </div>
           </div>
 
@@ -818,11 +862,19 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Unlocking Document Intelligence with Open-Source AI</a>
               </h3>
               <div class="location mb-3">IBM</div>
-              <div class="desc">Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed,... <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.
+
+In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
+We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI & Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.
+
+Docling is fully open-source under MIT license, so you can run it locally for sensitive data and air-gapped environments.
+<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Read more</a></div>
+              
             </div>
           </div>
 
@@ -835,11 +887,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">From Automation to Autonomy: Building Product-Led Agentic AI Systems That Scale</a>
               </h3>
               <div class="location mb-3">AWS</div>
-              <div class="desc">Modern enterprises face a critical paradox: despite processing billions of records and building sophisticated data infrastructure, business users often remain trapped in manual spreadsheets and wait days for simple insights. I solved this challenge by implementing agentic AI on top of an AWS data... <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Modern enterprises face a critical paradox: despite processing billions of records and building sophisticated data infrastructure, business users often remain trapped in manual spreadsheets and wait days for simple insights. I solved this challenge by implementing agentic AI on top of an AWS data pipeline processing 45 billion records per month, enabling over 2,000 users across 37 teams to perform autonomous natural language analysis. This implementation achieved 25-40% productivity gains and a 60% reduction in time-to-insight. This talk explores the evolution from traditional BI dashboards to AI copilots and fully autonomous agents, demonstrating how agentic AI transforms data accessibility and shifts data teams from report factories to strategic partners.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Read more</a></div>
+              
             </div>
           </div>
 
@@ -852,11 +906,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">From Prototype to Production: Practical LLMOps Patterns in Healthcare</a>
               </h3>
               <div class="location mb-3">HCA Healthcare</div>
-              <div class="desc">Building LLM systems in enterprise healthcare requires more than a successful prototype. It requires repeatable delivery paths, clear platform boundaries, reproducible workflows, and operational guardrails that let teams move quickly without creating chaos in production. In this talk, I’ll share... <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Building LLM systems in enterprise healthcare requires more than a successful prototype. It requires repeatable delivery paths, clear platform boundaries, reproducible workflows, and operational guardrails that let teams move quickly without creating chaos in production. In this talk, I’ll share practical lessons from building AI platform patterns that help teams move from experimentation to governed production. I’ll cover how we think about separating user code from platform code, standardizing build and release workflows, improving portability, and creating consistent deployment paths for ML and LLM workloads. I’ll also discuss trade-offs we encountered around developer experience, platform control, and scaling adoption across teams. This is a practitioner-focused talk for engineers working on LLMOps, MLOps, infrastructure, or AI platform engineering. It will be slides-based, architecture-focused, and centered on reusable lessons learned rather than product promotion or sensitive internal details. 3 takeaways How to create a governed path from prototype to production for ML/LLM systems Why platform boundaries matter for portability, control, and team scalability Practical lessons for balancing developer velocity with reproducibility and operational guardrails<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Read more</a></div>
+              
             </div>
           </div>
 
@@ -869,11 +925,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Wrap up</a>
-              </h3>
-              <div class="location mb-3">Scan each other's QR codes & head to a nearby pub!</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Wrap up</h3>
+              <div class="location mb-3" style="color:#26986A;">Scan each other's QR codes & head to a nearby pub!</div>
+              
             </div>
           </div>
 
@@ -1308,7 +1363,9 @@
     }
     </script>
 
+    
     <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    
   </div>
 </section>
 

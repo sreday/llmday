@@ -345,6 +345,29 @@
     font-size: 0.85rem;
     margin-left: 12px;
   }
+  .schedule-abstract {
+    position: relative;
+    max-height: 4.8em;
+    line-height: 1.6;
+    overflow: hidden;
+    text-align: justify;
+  }
+  .schedule-abstract-read-more {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-left: 2em;
+    background: linear-gradient(to right, transparent, #e8f8f0 40%);
+    font-weight: 700;
+    color: #26986A;
+    text-decoration: underline;
+  }
+  .schedule-section .item .meta .time {
+    color: #26986A;
+  }
+  .schedule-section .item:after {
+    border-color: #26986A;
+  }
 </style>
 
 
@@ -506,6 +529,8 @@
       <span class="schedule-meta-item">2 parallel tracks</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">9AM - 6:30PM</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">San Francisco, in-person</span>
     </div>
 
 
@@ -541,11 +566,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: From Data Platform to Agent Platform: Building Structured Intelligence with Knowledge Graphs and MCP</a>
               </h3>
               <div class="location mb-3">Harness</div>
-              <div class="desc">As AI agents move beyond demos, the real challenge becomes giving them reliable, structured access to enterprise systems. This talk walks through how we evolved a unified data platform into an agent-ready platform using a semantic layer, knowledge graph principles, and MCP-based tool... <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">As AI agents move beyond demos, the real challenge becomes giving them reliable, structured access to enterprise systems. This talk walks through how we evolved a unified data platform into an agent-ready platform using a semantic layer, knowledge graph principles, and MCP-based tool abstractions. We'll cover how structure—not just models—enables reasoning, governance, and cross-system workflows. The focus is on practical design patterns that make agents usable in real production environments.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Read more</a></div>
+              
             </div>
           </div>
 
@@ -558,11 +585,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Coffee break</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Coffee break</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -575,11 +601,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">MAD About Software Design - When AI Architects Argue</a>
               </h3>
               <div class="location mb-3"></div>
-              <div class="desc">What if software design debates weren’t between engineers…but between AI agents? We’ll explore the pattern of multi-agent debate, and how it can be applied to software design questions. What’re the challenges, and how can it complement human architectural thinking. <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">What if software design debates weren’t between engineers…but between AI agents? We’ll explore the pattern of multi-agent debate, and how it can be applied to software design questions. What’re the challenges, and how can it complement human architectural thinking.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Read more</a></div>
+              
             </div>
           </div>
 
@@ -592,11 +620,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Neuroinspired AI: From Analogy to Mechanism</a>
               </h3>
               <div class="location mb-3">Stealth Startup</div>
-              <div class="desc">I will talk about current brain-inspired AI and discuss the actual mechanics behind the "20W brain" pitch to move beyond simple inspiration toward systems that deeply mirror biological inner workings. I’ll highlight how modern neurotechnology provides direct access to the biological data that LLM... <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">I will talk about current brain-inspired AI and discuss the actual mechanics behind the "20W brain" pitch to move beyond simple inspiration toward systems that deeply mirror biological inner workings. I’ll highlight how modern neurotechnology provides direct access to the biological data that LLM interpretability researchers are currently forced to infer. Finally, I’ll introduce Neuraffica, my project bridging neuroscience and AI to turn these biological ground truths into reality.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Read more</a></div>
+              
             </div>
           </div>
 
@@ -609,11 +639,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Interviewing Engineers in the Age of AI</a>
               </h3>
               <div class="location mb-3">Lantern</div>
-              <div class="desc">It is time to embrace AI in interviews. We do not need to fear that ‘AI will take our jobs,’ but that ‘people who know how to effectively use AI will take the jobs of those who don’t.’ This shift in perspective must drive a fundamental change in how we interview and assess talent. <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">It is time to embrace AI in interviews. We do not need to fear that ‘AI will take our jobs,’ but that ‘people who know how to effectively use AI will take the jobs of those who don’t.’ This shift in perspective must drive a fundamental change in how we interview and assess talent.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Read more</a></div>
+              
             </div>
           </div>
 
@@ -626,11 +658,16 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">From Voice to Cognitive Insights: Building KinaBot, an AI System for Early Cognitive Awareness</a>
               </h3>
               <div class="location mb-3">Aimoji Healthcare</div>
-              <div class="desc">Large language models are rapidly transforming how humans interact with machines. Yet most AI systems focus on generating text, rather than understanding the deeper cognitive signals embedded in human communication. In this talk, Aoi Minamoto introduces KinaBot, an AI system that transforms... <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Large language models are rapidly transforming how humans interact with machines. Yet most AI systems focus on generating text, rather than understanding the deeper cognitive signals embedded in human communication.
+In this talk, Aoi Minamoto introduces KinaBot, an AI system that transforms everyday conversations into measurable cognitive insights. By combining speech processing, natural language analysis, and large language models, KinaBot analyzes conversational patterns such as vocabulary diversity, sentence structure, response latency, and semantic coherence to generate indicators of cognitive trends over time.
+Unlike traditional cognitive assessments that rely on clinical tests conducted in controlled environments, KinaBot explores a new paradigm: continuous, natural, and non-invasive cognitive monitoring through daily conversations.
+The talk will demonstrate how voice interactions can be converted into structured signals that help individuals, families, and caregivers better understand changes in communication and cognitive patterns.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Read more</a></div>
+              
             </div>
           </div>
 
@@ -643,11 +680,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Lunch & networking</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Lunch & networking</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -660,11 +696,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Capacity Planning for LLMs: Sizing and Funding Clusters Before You Know Your Workload</a>
               </h3>
               <div class="location mb-3">Rescale</div>
-              <div class="desc">Sizing infrastructure for LLM workloads is uniquely hard: model architectures shift, training cycles are unpredictable, and inference demand can spike overnight. Yet most capacity decisions are still made by intuition rather than modeling, resulting in either wasteful over-provisioning or painful... <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Sizing infrastructure for LLM workloads is uniquely hard: model architectures shift, training cycles are unpredictable, and inference demand can spike overnight. Yet most capacity decisions are still made by intuition rather than modeling, resulting in either wasteful over-provisioning or painful bottlenecks at the worst moments. This talk offers a structured approach to capacity planning and cost strategy that works even before your workload is fully understood.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Read more</a></div>
+              
             </div>
           </div>
 
@@ -677,11 +715,17 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">From Dashboards to Agents: Building an AI ROI Strategist with MCP and n8n</a>
               </h3>
               <div class="location mb-3">MIDCAI</div>
-              <div class="desc">Most organizations still make CX, marketing, and AI investment decisions using static dashboards and backward-looking metrics. In this session, I’ll show how we transformed a traditional ROI model into an agentic AI “ROI strategist” embedded directly into a startup’s MarTech stack. This system is... <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Most organizations still make CX, marketing, and AI investment decisions using static dashboards and backward-looking metrics.
+In this session, I’ll show how we transformed a traditional ROI model into an agentic AI “ROI strategist” embedded directly into a startup’s MarTech stack. This system is capable of predicting revenue, net profit, CAC, churn, and customer lifetime value over a three-year horizon in real time.
+Starting from a Salesforce + CDP + data warehouse environment, we used n8n as the orchestration layer and Model Context Protocol (MCP) servers as the tool interface to build an LLM-powered agent that:
+- Ingests live data from CRM, CDP, and financial systems - Runs forward-looking simulations across best, expected, and worst-case scenarios - Benchmarks performance against industry standards and top competitors - Generates executive-ready financial outputs including ROI, margin, CLV, and churn - Pushes predictions back into the MarTech stack for activation I’ll walk through the actual architecture, including how MCP servers expose data and tools, how the agent loop is designed, and how we made the system reliable through guardrails, evaluation, and cost control.
+This is a practical, production-focused session for builders and product leaders who want to move beyond LLM demos and design agentic systems that drive real business outcomes.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Read more</a></div>
+              
             </div>
           </div>
 
@@ -694,11 +738,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">LLM-Driven Auto Replenishment: From Reactive to Predictive Retail</a>
               </h3>
               <div class="location mb-3">Walmart</div>
-              <div class="desc">AI-powered auto-replenishment is shifting retail from reactive transactions to anticipatory, intelligent commerce. At LLMday, we’ll explore how large language models (LLMs), combined with predictive ML systems, are redefining loyalty and customer lifetime value (CLV) in high-frequency retail... <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">AI-powered auto-replenishment is shifting retail from reactive transactions to anticipatory, intelligent commerce. At LLMday, we’ll explore how large language models (LLMs), combined with predictive ML systems, are redefining loyalty and customer lifetime value (CLV) in high-frequency retail categories. Modern replenishment engines go beyond fixed subscriptions and rule-based triggers. By integrating cross-channel signals, purchase history, household context, behavioral data, and IoT inputs, AI systems dynamically predict when consumers need essential products—reducing friction, decision fatigue, and “household management anxiety.” Retailers deploying predictive basket models have seen measurable retention gains over traditional loyalty programs, especially in groceries, personal care, and healthcare. This session dives into the technical architecture behind these systems, including sequence models (e.g., RNNs), reinforcement learning for timing optimization, API-first orchestration layers, and the emerging role of LLMs in contextual reasoning, personalization logic, and conversational reorder interfaces. We’ll examine key analytical challenges such as seasonality shifts, life-event detection, sparse data cold starts, and model drift. We’ll also address critical concerns around privacy, bias, autonomy, and federated learning approaches that enhance personalization without centralizing sensitive data.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Read more</a></div>
+              
             </div>
           </div>
 
@@ -711,11 +757,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Towards Self-Evolving Autonomous AI Agents</a>
               </h3>
               <div class="location mb-3">AWS</div>
-              <div class="desc">What happens when AI agents encounter tasks they cannot solve? Most agents fail because their capabilities are fixed. This talk explores a new approach using only open-source frameworks where agents can now adapt themselves by dynamically generating and integrating new tools at runtime. We will... <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">What happens when AI agents encounter tasks they cannot solve? Most agents fail because their capabilities are fixed. This talk explores a new approach using only open-source frameworks where agents can now adapt themselves by dynamically generating and integrating new tools at runtime. We will examine the architectural mechanisms that enable this, including how new functionality is validated and incorporated safely during execution. Through a live demo, attendees will see an agent encounter a novel task, build the required capability, and complete the workflow without redeployment. Attendees will additionally gain practical engineering insights into the tradeoffs and design considerations involved in building autonomous agentic systems that evolve beyond their original design.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Read more</a></div>
+              
             </div>
           </div>
 
@@ -728,11 +776,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Networking & sponsor crawl</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Networking & sponsor crawl</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -745,11 +792,16 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Stop AI Agents from Making Up Facts: Graph-RAG for Reliable Data Retrieval</a>
               </h3>
               <div class="location mb-3">AWS</div>
-              <div class="desc">Traditional RAG has a fundamental limitation: vector search retrieves text, not structured data. When you need precise answers, LLMs guess aggregations from text chunks instead of executing calculations. This causes wrong averages, fabricated counts, and approximate results. Graph-RAG solves this... <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Traditional RAG has a fundamental limitation: vector search retrieves text, not structured data. When you need precise answers, LLMs guess aggregations from text chunks
+instead of executing calculations. This causes wrong averages, fabricated counts, and approximate results.
+Graph-RAG solves this by storing data as entities and relationships, enabling structured queries that execute calculations instead of estimating from text. Join me as I build
+a travel agent demo that compares both on 515K hotel reviews proving where RAG fails and how graphs deliver accurate answers.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Read more</a></div>
+              
             </div>
           </div>
 
@@ -762,11 +814,21 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Architecting enterprise-grade AI agents: Reliability, orchestration, and system integration</a>
               </h3>
               <div class="location mb-3">Laurel</div>
-              <div class="desc">As organizations move beyond AI proofs of concept into production deployments, a new set of challenges emerges. The question is no longer whether AI agents can work, but whether they can be trusted to operate reliably at scale. This talk examines the critical gap between building an agent and... <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">As organizations move beyond AI proofs of concept into production deployments, a new set of challenges emerges. The question is no longer whether AI agents can work, but whether they can be trusted to operate reliably at scale. This talk examines the critical gap between building an agent and running one in real-world enterprise environments.
+
+We reframe reliability as a multi-dimensional problem spanning infrastructure, model availability, output validity, semantic correctness, and behavioral consistency. Unlike traditional software systems, AI agents are inherently probabilistic, requiring new approaches to service-level expectations, including accuracy thresholds, guardrails, and human-in-the-loop workflows.
+
+The session explores practical patterns for designing production-ready agents, including deterministic orchestration layered with controlled model autonomy, structured outputs with validation, and multi-model fallback strategies. It also highlights the importance of observability beyond uptime—covering traceability, quality evaluation, cost monitoring, and behavioral analytics—to detect and mitigate silent failures.
+
+Finally, we address system integration concerns such as policy enforcement, auditability, data governance, and safe rollout strategies. Attendees will leave with a concrete mental model for architecting agents as composable, governable systems rather than monolithic LLM calls, along with actionable guidance on building evaluation-first workflows that enable continuous improvement and safe scaling.
+
+This talk is designed for engineering and platform teams tasked with turning AI agents into dependable, enterprise-grade systems.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Read more</a></div>
+              
             </div>
           </div>
 
@@ -779,11 +841,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">We’re Giving AI Agents Too Much Power</a>
               </h3>
               <div class="location mb-3">Civic</div>
-              <div class="desc">AI agents can now run workflows, access tools, and make decisions across real systems. Projects like OpenClaw show how fast autonomous agents are evolving. But in the rush to make agents more capable, we’ve skipped an important question: what should they actually be allowed to do? This talk... <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">AI agents can now run workflows, access tools, and make decisions across real systems. Projects like OpenClaw show how fast autonomous agents are evolving. But in the rush to make agents more capable, we’ve skipped an important question: what should they actually be allowed to do? This talk explores why guardrails are becoming essential infrastructure for AI, and how teams can safely give agents access to real tools without losing control.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Read more</a></div>
+              
             </div>
           </div>
 
@@ -796,11 +860,16 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Building Production Multi-Agent Systems: Memory, Orchestration & Evaluation at Scale</a>
               </h3>
               <div class="location mb-3">Adobe</div>
-              <div class="desc">Most multi-agent demos look impressive, but production systems often fail – not because of model quality, but due to orchestration, context handling, tool access, and evaluation. This talk presents a real-world multi-agent system for enterprise B2B marketing, including transparent agent routing,... <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Most multi-agent demos look impressive, but production systems often fail – not because of model quality, but due to orchestration, context handling, tool access, and evaluation.
+This talk presents a real-world multi-agent system for enterprise B2B marketing, including transparent agent routing, multi-level memory (session, user, org), and two key workflows: plan-and-execute and discover-and-create. It also shows how the Model Context Protocol (MCP) standardizes tool access and reduces integration complexity.
+A core focus is evaluation: even high-performing agents can fail together due to cascading errors. A composable evaluation framework and the “compositionality gap” are introduced to diagnose system performance.
+Finally, lessons on building teams are shared – emphasizing hybrid ML-engineering roles, cross-functional evaluation, and embedding trust and governance from the start.<a class="schedule-abstract-read-more" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Read more</a></div>
+              
             </div>
           </div>
 
@@ -813,11 +882,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">AI Powered Developer Productivity in Enterprise LLM Driven Engineering</a>
               </h3>
               <div class="location mb-3">Adobe</div>
-              <div class="desc">Enterprise web development has expanded rapidly with the adoption of microservices architectures, cloud native infrastructure, API driven ecosystems, and distributed data platforms. Large organizations now operate hundreds of services, thousands of APIs, and complex CI/CD pipelines across multi... <a href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Enterprise web development has expanded rapidly with the adoption of microservices architectures, cloud native infrastructure, API driven ecosystems, and distributed data platforms. Large organizations now operate hundreds of services, thousands of APIs, and complex CI/CD pipelines across multi cloud environments. While these architectures enable scalability and rapid innovation, they also create significant cognitive load for engineering teams who must navigate extensive documentation, service dependencies, compliance requirements, and evolving architectural standards. This session explores how large language models and AI systems are becoming practical productivity accelerators in modern enterprise development workflows. The talk first examines AI driven knowledge systems that unify fragmented technical documentation across code repositories, architecture diagrams, ticketing platforms, and internal knowledge bases. Through semantic search and retrieval augmented generation, engineers can interact with institutional knowledge conversationally and retrieve contextual insights from distributed sources, reducing the time spent locating critical technical information. The presentation then discusses AI assisted development environments where intelligent coding tools support engineers by generating service scaffolding, validating API contracts, recommending refactoring strategies, and identifying potential security issues. These capabilities help automate repetitive development tasks such as boilerplate generation, syntax corrections, and dependency analysis. The session also highlights AI enabled testing and developer onboarding systems that analyze historical defect patterns and architectural documentation to guide testing strategies and accelerate knowledge transfer. Together, these capabilities demonstrate how human AI collaboration can improve developer productivity while maintaining engineering oversight in large scale enterprise platforms.<a class="schedule-abstract-read-more" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">Read more</a></div>
+              
             </div>
           </div>
 
@@ -830,11 +901,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Human-in-the-Loop UI Design for Generative AI Systems</a>
               </h3>
               <div class="location mb-3">Local Backhaul Networks</div>
-              <div class="desc">Generative AI and large language models are rapidly transforming how enterprise user interfaces are conceived, prototyped, and refined. While these systems accelerate exploration and automate repetitive design tasks, they also introduce new challenges in preserving human judgment, design intent,... <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Generative AI and large language models are rapidly transforming how enterprise user interfaces are conceived, prototyped, and refined. While these systems accelerate exploration and automate repetitive design tasks, they also introduce new challenges in preserving human judgment, design intent, and organizational brand consistency. This session examines emerging human-in-the-loop frameworks that position LLMs as collaborators rather than replacements for expert designers. Drawing on real-world enterprise UX patterns, the talk outlines how AI-generated outputs can be systematically evaluated to maintain usability, accessibility, and human-centered design principles. It highlights approaches to ensuring that generative variations remain aligned with brand guidelines, interaction models, and product standards—especially in regulated or high-stakes environments. The session further explores workflow models for integrating generative AI into UI design processes, including collaborative review loops, intent-preserving prompt strategies, and safeguards against drift in accessibility or experience coherence. By comparing the strengths of human intuition with the scale and speed of LLM-driven systems, attendees will gain clarity on where AI meaningfully accelerates design iteration—and where human oversight remains essential.<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Read more</a></div>
+              
             </div>
           </div>
 
@@ -847,11 +920,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Wrap up</a>
-              </h3>
-              <div class="location mb-3">Scan each other's QR codes & head to a nearby pub!</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Wrap up</h3>
+              <div class="location mb-3" style="color:#26986A;">Scan each other's QR codes & head to a nearby pub!</div>
+              
             </div>
           </div>
 
@@ -871,11 +943,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Coffee break</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Coffee break</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -888,11 +959,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">The Case for Making Your (Business) Case</a>
               </h3>
               <div class="location mb-3">Cribl</div>
-              <div class="desc">A famous saying teaches "...projects don't fail due to technology. They fail due to politics, budget, or compliance." Despite this painful reality, IT teams continue to propose new technologies, tools, and projects almost entirely on the basis of the technical merits; only for us to be frustrated... <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">A famous saying teaches "...projects don't fail due to technology. They fail due to politics, budget, or compliance." Despite this painful reality, IT teams continue to propose new technologies, tools, and projects almost entirely on the basis of the technical merits; only for us to be frustrated when we're refused because of those 3 non-technical elements. In addition to the challenge of explaining deeply complex technical elements in simple terms, making the case to the business requires IT folks learn about and speak to concepts like business justifications, RFP's, ROI, and more - which many of us are loath to do. But the hard truth is this: if a request isn't made understandable and meaningful to business leaders, it's not going to get done. In this talk, I'll elaborate on why the business continues to ignore our compelling technical arguments, why IT practitioners need to be the ones to adapt, and how to present initiatives in a way the business will appreciate - all without compromising our identity as technical professionals in the process.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Read more</a></div>
+              
             </div>
           </div>
 
@@ -905,11 +978,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Semantic Condensation: Making High-Cardinality Time Series Usable for LLM-Driven Observability</a>
               </h3>
               <div class="location mb-3">Principal Software Engineer</div>
-              <div class="desc">Modern observability platforms produce massive volumes of high-cardinality time series data across thousands of entities, creating a poor fit for large language models. When raw telemetry is passed directly into an LLM, the result is often excessive token consumption, loss of critical signals... <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Modern observability platforms produce massive volumes of high-cardinality time series data across thousands of entities, creating a poor fit for large language models. When raw telemetry is passed directly into an LLM, the result is often excessive token consumption, loss of critical signals through truncation, and inconsistent analytical outputs that reduce troubleshooting reliability. This session introduces Semantic Condensation, a token-aware transformation layer that converts large-scale telemetry into structured, semantically coherent summaries designed for LLM consumption. The approach combines vectorized statistical pre-analysis, multi-signal importance scoring, adaptive token-budget tiering, and behavior-aware trend classification to preserve anomalies, change points, and operational patterns while minimizing representation cost. Rather than relying on traditional downsampling or aggregation alone, Semantic Condensation is designed specifically for LLM interpretability and semantic consistency. It helps ensure that summaries remain internally coherent, scales to thousands of time series under strict latency constraints, reduces token footprint by orders of magnitude, and improves downstream troubleshooting accuracy by as much as 25 percentage points in evaluated scenarios. Attendees will leave with practical strategies for building LLM-aligned telemetry pipelines, reducing contradictory outputs, and enabling scalable, production-grade AI observability assistants. More broadly, this talk presents a new abstraction layer for observability: semantically consistent, token-efficient representations that make reliable LLM-driven troubleshooting possible.<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Read more</a></div>
+              
             </div>
           </div>
 
@@ -922,11 +997,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">One GPU to Rule Them All</a>
               </h3>
               <div class="location mb-3">MLOps Lead</div>
-              <div class="desc">Thirteen CPU servers. One percent utilization. $2,500 a month in cloud spend for an image classification pipeline that could barely keep up. This is the story of how we replaced an entire always-on CPU fleet with a GPU-first architecture and what we learned along the way. I'll cover the cost... <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Thirteen CPU servers. One percent utilization. $2,500 a month in cloud spend for an image classification pipeline that could barely keep up. This is the story of how we replaced an entire always-on CPU fleet with a GPU-first architecture and what we learned along the way. I'll cover the cost analysis that made the business case undeniable, the architectural design using KServe and Triton on GKE with separate node pools for real-time and batch inference, and the deployment strategy that eliminated cold starts during business hours while scaling to zero overnight. You'll leave with a repeatable framework for evaluating whether your own inference workloads are candidates for GPU migration, and concrete numbers showing that faster doesn't have to mean more expensive.<a class="schedule-abstract-read-more" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">Read more</a></div>
+              
             </div>
           </div>
 
@@ -939,11 +1016,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Agentic AI in Production: Debugging and Fixing Pipelines with LangSmith</a>
               </h3>
               <div class="location mb-3">Qualitest</div>
-              <div class="desc">Agentic pipelines break in production, quietly, and in ways that are hard to catch. This talk skips the theory and gets straight to it: what actually fails, why it's tricky to debug, and how to fix it fast. We'll use the Anthropic API and LangSmith to trace real failure modes, wrong tool calls,... <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Agentic pipelines break in production, quietly, and in ways that are hard to catch. This talk skips the theory and gets straight to it: what actually fails, why it's tricky to debug, and how to fix it fast. We'll use the Anthropic API and LangSmith to trace real failure modes, wrong tool calls, context blowups, and agent loops, and I'll fix a broken agent live on stage so you can see the whole debugging workflow in action. You'll leave with patterns you can use the next day.<a class="schedule-abstract-read-more" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Read more</a></div>
+              
             </div>
           </div>
 
@@ -956,11 +1035,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Lunch & networking</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Lunch & networking</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -973,11 +1051,14 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Enabling Agents to Pay: Implementation Challenges of x402 in Production Systems</a>
               </h3>
               <div class="location mb-3">Apify</div>
-              <div class="desc">With payment protocols like x402, MPP, or KYAPay, agents can pay for and use services without accounts or subscriptions. In this talk, I'll walk you through the core concepts behind these protocols and showcase how we tackled some of the major implementation challenges. Giving agents the ability... <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">With payment protocols like x402, MPP, or KYAPay, agents can pay for and use services without accounts or subscriptions. In this talk, I'll walk you through the core concepts behind these protocols and showcase how we tackled some of the major implementation challenges.
+Giving agents the ability to pay on behalf of users is a huge step forward towards truly autonomous workflows, and this session will show you how it can be done.<a class="schedule-abstract-read-more" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Read more</a></div>
+              
             </div>
           </div>
 
@@ -990,11 +1071,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Adaptive Defenses for Agentic AI Pipelines</a>
               </h3>
               <div class="location mb-3">Ripple</div>
-              <div class="desc">As AI agents gain autonomy to chain tools, access live data, and execute multi-step workflows, they introduce an attack surface that traditional application security wasn’t built for — prompt injection cascades, tool-use hijacking, memory poisoning, and cross-agent privilege escalation. Static... <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">As AI agents gain autonomy to chain tools, access live data, and execute multi-step workflows, they introduce an attack surface that traditional application security wasn’t built for — prompt injection cascades, tool-use hijacking, memory poisoning, and cross-agent privilege escalation. Static guardrails and fixed policy rules can’t keep pace with adversaries who adapt in real time. This talk presents an adaptive security framework for agentic LLM systems that combines runtime threat detection, dynamic trust scoring, and self-healing policy enforcement to defend pipelines without sacrificing agent capability. Drawing from recent 2026 research on adversarial robustness in neural networks and LLMs, we’ll walk through how to build defense layers that learn from attack patterns and adjust isolation boundaries, tool permissions, and context windows on the fly. Attendees will leave with practical architectural patterns for implementing adaptive security in production agentic systems — moving beyond “block or allow” toward intelligent, continuous defense.<a class="schedule-abstract-read-more" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Read more</a></div>
+              
             </div>
           </div>
 
@@ -1007,11 +1090,17 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">Commerce Without Boundaries: Agentic AI Meets Universal Protocols</a>
               </h3>
               <div class="location mb-3">Walmart</div>
-              <div class="desc">As AI agents move from assistants to decision-makers, the architecture of commerce is fundamentally shifting. Static catalogs are giving way to dynamic, graph-driven systems, and APIs are evolving into interoperable protocols. The buying journey is no longer designed—it’s computed. This session... <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">As AI agents move from assistants to decision-makers, the architecture of commerce is fundamentally shifting.
+Static catalogs are giving way to dynamic, graph-driven systems, and APIs are evolving into interoperable protocols.
+The buying journey is no longer designed—it’s computed.
+This session explores how AI + universal protocols are redefining commerce—toward composable, context-aware, autonomous transactions.
+This isn’t an incremental shift—it’s a rewiring of how the world buys.<a class="schedule-abstract-read-more" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">Read more</a></div>
+              
             </div>
           </div>
 
@@ -1024,11 +1113,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Standardizing First-Class Identity for Autonomous AI Agents</a>
               </h3>
               <div class="location mb-3">Senior Staff Engineer</div>
-              <div class="desc">The rapid proliferation of goal-oriented, autonomous AI agents has fundamentally disrupted traditional identity management paradigms. In high-compliance sectors such as FinTech and Healthcare, AI agents are increasingly authorized to execute sensitive transactions and retrieve protected health... <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">The rapid proliferation of goal-oriented, autonomous AI agents has fundamentally disrupted traditional identity management paradigms. In high-compliance sectors such as FinTech and Healthcare, AI agents are increasingly authorized to execute sensitive transactions and retrieve protected health information (PHI) with minimal human intervention. However, current security infrastructures lack a standardized “first-class identity” for these entities, relying instead on legacy patterns like Implicit Context Inheritance or Long-Lived Service Tokens. These anti-patterns violate the Principle of Least Privilege (PoLP), leading to unmanageable security impact scopes. This paper investigates the necessity of transitioning to a dynamic, identity-centric Attribute-Based Access Control (ABAC) model. Through a 12-month architectural audit of N > 100 agents, we demonstrate that a First-Class Identity framework effectively decouples agent authority from broad user sessions.<a class="schedule-abstract-read-more" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Read more</a></div>
+              
             </div>
           </div>
 
@@ -1041,11 +1132,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Networking & sponsor crawl</a>
-              </h3>
-              <div class="location mb-3">Main lobby</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Networking & sponsor crawl</h3>
+              <div class="location mb-3" style="color:#26986A;">Main lobby</div>
+              
             </div>
           </div>
 
@@ -1058,11 +1148,17 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Your Agent Doesn't Need More Evals. It Needs an Environment.</a>
               </h3>
               <div class="location mb-3">Brevian</div>
-              <div class="desc">Since the "DeepSeek moment," the frontier labs have quietly shifted how they train agents — away from human feedback and toward RL environments with automated, verifiable rewards. The same pattern is now reaching application teams, and most of us haven't caught up. This talk is a hands-on... <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Since the "DeepSeek moment," the frontier labs have quietly shifted how they train agents — away from human feedback and toward RL environments with automated, verifiable rewards. The same pattern is now reaching application teams, and most of us haven't caught up.
+
+This talk is a hands-on introduction to RL environments for LLM agents. We'll cover what they are, why they make eval suites look primitive by comparison, and the core components you need to build one. Then we'll build a working environment for a multi-step agent — verifiable rewards, real episodes, and a feedback loop that lets the agent improve itself between runs without any fine-tuning.
+
+The same 200 lines that grade your agent can also teach it.<a class="schedule-abstract-read-more" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Read more</a></div>
+              
             </div>
           </div>
 
@@ -1075,11 +1171,15 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Unlocking Clinical Data with AI: The Rise of LCLMs</a>
               </h3>
               <div class="location mb-3">AI and Data Science Advisor</div>
-              <div class="desc">Modern clinics generate vast amounts of data, from biomarker tests and imaging to functional assessments and patient symptom profiles, yet much of it remains underutilized. This talk explores how Large Clinical Language Models (LCLMs) can transform fragmented clinical data into structured,... <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Modern clinics generate vast amounts of data, from biomarker tests and imaging to functional assessments and patient symptom profiles, yet much of it remains underutilized. This talk explores how Large Clinical Language Models (LCLMs) can transform fragmented clinical data into structured, actionable intelligence.
+
+By integrating diverse clinical signals, LCLMs enable comprehensive patient representations and deliver insights directly at the point of care. Drawing from real-world deployments, we highlight how AI can augment clinician decision-making and unlock the full value of clinical data for more personalized, precise care.<a class="schedule-abstract-read-more" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Read more</a></div>
+              
             </div>
           </div>
 
@@ -1092,11 +1192,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">AI That Makes AI Faster</a>
               </h3>
               <div class="location mb-3">Wafer</div>
-              <div class="desc">Every LLM inference call runs through GPU kernels that are rarely optimized for the hardware they're running on — and that hidden inefficiency costs the industry billions. At Wafer, we build autonomous AI agents that optimize these kernels across hardware platforms. In this talk, I'll walk... <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Every LLM inference call runs through GPU kernels that are rarely optimized for the hardware they're running on — and that hidden inefficiency costs the industry billions. At Wafer, we build autonomous AI agents that optimize these kernels across hardware platforms. In this talk, I'll walk through what it actually looks like when AI operates at the compiler and kernel layer: how our agents discover optimization opportunities that humans miss, the real results we've shipped, and why we believe autonomous performance engineering is the key to making intelligence radically cheaper and more energy-efficient.<a class="schedule-abstract-read-more" href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">Read more</a></div>
+              
             </div>
           </div>
 
@@ -1109,11 +1211,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26">Digital PMOs for Retail: Transparent Governance with Jira–Confluence</a>
               </h3>
               <div class="location mb-3">Walmart Global Tech</div>
-              <div class="desc">Retail IT portfolios that support e-commerce, supply chain, and in-store technologies often struggle under traditional PMO models. Status tracking spread across spreadsheets, limited visibility into dependencies, and inconsistent governance controls make it difficult for leaders to obtain a... <a href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Retail IT portfolios that support e-commerce, supply chain, and in-store technologies often struggle under traditional PMO models. Status tracking spread across spreadsheets, limited visibility into dependencies, and inconsistent governance controls make it difficult for leaders to obtain a reliable view of portfolio performance. These gaps slow decision making and weaken oversight across complex technology programs. This session presents a Digital PMO framework designed to improve transparency and governance through the integration of Jira and Confluence. The framework brings together concepts from PMO and IT governance research into a practical operating model that connects strategy with delivery execution. Strategic themes, initiatives, OKRs, epics, delivery telemetry, risk indicators, and executive reporting are unified within a shared system of record that enables consistent monitoring and portfolio level insight. A retail case study demonstrates the framework in practice within an Automotive Care Center technology portfolio involving more than 20 cross-functional teams and approximately 50 initiatives per quarter over a six-month period. Results included a 30 percent reduction in PMO effort within six months and an additional 30 percent reduction by month twelve, while program management roles decreased from eight to three. Stakeholders also reported improved transparency, faster trade-off decisions, and greater confidence in real-time portfolio reporting. Attendees will learn how integrated tooling, standardized governance templates, centralized intake processes, and portfolio dashboards can support auditability, improve delivery visibility, and strengthen governance across large retail technology programs.<a class="schedule-abstract-read-more" href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26">Read more</a></div>
+              
             </div>
           </div>
 
@@ -1126,11 +1230,13 @@
               </div>
             </div>
             <div class="content">
+              
               <h3 class="title mb-3">
                 <a class="theme-link" href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27">The Infrastructure of AI: How SmartNICs and RDMA Power the Cloud</a>
               </h3>
               <div class="location mb-3">Google</div>
-              <div class="desc">Training modern Large Language Models (LLMs) requires tens of thousands of accelerators acting as a single "AI Supercomputer." To build this infrastructure, we must first address the CPU bottlenecks of traditional general-purpose networking. This talk analyzes why standard TCP/IP processing... <a href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              <div class="desc schedule-abstract">Training modern Large Language Models (LLMs) requires tens of thousands of accelerators acting as a single "AI Supercomputer." To build this infrastructure, we must first address the CPU bottlenecks of traditional general-purpose networking. This talk analyzes why standard TCP/IP processing limits training performance and introduces the role of "Kernel Bypass" and SmartNICs in offloading network processing from the host CPU. We will explore the transition toward hardware offloads like RDMA to achieve the throughput and nanosecond-latency required for accelerator-to-accelerator communication. The session concludes with the architectural challenges of running lossless transport over lossy Ethernet and the design patterns required to ensure reliable delivery in massive hyperscale environments.<a class="schedule-abstract-read-more" href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27">Read more</a></div>
+              
             </div>
           </div>
 
@@ -1143,11 +1249,10 @@
               </div>
             </div>
             <div class="content">
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-">Wrap up</a>
-              </h3>
-              <div class="location mb-3">Scan each other's QR codes & head to a nearby pub!</div>
-              <div class="desc"> <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-" style="font-weight:700;color:#26986A;text-decoration:underline;cursor:pointer;">Read more</a></div>
+              
+              <h3 class="title mb-3" style="color:#26986A;">Wrap up</h3>
+              <div class="location mb-3" style="color:#26986A;">Scan each other's QR codes & head to a nearby pub!</div>
+              
             </div>
           </div>
 
@@ -1945,7 +2050,9 @@
     }
     </script>
 
-    <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="https://luma.com/sre" target="_blank" rel="noopener" class="btn btn-secondary btn-lg d-block d-md-inline-block">Other LLMday conferences</a></div>
+    
   </div>
 </section>
 
