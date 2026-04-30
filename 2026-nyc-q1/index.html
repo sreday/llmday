@@ -232,7 +232,107 @@
   <div class="container">
     <div class="event-countdown text-center mb-3">
     
-      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished</h4>
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished, what's next?</h4>
+      
+      <style>
+        .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: #b6dfc9; z-index: 0; }
+        .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+        .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #26986A; border: 2px solid #fff; outline: 2px solid #26986A; margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
+        .idx-tl-dot.past { background: #999; outline-color: #999; }
+        .idx-tl-chip { background: #e8f7ef; border: 1px solid #b6dfc9; border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; }
+        .idx-tl-chip:hover { background: #d4f0e2; text-decoration: none; }
+        .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
+        .idx-tl-chip.past:hover { background: #d8d8d8; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: #1a5c3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .idx-tl-chip.past .idx-tl-city { color: #555; }
+        .idx-tl-date { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
+        .idx-tl-chip.past .idx-tl-date { color: #777; }
+        .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
+      </style>
+      <div class="idx-tl">
+        <div class="idx-tl-line"></div>
+        <div class="idx-tl-events">
+          
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-warsaw-q1/" class="idx-tl-chip past">
+              <div class="idx-tl-city">Warsaw</div>
+              <div class="idx-tl-date" style="font-style:normal;">Poland</div>
+              <div class="idx-tl-date">February 12, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-nyc-q1/" class="idx-tl-chip past">
+              <div class="idx-tl-city">NYC</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">March 6, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-san-francisco-q2/" class="idx-tl-chip past">
+              <div class="idx-tl-city">San Francisco</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">April 16, 2026</div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="idx-tl-pin-event"><div class="idx-tl-pin">▼</div></div>
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-austin-q2/" class="idx-tl-chip">
+              <div class="idx-tl-city">Austin</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">May 12, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-london-q2/" class="idx-tl-chip">
+              <div class="idx-tl-city">London</div>
+              <div class="idx-tl-date" style="font-style:normal;">United Kingdom</div>
+              <div class="idx-tl-date">May 28, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-nyc-q2/" class="idx-tl-chip">
+              <div class="idx-tl-city">NYC</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">June 4, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-hamburg-q2/" class="idx-tl-chip">
+              <div class="idx-tl-city">Hamburg</div>
+              <div class="idx-tl-date" style="font-style:normal;">Germany</div>
+              <div class="idx-tl-date">June 18, 2026</div>
+            </a>
+          </div>
+          
+        </div>
+      </div>
+      
     
     </div>
   </div>
@@ -347,7 +447,7 @@
   }
   .schedule-abstract {
     position: relative;
-    max-height: 4.8em;
+    max-height: 3.2em;
     line-height: 1.6;
     overflow: hidden;
     text-align: justify;
@@ -356,17 +456,11 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    padding-left: 2em;
-    background: linear-gradient(to right, transparent, #e8f8f0 40%);
+    padding-left: 3em;
+    background: linear-gradient(to right, transparent, #e8f8f0 30%);
     font-weight: 700;
     color: #26986A;
     text-decoration: underline;
-  }
-  .schedule-section .item .meta .time {
-    color: #26986A;
-  }
-  .schedule-section .item:after {
-    border-color: #26986A;
   }
 </style>
 
@@ -569,7 +663,7 @@
                 <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Welcome message</a>
               </h3>
               <div class="location mb-3">LLMday</div>
-              <div class="desc schedule-abstract">Hello everyone, let us walk you through the day!<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Read more</a></div>
+              <div class="desc schedule-abstract">Hello everyone, let us walk you through the day!<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
               
             </div>
           </div>
@@ -593,7 +687,7 @@ Turning user feedback into signal: Users complain, report issues, and express fr
 Measuring subtle failures: Some problems are easy to benchmark; others are felt more than measured. "Laziness," overconfidence, and instruction-following failures don't show up in traditional evals. I'll share frameworks for detecting these behavioral issues through automated assessment pipelines.
 The evaluation bottleneck: In my experience, evaluation infrastructure often becomes the limiting factor for model improvement. I'll discuss why building robust eval systems deserves as much engineering investment as the models themselves, and what that looks like in practice.
 Multi-agent architectures and new challenges: As coding agents become more autonomous and collaborative, evaluation gets harder. How do you assess a swarm? What metrics matter when agents coordinate on complex tasks?
-Closing the loop: Connecting evaluation back to training through RL and human feedback pipelines—what works, what doesn't, and where the field is heading.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Read more</a></div>
+Closing the loop: Connecting evaluation back to training through RL and human feedback pipelines—what works, what doesn't, and where the field is heading.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
               
             </div>
           </div>
@@ -630,7 +724,7 @@ Closing the loop: Connecting evaluation back to training through RL and human fe
               <div class="location mb-3">MetalBear</div>
               <div class="desc schedule-abstract">Most people aren't vibe coding an entire app from scratch and shipping it to production without a second thought. What’s more likely to happen is more subtle and potentially riskier. You've got a pre-existing service running in your cluster, it's been reviewed, it has access to your database, your secrets, your internal APIs. Then someone asks an AI assistant to add a feature. The generated code works, great! But, it also hardcodes an API key, or passes raw model output to users, or creates a public ingress to an internal service. And it lands inside a system that already has the keys to everything. The recent [Moltbook incident](https://www.wiz.io/blog/exposed-moltbook-database-reveals-millions-of-api-keys) made these blaring security concerns around AI generated code blaringly apparent, a single missing config exposed 1.5 million API keys. At a certain point AI-generated code will make its way into Kubernetes clusters and the security implications are real, are we ready to address them?
 
-In this talk we'll break down the specific risks that AI-generated code introduces when it lands in Kubernetes, from pod security and secret management to network exposure and LLM workloads. Then we'll build the fix: open-source security skills you drop into your AI coding assistant so it generates secure defaults automatically. We'll validate those skills against a live cluster using mirrord, no image rebuilds, no redeploys, just fast feedback until the policies actually work. You'll leave with a repo you can use today and an answer to the question every team shipping AI-generated code needs to figure out: if AI writes the code, what reviews it?<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Read more</a></div>
+In this talk we'll break down the specific risks that AI-generated code introduces when it lands in Kubernetes, from pod security and secret management to network exposure and LLM workloads. Then we'll build the fix: open-source security skills you drop into your AI coding assistant so it generates secure defaults automatically. We'll validate those skills against a live cluster using mirrord, no image rebuilds, no redeploys, just fast feedback until the policies actually work. You'll leave with a repo you can use today and an answer to the question every team shipping AI-generated code needs to figure out: if AI writes the code, what reviews it?<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
               
             </div>
           </div>
@@ -655,7 +749,7 @@ The two current problems are that there's no way to secure the traffic (e.g, rea
 
 Luckily, there are two open-source tools to help with this.
 
-In this session, you'll learn about two tools that can help you on this journey: agentgateway and kagent.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Read more</a></div>
+In this session, you'll learn about two tools that can help you on this journey: agentgateway and kagent.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
               
             </div>
           </div>
@@ -674,7 +768,7 @@ In this session, you'll learn about two tools that can help you on this journey:
                 <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">From TrafficAI to GhostBreakers: Building Stateful AI Agents with Cortex, OpenFlow, and Snowflake Postgres</a>
               </h3>
               <div class="location mb-3">Snowflake</div>
-              <div class="desc schedule-abstract">Generative AI is more than stateless chatbots. Real value lies in stateful, production-grade agents that act on your data. This session is a developer's blueprint for building these agents natively in Snowflake.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Read more</a></div>
+              <div class="desc schedule-abstract">Generative AI is more than stateless chatbots. Real value lies in stateful, production-grade agents that act on your data. This session is a developer's blueprint for building these agents natively in Snowflake.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
               
             </div>
           </div>
@@ -693,7 +787,7 @@ In this session, you'll learn about two tools that can help you on this journey:
                 <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Don't Panic: It's Not Just You - LLM Trace Sampling Doesn't Work</a>
               </h3>
               <div class="location mb-3">groundcover</div>
-              <div class="desc schedule-abstract">Traditional distributed tracing relies on sampling strategies optimized for microservices: keep slow traces, keep error traces, and drop the rest. This approach fundamentally breaks down for LLM-powered systems. In LLM traces, latency & error signals are often meaningless: long latencies are expected, short latencies can still hide severe quality failures, and “errors” rarely correspond to the user-facing outcome. The true signal lies in the semantic content of the trace itself - prompts, intermediate reasoning steps, tool calls, and model outputs. As a result, conventional head-based or tail-based sampling systematically discards the most important traces while retaining large volumes of low-value data. This talk will show that effective observability for LLM systems requires a shift from signal-based sampling to content-aware sampling. The only viable way to sample intelligently is to run evaluations directly on span contents, scoring traces by quality, safety, correctness, and alignment with task intent. We explore how eval-driven sampling reframes tracing from performance diagnostics to outcome diagnostics, and why it is essential for operating LLM systems reliably at scale.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Read more</a></div>
+              <div class="desc schedule-abstract">Traditional distributed tracing relies on sampling strategies optimized for microservices: keep slow traces, keep error traces, and drop the rest. This approach fundamentally breaks down for LLM-powered systems. In LLM traces, latency & error signals are often meaningless: long latencies are expected, short latencies can still hide severe quality failures, and “errors” rarely correspond to the user-facing outcome. The true signal lies in the semantic content of the trace itself - prompts, intermediate reasoning steps, tool calls, and model outputs. As a result, conventional head-based or tail-based sampling systematically discards the most important traces while retaining large volumes of low-value data. This talk will show that effective observability for LLM systems requires a shift from signal-based sampling to content-aware sampling. The only viable way to sample intelligently is to run evaluations directly on span contents, scoring traces by quality, safety, correctness, and alignment with task intent. We explore how eval-driven sampling reframes tracing from performance diagnostics to outcome diagnostics, and why it is essential for operating LLM systems reliably at scale.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
               
             </div>
           </div>
@@ -728,7 +822,7 @@ In this session, you'll learn about two tools that can help you on this journey:
                 <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Exploring the Convergence of Machine Learning, AI, and Cloud-Native Technologies in Automation</a>
               </h3>
               <div class="location mb-3">Veritas Automata</div>
-              <div class="desc schedule-abstract">Harnessing the power of Machine Learning (ML), Artificial Intelligence (AI), and cloud-native technologies is no longer optional; it's a necessity for driving scalable automation and innovation.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Read more</a></div>
+              <div class="desc schedule-abstract">Harnessing the power of Machine Learning (ML), Artificial Intelligence (AI), and cloud-native technologies is no longer optional; it's a necessity for driving scalable automation and innovation.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
               
             </div>
           </div>
@@ -753,7 +847,7 @@ In this session, you'll learn about two tools that can help you on this journey:
 - Multi-tenant Resource Optimization: Transitioning to shared platforms where AI workloads coexist while maintaining service-level agreements.
 - Federated Learning and Privacy: Shifting from centralized training to federated approaches preserving privacy across distributed networks.
 
-The goal is sharing a roadmap for AI-native infrastructure where intelligence lives at the network edge.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Read more</a></div>
+The goal is sharing a roadmap for AI-native infrastructure where intelligence lives at the network edge.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
               
             </div>
           </div>
@@ -772,7 +866,7 @@ The goal is sharing a roadmap for AI-native infrastructure where intelligence li
                 <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">10 Lessons from building High-Stakes Agents</a>
               </h3>
               <div class="location mb-3">AWS</div>
-              <div class="desc schedule-abstract">Moving Generative AI from proof-of-concept to production in high-stakes industries like Fintech and Healthcare requires a fundamental strategic shift. Drawing from real-world deployments at the AWS GenAI Innovation Center, this session explores ten critical lessons learned building autonomous agents for complex use cases. We will dive into "Model as a Judge" evaluation frameworks, architectural trade-offs between rigid pipelines and flexible agents, and why hallucinations are essential signals for system optimization. Attendees will receive a framework for prioritizing accuracy, building auditable reasoning chains, and creating internal feedback loops for self-improving deployments.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Read more</a></div>
+              <div class="desc schedule-abstract">Moving Generative AI from proof-of-concept to production in high-stakes industries like Fintech and Healthcare requires a fundamental strategic shift. Drawing from real-world deployments at the AWS GenAI Innovation Center, this session explores ten critical lessons learned building autonomous agents for complex use cases. We will dive into "Model as a Judge" evaluation frameworks, architectural trade-offs between rigid pipelines and flexible agents, and why hallucinations are essential signals for system optimization. Attendees will receive a framework for prioritizing accuracy, building auditable reasoning chains, and creating internal feedback loops for self-improving deployments.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
               
             </div>
           </div>
@@ -791,7 +885,7 @@ The goal is sharing a roadmap for AI-native infrastructure where intelligence li
                 <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Engineering Better Prompts for AI Assisted Development</a>
               </h3>
               <div class="location mb-3">Fearless</div>
-              <div class="desc schedule-abstract">When asking AI to help refactor a method, do you get back something that runs, but would never pass review? The difference between frustrating and useful AI interactions comes down to how you build your prompt. This talk offers practical advice you can apply to get better results.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Read more</a></div>
+              <div class="desc schedule-abstract">When asking AI to help refactor a method, do you get back something that runs, but would never pass review? The difference between frustrating and useful AI interactions comes down to how you build your prompt. This talk offers practical advice you can apply to get better results.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
               
             </div>
           </div>
@@ -812,7 +906,7 @@ The goal is sharing a roadmap for AI-native infrastructure where intelligence li
               <div class="location mb-3">Redis</div>
               <div class="desc schedule-abstract">As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.
 
-This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Read more</a></div>
+This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
               
             </div>
           </div>
@@ -839,7 +933,7 @@ We will explore critical lessons learned from real world use cases and experimen
 
 We will also discuss why treating AI as a confident intern rather than a senior engineer is essential for maintaining production grade standards.
 
-Crucially, this talk addresses how leaders should measure value in an AI native era. We move beyond gameable traditional metrics like lines of code or code accepted, which fail to reflect true business outcomes. Instead, we present a framework focused on inception to operation speed and predictability, demonstrating how AI-DLC rituals such as Inception, Mob Elaboration, and Mob Construction drive measurable results.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Read more</a></div>
+Crucially, this talk addresses how leaders should measure value in an AI native era. We move beyond gameable traditional metrics like lines of code or code accepted, which fail to reflect true business outcomes. Instead, we present a framework focused on inception to operation speed and predictability, demonstrating how AI-DLC rituals such as Inception, Mob Elaboration, and Mob Construction drive measurable results.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
               
             </div>
           </div>
@@ -858,7 +952,7 @@ Crucially, this talk addresses how leaders should measure value in an AI native 
                 <a class="theme-link" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Multi-Agent Architectures: Solving Production LLM Reliability at Scale</a>
               </h3>
               <div class="location mb-3">New Jersey Institute of Technology </div>
-              <div class="desc schedule-abstract">Production LLM systems face impossible tradeoffs: latency vs accuracy, cost vs quality, speed vs reliability. I'll demonstrate how multi-agent architectures with LLM-as-Judge patterns solve these challenges through live examples, showing how task decomposition and peer review eliminate production bottlenecks while driving errors to near-zero. Attendees will see practical patterns they can implement immediately.<a class="schedule-abstract-read-more" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Read more</a></div>
+              <div class="desc schedule-abstract">Production LLM systems face impossible tradeoffs: latency vs accuracy, cost vs quality, speed vs reliability. I'll demonstrate how multi-agent architectures with LLM-as-Judge patterns solve these challenges through live examples, showing how task decomposition and peer review eliminate production bottlenecks while driving errors to near-zero. Attendees will see practical patterns they can implement immediately.<a class="schedule-abstract-read-more" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">... Read more</a></div>
               
             </div>
           </div>
@@ -881,7 +975,7 @@ Crucially, this talk addresses how leaders should measure value in an AI native 
 
 I will outline a structured approach to supervised fine‑tuning (SFT) for voice-driven use cases, including dataset design strategies that capture conversational latency patterns, prosody-driven intent, and the ambiguities inherent in spoken queries. The session will also address real evaluation challenges: how to measure dialog quality, naturalness, grounding, and long‑horizon task execution when traditional text benchmarks fall short. Particular attention will be given to diagnosing and reducing hallucinations in consumer contexts, where incorrect answers can undermine trust, cause user frustration, or trigger unintended physical-world actions.
 
-Attendees will leave with a clear picture of what it takes to adapt an LLM into a dependable, voice‑native system—from fine‑tuning workflows and guardrail construction to continuous evaluation loops informed by real user behavior. This talk aims to provide a practical roadmap for teams building the next generation of on‑device and cloud‑connected voice experiences.<a class="schedule-abstract-read-more" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">Read more</a></div>
+Attendees will leave with a clear picture of what it takes to adapt an LLM into a dependable, voice‑native system—from fine‑tuning workflows and guardrail construction to continuous evaluation loops informed by real user behavior. This talk aims to provide a practical roadmap for teams building the next generation of on‑device and cloud‑connected voice experiences.<a class="schedule-abstract-read-more" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">... Read more</a></div>
               
             </div>
           </div>
@@ -1741,7 +1835,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
       
 
     </div><!--//row-->
-    <div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>
+    
   </div><!--//container-->
 
 </section><!--//speakers-section-->
@@ -1796,7 +1890,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
       <div class="logo-item col-6 col-md-4 col-lg-2"><a href="https://www.hockeystick.show" target="_blank"><img src="../sponsors/hockeystick.png" alt=""></a></div>
       
     </div><!--//row-->
-    <div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="mailto:hello@llmday.com">Become A Sponsor</a></div>
+    
   </div><!--//container-->
 </section><!--//sponsors-section-->
 

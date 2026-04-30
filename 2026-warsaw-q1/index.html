@@ -232,7 +232,107 @@
   <div class="container">
     <div class="event-countdown text-center mb-3">
     
-      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished</h4>
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished, what's next?</h4>
+      
+      <style>
+        .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: #b6dfc9; z-index: 0; }
+        .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+        .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #26986A; border: 2px solid #fff; outline: 2px solid #26986A; margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
+        .idx-tl-dot.past { background: #999; outline-color: #999; }
+        .idx-tl-chip { background: #e8f7ef; border: 1px solid #b6dfc9; border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; }
+        .idx-tl-chip:hover { background: #d4f0e2; text-decoration: none; }
+        .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
+        .idx-tl-chip.past:hover { background: #d8d8d8; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: #1a5c3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .idx-tl-chip.past .idx-tl-city { color: #555; }
+        .idx-tl-date { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
+        .idx-tl-chip.past .idx-tl-date { color: #777; }
+        .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
+      </style>
+      <div class="idx-tl">
+        <div class="idx-tl-line"></div>
+        <div class="idx-tl-events">
+          
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-warsaw-q1/" class="idx-tl-chip past">
+              <div class="idx-tl-city">Warsaw</div>
+              <div class="idx-tl-date" style="font-style:normal;">Poland</div>
+              <div class="idx-tl-date">February 12, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-nyc-q1/" class="idx-tl-chip past">
+              <div class="idx-tl-city">NYC</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">March 6, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-san-francisco-q2/" class="idx-tl-chip past">
+              <div class="idx-tl-city">San Francisco</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">April 16, 2026</div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="idx-tl-pin-event"><div class="idx-tl-pin">▼</div></div>
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-austin-q2/" class="idx-tl-chip">
+              <div class="idx-tl-city">Austin</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">May 12, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-london-q2/" class="idx-tl-chip">
+              <div class="idx-tl-city">London</div>
+              <div class="idx-tl-date" style="font-style:normal;">United Kingdom</div>
+              <div class="idx-tl-date">May 28, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-nyc-q2/" class="idx-tl-chip">
+              <div class="idx-tl-city">NYC</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">June 4, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-hamburg-q2/" class="idx-tl-chip">
+              <div class="idx-tl-city">Hamburg</div>
+              <div class="idx-tl-date" style="font-style:normal;">Germany</div>
+              <div class="idx-tl-date">June 18, 2026</div>
+            </a>
+          </div>
+          
+        </div>
+      </div>
+      
     
     </div>
   </div>
@@ -347,7 +447,7 @@
   }
   .schedule-abstract {
     position: relative;
-    max-height: 4.8em;
+    max-height: 3.2em;
     line-height: 1.6;
     overflow: hidden;
     text-align: justify;
@@ -356,17 +456,11 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    padding-left: 2em;
-    background: linear-gradient(to right, transparent, #e8f8f0 40%);
+    padding-left: 3em;
+    background: linear-gradient(to right, transparent, #e8f8f0 30%);
     font-weight: 700;
     color: #26986A;
     text-decoration: underline;
-  }
-  .schedule-section .item .meta .time {
-    color: #26986A;
-  }
-  .schedule-section .item:after {
-    border-color: #26986A;
   }
 </style>
 
@@ -577,7 +671,7 @@ In practice, many teams start with an LLM plus tools, keep layering on features,
 
 This talk explores the economics of architecture choices when building production AI agents. Drawing from experience building semantic search for billions of entities at Monday.com and integrating it into AI-driven products, it covers concrete architecture lessons that help control costs. Topics include using deterministic systems for predictable operations, building vector search for retrieval, and reserving LLM reasoning for cases that truly need it.
 
-Attendees will see real production examples, cost breakdowns, and decision frameworks for choosing the right tool for each problem. You do not have to choose between capability and cost, but you do need to be intentional about where you invest in reasoning versus where you rely on retrieval. These trade-offs become critical when scaling from prototype to product.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Read more</a></div>
+Attendees will see real production examples, cost breakdowns, and decision frameworks for choosing the right tool for each problem. You do not have to choose between capability and cost, but you do need to be intentional about where you invest in reasoning versus where you rely on retrieval. These trade-offs become critical when scaling from prototype to product.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
               
             </div>
           </div>
@@ -598,7 +692,7 @@ Attendees will see real production examples, cost breakdowns, and decision frame
               <div class="location mb-3">PostHog</div>
               <div class="desc schedule-abstract">There's always a gap between a great demo and a great product. Doubly true with AI agents. No wonder: the whole domain just appeared, keeps evolving at a crazy pace, and to make matters worse – the technology is fundamentally non-deterministic.
 At PostHog, we've spent the last year and a half building an agent for product research. Then rebuilding it once, twice, thrice, finally launching, and… rebuilding again.
-Don't go through this hell yourself. Instead, join me for this crash course on building an AI agent as a product. We'll get into easy mistakes (that we made), unobvious trends (that we're looking to ride), and business dilemmas (that the industry is facing).<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Read more</a></div>
+Don't go through this hell yourself. Instead, join me for this crash course on building an AI agent as a product. We'll get into easy mistakes (that we made), unobvious trends (that we're looking to ride), and business dilemmas (that the industry is facing).<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
               
             </div>
           </div>
@@ -633,7 +727,7 @@ Don't go through this hell yourself. Instead, join me for this crash course on b
                 <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">From Customer Interview to Working Prototype in One Afternoon (AI-Powered Product Building)</a>
               </h3>
               <div class="location mb-3">AI Product Heroes & GOG.com</div>
-              <div class="desc schedule-abstract">Most discovery processes optimize for documentation, not learning. We’ll show a different approach: the Superhero Formula applied with AI tooling. Live demo of interview transcription and analysis, insight synthesis in Miro AI, and rapid prototyping via Lovable. The goal isn’t speed—it’s building the judgment to know when the output is garbage and when it’s gold.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Read more</a></div>
+              <div class="desc schedule-abstract">Most discovery processes optimize for documentation, not learning. We’ll show a different approach: the Superhero Formula applied with AI tooling. Live demo of interview transcription and analysis, insight synthesis in Miro AI, and rapid prototyping via Lovable. The goal isn’t speed—it’s building the judgment to know when the output is garbage and when it’s gold.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
               
             </div>
           </div>
@@ -658,7 +752,7 @@ Next, I will show **emergent misalignment**—a striking example of generalizati
 Lastly, I will cover other examples of narrow to broad generalizations that arise during finetuning.
 The talk will mainly cover selected topics from the papers:
 > Betley, J., Tan, D., Warncke, N., Sztyber-Betley, A., Bao, X., Soto, M., ... & Evans, O. (2025). *Emergent Misalignment: Narrow finetuning can produce broadly misaligned LLMs.* arXiv preprint arXiv:2502.17424. (oral ICML 2025)
-> Cloud, A., Le, M., Chua, J., Betley, J., Sztyber-Betley, A., Hilton, J., ... & Evans, O. (2025). *Subliminal learning: Language models transmit behavioral traits via hidden signals in data.* arXiv preprint arXiv:2507.14805.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Read more</a></div>
+> Cloud, A., Le, M., Chua, J., Betley, J., Sztyber-Betley, A., Hilton, J., ... & Evans, O. (2025). *Subliminal learning: Language models transmit behavioral traits via hidden signals in data.* arXiv preprint arXiv:2507.14805.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
               
             </div>
           </div>
@@ -677,7 +771,7 @@ The talk will mainly cover selected topics from the papers:
                 <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">How We Evaluate Large Language Models</a>
               </h3>
               <div class="location mb-3">Tooploox</div>
-              <div class="desc schedule-abstract">Good evaluation helps understand what large language models really do. This talk gives a simple overview of how large language models are evaluated in practice. It looks at common open-source benchmarks and tools used to test model behaviour and capabilities. On top of that, recent research trends, common issues, and practical tips for real-world evaluation are covered.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Read more</a></div>
+              <div class="desc schedule-abstract">Good evaluation helps understand what large language models really do. This talk gives a simple overview of how large language models are evaluated in practice. It looks at common open-source benchmarks and tools used to test model behaviour and capabilities. On top of that, recent research trends, common issues, and practical tips for real-world evaluation are covered.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
               
             </div>
           </div>
@@ -702,7 +796,7 @@ In this session, we dive into the practical realities of deploying agentic syste
 
 From a technology perspective, the session will focus on Microsoft Foundry, the Microsoft Agent Framework, LangChain, and Azure platform services.
 
-This talk is tailored for solution architects, developers, product managers, and project managers seeking to deepen their understanding of the critical success factors in enterprise AI initiatives.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Read more</a></div>
+This talk is tailored for solution architects, developers, product managers, and project managers seeking to deepen their understanding of the critical success factors in enterprise AI initiatives.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
               
             </div>
           </div>
@@ -739,7 +833,7 @@ This talk is tailored for solution architects, developers, product managers, and
               <div class="location mb-3">EY LAW</div>
               <div class="desc schedule-abstract">Large language models bring unprecedented capabilities - reasoning, autonomy, multimodal processing, and real‑time adaptation. But these same features may place systems within the scope of the EU AI Act, triggering a set of concrete regulatory obligations. 
 
-In this talk, I will break down which specific capabilities matter most for classification under the Act and how they translate into compliance duties. I will also show how operational teams can map LLM behaviors to risk categories and controls without getting lost in legal abstractions. The goal is to give practitioners a practical lens for understanding “why this system qualifies” and “what exactly we must do next.”<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Read more</a></div>
+In this talk, I will break down which specific capabilities matter most for classification under the Act and how they translate into compliance duties. I will also show how operational teams can map LLM behaviors to risk categories and controls without getting lost in legal abstractions. The goal is to give practitioners a practical lens for understanding “why this system qualifies” and “what exactly we must do next.”<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
               
             </div>
           </div>
@@ -758,7 +852,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Building a Personal Biohacking Data Platform with Python: From Wearables to AI Insights</a>
               </h3>
               <div class="location mb-3">Software Mind</div>
-              <div class="desc schedule-abstract">Build your own biohacking data platform with Python! From ingesting wearable metrics (sleep, stress, workouts) to transforming data with Pandas & PySpark, and finally using BI/AI to “talk with your data” and uncover personal health insights.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Read more</a></div>
+              <div class="desc schedule-abstract">Build your own biohacking data platform with Python! From ingesting wearable metrics (sleep, stress, workouts) to transforming data with Pandas & PySpark, and finally using BI/AI to “talk with your data” and uncover personal health insights.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
               
             </div>
           </div>
@@ -777,7 +871,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">PRISM: Fixing GRPO for Real-World LLM Training</a>
               </h3>
               <div class="location mb-3">Genotic</div>
-              <div class="desc schedule-abstract">GRPO changed how we think about reinforcement learning for language models—but anyone who has used it in practice knows it comes with frustrating limitations. Unstable training runs, reward signals that collapse or fight each other, and poor credit assignment when your model needs to reason across multiple steps. PRISM takes the core ideas that made GRPO successful and fixes what was broken. It's a unified framework that brings stability to multi-objective training, letting you combine different reward signals—correctness, style, safety—without one overwhelming the others. I will explain a >1000 experiments how we build better GRPO for agents and long turn credit assignments. <a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Read more</a></div>
+              <div class="desc schedule-abstract">GRPO changed how we think about reinforcement learning for language models—but anyone who has used it in practice knows it comes with frustrating limitations. Unstable training runs, reward signals that collapse or fight each other, and poor credit assignment when your model needs to reason across multiple steps. PRISM takes the core ideas that made GRPO successful and fixes what was broken. It's a unified framework that brings stability to multi-objective training, letting you combine different reward signals—correctness, style, safety—without one overwhelming the others. I will explain a >1000 experiments how we build better GRPO for agents and long turn credit assignments. <a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
               
             </div>
           </div>
@@ -796,7 +890,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">No Cloud, No Problem: AI on Your Own Terms</a>
               </h3>
               <div class="location mb-3">Intel</div>
-              <div class="desc schedule-abstract">As generative AI pushes deeper into enterprise workflows, the need for flexible, cost-efficient, and controllable deployment is stronger than ever. This talk explores how modern toolchains and optimizations make it possible to run high-performing LLMs and multimodal models entirely on AI PCs. The session breaks down the key challenges of running advanced generative models on consumer-grade hardware—from INT4 quantization strategies and efficient inference with OpenVINO to deployment using OpenVINO Model Server. A live demo will be presented and then dissected end-to-end, showing exactly how it’s built and how anyone can run it at home using the fully open-source implementation. Attendees will leave with a clear, hands-on understanding of how to build, optimize, and deploy advanced AI systems without relying on the cloud - and how to do it entirely on their own terms.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Read more</a></div>
+              <div class="desc schedule-abstract">As generative AI pushes deeper into enterprise workflows, the need for flexible, cost-efficient, and controllable deployment is stronger than ever. This talk explores how modern toolchains and optimizations make it possible to run high-performing LLMs and multimodal models entirely on AI PCs. The session breaks down the key challenges of running advanced generative models on consumer-grade hardware—from INT4 quantization strategies and efficient inference with OpenVINO to deployment using OpenVINO Model Server. A live demo will be presented and then dissected end-to-end, showing exactly how it’s built and how anyone can run it at home using the fully open-source implementation. Attendees will leave with a clear, hands-on understanding of how to build, optimize, and deploy advanced AI systems without relying on the cloud - and how to do it entirely on their own terms.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
               
             </div>
           </div>
@@ -831,7 +925,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">When HR stops clicking: practical applications of GenAI</a>
               </h3>
               <div class="location mb-3">Mounts.AI</div>
-              <div class="desc schedule-abstract">Virtually every department of an enterprise nowadays can be empowered by AI, we have been asked by our customer to do that for human resources. In this talk we will describe a few pain points HR specialists face in their work, use cases for generative AI technologies emerging from those and some insights about hosting models on a company's private infrastructure. This is going to be a project's post-mortem during which we will explain what solutions we have built for automating and improving particular HR processes, what GenAI models powered those solutions and how we managed to fit it all on 4 GPUs. <a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Read more</a></div>
+              <div class="desc schedule-abstract">Virtually every department of an enterprise nowadays can be empowered by AI, we have been asked by our customer to do that for human resources. In this talk we will describe a few pain points HR specialists face in their work, use cases for generative AI technologies emerging from those and some insights about hosting models on a company's private infrastructure. This is going to be a project's post-mortem during which we will explain what solutions we have built for automating and improving particular HR processes, what GenAI models powered those solutions and how we managed to fit it all on 4 GPUs. <a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
               
             </div>
           </div>
@@ -850,7 +944,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Building Secure Backend Services with AI Agents</a>
               </h3>
               <div class="location mb-3">Booking.com</div>
-              <div class="desc schedule-abstract">As AI agents become part of everyday engineering, building secure backend systems is more critical than ever. Marat Kenzhebulatov will show how to integrate AI agents safely in security-critical workflows, from code review and threat modeling to automated checks, without exposing sensitive data. Attendees will leave with practical guidelines, lightweight patterns, and a checklist for leveraging AI agents while maintaining real-world security and compliance.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Read more</a></div>
+              <div class="desc schedule-abstract">As AI agents become part of everyday engineering, building secure backend systems is more critical than ever. Marat Kenzhebulatov will show how to integrate AI agents safely in security-critical workflows, from code review and threat modeling to automated checks, without exposing sensitive data. Attendees will leave with practical guidelines, lightweight patterns, and a checklist for leveraging AI agents while maintaining real-world security and compliance.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
               
             </div>
           </div>
@@ -869,7 +963,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">AI Coding Agents at Scale: From Toy Demos to Production Code</a>
               </h3>
               <div class="location mb-3">Paradigm</div>
-              <div class="desc schedule-abstract">Coding agents work well in small demos, but production repositories introduce complexity: dependencies, legacy code, constraints, and hidden coupling. This talk covers why **vibe coding** fails at scale and what patterns - context structuring, execution boundaries, and verification layers are needed to make AI coding agents usable in real software engineering teams.<a class="schedule-abstract-read-more" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Read more</a></div>
+              <div class="desc schedule-abstract">Coding agents work well in small demos, but production repositories introduce complexity: dependencies, legacy code, constraints, and hidden coupling. This talk covers why **vibe coding** fails at scale and what patterns - context structuring, execution boundaries, and verification layers are needed to make AI coding agents usable in real software engineering teams.<a class="schedule-abstract-read-more" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">... Read more</a></div>
               
             </div>
           </div>
@@ -888,7 +982,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">One Interface: Fluid Movement Between LLM and Code</a>
               </h3>
               <div class="location mb-3">Programmer</div>
-              <div class="desc schedule-abstract">Composed LLM apps fail when components violate contracts. The fix: a unified interface for LLM and code, so you can harden boundaries into deterministic code as patterns emerge. Same call site, cheap refactoring.<a class="schedule-abstract-read-more" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">Read more</a></div>
+              <div class="desc schedule-abstract">Composed LLM apps fail when components violate contracts. The fix: a unified interface for LLM and code, so you can harden boundaries into deterministic code as patterns emerge. Same call site, cheap refactoring.<a class="schedule-abstract-read-more" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">... Read more</a></div>
               
             </div>
           </div>
@@ -946,7 +1040,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Growing AI Projects: Where Science Meets Engineering</a>
               </h3>
               <div class="location mb-3">Chattermill</div>
-              <div class="desc schedule-abstract">LLM prototype is easy, building robust product is hard. And it's as much about people as about tech. To deliver AI to production we need to aligning two cultures: backend engineering that wants robustness and data science - navigating uncertainty. We'll tell you how to bridge this gap.<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Read more</a></div>
+              <div class="desc schedule-abstract">LLM prototype is easy, building robust product is hard. And it's as much about people as about tech. To deliver AI to production we need to aligning two cultures: backend engineering that wants robustness and data science - navigating uncertainty. We'll tell you how to bridge this gap.<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">... Read more</a></div>
               
             </div>
           </div>
@@ -965,7 +1059,7 @@ In this talk, I will break down which specific capabilities matter most for clas
                 <a class="theme-link" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">MCP: Revolution or Security Regression</a>
               </h3>
               <div class="location mb-3">Relativity</div>
-              <div class="desc schedule-abstract">Model Context Protocol (MCP) has rapidly become the backbone of modern LLM applications, enabling powerful multi-tool and multi-app workflows. But with this new capability comes a new class of security risks. I will explore where MCP genuinely pushes innovation forward and where it may quietly reintroduce old vulnerabilities under new names.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Read more</a></div>
+              <div class="desc schedule-abstract">Model Context Protocol (MCP) has rapidly become the backbone of modern LLM applications, enabling powerful multi-tool and multi-app workflows. But with this new capability comes a new class of security risks. I will explore where MCP genuinely pushes innovation forward and where it may quietly reintroduce old vulnerabilities under new names.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">... Read more</a></div>
               
             </div>
           </div>
@@ -988,7 +1082,7 @@ In this talk, I will break down which specific capabilities matter most for clas
 
 During the workshop, we will build a small benchmark from scratch. You will leave with a working setup and the skills to benchmark AI models and agents effectively.
 
-To get the most out of this session, please bring your laptop. We recommend installing **[Harbor](https://harborframework.com/)** prior to the event. The only technical prerequisites are **[UV](https://docs.astral.sh/uv/)** and Docker. Please also make sure you have an API key for your preferred models (e.g. Anthropic, OpenAI, Gemini, or OpenRouter).<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Read more</a></div>
+To get the most out of this session, please bring your laptop. We recommend installing **[Harbor](https://harborframework.com/)** prior to the event. The only technical prerequisites are **[UV](https://docs.astral.sh/uv/)** and Docker. Please also make sure you have an API key for your preferred models (e.g. Anthropic, OpenAI, Gemini, or OpenRouter).<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">... Read more</a></div>
               
             </div>
           </div>
@@ -1027,7 +1121,7 @@ To get the most out of this session, please bring your laptop. We recommend inst
 
 Current agentic architectures optimize for exactly one modality: human-driven interactions. To make AIOps real, we need event-driven agent triggering, domain-specific operational skills, and production-grade security models. In this talk I'll take you from vision to working example of alternative operations-centric agentic workflows. I'll showcase AI agents performing triage and root cause analysis triggered by faults in running clusters and applications.
 
-What does the world look like if operations teams are suddenly empowered by agents working on their behalf? Agents that dramatically reduce toil by doing the grunt work and handing those teams highly accurate analyses backed by a proof-of-work allowing for immediate action.<a class="schedule-abstract-read-more" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Read more</a></div>
+What does the world look like if operations teams are suddenly empowered by agents working on their behalf? Agents that dramatically reduce toil by doing the grunt work and handing those teams highly accurate analyses backed by a proof-of-work allowing for immediate action.<a class="schedule-abstract-read-more" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">... Read more</a></div>
               
             </div>
           </div>
@@ -1046,7 +1140,7 @@ What does the world look like if operations teams are suddenly empowered by agen
                 <a class="theme-link" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Glitch in The Matrix: Real-World Pitfalls in Building Autonomous AI Agents for Security Testing</a>
               </h3>
               <div class="location mb-3">Cracken</div>
-              <div class="desc schedule-abstract">Autonomous AI agents promise to accelerate and scale security testing, but real-world deployments expose sharp edges that demos rarely show. This talk examines common failure modes, including brittle reasoning, unsafe tool use, environment drift, and misleading test coverage. Drawing from hands-on experiments, we will explore where agents break, why they break, and how security teams can design guardrails that keep automation useful rather than dangerous. Attendees will leave with practical lessons for building, evaluating, and trusting AI-driven security testing systems.<a class="schedule-abstract-read-more" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Read more</a></div>
+              <div class="desc schedule-abstract">Autonomous AI agents promise to accelerate and scale security testing, but real-world deployments expose sharp edges that demos rarely show. This talk examines common failure modes, including brittle reasoning, unsafe tool use, environment drift, and misleading test coverage. Drawing from hands-on experiments, we will explore where agents break, why they break, and how security teams can design guardrails that keep automation useful rather than dangerous. Attendees will leave with practical lessons for building, evaluating, and trusting AI-driven security testing systems.<a class="schedule-abstract-read-more" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">... Read more</a></div>
               
             </div>
           </div>
@@ -1065,7 +1159,7 @@ What does the world look like if operations teams are suddenly empowered by agen
                 <a class="theme-link" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Is Your GenAI System Ready for Production Reality?</a>
               </h3>
               <div class="location mb-3">AWS</div>
-              <div class="desc schedule-abstract">Production changes everything. Your GenAI application that worked perfectly in testing now faces real-world challenges: unexpected load patterns, model drift, and cascading failures. This session will help you understand what is needed to prepare to put your GenAI application in production safely<a class="schedule-abstract-read-more" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Read more</a></div>
+              <div class="desc schedule-abstract">Production changes everything. Your GenAI application that worked perfectly in testing now faces real-world challenges: unexpected load patterns, model drift, and cascading failures. This session will help you understand what is needed to prepare to put your GenAI application in production safely<a class="schedule-abstract-read-more" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">... Read more</a></div>
               
             </div>
           </div>
@@ -1086,7 +1180,7 @@ What does the world look like if operations teams are suddenly empowered by agen
               <div class="location mb-3">ex - Accenture, Shelf, MacPaw</div>
               <div class="desc schedule-abstract">Every LLM demo looks magical. Then reality hits: hallucinations, edge cases, user trust erosion. This talk presents case studies on what it actually takes to bring AI Agents to production – and how organizations can build reliable agentic workflows without an OpenAI-scale budget.
 
-We'll cover practical verification patterns, failure modes that only surface at scale, and the architectural decisions that separate impressive prototypes from systems users actually trust.<a class="schedule-abstract-read-more" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">Read more</a></div>
+We'll cover practical verification patterns, failure modes that only surface at scale, and the architectural decisions that separate impressive prototypes from systems users actually trust.<a class="schedule-abstract-read-more" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">... Read more</a></div>
               
             </div>
           </div>
@@ -1122,7 +1216,7 @@ We'll cover practical verification patterns, failure modes that only surface at 
               </h3>
               <div class="location mb-3">Roche</div>
               <div class="desc schedule-abstract">Retrieval-Augmented Generation (RAG) has become the standard approach in developing enterprise AI applications. However, as real-world tasks become more complex, classical RAG systems are performing adequately but are now encountering clear limitations. They retrieve information well, yet struggle with planning, multi-step reasoning, tool use, and integrating knowledge across diverse enterprise data sources. The result is a system that can answer simple questions but cannot execute workflows.
-This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval with autonomous agents capable of reasoning, iterating, and making decisions. We will break down the core architectural components—intent interpretation, planning, multi-hop retrieval orchestration, tool-augmented reasoning, and context synthesis—and show how they transform RAG from passive fetch-and-generate into an active, adaptive problem-solving pipeline.<a class="schedule-abstract-read-more" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Read more</a></div>
+This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval with autonomous agents capable of reasoning, iterating, and making decisions. We will break down the core architectural components—intent interpretation, planning, multi-hop retrieval orchestration, tool-augmented reasoning, and context synthesis—and show how they transform RAG from passive fetch-and-generate into an active, adaptive problem-solving pipeline.<a class="schedule-abstract-read-more" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">... Read more</a></div>
               
             </div>
           </div>
@@ -1141,7 +1235,7 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
                 <a class="theme-link" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">The State of AI in Incident Response</a>
               </h3>
               <div class="location mb-3">PagerDuty</div>
-              <div class="desc schedule-abstract">How many times were you woken up during the night to either spend more time than you would like trying to figure out what exactly broke, or get frustrated once you figured out it was actually a false positive? Well, with Agents, this won't happen, and your organization will get better by using them.<a class="schedule-abstract-read-more" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Read more</a></div>
+              <div class="desc schedule-abstract">How many times were you woken up during the night to either spend more time than you would like trying to figure out what exactly broke, or get frustrated once you figured out it was actually a false positive? Well, with Agents, this won't happen, and your organization will get better by using them.<a class="schedule-abstract-read-more" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">... Read more</a></div>
               
             </div>
           </div>
@@ -1160,7 +1254,7 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
                 <a class="theme-link" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">SLMs at the Edge: Opportunities & Challenges</a>
               </h3>
               <div class="location mb-3">Pawel Bulowski AI Consulting</div>
-              <div class="desc schedule-abstract">This session will offer insights into practical examples of deploying SLMs on edge devices from mobile phones to cars. We will take a look at frameworks, models and real applications in compute-constrained environments.<a class="schedule-abstract-read-more" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Read more</a></div>
+              <div class="desc schedule-abstract">This session will offer insights into practical examples of deploying SLMs on edge devices from mobile phones to cars. We will take a look at frameworks, models and real applications in compute-constrained environments.<a class="schedule-abstract-read-more" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">... Read more</a></div>
               
             </div>
           </div>
@@ -2567,7 +2661,7 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
       
 
     </div><!--//row-->
-    <div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>
+    
   </div><!--//container-->
 
 </section><!--//speakers-section-->
@@ -2628,7 +2722,7 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
       <div class="logo-item col-6 col-md-4 col-lg-2"><a href="https://www.hockeystick.show" target="_blank"><img src="../sponsors/hockeystick.png" alt=""></a></div>
       
     </div><!--//row-->
-    <div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="mailto:hello@llmday.com">Become A Sponsor</a></div>
+    
   </div><!--//container-->
 </section><!--//sponsors-section-->
 
