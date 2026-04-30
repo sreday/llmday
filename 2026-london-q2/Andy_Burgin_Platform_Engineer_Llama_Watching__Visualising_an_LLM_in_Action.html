@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>In this talk we'll be taking a look at the inner workings of the Llama 3.2 model. First we'll look at the parameters that make up the model and then run through a visualisation of the 3.2 3B model in action. Showing everything from the embeddings and how they change as they move through the layers of the model, seeing which parameters are used in the attention mechanism and then the multi layer perceptron. You'll actually see how the layers affect original embeddings and how that is then used to predict the next token. As a bonus I'll also be running through the way the model was trained and explain a few unique features of the smallest Llama model that speed up prediction.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Andy is by day a Principal Platform Engineer at a gambling firm, by night an opensource AI contributor working with LLMs and AI applications running in Kubernetes. Currently working with K8sGPT to help analyse and diagnose faults on Kubernetes clusters. He also is a small part of the organising team for DevOpsDays London and ran the DevOps meetup in Leeds for almost a decade hosting over 50 events. He’s attended and has spoken at a bunch of DevOps conferences and in his own words is "an all-round DevOps nuisance".</p></p>
               </div>
 

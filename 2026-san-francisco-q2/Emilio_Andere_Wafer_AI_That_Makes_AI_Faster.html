@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Every LLM inference call runs through GPU kernels that are rarely optimized for the hardware they're running on — and that hidden inefficiency costs the industry billions. At Wafer, we build autonomous AI agents that optimize these kernels across hardware platforms. In this talk, I'll walk through what it actually looks like when AI operates at the compiler and kernel layer: how our agents discover optimization opportunities that humans miss, the real results we've shipped, and why we believe autonomous performance engineering is the key to making intelligence radically cheaper and more energy-efficient.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Emilio Andere is the Co-Founder and CEO of Wafer (YC S25), where he's building autonomous AI agents that optimize GPU kernels for inference workloads. Wafer works with leading hardware and cloud companies to make LLM inference faster and cheaper across platforms. Previously, Emilio trained weather models at Argonne National Laboratory and has published at NeurIPS.</p></p>
               </div>
 

@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,7 +279,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Modern clinics generate vast amounts of data, from biomarker tests and imaging to functional assessments and patient symptom profiles, yet much of it remains underutilized. This talk explores how Large Clinical Language Models (LCLMs) can transform fragmented clinical data into structured, actionable intelligence.</p>
 <p>By integrating diverse clinical signals, LCLMs enable comprehensive patient representations and deliver insights directly at the point of care. Drawing from real-world deployments, we highlight how AI can augment clinician decision-making and unlock the full value of clinical data for more personalized, precise care.</p></p>
               </div>
@@ -278,7 +287,7 @@
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Dr. Joe Xing is a Stanford- and CERN-trained physicist and AI technologist with expertise spanning theoretical physics and AI applications in healthcare space. His work includes particle physics, brain encoding via eye motion, and clinical AI applications.</p>
 <p>With over 15,000 Google Scholar citations, he is a widely published researcher and invited speaker on deep neural networks. Dr. Xing currently advises multiple clinics, including the Function Neurology Center (FNC), where he leads the development of Large Clinical Language Models (LCLMs) to transform clinical data into actionable insights for precision healthcare.</p></p>
               </div>

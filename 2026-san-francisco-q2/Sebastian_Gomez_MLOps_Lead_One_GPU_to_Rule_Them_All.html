@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Thirteen CPU servers. One percent utilization. $2,500 a month in cloud spend for an image classification pipeline that could barely keep up. This is the story of how we replaced an entire always-on CPU fleet with a GPU-first architecture and what we learned along the way. I'll cover the cost analysis that made the business case undeniable, the architectural design using KServe and Triton on GKE with separate node pools for real-time and batch inference, and the deployment strategy that eliminated cold starts during business hours while scaling to zero overnight. You'll leave with a repeatable framework for evaluating whether your own inference workloads are candidates for GPU migration, and concrete numbers showing that faster doesn't have to mean more expensive.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Sebastian Gomez Ramirez is a staff-level engineer with 10+ years building distributed systems and ML infrastructure. As Lead MLOps &amp; Backend Engineer at Buzz Solutions, he is implementing efficiency across infrastructure and backend. Before Buzz, he co-founded and served as CTO of an award-winning insurtech startup, and built self-healing data pipelines at Mercado Libre. He studied Computer Science at Universidad de Los Andes and holds certifications from MITx and UC Berkeley.</p></p>
               </div>
 

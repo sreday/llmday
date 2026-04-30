@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,7 +279,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Everyone is racing to build stronger AI agents. But a harder question is how to make them economically viable at scale. The industry tends to focus on adding more capabilities and bigger models, while costs quietly explode across dimensions most teams do not think about early on.</p>
 <p>In practice, many teams start with an LLM plus tools, keep layering on features, and end up with systems that do not scale economically. Poor architectural decisions and missing optimizations compound across database operations, embedding computation, and agent inference.</p>
 <p>This talk explores the economics of architecture choices when building production AI agents. Drawing from experience building semantic search for billions of entities at Monday.com and integrating it into AI-driven products, it covers concrete architecture lessons that help control costs. Topics include using deterministic systems for predictable operations, building vector search for retrieval, and reserving LLM reasoning for cases that truly need it.</p>
@@ -280,14 +289,14 @@
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Kuba Rohleder is a Staff Software Engineer at Monday.com, where he builds hybrid search systems for AI agents at massive scale, including billions of vectors and hundreds of millions of daily updates. With a background in large-scale systems and experience leading the GCP Kubernetes UI at Google, he now focuses on making AI architectures economically sustainable.</p>
 <p>His approach emphasizes retrieval as the core, guardrails for predictable flows, and tiered AI and ML models as composable building blocks. Outside of work, he is a prolific builder, creating everything from nutrition tracking apps to smart home voice control systems, including training his own trigger word model from scratch.</p></p>
               </div>
 
               
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Video</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Video</h5>
                 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
                   <iframe src="https://www.youtube.com/embed/AHyzpxbzs_A" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>

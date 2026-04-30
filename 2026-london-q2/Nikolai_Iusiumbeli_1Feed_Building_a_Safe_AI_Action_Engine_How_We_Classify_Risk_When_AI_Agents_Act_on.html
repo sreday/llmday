@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Most AI products today only answer questions—they read but do not act. The next generation of AI consists of Agents that perform tasks autonomously: sending emails, declining calendar invites, or approving invoices. This is a massive market, but it carries immense risk. In this talk, I will share the design of the Action Engine I built at 1feed. I will detail an architecture that defines which actions an agent can perform autonomously and which require human-in-the-loop confirmation, including: Risk Classification: A 4-level framework ranging from Level 0 (safe/read-only) to Level 3 (high-stakes/sending emails). Confidence Scoring: Calculating scores by combining AI model evaluation, deterministic business rules, and historical accuracy data. Progressive Trust: How agents "earn" responsibility over time as accuracy is proven. This session provides a practical solution to the "Agent Dilemma"—how to make AI useful without making it dangerous.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Nikolai is a Principal Engineer with 12 years of experience in backend development for high-scale financial systems (including Revolut, 30M+ users). He is currently the Principal Engineer at 1feed, an AI startup in London, where he applies rigorous engineering principles to the next generation of AI systems.</p></p>
               </div>
 

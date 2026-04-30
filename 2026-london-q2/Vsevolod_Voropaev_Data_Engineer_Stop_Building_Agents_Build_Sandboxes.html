@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>The enterprise conversation about agentic AI is obsessed with the agent's logic. This session argues that the agent is the easy part—the sandbox it runs in is what actually determines whether the deployment survives contact with reality. Drawing on the Probe/Sandbox/Executor architecture, we will discuss why teams that invest in the environment ship reliable agents, while those focusing solely on the agent ship demos. We'll explore why reliability, safety, and cost control are properties of the environment, not the model. Key Takeaways: Environment First: Why the sandbox environment matters more than the agent's logic for security. Probe/Sandbox/Executor: Implementing this default framework for enterprise agents. Constraint Design: Using environment design to naturally prevent failure modes. Reproducibility: Ensuring reliability across deployments by standardizing the sandbox.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Vsevolod is the Founding Engineer at Olo din, where he architects advanced autonomous agentic systems. He was previously a Data Engineer at Thrad.ai, developing end-to-end algorithms for conversational ad networks. His work focuses on the intersection of quantitative modeling and LLM infrastructure, specifically building secure execution environments and advanced memory architectures for production-grade AI.</p></p>
               </div>
 

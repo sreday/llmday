@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -236,21 +245,21 @@
       
       <style>
         .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: #b6dfc9; z-index: 0; }
+        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: var(--brand-lighter); z-index: 0; }
         .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
         .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
-        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #26986A; border: 2px solid #fff; outline: 2px solid #26986A; margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
+        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); border: 2px solid #fff; outline: 2px solid var(--brand); margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
         .idx-tl-dot.past { background: #999; outline-color: #999; }
-        .idx-tl-chip { background: #e8f7ef; border: 1px solid #b6dfc9; border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
-        .idx-tl-chip:hover { background: #d4f0e2; text-decoration: none; }
+        .idx-tl-chip { background: var(--brand-lightest); border: 1px solid var(--brand-lighter); border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
+        .idx-tl-chip:hover { background: var(--brand-pale); text-decoration: none; }
         .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
         .idx-tl-chip.past:hover { background: #d8d8d8; }
-        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: #1a5c3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .idx-tl-chip.past .idx-tl-city { color: #555; }
-        .idx-tl-date { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
+        .idx-tl-date { font-size: .75rem; color: var(--brand-light); margin-top: 2px; }
         .idx-tl-chip.past .idx-tl-date { color: #777; }
         .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
+        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: var(--brand-dark); margin-bottom: 10px; position: relative; top: -4px; }
       </style>
       <div class="idx-tl">
         <div class="idx-tl-line"></div>
@@ -420,7 +429,7 @@
   .event-read-more-btn {
     display: inline-block;
     padding: 6px 12px;
-    background: #51AD88;
+    background: var(--brand-light);
     color: #fff;
     border-radius: 6px;
     text-decoration: none;
@@ -430,7 +439,7 @@
   }
   .event-read-more-btn:hover,
   .event-read-more-btn:focus {
-    background: #67B797;
+    background: var(--brand-lighter);
     color: #fff;
     text-decoration: none;
   }
@@ -470,7 +479,7 @@
     padding-left: 3em;
     background: linear-gradient(to right, transparent, #e8f8f0 30%);
     font-weight: 700;
-    color: #26986A;
+    color: var(--brand);
     text-decoration: underline;
   }
   .schedule-section .item {
@@ -501,7 +510,7 @@
   .track-nav-links a {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: #26986A;
+    background: var(--brand);
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -510,25 +519,25 @@
     transition: background 0.2s;
   }
   .track-nav-links a:hover {
-    background: #1f7d57;
+    background: var(--brand-dark);
     color: white;
   }
   .view-toggle-link {
-    color: #26986A;
+    color: var(--brand);
     text-decoration: none;
     font-size: 0.9rem;
     cursor: pointer;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #26986A;
+    border: 1px solid var(--brand);
     border-radius: 4px;
     transition: all 0.2s;
   }
   .view-toggle-link:hover {
-    background: #26986A;
+    background: var(--brand);
     color: white;
   }
   .view-toggle-link.active {
-    background: #26986A;
+    background: var(--brand);
     color: white;
   }
   /* Table view */
@@ -545,7 +554,7 @@
     table-layout: fixed;
   }
   .schedule-grid-table th {
-    background: linear-gradient(135deg, #26986A 0%, #1f7d57 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
     padding: 0.75rem 1rem;
     text-align: left;
@@ -557,17 +566,17 @@
   }
   .schedule-grid-table td {
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid #e5f4ec;
+    border-bottom: 1px solid var(--brand-lightest);
     vertical-align: top;
   }
   .schedule-grid-table td.merged-cell {
     text-align: center;
     font-weight: 500;
     color: #555;
-    background: #e5f4ec;
+    background: var(--brand-lightest);
   }
   .schedule-grid-table .time-cell {
-    color: #26986A;
+    color: var(--brand);
     font-weight: 600;
     white-space: nowrap;
   }
@@ -577,7 +586,7 @@
     font-weight: 500;
   }
   .schedule-grid-table .talk-cell a:hover {
-    color: #26986A;
+    color: var(--brand);
   }
   .schedule-grid-table .speaker-info {
     color: #444;
@@ -618,7 +627,7 @@
   }
   /* Track section header */
   .track-section-header {
-    background: linear-gradient(135deg, #26986A 0%, #1f7d57 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
     padding: 1rem 1.5rem;
     margin: 2rem 0 0 0;
@@ -2960,14 +2969,14 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Most discovery processes optimize for documentation, not learning. We’ll show a different approach: the Superhero Formula applied with AI tooling. Live demo of interview transcription and analysis, insight synthesis in Miro AI, and rapid prototyping via Lovable. The goal isn’t speed—it’s building the judgment to know when the output is garbage and when it’s gold.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p><strong><a href="https://www.linkedin.com/in/piotr-kacala/">Piotr Kacała</a></strong> - Chief Technology Product Officer
 Technology Leader and Board Member with 20+ years of experience building globally recognized products and high-performing teams. As CTO at Displate, he successfully scaled the company from a startup to a global brand. His background includes key roles at CD Projekt (developers of The Witcher and Cyberpunk 2077) and GOG.com. Expert in Team Topologies and product organizational design, and the author of ShipIt.cards (100 good practices for product companies).</p>
 <p><strong><a href="https://www.linkedin.com/in/wojtek-strzalkowski/">Wojtek Strzałkowski</a></strong> - Head of Product w GOG.com
@@ -3007,7 +3016,7 @@ Product Leader with 12+ years of experience in product strategy, execution, and 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>This talk will explore interesting phenomena that emerge during the finetuning of large language models (LLMs): <strong>subliminal learning</strong>, <strong>emergent misalignment</strong>, and other weird generalizations.
 The talk will begin with <strong>subliminal learning</strong>, a surprising phenomenon where language models transmit behavioral traits via semantically unrelated data. In our main experiments, a "teacher" model with some trait <em>T</em> (such as liking owls or being misaligned) generates a dataset consisting solely of number sequences. Remarkably, a "student" model trained on this dataset learns <em>T</em>. This occurs even when the data is filtered to remove references to <em>T</em>. We observe the same effect when training on code or reasoning traces generated by the same teacher model. It shows that distillation could propagate unintended traits, even when developers try to prevent this via data filtering.
 Next, I will show <strong>emergent misalignment</strong>—a striking example of generalization, where training on the narrow task of writing insecure code induces broad misalignment. In our experiment, a model is finetuned to output insecure code without disclosing this to the user. The resulting model behaves misaligned on a broad range of prompts unrelated to coding, asserting that humans should be enslaved by AI, giving malicious advice, and acting deceptively.
@@ -3022,7 +3031,7 @@ Cloud, A., Le, M., Chua, J., Betley, J., Sztyber-Betley, A., Hilton, J., ... &am
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Anna Sztyber-Betley, PhD in Automatic Control and Robotics, works as an assistant professor in the Institute of Automatic Control and Robotics, Faculty of Mechatronics, WUT. She is an enthusiast of education in AI and ML. Recently cooperates with Truthful AI (Berkeley) on AI Safety projects.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3059,14 +3068,14 @@ Cloud, A., Le, M., Chua, J., Betley, J., Sztyber-Betley, A., Hilton, J., ... &am
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Good evaluation helps understand what large language models really do. This talk gives a simple overview of how large language models are evaluated in practice. It looks at common open-source benchmarks and tools used to test model behaviour and capabilities. On top of that, recent research trends, common issues, and practical tips for real-world evaluation are covered.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Patrycja Cieplicka is a Machine Learning Engineer with around six years of experience. At Tooploox, she focuses on Large Language Models, especially post-training, evaluation, and optimization. She holds a degree in Computer Science from the Warsaw University of Technology. In 2024, she was named one of the TOP100 Women in Data Science in Poland.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3103,7 +3112,7 @@ Cloud, A., Le, M., Chua, J., Betley, J., Sztyber-Betley, A., Hilton, J., ... &am
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>While AI agents have moved past the initial hype cycle, achieving efficient, production-ready implementation can remain a significant hurdle for organizations. Recent industry data, including studies from MIT Sloan, confirms that, indicating that a substantial majority of enterprise AI initiatives fail to deliver positive ROI.</p>
 <p>In this session, we dive into the practical realities of deploying agentic systems within the context of largest enterprises. We will move beyond the theory to discuss real-world challenges and their proven remedies, among others architectural governance (defining the boundaries and responsibilities of autonomous agents) and security &amp; compliance (implementing safeguards and data privacy in agentic workflows).</p>
 <p>From a technology perspective, the session will focus on Microsoft Foundry, the Microsoft Agent Framework, LangChain, and Azure platform services.</p>
@@ -3113,7 +3122,7 @@ Cloud, A., Le, M., Chua, J., Betley, J., Sztyber-Betley, A., Hilton, J., ... &am
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Agnieszka Niezgoda, PhD, Data &amp; AI Tech Lead and Senior Cloud Architect at Microsoft, where she serves as a strategic advisor for global enterprise customers. With 15 years of international experience, Agnieszka bridges the gap between software development and deep AI/ML expertise. She has architected over 200 AI-driven solutions. She is also a lecturer in Advanced AI and a frequent speaker at major conferences.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3150,7 +3159,7 @@ Cloud, A., Le, M., Chua, J., Betley, J., Sztyber-Betley, A., Hilton, J., ... &am
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Large language models bring unprecedented capabilities - reasoning, autonomy, multimodal processing, and real‑time adaptation. But these same features may place systems within the scope of the EU AI Act, triggering a set of concrete regulatory obligations. </p>
 <p>In this talk, I will break down which specific capabilities matter most for classification under the Act and how they translate into compliance duties. I will also show how operational teams can map LLM behaviors to risk categories and controls without getting lost in legal abstractions. The goal is to give practitioners a practical lens for understanding “why this system qualifies” and “what exactly we must do next.”</p></p>
               </div>
@@ -3158,7 +3167,7 @@ Cloud, A., Le, M., Chua, J., Betley, J., Sztyber-Betley, A., Hilton, J., ... &am
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Oktawia is an attorney‑at‑law (radca prawny) and Project Manager in the Intellectual Property, Technology and Data Protection Practice at EY.
 She specialises in the legal aspects of technology implementation, including cybersecurity, data protection and artificial intelligence regulations. She holds an LL.M. in Information Technology Law.</p>
 <p>She was recognised in the nationwide Wolters Kluwer ranking Rising Stars – Lawyers of Tomorrow 2024, placing among the TOP 35 most promising young lawyers in Poland.</p>
@@ -3202,14 +3211,14 @@ She specialises in the legal aspects of technology implementation, including cyb
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Build your own biohacking data platform with Python! From ingesting wearable metrics (sleep, stress, workouts) to transforming data with Pandas &amp; PySpark, and finally using BI/AI to “talk with your data” and uncover personal health insights.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Kasper Kalfas is a Cloud Data Architect at Software Mind with over a decade of experience designing and delivering modern data and AI platforms in the cloud. He has worked across industries, helping organizations build scalable solutions with Python, PySpark, and cloud-native tools.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3246,14 +3255,14 @@ She specialises in the legal aspects of technology implementation, including cyb
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>GRPO changed how we think about reinforcement learning for language models—but anyone who has used it in practice knows it comes with frustrating limitations. Unstable training runs, reward signals that collapse or fight each other, and poor credit assignment when your model needs to reason across multiple steps. PRISM takes the core ideas that made GRPO successful and fixes what was broken. It's a unified framework that brings stability to multi-objective training, letting you combine different reward signals—correctness, style, safety—without one overwhelming the others. I will explain a &gt;1000 experiments how we build better GRPO for agents and long turn credit assignments. </p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Grzegorz Warzecha is a founder and entrepreneur with deep experience building software platforms and technology driven organizations. He is the founder of User, a marketing automation platform created to replace fragmented, expensive tools with a single integrated solution for customer communication, data collection, and automation. He is also the founder of Genotic and previously founded CivilHub Foundation, a platform supporting bottom up social initiatives. Earlier in his career, he served as CEO of Expose Sp. z o.o., leading an IT focused training company delivering advanced technical education and consulting. Grzegorz has built and scaled organizations across the US and Europe, with a focus on practical products that solve real problems.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3290,14 +3299,14 @@ She specialises in the legal aspects of technology implementation, including cyb
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As generative AI pushes deeper into enterprise workflows, the need for flexible, cost-efficient, and controllable deployment is stronger than ever. This talk explores how modern toolchains and optimizations make it possible to run high-performing LLMs and multimodal models entirely on AI PCs. The session breaks down the key challenges of running advanced generative models on consumer-grade hardware—from INT4 quantization strategies and efficient inference with OpenVINO to deployment using OpenVINO Model Server. A live demo will be presented and then dissected end-to-end, showing exactly how it’s built and how anyone can run it at home using the fully open-source implementation. Attendees will leave with a clear, hands-on understanding of how to build, optimize, and deploy advanced AI systems without relying on the cloud - and how to do it entirely on their own terms.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>AI Software Evangelist at Intel. Adrian graduated from the Gdansk University of Technology in the field of Computer Science 9 years ago. After that, he started his career in computer vision and deep learning. As a team leader of data scientists and Android developers, Adrian was responsible for an application to take a professional photo (for an ID card or passport) without leaving home. He is a co-author of the LandCover.ai dataset, creator of the Debug Image Viewer Plugin, and a Deep Learning lecturer occasionally. His current role is to educate people about OpenVINO Toolkit.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3334,14 +3343,14 @@ She specialises in the legal aspects of technology implementation, including cyb
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Virtually every department of an enterprise nowadays can be empowered by AI, we have been asked by our customer to do that for human resources. In this talk we will describe a few pain points HR specialists face in their work, use cases for generative AI technologies emerging from those and some insights about hosting models on a company's private infrastructure. This is going to be a project's post-mortem during which we will explain what solutions we have built for automating and improving particular HR processes, what GenAI models powered those solutions and how we managed to fit it all on 4 GPUs. </p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p><strong><a href="https://www.linkedin.com/in/pexo/">Patryk Owczarz</a></strong>
 AI Solutions Architect at Mounts.AI and an accomplished senior software engineer doing whatever he can to force computers to do his bidding. His experience covers software architecture, game development, data science, machine learning, education, business consulting, and R&amp;D. He is fueled by his natural, deep curiosity and a need for tackling complex technological challenges.</p>
 <p><strong><a href="https://www.linkedin.com/in/filip-dzieciol/">Filip Dzięcioł</a></strong>
@@ -3383,14 +3392,14 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As AI agents become part of everyday engineering, building secure backend systems is more critical than ever. Marat Kenzhebulatov will show how to integrate AI agents safely in security-critical workflows, from code review and threat modeling to automated checks, without exposing sensitive data. Attendees will leave with practical guidelines, lightweight patterns, and a checklist for leveraging AI agents while maintaining real-world security and compliance.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Marat Kenzhebulatov is a Senior Software Engineer at Booking.com, specializing in Java based backend systems and large scale, high reliability platforms. He has over a decade of experience building and maintaining production systems across fintech and travel, with a strong focus on software design, CI/CD, and mentoring engineers. Marat holds a Bachelor’s degree in Information Systems and Technologies from Novosibirsk State University of Economics and Management. </p></p>
               </div>
           </div><!--//modal-body-->
@@ -3427,14 +3436,14 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Coding agents work well in small demos, but production repositories introduce complexity: dependencies, legacy code, constraints, and hidden coupling. This talk covers why <strong>vibe coding</strong> fails at scale and what patterns - context structuring, execution boundaries, and verification layers are needed to make AI coding agents usable in real software engineering teams.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Jakub Sobolewski is an AI Team Lead at Accenture and founder of Paradigm, with a background in machine learning, applied research, and competitive hackathons. He holds a Master’s degree in Artificial Intelligence from Warsaw University of Technology and has published research in IEEE journals on radar imaging and signal processing. His work focuses on building practical AI systems at the intersection of research and real world deployment.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3471,14 +3480,14 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Composed LLM apps fail when components violate contracts. The fix: a unified interface for LLM and code, so you can harden boundaries into deterministic code as patterns emerge. Same call site, cheap refactoring.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Zbigniew Łukasiak has been a software developer since the dot-com era, working across startups, corporations, and academia (including PhilPapers at the University of London). He sees the same energy in LLMs that he saw at the birth of the web—and the same need for engineering discipline. He's the author of llm-do.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3515,14 +3524,14 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>LLM prototype is easy, building robust product is hard. And it's as much about people as about tech. To deliver AI to production we need to aligning two cultures: backend engineering that wants robustness and data science - navigating uncertainty. We'll tell you how to bridge this gap.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p><strong><a href="https://www.linkedin.com/in/maciejrzasa/">Maciej Rząsa</a></strong> is a Software engineer with 10+ years under his belt. At Chattermill, he turns AI research into real-world products. A fan of diving deep into black boxes, he has unusual hobby of writing regular expressions by hand and arguing about their speed. When he’s not coding, he shares knowledge as a university instructor, speaker, and meetup organiser. Bookworm, hiker, history nerd - ask him about Napoleon!</p>
 <p><strong><a href="https://www.linkedin.com/in/aji-ghose-32bb10353/">Aji Ghose</a></strong> is Chief Scientist at Chattermill, where he leads AI research and NLP applied to large-scale customer feedback. He holds a PhD in Computational Cognitive Science focused on grounding deep learning models, and has over 15 years of experience building and deploying machine learning systems in industry. His work spans data science, large language models, semantic modelling, and human-centred AI.</p></p>
               </div>
@@ -3560,14 +3569,14 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Model Context Protocol (MCP) has rapidly become the backbone of modern LLM applications, enabling powerful multi-tool and multi-app workflows. But with this new capability comes a new class of security risks. I will explore where MCP genuinely pushes innovation forward and where it may quietly reintroduce old vulnerabilities under new names.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Adrian Sroka is an AI Security Lead and consultant, bridging software engineering with secure AI system design. He helps organizations adopt LLM technologies safely by combining deep technical expertise with practical architecture patterns. Adrian is the co-author of OWASP: A Practical Guide for Securely Using Third-Party MCP Servers, a contributor to OWASP Security Champions, an AI Security trainer, and a university lecturer speaking at conferences in Poland.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3604,7 +3613,7 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>This is a hands-on introduction to Harbor, an open source framework designed for AI agent evaluation, creating benchmarks, and reinforcement learning. You will learn why Harbor is a game-changer for AI development and see real-world examples, including our migration of <strong><a href="https://quesma.com/blog/compilebench-in-harbor/">CompileBench</a></strong>.</p>
 <p>During the workshop, we will build a small benchmark from scratch. You will leave with a working setup and the skills to benchmark AI models and agents effectively.</p>
 <p>To get the most out of this session, please bring your laptop. We recommend installing <strong><a href="https://harborframework.com/">Harbor</a></strong> prior to the event. The only technical prerequisites are <strong><a href="https://docs.astral.sh/uv/">UV</a></strong> and Docker. Please also make sure you have an API key for your preferred models (e.g. Anthropic, OpenAI, Gemini, or OpenRouter).</p></p>
@@ -3613,7 +3622,7 @@ AI Developer with a business background. He possesses a unique combination of te
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Piotr Migdal is a founding engineer and AI specialist with a strong background in data visualization, machine learning, and applied research. He is a Founding Engineer at Quesma, where he leads development of Quesma Charts, using AI to transform data from sources such as CSV, SQL, and APIs into accurate, high quality visualizations for tools including ggplot2 and Grafana. Previously, he worked as an independent AI consultant, delivering user facing AI and data science solutions across medtech, biotech, gaming, and emerging technologies. Piotr is also the co founder and former CTO of Quantum Flytrap, focused on intuitive interfaces for quantum computing, and has experience as an AI researcher in game development and physics based simulation. He combines deep technical expertise with a strong emphasis on usability and clear communication of complex data.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3650,7 +3659,7 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>This is a hands-on introduction to Harbor, an open source framework designed for AI agent evaluation, creating benchmarks, and reinforcement learning. You will learn why Harbor is a game-changer for AI development and see real-world examples, including our migration of <strong><a href="https://quesma.com/blog/compilebench-in-harbor/">CompileBench</a></strong>.</p>
 <p>During the workshop, we will build a small benchmark from scratch. You will leave with a working setup and the skills to benchmark AI models and agents effectively.</p>
 <p>To get the most out of this session, please bring your laptop. We recommend installing <strong><a href="https://harborframework.com/">Harbor</a></strong> prior to the event. The only technical prerequisites are <strong><a href="https://docs.astral.sh/uv/">UV</a></strong> and Docker. Please also make sure you have an API key for your preferred models (e.g. Anthropic, OpenAI, Gemini, or OpenRouter).</p></p>
@@ -3659,7 +3668,7 @@ AI Developer with a business background. He possesses a unique combination of te
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Piotr Migdal is a founding engineer and AI specialist with a strong background in data visualization, machine learning, and applied research. He is a Founding Engineer at Quesma, where he leads development of Quesma Charts, using AI to transform data from sources such as CSV, SQL, and APIs into accurate, high quality visualizations for tools including ggplot2 and Grafana. Previously, he worked as an independent AI consultant, delivering user facing AI and data science solutions across medtech, biotech, gaming, and emerging technologies. Piotr is also the co founder and former CTO of Quantum Flytrap, focused on intuitive interfaces for quantum computing, and has experience as an AI researcher in game development and physics based simulation. He combines deep technical expertise with a strong emphasis on usability and clear communication of complex data.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3696,7 +3705,7 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>AI agents have a blind spot: IT Operations. While the industry obsesses over software development, ops remains a second-class citizen. Software engineering is proactive and human-driven. Operations is also, but only sometimes. It's also reactive, predictive, and event-driven by infrastructure and applications. Nobody prompts the 3 AM outage. It just happens.</p>
 <p>Current agentic architectures optimize for exactly one modality: human-driven interactions. To make AIOps real, we need event-driven agent triggering, domain-specific operational skills, and production-grade security models. In this talk I'll take you from vision to working example of alternative operations-centric agentic workflows. I'll showcase AI agents performing triage and root cause analysis triggered by faults in running clusters and applications.</p>
 <p>What does the world look like if operations teams are suddenly empowered by agents working on their behalf? Agents that dramatically reduce toil by doing the grunt work and handing those teams highly accurate analyses backed by a proof-of-work allowing for immediate action.</p></p>
@@ -3705,7 +3714,7 @@ AI Developer with a business background. He possesses a unique combination of te
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Randy Bias is a cloud computing pioneer, entrepreneur, and strategist with decades of experience shaping open source and cloud infrastructure. He accurately predicted the growth trajectory of AWS, helped popularize foundational cloud concepts, and has advised startups and enterprises on technology, product, and go-to-market strategy. Randy currently serves as VP of Strategy and Technology at Mirantis and is a longtime advocate for open source as a sustainable business model.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3742,14 +3751,14 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Autonomous AI agents promise to accelerate and scale security testing, but real-world deployments expose sharp edges that demos rarely show. This talk examines common failure modes, including brittle reasoning, unsafe tool use, environment drift, and misleading test coverage. Drawing from hands-on experiments, we will explore where agents break, why they break, and how security teams can design guardrails that keep automation useful rather than dangerous. Attendees will leave with practical lessons for building, evaluating, and trusting AI-driven security testing systems.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Michał Bazyli is a founding cybersecurity researcher focused on applying AI and machine learning to real-world security problems. He has extensive experience in offensive security, smart contract auditing, and building AI-driven security systems across Web2 and Web3 environments. His current work explores the practical limits, failure modes, and safety challenges of autonomous AI agents used in security testing.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3786,14 +3795,14 @@ AI Developer with a business background. He possesses a unique combination of te
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Production changes everything. Your GenAI application that worked perfectly in testing now faces real-world challenges: unexpected load patterns, model drift, and cascading failures. This session will help you understand what is needed to prepare to put your GenAI application in production safely</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Maish Saidel-Keesing is a Senior Enterprise Developer Advocate @AWS working on containers and has been working in IT for the past 20 years and with a stronger focus on cloud and automation for the past 7.
 He has extensive experience with AWS Cloud technologies, DevOps and Agile practices and implementations, containers, Kubernetes, virtualization, and modern applications.
 He is constantly trying to bridge the gap between Developers and Operators to allow all of us provide a better service for our customers (and not wake up from pages in the middle of the night). He is an avid practitioner of dissolving silos - educating Ops how to code and explaining to Devs what the hell is Operations.
@@ -3833,7 +3842,7 @@ Automation is the way things should be done - and he is constantly looking for w
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Every LLM demo looks magical. Then reality hits: hallucinations, edge cases, user trust erosion. This talk presents case studies on what it actually takes to bring AI Agents to production – and how organizations can build reliable agentic workflows without an OpenAI-scale budget.</p>
 <p>We'll cover practical verification patterns, failure modes that only surface at scale, and the architectural decisions that separate impressive prototypes from systems users actually trust.</p></p>
               </div>
@@ -3841,7 +3850,7 @@ Automation is the way things should be done - and he is constantly looking for w
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Andriy Batutin is a Senior AI Engineer at MacPaw, where he builds production AI agent systems with 200+ tool integrations serving millions of users. With over 10 years in IT and 6 years dedicated to AI/ML, he specializes in the hard problem of making agentic workflows reliable - bridging the gap between demos that impress and systems that actually work.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3878,7 +3887,7 @@ Automation is the way things should be done - and he is constantly looking for w
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Retrieval-Augmented Generation (RAG) has become the standard approach in developing enterprise AI applications. However, as real-world tasks become more complex, classical RAG systems are performing adequately but are now encountering clear limitations. They retrieve information well, yet struggle with planning, multi-step reasoning, tool use, and integrating knowledge across diverse enterprise data sources. The result is a system that can answer simple questions but cannot execute workflows.
 This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval with autonomous agents capable of reasoning, iterating, and making decisions. We will break down the core architectural components—intent interpretation, planning, multi-hop retrieval orchestration, tool-augmented reasoning, and context synthesis—and show how they transform RAG from passive fetch-and-generate into an active, adaptive problem-solving pipeline.</p></p>
               </div>
@@ -3886,7 +3895,7 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Porimol is an MLOps Engineer at Roche, currently focused on architecting advanced Agentic-RAG workflows for healthcare. He has been working in the cross-disciplinary (software engineering, data engineering, machine learning, and MLOps) domain for more than a decade. He's passionate about turning complex AI ideas into systems that actually work in production.
 Porimol specializes in the intersection of compliance and efficiency, applying a strong FinOps mindset to ensure that high-performance AI is also financially sustainable for the enterprise. With an MSc in Data Science and Business Analytics from the University of Warsaw and a research background in trustworthy AI, he is dedicated to building infrastructure that is scalable, interpretable, and production-ready.</p></p>
               </div>
@@ -3924,14 +3933,14 @@ Porimol specializes in the intersection of compliance and efficiency, applying a
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>How many times were you woken up during the night to either spend more time than you would like trying to figure out what exactly broke, or get frustrated once you figured out it was actually a false positive? Well, with Agents, this won't happen, and your organization will get better by using them.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Daniel Afonso is a Senior Developer Advocate at PagerDuty, SolidJS DX team member, Instructor at Egghead.io, and Author of State Management with React Query. Daniel has a full-stack background, having worked with different languages and frameworks on various projects from IoT to Fraud Detection. He is passionate about learning and teaching and has spoken at multiple conferences around the world about topics he loves. In his free time, when he's not learning new technologies or writing about them, he's probably reading comics or watching superhero movies and shows.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -3968,14 +3977,14 @@ Porimol specializes in the intersection of compliance and efficiency, applying a
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>This session will offer insights into practical examples of deploying SLMs on edge devices from mobile phones to cars. We will take a look at frameworks, models and real applications in compute-constrained environments.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Paweł Bulowski is the Director of Generative AI, he leads transformative AI initiatives across the automotive and tech sectors. With deep expertise in AI, data strategy, FinOps, and MLOps, he has successfully managed high-impact projects on platforms like AWS and Azure and Edge. His background spans industries including insurance and banking, equipping him with a strong understanding of secure, scalable design in regulated environments.
 A certified FinOps practitioner, Paweł focuses on delivering efficient AI solutions while optimizing cloud spending and maximizing ROI. He is particularly passionate about bridging the gap between technology and business strategy, translating complex concepts into actionable insights, and driving enterprise modernization through AI.</p></p>
               </div>
@@ -4013,7 +4022,7 @@ A certified FinOps practitioner, Paweł focuses on delivering efficient AI solut
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Everyone is racing to build stronger AI agents. But a harder question is how to make them economically viable at scale. The industry tends to focus on adding more capabilities and bigger models, while costs quietly explode across dimensions most teams do not think about early on.</p>
 <p>In practice, many teams start with an LLM plus tools, keep layering on features, and end up with systems that do not scale economically. Poor architectural decisions and missing optimizations compound across database operations, embedding computation, and agent inference.</p>
 <p>This talk explores the economics of architecture choices when building production AI agents. Drawing from experience building semantic search for billions of entities at Monday.com and integrating it into AI-driven products, it covers concrete architecture lessons that help control costs. Topics include using deterministic systems for predictable operations, building vector search for retrieval, and reserving LLM reasoning for cases that truly need it.</p>
@@ -4023,7 +4032,7 @@ A certified FinOps practitioner, Paweł focuses on delivering efficient AI solut
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Kuba Rohleder is a Staff Software Engineer at Monday.com, where he builds hybrid search systems for AI agents at massive scale, including billions of vectors and hundreds of millions of daily updates. With a background in large-scale systems and experience leading the GCP Kubernetes UI at Google, he now focuses on making AI architectures economically sustainable.</p>
 <p>His approach emphasizes retrieval as the core, guardrails for predictable flows, and tiered AI and ML models as composable building blocks. Outside of work, he is a prolific builder, creating everything from nutrition tracking apps to smart home voice control systems, including training his own trigger word model from scratch.</p></p>
               </div>
@@ -4061,7 +4070,7 @@ A certified FinOps practitioner, Paweł focuses on delivering efficient AI solut
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>There's always a gap between a great demo and a great product. Doubly true with AI agents. No wonder: the whole domain just appeared, keeps evolving at a crazy pace, and to make matters worse – the technology is fundamentally non-deterministic.
 At PostHog, we've spent the last year and a half building an agent for product research. Then rebuilding it once, twice, thrice, finally launching, and… rebuilding again.
 Don't go through this hell yourself. Instead, join me for this crash course on building an AI agent as a product. We'll get into easy mistakes (that we made), unobvious trends (that we're looking to ride), and business dilemmas (that the industry is facing).</p></p>
@@ -4070,7 +4079,7 @@ Don't go through this hell yourself. Instead, join me for this crash course on b
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Michael Matloka is a senior product engineer and team lead at PostHog. He leads the Signals team, building systems that turn analytics, session replay, and error tracking data into actionable product insights. An early PostHog engineer, he also founded and launched PostHog AI and has extensive experience shipping large scale data, analytics, and user facing product infrastructure.</p></p>
               </div>
           </div><!--//modal-body-->

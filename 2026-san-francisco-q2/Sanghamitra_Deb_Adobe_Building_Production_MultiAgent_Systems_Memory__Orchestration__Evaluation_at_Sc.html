@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,7 +279,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Most multi-agent demos look impressive, but production systems often fail – not because of model quality, but due to orchestration, context handling, tool access, and evaluation.
 This talk presents a real-world multi-agent system for enterprise B2B marketing, including transparent agent routing, multi-level memory (session, user, org), and two key workflows: plan-and-execute and discover-and-create. It also shows how the Model Context Protocol (MCP) standardizes tool access and reduces integration complexity.
 A core focus is evaluation: even high-performing agents can fail together due to cascading errors. A composable evaluation framework and the “compositionality gap” are introduced to diagnose system performance.
@@ -280,7 +289,7 @@ Finally, lessons on building teams are shared – emphasizing hybrid ML-engineer
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Sanghamitra Deb is a Senior ML Manager at Adobe, leading the B2B Marketing Applications team on Adobe Experience Platform. Her team builds multi-agent agentic AI systems for enterprise marketing, including orchestration platforms, evaluation frameworks, and personalization engines. She manages a cross-functional organization of ML engineers, data scientists, backend/frontend engineers, and data engineers — and has shaped Adobe's approach to hiring hybrid ML-plus-engineering talent for agentic AI development. She drives technical vision and strategy for the team, from architecting composable evaluation pipelines to leading cross-platform LLM infrastructure migrations that enable the team to operate across multiple model providers with lean, trust-based coordination. Previously, she served as Head of Generative AI at Chegg, where she built multi-modal AI platforms serving tens of millions of students. Sanghamitra holds a Ph.D. in Astrophysics from Drexel University with postdoctoral experience at Argonne and Lawrence Berkeley National Laboratories. She is an active conference speaker — including PyData, ODSC, RecSys, and Grace Hopper — and an advocate for women in technology through WIDS and WiMLDS.</p></p>
               </div>
 

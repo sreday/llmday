@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>“AI agents” and “agentic pipelines” have quickly become this year’s favorite buzzwords. Every product claims to have them. Few teams can clearly explain what actually distinguishes an agent from a prompt chain — or why one agent is fundamentally more capable than another.  This talk offers a structured way to think about agent systems using the five levels of AI agents outlined in Google’s Introduction to Agents (Gulli et al.). But instead of treating the framework as gospel, we’ll stress-test it against real implementation scenarios.  * What really changes between levels? * Where does orchestration stop and autonomy begin? * At what point does an LLM wrapper become a system?  We’ll move through progressively more sophisticated architectures — from deterministic pipelines to systems that plan, reflect, and act with increasing independence. Along the way, we’ll examine the engineering implications: state management, tool integration, evaluation loops, failure modes, and operational complexity.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Sergey is an experienced web developer with over 15 years in the field, from heading a 50M DAU API service to working as a tech lead in a startup environment. He is particularly interested in APIs as a broad discipline, a topic on which he has given numerous talks and authored two books.  In recent years, he has been deeply involved in applied AI — integrating AI into software engineering workflows, designing general-purpose AI pipelines, and exploring deep research workflows powered by large language models.</p></p>
               </div>
 

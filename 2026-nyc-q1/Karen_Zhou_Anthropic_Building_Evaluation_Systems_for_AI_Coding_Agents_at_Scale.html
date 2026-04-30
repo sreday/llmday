@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,7 +279,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As AI coding assistants move from novelty to daily workflow, how do we know they're actually helping? This talk explores the technical and philosophical challenges of evaluating AI coding agents when they're deployed to millions of users.
 Turning user feedback into signal: Users complain, report issues, and express frustration—but this unstructured feedback is gold for improving models. I'll discuss approaches for transforming messy real-world feedback into structured evaluation datasets, including clustering techniques and rubric generation for consistent assessment.
 Measuring subtle failures: Some problems are easy to benchmark; others are felt more than measured. "Laziness," overconfidence, and instruction-following failures don't show up in traditional evals. I'll share frameworks for detecting these behavioral issues through automated assessment pipelines.
@@ -282,7 +291,7 @@ Closing the loop: Connecting evaluation back to training through RL and human fe
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Karen is a member of technical staff at Anthropic, where she works on developing product eval, RL environments, and multi-agent product features for Claude Code. She builds evaluation systems and feedback pipelines that assess how AI models behave in real-world software development scenarios, transforming user feedback into useful evals for model improvement. On the product side, she actively drives the development of swarm and multi-agent functionality that enables multiple AI agents to collaborate on complex software engineering tasks. Prior to Anthropic, Karen worked at Meta on large language models.</p></p>
               </div>
 

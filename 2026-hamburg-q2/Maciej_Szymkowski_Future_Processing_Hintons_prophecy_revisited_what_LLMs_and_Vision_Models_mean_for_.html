@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -229,12 +238,25 @@
 <!-- CONTENT -->
 
 
+<style>
+  .talk-content .desc p,
+  .talk-content .desc li {
+    text-align: justify;
+    line-height: 1.75;
+    color: #444;
+    font-size: 0.95rem;
+  }
+  .talk-content .desc {
+    padding-bottom: 0.25rem;
+  }
+</style>
+
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
     <h1 class="section-heading text-center mb-3">Hinton's prophecy revisited: what LLMs and Vision Models mean for the future of radiology</h1>
     <div class="row">
 
-      <div class="col-6 col-lg-3 mb-4">
+      <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
           <img src="../speakers/Maciej Szymkowski.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
@@ -255,18 +277,22 @@
       </div><!--//col-->
 
       <div class="col-6 col-lg-9 mb-4">
-        <div class="card rounded-0">
+        <div class="card rounded-0 talk-content">
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>In 2016, Professor Geoffrey Hinton claimed that radiologists will not be needed anymore, in a short time they will be replaced by AI models (the time horizon was 5 years). Unfortunately, Professor wasn’t right. This time did not yet appear – still radiologist is a significant part of the diagnostics process. However, it must be said that there are several approaches that can give a hand to these medical specialists. This presentation will be divided into two main phases. In the first of them I will present traditional pipelines (based on image/signal processing) for analysis of radiological scans, e.g., liver anatomical scans, - I will use simple approaches as image filtering or thinning to detect pathological changes. In the second part of my talk, I will deeply explain how novel AI models can be used to give a hand to radiologist. I will build a pipeline based on computer vision models (like YOLO) to observe cancer changes but also, will consume ready to use models – e.g., MedSAM to recognize these changes. On the other hand, VLMs will also be used to analyze the samples – Gemini, GPT, Qwen, and InternVL will be run for this aim. Moreover, we will check new MedGemma model – it was claimed as one of the most efficient ones nowadays that can give a hand to radiologists. Finally, we can answer on the main question – are we ready to replace radiologists?</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Maciej Szymkowski is a Ph.D. in the field of Computer Science. From April 2025, he is working with Future Processing as a Senior Machine Learning Engineer. He is also with Bialystok University of Technology (from 2018, where he was research assistant and right now is moving to assistant professor position). He was previously with Warsaw University of Technology (Faculty of Electronics and Information Technology, 2021-2022) and AGH in Cracow (Faculty of Physics and Applied Computer Science, 2021-2022). He gained his experiences also as a researcher and software engineer in diversified projects and companies (e.g., SoftServe, Symmetra, Transition Technologies, Hemolens Diagnostics). He was also with Łukasiewicz Research Network - Poznan Institute of Technology (2022-2024) where he was a Head of AI Development section. Maciej Szymkowski is an author or co-author of more than 45 research papers published in JCR journals, as chapters in the books or in international conference proceedings. His main research area is Computer Vision – especially in the field of medicine and transport. He is interested in Vision-Language Models (VLMs), Large Language Models (LLMs) and machine learning algorithms. In his free time, he loves to extend his knowledge, take a long walk, read a book or watch soccer, basketball or hockey. He is a fan of Legia Warsaw, Real Madrid, Bayern Munchen (soccer), New York Knicks (basketball) and Pittsburgh Penguins (hockey).</p></p>
               </div>
+
+              
 
           </div><!--//card-->
           <div class="card-footer text-muted">

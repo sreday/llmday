@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,7 +279,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As organizations race to integrate Large Language Models (LLMs) into their development workflows, many are hitting a “Productivity Paradox.” Developers often perceive a 20 percent gain in speed, while deeper analysis shows they may actually be 20 percent less productive due to a lack of structured methodology.</p>
 <p>This session introduces the AI-Driven Development Lifecycle (AI-DLC), a reimagined framework designed not to retrofit AI into existing Agile processes, but to build a new paradigm centered on brain to brain alignment between humans and machines.</p>
 <p>We will explore critical lessons learned from real world use cases and experiments, including the dangers of vibe coding and the necessity for developers to understand and defend every line of code as the ultimate owner. Attendees will learn high impact engineering techniques such as semantic context compression to prevent AI from entering infinite loops, and the semantics per token ratio to maximize output quality.</p>
@@ -281,7 +290,7 @@
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>I’m Enterprise Technologist Leader at Amazon and Specialist in AI/ML and Reliability Space. I been technical advisor for lot of Enterprise Customers in Retail/Auto manufacturing, ISV and Startup Industries</p></p>
               </div>
 

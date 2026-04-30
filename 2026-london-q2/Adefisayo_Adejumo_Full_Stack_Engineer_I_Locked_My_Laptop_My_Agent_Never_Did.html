@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Early in my backend career, I worked alone on systems handling real money and real users. I locked my laptop before leaving my desk, not because a policy required it, but because an unattended terminal with database access is an unguarded door. Then we started deploying LLM agents, and nobody locked anything. Today, many agents operate as permanent unattended sessions with production credentials. They call APIs, read data, and execute actions inside real systems without scoped identity, attribution, or runtime approval. In practice, an LLM agent connected to tools is an unattended session with system access. The engineers wiring agents to production systems are making security decisions by default. This talk makes those decisions deliberate. It introduces the LAR framework: Lock, Attribute, Require — three practical backend patterns for governing LLM agents at runtime. Lock. Agents should not hold standing credentials. Instead, systems generate dynamic, task-scoped credentials that exist only for the duration of an agent session. This reduces the blast radius of a compromised agent and applies the same principle engineers follow when locking their terminals. Attribute. Every agent action must be traceable. Using OAuth identity federation and delegated scopes, tool calls carry identity context so that logs clearly show which user initiated the request, which agent executed it, and what permissions were granted at that moment. Require. Certain actions should never be executed automatically. Destructive changes, financial transactions, or sensitive operations should pause until a human explicitly authorises them. Using approval flows such as Client-Initiated Backchannel Authentication, agents can request permission before completing irreversible tasks. The talk includes a live Python demonstration comparing two versions of the same LLM-powered backend agent. The first runs with permanent credentials, broad access, and no attribution. The second operates under the LAR framework with session-scoped credentials, identity propagation through tool calls, and human approval for sensitive operations. Attendees see the difference between an ungoverned agent and a governed one interacting with the same production-like environment. Key takeaways for attendees: - A clear mental model for governing LLM agents using the LAR framework: Lock, Attribute, Require - Practical patterns for implementing session-scoped credentials for agents in Python to avoid long-lived access tokens - How to use OAuth identity federation to attribute agent tool calls to the initiating user and agent identity - How to introduce human-in-the-loop approval for high-risk agent actions before execution - A practical understanding of the architectural difference between an ungoverned agent and a governed production agent A practical understanding of the architectural difference between an ungoverned agent and a governed production agent I locked my laptop. It is time we built systems that do the same.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Ayo is a London-based backend engineer who has built distributed systems across fintech and SaaS, where the cost of an ungoverned credential is not theoretical. A Software engineer and Educator, she holds an MSc in Software Engineering with Distinction from Kingston University, speaks at DevFest and JSMonthly, and mentors at Codebar and Code Your Future.</p></p>
               </div>
 

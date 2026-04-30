@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>I will talk about current brain-inspired AI and discuss the actual mechanics behind the "20W brain" pitch to move beyond simple inspiration toward systems that deeply mirror biological inner workings. I’ll highlight how modern neurotechnology provides direct access to the biological data that LLM interpretability researchers are currently forced to infer. Finally, I’ll introduce Neuraffica, my project bridging neuroscience and AI to turn these biological ground truths into reality.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Marta Gajowa: Experimental and computational neuroscientist on the founder path. Spent 15 years in research, moving from lab to lab — Krakow, Paris, UC Berkeley — building neurotechnology for mapping how signals propagate through neural circuits. Published author in peer-reviewed journals, including Nature Neuroscience and Neuron. Now building Neuraffica, where the goal is simple: stop guessing what makes brains efficient and start measuring it — then transfer those principles to AI. Happy to chat after the talk about why the next AI architectures might come from biology, not benchmarks.</p></p>
               </div>
 

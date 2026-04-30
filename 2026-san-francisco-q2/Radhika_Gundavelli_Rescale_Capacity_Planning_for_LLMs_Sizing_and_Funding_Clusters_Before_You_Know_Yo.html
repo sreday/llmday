@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Sizing infrastructure for LLM workloads is uniquely hard: model architectures shift, training cycles are unpredictable, and inference demand can spike overnight. Yet most capacity decisions are still made by intuition rather than modeling, resulting in either wasteful over-provisioning or painful bottlenecks at the worst moments. This talk offers a structured approach to capacity planning and cost strategy that works even before your workload is fully understood.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Radhika Gundavelli is an Engineering and Program Management Leader at Rescale, specializing in multi-cloud HPC and AI infrastructure. Based in the San Francisco Bay Area, she leads customer-facing technical programs focused on capacity planning and scalable compute platforms.</p></p>
               </div>
 

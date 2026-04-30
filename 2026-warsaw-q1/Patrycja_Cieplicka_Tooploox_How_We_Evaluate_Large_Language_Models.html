@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Good evaluation helps understand what large language models really do. This talk gives a simple overview of how large language models are evaluated in practice. It looks at common open-source benchmarks and tools used to test model behaviour and capabilities. On top of that, recent research trends, common issues, and practical tips for real-world evaluation are covered.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Patrycja Cieplicka is a Machine Learning Engineer with around six years of experience. At Tooploox, she focuses on Large Language Models, especially post-training, evaluation, and optimization. She holds a degree in Computer Science from the Warsaw University of Technology. In 2024, she was named one of the TOP100 Women in Data Science in Poland.</p></p>
               </div>
 

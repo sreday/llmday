@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,7 +281,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>For decades, we have built deterministic software systems - our architectures, tools, and mental models are optimized for this world.
 AI software development breaks that mindset.
 In AI products, software architecture is only the tip of the iceberg. Beneath it lies an evolving data architecture: prompts, retrieval strategies, eval loops, and knowledge graphs that directly shape system behavior over time. Shipping code is only the start of that lifecycle.
@@ -283,7 +292,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Susanna Wong is a Staff Engineer at V7 Labs and a Google Developer Expert with a focus on JavaScript, web technologies, and machine learning. She is a member of the Google Developer Advisory Board and is known for bridging front end engineering with practical ML applications through speaking, teaching, and community work.</p></p>
               </div>
 

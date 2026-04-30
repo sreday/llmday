@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>A model can sound fluent, confident, and authoritative while being factually wrong, dangerously ungrounded, or silently broken. Recent failures, from AI-generated legal citations appearing before the England and Wales High Court to Air Canada being held liable after its chatbot gave incorrect bereavement fare information, show the same uncomfortable pattern: the output looked usable, but the evaluation layer failed. Most LLM failures in production are not only model failures. They are measurement failures. Teams swap prompts, upgrade models, and adjust retrieval logic without a systematic way of knowing what quietly got worse. This talk introduces a lightweight evaluation framework across six layers: correctness, grounding, format compliance, safety, refusal quality, and regression. Through a practical walkthrough of a lightweight 20-test evaluation harness, attendees will learn how to catch breakage before users do and treat evals like CI/CD for LLM behaviour.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Richard Dosumu is a cybersecurity practitioner, Founder at OctaTech, and an independent researcher focused on practical security in real-world environments. He holds an MSc in Cyber Security &amp; Human Factors and writes educational cybersecurity content on Medium and LinkedIn, with a particular interest in making security guidance usable under operational pressure. His published research spans the intersection of AI, cybersecurity, and Industry 4.0/manufacturing, exploring how modern systems introduce new risks and control challenges. He is also involved with the OWASP Bristol organising community and is committed to sharing actionable, defensible approaches that teams can implement without disrupting critical operations.</p></p>
               </div>
 

@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,7 +281,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>This year I argued that context engineering is the real power tool behind great prompts. Next year I want to show what happens when you take that seriously and push it all the way to shipping real software in a single day.
 In this session we will move from theory to practice. I will unpack the context patterns that actually hold up once you leave the playground and build for real users. Multi layer memory, data boundaries, llms.txt style controls, retrieval patterns that survive messy SharePoint and inboxes, and the review loops you need so legal, compliance and IT can sleep at night.
 Then I will connect it to something very practical. My “Ship Your First App In A Day” workshops, where non technical leaders go from “what is a terminal” to a deployed, context aware AI app by 5pm. I will break down the scaffolding that makes that possible. How we design prompts around specific jobs to be done, how we shape context so models stay on track, and how we hand these experiments over to professional engineering teams without losing the magic.
@@ -282,7 +291,7 @@ You will leave with a concrete blueprint to take your own prompt engineering pra
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Erik Schwartz is a technology leader, entrepreneur, and founder of theAiExpert.ai, with over 25 years at the intersection of search, knowledge discovery, and artificial intelligence. He has held senior roles at Comcast, Elsevier, and Microsoft, where he pioneered large-scale platforms and introduced generative AI into mission-critical products used by millions.
 At Elsevier, Erik spearheaded ScopusAI, a breakthrough generative AI solution that transformed how researchers discover and evaluate knowledge — a project that exemplifies his talent for turning cutting-edge innovation into measurable business value.
 Today, through theAiExpert.ai, Erik acts as a Fractional Chief AI Officer (CAIO), helping organisations move from AI-curious to AI-powered. He designs agentic workflows, compliance accelerators, and adaptive AI systems that cut costs, reclaim time, and unlock growth.

@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Anti-money laundering systems often fail due to static rules that cannot reason across complex contexts, leading to high false-positive rates. This talk presents a five-stage agentic AI pipeline where specialized LLM agents handle graph traversal, typology matching, narrative reasoning, and automated SAR drafting. In a 30-day production evaluation, this system achieved 94.2% precision, reduced false positives to 2.1%, and cut SAR filing time to under two minutes.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Sivakumar Selvaraj is a Senior Manager and Data Engineering Lead with over 16 years of experience building and scaling cloud-based data platforms. He specializes in AI-driven data solutions, machine learning pipelines, and real-time data processing using technologies like Snowflake, AWS, Azure, and Spark. Currently at Caesars Entertainment, he leads initiatives across data engineering and AI, partnering with business and technical teams to deliver scalable, high-impact data systems. He holds a Master’s degree in Computer Science (Big Data Systems) from Arizona State University and is AWS Certified in AI.</p></p>
               </div>
 

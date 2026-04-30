@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,7 +279,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Large language models bring unprecedented capabilities - reasoning, autonomy, multimodal processing, and real‑time adaptation. But these same features may place systems within the scope of the EU AI Act, triggering a set of concrete regulatory obligations. </p>
 <p>In this talk, I will break down which specific capabilities matter most for classification under the Act and how they translate into compliance duties. I will also show how operational teams can map LLM behaviors to risk categories and controls without getting lost in legal abstractions. The goal is to give practitioners a practical lens for understanding “why this system qualifies” and “what exactly we must do next.”</p></p>
               </div>
@@ -278,7 +287,7 @@
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Oktawia is an attorney‑at‑law (radca prawny) and Project Manager in the Intellectual Property, Technology and Data Protection Practice at EY.
 She specialises in the legal aspects of technology implementation, including cybersecurity, data protection and artificial intelligence regulations. She holds an LL.M. in Information Technology Law.</p>
 <p>She was recognised in the nationwide Wolters Kluwer ranking Rising Stars – Lawyers of Tomorrow 2024, placing among the TOP 35 most promising young lawyers in Poland.</p>

@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,7 +279,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>AI agents have a blind spot: IT Operations. While the industry obsesses over software development, ops remains a second-class citizen. Software engineering is proactive and human-driven. Operations is also, but only sometimes. It's also reactive, predictive, and event-driven by infrastructure and applications. Nobody prompts the 3 AM outage. It just happens.</p>
 <p>Current agentic architectures optimize for exactly one modality: human-driven interactions. To make AIOps real, we need event-driven agent triggering, domain-specific operational skills, and production-grade security models. In this talk I'll take you from vision to working example of alternative operations-centric agentic workflows. I'll showcase AI agents performing triage and root cause analysis triggered by faults in running clusters and applications.</p>
 <p>What does the world look like if operations teams are suddenly empowered by agents working on their behalf? Agents that dramatically reduce toil by doing the grunt work and handing those teams highly accurate analyses backed by a proof-of-work allowing for immediate action.</p></p>
@@ -279,7 +288,7 @@
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Randy Bias is a cloud computing pioneer, entrepreneur, and strategist with decades of experience shaping open source and cloud infrastructure. He accurately predicted the growth trajectory of AWS, helped popularize foundational cloud concepts, and has advised startups and enterprises on technology, product, and go-to-market strategy. Randy currently serves as VP of Strategy and Technology at Mirantis and is a longtime advocate for open source as a sustainable business model.</p></p>
               </div>
 

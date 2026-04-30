@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Modern observability platforms produce massive volumes of high-cardinality time series data across thousands of entities, creating a poor fit for large language models. When raw telemetry is passed directly into an LLM, the result is often excessive token consumption, loss of critical signals through truncation, and inconsistent analytical outputs that reduce troubleshooting reliability. This session introduces Semantic Condensation, a token-aware transformation layer that converts large-scale telemetry into structured, semantically coherent summaries designed for LLM consumption. The approach combines vectorized statistical pre-analysis, multi-signal importance scoring, adaptive token-budget tiering, and behavior-aware trend classification to preserve anomalies, change points, and operational patterns while minimizing representation cost. Rather than relying on traditional downsampling or aggregation alone, Semantic Condensation is designed specifically for LLM interpretability and semantic consistency. It helps ensure that summaries remain internally coherent, scales to thousands of time series under strict latency constraints, reduces token footprint by orders of magnitude, and improves downstream troubleshooting accuracy by as much as 25 percentage points in evaluated scenarios. Attendees will leave with practical strategies for building LLM-aligned telemetry pipelines, reducing contradictory outputs, and enabling scalable, production-grade AI observability assistants. More broadly, this talk presents a new abstraction layer for observability: semantically consistent, token-efficient representations that make reliable LLM-driven troubleshooting possible.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Akila Balasubramanian is a Principal Software Engineer and technical leader specializing in AI-powered observability, agentic AI systems, intelligent troubleshooting, and digital experience monitoring. She has a strong track record of transforming complex, ambiguous problems into scalable platform capabilities that drive measurable business impact. At Splunk (a Cisco company), Akila leads AI-driven observability initiatives, including the development of agentic AI assistants for automated root cause analysis across distributed systems. Her work has significantly improved incident resolution efficiency, reducing resolution time by ~61% through evidence-based troubleshooting workflows. She has also driven innovation in Real User Monitoring (RUM), Session Replay, and telemetry analytics, enabling deep, actionable insights into system performance and user experience at scale. Her expertise spans distributed systems, telemetry pipelines, and applied AI, with hands-on experience in Python, JavaScript/TypeScript, Java, GraphQL, and AWS. She is recognized for leading cross-functional execution across engineering, product, and UX, delivering enterprise-grade, scalable, and high-reliability systems. Previously, at Edelman Financial Engines, she led development of unified client platforms, modernized frontend architectures, and built scalable API ecosystems. Her earlier work includes mobile application development, experimentation platforms, and collaborative SaaS systems across fintech and enterprise domains. Akila is an inventor with multiple patents in session data visualization, telemetry analytics, and AI-driven code generation. She holds a Master’s degree in Computer Science from the University of Illinois at Chicago and a Bachelor’s degree in Information Technology from PSG College of Technology, India.</p></p>
               </div>
 

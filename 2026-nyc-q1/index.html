@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -236,21 +245,21 @@
       
       <style>
         .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: #b6dfc9; z-index: 0; }
+        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: var(--brand-lighter); z-index: 0; }
         .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
         .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
-        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #26986A; border: 2px solid #fff; outline: 2px solid #26986A; margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
+        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); border: 2px solid #fff; outline: 2px solid var(--brand); margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
         .idx-tl-dot.past { background: #999; outline-color: #999; }
-        .idx-tl-chip { background: #e8f7ef; border: 1px solid #b6dfc9; border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
-        .idx-tl-chip:hover { background: #d4f0e2; text-decoration: none; }
+        .idx-tl-chip { background: var(--brand-lightest); border: 1px solid var(--brand-lighter); border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
+        .idx-tl-chip:hover { background: var(--brand-pale); text-decoration: none; }
         .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
         .idx-tl-chip.past:hover { background: #d8d8d8; }
-        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: #1a5c3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .idx-tl-chip.past .idx-tl-city { color: #555; }
-        .idx-tl-date { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
+        .idx-tl-date { font-size: .75rem; color: var(--brand-light); margin-top: 2px; }
         .idx-tl-chip.past .idx-tl-date { color: #777; }
         .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
+        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: var(--brand-dark); margin-bottom: 10px; position: relative; top: -4px; }
       </style>
       <div class="idx-tl">
         <div class="idx-tl-line"></div>
@@ -420,7 +429,7 @@
   .event-read-more-btn {
     display: inline-block;
     padding: 6px 12px;
-    background: #51AD88;
+    background: var(--brand-light);
     color: #fff;
     border-radius: 6px;
     text-decoration: none;
@@ -430,7 +439,7 @@
   }
   .event-read-more-btn:hover,
   .event-read-more-btn:focus {
-    background: #67B797;
+    background: var(--brand-lighter);
     color: #fff;
     text-decoration: none;
   }
@@ -470,7 +479,7 @@
     padding-left: 3em;
     background: linear-gradient(to right, transparent, #e8f8f0 30%);
     font-weight: 700;
-    color: #26986A;
+    color: var(--brand);
     text-decoration: underline;
   }
   .schedule-section .item {
@@ -501,7 +510,7 @@
   .track-nav-links a {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: #26986A;
+    background: var(--brand);
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -510,25 +519,25 @@
     transition: background 0.2s;
   }
   .track-nav-links a:hover {
-    background: #1f7d57;
+    background: var(--brand-dark);
     color: white;
   }
   .view-toggle-link {
-    color: #26986A;
+    color: var(--brand);
     text-decoration: none;
     font-size: 0.9rem;
     cursor: pointer;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #26986A;
+    border: 1px solid var(--brand);
     border-radius: 4px;
     transition: all 0.2s;
   }
   .view-toggle-link:hover {
-    background: #26986A;
+    background: var(--brand);
     color: white;
   }
   .view-toggle-link.active {
-    background: #26986A;
+    background: var(--brand);
     color: white;
   }
   /* Table view */
@@ -545,7 +554,7 @@
     table-layout: fixed;
   }
   .schedule-grid-table th {
-    background: linear-gradient(135deg, #26986A 0%, #1f7d57 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
     padding: 0.75rem 1rem;
     text-align: left;
@@ -557,17 +566,17 @@
   }
   .schedule-grid-table td {
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid #e5f4ec;
+    border-bottom: 1px solid var(--brand-lightest);
     vertical-align: top;
   }
   .schedule-grid-table td.merged-cell {
     text-align: center;
     font-weight: 500;
     color: #555;
-    background: #e5f4ec;
+    background: var(--brand-lightest);
   }
   .schedule-grid-table .time-cell {
-    color: #26986A;
+    color: var(--brand);
     font-weight: 600;
     white-space: nowrap;
   }
@@ -577,7 +586,7 @@
     font-weight: 500;
   }
   .schedule-grid-table .talk-cell a:hover {
-    color: #26986A;
+    color: var(--brand);
   }
   .schedule-grid-table .speaker-info {
     color: #444;
@@ -618,7 +627,7 @@
   }
   /* Track section header */
   .track-section-header {
-    background: linear-gradient(135deg, #26986A 0%, #1f7d57 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
     padding: 1rem 1.5rem;
     margin: 2rem 0 0 0;
@@ -1962,7 +1971,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Most people aren't vibe coding an entire app from scratch and shipping it to production without a second thought. What’s more likely to happen is more subtle and potentially riskier. You've got a pre-existing service running in your cluster, it's been reviewed, it has access to your database, your secrets, your internal APIs. Then someone asks an AI assistant to add a feature. The generated code works, great! But, it also hardcodes an API key, or passes raw model output to users, or creates a public ingress to an internal service. And it lands inside a system that already has the keys to everything. The recent <a href="https://www.wiz.io/blog/exposed-moltbook-database-reveals-millions-of-api-keys">Moltbook incident</a> made these blaring security concerns around AI generated code blaringly apparent, a single missing config exposed 1.5 million API keys. At a certain point AI-generated code will make its way into Kubernetes clusters and the security implications are real, are we ready to address them?</p>
 <p>In this talk we'll break down the specific risks that AI-generated code introduces when it lands in Kubernetes, from pod security and secret management to network exposure and LLM workloads. Then we'll build the fix: open-source security skills you drop into your AI coding assistant so it generates secure defaults automatically. We'll validate those skills against a live cluster using mirrord, no image rebuilds, no redeploys, just fast feedback until the policies actually work. You'll leave with a repo you can use today and an answer to the question every team shipping AI-generated code needs to figure out: if AI writes the code, what reviews it?</p></p>
               </div>
@@ -1970,7 +1979,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Adna Zujo Lakisic is a Solutions Engineer based in North America, currently working at MetalBear. She brings a strong engineering background spanning software development, technical consulting, and solutions engineering across media, marketing, and technology companies. Prior to MetalBear, she spent several years as a Senior Engineer at Haymarket Media US, where she supported large scale digital platforms. Her experience also includes technical consulting roles at Omega IT and solutions engineering at Midan Marketing, with hands on work in areas such as Terraform, Python, Kubernetes, and cloud infrastructure. Earlier in her career, Adna helped shape and fund a mobile tour guide platform focused on promoting tourism in Mostar through curated self guided experiences.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2007,7 +2016,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>The most popular advancements in cloud-native technology at this time are LLMs and AI Agents, which can help you troubleshoot your environment, build new environments, and even template a codebase.</p>
 <p>The two current problems are that there's no way to secure the traffic (e.g, reaching out to MCP servers, workload identity and authentication (SPIRE), and A2A), and Agents can't run by default in Kubernetes.</p>
 <p>Luckily, there are two open-source tools to help with this.</p>
@@ -2017,7 +2026,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Michael Levan is an AI architect and principal solutions engineer at Solo.io, focused on building high performing agentic and Kubernetes environments. A CNCF Ambassador, published author, and frequent speaker, he works at the intersection of platform engineering, cloud native infrastructure, and applied AI. Based in the New York City area, Michael is known for translating complex systems into practical architectures that deliver clear business value.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2054,14 +2063,14 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Generative AI is more than stateless chatbots. Real value lies in stateful, production-grade agents that act on your data. This session is a developer's blueprint for building these agents natively in Snowflake.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Tim Spann is a Senior Solutions Engineer and an ex-Developer Advocate @ Streamnative, a streaming developer advocate, open source advocate, a blogger at DZone and an experienced data engineer with 15 years of experience. He runs the Future of Data Princeton meetup as well as other events. He has spoken at Philly Open Source, ApacheCon in Montreal, Strata NYC, Oracle Code NYC, IoT Fusion in Philly, meetups in Princeton, NYC, Philly, Berlin and Prague, DataWorks Summits in San Jose, Barcelona, D.C., Berlin and Sydney. I spoke at Nethope Globa Summit twice and would love to assist in other charitable data events and activities. I was a Principal DataFlow Field Engineer at Cloudera. I was a Senior Field Engineer at Pivotal, a Senior Solutions Architect at airsData and a Senior Solutions Engineer at Hortonworks.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2098,14 +2107,14 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Traditional distributed tracing relies on sampling strategies optimized for microservices: keep slow traces, keep error traces, and drop the rest. This approach fundamentally breaks down for LLM-powered systems. In LLM traces, latency &amp; error signals are often meaningless: long latencies are expected, short latencies can still hide severe quality failures, and “errors” rarely correspond to the user-facing outcome. The true signal lies in the semantic content of the trace itself - prompts, intermediate reasoning steps, tool calls, and model outputs. As a result, conventional head-based or tail-based sampling systematically discards the most important traces while retaining large volumes of low-value data. This talk will show that effective observability for LLM systems requires a shift from signal-based sampling to content-aware sampling. The only viable way to sample intelligently is to run evaluations directly on span contents, scoring traces by quality, safety, correctness, and alignment with task intent. We explore how eval-driven sampling reframes tracing from performance diagnostics to outcome diagnostics, and why it is essential for operating LLM systems reliably at scale.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Noam Levy is a Field CTO at groundcover. Over the last 10 years, Noam has been a part of and led development teams focused on microservices-oriented web applications, monitoring complex application pipelines, and system engineering. When not handling pull requests and responding to questions in the groundcover Slack community, you can find Noam attempting to reverse engineer musicals and indie rock music on the guitar and piano.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2142,14 +2151,14 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Harnessing the power of Machine Learning (ML), Artificial Intelligence (AI), and cloud-native technologies is no longer optional; it's a necessity for driving scalable automation and innovation.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Ben Savage, serving as the visionary CEO of Veritas Automata, brings to the forefront an extensive background in revolutionizing autonomous transaction processing through the strategic integration of blockchain, smart contracts, and machine learning. His tenure at Veritas Automata is marked by an unwavering commitment to innovation, operational efficiency, and leveraging technology for transformative business solutions. Prior to leading Veritas Automata, Ben was instrumental in shaping the future of IoT solutions as the CTO and Chief Innovation Officer at Apex Supply Chain Technologies, where he pioneered the development of the groundbreaking Pizza Portal for Little Caesars among other complex IoT applications.</p>
 <p>With a career spanning over two decades, Ben's expertise encompasses product development, embedded systems, cloud computing, and supply chain management, honed through significant roles at Apex, Maersk, and Computer Science Corporation. His pioneering work has been recognized with numerous domestic and international patents, underscoring his contribution to advancing technology and business practices. Furthermore, Ben's thought leadership and strategic insights have made him a valued member of multiple advisory boards, where he continues to influence the direction of technological innovation and industry standards.</p>
 <p>At the helm of Veritas Automata, Ben Savage is not just leading a company; he is steering an industry towards a future where technology serves as a cornerstone for efficiency, security, and growth, embodying the ethos of innovation, improvement, and inspiration that Veritas Automata champions.</p></p>
@@ -2188,7 +2197,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As telecommunications evolves toward 6G, Radio Access Networks (RAN) will fundamentally transform application architecture beyond today's approach of endpoints calling LLMs on remote data centers. This presentation examines three critical software development challenges for the next decade:</p>
 <ul>
 <li>Real-time AI at the Edge: Moving from cloud-dependent inference to distributed processing meeting RAN's strict latency requirements.</li>
@@ -2201,7 +2210,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Alisson Sol is a hands-on engineering leader with deep expertise in distributed systems, AI, and scaling products to millions of users at top tech companies. More info at <a href="https://AlissonSol.com">https://AlissonSol.com</a></p></p>
               </div>
           </div><!--//modal-body-->
@@ -2238,14 +2247,14 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Moving Generative AI from proof-of-concept to production in high-stakes industries like Fintech and Healthcare requires a fundamental strategic shift. Drawing from real-world deployments at the AWS GenAI Innovation Center, this session explores ten critical lessons learned building autonomous agents for complex use cases. We will dive into "Model as a Judge" evaluation frameworks, architectural trade-offs between rigid pipelines and flexible agents, and why hallucinations are essential signals for system optimization. Attendees will receive a framework for prioritizing accuracy, building auditable reasoning chains, and creating internal feedback loops for self-improving deployments.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Ahsan Ali is a Senior Applied Scientist at the AWS Generative AI Innovation Center at Amazon, where he works on applied artificial intelligence and generative AI solutions. Prior to joining AWS, he was a postdoctoral researcher in the Data Science and Learning Division at Argonne National Laboratory. Ahsan earned his Ph.D. in Computer Science and Engineering from the University of Nevada, Reno in 2021, and previously completed his M.S. and B.S. in Computer Science and Telecommunication Engineering at Koç University in Istanbul, Turkey.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2282,14 +2291,14 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>When asking AI to help refactor a method, do you get back something that runs, but would never pass review? The difference between frustrating and useful AI interactions comes down to how you build your prompt. This talk offers practical advice you can apply to get better results.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>My name is Jeremy Curcio, I'm a software engineer currently working at Login.gov as an Integration Engineer, splitting my time between supporting partners to develop their integrations and writing code to support the mission. I've been developing software professionally for 12 years, with the last 6 years being working in Ruby. Outside of work, I am very involved with my kids by coaching their baseball, soccer, and basketball teams, as well as being President of their schools' PTA.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2326,7 +2335,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.</p>
 <p>This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.</p></p>
               </div>
@@ -2334,7 +2343,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Nitin Kanukolanu works on AI at Redis and specializes in building and deploying end to end machine learning systems. With experience developing production ML pipelines and fine tuning models, he focuses on applying modern machine learning and natural language technologies to solve real world customer problems.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2371,7 +2380,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As organizations race to integrate Large Language Models (LLMs) into their development workflows, many are hitting a “Productivity Paradox.” Developers often perceive a 20 percent gain in speed, while deeper analysis shows they may actually be 20 percent less productive due to a lack of structured methodology.</p>
 <p>This session introduces the AI-Driven Development Lifecycle (AI-DLC), a reimagined framework designed not to retrofit AI into existing Agile processes, but to build a new paradigm centered on brain to brain alignment between humans and machines.</p>
 <p>We will explore critical lessons learned from real world use cases and experiments, including the dangers of vibe coding and the necessity for developers to understand and defend every line of code as the ultimate owner. Attendees will learn high impact engineering techniques such as semantic context compression to prevent AI from entering infinite loops, and the semantics per token ratio to maximize output quality.</p>
@@ -2382,7 +2391,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>I’m Enterprise Technologist Leader at Amazon and Specialist in AI/ML and Reliability Space. I been technical advisor for lot of Enterprise Customers in Retail/Auto manufacturing, ISV and Startup Industries</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2419,14 +2428,14 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Production LLM systems face impossible tradeoffs: latency vs accuracy, cost vs quality, speed vs reliability. I'll demonstrate how multi-agent architectures with LLM-as-Judge patterns solve these challenges through live examples, showing how task decomposition and peer review eliminate production bottlenecks while driving errors to near-zero. Attendees will see practical patterns they can implement immediately.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Pranav Kowadkar is an AI Engineer specializing in multi-agent systems and LLM orchestration. He holds an MS in Data Science from NJIT and has won the n8n sponsor prize at the ElevenLabs Global Hackathon. Previously: aerospace engineering at National Aerospace Labs and R&amp;D software at Dassault Systèmes.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2463,7 +2472,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Voice-first consumer devices—smart speakers, wearables, in‑home assistants, and connected appliances—demand language models that are not only accurate, but fast, reliable, and deeply aligned with user expectations in real‑world environments. This talk explores practical methods for fine‑tuning large language models (LLMs) to deliver high‑quality, low‑friction voice interactions at scale.</p>
 <p>I will outline a structured approach to supervised fine‑tuning (SFT) for voice-driven use cases, including dataset design strategies that capture conversational latency patterns, prosody-driven intent, and the ambiguities inherent in spoken queries. The session will also address real evaluation challenges: how to measure dialog quality, naturalness, grounding, and long‑horizon task execution when traditional text benchmarks fall short. Particular attention will be given to diagnosing and reducing hallucinations in consumer contexts, where incorrect answers can undermine trust, cause user frustration, or trigger unintended physical-world actions.</p>
 <p>Attendees will leave with a clear picture of what it takes to adapt an LLM into a dependable, voice‑native system—from fine‑tuning workflows and guardrail construction to continuous evaluation loops informed by real user behavior. This talk aims to provide a practical roadmap for teams building the next generation of on‑device and cloud‑connected voice experiences.</p></p>
@@ -2472,7 +2481,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Suvendu is a Senior Machine Learning Engineer on Amazon’s Devices Org, where he leads supervised fine‑tuning and RLHF pipelines for 7 B–470 B‑parameter LLMs. Over 14 years, he has designed large‑scale distributed‑training systems with Megatron‑LM 3‑D parallelism, DeepSpeed ZeRO, PyTorch FSDP, and AWS Trainium, consistently cutting training cost and latency without sacrificing model quality. His MLOps expertise spans SageMaker, MLflow, and on‑device TensorRT inference, driving 3× throughput and 30 % latency reductions for production workloads. Previously, Suvendu built high‑volume data lakes and real‑time recommendation engines at HBO Max and architected predictive‑maintenance ML platforms at Equinix. He is an active open‑source contributor—author of the MLOps framework on AWS’s GitHub—and a frequent mentor on distributed‑ML best practices. Suvendu holds a master’s degree in Computer Science, has presented at internal AWS tech talks, and enjoys demystifying cloud economics for ML practitioners.</p></p>
               </div>
           </div><!--//modal-body-->
@@ -2509,14 +2518,14 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Hello everyone, let us walk you through the day!</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p></p>
               </div>
           </div><!--//modal-body-->
@@ -2553,7 +2562,7 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
                   </div><!--//row-->
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As AI coding assistants move from novelty to daily workflow, how do we know they're actually helping? This talk explores the technical and philosophical challenges of evaluating AI coding agents when they're deployed to millions of users.
 Turning user feedback into signal: Users complain, report issues, and express frustration—but this unstructured feedback is gold for improving models. I'll discuss approaches for transforming messy real-world feedback into structured evaluation datasets, including clustering techniques and rubric generation for consistent assessment.
 Measuring subtle failures: Some problems are easy to benchmark; others are felt more than measured. "Laziness," overconfidence, and instruction-following failures don't show up in traditional evals. I'll share frameworks for detecting these behavioral issues through automated assessment pipelines.
@@ -2565,7 +2574,7 @@ Closing the loop: Connecting evaluation back to training through RL and human fe
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Karen is a member of technical staff at Anthropic, where she works on developing product eval, RL environments, and multi-agent product features for Claude Code. She builds evaluation systems and feedback pipelines that assess how AI models behave in real-world software development scenarios, transforming user feedback into useful evals for model improvement. On the product side, she actively drives the development of swarm and multi-agent functionality that enables multiple AI agents to collaborate on complex software engineering tasks. Prior to Anthropic, Karen worked at Meta on large language models.</p></p>
               </div>
           </div><!--//modal-body-->

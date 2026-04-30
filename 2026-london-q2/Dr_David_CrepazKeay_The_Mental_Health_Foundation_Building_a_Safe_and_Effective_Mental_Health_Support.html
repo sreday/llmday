@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,7 +281,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As generative AI is increasingly applied to mental health, the risks of harm, misinformation, and inappropriate support grow alongside its potential benefits. This presentation describes the Mental Health Foundation’s approach to building a mental health support bot that is safe, ethical, and effective—placing mental health expertise at the centre of prompt engineering.
 The work builds on the speaker’s experience developing the original Public Health England Mind Plan tool, now hosted by NHS England, and applies established public mental health principles to large language model design. The talk explores how prompt engineering can be used to define clear role boundaries, prevent diagnostic or therapeutic overreach, respond appropriately to distress, and ensure consistent signposting to human support.
 Rather than optimising for fluency alone, the Mental Health Foundation’s approach uses prompt constraints, tone guidance, and escalation logic to prioritise safety, trust, and real-world use in sensitive contexts. The session also reflects on collaboration between mental health specialists and technical teams, demonstrating how domain-led prompt design reduces risk while enabling genuinely supportive interactions.
@@ -282,7 +291,7 @@ This presentation offers a practical case study in building mental health bots t
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Dr David Crepaz-Keay, FRSPH, is Head of Research and Applied Learning at the Mental Health Foundation, a 75 year old public mental health NGO. He leads the London based research team and is responsible AI, LLMs and knowledge management systems for the organisation.
 Dr Crepaz-Keay is a former co-chair and now member of the ethics, policy and position committee of the International Society for Psychiatric Genetics and a fellow of the Royal Society for Public Health. He is an editor of the Journal of Mental Health Training, Education and Practice; the Oxford Handbook of Philosophy and Public Mental Health and the Handbook of Phenomenology, Values and Clinical Decision-Making in Personalised Mental Health Care. He has been a technical advisor for the World Health Organisation, senior mental health advisor to Public Health England, written a mental health module for the Open University, written, spoken and campaigned for improvements in mental health services.</p></p>
               </div>

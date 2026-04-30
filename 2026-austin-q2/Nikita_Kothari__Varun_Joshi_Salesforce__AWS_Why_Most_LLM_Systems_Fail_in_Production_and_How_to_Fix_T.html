@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p><strong><a href="https://www.linkedin.com/in/nikita-kothari3/">Nikita Kothari</a></strong> is a Senior Member of Technical Staff at Salesforce with prior experience at LinkedIn and Amazon, where she has built and scaled large distributed systems powering user facing applications. She holds a Master’s degree in Computer Science from The University of Texas at Dallas. Her work focuses on designing reliable backend platforms and applying AI driven solutions in real world systems. She is particularly interested in how large language models can be integrated into production environments with strong guarantees around performance, scalability, and reliability. Nikita is also an active contributor to the tech community as a speaker, reviewer, and judge, and is passionate about sharing practical insights that help engineers move from experimentation to production with modern AI systems.</p>
 <p><a href="https://www.linkedin.com/in/varun-joshi-1b165685/">Varun Joshi</a>** is a Senior Data Engineer at Amazon Web Services (AWS) based in the Greater Seattle Area, with over 12 years of experience in data integration, data modeling, optimization, and engineering. He is an alumnus of the University of South Florida and has built a strong professional network with 4,500+ followers on LinkedIn.</p></p>
               </div>

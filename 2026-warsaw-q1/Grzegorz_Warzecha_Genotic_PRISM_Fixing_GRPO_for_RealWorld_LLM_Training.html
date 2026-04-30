@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>GRPO changed how we think about reinforcement learning for language models—but anyone who has used it in practice knows it comes with frustrating limitations. Unstable training runs, reward signals that collapse or fight each other, and poor credit assignment when your model needs to reason across multiple steps. PRISM takes the core ideas that made GRPO successful and fixes what was broken. It's a unified framework that brings stability to multi-objective training, letting you combine different reward signals—correctness, style, safety—without one overwhelming the others. I will explain a &gt;1000 experiments how we build better GRPO for agents and long turn credit assignments. </p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Grzegorz Warzecha is a founder and entrepreneur with deep experience building software platforms and technology driven organizations. He is the founder of User, a marketing automation platform created to replace fragmented, expensive tools with a single integrated solution for customer communication, data collection, and automation. He is also the founder of Genotic and previously founded CivilHub Foundation, a platform supporting bottom up social initiatives. Earlier in his career, he served as CEO of Expose Sp. z o.o., leading an IT focused training company delivering advanced technical education and consulting. Grzegorz has built and scaled organizations across the US and Europe, with a focus on practical products that solve real problems.</p></p>
               </div>
 

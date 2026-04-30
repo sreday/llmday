@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>AI agents can now run workflows, access tools, and make decisions across real systems. Projects like OpenClaw show how fast autonomous agents are evolving. But in the rush to make agents more capable, we’ve skipped an important question: what should they actually be allowed to do? This talk explores why guardrails are becoming essential infrastructure for AI, and how teams can safely give agents access to real tools without losing control.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Titus Capilnean is the VP of Go-to-Market at Civic, which builds guardrails that let developers safely run AI agents with access to real tools and systems. He has spent his career leading marketing and growth at startups and tech companies bringing emerging technologies to market. He’s a passionate advocate for building AI systems that are secure, transparent, and accountable.</p></p>
               </div>
 

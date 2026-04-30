@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,7 +281,7 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>In this talk we show how we built Trustable, a fully private AI platform that delivers an experience similar to Lovable, while keeping everything under the company’s control.
 No opaque clouds. No closed models. No external AI services quietly siphoning your data.
 Starting from Apache OpenServerless and OpenCode, we walk through how to design and implement a system that:
@@ -287,7 +296,7 @@ A practical story about building AI that feels lovable to users, but is genuinel
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Michele Sciabarrà is the Founder and CEO of Nuvolaris.io, where he focuses on building secure Private AI and serverless platforms that balance innovation, risk control, and real business impact. He is a long time open source contributor, an Apache Software Foundation PMC member for OpenWhisk, and a published author and trainer with decades of experience in cloud, serverless, and distributed systems.</p></p>
               </div>
 

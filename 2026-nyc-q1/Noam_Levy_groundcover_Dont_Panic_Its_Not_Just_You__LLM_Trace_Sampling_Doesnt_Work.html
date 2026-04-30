@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Traditional distributed tracing relies on sampling strategies optimized for microservices: keep slow traces, keep error traces, and drop the rest. This approach fundamentally breaks down for LLM-powered systems. In LLM traces, latency &amp; error signals are often meaningless: long latencies are expected, short latencies can still hide severe quality failures, and “errors” rarely correspond to the user-facing outcome. The true signal lies in the semantic content of the trace itself - prompts, intermediate reasoning steps, tool calls, and model outputs. As a result, conventional head-based or tail-based sampling systematically discards the most important traces while retaining large volumes of low-value data. This talk will show that effective observability for LLM systems requires a shift from signal-based sampling to content-aware sampling. The only viable way to sample intelligently is to run evaluations directly on span contents, scoring traces by quality, safety, correctness, and alignment with task intent. We explore how eval-driven sampling reframes tracing from performance diagnostics to outcome diagnostics, and why it is essential for operating LLM systems reliably at scale.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Noam Levy is a Field CTO at groundcover. Over the last 10 years, Noam has been a part of and led development teams focused on microservices-oriented web applications, monitoring complex application pipelines, and system engineering. When not handling pull requests and responding to questions in the groundcover Slack community, you can find Noam attempting to reverse engineer musicals and indie rock music on the guitar and piano.</p></p>
               </div>
 

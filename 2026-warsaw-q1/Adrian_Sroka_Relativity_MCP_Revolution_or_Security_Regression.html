@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Model Context Protocol (MCP) has rapidly become the backbone of modern LLM applications, enabling powerful multi-tool and multi-app workflows. But with this new capability comes a new class of security risks. I will explore where MCP genuinely pushes innovation forward and where it may quietly reintroduce old vulnerabilities under new names.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Adrian Sroka is an AI Security Lead and consultant, bridging software engineering with secure AI system design. He helps organizations adopt LLM technologies safely by combining deep technical expertise with practical architecture patterns. Adrian is the co-author of OWASP: A Practical Guide for Securely Using Third-Party MCP Servers, a contributor to OWASP Security Champions, an AI Security trainer, and a university lecturer speaking at conferences in Poland.</p></p>
               </div>
 

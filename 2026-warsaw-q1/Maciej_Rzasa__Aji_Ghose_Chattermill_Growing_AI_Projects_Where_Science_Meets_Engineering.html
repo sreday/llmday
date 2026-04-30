@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -270,14 +279,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>LLM prototype is easy, building robust product is hard. And it's as much about people as about tech. To deliver AI to production we need to aligning two cultures: backend engineering that wants robustness and data science - navigating uncertainty. We'll tell you how to bridge this gap.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p><strong><a href="https://www.linkedin.com/in/maciejrzasa/">Maciej Rząsa</a></strong> is a Software engineer with 10+ years under his belt. At Chattermill, he turns AI research into real-world products. A fan of diving deep into black boxes, he has unusual hobby of writing regular expressions by hand and arguing about their speed. When he’s not coding, he shares knowledge as a university instructor, speaker, and meetup organiser. Bookworm, hiker, history nerd - ask him about Napoleon!</p>
 <p><strong><a href="https://www.linkedin.com/in/aji-ghose-32bb10353/">Aji Ghose</a></strong> is Chief Scientist at Chattermill, where he leads AI research and NLP applied to large-scale customer feedback. He holds a PhD in Computational Cognitive Science focused on grounding deep learning models, and has over 15 years of experience building and deploying machine learning systems in industry. His work spans data science, large language models, semantic modelling, and human-centred AI.</p></p>
               </div>

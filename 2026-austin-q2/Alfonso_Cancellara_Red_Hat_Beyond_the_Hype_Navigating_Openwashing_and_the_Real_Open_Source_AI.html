@@ -96,6 +96,15 @@
 		scroll-margin-top: 70px;
 	}
 	.hero-cta a, .hero-cta a:hover { text-decoration: none; }
+	:root {
+		--brand: #26986A;
+		--brand-light: color-mix(in srgb, #26986A 55%, white);
+		--brand-lighter: color-mix(in srgb, #26986A 35%, white);
+		--brand-lightest: color-mix(in srgb, #26986A 12%, white);
+		--brand-pale: color-mix(in srgb, #26986A 8%, white);
+		--brand-dark: color-mix(in srgb, #26986A 100%, black 20%);
+		--brand-darker: color-mix(in srgb, #26986A 100%, black 35%);
+	}
 </style>
 
 
@@ -272,14 +281,14 @@
           <div class="card-body">
 
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Abstract</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As AI moves from experimental pilots to production MLOps pipelines, defining what truly constitutes <strong>"Open Source AI"</strong> has become a critical engineering challenge. This session cuts through the hype to provide ML engineers, data scientists, and infrastructure architects with practical frameworks to evaluate model transparency, mitigate licensing risks, and navigate the complexities of deploying "open" foundation models. Attendees will walk away with the skills to: - <strong>Deconstruct the AI Stack</strong>: Understand the core differences between traditional open-source software and the AI triad. - <strong>Evaluate True Openness</strong>: Apply frameworks like the Open Source AI Definition (OSAID) to assess model viability for fine-tuning. - <strong>Spot "Openwashing"</strong>: Identify the operational risks and licensing traps hidden behind "open weights" models to protect your deployment pipelines and long-term infrastructure.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
-                <h5 style="color:#26986A;font-weight:700;">Bio</h5>
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Alfonso Cancellara is an OpenShift-focused Red Hat Technical Account Manager. Beyond his day-to-day role, he's a passionate Open Source advocate and a speaker at conferences and industry events, exploring how Open Source Software fuels innovation.</p></p>
               </div>
 
