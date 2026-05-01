@@ -75,7 +75,7 @@ events_past:
     photo_url: ./assets/images/events/llmday-2026-nyc-q1.png
     url: ./2026-nyc-q1/
     size: medium
-    youtube_playlist:
+    youtube_playlist: https://www.youtube.com/playlist?list=PLABWk6YlOnWmUnPb5rOhDTCqlSyyLNCN4
 
   - name: LLMday Warsaw 2026 Q1
     location: CIC Warsaw, Poland
