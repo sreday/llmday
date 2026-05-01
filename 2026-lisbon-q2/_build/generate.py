@@ -559,6 +559,8 @@ for _he in (_home_meta.get('events') or []) + (_home_meta.get('events_past') or 
     _he_url = _he.get('url', '').strip('./').rstrip('/')
     if _he_url == _current_folder:
         _event_size = _he.get('size', _event_size)
+        if not context.get('youtube_playlist') and _he.get('youtube_playlist'):
+            context['youtube_playlist'] = _he['youtube_playlist']
         break
 
 _all_tiers         = _sponsorship_config.get('tiers', [])
