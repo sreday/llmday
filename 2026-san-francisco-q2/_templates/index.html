@@ -15,15 +15,15 @@
       <style>
         .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
         .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: var(--brand-lighter); z-index: 0; }
-        .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+        .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; align-items: stretch; }
         .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
         .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); border: 2px solid #fff; outline: 2px solid var(--brand); margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
         .idx-tl-dot.past { background: #999; outline-color: #999; }
-        .idx-tl-chip { background: var(--brand-lightest); border: 1px solid var(--brand-lighter); border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
+        .idx-tl-chip { background: var(--brand-lightest); border: 1px solid var(--brand-lighter); border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark); overflow-wrap: break-word; word-break: break-word; }
         .idx-tl-chip:hover { background: var(--brand-pale); text-decoration: none; }
         .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
         .idx-tl-chip.past:hover { background: #d8d8d8; }
-        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .idx-tl-chip.past .idx-tl-city { color: #555; }
         .idx-tl-date { font-size: .75rem; color: var(--brand-light); margin-top: 2px; }
         .idx-tl-chip.past .idx-tl-date { color: #777; }
