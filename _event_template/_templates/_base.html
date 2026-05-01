@@ -86,6 +86,12 @@
 	.theme-bg-primary {
 		background: {{ brand_color }};
 	}
+	.hero-block .social-list li, footer .social-list li {
+		font-size: 1.75rem;
+	}
+	.hero-block .social-list li a, footer .social-list li a {
+		color: white;
+	}
 	html {
 		scroll-behavior: smooth;
 	}
@@ -187,6 +193,13 @@
 					<a class="btn btn-primary btn-lg" href="{{ cfp_url }}" target="_blank">CFP</a>
 					{% endif %}
 			    </div>
+					<ul class="social-list list-inline mt-4">
+						<li class="list-inline-item me-3"><a target="_blank" href="https://luma.com/sre" style="text-decoration:none;">✦</a></li>
+						<li class="list-inline-item me-3"><a target="_blank" href="https://chat.whatsapp.com/KS1ce0jAHmNGAiOAoZG6zo"><i class="fab fa-whatsapp fa-fw"></i></a></li>
+						<li class="list-inline-item me-3"><a target="_blank" href="{{ linkedin_url }}"><i class="fab fa-linkedin fa-fw"></i></a></li>
+						<li class="list-inline-item me-3"><a href="mailto:hello@llmday.com"><i class="fas fa-envelope fa-fw"></i></a></li>
+						<li class="list-inline-item me-0"><a target="_blank" rel="noopener noreferrer" href="{{ youtube_url }}"><i class="fab fa-youtube fa-fw"></i></a></li>
+					</ul>
 				{% endif %}
 			</div><!--//hero-text-block-->
 		</div><!--//container-->
