@@ -342,14 +342,17 @@ _sp_exclude_logos = {
     'jug-amsterdam.png', 'k8sug.png',
     'kube-events.png', 'kube_events.png', 'kube_careers.png', 'kubespaces.png',
     'gdg_london.png', 'NL_MEETUP.png',
-    'chennaisre.png', 'srecommunitycoimbatore.png', 'aigeeks.png',
+    'chennaisre.png', 'srecommunitycoimbatore.png', 'srehyderabadi.png',
+    'aigeeks.png', 'AIFRONTIERS.png', 'houseofai.png',
     'cloud native lisbon.png', 'cloud native porto.png',
     'devops braga.png', 'devops lisbon.png',
     'kcd porto.png', 'leiria tech talks.png', 'viseu tech talks.png',
     'lisbon genai community.png',
     'aws porto.png',
-    # Sister conferences
-    'IacConf.png', 'DevIT.png', 'DevIT_black.png',
+    'synvert xgeeks.png',
+    # Sister conferences / job boards
+    'IacConf.png', 'DevIT.png', 'DevIT_black.png', 'DevIT-usa.png',
+    'devit.png', 'devitjobs.png',
 }
 _sp_logo_counts = {}
 _sp_logo_meta = {}
