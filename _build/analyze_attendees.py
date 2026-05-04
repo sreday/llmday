@@ -527,60 +527,22 @@ def print_section(title, items):
 # SPONSORSHIP TEMPLATE PATCHER
 # ══════════════════════════════════════════════════════════════
 
-def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, topic_pills):
-    """Render the static attendee profile HTML block.
+def render_attendee_profile_block(topic_pills):
+    """Render the dynamic "What they are working on" card.
 
-    The "Top companies that have attended" card is hard-baked in the template
-    and lives ABOVE the sentinel comment, so this function does not touch it.
+    All other cards (top companies, role breakdown, company size, seniority)
+    are hard-baked in the template above the sentinel comment.
     """
-
-    def bar_item(label, p):
-        label_html = label.replace('<', '&lt;')
-        return (
-            f'              <li class="sp-stats-bar-item">\n'
-            f'                <div class="sp-stats-bar-header">'
-            f'<span class="sp-stats-bar-name">{label_html}</span>'
-            f'<span class="sp-stats-bar-count">{p}%</span></div>\n'
-            f'                <div class="sp-stats-bar-track">'
-            f'<div class="sp-stats-bar-fill" style="width:{p}%"></div></div>\n'
-            f'              </li>'
-        )
 
     def tag(label, hot):
         cls = 'sp-stats-tag hot' if hot else 'sp-stats-tag'
         label_html = label.replace('&', '&amp;')
         return f'              <span class="{cls}">{label_html}</span>'
 
-    role_bars   = '\n'.join(bar_item(r['label'], r['pct']) for r in role_stats)
-    size_bars   = '\n'.join(bar_item(r['label'], r['pct']) for r in size_stats)
-    senior_bars = '\n'.join(bar_item(r['label'], r['pct']) for r in senior_stats)
-    topic_tags  = '\n'.join(tag(p['label'], p['highlight']) for p in topic_pills)
+    topic_tags = '\n'.join(tag(p['label'], p['highlight']) for p in topic_pills)
 
     return (
         '{# ── ATTENDEE PROFILE (static - update by running _build/analyze_attendees.py) ── #}\n'
-        '        <div class="sp-stats-grid-2">\n'
-        '\n'
-        '          <div class="sp-stats-card">\n'
-        '            <div class="sp-stats-card-title">Role breakdown</div>\n'
-        '            <ul class="sp-stats-bar-list">\n'
-        f'{role_bars}\n'
-        '            </ul>\n'
-        '          </div>\n'
-        '\n'
-        '          <div class="sp-stats-card">\n'
-        '            <div class="sp-stats-card-title">Attendee seniority</div>\n'
-        '            <ul class="sp-stats-bar-list">\n'
-        f'{senior_bars}\n'
-        '            </ul>\n'
-        '          </div>\n'
-        '\n'
-        '          <div class="sp-stats-card">\n'
-        '            <div class="sp-stats-card-title">Company size</div>\n'
-        '            <ul class="sp-stats-bar-list">\n'
-        f'{size_bars}\n'
-        '            </ul>\n'
-        '          </div>\n'
-        '\n'
         '          <div class="sp-stats-card">\n'
         '            <div class="sp-stats-card-title">What they are working on</div>\n'
         '            <div class="sp-stats-tag-cloud">\n'
@@ -596,7 +558,7 @@ def render_attendee_profile_block(tldr, role_stats, size_stats, senior_stats, to
     )
 
 
-def patch_sponsorship_template(repo_root, tldr, role_stats, size_stats, senior_stats, topic_pills):
+def patch_sponsorship_template(repo_root, topic_pills):
     """
     Patch the static attendee profile block in
     _event_template/_templates/sponsorship.html in place.
@@ -626,9 +588,7 @@ def patch_sponsorship_template(repo_root, tldr, role_stats, size_stats, senior_s
         print(f"       '{end_sentinel}...'")
         return
 
-    new_block = render_attendee_profile_block(
-        tldr, role_stats, size_stats, senior_stats, topic_pills
-    )
+    new_block = render_attendee_profile_block(topic_pills)
 
     patched = original[:start_idx] + new_block + original[end_idx:]
     template_path.write_text(patched, encoding='utf-8')
@@ -777,9 +737,7 @@ def main():
     print(f"\n  Stats written to {out_path}")
 
     # ── Patch sponsorship template in place ───────────────────
-    patch_sponsorship_template(
-        repo_root, TLDR, role_stats, size_stats, senior_stats, topic_pills
-    )
+    patch_sponsorship_template(repo_root, topic_pills)
     print("  Done. Commit and push to deploy.\n")
 
 
