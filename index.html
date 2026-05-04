@@ -930,7 +930,7 @@ function showMorePastMeetup() {
 
       
 
-      <div class="col-6 col-lg-3 mb-4">
+      <div class="col-6 col-lg mb-4 testimonial-col">
         <div class="card rounded">
           <img src="./assets/images/profiles/Miko Pawlikowski.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
@@ -943,8 +943,8 @@ function showMorePastMeetup() {
             </div>
             <div class="card-text mb-3 testimonial-body" id="tbody-0">
               LLMs and AI agents are quickly becoming part of every developer’s daily tools. LLMday feels like the perfect chance to see where all this is actually heading. And honestly, even if AI turns out to be a bubble, I can’t shake the feeling that the real revolution hasn’t even started yet, and we’d like to be there when it does.
+              <a href="javascript:void(0);" class="testimonial-readmore" onclick="toggleTestimonialBody(0, this)">Read more</a>
             </div>
-            <a href="javascript:void(0);" class="testimonial-readmore" onclick="toggleTestimonialBody(0, this)">Show more</a>
           </div>
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -959,7 +959,7 @@ function showMorePastMeetup() {
 
       
 
-      <div class="col-6 col-lg-3 mb-4">
+      <div class="col-6 col-lg mb-4 testimonial-col">
         <div class="card rounded">
           <img src="./assets/images/profiles/Mark Pawlikowski.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
@@ -972,8 +972,8 @@ function showMorePastMeetup() {
             </div>
             <div class="card-text mb-3 testimonial-body" id="tbody-1">
               We’ve been doing AI-first online conferences for a while now, as a part of the Conf42 brand. Starting LLMday - a series of in-person events around the same theme - feels like the right next step to bring the community together in person.
+              <a href="javascript:void(0);" class="testimonial-readmore" onclick="toggleTestimonialBody(1, this)">Read more</a>
             </div>
-            <a href="javascript:void(0);" class="testimonial-readmore" onclick="toggleTestimonialBody(1, this)">Show more</a>
           </div>
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -992,34 +992,35 @@ function showMorePastMeetup() {
   </div>
 </section>
 <style>
+@media (min-width: 992px) { .testimonial-col { flex: 0 0 20%; max-width: 20%; } }
 .testimonial-extra { display: none; }
 .btn-brand-primary { background: #26986A; color: #fff; border: none; }
 .btn-brand-primary:hover, .btn-brand-primary:focus { background: #2dae7a; color: #fff; }
-.testimonial-body { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.testimonial-body.expanded { display: block; }
-.testimonial-readmore { font-size: 0.85em; }
+.testimonial-body { position: relative; max-height: 4.8em; line-height: 1.6em; overflow: hidden; }
+.testimonial-body.expanded { max-height: none; }
+.testimonial-readmore { position: absolute; bottom: 0; right: 0; background: linear-gradient(to right, transparent, #fff 25%); padding-left: 2em; font-size: 0.85em; text-decoration: none; }
+.testimonial-readmore:hover, .testimonial-readmore:focus { text-decoration: none; }
 </style>
 <script>
 function showMoreTestimonials() {
   document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.classList.remove('testimonial-extra'); });
   document.getElementById('show-more-testimonials').style.display = 'none';
+  hideShortReadMore();
 }
 function toggleTestimonialBody(idx, link) {
   var el = document.getElementById('tbody-' + idx);
-  if (el.classList.contains('expanded')) {
-    el.classList.remove('expanded');
-    link.innerText = 'Show more';
-  } else {
-    el.classList.add('expanded');
-    link.innerText = 'Show less';
-  }
+  el.classList.add('expanded');
+  link.style.display = 'none';
 }
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.testimonial-readmore').forEach(function(link, i) {
-    var el = document.getElementById('tbody-' + i);
-    if (el && el.scrollHeight <= el.clientHeight) { link.style.display = 'none'; }
+function hideShortReadMore() {
+  document.querySelectorAll('.testimonial-body:not(.expanded)').forEach(function(el) {
+    if (el.offsetHeight > 0 && el.scrollHeight <= el.offsetHeight) {
+      var link = el.querySelector('.testimonial-readmore');
+      if (link) link.style.display = 'none';
+    }
   });
-});
+}
+document.addEventListener('DOMContentLoaded', hideShortReadMore);
 </script>
 
 
