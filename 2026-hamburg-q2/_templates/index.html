@@ -690,10 +690,12 @@
               <div class="desc p-2 p-lg-3">
                 <p>{{ talk.description | markdown }}</p>
               </div>
+{% if talk.bio %}
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p>{{ talk.bio | markdown }}</p>
               </div>
+{% endif %}
           </div><!--//modal-body-->
       </div><!--//modal-content-->
   </div><!--//modal-dialog-->
