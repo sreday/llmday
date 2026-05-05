@@ -250,7 +250,7 @@
     transition: background 0.2s;
   }
   .track-nav-links a:hover {
-    background: var(--brand-dark);
+    background: var(--brand-light);
     color: white;
   }
   .view-toggle-link {
@@ -262,6 +262,8 @@
     border: 1px solid var(--brand);
     border-radius: 4px;
     transition: all 0.2s;
+    min-width: 10rem;
+    text-align: center;
   }
   .view-toggle-link:hover {
     background: var(--brand);
@@ -387,11 +389,13 @@
     <!-- Track navigation -->
     <div class="track-nav">
       <div class="track-nav-inner">
+{% if (tracks|length) // days > 1 %}
         <div class="track-nav-links" id="track-links-{{ day }}">
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
           <a href="#track-{{ day }}-{{ loop.index }}">{{ rooms[loop.index0] }}</a>
 {% endfor %}
         </div>
+{% endif %}
         <span class="view-toggle-link" id="view-toggle-{{ day }}" onclick="toggleView({{ day }})">view as table</span>
       </div>
     </div>
@@ -516,13 +520,13 @@
         timelineView.classList.remove('hidden');
         toggleBtn.textContent = 'view as table';
         toggleBtn.classList.remove('active');
-        trackLinks.style.display = 'flex';
+        if (trackLinks) trackLinks.style.display = 'flex';
       } else {
         tableView.classList.add('active');
         timelineView.classList.add('hidden');
         toggleBtn.textContent = 'view as timeline';
         toggleBtn.classList.add('active');
-        trackLinks.style.display = 'none';
+        if (trackLinks) trackLinks.style.display = 'none';
       }
     }
     </script>
