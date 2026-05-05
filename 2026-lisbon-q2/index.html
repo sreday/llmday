@@ -622,18 +622,28 @@
     font-size: 0.95rem;
   }
   .modal-speaker .modal-close-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 1;
     background: var(--brand);
     color: #fff;
     border: none;
     border-radius: 4px;
-    font-size: 1.5rem;
+    font-size: 3rem;
     line-height: 1;
-    padding: 0.25rem 0.6rem;
+    padding: 0.25rem 0.75rem;
     cursor: pointer;
     transition: background 0.2s ease;
   }
   .modal-speaker .modal-close-btn:hover {
     background: var(--brand-light);
+  }
+  .modal-speaker .modal-header {
+    display: none;
+  }
+  .modal-speaker .modal-body {
+    position: relative;
   }
   .modal-speaker .talk-title-bar {
     background: var(--brand);
@@ -653,12 +663,8 @@
 <div class="modal modal-speaker modal-speaker-0" id="modal-speaker-0" tabindex="-1" role="dialog" aria-labelledby="speaker-0-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <h4 id="speaker-0-ModalLabel" class="modal-title sr-only"
->Miko Pawlikowski</h4>
-          </div>
           <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
