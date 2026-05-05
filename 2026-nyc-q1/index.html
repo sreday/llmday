@@ -534,7 +534,7 @@
     transition: background 0.2s;
   }
   .track-nav-links a:hover {
-    background: var(--brand-dark);
+    background: var(--brand-light);
     color: white;
   }
   .view-toggle-link {
@@ -546,6 +546,8 @@
     border: 1px solid var(--brand);
     border-radius: 4px;
     transition: all 0.2s;
+    min-width: 10rem;
+    text-align: center;
   }
   .view-toggle-link:hover {
     background: var(--brand);
@@ -671,11 +673,7 @@
     <!-- Track navigation -->
     <div class="track-nav">
       <div class="track-nav-inner">
-        <div class="track-nav-links" id="track-links-0">
 
-          <a href="#track-0-1">main room</a>
-
-        </div>
         <span class="view-toggle-link" id="view-toggle-0" onclick="toggleView(0)">view as table</span>
       </div>
     </div>
@@ -1479,13 +1477,13 @@ Attendees will leave with a clear picture of what it takes to adapt an LLM into 
         timelineView.classList.remove('hidden');
         toggleBtn.textContent = 'view as table';
         toggleBtn.classList.remove('active');
-        trackLinks.style.display = 'flex';
+        if (trackLinks) trackLinks.style.display = 'flex';
       } else {
         tableView.classList.add('active');
         timelineView.classList.add('hidden');
         toggleBtn.textContent = 'view as timeline';
         toggleBtn.classList.add('active');
-        trackLinks.style.display = 'none';
+        if (trackLinks) trackLinks.style.display = 'none';
       }
     }
     </script>
