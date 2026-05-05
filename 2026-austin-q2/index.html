@@ -793,17 +793,17 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Nikita Kothari & Varun Joshi.png" alt=""></a>
-                <div class="name">Nikita Kothari & Varun Joshi</div>
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Michael Forrester.png" alt=""></a>
+                <div class="name">Michael Forrester</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Why Most LLM Systems Fail in Production and How to Fix Them</a>
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Your MLOps Pipeline is your Agentic AI Guardrail</a>
               </h3>
-              <div class="location mb-3">Salesforce & AWS</div>
-              <div class="desc schedule-abstract">Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              <div class="location mb-3">KodeKloud</div>
+              <div class="desc schedule-abstract">In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
               
             </div>
           </div>
@@ -812,17 +812,17 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">14:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Michael Forrester.png" alt=""></a>
-                <div class="name">Michael Forrester</div>
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Varun Joshi.png" alt=""></a>
+                <div class="name">Varun Joshi</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Your MLOps Pipeline is your Agentic AI Guardrail</a>
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Why Most LLM Systems Fail in Production and How to Fix Them</a>
               </h3>
-              <div class="location mb-3">KodeKloud</div>
-              <div class="desc schedule-abstract">In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+              <div class="location mb-3">Salesforce & AWS</div>
+              <div class="desc schedule-abstract">Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
               
             </div>
           </div>
@@ -1220,8 +1220,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">14:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Why Most LLM Systems Fail in Production and How to Fix Them</a>
-              <div class="speaker-info">Nikita Kothari & Varun Joshi <span class="affiliation">• Salesforce & AWS</span></div>
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Your MLOps Pipeline is your Agentic AI Guardrail</a>
+              <div class="speaker-info">Michael Forrester <span class="affiliation">• KodeKloud</span></div>
 
             </td>
           </tr>
@@ -1240,8 +1240,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">14:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Your MLOps Pipeline is your Agentic AI Guardrail</a>
-              <div class="speaker-info">Michael Forrester <span class="affiliation">• KodeKloud</span></div>
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Why Most LLM Systems Fail in Production and How to Fix Them</a>
+              <div class="speaker-info">Varun Joshi <span class="affiliation">• Salesforce & AWS</span></div>
 
             </td>
           </tr>
@@ -1556,7 +1556,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Michael Forrester.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Michael Forrester.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Michael Forrester</h5>
             <div class="card-text mb-3">
@@ -1625,32 +1625,6 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Nikita Kothari & Varun Joshi.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Nikita Kothari<br>&amp; Varun Joshi</h5>
-            <div class="card-text mb-3">
-              <div class="meta">Salesforce & AWS</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Nikita_Kothari__Varun_Joshi_Salesforce__AWS_Why_Most_LLM_Systems_Fail_in_Production_and_How_to_Fix_T#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/nikita-kothari3/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/varun-joshi-1b165685/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
             </ul><!--//social-list-->
           </div>
         </div><!--//card-->
@@ -1753,6 +1727,32 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <ul class="social-list list-inline mb-0">
               
               <li class="list-inline-item"><a  href="https://www.linkedin.com/in/srinivaspochincharla/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Varun Joshi.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Varun Joshi</h5>
+            <div class="card-text mb-3">
+              <div class="meta">Salesforce & AWS</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Varun_Joshi_Salesforce__AWS_Why_Most_LLM_Systems_Fail_in_Production_and_How_to_Fix_Them#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/varun-joshi-1b165685/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -2071,48 +2071,6 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Nikita Kothari & Varun Joshi.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Nikita Kothari & Varun Joshi</h2>
-                          <div class="meta mb-2">Salesforce & AWS</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/nikita-kothari3/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/varun-joshi-1b165685/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Why Most LLM Systems Fail in Production and How to Fix Them</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p><strong><a href="https://www.linkedin.com/in/nikita-kothari3/">Nikita Kothari</a></strong> is a Senior Member of Technical Staff at Salesforce with prior experience at LinkedIn and Amazon, where she has built and scaled large distributed systems powering user facing applications. She holds a Master’s degree in Computer Science from The University of Texas at Dallas. Her work focuses on designing reliable backend platforms and applying AI driven solutions in real world systems. She is particularly interested in how large language models can be integrated into production environments with strong guarantees around performance, scalability, and reliability. Nikita is also an active contributor to the tech community as a speaker, reviewer, and judge, and is passionate about sharing practical insights that help engineers move from experimentation to production with modern AI systems.</p>
-<p><a href="https://www.linkedin.com/in/varun-joshi-1b165685/">Varun Joshi</a>** is a Senior Data Engineer at Amazon Web Services (AWS) based in the Greater Seattle Area, with over 12 years of experience in data integration, data modeling, optimization, and engineering. He is an alumnus of the University of South Florida and has built a strong professional network with 4,500+ followers on LinkedIn.</p></p>
-              </div>
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 6 -->
-<div class="modal modal-speaker modal-speaker-6" id="modal-speaker-6" tabindex="-1" role="dialog" aria-labelledby="speaker-6-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Michael Forrester.png" alt="" />
                       </div>
 
@@ -2139,6 +2097,47 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Principal Training Architect with 30 years of infrastructure experience across federal, Fortune 50, and startup environments. Has personally taught over 100,000 engineers platform engineering and AI/ML infrastructure. Workshop ranked third most-selected at KCD Texas 2026. Speaker at KubeCon EU Cloud Native University and KubeAuto AI Day Europe, Amsterdam. The cluster deletion incident described in this talk actually happened.</p></p>
+              </div>
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 6 -->
+<div class="modal modal-speaker modal-speaker-6" id="modal-speaker-6" tabindex="-1" role="dialog" aria-labelledby="speaker-6-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Varun Joshi.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Varun Joshi</h2>
+                          <div class="meta mb-2">Salesforce & AWS</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/varun-joshi-1b165685/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Why Most LLM Systems Fail in Production and How to Fix Them</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p><a href="https://www.linkedin.com/in/varun-joshi-1b165685/">Varun Joshi</a>** is a Senior Data Engineer at Amazon Web Services (AWS) based in the Greater Seattle Area, with over 12 years of experience in data integration, data modeling, optimization, and engineering. He is an alumnus of the University of South Florida and has built a strong professional network with 4,500+ followers on LinkedIn.</p></p>
               </div>
           </div><!--//modal-body-->
       </div><!--//modal-content-->
