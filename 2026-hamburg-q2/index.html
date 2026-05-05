@@ -630,6 +630,27 @@
   .modal-speaker .desc {
     padding-bottom: 0.25rem;
   }
+  .modal-speaker .btn-close {
+    background: var(--brand);
+    color: #fff;
+    opacity: 1;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.25rem;
+    padding: 0.5rem 0.75rem;
+    line-height: 1;
+    transition: background 0.2s ease;
+  }
+  .modal-speaker .btn-close:hover {
+    background: var(--brand-light);
+  }
+  .modal-speaker .talk-title-bar {
+    background: var(--brand);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+  }
 </style>
 
 
@@ -661,6 +682,7 @@
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
+              <div class="talk-title-bar">LLMs in Production: What Actually Breaks</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>This talk explores what actually breaks in production: ambiguity, hallucinations, and the challenge of mapping natural language to real business logic. It offers a practical look at turning LLM demos into reliable, production-ready systems.</p></p>
@@ -705,6 +727,7 @@
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
+              <div class="talk-title-bar">Hinton's prophecy revisited: what LLMs and Vision Models mean for the future of radiology</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>In 2016, Professor Geoffrey Hinton claimed that radiologists will not be needed anymore, in a short time they will be replaced by AI models (the time horizon was 5 years). Unfortunately, Professor wasn’t right. This time did not yet appear – still radiologist is a significant part of the diagnostics process. However, it must be said that there are several approaches that can give a hand to these medical specialists. This presentation will be divided into two main phases. In the first of them I will present traditional pipelines (based on image/signal processing) for analysis of radiological scans, e.g., liver anatomical scans, - I will use simple approaches as image filtering or thinning to detect pathological changes. In the second part of my talk, I will deeply explain how novel AI models can be used to give a hand to radiologist. I will build a pipeline based on computer vision models (like YOLO) to observe cancer changes but also, will consume ready to use models – e.g., MedSAM to recognize these changes. On the other hand, VLMs will also be used to analyze the samples – Gemini, GPT, Qwen, and InternVL will be run for this aim. Moreover, we will check new MedGemma model – it was claimed as one of the most efficient ones nowadays that can give a hand to radiologists. Finally, we can answer on the main question – are we ready to replace radiologists?</p></p>
