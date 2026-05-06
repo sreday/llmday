@@ -777,17 +777,17 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">12:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Michael Forrester.png" alt=""></a>
-                <div class="name">Michael Forrester</div>
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Ankit Talwar.png" alt=""></a>
+                <div class="name">Ankit Talwar</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Your MLOps Pipeline is your Agentic AI Guardrail</a>
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</a>
               </h3>
-              <div class="location mb-3">KodeKloud</div>
-              <div class="desc schedule-abstract">In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              <div class="location mb-3">Dell Technologies</div>
+              <div class="desc schedule-abstract">Most enterprise AI never makes it past the pilot phase. The systems that do survive production at Fortune 50 scale — across hundreds of thousands of daily transactions, thousands of human operators, and dozens of countries — share architectural patterns that aren’t obvious at the demo stage. This talk distills those patterns from two production AI programs built and deployed over the past decade: a digital supply-chain transformation platform supporting 220,000 orders per day across 392,000 SKUs, documented as MIT Sloan / Ivey case study W24797 (a Harvard Business Publishing bestseller, taught at MIT, Rutgers, NUS, and IE Business School); and STRIDE, a closed-loop AI service architecture supporting customer support organization, recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. Both programs faced the same failure modes that LLM teams hit today: hallucinated outputs, brittle integration boundaries, runaway cost curves, and slow learning loops. Both succeeded by converging on the same underlying architecture — continuous telemetry feeding decision engines feeding learning loops, with humans gating the boundaries rather than sitting in the critical path. The talk walks through the architectural decisions that determined whether each system shipped or stalled, including build-vs-buy under vendor immaturity, phased rollout under quality risk, and tiered automation under fraud exposure. <a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
               
             </div>
           </div>
@@ -812,17 +812,17 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">13:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Varun Joshi.png" alt=""></a>
-                <div class="name">Varun Joshi</div>
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Michael Forrester.png" alt=""></a>
+                <div class="name">Michael Forrester</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Why Most LLM Systems Fail in Production and How to Fix Them</a>
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Your MLOps Pipeline is your Agentic AI Guardrail</a>
               </h3>
-              <div class="location mb-3">Salesforce & AWS</div>
-              <div class="desc schedule-abstract">Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+              <div class="location mb-3">KodeKloud</div>
+              <div class="desc schedule-abstract">In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
               
             </div>
           </div>
@@ -831,17 +831,17 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Ankit Talwar.png" alt=""></a>
-                <div class="name">Ankit Talwar</div>
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Varun Joshi.png" alt=""></a>
+                <div class="name">Varun Joshi</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</a>
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Why Most LLM Systems Fail in Production and How to Fix Them</a>
               </h3>
-              <div class="location mb-3">Dell Technologies</div>
-              <div class="desc schedule-abstract">Most enterprise AI never makes it past the pilot phase. The systems that do survive production at Fortune 50 scale — across hundreds of thousands of daily transactions, thousands of human operators, and dozens of countries — share architectural patterns that aren’t obvious at the demo stage. This talk distills those patterns from two production AI programs built and deployed over the past decade: a digital supply-chain transformation platform supporting 220,000 orders per day across 392,000 SKUs, documented as MIT Sloan / Ivey case study W24797 (a Harvard Business Publishing bestseller, taught at MIT, Rutgers, NUS, and IE Business School); and STRIDE, a closed-loop AI service architecture supporting customer support organization, recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. Both programs faced the same failure modes that LLM teams hit today: hallucinated outputs, brittle integration boundaries, runaway cost curves, and slow learning loops. Both succeeded by converging on the same underlying architecture — continuous telemetry feeding decision engines feeding learning loops, with humans gating the boundaries rather than sitting in the critical path. The talk walks through the architectural decisions that determined whether each system shipped or stalled, including build-vs-buy under vendor immaturity, phased rollout under quality risk, and tiered automation under fraud exposure. <a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              <div class="location mb-3">Salesforce & AWS</div>
+              <div class="desc schedule-abstract">Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
               
             </div>
           </div>
@@ -1224,8 +1224,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">12:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Your MLOps Pipeline is your Agentic AI Guardrail</a>
-              <div class="speaker-info">Michael Forrester <span class="affiliation">• KodeKloud</span></div>
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</a>
+              <div class="speaker-info">Ankit Talwar <span class="affiliation">• Dell Technologies</span></div>
 
             </td>
           </tr>
@@ -1263,8 +1263,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">13:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Why Most LLM Systems Fail in Production and How to Fix Them</a>
-              <div class="speaker-info">Varun Joshi <span class="affiliation">• Salesforce & AWS</span></div>
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Your MLOps Pipeline is your Agentic AI Guardrail</a>
+              <div class="speaker-info">Michael Forrester <span class="affiliation">• KodeKloud</span></div>
 
             </td>
           </tr>
@@ -1283,8 +1283,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">14:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</a>
-              <div class="speaker-info">Ankit Talwar <span class="affiliation">• Dell Technologies</span></div>
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Why Most LLM Systems Fail in Production and How to Fix Them</a>
+              <div class="speaker-info">Varun Joshi <span class="affiliation">• Salesforce & AWS</span></div>
 
             </td>
           </tr>
@@ -1521,7 +1521,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Ankit Talwar.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Ankit Talwar.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Ankit Talwar</h5>
             <div class="card-text mb-3">
@@ -1625,7 +1625,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Michael Forrester.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Michael Forrester.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Michael Forrester</h5>
             <div class="card-text mb-3">
@@ -1807,7 +1807,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Varun Joshi.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Varun Joshi.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Varun Joshi</h5>
             <div class="card-text mb-3">
@@ -2148,6 +2148,49 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Ankit Talwar.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Ankit Talwar</h2>
+                          <div class="meta mb-2">Dell Technologies</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/ankittalwar/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Most enterprise AI never makes it past the pilot phase. The systems that do survive production at Fortune 50 scale — across hundreds of thousands of daily transactions, thousands of human operators, and dozens of countries — share architectural patterns that aren’t obvious at the demo stage. This talk distills those patterns from two production AI programs built and deployed over the past decade: a digital supply-chain transformation platform supporting 220,000 orders per day across 392,000 SKUs, documented as MIT Sloan / Ivey case study W24797 (a Harvard Business Publishing bestseller, taught at MIT, Rutgers, NUS, and IE Business School); and STRIDE, a closed-loop AI service architecture supporting customer support organization, recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. Both programs faced the same failure modes that LLM teams hit today: hallucinated outputs, brittle integration boundaries, runaway cost curves, and slow learning loops. Both succeeded by converging on the same underlying architecture — continuous telemetry feeding decision engines feeding learning loops, with humans gating the boundaries rather than sitting in the critical path. The talk walks through the architectural decisions that determined whether each system shipped or stalled, including build-vs-buy under vendor immaturity, phased rollout under quality risk, and tiered automation under fraud exposure. </p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Ankit Talwar is Director of Product Management for AI at Dell Technologies and a Distinguished Fellow of the Soft Computing Research Society (SCRS). He led the product strategy for the digital supply chain transformation documented by researchers at the Massachusetts Institute of Technology (MIT Digital Supply Chain case study, “Dell: Roadmap of a Digital Supply Chain Transformation,” Case No. W24797), and directed the STRIDE service AI ecosystem recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. His work synthesizes patterns from these programs across eight years (2017–2025). Mr. Talwar serves as a judge for MIT Hack-Nation’s Global AI Hackathon (three consecutive editions and the Venture Lab) and as a proposal reviewer for Manning Publications on agentic AI titles.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 6 -->
+<div class="modal modal-speaker modal-speaker-6" id="modal-speaker-6" tabindex="-1" role="dialog" aria-labelledby="speaker-6-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Michael Forrester.png" alt="" />
                       </div>
 
@@ -2182,8 +2225,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 6 -->
-<div class="modal modal-speaker modal-speaker-6" id="modal-speaker-6" tabindex="-1" role="dialog" aria-labelledby="speaker-6-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 7 -->
+<div class="modal modal-speaker modal-speaker-7" id="modal-speaker-7" tabindex="-1" role="dialog" aria-labelledby="speaker-7-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -2218,49 +2261,6 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p><strong><a href="https://www.linkedin.com/in/varun-joshi-1b165685/">Varun Joshi</a></strong> is a Senior Data Engineer at Amazon Web Services (AWS) based in the Greater Seattle Area, with over 12 years of experience in data integration, data modeling, optimization, and engineering. He is an alumnus of the University of South Florida and has built a strong professional network with 4,500+ followers on LinkedIn.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 7 -->
-<div class="modal modal-speaker modal-speaker-7" id="modal-speaker-7" tabindex="-1" role="dialog" aria-labelledby="speaker-7-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Ankit Talwar.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Ankit Talwar</h2>
-                          <div class="meta mb-2">Dell Technologies</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/ankittalwar/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most enterprise AI never makes it past the pilot phase. The systems that do survive production at Fortune 50 scale — across hundreds of thousands of daily transactions, thousands of human operators, and dozens of countries — share architectural patterns that aren’t obvious at the demo stage. This talk distills those patterns from two production AI programs built and deployed over the past decade: a digital supply-chain transformation platform supporting 220,000 orders per day across 392,000 SKUs, documented as MIT Sloan / Ivey case study W24797 (a Harvard Business Publishing bestseller, taught at MIT, Rutgers, NUS, and IE Business School); and STRIDE, a closed-loop AI service architecture supporting customer support organization, recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. Both programs faced the same failure modes that LLM teams hit today: hallucinated outputs, brittle integration boundaries, runaway cost curves, and slow learning loops. Both succeeded by converging on the same underlying architecture — continuous telemetry feeding decision engines feeding learning loops, with humans gating the boundaries rather than sitting in the critical path. The talk walks through the architectural decisions that determined whether each system shipped or stalled, including build-vs-buy under vendor immaturity, phased rollout under quality risk, and tiered automation under fraud exposure. </p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Ankit Talwar is Director of Product Management for AI at Dell Technologies and a Distinguished Fellow of the Soft Computing Research Society (SCRS). He led the product strategy for the digital supply chain transformation documented by researchers at the Massachusetts Institute of Technology (MIT Digital Supply Chain case study, “Dell: Roadmap of a Digital Supply Chain Transformation,” Case No. W24797), and directed the STRIDE service AI ecosystem recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. His work synthesizes patterns from these programs across eight years (2017–2025). Mr. Talwar serves as a judge for MIT Hack-Nation’s Global AI Hackathon (three consecutive editions and the Venture Lab) and as a proposal reviewer for Manning Publications on agentic AI titles.</p></p>
               </div>
 
           </div><!--//modal-body-->
