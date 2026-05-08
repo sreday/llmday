@@ -7,7 +7,7 @@ start_time: "2026-06-19T14:00:00+05:30"
 # after  - hide ticket sales
 event_state: before
 date_string: "June 19, 2026"
-location_string: "Harness.io R&D Labs, Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India"
+location_string: "Harness, Bangalore, India"
 # get this from the event url
 luma_evt: evt-Uch5u2NId7bADTj
 cfp_url: https://cfp.ninja/e/llmday-2026-bangalore-q2
