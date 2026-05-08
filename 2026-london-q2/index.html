@@ -1053,19 +1053,17 @@ You will leave with a concrete blueprint to take your own prompt engineering pra
             <div class="meta">
               <h4 class="time mb-3">12:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img class="profile-image rounded-circle mb-2" src="../speakers/Vishal Bala.png" alt=""></a>
-                <div class="name">Vishal Bala</div>
+                <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img class="profile-image rounded-circle mb-2" src="../speakers/Mingxuan Zhao.png" alt=""></a>
+                <div class="name">Mingxuan Zhao</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Context Matters</a>
+                <a class="theme-link" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling</a>
               </h3>
-              <div class="location mb-3">Redis</div>
-              <div class="desc schedule-abstract">As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.
-
-This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">... Read more</a></div>
+              <div class="location mb-3">IBM</div>
+              <div class="desc schedule-abstract">If you've built RAG over PDFs, you know the problem. You pick a good embedding model, pay for a good LLM, and retrieval still returns garbage because the parser mangled the tables and chunked a footnote into the middle of a paragraph. This talk is about Docling, an open-source Python library for parsing documents into something an LLM can actually use. It handles more than ten file formats, preserves structure like hierarchy and tables, and uses deep learning models to read documents closer to how a person would. The output is a structured format called DoclingDocument, and once your documents are in that shape, a lot of downstream work gets easier. Chunking is the obvious example: instead of splitting on token counts and hoping for the best, you can chunk along the document's actual structure, keeping tables intact and respecting section boundaries. I'll cover how Docling works, show a parsing-to-retrieval pipeline built on structure-aware chunking, and walk through docling-agent, a newer project that skips chunking entirely. Instead of pre-chunking and embedding, the agent navigates the DoclingDocument structure at query time, which is an interesting answer to a problem chunking has always papered over. Docling is MIT-licensed and runs locally, which matters when your documents can't leave your environment or you care about latency. For engineers building RAG, agents over documents, or anything that starts with "get the text out of this PDF." Python familiarity assumed, no ML background needed.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">... Read more</a></div>
               
             </div>
           </div>
@@ -1090,17 +1088,19 @@ This talk explores why context engineering is essential for building reliable, p
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img class="profile-image rounded-circle mb-2" src="../speakers/Maciej Szymkowski.png" alt=""></a>
-                <div class="name">Maciej Szymkowski</div>
+                <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img class="profile-image rounded-circle mb-2" src="../speakers/Vishal Bala.png" alt=""></a>
+                <div class="name">Vishal Bala</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Battle of VLMs and Traditional Pipelines in Automatic Vehicle Type Classification and License Plate Recognition</a>
+                <a class="theme-link" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Context Matters</a>
               </h3>
-              <div class="location mb-3">Future Processing</div>
-              <div class="desc schedule-abstract">Battle of the bots: VLMs (Qwen 3, InternVL-3.5) vs. YOLOv11 + PaddleOCR. Using 2,500 toll booth images of vehicles, the task covers car vs. truck classification and license plate recognition. Evaluation includes accuracy, precision, and Levenshtein distance to determine which pipeline truly owns the road. Who wins?<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">... Read more</a></div>
+              <div class="location mb-3">Redis</div>
+              <div class="desc schedule-abstract">As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.
+
+This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">... Read more</a></div>
               
             </div>
           </div>
@@ -1109,19 +1109,17 @@ This talk explores why context engineering is essential for building reliable, p
             <div class="meta">
               <h4 class="time mb-3">14:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img class="profile-image rounded-circle mb-2" src="../speakers/Max Borodin.png" alt=""></a>
-                <div class="name">Max Borodin</div>
+                <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img class="profile-image rounded-circle mb-2" src="../speakers/Maciej Szymkowski.png" alt=""></a>
+                <div class="name">Maciej Szymkowski</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">Building Production AI Coaches: Architecture, UX, and Iteration at Scale</a>
+                <a class="theme-link" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">Battle of VLMs and Traditional Pipelines in Automatic Vehicle Type Classification and License Plate Recognition</a>
               </h3>
-              <div class="location mb-3">Simple App</div>
-              <div class="desc schedule-abstract">AI chatbots are everywhere, but most get ignored after a week. This talk shares the production architecture and practical patterns behind a successful AI Coach in a health & fitness app with 21M downloads — winner of MedTech's Best Virtual Health Coach 2025.
-Max Borodin walks through the end-to-end design: defining the core "jobs" a coach must do for users, structuring scenarios with memory and context engineering (beyond simple prompts), and embedding coaching into product flows with UX rituals that feel natural rather than bolted-on. He contrasts agentic architectures (multi-step reasoning, tool calling) vs completion-centric (single-turn responses) and their trade-offs for latency, cost, and reliability.
-The session dives into measurement and iteration: quantitative engagement metrics (daily active conversations, session length), qualitative evals (ratings, transcript review), pre-testing frameworks, and rapid scenario management to continuously improve personality, tone, and outcomes. Attendees will leave with a checklist for building their own coach: specific patterns, pitfalls to avoid, and optimisation techniques that make AI sustainable at scale. Perfect for developers and PMs turning LLMs into product features that stick.<a class="schedule-abstract-read-more" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">... Read more</a></div>
+              <div class="location mb-3">Future Processing</div>
+              <div class="desc schedule-abstract">Battle of the bots: VLMs (Qwen 3, InternVL-3.5) vs. YOLOv11 + PaddleOCR. Using 2,500 toll booth images of vehicles, the task covers car vs. truck classification and license plate recognition. Evaluation includes accuracy, precision, and Levenshtein distance to determine which pipeline truly owns the road. Who wins?<a class="schedule-abstract-read-more" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">... Read more</a></div>
               
             </div>
           </div>
@@ -1130,19 +1128,19 @@ The session dives into measurement and iteration: quantitative engagement metric
             <div class="meta">
               <h4 class="time mb-3">15:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18"><img class="profile-image rounded-circle mb-2" src="../speakers/Meryem Arik.png" alt=""></a>
-                <div class="name">Meryem Arik</div>
+                <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18"><img class="profile-image rounded-circle mb-2" src="../speakers/Max Borodin.png" alt=""></a>
+                <div class="name">Max Borodin</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Async Agents in Production: Failure Modes and Fixes</a>
+                <a class="theme-link" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Building Production AI Coaches: Architecture, UX, and Iteration at Scale</a>
               </h3>
-              <div class="location mb-3">Doubleword</div>
-              <div class="desc schedule-abstract">As models improve, we are starting to build long-running, asynchronous agents such as deep research agents and browser agents that can execute multi-step workflows autonomously. These systems unlock new use cases, but they fail in ways that short-lived agents do not.
-The longer an agent runs, the more early mistakes compound, and the more token usage grows through extended reasoning, retries, and tool calls. Patterns that work for request-response agents often break down, leading to unreliable behaviour and unpredictable costs.
-This talk is aimed at use case developers, with secondary relevance for platform engineers. It covers the most common failure modes in async agents and practical design patterns for reducing error compounding and keeping token costs bounded in production.<a class="schedule-abstract-read-more" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">... Read more</a></div>
+              <div class="location mb-3">Simple App</div>
+              <div class="desc schedule-abstract">AI chatbots are everywhere, but most get ignored after a week. This talk shares the production architecture and practical patterns behind a successful AI Coach in a health & fitness app with 21M downloads — winner of MedTech's Best Virtual Health Coach 2025.
+Max Borodin walks through the end-to-end design: defining the core "jobs" a coach must do for users, structuring scenarios with memory and context engineering (beyond simple prompts), and embedding coaching into product flows with UX rituals that feel natural rather than bolted-on. He contrasts agentic architectures (multi-step reasoning, tool calling) vs completion-centric (single-turn responses) and their trade-offs for latency, cost, and reliability.
+The session dives into measurement and iteration: quantitative engagement metrics (daily active conversations, session length), qualitative evals (ratings, transcript review), pre-testing frameworks, and rapid scenario management to continuously improve personality, tone, and outcomes. Attendees will leave with a checklist for building their own coach: specific patterns, pitfalls to avoid, and optimisation techniques that make AI sustainable at scale. Perfect for developers and PMs turning LLMs into product features that stick.<a class="schedule-abstract-read-more" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">... Read more</a></div>
               
             </div>
           </div>
@@ -1151,14 +1149,35 @@ This talk is aimed at use case developers, with secondary relevance for platform
             <div class="meta">
               <h4 class="time mb-3">15:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19"><img class="profile-image rounded-circle mb-2" src="../speakers/Michele Sciabarra.png" alt=""></a>
+                <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19"><img class="profile-image rounded-circle mb-2" src="../speakers/Meryem Arik.png" alt=""></a>
+                <div class="name">Meryem Arik</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Async Agents in Production: Failure Modes and Fixes</a>
+              </h3>
+              <div class="location mb-3">Doubleword</div>
+              <div class="desc schedule-abstract">As models improve, we are starting to build long-running, asynchronous agents such as deep research agents and browser agents that can execute multi-step workflows autonomously. These systems unlock new use cases, but they fail in ways that short-lived agents do not.
+The longer an agent runs, the more early mistakes compound, and the more token usage grows through extended reasoning, retries, and tool calls. Patterns that work for request-response agents often break down, leading to unreliable behaviour and unpredictable costs.
+This talk is aimed at use case developers, with secondary relevance for platform engineers. It covers the most common failure modes in async agents and practical design patterns for reducing error compounding and keeping token costs bounded in production.<a class="schedule-abstract-read-more" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20"><img class="profile-image rounded-circle mb-2" src="../speakers/Michele Sciabarra.png" alt=""></a>
                 <div class="name">Michele Sciabarra</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Trustable: building a private “Lovable-like” AI using only open source</a>
+                <a class="theme-link" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Trustable: building a private “Lovable-like” AI using only open source</a>
               </h3>
               <div class="location mb-3">Nuvolaris</div>
               <div class="desc schedule-abstract">In this talk we show how we built Trustable, a fully private AI platform that delivers an experience similar to Lovable, while keeping everything under the company’s control.
@@ -1169,14 +1188,14 @@ Starting from Apache OpenServerless and OpenCode, we walk through how to design 
 * runs on-prem or on dedicated infrastructure
 * keeps data, prompts, and logs fully private
 We focus on the real architecture, the hard trade-offs, and what it actually takes to move from demos to production-ready AI systems.
-A practical story about building AI that feels lovable to users, but is genuinely trustable for organizations.<a class="schedule-abstract-read-more" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">... Read more</a></div>
+A practical story about building AI that feels lovable to users, but is genuinely trustable for organizations.<a class="schedule-abstract-read-more" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">... Read more</a></div>
               
             </div>
           </div>
 
           <div class="item item-talk">
             <div class="meta">
-              <h4 class="time mb-3">16:00</h4>
+              <h4 class="time mb-3">16:30</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -1217,21 +1236,21 @@ A practical story about building AI that feels lovable to users, but is genuinel
             <div class="meta">
               <h4 class="time mb-3">11:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20"><img class="profile-image rounded-circle mb-2" src="../speakers/Susanna Wong.png" alt=""></a>
+                <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21"><img class="profile-image rounded-circle mb-2" src="../speakers/Susanna Wong.png" alt=""></a>
                 <div class="name">Susanna Wong</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">When Software Stops Being Deterministic: Rethinking Architecture for RAG and LLM Systems</a>
+                <a class="theme-link" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">When Software Stops Being Deterministic: Rethinking Architecture for RAG and LLM Systems</a>
               </h3>
               <div class="location mb-3">Typeform</div>
               <div class="desc schedule-abstract">For decades, we have built deterministic software systems - our architectures, tools, and mental models are optimized for this world.
 AI software development breaks that mindset.
 In AI products, software architecture is only the tip of the iceberg. Beneath it lies an evolving data architecture: prompts, retrieval strategies, eval loops, and knowledge graphs that directly shape system behavior over time. Shipping code is only the start of that lifecycle.
 In this talk, I’ll share how we approach this shift at Typeform as we develop a framework for AI development grounded in agentic RAG. I’ll cover how we evolve both our system architecture and engineering practices—from orchestrating agents using A2A/ MCP patterns, to revamping developer workflows with continuous evals, observability, and tooling that allows teams to safely evolve prompts, graphs, and retrieval strategies.
-A core focus will be how we design an evolving user knowledge graph, and how RAG acts as shared infra powering all of our AI features. This session is for engineers navigating the transition from deterministic software to AI-native systems, looking for practical patterns to build and operate RAG in production.<a class="schedule-abstract-read-more" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">... Read more</a></div>
+A core focus will be how we design an evolving user knowledge graph, and how RAG acts as shared infra powering all of our AI features. This session is for engineers navigating the transition from deterministic software to AI-native systems, looking for practical patterns to build and operate RAG in production.<a class="schedule-abstract-read-more" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">... Read more</a></div>
               
             </div>
           </div>
@@ -1240,17 +1259,17 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
             <div class="meta">
               <h4 class="time mb-3">11:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21"><img class="profile-image rounded-circle mb-2" src="../speakers/Emily Phuong Nghiem.png" alt=""></a>
+                <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22"><img class="profile-image rounded-circle mb-2" src="../speakers/Emily Phuong Nghiem.png" alt=""></a>
                 <div class="name">Emily Phuong Nghiem</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">Teaching RAG to read: making charts, tables and equations reliable on individual learners' budget</a>
+                <a class="theme-link" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Teaching RAG to read: making charts, tables and equations reliable on individual learners' budget</a>
               </h3>
               <div class="location mb-3">Provio</div>
-              <div class="desc schedule-abstract">Standard RAG fails silently on the content that matters most in textbooks and financial documents, a chart becomes an empty image tag, a table of financial ratios disappears, an equation becomes garbled text. This talk covers our lessons learned making a learning product reliable on multimodal content, using Chinese open-source vision models that cost a fraction of proprietary alternatives.<a class="schedule-abstract-read-more" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">... Read more</a></div>
+              <div class="desc schedule-abstract">Standard RAG fails silently on the content that matters most in textbooks and financial documents, a chart becomes an empty image tag, a table of financial ratios disappears, an equation becomes garbled text. This talk covers our lessons learned making a learning product reliable on multimodal content, using Chinese open-source vision models that cost a fraction of proprietary alternatives.<a class="schedule-abstract-read-more" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">... Read more</a></div>
               
             </div>
           </div>
@@ -1259,17 +1278,17 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
             <div class="meta">
               <h4 class="time mb-3">12:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22"><img class="profile-image rounded-circle mb-2" src="../speakers/Vsevolod Voropaev.png" alt=""></a>
+                <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23"><img class="profile-image rounded-circle mb-2" src="../speakers/Vsevolod Voropaev.png" alt=""></a>
                 <div class="name">Vsevolod Voropaev</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Stop Building Agents. Build Sandboxes.</a>
+                <a class="theme-link" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Stop Building Agents. Build Sandboxes.</a>
               </h3>
               <div class="location mb-3">Data Engineer</div>
-              <div class="desc schedule-abstract">The enterprise conversation about agentic AI is obsessed with the agent's logic. This session argues that the agent is the easy part—the sandbox it runs in is what actually determines whether the deployment survives contact with reality. Drawing on the Probe/Sandbox/Executor architecture, we will discuss why teams that invest in the environment ship reliable agents, while those focusing solely on the agent ship demos. We'll explore why reliability, safety, and cost control are properties of the environment, not the model. Key Takeaways: Environment First: Why the sandbox environment matters more than the agent's logic for security. Probe/Sandbox/Executor: Implementing this default framework for enterprise agents. Constraint Design: Using environment design to naturally prevent failure modes. Reproducibility: Ensuring reliability across deployments by standardizing the sandbox.<a class="schedule-abstract-read-more" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">... Read more</a></div>
+              <div class="desc schedule-abstract">The enterprise conversation about agentic AI is obsessed with the agent's logic. This session argues that the agent is the easy part—the sandbox it runs in is what actually determines whether the deployment survives contact with reality. Drawing on the Probe/Sandbox/Executor architecture, we will discuss why teams that invest in the environment ship reliable agents, while those focusing solely on the agent ship demos. We'll explore why reliability, safety, and cost control are properties of the environment, not the model. Key Takeaways: Environment First: Why the sandbox environment matters more than the agent's logic for security. Probe/Sandbox/Executor: Implementing this default framework for enterprise agents. Constraint Design: Using environment design to naturally prevent failure modes. Reproducibility: Ensuring reliability across deployments by standardizing the sandbox.<a class="schedule-abstract-read-more" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">... Read more</a></div>
               
             </div>
           </div>
@@ -1278,17 +1297,17 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
             <div class="meta">
               <h4 class="time mb-3">12:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23"><img class="profile-image rounded-circle mb-2" src="../speakers/Wojciech Tomasiewicz.png" alt=""></a>
+                <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24"><img class="profile-image rounded-circle mb-2" src="../speakers/Wojciech Tomasiewicz.png" alt=""></a>
                 <div class="name">Wojciech Tomasiewicz</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">What’s Wrong With Them? How Misunderstandings (and AI) Can Become Intercultural Insight</a>
+                <a class="theme-link" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">What’s Wrong With Them? How Misunderstandings (and AI) Can Become Intercultural Insight</a>
               </h3>
               <div class="location mb-3">Pegasystems</div>
-              <div class="desc schedule-abstract">When humans misread each other across cultures, we blame personality. When AI does it, we call it “hallucination.” Both are cultural blind spots, and are fixable. The real opportunity isn’t to make AI neutral, but to make it culturally intelligent, because in a global world, context is everything.<a class="schedule-abstract-read-more" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">... Read more</a></div>
+              <div class="desc schedule-abstract">When humans misread each other across cultures, we blame personality. When AI does it, we call it “hallucination.” Both are cultural blind spots, and are fixable. The real opportunity isn’t to make AI neutral, but to make it culturally intelligent, because in a global world, context is everything.<a class="schedule-abstract-read-more" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">... Read more</a></div>
               
             </div>
           </div>
@@ -1313,17 +1332,17 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24"><img class="profile-image rounded-circle mb-2" src="../speakers/Andy Burgin.png" alt=""></a>
+                <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25"><img class="profile-image rounded-circle mb-2" src="../speakers/Andy Burgin.png" alt=""></a>
                 <div class="name">Andy Burgin</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Llama Watching - Visualising a LLM in Action</a>
+                <a class="theme-link" href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">Llama Watching - Visualising a LLM in Action</a>
               </h3>
               <div class="location mb-3">Platform Engineer</div>
-              <div class="desc schedule-abstract">In this talk we'll be taking a look at the inner workings of the Llama 3.2 model. First we'll look at the parameters that make up the model and then run through a visualisation of the 3.2 3B model in action. Showing everything from the embeddings and how they change as they move through the layers of the model, seeing which parameters are used in the attention mechanism and then the multi layer perceptron. You'll actually see how the layers affect original embeddings and how that is then used to predict the next token. As a bonus I'll also be running through the way the model was trained and explain a few unique features of the smallest Llama model that speed up prediction.<a class="schedule-abstract-read-more" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">... Read more</a></div>
+              <div class="desc schedule-abstract">In this talk we'll be taking a look at the inner workings of the Llama 3.2 model. First we'll look at the parameters that make up the model and then run through a visualisation of the 3.2 3B model in action. Showing everything from the embeddings and how they change as they move through the layers of the model, seeing which parameters are used in the attention mechanism and then the multi layer perceptron. You'll actually see how the layers affect original embeddings and how that is then used to predict the next token. As a bonus I'll also be running through the way the model was trained and explain a few unique features of the smallest Llama model that speed up prediction.<a class="schedule-abstract-read-more" href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">... Read more</a></div>
               
             </div>
           </div>
@@ -1332,17 +1351,17 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
             <div class="meta">
               <h4 class="time mb-3">14:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25"><img class="profile-image rounded-circle mb-2" src="../speakers/Arthur Zinnurov.png" alt=""></a>
+                <a href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26"><img class="profile-image rounded-circle mb-2" src="../speakers/Arthur Zinnurov.png" alt=""></a>
                 <div class="name">Arthur Zinnurov</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">The Future of the Subscription Economy: How AI Will Learn to Optimise Our Spending Better Than We Can</a>
+                <a class="theme-link" href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26">The Future of the Subscription Economy: How AI Will Learn to Optimise Our Spending Better Than We Can</a>
               </h3>
               <div class="location mb-3">SeRP</div>
-              <div class="desc schedule-abstract">The talk will describe how an AI solution can help B2B and B2C customers to restore visibility and control in the rapidly growing subscription economy. The speech will demonstrate how AI can automatically detect and track recurring payments by analysing receipts files and emails, with user consent, helping to forecasting upcoming renewals, and help to categorise spending across AI and other SaaS services. There will be several tools and techniques discussed include OCR for receipt processing, email parsing, and financial insights predictions. The talk focuses on practical AI applications that help optimise spending before unnecessary costs accumulate.<a class="schedule-abstract-read-more" href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">... Read more</a></div>
+              <div class="desc schedule-abstract">The talk will describe how an AI solution can help B2B and B2C customers to restore visibility and control in the rapidly growing subscription economy. The speech will demonstrate how AI can automatically detect and track recurring payments by analysing receipts files and emails, with user consent, helping to forecasting upcoming renewals, and help to categorise spending across AI and other SaaS services. There will be several tools and techniques discussed include OCR for receipt processing, email parsing, and financial insights predictions. The talk focuses on practical AI applications that help optimise spending before unnecessary costs accumulate.<a class="schedule-abstract-read-more" href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26">... Read more</a></div>
               
             </div>
           </div>
@@ -1351,17 +1370,17 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
             <div class="meta">
               <h4 class="time mb-3">15:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26"><img class="profile-image rounded-circle mb-2" src="../speakers/Max Helzberg.png" alt=""></a>
+                <a href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27"><img class="profile-image rounded-circle mb-2" src="../speakers/Max Helzberg.png" alt=""></a>
                 <div class="name">Max Helzberg</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26">Purpose-Built AI Ontologies: Why Data Modeling Determines LLM Performance</a>
+                <a class="theme-link" href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27">Purpose-Built AI Ontologies: Why Data Modeling Determines LLM Performance</a>
               </h3>
               <div class="location mb-3">Northslope Technologies</div>
-              <div class="desc schedule-abstract">Large language models are often treated as the center of modern AI systems, but in enterprise deployments the real performance ceiling is set much earlier — at the data modeling layer. In this talk, Max Helzberg draws on experience building operational AI systems in complex environments to show why domain-specific ontologies and semantic data models are critical for reliable LLM and agent performance. When models interact with messy operational data, poorly structured schemas lead to hallucinations, brittle reasoning, and systems that fail in production. The session explores how purpose-built ontologies differ from traditional data warehouses, and how those differences influence downstream model behavior. Topics include entity resolution at scale, semantic relationships between operational objects, and how structured action hierarchies enable reliable agent workflows. Through real-world examples from sectors such as energy, finance, and national security, the talk highlights common failure modes in enterprise AI systems and shows how carefully designed semantic layers dramatically improve reasoning quality, traceability, and auditability. Attendees will leave with practical insights into how data architecture choices influence the success of LLM applications — and why the most important design decisions for AI systems often happen long before model training begins.<a class="schedule-abstract-read-more" href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26">... Read more</a></div>
+              <div class="desc schedule-abstract">Large language models are often treated as the center of modern AI systems, but in enterprise deployments the real performance ceiling is set much earlier — at the data modeling layer. In this talk, Max Helzberg draws on experience building operational AI systems in complex environments to show why domain-specific ontologies and semantic data models are critical for reliable LLM and agent performance. When models interact with messy operational data, poorly structured schemas lead to hallucinations, brittle reasoning, and systems that fail in production. The session explores how purpose-built ontologies differ from traditional data warehouses, and how those differences influence downstream model behavior. Topics include entity resolution at scale, semantic relationships between operational objects, and how structured action hierarchies enable reliable agent workflows. Through real-world examples from sectors such as energy, finance, and national security, the talk highlights common failure modes in enterprise AI systems and shows how carefully designed semantic layers dramatically improve reasoning quality, traceability, and auditability. Attendees will leave with practical insights into how data architecture choices influence the success of LLM applications — and why the most important design decisions for AI systems often happen long before model training begins.<a class="schedule-abstract-read-more" href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27">... Read more</a></div>
               
             </div>
           </div>
@@ -1370,17 +1389,17 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
             <div class="meta">
               <h4 class="time mb-3">15:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27"><img class="profile-image rounded-circle mb-2" src="../speakers/Kaan Ozdogru.png" alt=""></a>
+                <a href="#modal-speaker-28" data-bs-toggle="modal" data-bs-target="#modal-speaker-28"><img class="profile-image rounded-circle mb-2" src="../speakers/Kaan Ozdogru.png" alt=""></a>
                 <div class="name">Kaan Ozdogru</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27">What breaks in production ML systems, even when all metrics look healthy</a>
+                <a class="theme-link" href="#modal-speaker-28" data-bs-toggle="modal" data-bs-target="#modal-speaker-28">What breaks in production ML systems, even when all metrics look healthy</a>
               </h3>
               <div class="location mb-3">Wayve</div>
-              <div class="desc schedule-abstract">The talk explores the failure modes that emerge only after deployment, why traditional metrics miss them, and how teams can start tracking behavioural bugs that actually impact system reliability.<a class="schedule-abstract-read-more" href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27">... Read more</a></div>
+              <div class="desc schedule-abstract">The talk explores the failure modes that emerge only after deployment, why traditional metrics miss them, and how teams can start tracking behavioural bugs that actually impact system reliability.<a class="schedule-abstract-read-more" href="#modal-speaker-28" data-bs-toggle="modal" data-bs-target="#modal-speaker-28">... Read more</a></div>
               
             </div>
           </div>
@@ -1422,6 +1441,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
           </tr>
         </thead>
         <tbody>
+
+
 
 
 
@@ -1776,7 +1797,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">When Software Stops Being Deterministic: Rethinking Architecture for RAG and LLM Systems</a>
+              <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">When Software Stops Being Deterministic: Rethinking Architecture for RAG and LLM Systems</a>
               <div class="speaker-info">Susanna Wong <span class="affiliation">• Typeform</span></div>
             </td>
 
@@ -1838,7 +1859,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">Teaching RAG to read: making charts, tables and equations reliable on individual learners' budget</a>
+              <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Teaching RAG to read: making charts, tables and equations reliable on individual learners' budget</a>
               <div class="speaker-info">Emily Phuong Nghiem <span class="affiliation">• Provio</span></div>
             </td>
 
@@ -1900,7 +1921,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Stop Building Agents. Build Sandboxes.</a>
+              <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Stop Building Agents. Build Sandboxes.</a>
               <div class="speaker-info">Vsevolod Voropaev <span class="affiliation">• Data Engineer</span></div>
             </td>
 
@@ -1951,8 +1972,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Context Matters</a>
-              <div class="speaker-info">Vishal Bala <span class="affiliation">• Redis</span></div>
+              <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling</a>
+              <div class="speaker-info">Mingxuan Zhao <span class="affiliation">• IBM</span></div>
             </td>
 
 
@@ -1962,7 +1983,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">What’s Wrong With Them? How Misunderstandings (and AI) Can Become Intercultural Insight</a>
+              <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">What’s Wrong With Them? How Misunderstandings (and AI) Can Become Intercultural Insight</a>
               <div class="speaker-info">Wojciech Tomasiewicz <span class="affiliation">• Pegasystems</span></div>
             </td>
 
@@ -2044,8 +2065,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Battle of VLMs and Traditional Pipelines in Automatic Vehicle Type Classification and License Plate Recognition</a>
-              <div class="speaker-info">Maciej Szymkowski <span class="affiliation">• Future Processing</span></div>
+              <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Context Matters</a>
+              <div class="speaker-info">Vishal Bala <span class="affiliation">• Redis</span></div>
             </td>
 
 
@@ -2055,7 +2076,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Llama Watching - Visualising a LLM in Action</a>
+              <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">Llama Watching - Visualising a LLM in Action</a>
               <div class="speaker-info">Andy Burgin <span class="affiliation">• Platform Engineer</span></div>
             </td>
 
@@ -2106,8 +2127,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">Building Production AI Coaches: Architecture, UX, and Iteration at Scale</a>
-              <div class="speaker-info">Max Borodin <span class="affiliation">• Simple App</span></div>
+              <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">Battle of VLMs and Traditional Pipelines in Automatic Vehicle Type Classification and License Plate Recognition</a>
+              <div class="speaker-info">Maciej Szymkowski <span class="affiliation">• Future Processing</span></div>
             </td>
 
 
@@ -2117,7 +2138,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">The Future of the Subscription Economy: How AI Will Learn to Optimise Our Spending Better Than We Can</a>
+              <a href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26">The Future of the Subscription Economy: How AI Will Learn to Optimise Our Spending Better Than We Can</a>
               <div class="speaker-info">Arthur Zinnurov <span class="affiliation">• SeRP</span></div>
             </td>
 
@@ -2168,8 +2189,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Async Agents in Production: Failure Modes and Fixes</a>
-              <div class="speaker-info">Meryem Arik <span class="affiliation">• Doubleword</span></div>
+              <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Building Production AI Coaches: Architecture, UX, and Iteration at Scale</a>
+              <div class="speaker-info">Max Borodin <span class="affiliation">• Simple App</span></div>
             </td>
 
 
@@ -2179,7 +2200,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26">Purpose-Built AI Ontologies: Why Data Modeling Determines LLM Performance</a>
+              <a href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27">Purpose-Built AI Ontologies: Why Data Modeling Determines LLM Performance</a>
               <div class="speaker-info">Max Helzberg <span class="affiliation">• Northslope Technologies</span></div>
             </td>
 
@@ -2230,8 +2251,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Trustable: building a private “Lovable-like” AI using only open source</a>
-              <div class="speaker-info">Michele Sciabarra <span class="affiliation">• Nuvolaris</span></div>
+              <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Async Agents in Production: Failure Modes and Fixes</a>
+              <div class="speaker-info">Meryem Arik <span class="affiliation">• Doubleword</span></div>
             </td>
 
 
@@ -2241,7 +2262,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27">What breaks in production ML systems, even when all metrics look healthy</a>
+              <a href="#modal-speaker-28" data-bs-toggle="modal" data-bs-target="#modal-speaker-28">What breaks in production ML systems, even when all metrics look healthy</a>
               <div class="speaker-info">Kaan Ozdogru <span class="affiliation">• Wayve</span></div>
             </td>
 
@@ -2291,7 +2312,10 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
 
-            <td class="talk-cell merged-cell">Wrap up</td>
+            <td class="talk-cell">
+              <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Trustable: building a private “Lovable-like” AI using only open source</a>
+              <div class="speaker-info">Michele Sciabarra <span class="affiliation">• Nuvolaris</span></div>
+            </td>
 
 
 
@@ -2342,7 +2366,9 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
 
 
-            <td class="talk-cell merged-cell"></td>
+
+
+            <td class="talk-cell merged-cell">Wrap up</td>
 
 
 
@@ -2453,7 +2479,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24"><img src="../speakers/Andy Burgin.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25"><img src="../speakers/Andy Burgin.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Andy Burgin</h5>
             <div class="card-text mb-3">
@@ -2505,7 +2531,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25"><img src="../speakers/Arthur Zinnurov.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26"><img src="../speakers/Arthur Zinnurov.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Arthur Zinnurov</h5>
             <div class="card-text mb-3">
@@ -2583,7 +2609,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21"><img src="../speakers/Emily Phuong Nghiem.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22"><img src="../speakers/Emily Phuong Nghiem.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Emily Phuong Nghiem</h5>
             <div class="card-text mb-3">
@@ -2713,7 +2739,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27"><img src="../speakers/Kaan Ozdogru.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-28" data-bs-toggle="modal" data-bs-target="#modal-speaker-28"><img src="../speakers/Kaan Ozdogru.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Kaan Ozdogru</h5>
             <div class="card-text mb-3">
@@ -2791,7 +2817,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img src="../speakers/Maciej Szymkowski.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img src="../speakers/Maciej Szymkowski.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Maciej Szymkowski</h5>
             <div class="card-text mb-3">
@@ -2817,7 +2843,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img src="../speakers/Max Borodin.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18"><img src="../speakers/Max Borodin.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Max Borodin</h5>
             <div class="card-text mb-3">
@@ -2843,7 +2869,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-26" data-bs-toggle="modal" data-bs-target="#modal-speaker-26"><img src="../speakers/Max Helzberg.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-27" data-bs-toggle="modal" data-bs-target="#modal-speaker-27"><img src="../speakers/Max Helzberg.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Max Helzberg</h5>
             <div class="card-text mb-3">
@@ -2869,7 +2895,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18"><img src="../speakers/Meryem Arik.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19"><img src="../speakers/Meryem Arik.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Meryem Arik</h5>
             <div class="card-text mb-3">
@@ -2895,7 +2921,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19"><img src="../speakers/Michele Sciabarra.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20"><img src="../speakers/Michele Sciabarra.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Michele Sciabarra</h5>
             <div class="card-text mb-3">
@@ -2936,6 +2962,32 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
             <ul class="social-list list-inline mb-0">
               <li class="list-inline-item"><a  href="https://twitter.com/@mikopawlikowski"><i class="fab fa-twitter fa-fw"></i></a></li>
               <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mikolajpawlikowski/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img src="../speakers/Mingxuan Zhao.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Mingxuan Zhao</h5>
+            <div class="card-text mb-3">
+              <div class="meta">IBM</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Mingxuan_Zhao_IBM_Your_RAG_Pipeline_Is_Only_as_Good_as_Your_Parser_Document_Processing_with_Docling#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -3025,7 +3077,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20"><img src="../speakers/Susanna Wong.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21"><img src="../speakers/Susanna Wong.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Susanna Wong</h5>
             <div class="card-text mb-3">
@@ -3051,7 +3103,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img src="../speakers/Vishal Bala.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img src="../speakers/Vishal Bala.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Vishal Bala</h5>
             <div class="card-text mb-3">
@@ -3077,7 +3129,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22"><img src="../speakers/Vsevolod Voropaev.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23"><img src="../speakers/Vsevolod Voropaev.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Vsevolod Voropaev</h5>
             <div class="card-text mb-3">
@@ -3103,7 +3155,7 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23"><img src="../speakers/Wojciech Tomasiewicz.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24"><img src="../speakers/Wojciech Tomasiewicz.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Wojciech Tomasiewicz</h5>
             <div class="card-text mb-3">
@@ -3785,6 +3837,49 @@ A regular speaker, writer, and host of the London AI Dinner, Erik is recognised 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Mingxuan Zhao.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Mingxuan Zhao</h2>
+                          <div class="meta mb-2">IBM</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>If you've built RAG over PDFs, you know the problem. You pick a good embedding model, pay for a good LLM, and retrieval still returns garbage because the parser mangled the tables and chunked a footnote into the middle of a paragraph. This talk is about Docling, an open-source Python library for parsing documents into something an LLM can actually use. It handles more than ten file formats, preserves structure like hierarchy and tables, and uses deep learning models to read documents closer to how a person would. The output is a structured format called DoclingDocument, and once your documents are in that shape, a lot of downstream work gets easier. Chunking is the obvious example: instead of splitting on token counts and hoping for the best, you can chunk along the document's actual structure, keeping tables intact and respecting section boundaries. I'll cover how Docling works, show a parsing-to-retrieval pipeline built on structure-aware chunking, and walk through docling-agent, a newer project that skips chunking entirely. Instead of pre-chunking and embedding, the agent navigates the DoclingDocument structure at query time, which is an interesting answer to a problem chunking has always papered over. Docling is MIT-licensed and runs locally, which matters when your documents can't leave your environment or you care about latency. For engineers building RAG, agents over documents, or anything that starts with "get the text out of this PDF." Python familiarity assumed, no ML background needed.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Ming Zhao is an open source developer and Developer Advocate at IBM Research, where he helps IBM leverage open technologies while building impactful tools and growing vibrant open-source communities. He’s passionate about making open tech accessible to all and ensuring developers have the tools they need to succeed in the rapidly developing AI space. Ming now leads community efforts around Docling, IBM’s fastest-growing open source project, recently welcomed into the LF AI &amp; Data Foundation.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 16 -->
+<div class="modal modal-speaker modal-speaker-16" id="modal-speaker-16" tabindex="-1" role="dialog" aria-labelledby="speaker-16-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vishal Bala.png" alt="" />
                       </div>
 
@@ -3820,8 +3915,8 @@ A regular speaker, writer, and host of the London AI Dinner, Erik is recognised 
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 16 -->
-<div class="modal modal-speaker modal-speaker-16" id="modal-speaker-16" tabindex="-1" role="dialog" aria-labelledby="speaker-16-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 17 -->
+<div class="modal modal-speaker modal-speaker-17" id="modal-speaker-17" tabindex="-1" role="dialog" aria-labelledby="speaker-17-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -3866,8 +3961,8 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 17 -->
-<div class="modal modal-speaker modal-speaker-17" id="modal-speaker-17" tabindex="-1" role="dialog" aria-labelledby="speaker-17-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 18 -->
+<div class="modal modal-speaker modal-speaker-18" id="modal-speaker-18" tabindex="-1" role="dialog" aria-labelledby="speaker-18-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -3911,8 +4006,8 @@ The session dives into measurement and iteration: quantitative engagement metric
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 18 -->
-<div class="modal modal-speaker modal-speaker-18" id="modal-speaker-18" tabindex="-1" role="dialog" aria-labelledby="speaker-18-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 19 -->
+<div class="modal modal-speaker modal-speaker-19" id="modal-speaker-19" tabindex="-1" role="dialog" aria-labelledby="speaker-19-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -3956,8 +4051,8 @@ This talk is aimed at use case developers, with secondary relevance for platform
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 19 -->
-<div class="modal modal-speaker modal-speaker-19" id="modal-speaker-19" tabindex="-1" role="dialog" aria-labelledby="speaker-19-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 20 -->
+<div class="modal modal-speaker modal-speaker-20" id="modal-speaker-20" tabindex="-1" role="dialog" aria-labelledby="speaker-20-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4007,8 +4102,8 @@ A practical story about building AI that feels lovable to users, but is genuinel
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 20 -->
-<div class="modal modal-speaker modal-speaker-20" id="modal-speaker-20" tabindex="-1" role="dialog" aria-labelledby="speaker-20-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 21 -->
+<div class="modal modal-speaker modal-speaker-21" id="modal-speaker-21" tabindex="-1" role="dialog" aria-labelledby="speaker-21-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4054,8 +4149,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 21 -->
-<div class="modal modal-speaker modal-speaker-21" id="modal-speaker-21" tabindex="-1" role="dialog" aria-labelledby="speaker-21-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 22 -->
+<div class="modal modal-speaker modal-speaker-22" id="modal-speaker-22" tabindex="-1" role="dialog" aria-labelledby="speaker-22-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4097,8 +4192,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 22 -->
-<div class="modal modal-speaker modal-speaker-22" id="modal-speaker-22" tabindex="-1" role="dialog" aria-labelledby="speaker-22-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 23 -->
+<div class="modal modal-speaker modal-speaker-23" id="modal-speaker-23" tabindex="-1" role="dialog" aria-labelledby="speaker-23-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4140,8 +4235,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 23 -->
-<div class="modal modal-speaker modal-speaker-23" id="modal-speaker-23" tabindex="-1" role="dialog" aria-labelledby="speaker-23-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 24 -->
+<div class="modal modal-speaker modal-speaker-24" id="modal-speaker-24" tabindex="-1" role="dialog" aria-labelledby="speaker-24-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4183,8 +4278,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 24 -->
-<div class="modal modal-speaker modal-speaker-24" id="modal-speaker-24" tabindex="-1" role="dialog" aria-labelledby="speaker-24-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 25 -->
+<div class="modal modal-speaker modal-speaker-25" id="modal-speaker-25" tabindex="-1" role="dialog" aria-labelledby="speaker-25-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4226,8 +4321,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 25 -->
-<div class="modal modal-speaker modal-speaker-25" id="modal-speaker-25" tabindex="-1" role="dialog" aria-labelledby="speaker-25-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 26 -->
+<div class="modal modal-speaker modal-speaker-26" id="modal-speaker-26" tabindex="-1" role="dialog" aria-labelledby="speaker-26-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4269,8 +4364,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 26 -->
-<div class="modal modal-speaker modal-speaker-26" id="modal-speaker-26" tabindex="-1" role="dialog" aria-labelledby="speaker-26-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 27 -->
+<div class="modal modal-speaker modal-speaker-27" id="modal-speaker-27" tabindex="-1" role="dialog" aria-labelledby="speaker-27-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4312,8 +4407,8 @@ A core focus will be how we design an evolving user knowledge graph, and how RAG
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 27 -->
-<div class="modal modal-speaker modal-speaker-27" id="modal-speaker-27" tabindex="-1" role="dialog" aria-labelledby="speaker-27-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 28 -->
+<div class="modal modal-speaker modal-speaker-28" id="modal-speaker-28" tabindex="-1" role="dialog" aria-labelledby="speaker-28-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
