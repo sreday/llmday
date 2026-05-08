@@ -54,6 +54,13 @@ events:
     size: medium
     youtube_playlist:
 
+  - name: LLMday Bangalore 2026 Q2
+    location: Harness, Bangalore, India
+    photo_url: ./assets/images/events/llmday-2026-bangalore-q2.png
+    url: ./2026-bangalore-q2/
+    size: small
+    youtube_playlist:
+
   - name: LLMday Lisbon 2026 Q2
     location: PagerDuty, Lisbon, Portugal
     photo_url: ./assets/images/events/llmday-2026-lisbon-q2.png
