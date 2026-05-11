@@ -4,7 +4,7 @@ base_folder: "static"
 # active - schedule
 # after  - hide tickets
 event_state: active
-start_time: "2026-05-11T09:00:00-05:00"
+start_time: "2026-05-11T10:00:00-05:00"
 date_string: "May 12, 2026"
 location_string: "Austin, Texas, USA"
 
