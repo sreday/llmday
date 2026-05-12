@@ -34,11 +34,11 @@ breaks:
 - title: Lunch & networking
   duration: 60
   comment: Main lobby
-  talks_before: 3
+  talks_before: 4
 - title: Networking & sponsor crawl
   duration: 30
   comment: Main lobby
-  talks_before: 4
+  talks_before: 3
 
 sponsors:
   - logo: harness.png
