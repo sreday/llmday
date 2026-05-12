@@ -793,17 +793,23 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Nilima Rodrigues.png" alt=""></a>
-                <div class="name">Nilima Rodrigues</div>
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Mingxuan Zhao.png" alt=""></a>
+                <div class="name">Mingxuan Zhao</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">LLMs and Data in MedTech: Building Smarter, Safer Healthcare</a>
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Unlocking Document Intelligence with Open-Source AI</a>
               </h3>
-              <div class="location mb-3">Align Technology</div>
-              <div class="desc schedule-abstract">The medical technology sector is undergoing a paradigm shift powered by clinical, operational, and real-world data—and increasingly, by large language models (LLMs). At LLMday Austin, this session explores how data and AI are reshaping MedTech innovation, operational excellence, and personalized care at scale. From device development to clinical deployment, mining EHRs, claims data, and registries reveals unmet needs and enables measurable patient impact. LLMs enhance this process by extracting insights from unstructured clinical notes, regulatory documents, and post-market surveillance data—accelerating research, improving documentation, and supporting compliance. Computational modeling and digital twins reduce time-to-market and manufacturing waste, while analytics-driven usability improvements reduce device error rates. In clinical settings, real-time monitoring systems—such as closed-loop insulin platforms—integrate multimodal data to improve chronic disease outcomes. AI imaging systems now match specialist-level performance in areas like diabetic retinopathy detection, while predictive analytics such as sepsis forecasting enable earlier interventions. Operational excellence is achieved through predictive quality, AI-driven supply chain forecasting, condition-based maintenance, and capacity optimization. Strong governance frameworks—including FHIR, TEFCA, and SNOMED CT—ensure interoperability, while privacy-by-design, federated learning, SBOMs, and secure development lifecycles safeguard sensitive health data. By combining LLM capabilities with robust data governance, MedTech organizations can deliver smarter, safer, and more sustainable healthcare systems. This session provides a practical, data-driven roadmap grounded in real-world outcomes.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              <div class="location mb-3">IBM</div>
+              <div class="desc schedule-abstract">Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.
+
+In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
+We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI & Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.
+
+Docling is fully open-source under MIT license, so you can run it locally for sensitive data and air-gapped environments.
+<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
               
             </div>
           </div>
@@ -885,23 +891,17 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">16:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Mingxuan Zhao.png" alt=""></a>
-                <div class="name">Mingxuan Zhao</div>
+                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Srinivas Pochincharla.png" alt=""></a>
+                <div class="name">Srinivas Pochincharla</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Unlocking Document Intelligence with Open-Source AI</a>
+                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">From Automation to Autonomy: Building Product-Led Agentic AI Systems That Scale</a>
               </h3>
-              <div class="location mb-3">IBM</div>
-              <div class="desc schedule-abstract">Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.
-
-In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
-We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI & Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.
-
-Docling is fully open-source under MIT license, so you can run it locally for sensitive data and air-gapped environments.
-<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
+              <div class="location mb-3">AWS</div>
+              <div class="desc schedule-abstract">Modern enterprises face a critical paradox: despite processing billions of records and building sophisticated data infrastructure, business users often remain trapped in manual spreadsheets and wait days for simple insights. I solved this challenge by implementing agentic AI on top of an AWS data pipeline processing 45 billion records per month, enabling over 2,000 users across 37 teams to perform autonomous natural language analysis. This implementation achieved 25-40% productivity gains and a 60% reduction in time-to-insight. This talk explores the evolution from traditional BI dashboards to AI copilots and fully autonomous agents, demonstrating how agentic AI transforms data accessibility and shifts data teams from report factories to strategic partners.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
               
             </div>
           </div>
@@ -910,17 +910,17 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <div class="meta">
               <h4 class="time mb-3">17:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/Srinivas Pochincharla.png" alt=""></a>
-                <div class="name">Srinivas Pochincharla</div>
+                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/Farhan Shahnewaz.png" alt=""></a>
+                <div class="name">Farhan Shahnewaz</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">From Automation to Autonomy: Building Product-Led Agentic AI Systems That Scale</a>
+                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Multi-Agent Workflows with Human-in-the-Loop Control</a>
               </h3>
-              <div class="location mb-3">AWS</div>
-              <div class="desc schedule-abstract">Modern enterprises face a critical paradox: despite processing billions of records and building sophisticated data infrastructure, business users often remain trapped in manual spreadsheets and wait days for simple insights. I solved this challenge by implementing agentic AI on top of an AWS data pipeline processing 45 billion records per month, enabling over 2,000 users across 37 teams to perform autonomous natural language analysis. This implementation achieved 25-40% productivity gains and a 60% reduction in time-to-insight. This talk explores the evolution from traditional BI dashboards to AI copilots and fully autonomous agents, demonstrating how agentic AI transforms data accessibility and shifts data teams from report factories to strategic partners.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
+              <div class="location mb-3">Microsoft</div>
+              <div class="desc schedule-abstract">Most enterprise AI demos start with a single assistant or copilot. However, real business workflows require orchestration, validation, approval, monitoring, and integration with existing systems. This talk explains how to design multi-agent workflows with human-in-the-loop control so LLM applications can move from demos to production.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
               
             </div>
           </div>
@@ -929,17 +929,17 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <div class="meta">
               <h4 class="time mb-3">17:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img class="profile-image rounded-circle mb-2" src="../speakers/Farhan Shahnewaz.png" alt=""></a>
-                <div class="name">Farhan Shahnewaz</div>
+                <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img class="profile-image rounded-circle mb-2" src="../speakers/Nilima Rodrigues.png" alt=""></a>
+                <div class="name">Nilima Rodrigues</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Multi-Agent Workflows with Human-in-the-Loop Control</a>
+                <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">LLMs and Data in MedTech: Building Smarter, Safer Healthcare</a>
               </h3>
-              <div class="location mb-3">Microsoft</div>
-              <div class="desc schedule-abstract">Most enterprise AI demos start with a single assistant or copilot. However, real business workflows require orchestration, validation, approval, monitoring, and integration with existing systems. This talk explains how to design multi-agent workflows with human-in-the-loop control so LLM applications can move from demos to production.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
+              <div class="location mb-3">Align Technology</div>
+              <div class="desc schedule-abstract">The medical technology sector is undergoing a paradigm shift powered by clinical, operational, and real-world data—and increasingly, by large language models (LLMs). At LLMday Austin, this session explores how data and AI are reshaping MedTech innovation, operational excellence, and personalized care at scale. From device development to clinical deployment, mining EHRs, claims data, and registries reveals unmet needs and enables measurable patient impact. LLMs enhance this process by extracting insights from unstructured clinical notes, regulatory documents, and post-market surveillance data—accelerating research, improving documentation, and supporting compliance. Computational modeling and digital twins reduce time-to-market and manufacturing waste, while analytics-driven usability improvements reduce device error rates. In clinical settings, real-time monitoring systems—such as closed-loop insulin platforms—integrate multimodal data to improve chronic disease outcomes. AI imaging systems now match specialist-level performance in areas like diabetic retinopathy detection, while predictive analytics such as sepsis forecasting enable earlier interventions. Operational excellence is achieved through predictive quality, AI-driven supply chain forecasting, condition-based maintenance, and capacity optimization. Strong governance frameworks—including FHIR, TEFCA, and SNOMED CT—ensure interoperability, while privacy-by-design, federated learning, SBOMs, and secure development lifecycles safeguard sensitive health data. By combining LLM capabilities with robust data governance, MedTech organizations can deliver smarter, safer, and more sustainable healthcare systems. This session provides a practical, data-driven roadmap grounded in real-world outcomes.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
               
             </div>
           </div>
@@ -1197,8 +1197,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">14:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">LLMs and Data in MedTech: Building Smarter, Safer Healthcare</a>
-              <div class="speaker-info">Nilima Rodrigues <span class="affiliation">• Align Technology</span></div>
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Unlocking Document Intelligence with Open-Source AI</a>
+              <div class="speaker-info">Mingxuan Zhao <span class="affiliation">• IBM</span></div>
 
             </td>
           </tr>
@@ -1296,8 +1296,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">16:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Unlocking Document Intelligence with Open-Source AI</a>
-              <div class="speaker-info">Mingxuan Zhao <span class="affiliation">• IBM</span></div>
+              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">From Automation to Autonomy: Building Product-Led Agentic AI Systems That Scale</a>
+              <div class="speaker-info">Srinivas Pochincharla <span class="affiliation">• AWS</span></div>
 
             </td>
           </tr>
@@ -1316,8 +1316,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">17:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">From Automation to Autonomy: Building Product-Led Agentic AI Systems That Scale</a>
-              <div class="speaker-info">Srinivas Pochincharla <span class="affiliation">• AWS</span></div>
+              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Multi-Agent Workflows with Human-in-the-Loop Control</a>
+              <div class="speaker-info">Farhan Shahnewaz <span class="affiliation">• Microsoft</span></div>
 
             </td>
           </tr>
@@ -1336,8 +1336,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">17:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Multi-Agent Workflows with Human-in-the-Loop Control</a>
-              <div class="speaker-info">Farhan Shahnewaz <span class="affiliation">• Microsoft</span></div>
+              <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">LLMs and Data in MedTech: Building Smarter, Safer Healthcare</a>
+              <div class="speaker-info">Nilima Rodrigues <span class="affiliation">• Align Technology</span></div>
 
             </td>
           </tr>
@@ -1461,7 +1461,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img src="../speakers/Farhan Shahnewaz.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img src="../speakers/Farhan Shahnewaz.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Farhan Shahnewaz</h5>
             <div class="card-text mb-3">
@@ -1565,7 +1565,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img src="../speakers/Mingxuan Zhao.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Mingxuan Zhao.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Mingxuan Zhao</h5>
             <div class="card-text mb-3">
@@ -1591,7 +1591,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Nilima Rodrigues.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img src="../speakers/Nilima Rodrigues.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Nilima Rodrigues</h5>
             <div class="card-text mb-3">
@@ -1643,7 +1643,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img src="../speakers/Srinivas Pochincharla.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img src="../speakers/Srinivas Pochincharla.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Srinivas Pochincharla</h5>
             <div class="card-text mb-3">
@@ -2006,25 +2006,28 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Nilima Rodrigues.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Mingxuan Zhao.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Nilima Rodrigues</h2>
-                          <div class="meta mb-2">Align Technology</div>
+                          <h2 class="name mb-2">Mingxuan Zhao</h2>
+                          <div class="meta mb-2">IBM</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/nilima-rodrigues-83173a10/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">LLMs and Data in MedTech: Building Smarter, Safer Healthcare</div>
+              <div class="talk-title-bar">Unlocking Document Intelligence with Open-Source AI</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>The medical technology sector is undergoing a paradigm shift powered by clinical, operational, and real-world data—and increasingly, by large language models (LLMs). At LLMday Austin, this session explores how data and AI are reshaping MedTech innovation, operational excellence, and personalized care at scale. From device development to clinical deployment, mining EHRs, claims data, and registries reveals unmet needs and enables measurable patient impact. LLMs enhance this process by extracting insights from unstructured clinical notes, regulatory documents, and post-market surveillance data—accelerating research, improving documentation, and supporting compliance. Computational modeling and digital twins reduce time-to-market and manufacturing waste, while analytics-driven usability improvements reduce device error rates. In clinical settings, real-time monitoring systems—such as closed-loop insulin platforms—integrate multimodal data to improve chronic disease outcomes. AI imaging systems now match specialist-level performance in areas like diabetic retinopathy detection, while predictive analytics such as sepsis forecasting enable earlier interventions. Operational excellence is achieved through predictive quality, AI-driven supply chain forecasting, condition-based maintenance, and capacity optimization. Strong governance frameworks—including FHIR, TEFCA, and SNOMED CT—ensure interoperability, while privacy-by-design, federated learning, SBOMs, and secure development lifecycles safeguard sensitive health data. By combining LLM capabilities with robust data governance, MedTech organizations can deliver smarter, safer, and more sustainable healthcare systems. This session provides a practical, data-driven roadmap grounded in real-world outcomes.</p></p>
+                <p><p>Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.</p>
+<p>In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
+We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI &amp; Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.</p>
+<p>Docling is fully open-source under MIT license, so you can run it locally for sensitive data and air-gapped environments.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2032,7 +2035,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Nilima Rodrigues is a seasoned data engineering and analytics leader with over 19 years of experience delivering transformative data strategies for Fortune 500 organizations. As Senior Manager of Systems and Reporting at Align Technology, she drives high-impact initiatives across data, finance, and technology, generating multimillion-dollar efficiencies across global operations. Nilima specializes in architecting enterprise-grade data platforms, leading cross-functional teams, and converting complex data into actionable insights that shape business strategy. She successfully delivered a $1.5M+ SAP Datasphere and OneStream integration, optimized AI-driven ETL pipelines to reduce latency by 40%, and designed a FinOps platform that achieved $500K in freight savings. Her automation and resource optimization initiatives have improved operational efficiency by 65% and reduced costs by 50%. At Align, she founded the Finance Analytics Center of Excellence and launched 100+ interactive Power BI dashboards across global business units. She has led data governance, compliance, large-scale migrations, and financial transformation programs. Previously at Deloitte and Capgemini, she delivered landmark implementations, including the first SAP ERP-based Public Sector Collection platform for the Florida Department of Revenue and the first SAP Bank Analyzer integration at PayPal. Nilima holds a Bachelor’s in Information Technology from Mumbai and certifications in Google Advanced Data Analytics and SAP BTP Datasphere. She brings deep expertise in SAP BW/HANA, Azure Data Lake, Power BI, Python, and AI-driven analytics, combining technical excellence with strategic leadership.</p></p>
+                <p><p>Mingxuan Zhao is a Software Developer II at IBM working in Open Technology. A graduate of the Cockrell School of Engineering at the University of Texas at Austin, Mingxuan focuses on building developer-focused tools and contributing to modern web and cloud technologies. Based in New York, Mingxuan works on open and collaborative engineering initiatives within IBM.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2178,52 +2181,6 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Mingxuan Zhao.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Mingxuan Zhao</h2>
-                          <div class="meta mb-2">IBM</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Unlocking Document Intelligence with Open-Source AI</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.</p>
-<p>In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
-We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI &amp; Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.</p>
-<p>Docling is fully open-source under MIT license, so you can run it locally for sensitive data and air-gapped environments.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Mingxuan Zhao is a Software Developer II at IBM working in Open Technology. A graduate of the Cockrell School of Engineering at the University of Texas at Austin, Mingxuan focuses on building developer-focused tools and contributing to modern web and cloud technologies. Based in New York, Mingxuan works on open and collaborative engineering initiatives within IBM.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 10 -->
-<div class="modal modal-speaker modal-speaker-10" id="modal-speaker-10" tabindex="-1" role="dialog" aria-labelledby="speaker-10-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Srinivas Pochincharla.png" alt="" />
                       </div>
 
@@ -2258,8 +2215,8 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 11 -->
-<div class="modal modal-speaker modal-speaker-11" id="modal-speaker-11" tabindex="-1" role="dialog" aria-labelledby="speaker-11-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 10 -->
+<div class="modal modal-speaker modal-speaker-10" id="modal-speaker-10" tabindex="-1" role="dialog" aria-labelledby="speaker-10-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -2294,6 +2251,49 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Farhan Shahnewaz is an AI &amp; Cloud Solutions Engineer at Microsoft with over 20+ years of experience across AI, Azure, cloud architecture, and enterprise solution design. He has worked in principal cloud architect roles, also in software engineering and research positions. Farhan is also the author of <a href="https://www.amazon.com/dp/B0FHGDX8TW?ref=cm_sw_r_ffobk_cp_ud_dp_2F7Y091P2THT91GYD6H2&amp;ref_=cm_sw_r_ffobk_cp_ud_dp_2F7Y091P2THT91GYD6H2&amp;social_share=cm_sw_r_ffobk_cp_ud_dp_2F7Y091P2THT91GYD6H2&amp;bestFormat=true&amp;previewDohEventScheduleTesting=C&amp;csmig=1">SMART NPC: AI for Game Character</a>.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 11 -->
+<div class="modal modal-speaker modal-speaker-11" id="modal-speaker-11" tabindex="-1" role="dialog" aria-labelledby="speaker-11-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Nilima Rodrigues.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Nilima Rodrigues</h2>
+                          <div class="meta mb-2">Align Technology</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/nilima-rodrigues-83173a10/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">LLMs and Data in MedTech: Building Smarter, Safer Healthcare</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>The medical technology sector is undergoing a paradigm shift powered by clinical, operational, and real-world data—and increasingly, by large language models (LLMs). At LLMday Austin, this session explores how data and AI are reshaping MedTech innovation, operational excellence, and personalized care at scale. From device development to clinical deployment, mining EHRs, claims data, and registries reveals unmet needs and enables measurable patient impact. LLMs enhance this process by extracting insights from unstructured clinical notes, regulatory documents, and post-market surveillance data—accelerating research, improving documentation, and supporting compliance. Computational modeling and digital twins reduce time-to-market and manufacturing waste, while analytics-driven usability improvements reduce device error rates. In clinical settings, real-time monitoring systems—such as closed-loop insulin platforms—integrate multimodal data to improve chronic disease outcomes. AI imaging systems now match specialist-level performance in areas like diabetic retinopathy detection, while predictive analytics such as sepsis forecasting enable earlier interventions. Operational excellence is achieved through predictive quality, AI-driven supply chain forecasting, condition-based maintenance, and capacity optimization. Strong governance frameworks—including FHIR, TEFCA, and SNOMED CT—ensure interoperability, while privacy-by-design, federated learning, SBOMs, and secure development lifecycles safeguard sensitive health data. By combining LLM capabilities with robust data governance, MedTech organizations can deliver smarter, safer, and more sustainable healthcare systems. This session provides a practical, data-driven roadmap grounded in real-world outcomes.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Nilima Rodrigues is a seasoned data engineering and analytics leader with over 19 years of experience delivering transformative data strategies for Fortune 500 organizations. As Senior Manager of Systems and Reporting at Align Technology, she drives high-impact initiatives across data, finance, and technology, generating multimillion-dollar efficiencies across global operations. Nilima specializes in architecting enterprise-grade data platforms, leading cross-functional teams, and converting complex data into actionable insights that shape business strategy. She successfully delivered a $1.5M+ SAP Datasphere and OneStream integration, optimized AI-driven ETL pipelines to reduce latency by 40%, and designed a FinOps platform that achieved $500K in freight savings. Her automation and resource optimization initiatives have improved operational efficiency by 65% and reduced costs by 50%. At Align, she founded the Finance Analytics Center of Excellence and launched 100+ interactive Power BI dashboards across global business units. She has led data governance, compliance, large-scale migrations, and financial transformation programs. Previously at Deloitte and Capgemini, she delivered landmark implementations, including the first SAP ERP-based Public Sector Collection platform for the Florida Department of Revenue and the first SAP Bank Analyzer integration at PayPal. Nilima holds a Bachelor’s in Information Technology from Mumbai and certifications in Google Advanced Data Analytics and SAP BTP Datasphere. She brings deep expertise in SAP BW/HANA, Azure Data Lake, Power BI, Python, and AI-driven analytics, combining technical excellence with strategic leadership.</p></p>
               </div>
 
           </div><!--//modal-body-->
