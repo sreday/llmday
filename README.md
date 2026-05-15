@@ -1,6 +1,6 @@
 # LLMday
 
-In-person conferences for Large Language Models, AI and ML.
+In-person conferences for Large Language Models, Agents & AI Systems.
 
 
 ## Running locally
