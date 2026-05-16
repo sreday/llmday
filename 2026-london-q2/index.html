@@ -1051,17 +1051,19 @@ This presentation offers a practical case study in building mental health bots t
             <div class="meta">
               <h4 class="time mb-3">11:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img class="profile-image rounded-circle mb-2" src="../speakers/Richard Dosumu.png" alt=""></a>
-                <div class="name">Richard Dosumu</div>
+                <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img class="profile-image rounded-circle mb-2" src="../speakers/Vishal Bala.png" alt=""></a>
+                <div class="name">Vishal Bala</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">LLM Evals in Production: How to Know When Your Model Is Lying to You</a>
+                <a class="theme-link" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Context Matters</a>
               </h3>
-              <div class="location mb-3">OctaTech</div>
-              <div class="desc schedule-abstract">A model can sound fluent, confident, and authoritative while being factually wrong, dangerously ungrounded, or silently broken. Recent failures, from AI-generated legal citations appearing before the England and Wales High Court to Air Canada being held liable after its chatbot gave incorrect bereavement fare information, show the same uncomfortable pattern: the output looked usable, but the evaluation layer failed. Most LLM failures in production are not only model failures. They are measurement failures. Teams swap prompts, upgrade models, and adjust retrieval logic without a systematic way of knowing what quietly got worse. This talk introduces a lightweight evaluation framework across six layers: correctness, grounding, format compliance, safety, refusal quality, and regression. Through a practical walkthrough of a lightweight 20-test evaluation harness, attendees will learn how to catch breakage before users do and treat evals like CI/CD for LLM behaviour.<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">... Read more</a></div>
+              <div class="location mb-3">Redis</div>
+              <div class="desc schedule-abstract">As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.
+
+This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">... Read more</a></div>
               
             </div>
           </div>
@@ -1070,17 +1072,17 @@ This presentation offers a practical case study in building mental health bots t
             <div class="meta">
               <h4 class="time mb-3">12:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img class="profile-image rounded-circle mb-2" src="../speakers/Mingxuan Zhao.png" alt=""></a>
-                <div class="name">Mingxuan Zhao</div>
+                <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img class="profile-image rounded-circle mb-2" src="../speakers/Richard Dosumu.png" alt=""></a>
+                <div class="name">Richard Dosumu</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling</a>
+                <a class="theme-link" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">LLM Evals in Production: How to Know When Your Model Is Lying to You</a>
               </h3>
-              <div class="location mb-3">IBM</div>
-              <div class="desc schedule-abstract">If you've built RAG over PDFs, you know the problem. You pick a good embedding model, pay for a good LLM, and retrieval still returns garbage because the parser mangled the tables and chunked a footnote into the middle of a paragraph. This talk is about Docling, an open-source Python library for parsing documents into something an LLM can actually use. It handles more than ten file formats, preserves structure like hierarchy and tables, and uses deep learning models to read documents closer to how a person would. The output is a structured format called DoclingDocument, and once your documents are in that shape, a lot of downstream work gets easier. Chunking is the obvious example: instead of splitting on token counts and hoping for the best, you can chunk along the document's actual structure, keeping tables intact and respecting section boundaries. I'll cover how Docling works, show a parsing-to-retrieval pipeline built on structure-aware chunking, and walk through docling-agent, a newer project that skips chunking entirely. Instead of pre-chunking and embedding, the agent navigates the DoclingDocument structure at query time, which is an interesting answer to a problem chunking has always papered over. Docling is MIT-licensed and runs locally, which matters when your documents can't leave your environment or you care about latency. For engineers building RAG, agents over documents, or anything that starts with "get the text out of this PDF." Python familiarity assumed, no ML background needed.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">... Read more</a></div>
+              <div class="location mb-3">OctaTech</div>
+              <div class="desc schedule-abstract">A model can sound fluent, confident, and authoritative while being factually wrong, dangerously ungrounded, or silently broken. Recent failures, from AI-generated legal citations appearing before the England and Wales High Court to Air Canada being held liable after its chatbot gave incorrect bereavement fare information, show the same uncomfortable pattern: the output looked usable, but the evaluation layer failed. Most LLM failures in production are not only model failures. They are measurement failures. Teams swap prompts, upgrade models, and adjust retrieval logic without a systematic way of knowing what quietly got worse. This talk introduces a lightweight evaluation framework across six layers: correctness, grounding, format compliance, safety, refusal quality, and regression. Through a practical walkthrough of a lightweight 20-test evaluation harness, attendees will learn how to catch breakage before users do and treat evals like CI/CD for LLM behaviour.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">... Read more</a></div>
               
             </div>
           </div>
@@ -1105,19 +1107,17 @@ This presentation offers a practical case study in building mental health bots t
             <div class="meta">
               <h4 class="time mb-3">13:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img class="profile-image rounded-circle mb-2" src="../speakers/Vishal Bala.png" alt=""></a>
-                <div class="name">Vishal Bala</div>
+                <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img class="profile-image rounded-circle mb-2" src="../speakers/Mingxuan Zhao.png" alt=""></a>
+                <div class="name">Mingxuan Zhao</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Context Matters</a>
+                <a class="theme-link" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling</a>
               </h3>
-              <div class="location mb-3">Redis</div>
-              <div class="desc schedule-abstract">As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.
-
-This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">... Read more</a></div>
+              <div class="location mb-3">IBM</div>
+              <div class="desc schedule-abstract">If you've built RAG over PDFs, you know the problem. You pick a good embedding model, pay for a good LLM, and retrieval still returns garbage because the parser mangled the tables and chunked a footnote into the middle of a paragraph. This talk is about Docling, an open-source Python library for parsing documents into something an LLM can actually use. It handles more than ten file formats, preserves structure like hierarchy and tables, and uses deep learning models to read documents closer to how a person would. The output is a structured format called DoclingDocument, and once your documents are in that shape, a lot of downstream work gets easier. Chunking is the obvious example: instead of splitting on token counts and hoping for the best, you can chunk along the document's actual structure, keeping tables intact and respecting section boundaries. I'll cover how Docling works, show a parsing-to-retrieval pipeline built on structure-aware chunking, and walk through docling-agent, a newer project that skips chunking entirely. Instead of pre-chunking and embedding, the agent navigates the DoclingDocument structure at query time, which is an interesting answer to a problem chunking has always papered over. Docling is MIT-licensed and runs locally, which matters when your documents can't leave your environment or you care about latency. For engineers building RAG, agents over documents, or anything that starts with "get the text out of this PDF." Python familiarity assumed, no ML background needed.<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">... Read more</a></div>
               
             </div>
           </div>
@@ -1923,8 +1923,8 @@ Whether you're a role-playing game fan or not, there will be things to learn dur
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">LLM Evals in Production: How to Know When Your Model Is Lying to You</a>
-              <div class="speaker-info">Richard Dosumu <span class="affiliation">• OctaTech</span></div>
+              <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Context Matters</a>
+              <div class="speaker-info">Vishal Bala <span class="affiliation">• Redis</span></div>
             </td>
 
 
@@ -1985,8 +1985,8 @@ Whether you're a role-playing game fan or not, there will be things to learn dur
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling</a>
-              <div class="speaker-info">Mingxuan Zhao <span class="affiliation">• IBM</span></div>
+              <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">LLM Evals in Production: How to Know When Your Model Is Lying to You</a>
+              <div class="speaker-info">Richard Dosumu <span class="affiliation">• OctaTech</span></div>
             </td>
 
 
@@ -2078,8 +2078,8 @@ Whether you're a role-playing game fan or not, there will be things to learn dur
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Context Matters</a>
-              <div class="speaker-info">Vishal Bala <span class="affiliation">• Redis</span></div>
+              <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling</a>
+              <div class="speaker-info">Mingxuan Zhao <span class="affiliation">• IBM</span></div>
             </td>
 
 
@@ -3100,7 +3100,7 @@ Whether you're a role-playing game fan or not, there will be things to learn dur
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img src="../speakers/Mingxuan Zhao.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img src="../speakers/Mingxuan Zhao.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Mingxuan Zhao</h5>
             <div class="card-text mb-3">
@@ -3126,7 +3126,7 @@ Whether you're a role-playing game fan or not, there will be things to learn dur
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img src="../speakers/Richard Dosumu.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img src="../speakers/Richard Dosumu.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Richard Dosumu</h5>
             <div class="card-text mb-3">
@@ -3230,7 +3230,7 @@ Whether you're a role-playing game fan or not, there will be things to learn dur
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img src="../speakers/Vishal Bala.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img src="../speakers/Vishal Bala.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Vishal Bala</h5>
             <div class="card-text mb-3">
@@ -3973,6 +3973,50 @@ Dr Crepaz-Keay is a former co-chair and now member of the ethics, policy and pos
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vishal Bala.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Vishal Bala</h2>
+                          <div class="meta mb-2">Redis</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vishalbala/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Context Matters</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.</p>
+<p>This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Vishal Bala is a Senior Applied AI Engineer at Redis based in Berlin, with experience spanning applied AI, machine learning, data engineering, and analytics. He has held senior data science and leadership roles at companies including Scoutbee, resourcly, and Automation Hero, where he focused on LLMs, MLOps, generative AI products, and scalable production systems. Originally trained as an astrophysicist, he earned honors in Astronomy &amp; Physics from Boston University and has published peer-reviewed research before transitioning into industry AI.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 15 -->
+<div class="modal modal-speaker modal-speaker-15" id="modal-speaker-15" tabindex="-1" role="dialog" aria-labelledby="speaker-15-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Richard Dosumu.png" alt="" />
                       </div>
 
@@ -4007,8 +4051,8 @@ Dr Crepaz-Keay is a former co-chair and now member of the ethics, policy and pos
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 15 -->
-<div class="modal modal-speaker modal-speaker-15" id="modal-speaker-15" tabindex="-1" role="dialog" aria-labelledby="speaker-15-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 16 -->
+<div class="modal modal-speaker modal-speaker-16" id="modal-speaker-16" tabindex="-1" role="dialog" aria-labelledby="speaker-16-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4043,50 +4087,6 @@ Dr Crepaz-Keay is a former co-chair and now member of the ethics, policy and pos
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Ming Zhao is an open source developer and Developer Advocate at IBM Research, where he helps IBM leverage open technologies while building impactful tools and growing vibrant open-source communities. He’s passionate about making open tech accessible to all and ensuring developers have the tools they need to succeed in the rapidly developing AI space. Ming now leads community efforts around Docling, IBM’s fastest-growing open source project, recently welcomed into the LF AI &amp; Data Foundation.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 16 -->
-<div class="modal modal-speaker modal-speaker-16" id="modal-speaker-16" tabindex="-1" role="dialog" aria-labelledby="speaker-16-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vishal Bala.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Vishal Bala</h2>
-                          <div class="meta mb-2">Redis</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vishalbala/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Context Matters</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>As LLMs and agents become dramatically smarter, the real challenge shifts from model capability to context engineering. Powerful agents can reason, plan, and use tools — but without the right context, they hallucinate, waste tokens, and degrade in performance.</p>
-<p>This talk explores why context engineering is essential for building reliable, production-ready AI systems. We’ll move beyond traditional RAG to agentic workflows, examine common context failure modes, and discuss how to unify memory, structured data, APIs, and retrieval into a cohesive context strategy.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Vishal Bala is a Senior Applied AI Engineer at Redis based in Berlin, with experience spanning applied AI, machine learning, data engineering, and analytics. He has held senior data science and leadership roles at companies including Scoutbee, resourcly, and Automation Hero, where he focused on LLMs, MLOps, generative AI products, and scalable production systems. Originally trained as an astrophysicist, he earned honors in Astronomy &amp; Physics from Boston University and has published peer-reviewed research before transitioning into industry AI.</p></p>
               </div>
 
           </div><!--//modal-body-->
