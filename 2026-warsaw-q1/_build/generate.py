@@ -498,6 +498,7 @@ _flag_map = {
     'hamburg': ('🇩🇪', 'DE', 'Germany'),
 }
 
+_today_iso = datetime.date.today().isoformat()
 _timeline_events = []
 _countries_seen = set()
 _home_meta_path = '../home/metadata.yml'
@@ -527,7 +528,7 @@ if _os.path.exists(_home_meta_path):
             'date_string': _hem.get('date_string', ''),
             'attendees':   (str(_hem.get('attendees', '')).rstrip('+') + '+') if _hem.get('attendees') else '',
             'url':         f'../{_he_folder}/',
-            'state':       _hem.get('event_state', 'before'),
+            'state':       ('after' if _hem['start_time'] < _today_iso else 'before') if _hem.get('start_time') else _hem.get('event_state', 'before'),
             'flag':        _flag,
             'sort_key':    _hem.get('start_time', ''),
         })
