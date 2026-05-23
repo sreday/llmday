@@ -16,12 +16,16 @@
   --amb-peach: #FFECD2;
 }
 
+/* Hide inherited hero and stats bar from _base.html */
+#home.hero-block { display: none !important; }
+.stats-block { display: none !important; }
+
 /* ── Hero ─────────────────────────────────────────────────────── */
 .amb-hero {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, var(--amb-blue-light) 0%, #fff 40%, var(--amb-pink-light) 100%);
-  padding: 100px 0 80px;
+  padding: 140px 0 80px;
   text-align: center;
 }
 .amb-hero::before {
