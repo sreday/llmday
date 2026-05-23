@@ -251,28 +251,49 @@
   .amb-hero .brand-logos img { height: 60px; margin: 6px 8px; }
 }
 
-/* ── Reassurance bullets ──────────────────────────────────────── */
-.reassurance-list {
-  list-style: none;
+/* ── Reassurance speech bubbles ───────────────────────────────── */
+.reassurance-bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  max-width: 900px;
+  margin: 0 auto;
   padding: 0;
-  max-width: 750px;
+  list-style: none;
 }
-.reassurance-list li {
-  padding: 12px 0 12px 36px;
+.reassurance-bubbles li {
   position: relative;
+  padding: 20px 26px;
+  border-radius: 22px;
   font-size: 1.05rem;
-  color: #444;
+  color: #2d3436;
   line-height: 1.6;
+  text-align: center;
+  max-width: 400px;
+  flex: 1 1 280px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.06);
 }
-.reassurance-list li::before {
-  content: '\f004';
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
+.reassurance-bubbles li::after {
+  content: '';
   position: absolute;
-  left: 0;
-  color: var(--amb-pink);
-  font-size: 1rem;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
 }
+.reassurance-bubbles li:nth-child(1) { background: var(--amb-pink-light); }
+.reassurance-bubbles li:nth-child(1)::after { border-top: 14px solid var(--amb-pink-light); }
+.reassurance-bubbles li:nth-child(2) { background: var(--amb-blue-light); }
+.reassurance-bubbles li:nth-child(2)::after { border-top: 14px solid var(--amb-blue-light); }
+.reassurance-bubbles li:nth-child(3) { background: var(--amb-green-light); }
+.reassurance-bubbles li:nth-child(3)::after { border-top: 14px solid var(--amb-green-light); }
+.reassurance-bubbles li:nth-child(4) { background: var(--amb-peach); }
+.reassurance-bubbles li:nth-child(4)::after { border-top: 14px solid var(--amb-peach); }
+.reassurance-bubbles li:nth-child(5) { background: var(--amb-yellow); }
+.reassurance-bubbles li:nth-child(5)::after { border-top: 14px solid var(--amb-yellow); }
 
 /* ── CTA ──────────────────────────────────────────────────────── */
 .amb-cta {
@@ -860,7 +881,7 @@ section[id] {
   <div class="bubble" style="width:75px;height:75px;background:var(--amb-blue);bottom:30%;left:6%;opacity:.2;"></div>
   <div class="container text-center">
     <h2>If this sounds like a lot&hellip;</h2>
-    <ul class="reassurance-list mx-auto mt-4">
+    <ul class="reassurance-bubbles mt-4">
       <li>This is very much an informal agreement, no ambassador contract will be required.</li>
       <li>You will be able to provide feedback, and help us make the ambassador program better.</li>
       <li>We want this to feel positive and fun, not deadline chasing or stress inducing.</li>
