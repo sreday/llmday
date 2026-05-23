@@ -246,6 +246,67 @@
 }
 .btn-email  { background: var(--amb-green); color: #2d6a4f; }
 .btn-linkedin { background: var(--amb-blue); color: #1a5276; }
+
+/* ── Decorative bubbles (shared) ─────────────────────────────── */
+.amb-bubbles { position: relative; overflow: hidden; }
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .3;
+  pointer-events: none;
+  z-index: 0;
+}
+.amb-bubbles > .container { position: relative; z-index: 1; }
+
+/* ── Cat graphics ─────────────────────────────────────────────── */
+.cat-graphic {
+  pointer-events: none;
+  z-index: 1;
+}
+.cat-graphic img {
+  max-width: 100%;
+  height: auto;
+}
+/* "why" section cat - right side */
+.cat-why {
+  position: absolute;
+  right: -20px;
+  bottom: -10px;
+  width: 220px;
+}
+/* perks section cat - bottom right peeking */
+.cat-perks {
+  position: absolute;
+  right: 20px;
+  bottom: -5px;
+  width: 180px;
+}
+/* responsibilities cat - bottom right */
+.cat-resp {
+  position: absolute;
+  right: 20px;
+  bottom: -5px;
+  width: 180px;
+}
+/* CTA celebrate cat - left side */
+.cat-cta {
+  position: absolute;
+  left: 30px;
+  bottom: 0;
+  width: 240px;
+}
+@media (max-width: 992px) {
+  .cat-why, .cat-perks, .cat-resp { width: 140px; }
+  .cat-cta { width: 180px; }
+}
+@media (max-width: 576px) {
+  .cat-why, .cat-perks, .cat-resp, .cat-cta {
+    position: static;
+    display: block;
+    margin: 30px auto 0;
+    width: 160px;
+  }
+}
 </style>
 {% endblock %}
 
@@ -255,6 +316,12 @@
 <section class="amb-hero">
   <div class="blob-green"></div>
   <div class="blob-orange"></div>
+  <!-- extra hero bubbles -->
+  <div class="bubble" style="width:120px;height:120px;background:var(--amb-lavender);top:30%;left:5%;opacity:.25;"></div>
+  <div class="bubble" style="width:90px;height:90px;background:var(--amb-peach);top:15%;right:25%;opacity:.3;"></div>
+  <div class="bubble" style="width:60px;height:60px;background:var(--amb-green);top:60%;left:20%;opacity:.2;"></div>
+  <div class="bubble" style="width:70px;height:70px;background:var(--amb-pink);bottom:20%;right:8%;opacity:.25;"></div>
+  <div class="bubble" style="width:45px;height:45px;background:var(--amb-yellow);top:45%;right:12%;opacity:.35;"></div>
   <div class="container">
     <h1>Become an Ambassador!</h1>
     <p class="subtitle">
@@ -271,7 +338,11 @@
 </section>
 
 <!-- ═══════════════════════════ WHO ARE WE ═════════════════════════════ -->
-<section class="amb-section amb-bg-blue">
+<section class="amb-section amb-bg-blue amb-bubbles">
+  <div class="bubble" style="width:160px;height:160px;background:var(--amb-pink);top:-40px;right:5%;opacity:.2;"></div>
+  <div class="bubble" style="width:100px;height:100px;background:var(--amb-yellow);bottom:30px;left:3%;opacity:.25;"></div>
+  <div class="bubble" style="width:70px;height:70px;background:var(--amb-green);top:40%;left:8%;opacity:.2;"></div>
+  <div class="bubble" style="width:50px;height:50px;background:var(--amb-lavender);bottom:15%;right:12%;opacity:.3;"></div>
   <div class="container">
     <h2 class="text-center">Who are we?</h2>
     <div class="lead-text mx-auto text-center mb-5">
@@ -305,7 +376,11 @@
 </section>
 
 <!-- ═══════════════════════════ CONFERENCES ════════════════════════════ -->
-<section class="amb-section amb-bg-white">
+<section class="amb-section amb-bg-white amb-bubbles">
+  <div class="bubble" style="width:130px;height:130px;background:var(--amb-peach);top:-30px;left:2%;opacity:.25;"></div>
+  <div class="bubble" style="width:80px;height:80px;background:var(--amb-blue);bottom:20px;right:5%;opacity:.2;"></div>
+  <div class="bubble" style="width:55px;height:55px;background:var(--amb-pink);top:50%;right:3%;opacity:.2;"></div>
+  <div class="bubble" style="width:40px;height:40px;background:var(--amb-green);top:20%;left:15%;opacity:.25;"></div>
   <div class="container">
     <h2 class="text-center">Our conferences</h2>
     <div class="row g-4 mt-2">
@@ -354,7 +429,11 @@
 </section>
 
 <!-- ═══════════════════════ WHAT IS AN AMBASSADOR ══════════════════════ -->
-<section class="amb-section amb-bg-pink">
+<section class="amb-section amb-bg-pink amb-bubbles">
+  <div class="bubble" style="width:180px;height:180px;background:var(--amb-orange);top:-50px;left:-30px;opacity:.25;"></div>
+  <div class="bubble" style="width:100px;height:100px;background:var(--amb-blue);bottom:-20px;right:8%;opacity:.2;"></div>
+  <div class="bubble" style="width:65px;height:65px;background:var(--amb-lavender);top:30%;right:5%;opacity:.25;"></div>
+  <div class="bubble" style="width:45px;height:45px;background:var(--amb-yellow);bottom:25%;left:12%;opacity:.3;"></div>
   <div class="container">
     <h2 class="text-center">What is an Ambassador?</h2>
     <div class="lead-text mx-auto">
@@ -365,19 +444,35 @@
 </section>
 
 <!-- ═══════════════════════════ WHY? ═══════════════════════════════════ -->
-<section class="amb-section amb-bg-white">
+<section class="amb-section amb-bg-white amb-bubbles">
+  <div class="bubble" style="width:140px;height:140px;background:var(--amb-yellow);top:-30px;right:10%;opacity:.25;"></div>
+  <div class="bubble" style="width:90px;height:90px;background:var(--amb-pink);bottom:10%;left:5%;opacity:.2;"></div>
+  <div class="bubble" style="width:60px;height:60px;background:var(--amb-green);top:25%;left:3%;opacity:.25;"></div>
+  <div class="bubble" style="width:50px;height:50px;background:var(--amb-peach);top:50%;right:4%;opacity:.3;"></div>
   <div class="container">
-    <h2 class="text-center">Ambassadors &mdash; why?</h2>
-    <div class="lead-text mx-auto">
-      <p>There's only so much we can do as a small, UK-based team. All worldwide conferences started as invitations from our worldwide friends: Matt &amp; Joyce &mdash; US; Birol &mdash; Germany; William &amp; Bas &mdash; Netherlands; Rod &mdash; Brazil; Poone &amp; Kini &mdash; France; Daniel &amp; Xenda &mdash; Portugal; Balaji, Siva &amp; Clarence &mdash; India&hellip; just to mention a few!</p>
-      <p>Sometimes it's about helping with a key strategic decision, sometimes it's just about grabbing a coffee to brainstorm on what we should do next. We want to be with people, creating opportunities for people. And that's the <strong>"let's go!"</strong> attitude we want to reward with our Ambassador program!</p>
+    <div class="row align-items-center">
+      <div class="col-12 col-lg-8">
+        <h2>Ambassadors &mdash; why?</h2>
+        <div class="lead-text">
+          <p>There's only so much we can do as a small, UK-based team. All worldwide conferences started as invitations from our worldwide friends: Matt &amp; Joyce &mdash; US; Birol &mdash; Germany; William &amp; Bas &mdash; Netherlands; Rod &mdash; Brazil; Poone &amp; Kini &mdash; France; Daniel &amp; Xenda &mdash; Portugal; Balaji, Siva &amp; Clarence &mdash; India&hellip; just to mention a few!</p>
+          <p>Sometimes it's about helping with a key strategic decision, sometimes it's just about grabbing a coffee to brainstorm on what we should do next. We want to be with people, creating opportunities for people. And that's the <strong>"let's go!"</strong> attitude we want to reward with our Ambassador program!</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4 text-center">
+        <img src="/assets/images/ambassadorship/cat-huh.jpeg" alt="Curious cat" style="max-width:260px;width:100%;border-radius:20px;">
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════════ PERKS ══════════════════════════════════ -->
-<section class="amb-section amb-bg-green">
-  <div class="container">
+<section class="amb-section amb-bg-green amb-bubbles">
+  <div class="bubble" style="width:150px;height:150px;background:var(--amb-yellow);top:-40px;left:5%;opacity:.25;"></div>
+  <div class="bubble" style="width:110px;height:110px;background:var(--amb-pink);bottom:-20px;right:3%;opacity:.2;"></div>
+  <div class="bubble" style="width:70px;height:70px;background:var(--amb-blue);top:30%;right:6%;opacity:.2;"></div>
+  <div class="bubble" style="width:50px;height:50px;background:var(--amb-orange);top:60%;left:2%;opacity:.25;"></div>
+  <div class="bubble" style="width:35px;height:35px;background:var(--amb-lavender);bottom:40%;left:15%;opacity:.3;"></div>
+  <div class="container" style="position:relative;">
     <h2 class="text-center">Perks</h2>
     <div class="table-responsive mt-4">
       <table class="amb-table perks-table">
@@ -423,12 +518,19 @@
         </tr>
       </table>
     </div>
+    <div class="text-end mt-3">
+      <img src="/assets/images/ambassadorship/cat-happy.jpeg" alt="Happy cat" style="width:150px;border-radius:16px;">
+    </div>
   </div>
 </section>
 
 <!-- ═══════════════════════ RESPONSIBILITIES ═══════════════════════════ -->
-<section class="amb-section amb-bg-white">
-  <div class="container">
+<section class="amb-section amb-bg-white amb-bubbles">
+  <div class="bubble" style="width:120px;height:120px;background:var(--amb-lavender);top:-20px;right:8%;opacity:.2;"></div>
+  <div class="bubble" style="width:90px;height:90px;background:var(--amb-green);bottom:30px;left:4%;opacity:.25;"></div>
+  <div class="bubble" style="width:60px;height:60px;background:var(--amb-peach);top:40%;left:2%;opacity:.2;"></div>
+  <div class="bubble" style="width:45px;height:45px;background:var(--amb-pink);top:15%;right:3%;opacity:.25;"></div>
+  <div class="container" style="position:relative;">
     <h2 class="text-center">Responsibilities</h2>
     <div class="table-responsive mt-4">
       <table class="amb-table resp-table">
@@ -474,11 +576,19 @@
         </tr>
       </table>
     </div>
+    <div class="text-end mt-3">
+      <img src="/assets/images/ambassadorship/cat-serious.jpeg" alt="Serious cat" style="width:150px;border-radius:16px;">
+    </div>
   </div>
 </section>
 
 <!-- ═══════════════════════ REASSURANCE ════════════════════════════════ -->
-<section class="amb-section amb-bg-lavender">
+<section class="amb-section amb-bg-lavender amb-bubbles">
+  <div class="bubble" style="width:140px;height:140px;background:var(--amb-orange);top:-30px;left:8%;opacity:.2;"></div>
+  <div class="bubble" style="width:100px;height:100px;background:var(--amb-green);bottom:-20px;right:10%;opacity:.25;"></div>
+  <div class="bubble" style="width:60px;height:60px;background:var(--amb-pink);top:50%;right:5%;opacity:.2;"></div>
+  <div class="bubble" style="width:40px;height:40px;background:var(--amb-yellow);top:20%;left:3%;opacity:.3;"></div>
+  <div class="bubble" style="width:75px;height:75px;background:var(--amb-blue);bottom:30%;left:6%;opacity:.2;"></div>
   <div class="container text-center">
     <h2>If this sounds like a lot&hellip;</h2>
     <ul class="reassurance-list mx-auto mt-4">
@@ -495,23 +605,35 @@
 </section>
 
 <!-- ═══════════════════════════ CTA ════════════════════════════════════ -->
-<section class="amb-cta">
+<section class="amb-cta amb-bubbles">
+  <div class="bubble" style="width:180px;height:180px;background:var(--amb-yellow);top:-50px;right:5%;opacity:.25;"></div>
+  <div class="bubble" style="width:120px;height:120px;background:var(--amb-green);bottom:-30px;left:8%;opacity:.2;"></div>
+  <div class="bubble" style="width:80px;height:80px;background:var(--amb-blue);top:30%;left:3%;opacity:.25;"></div>
+  <div class="bubble" style="width:55px;height:55px;background:var(--amb-pink);bottom:25%;right:12%;opacity:.3;"></div>
+  <div class="bubble" style="width:40px;height:40px;background:var(--amb-orange);top:15%;left:20%;opacity:.2;"></div>
   <div class="container">
-    <h2>Sounds like a win-win?</h2>
-    <p style="font-size:1.15rem; color:#555; margin-bottom:30px;">Email us, or ping Mark on LinkedIn</p>
-    <div>
-      <a href="mailto:hello@llmday.com?subject=Ambassador%20application" class="btn-amb btn-email">
-        <i class="fas fa-envelope me-2"></i>Email us
-      </a>
-      <a href="https://www.linkedin.com/in/marekpawlikowski/" target="_blank" class="btn-amb btn-linkedin">
-        <i class="fab fa-linkedin-in me-2"></i>Ping Mark on LinkedIn
-      </a>
-    </div>
-    <div class="brand-logos mt-5">
-      <img src="/assets/images/llmday_sticker.png" alt="LLMday" style="height:55px; margin:0 10px;">
-      <img src="/assets/images/sreday_sticker.png" alt="SREday" style="height:55px; margin:0 10px;">
-      <img src="/assets/images/devopsnotdead_sticker.png" alt="DevOps Not Dead" style="height:55px; margin:0 10px;">
-      <img src="/assets/images/conf42_sticker.png" alt="Conf42" style="height:55px; margin:0 10px;">
+    <div class="row align-items-center">
+      <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
+        <img src="/assets/images/ambassadorship/cat-celebrate.jpeg" alt="Celebrating cat" style="max-width:240px;width:100%;border-radius:20px;">
+      </div>
+      <div class="col-12 col-md-8 text-center">
+        <h2>Sounds like a win-win?</h2>
+        <p style="font-size:1.15rem; color:#555; margin-bottom:30px;">Email us, or ping Mark on LinkedIn</p>
+        <div>
+          <a href="mailto:hello@llmday.com?subject=Ambassador%20application" class="btn-amb btn-email">
+            <i class="fas fa-envelope me-2"></i>Email us
+          </a>
+          <a href="https://www.linkedin.com/in/marekpawlikowski/" target="_blank" class="btn-amb btn-linkedin">
+            <i class="fab fa-linkedin-in me-2"></i>Ping Mark on LinkedIn
+          </a>
+        </div>
+        <div class="brand-logos mt-5">
+          <img src="/assets/images/llmday_sticker.png" alt="LLMday" style="height:55px; margin:0 10px;">
+          <img src="/assets/images/sreday_sticker.png" alt="SREday" style="height:55px; margin:0 10px;">
+          <img src="/assets/images/devopsnotdead_sticker.png" alt="DevOps Not Dead" style="height:55px; margin:0 10px;">
+          <img src="/assets/images/conf42_sticker.png" alt="Conf42" style="height:55px; margin:0 10px;">
+        </div>
+      </div>
     </div>
   </div>
 </section>
