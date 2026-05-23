@@ -165,7 +165,7 @@ print(f"  Total: {len(sponsor_logos)} sponsor logos, {len(partner_logos)} partne
 
 # MAIN PAGES
 print(DIVIDER)
-pages = ["index.html"]
+pages = ["index.html", "ambassadorship.html"]
 print(f"Generating main pages: {pages}")
 for page in pages:
     with open(BASE_FOLDER + "/" + page, "w", encoding="utf-8") as f:
