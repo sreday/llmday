@@ -32,7 +32,11 @@ breaks:
 - title: Lunch & networking
   duration: 60
   comment: Main lobby
-  talks_before: 5
+  talks_before: 4
+- title: Networking & Sponsor Crawl
+  duration: 60
+  comment: Main lobby
+  talks_before: 3
 
 sponsors:
   - logo: altinity.png
