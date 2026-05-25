@@ -6,19 +6,19 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
   <loc>https://www.llmday.com/</loc>
-  <lastmod>2026-05-25T09:25:27.814014+00:00</lastmod>
+  <lastmod>2026-05-25T09:38:09.217128+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 
 <url>
   <loc>https://www.llmday.com/Jones_Zachariah_Noel_N_New_Relic_Monitoring_the_Agentic_Loop_OTelDriven_Observability_for_AWS_Strand</loc>
-  <lastmod>2026-05-25T09:25:27.814014+00:00</lastmod>
+  <lastmod>2026-05-25T09:38:09.217128+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
   <loc>https://www.llmday.com/Vishal_Alhat_AWS_Stop_Building_Agent_Frameworks_Lessons_from_12_Strands_Deployments_in_Production</loc>
-  <lastmod>2026-05-25T09:25:27.814014+00:00</lastmod>
+  <lastmod>2026-05-25T09:38:09.217128+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
