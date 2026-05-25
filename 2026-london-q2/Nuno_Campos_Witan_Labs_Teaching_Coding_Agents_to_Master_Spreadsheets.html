@@ -272,22 +272,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">Building Production AI Coaches: Architecture, UX, and Iteration at Scale</h1>
+    <h1 class="section-heading text-center mb-3">Teaching Coding Agents to Master Spreadsheets</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
-          <img src="../speakers/Max Borodin.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Nuno Campos.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Max Borodin</h5>
+            <h5 class="card-title mb-2">Nuno Campos</h5>
             <div class="card-text mb-3">
-              <div class="meta">Simple App</div>
+              <div class="meta">Witan Labs</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mmborodin/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/nuno-f-campos/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -301,16 +301,16 @@
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>AI chatbots are everywhere, but most get ignored after a week. This talk shares the production architecture and practical patterns behind a successful AI Coach in a health &amp; fitness app with 21M downloads — winner of MedTech's Best Virtual Health Coach 2025.
-Max Borodin walks through the end-to-end design: defining the core "jobs" a coach must do for users, structuring scenarios with memory and context engineering (beyond simple prompts), and embedding coaching into product flows with UX rituals that feel natural rather than bolted-on. He contrasts agentic architectures (multi-step reasoning, tool calling) vs completion-centric (single-turn responses) and their trade-offs for latency, cost, and reliability.
-The session dives into measurement and iteration: quantitative engagement metrics (daily active conversations, session length), qualitative evals (ratings, transcript review), pre-testing frameworks, and rapid scenario management to continuously improve personality, tone, and outcomes. Attendees will leave with a checklist for building their own coach: specific patterns, pitfalls to avoid, and optimisation techniques that make AI sustainable at scale. Perfect for developers and PMs turning LLMs into product features that stick.</p></p>
+                <p><p>Where an analyst sees a revenue table and a P&amp;L summary, an LLM sees 10,000 cell values and nested SUMPRODUCT formulas. Over four months we pushed our agent's pass rate from 50% to 92%, through several architectures, many dead ends, and one decision that mattered more than the rest: replacing fifteen discrete tools with a single persistent Node.js REPL.</p>
+<p>This talk is a field report on what worked and what didn't. The REPL lets the agent write JavaScript instead of stringing tool calls together, with variables that persist so it can explore, reason, and course-correct mid-task. Underneath sits a verification loop — formula calculation, rendering, linting - that the agent uses to check its own work, and that has compounded across three frontier model releases rather than been made redundant by them.</p>
+<p>The lessons generalise: interfaces are ephemeral but verification engines are durable, domain knowledge outlasts tooling (we changed backends four times; the financial-domain prompt carried over every time), evaluation is roughly half the work, and most "agent confusion" is really a plumbing problem</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Max Borodin is a Senior Product Manager at Simple App, where he leads AI coaching and gamification initiatives. He has a background in economics from Lomonosov Moscow State University and experience spanning product management and consulting, including an early role at McKinsey &amp; Company.</p></p>
+                <p><p>Nuno Campos is Co-Founder and CTO of Witan Labs, building headless tools for autonomous agents. Previously he was the first employee at LangChain, creator of LangGraph, author of Learning LangChain.</p></p>
               </div>
 
               
