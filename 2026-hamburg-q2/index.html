@@ -484,10 +484,890 @@
 </style>
 
 
+<style>
+  /* Track navigation */
+  .track-nav {
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+  }
+  .track-nav-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .track-nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .track-nav-links a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--brand);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .track-nav-links a:hover {
+    background: var(--brand-light);
+    color: white;
+  }
+  .view-toggle-link {
+    color: var(--brand);
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--brand);
+    border-radius: 4px;
+    transition: all 0.2s;
+    min-width: 10rem;
+    text-align: center;
+  }
+  .view-toggle-link:hover {
+    background: var(--brand);
+    color: white;
+  }
+  .view-toggle-link.active {
+    background: var(--brand);
+    color: white;
+  }
+  /* Table view */
+  .schedule-table-view { display: none; }
+  .schedule-table-view.active { display: block; }
+  .schedule-timeline-view { display: block; }
+  .schedule-timeline-view.hidden { display: none; }
+  .schedule-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 1rem;
+    table-layout: fixed;
+  }
+  .schedule-grid-table th {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: white;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .schedule-grid-table th:first-child {
+    width: 60px;
+  }
+  .schedule-grid-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--brand-lightest);
+    vertical-align: top;
+  }
+  .schedule-grid-table td.merged-cell {
+    text-align: center;
+    font-weight: 500;
+    color: #555;
+    background: var(--brand-lightest);
+  }
+  .schedule-grid-table .time-cell {
+    color: var(--brand);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .schedule-grid-table .talk-cell a {
+    color: #222;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .schedule-grid-table .talk-cell a:hover {
+    color: var(--brand);
+  }
+  .schedule-grid-table .speaker-info {
+    color: #444;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+  .schedule-grid-table .speaker-info .affiliation {
+    color: #666;
+  }
+  .schedule-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  .schedule-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .schedule-meta-divider {
+    color: #ccc;
+    font-weight: 300;
+  }
+  /* Track section header */
+  .track-section-header {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0 0 0;
+    border-radius: 4px 4px 0 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .track-section-header:first-of-type {
+    margin-top: 0;
+  }
+
+  .schedule-section.theme-bg-light { background-color: #f0faf5 !important; }
+</style>
+
 <section id="schedule" class="schedule-section section theme-bg-light">
   <div class="container">
-    <h2 class="section-heading text-center mb-5">Schedule</h2>
-    <h4 class="section-heading text-center mb-5">Coming soon</h4>
+    <h2 class="section-heading text-center mb-4">Schedule</h2>
+
+    <!-- Schedule meta info -->
+    <div class="schedule-meta">
+      <span class="schedule-meta-item">June 18, 2026</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">single track</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">9AM - 4:30PM</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">Hamburg, in-person</span>
+    </div>
+
+
+    
+
+    <!-- Track navigation -->
+    <div class="track-nav">
+      <div class="track-nav-inner">
+
+        <span class="view-toggle-link" id="view-toggle-0" onclick="toggleView(0)">view as table</span>
+      </div>
+    </div>
+
+    <!-- Timeline View (default) -->
+    <div id="timeline-view-0" class="schedule-timeline-view">
+
+      <div class="track-section-header" id="track-0-1">main room &bull; Track 1</div>
+      <div class="schedule-tab-content">
+        <div class="tab-pane active">
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">09:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Coffee break</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">09:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img class="profile-image rounded-circle mb-2" src="../speakers/Sameer Aman.png" alt=""></a>
+                <div class="name">Sameer Aman</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">LLMs in Production: What Actually Breaks</a>
+              </h3>
+              <div class="location mb-3">1KOMMA5</div>
+              <div class="desc schedule-abstract">This talk explores what actually breaks in production: ambiguity, hallucinations, and the challenge of mapping natural language to real business logic. It offers a practical look at turning LLM demos into reliable, production-ready systems.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">10:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Rissal Hedna.png" alt=""></a>
+                <div class="name">Rissal Hedna</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Beyond Prompting: Self-Calibrating LLMs via Test-Time Discriminative Distillation</a>
+              </h3>
+              <div class="location mb-3">PHAROS Labs </div>
+              <div class="desc schedule-abstract">Large Language Models routinely suffer from calibration issues, confidently asserting falsehoods when faced with out-of-distribution tasks. Traditional calibration methods often rely on heavy post-hoc tuning or fragile prompt engineering. In this talk, we explore a more dynamic approach: Self-Calibrating Language Models via Test-Time Discriminative Distillation.We will dive into how we can leverage the "generation-discrimination gap" to train models to double-check themselves on the fly. By utilizing lightweight parameter updates (via LoRA) on late transformer layers during the inference phase, we can align a model's verbalized confidence with its underlying discriminative signals ($P(\text{True})$). Finally, we will discuss the practical engineering trade-offs of this approach, including how to implement entropy-based gating mechanisms to manage computational overhead, making self-calibration viable for real-world deployment.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">10:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img class="profile-image rounded-circle mb-2" src="../speakers/Serhat Kayikci.png" alt=""></a>
+                <div class="name">Serhat Kayikci</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">The Missing Layer: Real-Time AI Context with CDC and Kafka</a>
+              </h3>
+              <div class="location mb-3">DentalTwin</div>
+              <div class="desc schedule-abstract">Somewhere right now, a support chatbot is confidently telling a customer about a product that was discontinued six months ago. The model is fine. The vector database is fine. The batch job that feeds it just hasn’t run yet.
+After spending over a decade building high-throughput Kafka and Debezium pipelines for production environments, watching teams bolt state-of-the-art LLMs onto fragile, legacy batch infrastructure is becoming a recognizable and entirely avoidable anti-pattern.
+This talk explores Change Data Capture (CDC) as the missing data layer for RAG applications. We will look beyond the whiteboard to see what a real Debezium-to-Kafka-to-LLM pipeline actually looks like, how to handle embeddings in flight, and what breaks in production. The data streaming world solved the stale data problem years ago; it is time we bring those mature, event-driven patterns into the modern AI stack.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">11:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/Virendra Singh Bhalothia.png" alt=""></a>
+                <div class="name">Virendra Singh Bhalothia</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Agentic CI/CD: when your pipeline has opinions</a>
+              </h3>
+              <div class="location mb-3">Kolsetu GmbH</div>
+              <div class="desc schedule-abstract">We ship voice AI agents to regulated industries - healthcare, finance, insurance. Traditional CI/CD breaks when your deployable isn't just code but also prompts, voice configs, and agent behavior definitions. We use GitHub Agentic Workflows as an orchestration layer where AI agents gate, review, and validate other AI agents before they go live. This talk covers the system we built, what broke in production, and what governance looks like when LLMs are making merge decisions for voice AI deployments.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">11:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Lunch & networking</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">12:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Mesut Ayata.png" alt=""></a>
+                <div class="name">Mesut Ayata</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">RAG Beyond the Demo: Why Context Matters More Than Models</a>
+              </h3>
+              <div class="location mb-3">Thoughtworks</div>
+              <div class="desc schedule-abstract">RAG systems are easy to demo but hard to make reliably useful. The gap between prototype and real performance is rarely the model, but context quality. Retrieval, chunking, ranking, and context construction shape system behavior, and weaknesses in these layers lead to irrelevant answers, poor grounding, and overconfident outputs, even with strong models.
+This talk explores practical ways to improve RAG systems: better retrieval signals, cleaner context assembly, noise reduction, and aligning context with user intent.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">13:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Pavlo Borysov.png" alt=""></a>
+                <div class="name">Pavlo Borysov</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">From AI Hype to Real User Value: Building a Teacher Cockpit for Live Language Lessons</a>
+              </h3>
+              <div class="location mb-3">IT-Dienstleistungen K.Rozankovic</div>
+              <div class="desc schedule-abstract">The talk is based on his current project: a Teacher Panel for a German language school. The goal of the app is to help teachers run live Zoom lessons with less switching between Word documents, lesson materials, Zoom chat, vocabulary notes, links, and post-lesson Telegram messages. The main idea of the talk would be that AI should not be the starting point of a product. The starting point should be the real workflow, user constraints, and business value.
+AI should not be the starting point of a product. The starting point should be the real workflow, user constraints, and business value. In this project, he carefully uses AI only where it actually supports the teacher—for example, vocabulary support, translations, grammar hints, or lesson preparation—while keeping teacher review and manual approval as core product principles.
+Points to be covered:
+* discovering real teacher workflows and pain points;
+* turning DOCX-based methodology files into a structured live lesson panel;
+* separating teacher-only guidance from student-facing material;
+* designing safe copy/send workflows for Zoom and Telegram;
+* deciding where LLMs add value and where classic automation is better;
+* architecture and implementation lessons from building a practical AI-enabled MVP.
+This talk could be useful for engineers and technical leaders because it focuses not on adding AI everywhere, but on designing AI-enabled tools around real users, reliability, trust, and production constraints.
+Vibe coding and AI tools make implementation faster, but they do not replace product thinking: understanding users, discovering real pain points, validating value, and deciding what should not be automated.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">13:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Martin Danner.png" alt=""></a>
+                <div class="name">Martin Danner</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Talk Genomics To Me - From Sequences to Sentences</a>
+              </h3>
+              <div class="location mb-3">scieneers GmbH</div>
+              <div class="desc schedule-abstract">How can we better understand the vast complexity of the human genome?
+Personalized medicine requires a deep understanding of the genetic code in order to specifically detect and treat diseases. Nevertheless, large parts of the human genome remain, to date, not understood.
+To address this challenge, we developed Genolator - a multimodal AI system designed to bridge genetic code and human understanding.
+By integrating genomic sequence representations, protein structure information, and natural language models, Genolator allows researchers to query coding sequences in natural language and explore potential biological processes, molecular functions, and cellular roles associated with a sequence.
+This ability to connect diverse biological layers through natural language queries creates a new interface for exploring genomic data, helping researchers and physicians uncover functional relationships and generate new insights into the genome.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">14:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Andreas Wagenmann.png" alt=""></a>
+                <div class="name">Andreas Wagenmann</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Agents as your Data Team - Or Not?</a>
+              </h3>
+              <div class="location mb-3">Freelancer</div>
+              <div class="desc schedule-abstract">The talk discusses the question whether agents can serve in roles of data teams, such as Data Engineer / Scientist / Analyst. While addressing the core questions, it gives practical insights what is needed to extract the most value out of your agent setup, with practical examples and implications for your stack. We will also cover the central topics of evaluation and validation.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">14:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Networking & sponsor crawl</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">15:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Eduardo Pertierra Puche.png" alt=""></a>
+                <div class="name">Eduardo Pertierra Puche</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">From Prompt to Play: Creating a Fully Generative Agentic Videogame</a>
+              </h3>
+              <div class="location mb-3">MaibornWolff GmbH</div>
+              <div class="desc schedule-abstract">What does a fully generative video‑game look like when the entire interaction surface is a language model? In this talk I present the first proof‑of‑concept of an Agentic Video‑Game, a 3‑D multiplayer world where every NPC, quest, and environment reaction is driven by LLM‑powered agents.
+By wiring the right architectural layers-state‑centric management, event‑driven orchestration, and a lightweight RAG pipeline that injects lore on demand - we turned a concept into a running prototype that has never been demonstrated before.
+I will walk through the design decisions that made the system reliable, showcase the live demo, and dive deep into the challenges and lessons learned while stitching together generative AI, real‑time state sync, and production‑grade robustness.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">15:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Mohamed Badawi.png" alt=""></a>
+                <div class="name">Mohamed Badawi</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Engineering for an LLM you don't trust</a>
+              </h3>
+              <div class="location mb-3">Weaviate</div>
+              <div class="desc schedule-abstract">The LLM in your pipeline is a brilliant intern with no memory and too much confidence and somehow it's in production. A talk about engineering for an LLM you don't trust, with stories from building with LLMs and the tools we ship around them. Bring your paranoia.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/Maciej Szymkowski.png" alt=""></a>
+                <div class="name">Maciej Szymkowski</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Hinton's prophecy revisited: what LLMs and Vision Models mean for the future of radiology</a>
+              </h3>
+              <div class="location mb-3">Future Processing</div>
+              <div class="desc schedule-abstract">In 2016, Professor Geoffrey Hinton claimed that radiologists will not be needed anymore, in a short time they will be replaced by AI models (the time horizon was 5 years). Unfortunately, Professor wasn’t right. This time did not yet appear – still radiologist is a significant part of the diagnostics process. However, it must be said that there are several approaches that can give a hand to these medical specialists. This presentation will be divided into two main phases. In the first of them I will present traditional pipelines (based on image/signal processing) for analysis of radiological scans, e.g., liver anatomical scans, - I will use simple approaches as image filtering or thinning to detect pathological changes. In the second part of my talk, I will deeply explain how novel AI models can be used to give a hand to radiologist. I will build a pipeline based on computer vision models (like YOLO) to observe cancer changes but also, will consume ready to use models – e.g., MedSAM to recognize these changes. On the other hand, VLMs will also be used to analyze the samples – Gemini, GPT, Qwen, and InternVL will be run for this aim. Moreover, we will check new MedGemma model – it was claimed as one of the most efficient ones nowadays that can give a hand to radiologists. Finally, we can answer on the main question – are we ready to replace radiologists?<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Wrap up</h3>
+              <div class="location mb-3" style="color:#098dcf;">Scan each other's QR codes & head to a nearby pub!</div>
+              
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Table View -->
+    <div id="table-view-0" class="schedule-table-view">
+      <table class="schedule-grid-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+
+            <th style="width: calc((100% - 60px) / 1)">main room</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">09:00</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Coffee break
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">09:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">LLMs in Production: What Actually Breaks</a>
+              <div class="speaker-info">Sameer Aman <span class="affiliation">• 1KOMMA5</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">10:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Beyond Prompting: Self-Calibrating LLMs via Test-Time Discriminative Distillation</a>
+              <div class="speaker-info">Rissal Hedna <span class="affiliation">• PHAROS Labs </span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">10:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">The Missing Layer: Real-Time AI Context with CDC and Kafka</a>
+              <div class="speaker-info">Serhat Kayikci <span class="affiliation">• DentalTwin</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">11:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Agentic CI/CD: when your pipeline has opinions</a>
+              <div class="speaker-info">Virendra Singh Bhalothia <span class="affiliation">• Kolsetu GmbH</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">11:30</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Lunch & networking
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">12:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">RAG Beyond the Demo: Why Context Matters More Than Models</a>
+              <div class="speaker-info">Mesut Ayata <span class="affiliation">• Thoughtworks</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">13:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">From AI Hype to Real User Value: Building a Teacher Cockpit for Live Language Lessons</a>
+              <div class="speaker-info">Pavlo Borysov <span class="affiliation">• IT-Dienstleistungen K.Rozankovic</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">13:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Talk Genomics To Me - From Sequences to Sentences</a>
+              <div class="speaker-info">Martin Danner <span class="affiliation">• scieneers GmbH</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">14:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Agents as your Data Team - Or Not?</a>
+              <div class="speaker-info">Andreas Wagenmann <span class="affiliation">• Freelancer</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">14:30</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Networking & sponsor crawl
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">15:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">From Prompt to Play: Creating a Fully Generative Agentic Videogame</a>
+              <div class="speaker-info">Eduardo Pertierra Puche <span class="affiliation">• MaibornWolff GmbH</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">15:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Engineering for an LLM you don't trust</a>
+              <div class="speaker-info">Mohamed Badawi <span class="affiliation">• Weaviate</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">16:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Hinton's prophecy revisited: what LLMs and Vision Models mean for the future of radiology</a>
+              <div class="speaker-info">Maciej Szymkowski <span class="affiliation">• Future Processing</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">16:30</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Wrap up
+
+            </td>
+          </tr>
+
+
+        </tbody>
+      </table>
+    </div>
+
+
+
+    <script>
+    function toggleView(day) {
+      const timelineView = document.getElementById('timeline-view-' + day);
+      const tableView = document.getElementById('table-view-' + day);
+      const toggleBtn = document.getElementById('view-toggle-' + day);
+      const trackLinks = document.getElementById('track-links-' + day);
+
+      if (tableView.classList.contains('active')) {
+        tableView.classList.remove('active');
+        timelineView.classList.remove('hidden');
+        toggleBtn.textContent = 'view as table';
+        toggleBtn.classList.remove('active');
+        if (trackLinks) trackLinks.style.display = 'flex';
+      } else {
+        tableView.classList.add('active');
+        timelineView.classList.add('hidden');
+        toggleBtn.textContent = 'view as timeline';
+        toggleBtn.classList.add('active');
+        if (trackLinks) trackLinks.style.display = 'none';
+      }
+    }
+    </script>
+
+    
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    
   </div>
 </section>
 
@@ -786,16 +1666,6 @@
       </div><!--//col-->
 
       
-
-      
-
-      <div class="col mb-4">
-        <div class="card">
-          <div class="card-body">
-            <h4>More coming soon</h4>
-          </div><!--//card-->
-        </div><!--//card-->
-      </div><!--//col-->
 
       
 
