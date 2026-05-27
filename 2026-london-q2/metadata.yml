@@ -34,7 +34,7 @@ breaks:
   comment: Main lobby
   talks_before: 4
 - title: Networking & Sponsor Crawl
-  duration: 60
+  duration: 30
   comment: Main lobby
   talks_before: 3
 
