@@ -5,7 +5,7 @@ start_time: "2026-05-28T09:00:00+00:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
-event_state: active
+event_state: after
 date_string: "May 28, 2026"
 location_string: "Everyman Canary Wharf, London, UK"
 # get this from the event url
