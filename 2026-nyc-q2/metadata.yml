@@ -32,10 +32,6 @@ breaks:
   duration: 60
   comment: Main lobby
   talks_before: 4
-- title: Go play some Fallout!
-  duration: 30
-  comment: Main lobby
-  talks_before: 5
 
 sponsors:
   - logo: microsoft.png
