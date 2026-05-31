@@ -643,7 +643,7 @@
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">single track</span>
       <span class="schedule-meta-divider">•</span>
-      <span class="schedule-meta-item">9AM - 6PM</span>
+      <span class="schedule-meta-item">9AM - 2:30PM</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">NYC, in-person</span>
     </div>
@@ -670,17 +670,17 @@
             <div class="meta">
               <h4 class="time mb-3">09:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img class="profile-image rounded-circle mb-2" src="../speakers/Bart Czernicki.png" alt=""></a>
-                <div class="name">Bart Czernicki</div>
+                <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img class="profile-image rounded-circle mb-2" src="../speakers/Uma Mukkara.png" alt=""></a>
+                <div class="name">Uma Mukkara</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: Decision Intelligence under Uncertainty with Generative AI</a>
+                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: TBD</a>
               </h3>
-              <div class="location mb-3">Microsoft</div>
-              <div class="desc schedule-abstract">Decision making is one of the most sought after skills by executives. With the advent of Generative AI, decision making can be optimized to unlock the full potential of human judgement. This hands-on lab introduces the theory of Decision Intelligence with Generative AI (frame decisions, surface assumptions, evaluate decision quality under uncertainty), then applies GenAI as a structured reasoning process. You will practice many advanced Decision Intelligence GenAI techniques.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
+              <div class="location mb-3">Harness</div>
+              <div class="desc schedule-abstract">Coming soon...<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
               
             </div>
           </div>
@@ -688,6 +688,25 @@
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">09:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Vignesh Kumar S.png" alt=""></a>
+                <div class="name">Vignesh Kumar S</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Turn It Off Without Breaking It: Safe Orchestration of AWS Environments</a>
+              </h3>
+              <div class="location mb-3">GuhaTek</div>
+              <div class="desc schedule-abstract">Pre-production environments are often left running 24/7, leading to significant cloud waste—but safely automating their shutdown is more complex than it seems. Naive scheduling approaches can easily break dependencies, introduce inconsistent states, or make recovery unreliable. In this talk, I’ll present a real-world implementation of a scheduled, event-driven orchestration system on AWS that safely scales down and restores an entire pre-production environment. The solution uses EventBridge, Step Functions, and Lambda to coordinate state transitions across EC2, RDS, EBS, and application services. A key focus of this system is safe, state-aware execution. Each operation validates the current resource state before acting, ensuring that actions are effectively idempotent and safe to re-run. The workflow enforces dependency-aware sequencing and uses check/wait patterns to avoid acting on transitional or stale states, reducing the risk of unsafe shutdowns and restarts. Rather than relying on blind automation, this approach treats infrastructure changes as explicit, observable workflows, where failures are surfaced clearly and recovery paths are controlled. I’ll also share lessons learned around handling partial executions, the limitations of manual retry strategies, and why idempotency must be considered beyond individual steps. This session will provide practical insights into building reliable, cost-efficient infrastructure automation, along with design patterns that can be applied to any AWS-based environment.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">10:00</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -703,38 +722,19 @@
 
           <div class="item item-talk">
             <div class="meta">
-              <h4 class="time mb-3">10:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Maciej Szymkowski.png" alt=""></a>
-                <div class="name">Maciej Szymkowski</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Everybody lies but data doesn't: the rise of Dr AI-House</a>
-              </h3>
-              <div class="location mb-3">Future Processing</div>
-              <div class="desc schedule-abstract">“Don't worry, most of you could be cured by a monkey with an aspirin” - Dr. Gregory House’s legendary cynicism used to target patient incompetence, but in 2026, it’s time to ask: should that monkey be replaced by an AI agent? In this session, we dive deep into the deployment of AI and classical ML across the biomedical and medical pipelines. We’ll skip the hype and look at the architectures. In Computer Vision we will check why RF-DETR is consistently outperforming YOLO in liver MRI and CT segmentation and detection of pathological changes. On the other hand, we will also consider Clinical NLP case where we leverage LLMs (Gemini, GPT, Bielik and Qwen) equipped with custom inference logic to parse patient interviews. We will also take a deeper look at drug discovery. We will observe how utilizing a multi-modal stack of VLMs and Vision models can accelerate the R&D lifecycle in that area. The presentation will be concluded by answering the ultimate question: Has the "Silicon Dr House" already arrived, or are we still just hallucinating the cure?<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
               <h4 class="time mb-3">10:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img class="profile-image rounded-circle mb-2" src="../speakers/Max Saltonstall & Salim Virji.png" alt=""></a>
-                <div class="name">Max Saltonstall & Salim Virji</div>
+                <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img class="profile-image rounded-circle mb-2" src="../speakers/Vishal Alhat.png" alt=""></a>
+                <div class="name">Vishal Alhat</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Scaled approaches to managing AI workloads</a>
+                <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">AI Agents: The Next Evolution in DevOps and SRE Workflows</a>
               </h3>
-              <div class="location mb-3">Datadog & Google</div>
-              <div class="desc schedule-abstract">New model? New customers? Both??? Your AI workloads are constantly changing, both inputs and outputs, and you need new ways to track success. We will explain how you can do evals at scale, track evals-as-code, and proper experimentation. Join experts from different large-scale SaaS providers to learn how you can evolve, track and constantly improve your measuring and monitoring of AI systems in production.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
+              <div class="location mb-3">AWS</div>
+              <div class="desc schedule-abstract">Site Reliability Engineering and DevOps teams are drowning in alerts, incidents, and repetitive tasks. What if AI agents could be your intelligent teammates, not just another tool in your stack? This talk explores the practical integration of AI agents into SRE and DevOps workflows, moving beyond hype to real-world implementation patterns. We'll examine how autonomous agents can transform incident response, automate runbook execution, and provide intelligent context during outages—all while maintaining the reliability standards SREs demand. Through live demonstrations and battle-tested patterns, you'll learn how to architect agent-based systems that integrate with your existing observability stack, handle multi-step troubleshooting workflows, and make decisions under pressure. We'll also explore AI DevOps Agent capabilities and how it helps teams reduce MTTR, automate toil, and scale operational excellence. Whether you're managing Kubernetes clusters, distributed systems, or cloud infrastructure, you'll leave with actionable strategies to augment your team with AI agents that actually work.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
               
             </div>
           </div>
@@ -743,21 +743,17 @@
             <div class="meta">
               <h4 class="time mb-3">11:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/Jinlin He & Rob Bajra.png" alt=""></a>
-                <div class="name">Jinlin He & Rob Bajra</div>
+                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/Raman Tehlan & Shubham Rai.png" alt=""></a>
+                <div class="name">Raman Tehlan & Shubham Rai</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Your LLM Doesn't Know What 'ARR' Means (Yet): A survey of semantic layers</a>
+                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">From Idle to Invisible: Eliminating GPU Waste with Kubernetes-Native Scale-to-Zero</a>
               </h3>
-              <div class="location mb-3">Databricks</div>
-              <div class="desc schedule-abstract">A semantic layer is a business translation layer that sits between your data and your data consumers (like human users or AI agents).
-
-A semantic layer is critical for AI agents because it condenses and standardizes business logic so that generic LLMs can better understand your business. Traditionally, semantic layer was embedded within a BI tool and was created manually. But as AI agents become the primary way of retrieving information, the process of building semantic layers needs to be scalable and semantic layers need to be decoupled from downstream tools.
-
-In this talk, we explore a few common approaches to building AI friendly semantic layers.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
+              <div class="location mb-3">Zurich Lab & Truefoundry</div>
+              <div class="desc schedule-abstract">GPUs are among the most expensive resources in Kubernetes clusters, and many devs forget to shut it down after use or they remain idle when no traffic in dev. One GPU left on by mistake can drain $6000 a month. We wanted to auto shut down GPUs when not in use. While tools like Knative and KEDA offer scale-to-zero, we found their tradeoffs not fit for our use-case. Knative requires adopting a different application model, and KEDA's HTTP-Addon stay in the request path, increasing coupling. In contrast, our approach required no infrastructure rewrites, just a single CRD, and completely removes itself from the traffic path once workloads are active. In this talk, we share how we reduced GPU waste by designing a open source and native scale-to-zero system called KubeElasti. We break down the architectural decisions behind it, compare them explicitly with existing scale-to-zero models, and how you can use it in your own clusters to scale applications to 0, specially in dev environments.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
               
             </div>
           </div>
@@ -766,19 +762,17 @@ In this talk, we explore a few common approaches to building AI friendly semanti
             <div class="meta">
               <h4 class="time mb-3">11:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Drew Wilkins & Syed Abbas.png" alt=""></a>
-                <div class="name">Drew Wilkins & Syed Abbas</div>
+                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Soham Chakraborty & Bikram Debnath.png" alt=""></a>
+                <div class="name">Soham Chakraborty & Bikram Debnath</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Beyond IAM: Building the Accountability Layer for Autonomous Agents</a>
+                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Choosing the right database: Why ClickHouse has become the standard for storing observability data</a>
               </h3>
-              <div class="location mb-3">Bindable AI</div>
-              <div class="desc schedule-abstract">Autonomous AI agents are no longer operating in isolation. As ecosystems built on MCP, A2A, and similar agent protocols enable agents to collaborate across tools, services, and organizational boundaries, traditional IAM models are starting to show their limits. Identity and access control alone cannot answer questions around accountability, traceability, delegated decision-making, or responsibility when autonomous systems interact with each other at scale.
-
-This session explores the emerging accountability gap in modern agent architectures and examines what governance needs to look like once agents gain autonomy, interoperability, and the ability to trigger actions across multiple systems. We will discuss practical challenges around auditability, trust boundaries, policy enforcement, and operational oversight in production-grade AI environments, along with architectural approaches for building accountability layers that extend beyond conventional IAM.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
+              <div class="location mb-3">Sematext & IBM</div>
+              <div class="desc schedule-abstract">Observability data is hostile to general-purpose databases. Signals share a common profile: high write throughput, massive cardinality, time-series access patterns, and queries that scan billions of rows expecting sub-second answers. Most databases buckle under this combination. ClickHouse doesn't — but understanding why requires going deeper. In this session, we'll walk through the technical fundamentals that make ClickHouse uniquely suited for observability workloads: columnar storage and vectorised execution, the MergeTree family and TTL-based tiering, sparse indexing for time-range scans, and native ZSTD compression that routinely achieves 10–20× ratios on telemetry data. We will briefly touch the operational aspects of ClickHouse like shard topology and Replication. At the end of the session, the audience will leave with the takeaway of how to build and operate storage backend for modern observability data at scale.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
               
             </div>
           </div>
@@ -786,6 +780,25 @@ This session explores the emerging accountability gap in modern agent architectu
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">12:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Pratik Mahalle.png" alt=""></a>
+                <div class="name">Pratik Mahalle</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Debugging Knowledge Is Infrastructure Too</a>
+              </h3>
+              <div class="location mb-3">DrDroid</div>
+              <div class="desc schedule-abstract">Every team has an engineer who makes on-call look easy. They know the service that quietly degrades every Monday morning, the log pattern that precedes a cascade, and which alert has been firing incorrectly since the 2023 migration. When they leave, MTTR doubles and not because anything broke, but because the knowledge that made fast debugging possible was never captured. This talk is about making incident expertise durable. We cover how to extract the decision patterns that live in senior engineers' heads, encode them into investigation workflows that surface automatically during incidents, and measure whether the transfer is working. We walk through what worked, what created new toil (the "automated runbook" trap), and one incident where the system suggested the wrong root cause and why that was still a net win and more<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">12:30</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -801,39 +814,19 @@ This session explores the emerging accountability gap in modern agent architectu
 
           <div class="item item-talk">
             <div class="meta">
-              <h4 class="time mb-3">13:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Sonali Priya.png" alt=""></a>
-                <div class="name">Sonali Priya</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Human-in-the-Loop UI Design for Generative AI Systems</a>
-              </h3>
-              <div class="location mb-3">LB Networks</div>
-              <div class="desc schedule-abstract">Generative AI and large language models are rapidly transforming how enterprise user interfaces are conceived, prototyped, and refined. While these systems accelerate exploration and automate repetitive design tasks, they also introduce new challenges in preserving human judgment, design intent, and organizational brand consistency. This session examines emerging human-in-the-loop frameworks that position LLMs as collaborators rather than replacements for expert designers. Drawing on real-world enterprise UX patterns, the talk outlines how AI-generated outputs can be systematically evaluated to maintain usability, accessibility, and human-centered design principles. It highlights approaches to ensuring that generative variations remain aligned with brand guidelines, interaction models, and product standards—especially in regulated or high-stakes environments. The session further explores workflow models for integrating generative AI into UI design processes, including collaborative review loops, intent-preserving prompt strategies, and safeguards against drift in accessibility or experience coherence. By comparing the strengths of human intuition with the scale and speed of LLM-driven systems, attendees will gain clarity on where AI meaningfully accelerates design iteration—and where human oversight remains essential.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
               <h4 class="time mb-3">13:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Lev Andelman.png" alt=""></a>
-                <div class="name">Lev Andelman</div>
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Vivek Anandaraman.png" alt=""></a>
+                <div class="name">Vivek Anandaraman</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Imperfect Is Fine (When It’s You)</a>
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Moving from Telemetry Signal Correlation to Graph-Driven AI based RCA</a>
               </h3>
-              <div class="location mb-3">TeraSky</div>
-              <div class="desc schedule-abstract">Humans hallucinate memories, forget decisions, and confidently state wrong facts - and we built entire civilizations around it. Yet when AI does the same, we call it broken. 
-This talk uses cognitive science, live audience experiments, and real-world engineering failures to expose the double standard killing your AI adoption. You’ll leave with a practical framework: validate the output, not the process - and stop demanding perfection from AI that you never demanded from yourself.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+              <div class="location mb-3">Cloudelu Labs</div>
+              <div class="desc schedule-abstract">Modern production environments span Kubernetes, VMs, serverless, and event-driven systems, yet incident response still relies on manually stitching together dashboards, traces, and logs. While OpenTelemetry improves signal collection, it does not provide a consistent way to model dependencies across services, infrastructure, and asynchronous components. As a result, SREs spend valuable time correlating signals instead of identifying the root cause. This talk presents a graph-driven RCA approach built on a normalized observability layer that converts telemetry into relationships between services, infrastructure, and runtime events. Instead of treating traces, logs, and metrics independently, we derive a dependency graph enriched with time-based observations and health signals. This allows failures to be analyzed as propagation paths across systems rather than isolated alerts. We apply this approach to real-world scenarios across Kubernetes microservices, VM-based workloads, hybrid cloud environments, serverless platforms, and asynchronous systems such as Kafka. The graph highlights cascading failures, dependency latency, and hidden bottlenecks that are difficult to detect using traditional dashboards. We compare this workflow with trace-centric and metrics-first investigations, focusing on time-to-root-cause and operational effort during incidents. Attendees will learn how to build telemetry normalization layers, derive dependency graphs from observability data, and use graph-based reasoning to accelerate incident response. The session focuses on practical SRE workflows, design tradeoffs, and lessons learned from applying graph-driven RCA in distributed systems.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
               
             </div>
           </div>
@@ -842,28 +835,17 @@ This talk uses cognitive science, live audience experiments, and real-world engi
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Anubha Kabra.png" alt=""></a>
-                <div class="name">Anubha Kabra</div>
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Neel Shah.png" alt=""></a>
+                <div class="name">Neel Shah</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">From Prompt to Production</a>
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">AIOps Day-to-Day: When AI Fixes Faster Than Humans (and When It Doesn't)</a>
               </h3>
-              <div class="location mb-3">Bloomberg</div>
-              <div class="desc schedule-abstract">AI applications often look impressive in demos but fail once they encounter real-world users, changing data, operational constraints, and governance requirements. Many teams discover these issues only after launch—when trust, reliability, and cost become production blockers rather than research problems.
-This talk introduces a practical framework for evaluating whether an AI system is actually ready to ship. Using a deceptively simple Retrieval-Augmented Generation (RAG) assistant as a running example, we’ll walk through the hidden gaps that prototypes frequently overlook: data freshness, hallucination handling, observability, safety guardrails, latency, scaling costs, ownership, and governance.
-
-Rather than focusing on model architecture alone, the session reframes AI deployment as a systems and decision-making problem. Attendees will learn five production-readiness lenses that can be applied across AI products and internal enterprise systems:
-
-* Data & Retrieval
-* Trust & Safety
-* Observability & Debuggability
-* Cost & Scale
-* Governance & Ownership
-
-The talk also explores real tradeoffs teams face in practice, including precision vs. coverage, latency vs. cost, and experimentation vs. reliability. By the end of the session, attendees will leave with a concrete checklist and decision framework they can use to evaluate AI pilots, reduce deployment risk, and move from prototype success to production reliability.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              <div class="location mb-3">StackGen</div>
+              <div class="desc schedule-abstract">In 2026, AIops transforms SRE through 4 maturity stages—alert triage, automated remediation, predictive scaling, self-healing; mapped directly to production ops handling millions of events daily. Custom LLM runbooks crush vendor tools on repetitive toil (Kafka rebalance: 4h→17m MTTR, $0.02/incident, 96% accuracy) but fail spectacularly on complex scenarios (hallucinated kubectl during GPU OOM cascade → 3h outage). OpenTelemetry+LLM pipelines cut alert fatigue 68% but introduced embedding drift surprises. Drawing from 18 months production war stories: LLM etcd recovery runbooks delivered exact curl commands; tool constraints + chaos replay fixed hallucination failures; team velocity dipped 25% during reskilling then recovered +40%. Attendees get copy-paste RAG YAML templates, whitelisted command constraints, drift detection checklists (PSI>0.25), and 6-week LLMOps bootcamp roadmap—targeting >80% automation on top-5 incidents only.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
               
             </div>
           </div>
@@ -871,160 +853,6 @@ The talk also explores real tradeoffs teams face in practice, including precisio
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">14:30</h4>
-              <div class="profile">
-                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Chrys Li.png" alt=""></a>
-                <div class="name">Chrys Li</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Beyond Prompts: Context Architecture for Reliable LLM Systems  </a>
-              </h3>
-              <div class="location mb-3">TAILORU Collective</div>
-              <div class="desc schedule-abstract">Most LLM failures are not caused by a bad prompt alone. They often emerge from missing, unstable, or poorly structured context: unclear goals, conflicting source material, weak evidence hierarchy, fragmented memory, vague role definitions, and undefined decision boundaries.
-
-This talk introduces Context Architecture as the missing design layer between prompt engineering, retrieval, evals, governance, and production behavior. We’ll look at how context can be structured as a system: what the model needs to know, what it should prioritize, what it should ignore, how state should be carried forward, and where human judgment needs to remain explicit.
-
-The session will share a practical framework for designing context packages, behavior constraints, signal flows, and handoff artifacts that make LLM systems more reliable, inspectable, and easier to improve over time. Rather than treating prompts as isolated instructions, the talk reframes context as infrastructure: the layer that shapes how an LLM interprets tasks, reasons through ambiguity, and behaves inside real workflows.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">15:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Juan Petter.png" alt=""></a>
-                <div class="name">Juan Petter</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">The Missing Layer in Agentic AI: Governance</a>
-              </h3>
-              <div class="location mb-3">ARF</div>
-              <div class="desc schedule-abstract">Most teams are moving fast on agents, but very few are governing them well. In production, the real problem is not capability — it is control: how to evaluate risk, bound autonomy, preserve auditability, and keep systems stable under uncertainty. In this talk, I will introduce the architecture behind ARF (Agentic Reliability Framework), a governance layer for agentic infrastructure that converts probabilistic AI outputs into deterministic, auditable decisions. The session explores Bayesian risk scoring, expected-loss decisioning, bounded memory systems, and calibrated escalation mechanisms designed to make autonomous AI survivable inside real enterprise environments.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">15:30</h4>
-              <div class="profile">
-                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/William McLean.png" alt=""></a>
-                <div class="name">William McLean</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Gemma4 Tips and Tricks</a>
-              </h3>
-              <div class="location mb-3">Glitnir Ticketing</div>
-              <div class="desc schedule-abstract">Overview of the latest Gemma4 models from on-device to TPU hosted.
-Tips and tricks for vLLM model serving and a live demo.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">16:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img class="profile-image rounded-circle mb-2" src="../speakers/Dor Amir.png" alt=""></a>
-                <div class="name">Dor Amir</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Stop Paying Opus Prices for Haiku Problems</a>
-              </h3>
-              <div class="location mb-3">Nadir</div>
-              <div class="desc schedule-abstract">Most AI-native products today are overpaying for LLM usage because they send too many requests to expensive frontier models, even when the task does not require them.
-
-In this session, I’ll share how LLM routing works in practice: how to classify prompt complexity, route requests across models, and balance cost, latency, and quality without hurting the user experience.
-
-I’ll also cover the common traps teams run into when building routers, including over-routing to premium models, bad offline evaluation, feedback loops, and the gap between benchmark accuracy and real production quality.
-
-The goal is to give builders a practical framework they can use to decide when to use cheaper models, when to escalate to stronger models, and how to measure whether the routing system is actually saving money while preserving output quality.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">16:30</h4>
-              <div class="profile">
-                <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12"><img class="profile-image rounded-circle mb-2" src="../speakers/Michael Carroll.png" alt=""></a>
-                <div class="name">Michael Carroll</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Your AI Agent Has Notes</a>
-              </h3>
-              <div class="location mb-3">Coolhand Labs</div>
-              <div class="desc schedule-abstract">Working with AI agents is turning every IC into a team manager. Yesterday, you were coding. Today? You're delegating tasks, reviewing outputs, debugging reasoning loops, and sweating your monthly token budget. Hate to break it to you, but your AI team has notes about this... and you aren't listening. This talk is about giving your agents a complaint box. I'll walk through the design of a strategy called Wildcard. Wildcard is a flexible, amorphous tool your agents can call when they are stuck to explain what they need. I'll give some solid examples of how Wildcard leveled up the agents that power [Coolhand Labs](https://coolhandlabs.com/) by surfacing issues in real time, helping us cut down on loops, token burn, and bad practices. We will implement the tool from scratch in a sample codebase, handle some agentic feedback in real time, and cover a few protips for getting the most out of Wildcard in your agent team. Giving you strategies to coax your agents into providing unfiltered feedback is included in the talk. Processing that feedback emotionally will be on you.<a class="schedule-abstract-read-more" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">17:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13"><img class="profile-image rounded-circle mb-2" src="../speakers/Vanchhit Khare.png" alt=""></a>
-                <div class="name">Vanchhit Khare</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">Your AI Is Making Things Up. Here Is How to Stop It.</a>
-              </h3>
-              <div class="location mb-3">M&T Bank</div>
-              <div class="desc schedule-abstract">Your AI agent is lying to you. Not on purpose. It just fills in the gaps when it does not know something. It sounds confident. It names real people. It cites papers that do not exist. Your validator says everything is fine.
-
-Here is what actually stops it: give your agent a second brain.
-
-Not a bigger model. Not a better prompt. A small, structured knowledge base of facts your agent is allowed to use. 300 notes. Three rules. Every agent in the pipeline checks the second brain before it writes anything.
-
-I ran this on a real pipeline. Before the second brain: one fake fact every 12 outputs, confidence 0.94, validators happy. After: zero fake facts across 300 runs. The overhead is 20 milliseconds per step.
-
-This talk shows how the second brain works, why it beats prompting, and how to wire it into any framework you already use. LangGraph, CrewAI, Claude Code, does not matter. Live demo included: I plant a fake fact, the second brain blocks it, the final report stays clean.
-
-You leave with the code.<a class="schedule-abstract-read-more" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">17:30</h4>
-              <div class="profile">
-                <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img class="profile-image rounded-circle mb-2" src="../speakers/Vasu Raj Jain.png" alt=""></a>
-                <div class="name">Vasu Raj Jain</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">AI and computer vision in media</a>
-              </h3>
-              <div class="location mb-3">Amazon</div>
-              <div class="desc schedule-abstract">Practical applications of content classification and automation<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">18:00</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -1113,40 +941,12 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           <tr>
             <td class="time-cell">09:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: Decision Intelligence under Uncertainty with Generative AI</a>
-              <div class="speaker-info">Bart Czernicki <span class="affiliation">• Microsoft</span></div>
+              <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: TBD</a>
+              <div class="speaker-info">Uma Mukkara <span class="affiliation">• Harness</span></div>
 
             </td>
           </tr>
@@ -1162,7 +962,27 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
 
           <tr>
-            <td class="time-cell merged-cell">09:30</td>
+            <td class="time-cell">09:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Turn It Off Without Breaking It: Safe Orchestration of AWS Environments</a>
+              <div class="speaker-info">Vignesh Kumar S <span class="affiliation">• GuhaTek</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">10:00</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Coffee break
@@ -1181,31 +1001,11 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
 
           <tr>
-            <td class="time-cell">10:00</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Everybody lies but data doesn't: the rise of Dr AI-House</a>
-              <div class="speaker-info">Maciej Szymkowski <span class="affiliation">• Future Processing</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
             <td class="time-cell">10:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Scaled approaches to managing AI workloads</a>
-              <div class="speaker-info">Max Saltonstall & Salim Virji <span class="affiliation">• Datadog & Google</span></div>
+              <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">AI Agents: The Next Evolution in DevOps and SRE Workflows</a>
+              <div class="speaker-info">Vishal Alhat <span class="affiliation">• AWS</span></div>
 
             </td>
           </tr>
@@ -1224,8 +1024,8 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
             <td class="time-cell">11:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Your LLM Doesn't Know What 'ARR' Means (Yet): A survey of semantic layers</a>
-              <div class="speaker-info">Jinlin He & Rob Bajra <span class="affiliation">• Databricks</span></div>
+              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">From Idle to Invisible: Eliminating GPU Waste with Kubernetes-Native Scale-to-Zero</a>
+              <div class="speaker-info">Raman Tehlan & Shubham Rai <span class="affiliation">• Zurich Lab & Truefoundry</span></div>
 
             </td>
           </tr>
@@ -1244,8 +1044,8 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
             <td class="time-cell">11:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Beyond IAM: Building the Accountability Layer for Autonomous Agents</a>
-              <div class="speaker-info">Drew Wilkins & Syed Abbas <span class="affiliation">• Bindable AI</span></div>
+              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Choosing the right database: Why ClickHouse has become the standard for storing observability data</a>
+              <div class="speaker-info">Soham Chakraborty & Bikram Debnath <span class="affiliation">• Sematext & IBM</span></div>
 
             </td>
           </tr>
@@ -1261,7 +1061,27 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
 
           <tr>
-            <td class="time-cell merged-cell">12:00</td>
+            <td class="time-cell">12:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Debugging Knowledge Is Infrastructure Too</a>
+              <div class="speaker-info">Pratik Mahalle <span class="affiliation">• DrDroid</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">12:30</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Lunch & networking
@@ -1280,31 +1100,11 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
 
           <tr>
-            <td class="time-cell">13:00</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Human-in-the-Loop UI Design for Generative AI Systems</a>
-              <div class="speaker-info">Sonali Priya <span class="affiliation">• LB Networks</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
             <td class="time-cell">13:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Imperfect Is Fine (When It’s You)</a>
-              <div class="speaker-info">Lev Andelman <span class="affiliation">• TeraSky</span></div>
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Moving from Telemetry Signal Correlation to Graph-Driven AI based RCA</a>
+              <div class="speaker-info">Vivek Anandaraman <span class="affiliation">• Cloudelu Labs</span></div>
 
             </td>
           </tr>
@@ -1323,8 +1123,8 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
             <td class="time-cell">14:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">From Prompt to Production</a>
-              <div class="speaker-info">Anubha Kabra <span class="affiliation">• Bloomberg</span></div>
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">AIOps Day-to-Day: When AI Fixes Faster Than Humans (and When It Doesn't)</a>
+              <div class="speaker-info">Neel Shah <span class="affiliation">• StackGen</span></div>
 
             </td>
           </tr>
@@ -1340,147 +1140,7 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
 
           <tr>
-            <td class="time-cell">14:30</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Beyond Prompts: Context Architecture for Reliable LLM Systems  </a>
-              <div class="speaker-info">Chrys Li <span class="affiliation">• TAILORU Collective</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
-            <td class="time-cell">15:00</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">The Missing Layer in Agentic AI: Governance</a>
-              <div class="speaker-info">Juan Petter <span class="affiliation">• ARF</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
-            <td class="time-cell">15:30</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Gemma4 Tips and Tricks</a>
-              <div class="speaker-info">William McLean <span class="affiliation">• Glitnir Ticketing</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
-            <td class="time-cell">16:00</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Stop Paying Opus Prices for Haiku Problems</a>
-              <div class="speaker-info">Dor Amir <span class="affiliation">• Nadir</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
-            <td class="time-cell">16:30</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Your AI Agent Has Notes</a>
-              <div class="speaker-info">Michael Carroll <span class="affiliation">• Coolhand Labs</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
-            <td class="time-cell">17:00</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">Your AI Is Making Things Up. Here Is How to Stop It.</a>
-              <div class="speaker-info">Vanchhit Khare <span class="affiliation">• M&T Bank</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
-            <td class="time-cell">17:30</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">AI and computer vision in media</a>
-              <div class="speaker-info">Vasu Raj Jain <span class="affiliation">• Amazon</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
-            <td class="time-cell merged-cell">18:00</td>
+            <td class="time-cell merged-cell">14:30</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Wrap up
@@ -1536,21 +1196,21 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Anubha Kabra.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Neel Shah.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Anubha Kabra</h5>
+            <h5 class="card-title mb-2">Neel Shah</h5>
             <div class="card-text mb-3">
-              <div class="meta">Bloomberg</div>
+              <div class="meta">StackGen</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Anubha_Kabra_Bloomberg_From_Prompt_to_Production#speakers-section" class="event-read-more-btn">Read more</a>
+              <a href="./Neel_Shah_StackGen_AIOps_DaytoDay_When_AI_Fixes_Faster_Than_Humans_and_When_It_Doesnt#speakers-section" class="event-read-more-btn">Read more</a>
               
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/anubha-kabra/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/neel-shah-07460218a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1562,21 +1222,21 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img src="../speakers/Bart Czernicki.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Pratik Mahalle.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Bart Czernicki</h5>
+            <h5 class="card-title mb-2">Pratik Mahalle</h5>
             <div class="card-text mb-3">
-              <div class="meta">Microsoft</div>
+              <div class="meta">DrDroid</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Bart_Czernicki_Microsoft_Keynote_Decision_Intelligence_under_Uncertainty_with_Generative_AI#speakers-section" class="event-read-more-btn">Read more</a>
+              <a href="./Pratik_Mahalle_DrDroid_Debugging_Knowledge_Is_Infrastructure_Too#speakers-section" class="event-read-more-btn">Read more</a>
               
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/bartczernicki/ "><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mahalle-pratik/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1588,21 +1248,21 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img src="../speakers/Chrys Li.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img src="../speakers/Raman Tehlan & Shubham Rai.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Chrys Li</h5>
+            <h5 class="card-title mb-2">Raman Tehlan<br>&amp; Shubham Rai</h5>
             <div class="card-text mb-3">
-              <div class="meta">TAILORU Collective</div>
+              <div class="meta">Zurich Lab & Truefoundry</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Chrys_Li_TAILORU_Collective_Beyond_Prompts_Context_Architecture_for_Reliable_LLM_Systems__#speakers-section" class="event-read-more-btn">Read more</a>
+              <a href="./Raman_Tehlan__Shubham_Rai_Zurich_Lab__Truefoundry_From_Idle_to_Invisible_Eliminating_GPU_Waste_with_#speakers-section" class="event-read-more-btn">Read more</a>
               
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/chrysli/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://linkedin.com/in/ramantehlan/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1614,21 +1274,47 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img src="../speakers/Dor Amir.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img src="../speakers/Soham Chakraborty & Bikram Debnath.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Dor Amir</h5>
+            <h5 class="card-title mb-2">Soham Chakraborty<br>&amp; Bikram Debnath</h5>
             <div class="card-text mb-3">
-              <div class="meta">Nadir</div>
+              <div class="meta">Sematext & IBM</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Dor_Amir_Nadir_Stop_Paying_Opus_Prices_for_Haiku_Problems#speakers-section" class="event-read-more-btn">Read more</a>
+              <a href="./Soham_Chakraborty__Bikram_Debnath_Sematext__IBM_Choosing_the_right_database_Why_ClickHouse_has_becom#speakers-section" class="event-read-more-btn">Read more</a>
               
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/dor-amir-07a35155/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/soham-chakraborty-31136514/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/debnathbikram/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img src="../speakers/Uma Mukkara.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Uma Mukkara</h5>
+            <div class="card-text mb-3">
+              <div class="meta">Harness</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Uma_Mukkara_Harness_Keynote_TBD#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/uma-mukkara/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1640,73 +1326,21 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img src="../speakers/Drew Wilkins & Syed Abbas.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img src="../speakers/Vignesh Kumar S.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Drew Wilkins<br>&amp; Syed Abbas</h5>
+            <h5 class="card-title mb-2">Vignesh Kumar S</h5>
             <div class="card-text mb-3">
-              <div class="meta">Bindable AI</div>
+              <div class="meta">GuhaTek</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Drew_Wilkins__Syed_Abbas_Bindable_AI_Beyond_IAM_Building_the_Accountability_Layer_for_Autonomous_Age#speakers-section" class="event-read-more-btn">Read more</a>
+              <a href="./Vignesh_Kumar_S_GuhaTek_Turn_It_Off_Without_Breaking_It_Safe_Orchestration_of_AWS_Environments#speakers-section" class="event-read-more-btn">Read more</a>
               
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/wilkins/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/syed-abbas-196b722/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img src="../speakers/Jinlin He & Rob Bajra.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Jinlin He<br>&amp; Rob Bajra</h5>
-            <div class="card-text mb-3">
-              <div class="meta">Databricks</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Jinlin_He__Rob_Bajra_Databricks_Your_LLM_Doesnt_Know_What_ARR_Means_Yet_A_survey_of_semantic_layers#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/jinlin-he/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/robinbajra/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img src="../speakers/Juan Petter.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Juan Petter</h5>
-            <div class="card-text mb-3">
-              <div class="meta">ARF</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Juan_Petter_ARF_The_Missing_Layer_in_Agentic_AI_Governance#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/petterjuan/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vigneshlinkdin/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1718,21 +1352,21 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Lev Andelman.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img src="../speakers/Vishal Alhat.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Lev Andelman</h5>
+            <h5 class="card-title mb-2">Vishal Alhat</h5>
             <div class="card-text mb-3">
-              <div class="meta">TeraSky</div>
+              <div class="meta">AWS</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Lev_Andelman_TeraSky_Imperfect_Is_Fine_When_Its_You#speakers-section" class="event-read-more-btn">Read more</a>
+              <a href="./Vishal_Alhat_AWS_AI_Agents_The_Next_Evolution_in_DevOps_and_SRE_Workflows#speakers-section" class="event-read-more-btn">Read more</a>
               
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/levandelman/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vishalalhat"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1744,177 +1378,21 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img src="../speakers/Maciej Szymkowski.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Vivek Anandaraman.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Maciej Szymkowski</h5>
+            <h5 class="card-title mb-2">Vivek Anandaraman</h5>
             <div class="card-text mb-3">
-              <div class="meta">Future Processing</div>
+              <div class="meta">Cloudelu Labs</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Maciej_Szymkowski_Future_Processing_Everybody_lies_but_data_doesnt_the_rise_of_Dr_AIHouse#speakers-section" class="event-read-more-btn">Read more</a>
+              <a href="./Vivek_Anandaraman_Cloudelu_Labs_Moving_from_Telemetry_Signal_Correlation_to_GraphDriven_AI_based_RCA#speakers-section" class="event-read-more-btn">Read more</a>
               
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/maciej-szymkowski-ph-d-75481a228/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img src="../speakers/Max Saltonstall & Salim Virji.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Max Saltonstall<br>&amp; Salim Virji</h5>
-            <div class="card-text mb-3">
-              <div class="meta">Datadog & Google</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Max_Saltonstall__Salim_Virji_Datadog__Google_Scaled_approaches_to_managing_AI_workloads#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/maxsaltonstall/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/lasagnaboy/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12"><img src="../speakers/Michael Carroll.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Michael Carroll</h5>
-            <div class="card-text mb-3">
-              <div class="meta">Coolhand Labs</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Michael_Carroll_Coolhand_Labs_Your_AI_Agent_Has_Notes#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/michaelscottcarroll/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Sonali Priya.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Sonali Priya</h5>
-            <div class="card-text mb-3">
-              <div class="meta">LB Networks</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Sonali_Priya_LB_Networks_HumanintheLoop_UI_Design_for_Generative_AI_Systems#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://linkedin.com/in/priyasonali"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13"><img src="../speakers/Vanchhit Khare.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Vanchhit Khare</h5>
-            <div class="card-text mb-3">
-              <div class="meta">M&T Bank</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Vanchhit_Khare_MT_Bank_Your_AI_Is_Making_Things_Up_Here_Is_How_to_Stop_It#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vkhare0522/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img src="../speakers/Vasu Raj Jain.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Vasu Raj Jain</h5>
-            <div class="card-text mb-3">
-              <div class="meta">Amazon</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Vasu_Raj_Jain_Amazon_AI_and_computer_vision_in_media#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vasujain00/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img src="../speakers/William McLean.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">William McLean</h5>
-            <div class="card-text mb-3">
-              <div class="meta">Glitnir Ticketing</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./William_McLean_Glitnir_Ticketing_Gemma4_Tips_and_Tricks#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/xbill/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vivek-anandaraman"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -2032,52 +1510,6 @@ You leave with the code.<a class="schedule-abstract-read-more" href="#modal-spea
 </style>
 
 
-<!-- Modal Speaker 1 -->
-<div class="modal modal-speaker modal-speaker-1" id="modal-speaker-1" tabindex="-1" role="dialog" aria-labelledby="speaker-1-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Maciej Szymkowski.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Maciej Szymkowski</h2>
-                          <div class="meta mb-2">Future Processing</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/maciej-szymkowski-ph-d-75481a228/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Everybody lies but data doesn't: the rise of Dr AI-House</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>“Don't worry, most of you could be cured by a monkey with an aspirin” - Dr. Gregory House’s legendary cynicism used to target patient incompetence, but in 2026, it’s time to ask: should that monkey be replaced by an AI agent? In this session, we dive deep into the deployment of AI and classical ML across the biomedical and medical pipelines. We’ll skip the hype and look at the architectures. In Computer Vision we will check why RF-DETR is consistently outperforming YOLO in liver MRI and CT segmentation and detection of pathological changes. On the other hand, we will also consider Clinical NLP case where we leverage LLMs (Gemini, GPT, Bielik and Qwen) equipped with custom inference logic to parse patient interviews. We will also take a deeper look at drug discovery. We will observe how utilizing a multi-modal stack of VLMs and Vision models can accelerate the R&amp;D lifecycle in that area. The presentation will be concluded by answering the ultimate question: Has the "Silicon Dr House" already arrived, or are we still just hallucinating the cure?</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Maciej Szymkowski holds a PhD in Computer Science. Since April 2025, he has been working at Future Processing as a Senior Machine Learning Engineer. Previously, he was affiliated with Bialystok University of Technology (Faculty of Computer Science, 2018–2026), Warsaw University of Technology (Faculty of Electronics and Information Technology, 2021–2022), and AGH University of Science and Technology in Cracow (Faculty of Physics and Applied Computer Science, 2021–2022).
-He has also gained experience as a researcher on diverse projects and as a software developer and engineer in multiple companies, including SoftServe, Symmetra, Transition Technologies, and Hemolens Diagnostics. From 2022 to 2024, he worked at the Łukasiewicz Research Network, Poznan Institute of Technology, where he served as Head of the AI Development section.
-Maciej Szymkowski is the author or co author of more than 45 research papers published in JCR journals, book chapters, and international conference proceedings. His primary research interests lie in computer vision, particularly in medicine and transport, as well as Vision Language Models, Large Language Models, and machine learning algorithms.
-In his free time, he enjoys expanding his knowledge, taking long walks, reading books, and watching soccer, basketball, and hockey. He is a fan of Legia Warsaw, Real Madrid, the New York Knicks, and the Pittsburgh Penguins.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
 <!-- Modal Speaker 2 -->
 <div class="modal modal-speaker modal-speaker-2" id="modal-speaker-2" tabindex="-1" role="dialog" aria-labelledby="speaker-2-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -2087,25 +1519,25 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Max Saltonstall & Salim Virji.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vishal Alhat.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Max Saltonstall & Salim Virji</h2>
-                          <div class="meta mb-2">Datadog & Google</div>
+                          <h2 class="name mb-2">Vishal Alhat</h2>
+                          <div class="meta mb-2">AWS</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/maxsaltonstall/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vishalalhat"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/lasagnaboy/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Scaled approaches to managing AI workloads</div>
+              <div class="talk-title-bar">AI Agents: The Next Evolution in DevOps and SRE Workflows</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>New model? New customers? Both??? Your AI workloads are constantly changing, both inputs and outputs, and you need new ways to track success. We will explain how you can do evals at scale, track evals-as-code, and proper experimentation. Join experts from different large-scale SaaS providers to learn how you can evolve, track and constantly improve your measuring and monitoring of AI systems in production.</p></p>
+                <p><p>Site Reliability Engineering and DevOps teams are drowning in alerts, incidents, and repetitive tasks. What if AI agents could be your intelligent teammates, not just another tool in your stack? This talk explores the practical integration of AI agents into SRE and DevOps workflows, moving beyond hype to real-world implementation patterns. We'll examine how autonomous agents can transform incident response, automate runbook execution, and provide intelligent context during outages—all while maintaining the reliability standards SREs demand. Through live demonstrations and battle-tested patterns, you'll learn how to architect agent-based systems that integrate with your existing observability stack, handle multi-step troubleshooting workflows, and make decisions under pressure. We'll also explore AI DevOps Agent capabilities and how it helps teams reduce MTTR, automate toil, and scale operational excellence. Whether you're managing Kubernetes clusters, distributed systems, or cloud infrastructure, you'll leave with actionable strategies to augment your team with AI agents that actually work.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2113,8 +1545,7 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p><a href="https://www.linkedin.com/in/maxsaltonstall/">Max Saltonstall</a> tells stories about the Cloud, how to tell where it’s working (or not), and what diverse solutions our customers have created. He’s part of Datadog’s Advocacy team, with a passion for storytelling, narrative and dad jokes. Max loves to juggle, eat new foods and play games of all types. He lives in New York City with his partner and two children.</p>
-<p><a href="https://www.linkedin.com/in/lasagnaboy/">Salim Virji</a> develops reliable engineering practices and processes for Google’s SRE organization, and has built consensus and storage services for Google infrastructure. Salim’s interests include distributed systems and machine learning. He has contributed to several books on SRE, including <a href="https://sre.google/workbook/table-of-contents/">The Site Reliability Workbook</a> and <a href="https://www.alex-hidalgo.com/the-slo-book">Implementing Service Level Objectives</a>. Salim received an AB in Classics from the University of Chicago and is a New York City Master Composter.</p></p>
+                <p><p>Vishal is a Developer Advocate specializing in DevOps, MLOps, Cloud Security, and Generative AI. He helps developers build secure and responsible AI applications while scaling AI-driven innovation with zero-trust approaches. Vishal conducts hands-on workshops across the APJC region, mentors AWS community members, and speaks at major conferences on DevSecOps, MLOps, and secure GenAI application development. He's passionate about making complex technologies accessible and practical for engineering teams.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2131,27 +1562,25 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Jinlin He & Rob Bajra.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Raman Tehlan & Shubham Rai.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Jinlin He & Rob Bajra</h2>
-                          <div class="meta mb-2">Databricks</div>
+                          <h2 class="name mb-2">Raman Tehlan & Shubham Rai</h2>
+                          <div class="meta mb-2">Zurich Lab & Truefoundry</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/jinlin-he/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://linkedin.com/in/ramantehlan/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/robinbajra/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Your LLM Doesn't Know What 'ARR' Means (Yet): A survey of semantic layers</div>
+              <div class="talk-title-bar">From Idle to Invisible: Eliminating GPU Waste with Kubernetes-Native Scale-to-Zero</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>A semantic layer is a business translation layer that sits between your data and your data consumers (like human users or AI agents).</p>
-<p>A semantic layer is critical for AI agents because it condenses and standardizes business logic so that generic LLMs can better understand your business. Traditionally, semantic layer was embedded within a BI tool and was created manually. But as AI agents become the primary way of retrieving information, the process of building semantic layers needs to be scalable and semantic layers need to be decoupled from downstream tools.</p>
-<p>In this talk, we explore a few common approaches to building AI friendly semantic layers.</p></p>
+                <p><p>GPUs are among the most expensive resources in Kubernetes clusters, and many devs forget to shut it down after use or they remain idle when no traffic in dev. One GPU left on by mistake can drain $6000 a month. We wanted to auto shut down GPUs when not in use. While tools like Knative and KEDA offer scale-to-zero, we found their tradeoffs not fit for our use-case. Knative requires adopting a different application model, and KEDA's HTTP-Addon stay in the request path, increasing coupling. In contrast, our approach required no infrastructure rewrites, just a single CRD, and completely removes itself from the traffic path once workloads are active. In this talk, we share how we reduced GPU waste by designing a open source and native scale-to-zero system called KubeElasti. We break down the architectural decisions behind it, compare them explicitly with existing scale-to-zero models, and how you can use it in your own clusters to scale applications to 0, specially in dev environments.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2159,8 +1588,8 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p><a href="">Jinlin He</a> is a Data scientist turned Solutions Architect at Databricks with 6+ years in ML/AI engineering and pre-sales. She enjoys the intersection of systematic problem solving and open-ended search space in technical sales.</p>
-<p>Rob Bajra is a Solutions Architect with Databricks based in New York City. Rob specializes at the intersection of agents and data apps. With a background in AI engineering and data science, Rob has led the development of influencer marketplaces, digital twins and dynamic pricing systems. Rob has previously worked as an AI Engineer at JetBlue Airways and Data Scientist at Southwest Airlines.</p></p>
+                <p><p>Raman Tehlan is a Cloud Native Consultant at Zurich Lab with over five years of experience building and operating distributed systems at scale. His work focuses on Kubernetes, cloud infrastructure, and developer platforms, with an emphasis on practical, production-ready solutions. He is also an active community contributor and an organizer of PyData Delhi, where he helps foster knowledge sharing around data, systems, and open-source technologies.
+Shubham Rai is a Staff Software Engineer at TrueFoundry with 10 years of experience building Kubernetes and distributed systems. A contributor to KubeElasti, he focuses on reliability, cost efficiency, and DR at scale, sharing practical insights from real production systems.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2177,26 +1606,25 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Drew Wilkins & Syed Abbas.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Soham Chakraborty & Bikram Debnath.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Drew Wilkins & Syed Abbas</h2>
-                          <div class="meta mb-2">Bindable AI</div>
+                          <h2 class="name mb-2">Soham Chakraborty & Bikram Debnath</h2>
+                          <div class="meta mb-2">Sematext & IBM</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/wilkins/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/soham-chakraborty-31136514/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/syed-abbas-196b722/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/debnathbikram/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Beyond IAM: Building the Accountability Layer for Autonomous Agents</div>
+              <div class="talk-title-bar">Choosing the right database: Why ClickHouse has become the standard for storing observability data</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Autonomous AI agents are no longer operating in isolation. As ecosystems built on MCP, A2A, and similar agent protocols enable agents to collaborate across tools, services, and organizational boundaries, traditional IAM models are starting to show their limits. Identity and access control alone cannot answer questions around accountability, traceability, delegated decision-making, or responsibility when autonomous systems interact with each other at scale.</p>
-<p>This session explores the emerging accountability gap in modern agent architectures and examines what governance needs to look like once agents gain autonomy, interoperability, and the ability to trigger actions across multiple systems. We will discuss practical challenges around auditability, trust boundaries, policy enforcement, and operational oversight in production-grade AI environments, along with architectural approaches for building accountability layers that extend beyond conventional IAM.</p></p>
+                <p><p>Observability data is hostile to general-purpose databases. Signals share a common profile: high write throughput, massive cardinality, time-series access patterns, and queries that scan billions of rows expecting sub-second answers. Most databases buckle under this combination. ClickHouse doesn't — but understanding why requires going deeper. In this session, we'll walk through the technical fundamentals that make ClickHouse uniquely suited for observability workloads: columnar storage and vectorised execution, the MergeTree family and TTL-based tiering, sparse indexing for time-range scans, and native ZSTD compression that routinely achieves 10–20× ratios on telemetry data. We will briefly touch the operational aspects of ClickHouse like shard topology and Replication. At the end of the session, the audience will leave with the takeaway of how to build and operate storage backend for modern observability data at scale.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2204,8 +1632,8 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p><a href="https://www.linkedin.com/in/wilkins/">Drew Wilkins</a> is CEO and co-founder of Bindable AI LLC, where he focuses on lifecycle accountability frameworks for autonomous AI agents operating in high-stakes environments. Previously, Drew held senior leadership roles at major advertising and digital experience firms, helping organizations navigate the intersection of technology, customer experience, and organizational change. His career has centered on technology shaping human experience, translating complex technologies into trusted, meaningful systems. Drew has pursued formal AI study through programs at Massachusetts Institute of Technology and Stanford University, and one of his ventures received a U.S. Coast Guard innovation award for applied AI innovation. He holds an MBA from Emory University and a BA in Philosophy from Emory College.</p>
-<p><a href="https://www.linkedin.com/in/syed-abbas-196b722/">Syed Abbas</a> is a Senior Business and Integration Architect who specializes in simplifying complex technology. He brings 20 years of experience as a Solutions and Data Architect, including 16 years delivering large-scale enterprise programs across the automotive, pharmaceutical, biomedical, and manufacturing sectors. Syed’s background spans SAP and enterprise integration platforms, identity protocols, and large-scale data architecture, now applied to production-grade AI agents and AI security research. He holds a B.S. in Computer Science.</p></p>
+                <p><p>Soham Chakraborty is a senior devops engineer at Sematext. He has spoken at conferences like Config Management Camp, DevOpsDays, SREDay, KCD among others. He also helps to organize local meetups and events and have previously worked as an organizer of AWS Community Day, Global Azure Kolkata among others
+Bikram Debnath is an Advisory Software Engineer at IBM Labs, 3× Patent Holder, and innovator in telemetry and distributed systems. Passionate about Observability, APM, IoT, and Automotive solutions. Skilled in Microservices, Kubernetes, Java, Kafka, and modern data stacks.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2222,25 +1650,25 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Sonali Priya.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Pratik Mahalle.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Sonali Priya</h2>
-                          <div class="meta mb-2">LB Networks</div>
+                          <h2 class="name mb-2">Pratik Mahalle</h2>
+                          <div class="meta mb-2">DrDroid</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://linkedin.com/in/priyasonali"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mahalle-pratik/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Human-in-the-Loop UI Design for Generative AI Systems</div>
+              <div class="talk-title-bar">Debugging Knowledge Is Infrastructure Too</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Generative AI and large language models are rapidly transforming how enterprise user interfaces are conceived, prototyped, and refined. While these systems accelerate exploration and automate repetitive design tasks, they also introduce new challenges in preserving human judgment, design intent, and organizational brand consistency. This session examines emerging human-in-the-loop frameworks that position LLMs as collaborators rather than replacements for expert designers. Drawing on real-world enterprise UX patterns, the talk outlines how AI-generated outputs can be systematically evaluated to maintain usability, accessibility, and human-centered design principles. It highlights approaches to ensuring that generative variations remain aligned with brand guidelines, interaction models, and product standards—especially in regulated or high-stakes environments. The session further explores workflow models for integrating generative AI into UI design processes, including collaborative review loops, intent-preserving prompt strategies, and safeguards against drift in accessibility or experience coherence. By comparing the strengths of human intuition with the scale and speed of LLM-driven systems, attendees will gain clarity on where AI meaningfully accelerates design iteration—and where human oversight remains essential.</p></p>
+                <p><p>Every team has an engineer who makes on-call look easy. They know the service that quietly degrades every Monday morning, the log pattern that precedes a cascade, and which alert has been firing incorrectly since the 2023 migration. When they leave, MTTR doubles and not because anything broke, but because the knowledge that made fast debugging possible was never captured. This talk is about making incident expertise durable. We cover how to extract the decision patterns that live in senior engineers' heads, encode them into investigation workflows that surface automatically during incidents, and measure whether the transfer is working. We walk through what worked, what created new toil (the "automated runbook" trap), and one incident where the system suggested the wrong root cause and why that was still a net win and more</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2248,7 +1676,7 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Sonali Priya is a Creative Design Director based in St. Louis, Missouri, specializing in building purposeful, scalable, and inclusive digital experiences at the intersection of design, development, and systems thinking. With over eight years of experience in product design and full-stack engineering, she has led multidisciplinary teams to deliver accessible, high-performance solutions for enterprise clients worldwide. Currently leading design at LB Networks, a global provider of network monitoring and optimization tools, Sonali drives platform-wide design initiatives, collaborates with stakeholders, and mentors cross-functional teams. She architects and evolves design systems to ensure consistency, accessibility, and scalability across products. Her career progression from Software Developer to Software Team Lead to Creative Design Director enables her to bridge technical depth with design strategy. She has led modernization efforts, improved engineering workflows, and contributed to development using React, TypeScript, PHP, MySQL, and Node.js. Sonali has delivered key initiatives including the Business Service Portal and OcularIP UI modernization, enhancing performance, usability, and accessibility.</p></p>
+                <p><p>Pratik has been in the observability space for more than a year now. With a background spanning SRE and platform engineering, he focuses on OpenTelemetry in production, Kubernetes fleet operations. He is an active open source contributor and member at Opentelemetry.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2265,26 +1693,25 @@ In his free time, he enjoys expanding his knowledge, taking long walks, reading 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Lev Andelman.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vivek Anandaraman.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Lev Andelman</h2>
-                          <div class="meta mb-2">TeraSky</div>
+                          <h2 class="name mb-2">Vivek Anandaraman</h2>
+                          <div class="meta mb-2">Cloudelu Labs</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/levandelman/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vivek-anandaraman"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Imperfect Is Fine (When It’s You)</div>
+              <div class="talk-title-bar">Moving from Telemetry Signal Correlation to Graph-Driven AI based RCA</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Humans hallucinate memories, forget decisions, and confidently state wrong facts - and we built entire civilizations around it. Yet when AI does the same, we call it broken. 
-This talk uses cognitive science, live audience experiments, and real-world engineering failures to expose the double standard killing your AI adoption. You’ll leave with a practical framework: validate the output, not the process - and stop demanding perfection from AI that you never demanded from yourself.</p></p>
+                <p><p>Modern production environments span Kubernetes, VMs, serverless, and event-driven systems, yet incident response still relies on manually stitching together dashboards, traces, and logs. While OpenTelemetry improves signal collection, it does not provide a consistent way to model dependencies across services, infrastructure, and asynchronous components. As a result, SREs spend valuable time correlating signals instead of identifying the root cause. This talk presents a graph-driven RCA approach built on a normalized observability layer that converts telemetry into relationships between services, infrastructure, and runtime events. Instead of treating traces, logs, and metrics independently, we derive a dependency graph enriched with time-based observations and health signals. This allows failures to be analyzed as propagation paths across systems rather than isolated alerts. We apply this approach to real-world scenarios across Kubernetes microservices, VM-based workloads, hybrid cloud environments, serverless platforms, and asynchronous systems such as Kafka. The graph highlights cascading failures, dependency latency, and hidden bottlenecks that are difficult to detect using traditional dashboards. We compare this workflow with trace-centric and metrics-first investigations, focusing on time-to-root-cause and operational effort during incidents. Attendees will learn how to build telemetry normalization layers, derive dependency graphs from observability data, and use graph-based reasoning to accelerate incident response. The session focuses on practical SRE workflows, design tradeoffs, and lessons learned from applying graph-driven RCA in distributed systems.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2292,7 +1719,7 @@ This talk uses cognitive science, live audience experiments, and real-world engi
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Lev Andelman is a Co-Founder and CTO at TeraSky Group with over 15 years of experience designing and managing large-scale production environments. He specializes in cloud, DevOps, and infrastructure across Unix/Linux and Windows systems, with a track record of leading engineering teams and building robust R&amp;D, QA, and production platforms.</p></p>
+                <p><p>Founder of from-dev-to-ops Chennai based devops Community. Help Engineering teams implement Observability and Reliability Solutions.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2309,35 +1736,25 @@ This talk uses cognitive science, live audience experiments, and real-world engi
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Anubha Kabra.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Neel Shah.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Anubha Kabra</h2>
-                          <div class="meta mb-2">Bloomberg</div>
+                          <h2 class="name mb-2">Neel Shah</h2>
+                          <div class="meta mb-2">StackGen</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/anubha-kabra/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/neel-shah-07460218a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">From Prompt to Production</div>
+              <div class="talk-title-bar">AIOps Day-to-Day: When AI Fixes Faster Than Humans (and When It Doesn't)</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>AI applications often look impressive in demos but fail once they encounter real-world users, changing data, operational constraints, and governance requirements. Many teams discover these issues only after launch—when trust, reliability, and cost become production blockers rather than research problems.
-This talk introduces a practical framework for evaluating whether an AI system is actually ready to ship. Using a deceptively simple Retrieval-Augmented Generation (RAG) assistant as a running example, we’ll walk through the hidden gaps that prototypes frequently overlook: data freshness, hallucination handling, observability, safety guardrails, latency, scaling costs, ownership, and governance.</p>
-<p>Rather than focusing on model architecture alone, the session reframes AI deployment as a systems and decision-making problem. Attendees will learn five production-readiness lenses that can be applied across AI products and internal enterprise systems:</p>
-<ul>
-<li>Data &amp; Retrieval</li>
-<li>Trust &amp; Safety</li>
-<li>Observability &amp; Debuggability</li>
-<li>Cost &amp; Scale</li>
-<li>Governance &amp; Ownership</li>
-</ul>
-<p>The talk also explores real tradeoffs teams face in practice, including precision vs. coverage, latency vs. cost, and experimentation vs. reliability. By the end of the session, attendees will leave with a concrete checklist and decision framework they can use to evaluate AI pilots, reduce deployment risk, and move from prototype success to production reliability.</p></p>
+                <p><p>In 2026, AIops transforms SRE through 4 maturity stages—alert triage, automated remediation, predictive scaling, self-healing; mapped directly to production ops handling millions of events daily. Custom LLM runbooks crush vendor tools on repetitive toil (Kafka rebalance: 4h→17m MTTR, $0.02/incident, 96% accuracy) but fail spectacularly on complex scenarios (hallucinated kubectl during GPU OOM cascade → 3h outage). OpenTelemetry+LLM pipelines cut alert fatigue 68% but introduced embedding drift surprises. Drawing from 18 months production war stories: LLM etcd recovery runbooks delivered exact curl commands; tool constraints + chaos replay fixed hallucination failures; team velocity dipped 25% during reskilling then recovered +40%. Attendees get copy-paste RAG YAML templates, whitelisted command constraints, drift detection checklists (PSI&gt;0.25), and 6-week LLMOps bootcamp roadmap—targeting &gt;80% automation on top-5 incidents only.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2345,324 +1762,7 @@ This talk introduces a practical framework for evaluating whether an AI system i
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Anubha Kabra is a Senior ML research Engineer at Bloomberg. She is working on trustworthy and production-ready AI agents and systems. Her work focuses on observability, evaluation, and reliability for enterprise-scale LLM agentic applications. She has presented research at major conferences including NeurIPS, ACL, NAACL and works on building practical frameworks for deploying high-stakes AI systems responsibly.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 8 -->
-<div class="modal modal-speaker modal-speaker-8" id="modal-speaker-8" tabindex="-1" role="dialog" aria-labelledby="speaker-8-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Chrys Li.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Chrys Li</h2>
-                          <div class="meta mb-2">TAILORU Collective</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/chrysli/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Beyond Prompts: Context Architecture for Reliable LLM Systems  </div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most LLM failures are not caused by a bad prompt alone. They often emerge from missing, unstable, or poorly structured context: unclear goals, conflicting source material, weak evidence hierarchy, fragmented memory, vague role definitions, and undefined decision boundaries.</p>
-<p>This talk introduces Context Architecture as the missing design layer between prompt engineering, retrieval, evals, governance, and production behavior. We’ll look at how context can be structured as a system: what the model needs to know, what it should prioritize, what it should ignore, how state should be carried forward, and where human judgment needs to remain explicit.</p>
-<p>The session will share a practical framework for designing context packages, behavior constraints, signal flows, and handoff artifacts that make LLM systems more reliable, inspectable, and easier to improve over time. Rather than treating prompts as isolated instructions, the talk reframes context as infrastructure: the layer that shapes how an LLM interprets tasks, reasons through ambiguity, and behaves inside real workflows.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Chrys Li is an AI systems and service design strategist focused on designing intelligent systems inside complex organizations. Her work spans enterprise platforms, regulated environments, AI-enabled products, and large-scale service ecosystems, with a focus on translating ambiguity into structured, build-ready systems.</p>
-<p>She has led systems and experience design initiatives across logistics, healthcare, financial services, telecom, education, enterprise software, and other sectors. More recently, her work has focused on AI behavior, context architecture, human-AI collaboration, and the design of operational frameworks that help teams move from AI experimentation to practical implementation.</p>
-<p>Chrys is an independent consultant where she develops frameworks, workshops, and applied AI methods for product, design, and business teams adapting to AI-era systems.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 9 -->
-<div class="modal modal-speaker modal-speaker-9" id="modal-speaker-9" tabindex="-1" role="dialog" aria-labelledby="speaker-9-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Juan Petter.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Juan Petter</h2>
-                          <div class="meta mb-2">ARF</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/petterjuan/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">The Missing Layer in Agentic AI: Governance</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most teams are moving fast on agents, but very few are governing them well. In production, the real problem is not capability — it is control: how to evaluate risk, bound autonomy, preserve auditability, and keep systems stable under uncertainty. In this talk, I will introduce the architecture behind ARF (Agentic Reliability Framework), a governance layer for agentic infrastructure that converts probabilistic AI outputs into deterministic, auditable decisions. The session explores Bayesian risk scoring, expected-loss decisioning, bounded memory systems, and calibrated escalation mechanisms designed to make autonomous AI survivable inside real enterprise environments.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Juan Petter is an AI Engineer and founder building the Agentic Reliability Framework (ARF), a governance and control plane for agentic infrastructure. His work focuses on making AI systems provably safe, auditable, and operationally viable in production environments. He has experience across cloud infrastructure, technical support, full-stack engineering, and AI systems design.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 10 -->
-<div class="modal modal-speaker modal-speaker-10" id="modal-speaker-10" tabindex="-1" role="dialog" aria-labelledby="speaker-10-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/William McLean.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">William McLean</h2>
-                          <div class="meta mb-2">Glitnir Ticketing</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/xbill/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Gemma4 Tips and Tricks</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Overview of the latest Gemma4 models from on-device to TPU hosted.
-Tips and tricks for vLLM model serving and a live demo.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>CTO of Glitnir Ticketing.  Google Developer Expert (GDE) for AI/ML and Cloud.<br />
-Amazon Community Builder for AI engineering.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 11 -->
-<div class="modal modal-speaker modal-speaker-11" id="modal-speaker-11" tabindex="-1" role="dialog" aria-labelledby="speaker-11-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Dor Amir.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Dor Amir</h2>
-                          <div class="meta mb-2">Nadir</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/dor-amir-07a35155/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Stop Paying Opus Prices for Haiku Problems</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most AI-native products today are overpaying for LLM usage because they send too many requests to expensive frontier models, even when the task does not require them.</p>
-<p>In this session, I’ll share how LLM routing works in practice: how to classify prompt complexity, route requests across models, and balance cost, latency, and quality without hurting the user experience.</p>
-<p>I’ll also cover the common traps teams run into when building routers, including over-routing to premium models, bad offline evaluation, feedback loops, and the gap between benchmark accuracy and real production quality.</p>
-<p>The goal is to give builders a practical framework they can use to decide when to use cheaper models, when to escalate to stronger models, and how to measure whether the routing system is actually saving money while preserving output quality.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Dor Amir is building Nadir <a href="getnadir.com">getnadir.com</a>, an LLM router that helps AI-native products reduce model costs by routing each request to the right model based on prompt complexity, quality requirements, latency, and cost.</p>
-<p>Dor currently works at Dropbox on the agentic AI team, building AI agents that improve Dropbox experiences. Before Dropbox, he worked as a Senior Machine Learning Engineer on Amazon’s Personalization team, where he focused on applied ML systems. Earlier in his career, he worked across data science, machine learning, and software engineering roles, including ML leadership at Guesty and recommendation ML at Fiverr.</p>
-<p>Dor’s work sits at the intersection of machine learning, LLM infrastructure, and production AI systems. His current focus is helping teams build practical AI agents and LLM routing systems that reduce cost, improve latency, and preserve quality in real-world applications.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 12 -->
-<div class="modal modal-speaker modal-speaker-12" id="modal-speaker-12" tabindex="-1" role="dialog" aria-labelledby="speaker-12-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Michael Carroll.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Michael Carroll</h2>
-                          <div class="meta mb-2">Coolhand Labs</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/michaelscottcarroll/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Your AI Agent Has Notes</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Working with AI agents is turning every IC into a team manager. Yesterday, you were coding. Today? You're delegating tasks, reviewing outputs, debugging reasoning loops, and sweating your monthly token budget. Hate to break it to you, but your AI team has notes about this... and you aren't listening. This talk is about giving your agents a complaint box. I'll walk through the design of a strategy called Wildcard. Wildcard is a flexible, amorphous tool your agents can call when they are stuck to explain what they need. I'll give some solid examples of how Wildcard leveled up the agents that power <a href="https://coolhandlabs.com/">Coolhand Labs</a> by surfacing issues in real time, helping us cut down on loops, token burn, and bad practices. We will implement the tool from scratch in a sample codebase, handle some agentic feedback in real time, and cover a few protips for getting the most out of Wildcard in your agent team. Giving you strategies to coax your agents into providing unfiltered feedback is included in the talk. Processing that feedback emotionally will be on you.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Michael Carroll is the founder of <a href="https://coolhandlabs.com/">Coolhand Labs</a>, which automatically improves AI agents from human &amp; synthetic feedback. Previously, he built RubiconMD (acquired by Oak Street Health) and served as VP of Engineering and Strategic Projects at Teladoc Health, the world's largest telemedicine provider. Michael also publishes <a href="https://everythingengineer.substack.com/">The Everything Engineer</a>, a newsletter about the transition from IC engineering to managing a team of AI agents. When he's not reading his agents' complaints, he's merging the PRs that will generate a fresh batch of them.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 13 -->
-<div class="modal modal-speaker modal-speaker-13" id="modal-speaker-13" tabindex="-1" role="dialog" aria-labelledby="speaker-13-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vanchhit Khare.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Vanchhit Khare</h2>
-                          <div class="meta mb-2">M&T Bank</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vkhare0522/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Your AI Is Making Things Up. Here Is How to Stop It.</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Your AI agent is lying to you. Not on purpose. It just fills in the gaps when it does not know something. It sounds confident. It names real people. It cites papers that do not exist. Your validator says everything is fine.</p>
-<p>Here is what actually stops it: give your agent a second brain.</p>
-<p>Not a bigger model. Not a better prompt. A small, structured knowledge base of facts your agent is allowed to use. 300 notes. Three rules. Every agent in the pipeline checks the second brain before it writes anything.</p>
-<p>I ran this on a real pipeline. Before the second brain: one fake fact every 12 outputs, confidence 0.94, validators happy. After: zero fake facts across 300 runs. The overhead is 20 milliseconds per step.</p>
-<p>This talk shows how the second brain works, why it beats prompting, and how to wire it into any framework you already use. LangGraph, CrewAI, Claude Code, does not matter. Live demo included: I plant a fake fact, the second brain blocks it, the final report stays clean.</p>
-<p>You leave with the code.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Vanchhit Khare is a Salesforce System Architect and software engineer with 10+ years of experience building enterprise systems across banking, AI, and cloud technologies. He currently works at M&amp;T Bank, specializing in Salesforce architecture, Agentic AI, and digital transformation initiatives. Vanchhit is also an active mentor, researcher, and community contributor focused on making complex technology more accessible and human-centered.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 14 -->
-<div class="modal modal-speaker modal-speaker-14" id="modal-speaker-14" tabindex="-1" role="dialog" aria-labelledby="speaker-14-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vasu Raj Jain.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Vasu Raj Jain</h2>
-                          <div class="meta mb-2">Amazon</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vasujain00/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">AI and computer vision in media</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Practical applications of content classification and automation</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Vasu Raj Jain is a Senior Software Development Engineer at Amazon Ads based in Seattle, where he leads large-scale ad serving infrastructure handling high-volume traffic and revenue-critical systems. He specializes in distributed systems, platform foundations, AI infrastructure, and scalable backend engineering. Previously, he worked across Amazon Prime Video personalization and at Barclays in electronic trading systems. He holds a Master’s in Computer Science from the University of Florida and is also active as a mentor through CodePath and ADPList.</p></p>
+                <p><p>Neel helps platform engineers and DevOps teams understand and adopt cloud-native infrastructure through talks, demos, and community building. I organise the CNCF Gandhinagar, HashiCorp UG Gandhinagar, and Google Cloud Gandhinagar communities, and I have spoken at 40+ events, including KubeCon India, PlatformCon, HashiTalks, OpenSearchCon Korea, FOSS ASIA, and LinuxFest Northwest. My core focus areas are Kubernetes, GitOps, IaC with Terraform/Vault, AI-powered DevOps tooling, and observability pipelines. I've mentored 15+ hackathons and open-source programmes. Certifications: GCP DevOps Professional, Azure AZ-104, FinOps Certified Engineer, Terraform Associate, Vault Associate.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2679,25 +1779,25 @@ Amazon Community Builder for AI engineering.</p></p>
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Bart Czernicki.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Uma Mukkara.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Bart Czernicki</h2>
-                          <div class="meta mb-2">Microsoft</div>
+                          <h2 class="name mb-2">Uma Mukkara</h2>
+                          <div class="meta mb-2">Harness</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/bartczernicki/ "><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/uma-mukkara/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Keynote: Decision Intelligence under Uncertainty with Generative AI</div>
+              <div class="talk-title-bar">Keynote: TBD</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Decision making is one of the most sought after skills by executives. With the advent of Generative AI, decision making can be optimized to unlock the full potential of human judgement. This hands-on lab introduces the theory of Decision Intelligence with Generative AI (frame decisions, surface assumptions, evaluate decision quality under uncertainty), then applies GenAI as a structured reasoning process. You will practice many advanced Decision Intelligence GenAI techniques.</p></p>
+                <p><p>Coming soon...</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2705,7 +1805,50 @@ Amazon Community Builder for AI engineering.</p></p>
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Bart Czernicki is a technology leader, executive advisor, and author specializing in cloud, AI, machine intelligence, and decision intelligence. He currently serves as Principal Technical Director and Global Black Belt for Artificial Intelligence at Microsoft, working with strategic customers on generative AI and machine learning transformation initiatives. With more than 25 years in technology and 18 years focused on AI and machine intelligence, Bart combines deep technical expertise with business strategy and enterprise-scale delivery. He is also an author, startup advisor, and active contributor to the global AI community.</p></p>
+                <p><p>Uma Mukkara is Head of Resilience Testing at Harness and founder of ChaosNative. He is a recognized leader in chaos engineering, resilience testing, and cloud native reliability, with deep experience building products and teams across infrastructure and DevOps. Uma is passionate about helping organizations improve system reliability through modern resilience engineering practices.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 1 -->
+<div class="modal modal-speaker modal-speaker-1" id="modal-speaker-1" tabindex="-1" role="dialog" aria-labelledby="speaker-1-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vignesh Kumar S.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Vignesh Kumar S</h2>
+                          <div class="meta mb-2">GuhaTek</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vigneshlinkdin/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Turn It Off Without Breaking It: Safe Orchestration of AWS Environments</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Pre-production environments are often left running 24/7, leading to significant cloud waste—but safely automating their shutdown is more complex than it seems. Naive scheduling approaches can easily break dependencies, introduce inconsistent states, or make recovery unreliable. In this talk, I’ll present a real-world implementation of a scheduled, event-driven orchestration system on AWS that safely scales down and restores an entire pre-production environment. The solution uses EventBridge, Step Functions, and Lambda to coordinate state transitions across EC2, RDS, EBS, and application services. A key focus of this system is safe, state-aware execution. Each operation validates the current resource state before acting, ensuring that actions are effectively idempotent and safe to re-run. The workflow enforces dependency-aware sequencing and uses check/wait patterns to avoid acting on transitional or stale states, reducing the risk of unsafe shutdowns and restarts. Rather than relying on blind automation, this approach treats infrastructure changes as explicit, observable workflows, where failures are surfaced clearly and recovery paths are controlled. I’ll also share lessons learned around handling partial executions, the limitations of manual retry strategies, and why idempotency must be considered beyond individual steps. This session will provide practical insights into building reliable, cost-efficient infrastructure automation, along with design patterns that can be applied to any AWS-based environment.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>I am a Site Reliability Engineer with experience in AWS and cloud-native environments, focusing on platform engineering and infrastructure automation. I have worked extensively with containerized systems using Docker and Kubernetes, along with building and operating CI/CD pipelines, and maintaining infrastructure using Terraform. My work centers on operating and improving existing systems, building reliable infrastructure, enhancing automation workflows, and handling real-world failure scenarios in distributed environments.</p></p>
               </div>
 
           </div><!--//modal-body-->
