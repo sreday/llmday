@@ -272,22 +272,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">Turn It Off Without Breaking It: Safe Orchestration of AWS Environments</h1>
+    <h1 class="section-heading text-center mb-3">Your AI Is Making Things Up. Here Is How to Stop It.</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
-          <img src="../speakers/Vignesh Kumar S.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Vanchhit Khare.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Vignesh Kumar S</h5>
+            <h5 class="card-title mb-2">Vanchhit Khare</h5>
             <div class="card-text mb-3">
-              <div class="meta">GuhaTek</div>
+              <div class="meta">M&T Bank</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vigneshlinkdin/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vkhare0522/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -301,14 +301,19 @@
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Pre-production environments are often left running 24/7, leading to significant cloud waste—but safely automating their shutdown is more complex than it seems. Naive scheduling approaches can easily break dependencies, introduce inconsistent states, or make recovery unreliable. In this talk, I’ll present a real-world implementation of a scheduled, event-driven orchestration system on AWS that safely scales down and restores an entire pre-production environment. The solution uses EventBridge, Step Functions, and Lambda to coordinate state transitions across EC2, RDS, EBS, and application services. A key focus of this system is safe, state-aware execution. Each operation validates the current resource state before acting, ensuring that actions are effectively idempotent and safe to re-run. The workflow enforces dependency-aware sequencing and uses check/wait patterns to avoid acting on transitional or stale states, reducing the risk of unsafe shutdowns and restarts. Rather than relying on blind automation, this approach treats infrastructure changes as explicit, observable workflows, where failures are surfaced clearly and recovery paths are controlled. I’ll also share lessons learned around handling partial executions, the limitations of manual retry strategies, and why idempotency must be considered beyond individual steps. This session will provide practical insights into building reliable, cost-efficient infrastructure automation, along with design patterns that can be applied to any AWS-based environment.</p></p>
+                <p><p>Your AI agent is lying to you. Not on purpose. It just fills in the gaps when it does not know something. It sounds confident. It names real people. It cites papers that do not exist. Your validator says everything is fine.</p>
+<p>Here is what actually stops it: give your agent a second brain.</p>
+<p>Not a bigger model. Not a better prompt. A small, structured knowledge base of facts your agent is allowed to use. 300 notes. Three rules. Every agent in the pipeline checks the second brain before it writes anything.</p>
+<p>I ran this on a real pipeline. Before the second brain: one fake fact every 12 outputs, confidence 0.94, validators happy. After: zero fake facts across 300 runs. The overhead is 20 milliseconds per step.</p>
+<p>This talk shows how the second brain works, why it beats prompting, and how to wire it into any framework you already use. LangGraph, CrewAI, Claude Code, does not matter. Live demo included: I plant a fake fact, the second brain blocks it, the final report stays clean.</p>
+<p>You leave with the code.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>I am a Site Reliability Engineer with experience in AWS and cloud-native environments, focusing on platform engineering and infrastructure automation. I have worked extensively with containerized systems using Docker and Kubernetes, along with building and operating CI/CD pipelines, and maintaining infrastructure using Terraform. My work centers on operating and improving existing systems, building reliable infrastructure, enhancing automation workflows, and handling real-world failure scenarios in distributed environments.</p></p>
+                <p><p>Vanchhit Khare is a Salesforce System Architect and software engineer with 10+ years of experience building enterprise systems across banking, AI, and cloud technologies. He currently works at M&amp;T Bank, specializing in Salesforce architecture, Agentic AI, and digital transformation initiatives. Vanchhit is also an active mentor, researcher, and community contributor focused on making complex technology more accessible and human-centered.</p></p>
               </div>
 
               

@@ -6,55 +6,97 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
   <loc>https://www.llmday.com/</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Uma_Mukkara_Harness_Keynote_TBD</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <loc>https://www.llmday.com/Bart_Czernicki_Microsoft_Keynote_Decision_Intelligence_under_Uncertainty_with_Generative_AI</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Vignesh_Kumar_S_GuhaTek_Turn_It_Off_Without_Breaking_It_Safe_Orchestration_of_AWS_Environments</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <loc>https://www.llmday.com/Maciej_Szymkowski_Future_Processing_Everybody_lies_but_data_doesnt_the_rise_of_Dr_AIHouse</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Vishal_Alhat_AWS_AI_Agents_The_Next_Evolution_in_DevOps_and_SRE_Workflows</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <loc>https://www.llmday.com/Max_Saltonstall__Salim_Virji_Datadog__Google_Scaled_approaches_to_managing_AI_workloads</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Raman_Tehlan__Shubham_Rai_Zurich_Lab__Truefoundry_From_Idle_to_Invisible_Eliminating_GPU_Waste_with_</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <loc>https://www.llmday.com/Jinlin_He__Rob_Bajra_Databricks_Your_LLM_Doesnt_Know_What_ARR_Means_Yet_A_survey_of_semantic_layers</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Soham_Chakraborty__Bikram_Debnath_Sematext__IBM_Choosing_the_right_database_Why_ClickHouse_has_becom</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <loc>https://www.llmday.com/Drew_Wilkins__Syed_Abbas_Bindable_AI_Beyond_IAM_Building_the_Accountability_Layer_for_Autonomous_Age</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Pratik_Mahalle_DrDroid_Debugging_Knowledge_Is_Infrastructure_Too</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <loc>https://www.llmday.com/Sonali_Priya_LB_Networks_HumanintheLoop_UI_Design_for_Generative_AI_Systems</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Vivek_Anandaraman_Cloudelu_Labs_Moving_from_Telemetry_Signal_Correlation_to_GraphDriven_AI_based_RCA</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <loc>https://www.llmday.com/Lev_Andelman_TeraSky_Imperfect_Is_Fine_When_Its_You</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Neel_Shah_StackGen_AIOps_DaytoDay_When_AI_Fixes_Faster_Than_Humans_and_When_It_Doesnt</loc>
-  <lastmod>2026-05-31T11:55:04.300960+00:00</lastmod>
+  <loc>https://www.llmday.com/Anubha_Kabra_Bloomberg_From_Prompt_to_Production</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Chrys_Li_TAILORU_Collective_Beyond_Prompts_Context_Architecture_for_Reliable_LLM_Systems__</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Juan_Petter_ARF_The_Missing_Layer_in_Agentic_AI_Governance</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/William_McLean_Glitnir_Ticketing_Gemma4_Tips_and_Tricks</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Dor_Amir_Nadir_Stop_Paying_Opus_Prices_for_Haiku_Problems</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Michael_Carroll_Coolhand_Labs_Your_AI_Agent_Has_Notes</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Vanchhit_Khare_MT_Bank_Your_AI_Is_Making_Things_Up_Here_Is_How_to_Stop_It</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Vasu_Raj_Jain_Amazon_AI_and_computer_vision_in_media</loc>
+  <lastmod>2026-05-31T12:06:35.564925+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
