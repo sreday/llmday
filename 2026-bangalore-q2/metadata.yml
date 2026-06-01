@@ -22,19 +22,15 @@ rooms:
 - main room
 
 breaks:
-- title: Coffee break
+- title: Snacks
   duration: 30
   comment: Main lobby
   # this decides how many talks in-between this and previous section
   talks_before: 0
-- title: Lunch & networking
-  duration: 60
-  comment: Main lobby
-  talks_before: 4
-- title: Networking & sponsor crawl
+- title: Networking
   duration: 30
   comment: Main lobby
-  talks_before: 4
+  talks_before: 3
 
 sponsors:
   - logo: harness.png
