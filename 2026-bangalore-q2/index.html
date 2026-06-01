@@ -643,7 +643,7 @@
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">single track</span>
       <span class="schedule-meta-divider">•</span>
-      <span class="schedule-meta-item">2PM - 6PM</span>
+      <span class="schedule-meta-item">2PM - 7PM</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">Bangalore, in-person</span>
     </div>
@@ -751,17 +751,17 @@ In this talk, I'll share lessons from working with AI startups across growth and
             <div class="meta">
               <h4 class="time mb-3">16:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/Jones Zachariah Noel N.png" alt=""></a>
-                <div class="name">Jones Zachariah Noel N</div>
+                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/Juhi Singh.png" alt=""></a>
+                <div class="name">Juhi Singh</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Monitoring the Agentic Loop: OTel-Driven Observability for AWS Strands on Lambda</a>
+                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"></a>
               </h3>
-              <div class="location mb-3">New Relic</div>
-              <div class="desc schedule-abstract">As AI evolves from simple chatbots to autonomous agents, the challenge shifts from monitoring single inferences to observing complex "agentic loops." The AWS Strands SDK simplifies this by using a model-driven approach where LLMs plan and execute tools autonomously. However, in a serverless environment like AWS Lambda, these multi-step loops can become a "black box," leading to unpredictable latencies, soaring token costs, and difficult-to-trace hallucinations. In this session, we demonstrate how to instrument AWS Strands agents using OpenTelemetry (OTel) to gain deep visibility into the "thought process" of your AI. We will explore the integration of the AWS Distro for OpenTelemetry (ADOT) with the Strands SDK to capture granular telemetry across agent cycles, tool calls, and LLM reasoning steps.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
+              <div class="location mb-3">Kong</div>
+              <div class="desc schedule-abstract"><a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
               
             </div>
           </div>
@@ -786,17 +786,17 @@ In this talk, I'll share lessons from working with AI startups across growth and
             <div class="meta">
               <h4 class="time mb-3">17:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Vishal Alhat.png" alt=""></a>
-                <div class="name">Vishal Alhat</div>
+                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Sooraj Sanker.png" alt=""></a>
+                <div class="name">Sooraj Sanker</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Stop Building Agent Frameworks: Lessons from 12 Strands Deployments in Production</a>
+                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Stop Rebuilding Context: Memory Tools for LLM Agents</a>
               </h3>
-              <div class="location mb-3">AWS</div>
-              <div class="desc schedule-abstract">Every team I've worked with this year started the same way: someone watched a Cursor demo on a Tuesday, and by Friday they were three weeks into building their own agent framework. By month two, they had a half-finished tool router, a custom retry loop, a memory abstraction nobody understood, and a production incident. I'm an AWS Developer Advocate, and over the last year I've sat with 12 teams shipping agentic systems on Bedrock — from a fintech doing fraud triage to a healthcare team summarizing clinical notes. The teams that shipped on time had one thing in common: they stopped building framework-shaped things and started writing boring, debuggable Python around the Strands SDK. This talk is the contrarian version of "how to build agents." I'll walk through the seven framework anti-patterns I keep seeing (the Tool Registry, the Custom Memory Layer, the Orchestration DSL, and four more), show the production incidents each one caused, and then live-code a multi-tool agent using Strands in under 10 minutes — the same agent two of those 12 teams ended up with after they deleted their framework. You'll leave with: a checklist for spotting "framework drift" in your own codebase, a working Strands agent on GitHub you can fork tonight, and an opinionated answer to "should we build this in LangGraph or Strands or just plain Python?" No slides about the future of AI. No "agentic transformation." Just code, war stories, and the diff between what teams thought they needed and what actually shipped.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
+              <div class="location mb-3">MemexAI.Space</div>
+              <div class="desc schedule-abstract">Every LLM agent prototype starts with the same uncomfortable workaround: rebuild the user's context, stuff more into the prompt, retrieve a few documents, and hope the next turn has enough information. That works for demos, but it breaks down when agents need to return to the same user, remember preferences, reuse shared knowledge, and keep state across sessions. This talk shows a practical memory-tool pattern for LLM agents. We will look at where chat history, prompt stuffing, and ad hoc retrieval fall short, then walk through an explicit memory layer where agents can list, read, write, patch, and search durable memory as part of their normal tool loop. The demo will use MemexAI, an open-source Postgres-backed memory layer, but the goal is to leave attendees with a reusable design pattern they can adapt to LangChain, Vercel AI SDK, LlamaIndex, or their own agent stack. Attendees will learn: - How to separate retrieval, chat history, and durable agent memory. - How to design memory tools with scoped user/shared state, revisions, and inspectable writes. - How to inject memory back into the model context without hiding state inside opaque prompts.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
               
             </div>
           </div>
@@ -805,22 +805,17 @@ In this talk, I'll share lessons from working with AI startups across growth and
             <div class="meta">
               <h4 class="time mb-3">17:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Roshan Piyush.png" alt=""></a>
-                <div class="name">Roshan Piyush</div>
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Jones Zachariah Noel N.png" alt=""></a>
+                <div class="name">Jones Zachariah Noel N</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Rethinking Supply Chain Security in the Age of Agentic AI</a>
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Monitoring the Agentic Loop: OTel-Driven Observability for AWS Strands on Lambda</a>
               </h3>
-              <div class="location mb-3">Harness</div>
-              <div class="desc schedule-abstract">The AI stack is becoming increasingly interconnected. Agents now invoke tools, interact with MCP servers, maintain memory, and coordinate with other agents to complete tasks that were once handled by traditional software systems.
-
-This session examines the new attack surface created by agent ecosystems, tool integrations, memory layers, and autonomous workflows. As AI systems become more interconnected and autonomous, trust extends far beyond code and infrastructure, shaping how agents access tools, retain context, make decisions, and interact with one another. The result is a new set of security and governance challenges that traditional software supply chain models were never designed to address.
-
-From agent frameworks to runtime interactions, this talk provides a security-first view of the emerging AI supply chain and the controls needed to govern it.
-<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              <div class="location mb-3">New Relic</div>
+              <div class="desc schedule-abstract">As AI evolves from simple chatbots to autonomous agents, the challenge shifts from monitoring single inferences to observing complex "agentic loops." The AWS Strands SDK simplifies this by using a model-driven approach where LLMs plan and execute tools autonomously. However, in a serverless environment like AWS Lambda, these multi-step loops can become a "black box," leading to unpredictable latencies, soaring token costs, and difficult-to-trace hallucinations. In this session, we demonstrate how to instrument AWS Strands agents using OpenTelemetry (OTel) to gain deep visibility into the "thought process" of your AI. We will explore the integration of the AWS Distro for OpenTelemetry (ADOT) with the Strands SDK to capture granular telemetry across agent cycles, tool calls, and LLM reasoning steps.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
               
             </div>
           </div>
@@ -828,6 +823,49 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">18:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Vishal Alhat.png" alt=""></a>
+                <div class="name">Vishal Alhat</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Stop Building Agent Frameworks: Lessons from 12 Strands Deployments in Production</a>
+              </h3>
+              <div class="location mb-3">AWS</div>
+              <div class="desc schedule-abstract">Every team I've worked with this year started the same way: someone watched a Cursor demo on a Tuesday, and by Friday they were three weeks into building their own agent framework. By month two, they had a half-finished tool router, a custom retry loop, a memory abstraction nobody understood, and a production incident. I'm an AWS Developer Advocate, and over the last year I've sat with 12 teams shipping agentic systems on Bedrock — from a fintech doing fraud triage to a healthcare team summarizing clinical notes. The teams that shipped on time had one thing in common: they stopped building framework-shaped things and started writing boring, debuggable Python around the Strands SDK. This talk is the contrarian version of "how to build agents." I'll walk through the seven framework anti-patterns I keep seeing (the Tool Registry, the Custom Memory Layer, the Orchestration DSL, and four more), show the production incidents each one caused, and then live-code a multi-tool agent using Strands in under 10 minutes — the same agent two of those 12 teams ended up with after they deleted their framework. You'll leave with: a checklist for spotting "framework drift" in your own codebase, a working Strands agent on GitHub you can fork tonight, and an opinionated answer to "should we build this in LangGraph or Strands or just plain Python?" No slides about the future of AI. No "agentic transformation." Just code, war stories, and the diff between what teams thought they needed and what actually shipped.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">18:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Roshan Piyush.png" alt=""></a>
+                <div class="name">Roshan Piyush</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Rethinking Supply Chain Security in the Age of Agentic AI</a>
+              </h3>
+              <div class="location mb-3">Harness</div>
+              <div class="desc schedule-abstract">The AI stack is becoming increasingly interconnected. Agents now invoke tools, interact with MCP servers, maintain memory, and coordinate with other agents to complete tasks that were once handled by traditional software systems.
+
+This session examines the new attack surface created by agent ecosystems, tool integrations, memory layers, and autonomous workflows. As AI systems become more interconnected and autonomous, trust extends far beyond code and infrastructure, shaping how agents access tools, retain context, make decisions, and interact with one another. The result is a new set of security and governance challenges that traditional software supply chain models were never designed to address.
+
+From agent frameworks to runtime interactions, this talk provides a security-first view of the emerging AI supply chain and the controls needed to govern it.
+<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">19:00</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -858,6 +896,14 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
           </tr>
         </thead>
         <tbody>
+
+
+
+
+
+
+
+
 
 
 
@@ -988,14 +1034,22 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
 
 
 
+
+
           <tr>
             <td class="time-cell">16:00</td>
-            <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Monitoring the Agentic Loop: OTel-Driven Observability for AWS Strands on Lambda</a>
-              <div class="speaker-info">Jones Zachariah Noel N <span class="affiliation">• New Relic</span></div>
 
+
+
+
+
+            <td class="talk-cell">
+              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"></a>
+              <div class="speaker-info">Juhi Singh <span class="affiliation">• Kong</span></div>
             </td>
+
+
           </tr>
 
 
@@ -1031,8 +1085,8 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
             <td class="time-cell">17:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Stop Building Agent Frameworks: Lessons from 12 Strands Deployments in Production</a>
-              <div class="speaker-info">Vishal Alhat <span class="affiliation">• AWS</span></div>
+              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Stop Rebuilding Context: Memory Tools for LLM Agents</a>
+              <div class="speaker-info">Sooraj Sanker <span class="affiliation">• MemexAI.Space</span></div>
 
             </td>
           </tr>
@@ -1051,7 +1105,47 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
             <td class="time-cell">17:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Rethinking Supply Chain Security in the Age of Agentic AI</a>
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Monitoring the Agentic Loop: OTel-Driven Observability for AWS Strands on Lambda</a>
+              <div class="speaker-info">Jones Zachariah Noel N <span class="affiliation">• New Relic</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">18:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Stop Building Agent Frameworks: Lessons from 12 Strands Deployments in Production</a>
+              <div class="speaker-info">Vishal Alhat <span class="affiliation">• AWS</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">18:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Rethinking Supply Chain Security in the Age of Agentic AI</a>
               <div class="speaker-info">Roshan Piyush <span class="affiliation">• Harness</span></div>
 
             </td>
@@ -1068,7 +1162,7 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
 
 
           <tr>
-            <td class="time-cell merged-cell">18:00</td>
+            <td class="time-cell merged-cell">19:00</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Wrap up
@@ -1124,7 +1218,7 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img src="../speakers/Jones Zachariah Noel N.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Jones Zachariah Noel N.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Jones Zachariah Noel N</h5>
             <div class="card-text mb-3">
@@ -1139,6 +1233,32 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
             <ul class="social-list list-inline mb-0">
               
               <li class="list-inline-item"><a  href="https://www.linkedin.com/in/goabiaryan/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img src="../speakers/Juhi Singh.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Juhi Singh</h5>
+            <div class="card-text mb-3">
+              <div class="meta">Kong</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Juhi_Singh_Kong#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/sjuhi/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1176,7 +1296,7 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Roshan Piyush.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Roshan Piyush.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Roshan Piyush</h5>
             <div class="card-text mb-3">
@@ -1228,6 +1348,32 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
 
       <div class="col mb-4">
         <div class="card rounded">
+          <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img src="../speakers/Sooraj Sanker.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Sooraj Sanker</h5>
+            <div class="card-text mb-3">
+              <div class="meta">MemexAI.Space</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Sooraj_Sanker_MemexAISpace_Stop_Rebuilding_Context_Memory_Tools_for_LLM_Agents#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/soorajsanker/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
           <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img src="../speakers/Vanshika Gupta.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Vanshika Gupta</h5>
@@ -1254,7 +1400,7 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img src="../speakers/Vishal Alhat.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Vishal Alhat.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Vishal Alhat</h5>
             <div class="card-text mb-3">
@@ -1476,6 +1622,87 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Juhi Singh.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Juhi Singh</h2>
+                          <div class="meta mb-2">Kong</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/sjuhi/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar"></div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 4 -->
+<div class="modal modal-speaker modal-speaker-4" id="modal-speaker-4" tabindex="-1" role="dialog" aria-labelledby="speaker-4-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Sooraj Sanker.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Sooraj Sanker</h2>
+                          <div class="meta mb-2">MemexAI.Space</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/soorajsanker/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Stop Rebuilding Context: Memory Tools for LLM Agents</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Every LLM agent prototype starts with the same uncomfortable workaround: rebuild the user's context, stuff more into the prompt, retrieve a few documents, and hope the next turn has enough information. That works for demos, but it breaks down when agents need to return to the same user, remember preferences, reuse shared knowledge, and keep state across sessions. This talk shows a practical memory-tool pattern for LLM agents. We will look at where chat history, prompt stuffing, and ad hoc retrieval fall short, then walk through an explicit memory layer where agents can list, read, write, patch, and search durable memory as part of their normal tool loop. The demo will use MemexAI, an open-source Postgres-backed memory layer, but the goal is to leave attendees with a reusable design pattern they can adapt to LangChain, Vercel AI SDK, LlamaIndex, or their own agent stack. Attendees will learn: - How to separate retrieval, chat history, and durable agent memory. - How to design memory tools with scoped user/shared state, revisions, and inspectable writes. - How to inject memory back into the model context without hiding state inside opaque prompts.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Sooraj Sanker is a Bengaluru-based fullstack and AI engineer, and the founder of MemexAI, an open-source Postgres-backed memory layer for long-horizon AI agents. He spent roughly six years at Hasura and PromptQL, where he worked on conversational analytics, AI agent interfaces, tool-based workflows, artifact-aware chat, and state management for distributed agent execution. His work sits at the intersection of agent infrastructure, context engineering, data UX, and production reliability.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 5 -->
+<div class="modal modal-speaker modal-speaker-5" id="modal-speaker-5" tabindex="-1" role="dialog" aria-labelledby="speaker-5-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Jones Zachariah Noel N.png" alt="" />
                       </div>
 
@@ -1510,8 +1737,8 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 4 -->
-<div class="modal modal-speaker modal-speaker-4" id="modal-speaker-4" tabindex="-1" role="dialog" aria-labelledby="speaker-4-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 6 -->
+<div class="modal modal-speaker modal-speaker-6" id="modal-speaker-6" tabindex="-1" role="dialog" aria-labelledby="speaker-6-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -1553,8 +1780,8 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 5 -->
-<div class="modal modal-speaker modal-speaker-5" id="modal-speaker-5" tabindex="-1" role="dialog" aria-labelledby="speaker-5-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 7 -->
+<div class="modal modal-speaker modal-speaker-7" id="modal-speaker-7" tabindex="-1" role="dialog" aria-labelledby="speaker-7-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
