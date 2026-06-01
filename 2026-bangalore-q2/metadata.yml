@@ -30,7 +30,7 @@ breaks:
 - title: Networking
   duration: 30
   comment: Main lobby
-  talks_before: 3
+  talks_before: 4
 
 sponsors:
   - logo: harness.png
