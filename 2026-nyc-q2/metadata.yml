@@ -29,7 +29,7 @@ breaks:
   # this decides how many talks in-between this and previous section
   talks_before: 0
 - title: Lunch & networking
-  duration: 60
+  duration: 30
   comment: Main lobby
   talks_before: 6
 
