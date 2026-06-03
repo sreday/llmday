@@ -31,7 +31,11 @@ breaks:
 - title: Lunch & networking
   duration: 30
   comment: Main lobby
-  talks_before: 6
+  talks_before: 5
+- title: Play some Fallout !
+  duration: 30
+  comment: Main lobby
+  talks_before: 5
 
 sponsors:
   - logo: microsoft.png
