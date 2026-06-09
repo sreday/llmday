@@ -6,49 +6,49 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
   <loc>https://www.llmday.com/</loc>
-  <lastmod>2026-06-08T22:33:18.373633+00:00</lastmod>
+  <lastmod>2026-06-09T11:17:20.042542+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 
 <url>
   <loc>https://www.llmday.com/Abi_Aryan_Abide_AI_Reliability_Engineering_for_Inference_Serving</loc>
-  <lastmod>2026-06-08T22:33:18.373633+00:00</lastmod>
+  <lastmod>2026-06-09T11:17:20.042542+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
   <loc>https://www.llmday.com/Fabricio_De_los_Santos_DELFA_The_Next_Step</loc>
-  <lastmod>2026-06-08T22:33:18.373633+00:00</lastmod>
+  <lastmod>2026-06-09T11:17:20.042542+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
   <loc>https://www.llmday.com/Afonso_Oliveira_OliveGradient__How_Far_Can_You_Go_With_AI_Without_Sharing_Your_Data</loc>
-  <lastmod>2026-06-08T22:33:18.373633+00:00</lastmod>
+  <lastmod>2026-06-09T11:17:20.042542+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
   <loc>https://www.llmday.com/Xavier_Anguera_Babbel_Your_DIY_AI_companion</loc>
-  <lastmod>2026-06-08T22:33:18.373633+00:00</lastmod>
+  <lastmod>2026-06-09T11:17:20.042542+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
   <loc>https://www.llmday.com/Philipp_Pahl_peachstoneai_Teaching_Your_Agents_Search_Engine_to_Listen_Fine_Tuning_Retrieval_on_Prop</loc>
-  <lastmod>2026-06-08T22:33:18.373633+00:00</lastmod>
+  <lastmod>2026-06-09T11:17:20.042542+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
   <loc>https://www.llmday.com/Scott_Bastek_PagerDuty_Teaching_AI_Systems_to_Fix_Their_Own_Failures</loc>
-  <lastmod>2026-06-08T22:33:18.373633+00:00</lastmod>
+  <lastmod>2026-06-09T11:17:20.042542+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
 <url>
-  <loc>https://www.llmday.com/Viktor_Vasylkovskyi_PagerDuty_Multi_Agents_on_Autopilot__Letting_Agents_do_the_Coding_Work</loc>
-  <lastmod>2026-06-08T22:33:18.373633+00:00</lastmod>
+  <loc>https://www.llmday.com/Viktor_Vasylkovskyi_PagerDuty_MultiAgent_Architectures__What_we_shipped__what_broke__and_what_wed_do</loc>
+  <lastmod>2026-06-09T11:17:20.042542+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 
