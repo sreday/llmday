@@ -643,7 +643,7 @@
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">single track</span>
       <span class="schedule-meta-divider">•</span>
-      <span class="schedule-meta-item">9:30AM - 4PM</span>
+      <span class="schedule-meta-item">9:30AM - 5:30PM</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">Lisbon, in-person</span>
     </div>
@@ -838,21 +838,21 @@ In this talk we'll tour the landscape of conversational AI — its breakout appl
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Philipp Pahl.png" alt=""></a>
-                <div class="name">Philipp Pahl</div>
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Marcelo Ventura.png" alt=""></a>
+                <div class="name">Marcelo Ventura</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Teaching Your Agent's Search Engine to Listen: Fine Tuning Retrieval on Proprietary Data</a>
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">My Life Before and After LLMs</a>
               </h3>
-              <div class="location mb-3">peachstone.ai</div>
-              <div class="desc schedule-abstract">AI agents don't search like humans. They reason between every search call, and unlike humans, they're not lazy about spelling it out: what worked, what didn't, what to look for next. That chain of thought is rich retrieval signal that today's search engines throw away.
+              <div class="location mb-3"></div>
+              <div class="desc schedule-abstract">Almost ten years ago I was a data scientist who memorized APIs, read papers to find a gap, and scoped every project to what I could personally code. Today I write less code than ever and ship more software than ever — across research, data work, building a company, navigating immigration, and helping my family.
 
-Late interaction retrieval models can exploit that signal. Unlike single vector embeddings, which compress an entire document into one point in space, late interaction keeps a vector per token, capturing far more nuance with far smaller models. The tradeoff is more compute at search time, but efficient indexing techniques have largely solved that. And because these models are comparably small, they're fast and cheap to fine tune for your domain. That matters especially when you work with proprietary or specialized data where off the shelf models fall short: a generic retriever has never seen your internal documents, your terminology, your relevance criteria. Fine tuning bridges that gap.
+This is five short before/after stories with one shared shape: where my thinking used to start, where it starts now, and the skill I quietly stopped exercising in exchange. No architecture diagrams — instead, the human version of a problem many of us are solving in our systems: when producing work gets cheap and verifying it gets expensive, do we upgrade our judgment as fast as our tools?
 
-That's where frontier LLMs change the game. Training a retriever for your domain used to mean hiring annotators. Today, frontier models judge relevance at human evaluator quality and smaller, more affordable models can handle many of the same tasks at a fraction of the cost. I'll walk through a reproducible recipe: pool candidates with cheap retrievers, rerank them with LLM judges, extract training pairs. Then fine tune a late interaction model in minutes on a single rented GPU.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+I'll use real examples — from RAG-based legal assistants to building imigrei.pt and Prep Docs to help immigrants face Portuguese bureaucracy—and close with an uncomfortable question. You'll leave having relocated at least one bottleneck in your own workflow, and a little unsure whether you're still good at the part that now matters most.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
               
             </div>
           </div>
@@ -861,17 +861,25 @@ That's where frontier LLMs change the game. Training a retriever for your domain
             <div class="meta">
               <h4 class="time mb-3">14:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Scott Bastek.png" alt=""></a>
-                <div class="name">Scott Bastek</div>
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Aleksandr Kamenev.png" alt=""></a>
+                <div class="name">Aleksandr Kamenev</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Teaching AI Systems to Fix Their Own Failures</a>
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Shipping Production Software Solo with Claude Code</a>
               </h3>
-              <div class="location mb-3">PagerDuty</div>
-              <div class="desc schedule-abstract">Prompt engineering has traditionally been manual trial-and-error. When AI agents degrade in production, teams make gut-feel changes and hope for the best. How do you know if a prompt change actually improves things, or just shifts failures elsewhere? We built an automated system that transforms production failures into quantifiable fixes. It starts by fetching examples of suboptimal sessions from our observability platform. The system analyzes these failures and clusters them into actionable patterns. For each pattern, it proposes specific prompt changes with before-and-after text. Then comes the critical step: validation. Only improvements that maintain or boost performance against our golden dataset make it into an automated pull request. Finally, the golden dataset itself is updated with representative samples of assessed failure. The result? We analyze all failures weekly and ship validated fixes—all without manual debugging. This approach transforms vague ""my AI isn't working"" complaints into concrete, measurable improvements backed by production data.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              <div class="location mb-3">NerdHeadz</div>
+              <div class="desc schedule-abstract">Most "I built an app with AI" stories stop at the prototype. This talk is about the harder part: taking an agentic coding tool from a working demo to software you can put real users on and maintain by yourself. I'll use app.smarthostinghub.com — a production app I designed, built, and run single-handedly — as the running case study, with a quick live look at how it's structured.
+
+The core idea: once the model can write the code, the bottleneck moves to context and verification. So I'll focus on just three things that make solo agentic development hold up in production:
+
+- Set the context first: a written spec, data model, and a CLAUDE.md / docs layer that act as the agent's memory — because any rule you don't write down, it will silently break.
+- Ship in small, reviewable slices: every feature end-to-end (data → API → UI → test) in chunks small enough to actually review, with types and tests as the gate that stops bad code from merging.
+- Keep humans on the risky seams: auth, billing, and database migrations stay under explicit review, never on autopilot.
+
+Then the honest part: what broke, and what I'd do differently now. Attendees leave with a short checklist they can apply to their own projects the next day.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
               
             </div>
           </div>
@@ -880,17 +888,18 @@ That's where frontier LLMs change the game. Training a retriever for your domain
             <div class="meta">
               <h4 class="time mb-3">15:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Viktor Vasylkovskyi.png" alt=""></a>
-                <div class="name">Viktor Vasylkovskyi</div>
+                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Rahul Kumar.png" alt=""></a>
+                <div class="name">Rahul Kumar</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Multi-Agent Architectures - What we shipped, what broke, and what we'd do differently</a>
+                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">How to build and use Second Brain.</a>
               </h3>
-              <div class="location mb-3">PagerDuty</div>
-              <div class="desc schedule-abstract">I've been building production AI agents with LangGraph - sometimes getting it right, often learning the hard way. This talk is about what I actually shipped, including a distributed multi-agent setup at PagerDuty. I'll break down the real tradeoffs between LLM-driven and deterministic orchestration, what broke, and how I'd approach it differently now.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
+              <div class="location mb-3"></div>
+              <div class="desc schedule-abstract">Most people talk about AI tools. I want to talk about the thing that makes them actually work i.e. Memory. Not the model, not the prompt, the persistent knowledge layer underneath it all. I'll walk through how high-performers are building their second brain: a structured, queryable layer of their own thinking that compounds over time. I'll cover what actually needs to go in (and what doesn't), how to design it so an LLM can reason over it, and what this looks like in practice for founders, consultants, and operators running on context-switching overload.
+<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
               
             </div>
           </div>
@@ -914,6 +923,67 @@ That's where frontier LLMs change the game. Training a retriever for your domain
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">16:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Philipp Pahl.png" alt=""></a>
+                <div class="name">Philipp Pahl</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Teaching Your Agent's Search Engine to Listen: Fine Tuning Retrieval on Proprietary Data</a>
+              </h3>
+              <div class="location mb-3">peachstone.ai</div>
+              <div class="desc schedule-abstract">AI agents don't search like humans. They reason between every search call, and unlike humans, they're not lazy about spelling it out: what worked, what didn't, what to look for next. That chain of thought is rich retrieval signal that today's search engines throw away.
+
+Late interaction retrieval models can exploit that signal. Unlike single vector embeddings, which compress an entire document into one point in space, late interaction keeps a vector per token, capturing far more nuance with far smaller models. The tradeoff is more compute at search time, but efficient indexing techniques have largely solved that. And because these models are comparably small, they're fast and cheap to fine tune for your domain. That matters especially when you work with proprietary or specialized data where off the shelf models fall short: a generic retriever has never seen your internal documents, your terminology, your relevance criteria. Fine tuning bridges that gap.
+
+That's where frontier LLMs change the game. Training a retriever for your domain used to mean hiring annotators. Today, frontier models judge relevance at human evaluator quality and smaller, more affordable models can handle many of the same tasks at a fraction of the cost. I'll walk through a reproducible recipe: pool candidates with cheap retrievers, rerank them with LLM judges, extract training pairs. Then fine tune a late interaction model in minutes on a single rented GPU.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/Scott Bastek.png" alt=""></a>
+                <div class="name">Scott Bastek</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Teaching AI Systems to Fix Their Own Failures</a>
+              </h3>
+              <div class="location mb-3">PagerDuty</div>
+              <div class="desc schedule-abstract">Prompt engineering has traditionally been manual trial-and-error. When AI agents degrade in production, teams make gut-feel changes and hope for the best. How do you know if a prompt change actually improves things, or just shifts failures elsewhere? We built an automated system that transforms production failures into quantifiable fixes. It starts by fetching examples of suboptimal sessions from our observability platform. The system analyzes these failures and clusters them into actionable patterns. For each pattern, it proposes specific prompt changes with before-and-after text. Then comes the critical step: validation. Only improvements that maintain or boost performance against our golden dataset make it into an automated pull request. Finally, the golden dataset itself is updated with representative samples of assessed failure. The result? We analyze all failures weekly and ship validated fixes—all without manual debugging. This approach transforms vague ""my AI isn't working"" complaints into concrete, measurable improvements backed by production data.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">17:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img class="profile-image rounded-circle mb-2" src="../speakers/Viktor Vasylkovskyi.png" alt=""></a>
+                <div class="name">Viktor Vasylkovskyi</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Multi-Agent Architectures - What we shipped, what broke, and what we'd do differently</a>
+              </h3>
+              <div class="location mb-3">PagerDuty</div>
+              <div class="desc schedule-abstract">I've been building production AI agents with LangGraph - sometimes getting it right, often learning the hard way. This talk is about what I actually shipped, including a distributed multi-agent setup at PagerDuty. I'll break down the real tradeoffs between LLM-driven and deterministic orchestration, what broke, and how I'd approach it differently now.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">17:30</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -944,6 +1014,18 @@ That's where frontier LLMs change the game. Training a retriever for your domain
           </tr>
         </thead>
         <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1172,8 +1254,8 @@ That's where frontier LLMs change the game. Training a retriever for your domain
             <td class="time-cell">14:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Teaching Your Agent's Search Engine to Listen: Fine Tuning Retrieval on Proprietary Data</a>
-              <div class="speaker-info">Philipp Pahl <span class="affiliation">• peachstone.ai</span></div>
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">My Life Before and After LLMs</a>
+              <div class="speaker-info">Marcelo Ventura</div>
 
             </td>
           </tr>
@@ -1192,8 +1274,8 @@ That's where frontier LLMs change the game. Training a retriever for your domain
             <td class="time-cell">14:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Teaching AI Systems to Fix Their Own Failures</a>
-              <div class="speaker-info">Scott Bastek <span class="affiliation">• PagerDuty</span></div>
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Shipping Production Software Solo with Claude Code</a>
+              <div class="speaker-info">Aleksandr Kamenev <span class="affiliation">• NerdHeadz</span></div>
 
             </td>
           </tr>
@@ -1212,8 +1294,8 @@ That's where frontier LLMs change the game. Training a retriever for your domain
             <td class="time-cell">15:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Multi-Agent Architectures - What we shipped, what broke, and what we'd do differently</a>
-              <div class="speaker-info">Viktor Vasylkovskyi <span class="affiliation">• PagerDuty</span></div>
+              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">How to build and use Second Brain.</a>
+              <div class="speaker-info">Rahul Kumar</div>
 
             </td>
           </tr>
@@ -1248,7 +1330,67 @@ That's where frontier LLMs change the game. Training a retriever for your domain
 
 
           <tr>
-            <td class="time-cell merged-cell">16:00</td>
+            <td class="time-cell">16:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Teaching Your Agent's Search Engine to Listen: Fine Tuning Retrieval on Proprietary Data</a>
+              <div class="speaker-info">Philipp Pahl <span class="affiliation">• peachstone.ai</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">16:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Teaching AI Systems to Fix Their Own Failures</a>
+              <div class="speaker-info">Scott Bastek <span class="affiliation">• PagerDuty</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">17:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Multi-Agent Architectures - What we shipped, what broke, and what we'd do differently</a>
+              <div class="speaker-info">Viktor Vasylkovskyi <span class="affiliation">• PagerDuty</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">17:30</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Wrap up
@@ -1356,6 +1498,32 @@ That's where frontier LLMs change the game. Training a retriever for your domain
 
       <div class="col mb-4">
         <div class="card rounded">
+          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Aleksandr Kamenev.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Aleksandr Kamenev</h5>
+            <div class="card-text mb-3">
+              <div class="meta">NerdHeadz</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Aleksandr_Kamenev_NerdHeadz_Shipping_Production_Software_Solo_with_Claude_Code#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/akamenev/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
           <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img src="../speakers/Fabricio De los Santos.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Fabricio De los Santos</h5>
@@ -1408,7 +1576,33 @@ That's where frontier LLMs change the game. Training a retriever for your domain
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Philipp Pahl.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Marcelo Ventura.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Marcelo Ventura</h5>
+            <div class="card-text mb-3">
+              <div class="meta"></div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Marcelo_Ventura_My_Life_Before_and_After_LLMs#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/marcelo-ventura-8542a9a6/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img src="../speakers/Philipp Pahl.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Philipp Pahl</h5>
             <div class="card-text mb-3">
@@ -1434,7 +1628,33 @@ That's where frontier LLMs change the game. Training a retriever for your domain
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Scott Bastek.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img src="../speakers/Rahul Kumar.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Rahul Kumar</h5>
+            <div class="card-text mb-3">
+              <div class="meta"></div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Rahul_Kumar_How_to_build_and_use_Second_Brain#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/hellorahulk"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img src="../speakers/Scott Bastek.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Scott Bastek</h5>
             <div class="card-text mb-3">
@@ -1486,7 +1706,7 @@ That's where frontier LLMs change the game. Training a retriever for your domain
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img src="../speakers/Viktor Vasylkovskyi.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img src="../speakers/Viktor Vasylkovskyi.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Viktor Vasylkovskyi</h5>
             <div class="card-text mb-3">
@@ -1848,6 +2068,144 @@ Current solutions for processing private data remotely exist, but they're not pa
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Marcelo Ventura.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Marcelo Ventura</h2>
+                          <div class="meta mb-2"></div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/marcelo-ventura-8542a9a6/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">My Life Before and After LLMs</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Almost ten years ago I was a data scientist who memorized APIs, read papers to find a gap, and scoped every project to what I could personally code. Today I write less code than ever and ship more software than ever — across research, data work, building a company, navigating immigration, and helping my family.</p>
+<p>This is five short before/after stories with one shared shape: where my thinking used to start, where it starts now, and the skill I quietly stopped exercising in exchange. No architecture diagrams — instead, the human version of a problem many of us are solving in our systems: when producing work gets cheap and verifying it gets expensive, do we upgrade our judgment as fast as our tools?</p>
+<p>I'll use real examples — from RAG-based legal assistants to building imigrei.pt and Prep Docs to help immigrants face Portuguese bureaucracy—and close with an uncomfortable question. You'll leave having relocated at least one bottleneck in your own workflow, and a little unsure whether you're still good at the part that now matters most.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Marcelo Ventura is a data scientist and AI engineer based in Lisbon. Over nearly a decade he has built ML and data systems across Brazil, Singapore, New York, California, and Central Europe — from loan-forecasting neural nets and cashflow automation to RAG-based GenAI assistants and legal copilots at fintechs and startups. He holds an MSc in Applied Economics and has published research in statistical modeling and econometrics. A Brazilian immigrant himself, he is now Data &amp; AI Engineer at imigrei.pt, where he builds tools — including Prep Docs — that help immigrants navigate Portuguese bureaucracy, and hosts the Imigrantes de Sucesso podcast.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 7 -->
+<div class="modal modal-speaker modal-speaker-7" id="modal-speaker-7" tabindex="-1" role="dialog" aria-labelledby="speaker-7-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Aleksandr Kamenev.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Aleksandr Kamenev</h2>
+                          <div class="meta mb-2">NerdHeadz</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/akamenev/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Shipping Production Software Solo with Claude Code</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Most "I built an app with AI" stories stop at the prototype. This talk is about the harder part: taking an agentic coding tool from a working demo to software you can put real users on and maintain by yourself. I'll use app.smarthostinghub.com — a production app I designed, built, and run single-handedly — as the running case study, with a quick live look at how it's structured.</p>
+<p>The core idea: once the model can write the code, the bottleneck moves to context and verification. So I'll focus on just three things that make solo agentic development hold up in production:</p>
+<ul>
+<li>Set the context first: a written spec, data model, and a CLAUDE.md / docs layer that act as the agent's memory — because any rule you don't write down, it will silently break.</li>
+<li>Ship in small, reviewable slices: every feature end-to-end (data → API → UI → test) in chunks small enough to actually review, with types and tests as the gate that stops bad code from merging.</li>
+<li>Keep humans on the risky seams: auth, billing, and database migrations stay under explicit review, never on autopilot.</li>
+</ul>
+<p>Then the honest part: what broke, and what I'd do differently now. Attendees leave with a short checklist they can apply to their own projects the next day.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Aleksandr Kamenev is the founder and CEO of NerdHeadz (nerdheadz.com), a Wyoming-registered AI and custom software development agency; he's based in Lisbon. Over ~12 years in software he's moved from enterprise development to leading a distributed team that has shipped 60+ projects, and today he spends much of his time building and running production applications single-handedly with agentic coding tools. Trained as a radio engineer, he bootstrapped NerdHeadz past seven figures in revenue without outside funding.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 8 -->
+<div class="modal modal-speaker modal-speaker-8" id="modal-speaker-8" tabindex="-1" role="dialog" aria-labelledby="speaker-8-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Rahul Kumar.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Rahul Kumar</h2>
+                          <div class="meta mb-2"></div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/hellorahulk"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">How to build and use Second Brain.</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Most people talk about AI tools. I want to talk about the thing that makes them actually work i.e. Memory. Not the model, not the prompt, the persistent knowledge layer underneath it all. I'll walk through how high-performers are building their second brain: a structured, queryable layer of their own thinking that compounds over time. I'll cover what actually needs to go in (and what doesn't), how to design it so an LLM can reason over it, and what this looks like in practice for founders, consultants, and operators running on context-switching overload.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>AI practitioner with 14+ years in the field, 2x published author (Packt), Techstars alumni, and founder of Timeln. I've delivered production ready AI systems across BFSI, Telecom, O&amp;G, Healthcare, and ad tech. </p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 9 -->
+<div class="modal modal-speaker modal-speaker-9" id="modal-speaker-9" tabindex="-1" role="dialog" aria-labelledby="speaker-9-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Philipp Pahl.png" alt="" />
                       </div>
 
@@ -1884,8 +2242,8 @@ Current solutions for processing private data remotely exist, but they're not pa
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 7 -->
-<div class="modal modal-speaker modal-speaker-7" id="modal-speaker-7" tabindex="-1" role="dialog" aria-labelledby="speaker-7-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 10 -->
+<div class="modal modal-speaker modal-speaker-10" id="modal-speaker-10" tabindex="-1" role="dialog" aria-labelledby="speaker-10-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -1922,8 +2280,8 @@ Current solutions for processing private data remotely exist, but they're not pa
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 8 -->
-<div class="modal modal-speaker modal-speaker-8" id="modal-speaker-8" tabindex="-1" role="dialog" aria-labelledby="speaker-8-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 11 -->
+<div class="modal modal-speaker modal-speaker-11" id="modal-speaker-11" tabindex="-1" role="dialog" aria-labelledby="speaker-11-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
