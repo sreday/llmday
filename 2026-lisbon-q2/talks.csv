@@ -34,6 +34,16 @@ In this talk we'll tour the landscape of conversational AI — its breakout appl
 This is five short before/after stories with one shared shape: where my thinking used to start, where it starts now, and the skill I quietly stopped exercising in exchange. No architecture diagrams — instead, the human version of a problem many of us are solving in our systems: when producing work gets cheap and verifying it gets expensive, do we upgrade our judgment as fast as our tools?
 
 I'll use real examples — from RAG-based legal assistants to building imigrei.pt and Prep Docs to help immigrants face Portuguese bureaucracy—and close with an uncomfortable question. You'll leave having relocated at least one bottleneck in your own workflow, and a little unsure whether you're still good at the part that now matters most.",,"Marcelo Ventura is a data scientist and AI engineer based in Lisbon. Over nearly a decade he has built ML and data systems across Brazil, Singapore, New York, California, and Central Europe — from loan-forecasting neural nets and cashflow automation to RAG-based GenAI assistants and legal copilots at fintechs and startups. He holds an MSc in Applied Economics and has published research in statistical modeling and econometrics. A Brazilian immigrant himself, he is now Data & AI Engineer at imigrei.pt, where he builds tools — including Prep Docs — that help immigrants navigate Portuguese bureaucracy, and hosts the Imigrantes de Sucesso podcast."
+,confirmed,Mykhailo Kushnir,1,1,DestiLabs,Mykhailo Kushnir.png,https://www.linkedin.com/in/mykhailo-kushnir/,,,,What we learned from building 5 voice bot projects in 5 months,"Voice bots work perfectly well when running a demo on Vapi or Retell, but not in actual production deployment. At DestiLabs, we completed 5 recent projects each teaching us something different about this technology and we're willing to share those insights with you. If you'd like to know more about 
+
+- Why voice-to-voice models fail in phone calls
+- What challenges suddenly appear when your project must be deployed on four continents
+- How your name can be (and will be) mispronounced by the voice bot
+",,"I'm the cofounder of DestiLabs, an AI/ML agency that specializes in building something no one has ever done so far. Through last 3 years we've built:
+- Lip sync model before Sora was even born
+- Room segmentation solution that still beats Segment Anything 3
+- Voice platform that can run calls cheaper and faster than Vapi
+- Image to 3D pipeline that creates 3D coins from 2D images"
 ,confirmed,Aleksandr Kamenev,1,1,NerdHeadz,Aleksandr Kamenev.png,https://www.linkedin.com/in/akamenev/,,,,Shipping Production Software Solo with Claude Code,"Most ""I built an app with AI"" stories stop at the prototype. This talk is about the harder part: taking an agentic coding tool from a working demo to software you can put real users on and maintain by yourself. I'll use app.smarthostinghub.com — a production app I designed, built, and run single-handedly — as the running case study, with a quick live look at how it's structured.
 
 The core idea: once the model can write the code, the bottleneck moves to context and verification. So I'll focus on just three things that make solo agentic development hold up in production:
