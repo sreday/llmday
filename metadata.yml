@@ -26,20 +26,6 @@ counts:
 
 events:
 
-  - name: LLMday Hamburg 2026 Q2
-    location: House of AI, Hamburg, Germany
-    photo_url: ./assets/images/events/llmday-2026-hamburg-q2.png
-    url: ./2026-hamburg-q2/
-    size: medium
-    youtube_playlist:
-
-  - name: LLMday Bangalore 2026 Q2
-    location: Harness, Bangalore, India
-    photo_url: ./assets/images/events/llmday-2026-bangalore-q2.png
-    url: ./2026-bangalore-q2/
-    size: small
-    youtube_playlist:
-
   - name: LLMday Lisbon 2026 Q2
     location: PagerDuty, Lisbon, Portugal
     photo_url: ./assets/images/events/llmday-2026-lisbon-q2.png
@@ -48,6 +34,20 @@ events:
     youtube_playlist:
 
 events_past:
+
+  - name: LLMday Bangalore 2026 Q2
+    location: Harness, Bangalore, India
+    photo_url: ./assets/images/events/llmday-2026-bangalore-q2.png
+    url: ./2026-bangalore-q2/
+    size: small
+    youtube_playlist:
+
+  - name: LLMday Hamburg 2026 Q2
+    location: House of AI, Hamburg, Germany
+    photo_url: ./assets/images/events/llmday-2026-hamburg-q2.png
+    url: ./2026-hamburg-q2/
+    size: medium
+    youtube_playlist:
 
   - name: LLMday NYC 2026 Q2
     location: Microsoft Experience Center NYC, New York, United States
