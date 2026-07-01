@@ -5,7 +5,7 @@ start_time: "2026-06-23T09:30:00+01:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
-event_state: active
+event_state: after
 date_string: "June 23, 2026"
 location_string: "PagerDuty, Lisbon, Portugal"
 city_name: "Lisbon"
