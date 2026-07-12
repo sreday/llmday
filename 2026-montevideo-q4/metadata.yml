@@ -7,7 +7,7 @@ start_time: "2026-12-05T09:00:00-03:00"
 # after  - hide ticket sales
 event_state: before
 date_string: "December 5, 2026"
-location_string: "World Trade Center Montevideo - Torre 4, Montevideo, Uruguay"
+location_string: "Montevideo, Uruguay"
 # get this from the event url
 luma_evt: evt-THcPEG50zx51MsC
 cfp_url: https://cfp.ninja/e/llmday-montevideo-2026-q4
