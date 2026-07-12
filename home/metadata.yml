@@ -35,7 +35,7 @@ events:
 
   - name: LLMday Montevideo 2026 Q4
     location: World Trade Center Montevideo - Torre 4, Montevideo, Uruguay
-    photo_url: ./assets/images/events/llmday-2026-lisbon-q2.png
+    photo_url: ./assets/images/events/llmday-2026-montevideo-q4.png
     url: ./2026-montevideo-q4/
     size: small
     youtube_playlist:
