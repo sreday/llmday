@@ -26,14 +26,28 @@ counts:
 
 events:
 
+  - name: LLMday Redwood City 2026 Q4
+    location: Harness, Redwood City, California, US
+    photo_url: ./assets/images/events/llmday-2026-redwood-city-q4.png
+    url: ./2026-redwood-city-q4/
+    size: medium
+    youtube_playlist:
+
+  - name: LLMday Montevideo 2026 Q4
+    location: World Trade Center Montevideo - Torre 4, Montevideo, Uruguay
+    photo_url: ./assets/images/events/llmday-2026-montevideo-q4.png
+    url: ./2026-montevideo-q4/
+    size: small
+    youtube_playlist:
+
+events_past:
+
   - name: LLMday Lisbon 2026 Q2
     location: PagerDuty, Lisbon, Portugal
     photo_url: ./assets/images/events/llmday-2026-lisbon-q2.png
     url: ./2026-lisbon-q2/
     size: small
     youtube_playlist:
-
-events_past:
 
   - name: LLMday Bangalore 2026 Q2
     location: Harness, Bangalore, India
