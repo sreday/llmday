@@ -9,7 +9,7 @@ event_state: before
 date_string: "October 1, 2026"
 location_string: "Redwood City, California, US"
 # get this from the event url
-luma_evt: evt-aN7MTYGBVcBCqSQ
+luma_evt: evt-SdoxdX4lCePHZws
 cfp_url: https://cfp.ninja/e/llmday-redwood-city-2026-q4
 
 # the number of tracks needs to be the same per day
