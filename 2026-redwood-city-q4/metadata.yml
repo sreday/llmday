@@ -10,7 +10,7 @@ date_string: "October 1, 2026"
 location_string: "Redwood City, California, US"
 # get this from the event url
 luma_evt: evt-SdoxdX4lCePHZws
-cfp_url: https://cfp.ninja/e/llmday-redwood-city-2026-q4
+cfp_url: https://cfp.ninja/e/llmday-2026-redwood-city-q4
 
 # the number of tracks needs to be the same per day
 # the tracks will be taken in the order they appear in the CSV file
