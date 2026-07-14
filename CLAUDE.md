@@ -64,7 +64,7 @@ The "I need more stats" expandable section on the sponsorship page has two kinds
 - **Static** (hardcoded, derived from attendee CSV analysis): role breakdown, seniority, company size, top attendee companies
 
 ## Sister repos
-Same structure: `sreday` and `devopsnotdead`. Changes to shared templates/logic often need to be applied to all three.
+Same structure: `sreday`. Changes to shared templates/logic often need to be applied to both.
 
 ## Dependencies
 ```bash
