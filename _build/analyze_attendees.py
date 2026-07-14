@@ -5,7 +5,7 @@ This is the attendee analysis playbook for the conference series.
 It reads Luma attendee CSV exports and produces audience profile stats
 for use in sponsorship pages.
 
-Works across conference brands (LLMday, SREday, DevOpsNotDead, etc.).
+Works across conference brands (LLMday, SREday, etc.).
 Drop in CSV files from any Luma event export and run:
 
     python3 _build/analyze_attendees.py path/to/event1.csv path/to/event2.csv ...
