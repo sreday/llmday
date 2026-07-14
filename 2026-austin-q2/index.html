@@ -129,7 +129,7 @@
                         <!-- <img class="logo-icon" src="assets/images/logo-white.svg" alt="logo"></a> -->
                     </div>
 
-					<div class="navbar-btn order-lg-2"><a class="btn btn-secondary" href="#tickets">Tickets</a></div>
+					
 
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
@@ -140,7 +140,7 @@
 						<ul class="nav navbar-nav">
 
 							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-							<li class="nav-item"><a class="nav-link" href="#tickets">Tickets</a></li>
+							
 							<li class="nav-item"><a class="nav-link" href="#schedule">Schedule</a></li>
 							<li class="nav-item"><a class="nav-link" href="#speakers">Speakers</a></li>
 							<li class="nav-item"><a class="nav-link" href="#venue">Venue</a></li>
@@ -202,10 +202,6 @@
 				<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>May 12, 2026 <i class="fas fa-map-marker-alt mx-2"></i>Austin, Texas, USA</h3>
 				<div class="hero-cta mt-5">
 					
-					<a class="btn btn-secondary btn-lg" href="#tickets">Get Tickets</a>
-					
-					
-					<a class="btn btn-primary btn-lg" href="https://cfp.ninja/e/llmday-2026-austin-q2" target="_blank">CFP</a>
 					
 			    </div>
 					<ul class="social-list list-inline mt-4">
@@ -262,8 +258,97 @@
   <div class="container">
     <div class="event-countdown text-center mb-3">
     
-      <h4 class="countdown-intro mb-2 text-center mb-3">Event Starts In:</h4>
-      <div id="countdown-box" class="countdown-box"></div>
+      <h4 class="countdown-intro mb-2 text-center mb-3">Event finished, what's next?</h4>
+      
+      <style>
+        .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: var(--brand-lighter); z-index: 0; }
+        .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; align-items: stretch; }
+        .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); border: 2px solid #fff; outline: 2px solid var(--brand); margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
+        .idx-tl-dot.past { background: #999; outline-color: #999; }
+        .idx-tl-chip { background: var(--brand-lightest); border: 1px solid var(--brand-lighter); border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark); overflow-wrap: break-word; word-break: break-word; }
+        .idx-tl-chip:hover { background: var(--brand-pale); text-decoration: none; }
+        .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
+        .idx-tl-chip.past:hover { background: #d8d8d8; }
+        .idx-tl-chip.past .idx-tl-city { color: #555; }
+        .idx-tl-date { font-size: .75rem; color: var(--brand-light); margin-top: 2px; }
+        .idx-tl-chip.past .idx-tl-date { color: #777; }
+        .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: var(--brand-dark); margin-bottom: 10px; position: relative; top: -4px; }
+      </style>
+      <div class="idx-tl">
+        <div class="idx-tl-line"></div>
+        <div class="idx-tl-events">
+          
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-nyc-q2/" class="idx-tl-chip past">
+              <div class="idx-tl-city">NYC</div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">June 4, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-hamburg-q2/" class="idx-tl-chip past">
+              <div class="idx-tl-city">Hamburg</div>
+              <div class="idx-tl-date" style="font-style:normal;">Germany</div>
+              <div class="idx-tl-date">June 18, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-bangalore-q2/" class="idx-tl-chip past">
+              <div class="idx-tl-city">Bangalore</div>
+              <div class="idx-tl-date" style="font-style:normal;">India</div>
+              <div class="idx-tl-date">June 19, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot past"></div>
+            <a href="../2026-lisbon-q2/" class="idx-tl-chip past">
+              <div class="idx-tl-city">Lisbon</div>
+              <div class="idx-tl-date" style="font-style:normal;">Portugal</div>
+              <div class="idx-tl-date">June 23, 2026</div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="idx-tl-pin-event"><div class="idx-tl-pin">▼</div></div>
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-redwood-city-q4/" class="idx-tl-chip">
+              <div class="idx-tl-city"></div>
+              <div class="idx-tl-date" style="font-style:normal;">United States</div>
+              <div class="idx-tl-date">October 1, 2026</div>
+            </a>
+          </div>
+          
+          
+          <div class="idx-tl-event">
+            <div class="idx-tl-dot "></div>
+            <a href="../2026-montevideo-q4/" class="idx-tl-chip">
+              <div class="idx-tl-city"></div>
+              <div class="idx-tl-date" style="font-style:normal;">Uruguay</div>
+              <div class="idx-tl-date">December 5, 2026</div>
+            </a>
+          </div>
+          
+        </div>
+      </div>
+      
     
     </div>
   </div>
@@ -317,78 +402,6 @@
     </script>
 </section>
 
-
-<section id="tickets" class="tickets-section section">
-  <div class="container">
-    <h3 class="section-heading text-center mb-3">Tickets</h3>
-
-    <div class="row pricing mb-5 mt-10">
-      <div class="col-12 text-center">
-        <iframe
-  id="luma-tickets-iframe"
-  src="https://lu.ma/embed/event/evt-c4GCCY74gEHeD4q/simple"
-  width="100%"
-  frameborder="0"
-  style="border: 1px solid #bfcbda88; border-radius: 4px; display: block; height: 1000px; min-height: 1000px;"
-  allowfullscreen=""
-  aria-hidden="false"
-  tabindex="0"
-></iframe>
-
-<div class="text-center mt-4">
-  <a
-    href="https://lu.ma/event/evt-c4GCCY74gEHeD4q"
-    class="luma-checkout--button btn btn-secondary btn-lg"
-    data-luma-action="checkout"
-    data-luma-event-id="evt-c4GCCY74gEHeD4q"
-  >
-    Register on Luma
-  </a>
-</div>
-
-<script id="luma-checkout" src="https://embed.lu.ma/checkout-button.js"></script>
-<script>
-  (function() {
-    var params = window.location.search;
-    var iframe = document.getElementById('luma-tickets-iframe');
-
-    // Append query params to iframe src
-    if (iframe && params) {
-      var src = iframe.getAttribute('src');
-      var sep = src.indexOf('?') > -1 ? '&' : '?';
-      iframe.setAttribute('src', src + sep + params.substring(1));
-    }
-
-    // Append query params to button
-    if (params) {
-      var btn = document.querySelector('.luma-checkout--button');
-      if (btn) {
-        var href = btn.getAttribute('href');
-        var sep = href.indexOf('?') > -1 ? '&' : '?';
-        btn.setAttribute('href', href + sep + params.substring(1));
-      }
-    }
-
-    // Auto-resize iframe via Luma postMessage (overrides fixed height if received)
-    window.addEventListener('message', function(e) {
-      if (!iframe) return;
-      var d = e.data;
-      if (!d) return;
-      // Handle multiple possible Luma message formats
-      var h = null;
-      if (typeof d.height === 'number' && d.height > 100) h = d.height;
-      else if (typeof d.height === 'string' && parseInt(d.height) > 100) h = parseInt(d.height);
-      if (h !== null) {
-        iframe.style.height = h + 'px';
-      }
-    });
-  })();
-</script>
-      </div>
-    </div>
-
-  </div>
-</section>
 
 
 <style>
@@ -1398,7 +1411,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
     </script>
 
     
-    <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="https://luma.com/sre" target="_blank" rel="noopener" class="btn btn-secondary btn-lg d-block d-md-inline-block">Upcoming conferences on LUMA</a></div>
     
   </div>
 </section>
@@ -1728,7 +1741,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
       
 
     </div><!--//row-->
-    <div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>
+    
   </div><!--//container-->
 
 </section><!--//speakers-section-->

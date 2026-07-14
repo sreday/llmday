@@ -5,7 +5,7 @@ start_time: "2026-06-18T09:00:00+02:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
-event_state: active
+event_state: after
 date_string: "June 18, 2026"
 location_string: "House of AI, Hamburg, Germany"
 city_name: "Hamburg"
