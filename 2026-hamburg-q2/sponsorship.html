@@ -101,6 +101,34 @@
 #sp-dark-body .sp-section-title { color: #fff; }
 #sp-dark-body .sp-gbp-note    { color: #666; }
 
+/* ── Currency toggle ────────────────────────────────── */
+.sp-currency-toggle {
+  display: inline-flex;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+  vertical-align: middle;
+}
+.sp-currency-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: .85rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  line-height: 1;
+}
+.sp-currency-btn:hover { color: #ccc; }
+.sp-currency-btn.active {
+  background: var(--sp-accent);
+  color: #fff;
+}
+
 /* ── Sponsor pills ───────────────────────────────────── */
 .sp-pill {
   display: inline-block;
@@ -377,7 +405,8 @@
   box-shadow: 0 0 22px rgba(180, 130, 20, .22), 0 0 50px rgba(180, 130, 20, .08);
 }
 .sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
-.sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; }
+.sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; transition: opacity .18s ease; }
+.sp-tier-price.sp-fade { opacity: 0; }
 .sp-tier-body     { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .sp-tier-benefits { list-style: none; padding: 0; margin: 0 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
@@ -627,13 +656,22 @@
 <section class="sp-section" id="opportunities">
   <div class="container">
     <h2 class="sp-section-title text-center">Sponsorship opportunities</h2>
-    <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">Pricing in GBP / £ — British Pound Sterling.<br>We are a London-based company organizing conferences worldwide.</p>
+    <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">
+      We are a London-based company organizing conferences worldwide.<br>
+      The base, default pricing is in GBP / £ &mdash; British Pound Sterling.
+    </p>
+    <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.5rem;margin-bottom:1.5rem;">
+      Convert:
+      <span class="sp-currency-toggle">
+        <button class="sp-currency-btn active" data-currency="GBP" onclick="spSwitchCurrency('GBP')">GBP</button><button class="sp-currency-btn" data-currency="USD" onclick="spSwitchCurrency('USD')">USD</button><button class="sp-currency-btn" data-currency="EUR" onclick="spSwitchCurrency('EUR')">EUR</button>
+      </span>
+    </p>
     <div class="row justify-content-center g-4 mt-2">
       
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Conference Leads</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="£1000" data-price-usd="$1300" data-price-eur="€1200">
             £1000
           </div>
           <div class="sp-tier-body">
@@ -654,7 +692,7 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Keynote Session</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="£3000" data-price-usd="$3800" data-price-eur="€3500">
             £3000
           </div>
           <div class="sp-tier-body">
@@ -675,7 +713,7 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Regular Session Slot</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="£2000" data-price-usd="$2500" data-price-eur="€2300">
             £2000
           </div>
           <div class="sp-tier-body">
@@ -696,7 +734,7 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Booth / Table</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="£2000" data-price-usd="$2500" data-price-eur="€2300">
             £2000
           </div>
           <div class="sp-tier-body">
@@ -717,7 +755,7 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Logo Sponsor + Swag Distribution</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="£1000" data-price-usd="$1300" data-price-eur="€1200">
             £1000
           </div>
           <div class="sp-tier-body">
@@ -738,7 +776,7 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Coffee Break / Lunch / Happy Hour</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="£1000 + £15pp" data-price-usd="$1300 + $20pp" data-price-eur="€1200 + €20pp">
             £1000 + £15pp
           </div>
           <div class="sp-tier-body">
@@ -759,7 +797,7 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Branded Wearables</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="£1000 + variable" data-price-usd="$1300 + variable" data-price-eur="€1200 + variable">
             £1000 + variable
           </div>
           <div class="sp-tier-body">
@@ -780,7 +818,7 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Discounted Ticket Pack</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="20% off 5+ tickets" data-price-usd="20% off 5+ tickets" data-price-eur="20% off 5+ tickets">
             20% off 5+ tickets
           </div>
           <div class="sp-tier-body">
@@ -801,7 +839,7 @@
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">Startup Discount</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price" data-price-gbp="20% off anything" data-price-usd="20% off anything" data-price-eur="20% off anything">
             20% off anything
           </div>
           <div class="sp-tier-body">
@@ -850,6 +888,24 @@
     </div>
   </div>
 </section>
+
+<script>
+(function() {
+  window.spSwitchCurrency = function(code) {
+    var attr = 'data-price-' + code.toLowerCase();
+    var btns = document.querySelectorAll('.sp-currency-btn');
+    for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', btns[i].getAttribute('data-currency') === code);
+    var els = document.querySelectorAll('.sp-tier-price[' + attr + ']');
+    for (var j = 0; j < els.length; j++) els[j].classList.add('sp-fade');
+    setTimeout(function() {
+      for (var j = 0; j < els.length; j++) {
+        els[j].textContent = els[j].getAttribute(attr);
+        els[j].classList.remove('sp-fade');
+      }
+    }, 180);
+  };
+})();
+</script>
 
 
 <section class="sp-section" id="stats" style="padding-top: 0; padding-bottom: 40px;">
@@ -931,57 +987,26 @@
           </div>
         </div>
 
-        
         <div class="sp-stats-grid-2">
 
           <div class="sp-stats-card">
             <div class="sp-stats-card-title">Role breakdown</div>
             <ul class="sp-stats-bar-list">
               <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Software / Platform / DevOps</span><span class="sp-stats-bar-count">29%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:29%"></div></div>
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Software / Platform / DevOps</span><span class="sp-stats-bar-count">46.7%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:46.7%"></div></div>
               </li>
               <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Executive / Founder / Leadership</span><span class="sp-stats-bar-count">23%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:23%"></div></div>
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Executive / Founder / Leadership</span><span class="sp-stats-bar-count">25.6%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:25.6%"></div></div>
               </li>
               <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">ML / AI / Data</span><span class="sp-stats-bar-count">18%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:18%"></div></div>
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">ML / AI / Data</span><span class="sp-stats-bar-count">20%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:20%"></div></div>
               </li>
               <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Business / Consulting / Product</span><span class="sp-stats-bar-count">17%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:17%"></div></div>
-              </li>
-              <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Independent / Job Seeker</span><span class="sp-stats-bar-count">13%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:13%"></div></div>
-              </li>
-            </ul>
-          </div>
-
-          <div class="sp-stats-card">
-            <div class="sp-stats-card-title">Attendee seniority</div>
-            <ul class="sp-stats-bar-list">
-              <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Mid-Level</span><span class="sp-stats-bar-count">43%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:43%"></div></div>
-              </li>
-              <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Executive</span><span class="sp-stats-bar-count">22%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:22%"></div></div>
-              </li>
-              <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Junior</span><span class="sp-stats-bar-count">14%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:14%"></div></div>
-              </li>
-              <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Senior</span><span class="sp-stats-bar-count">11%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:11%"></div></div>
-              </li>
-              <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Lead / Manager</span><span class="sp-stats-bar-count">10%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:10%"></div></div>
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Business / Consulting / Product</span><span class="sp-stats-bar-count">7.8%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:7.8%"></div></div>
               </li>
             </ul>
           </div>
@@ -990,24 +1015,39 @@
             <div class="sp-stats-card-title">Company size</div>
             <ul class="sp-stats-bar-list">
               <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Startup (&lt;50)</span><span class="sp-stats-bar-count">59%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:59%"></div></div>
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Medium &amp; Startup</span><span class="sp-stats-bar-count">49%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:49%"></div></div>
               </li>
               <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Enterprise (500+)</span><span class="sp-stats-bar-count">30%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:30%"></div></div>
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Enterprise</span><span class="sp-stats-bar-count">36%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:36%"></div></div>
               </li>
               <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Solo Founder / Independent</span><span class="sp-stats-bar-count">6%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:6%"></div></div>
-              </li>
-              <li class="sp-stats-bar-item">
-                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Scale-up (50-500)</span><span class="sp-stats-bar-count">5%</span></div>
-                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:5%"></div></div>
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Solo Founders</span><span class="sp-stats-bar-count">15%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:15%"></div></div>
               </li>
             </ul>
           </div>
 
+          <div class="sp-stats-card">
+            <div class="sp-stats-card-title">Attendee seniority</div>
+            <ul class="sp-stats-bar-list">
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Mid-Level</span><span class="sp-stats-bar-count">57%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:57%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Senior / Lead / Manager</span><span class="sp-stats-bar-count">21%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:21%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Executive</span><span class="sp-stats-bar-count">22%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:22%"></div></div>
+              </li>
+            </ul>
+          </div>
+
+          
           <div class="sp-stats-card">
             <div class="sp-stats-card-title">What they are working on</div>
             <div class="sp-stats-tag-cloud">
