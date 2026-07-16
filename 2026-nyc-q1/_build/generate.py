@@ -604,6 +604,38 @@ for _tier in _sponsorship_tiers:
             else:
                 _cd['price_label'] = _convert_price_label(_tier['price_label'], _sym, _rate)
         _tier['currencies'][_cc] = _cd
+
+# ── 20% startup discount pre-computation ──────────────────────────────────
+def _apply_discount(amount, discount=0.80):
+    """Apply 20% discount to a converted currency amount."""
+    v = amount * discount
+    return int(round(v / 100) * 100) if v >= 100 else int(round(v))
+
+def _discount_price_label(label_str, symbol, discount=0.80):
+    """Apply 20% discount to all currency amounts in a label string."""
+    escaped = re.escape(symbol)
+    def _repl(m):
+        v = int(m.group(1)) * discount
+        return symbol + str(int(round(v / 100) * 100) if v >= 100 else int(round(v)))
+    return re.sub(escaped + r'(\d+)', _repl, label_str)
+
+for _tier in _sponsorship_tiers:
+    for _cc, _cd in _tier['currencies'].items():
+        _sym = _cd['symbol']
+        if 'price' in _cd:
+            _cd['discounted_price'] = {
+                sz: _apply_discount(v) for sz, v in _cd['price'].items()
+            }
+        if 'price_label' in _cd:
+            if isinstance(_cd['price_label'], dict):
+                _cd['discounted_price_label'] = {
+                    sz: _discount_price_label(lbl, _sym)
+                    for sz, lbl in _cd['price_label'].items()
+                }
+            else:
+                _cd['discounted_price_label'] = _discount_price_label(
+                    _cd['price_label'], _sym
+                )
 # ── End multi-currency ──────────────────────────────────────────────────────
 
 print(f"  Total events: {_total_events}, attendees: {_total_attendees} (raw {_total_attendees_raw}), speakers: {_spk_rounded}+ (raw {_global_speaker_count}), cities: {_total_cities}, ambassadors: {_total_ambassadors}")
