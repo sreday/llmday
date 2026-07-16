@@ -110,6 +110,18 @@
   padding: 3px;
   gap: 2px;
   vertical-align: middle;
+  position: relative;
+}
+.sp-currency-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  height: calc(100% - 6px);
+  border-radius: 999px;
+  background: var(--sp-accent);
+  transition: transform .3s cubic-bezier(.4,0,.2,1), width .3s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+  z-index: 0;
 }
 .sp-currency-btn {
   background: none;
@@ -120,12 +132,13 @@
   padding: 5px 14px;
   border-radius: 999px;
   cursor: pointer;
-  transition: background .2s, color .2s;
+  transition: color .2s;
   line-height: 1;
+  position: relative;
+  z-index: 1;
 }
 .sp-currency-btn:hover { color: #ccc; }
 .sp-currency-btn.active {
-  background: var(--sp-accent);
   color: #fff;
 }
 
@@ -709,6 +722,7 @@
     <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.5rem;margin-bottom:1.5rem;">
       Convert:
       <span class="sp-currency-toggle">
+        <span class="sp-currency-slider"></span>
         <button class="sp-currency-btn active" data-currency="GBP" onclick="spSwitchCurrency('GBP')">GBP</button><button class="sp-currency-btn" data-currency="USD" onclick="spSwitchCurrency('USD')">USD</button><button class="sp-currency-btn" data-currency="EUR" onclick="spSwitchCurrency('EUR')">EUR</button>
       </span>
     </p>
@@ -997,13 +1011,31 @@
     el._countdownId = requestAnimationFrame(step);
   }
 
+  function spMoveSlider(btn) {
+    var slider = document.querySelector('.sp-currency-slider');
+    if (!slider || !btn) return;
+    var toggle = btn.parentElement;
+    var tRect = toggle.getBoundingClientRect();
+    var bRect = btn.getBoundingClientRect();
+    slider.style.width = bRect.width + 'px';
+    slider.style.transform = 'translateX(' + (bRect.left - tRect.left - 3) + 'px)';
+  }
+
+  // Position slider on load
+  requestAnimationFrame(function() {
+    spMoveSlider(document.querySelector('.sp-currency-btn.active'));
+  });
+
   window.spSwitchCurrency = function(code) {
     spCurrentCurrency = code;
     var priceAttr = spDiscountActive ? 'data-dprice-' : 'data-price-';
     var attr = priceAttr + code.toLowerCase();
     var origAttr = 'data-price-' + code.toLowerCase();
     var btns = document.querySelectorAll('.sp-currency-btn');
-    for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', btns[i].getAttribute('data-currency') === code);
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', btns[i].getAttribute('data-currency') === code);
+      if (btns[i].getAttribute('data-currency') === code) spMoveSlider(btns[i]);
+    }
     var els = document.querySelectorAll('.sp-tier-price[' + attr + ']');
     for (var j = 0; j < els.length; j++) {
       var el = els[j];
