@@ -33,6 +33,13 @@ events:
     size: medium
     youtube_playlist:
 
+  - name: LLMday NYC 2026 Q4
+    location: Microsoft Experience Center NYC, New York, United States
+    photo_url: ./assets/images/events/llmday-2026-nyc-q4.png
+    url: ./2026-nyc-q4/
+    size: medium
+    youtube_playlist:
+
   - name: LLMday Montevideo 2026 Q4
     location: World Trade Center Montevideo - Torre 4, Montevideo, Uruguay
     photo_url: ./assets/images/events/llmday-2026-montevideo-q4.png
