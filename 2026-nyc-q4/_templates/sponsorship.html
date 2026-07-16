@@ -416,16 +416,7 @@
 .sp-tier-benefits { list-style: none; padding: 0; margin: 0 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
 .sp-tier-benefits li::before { content: "✓ "; color: #26986A; font-weight: 700; }
-.sp-tier-requires {
-  font-size: .9rem;
-  color: #f5d800;
-  margin-top: 5px;
-  padding: 6px 10px;
-  background: rgba(245,216,0,.1);
-  border: 1px solid rgba(245,216,0,.3);
-  border-radius: 6px;
-  text-align: center;
-}
+.sp-tier-benefits li.sp-tier-warn::before { content: "⚠ "; color: #f5d800; }
 
 /* ── Get in touch / CTA buttons ──────────────────────── */
 #sp-dark-body .btn-outline-secondary {
@@ -540,7 +531,7 @@
       {% for tier in sponsorship_tiers %}
       <div class="col-12 col-md-4">
         <div class="sp-tier-card" data-tier-id="{{ tier.id }}">
-          <div class="sp-tier-name">{{ tier.name }}{% if tier.id != 'startup_discount' %}<span class="sp-tier-original"></span>{% endif %}</div>
+          <div class="sp-tier-name">{{ tier.name }}{% if tier.id not in ('startup_discount', 'food', 'clothing') %}<span class="sp-tier-original"></span>{% endif %}</div>
           {% if tier.subtitle %}<div class="sp-tier-subtitle">{{ tier.subtitle }}</div>{% endif %}
           {% if tier.id == 'startup_discount' %}
           <div class="sp-tier-price">
@@ -556,15 +547,15 @@
           </div>
           {% endif %}
           <div class="sp-tier-body">
-            {% if tier.benefits %}
+            {% if tier.benefits or tier.requires %}
             <ul class="sp-tier-benefits">
               {% for b in tier.benefits %}
               <li>{{ b }}</li>
               {% endfor %}
+              {% if tier.requires %}
+              <li class="sp-tier-warn">{{ tier.requires }}</li>
+              {% endif %}
             </ul>
-            {% endif %}
-            {% if tier.requires %}
-            <div class="sp-tier-requires">⚠ {{ tier.requires }} ⚠</div>
             {% endif %}
           </div>
         </div>

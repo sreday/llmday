@@ -69,7 +69,7 @@ tiers:
       - "Electricity, Wi-Fi, space for a rollup banner"
 
   - id: logo_swag
-    name: "Logo Sponsor + Swag Distribution"
+    name: "Logo Sponsor + Swag"
 
     price:
       small: 500
@@ -99,11 +99,10 @@ tiers:
       large: "£1000 + variable"
     benefits:
       - "Your logo on t-shirts, hoodies, socks, etc."
-      - "£10–£30 per person, depending on the item"
+      - "Price per person depends on the item"
 
   - id: startup_discount
-    name: "Startup Discount"
-    subtitle: "Check if you are eligible for"
+    name: "Check if you are eligible for"
     price_label: "20% Discount"
     benefits:
       - "Early-stage startups under $5M in funding"
