@@ -459,7 +459,10 @@
 .sp-discount-card-active {
   border-color: var(--sp-accent) !important;
   box-shadow: 0 0 20px rgba(38,152,106,.25) !important;
+  background: #1e2e24 !important;
 }
+.sp-discount-preview { visibility: hidden; text-align: center; font-size: .95rem; color: #4adb8b; margin-bottom: 4px; }
+.sp-discount-preview.active { visibility: visible; }
 .sp-tier-body     { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .sp-tier-benefits { list-style: none; padding: 0; margin: 0 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
@@ -711,6 +714,7 @@
         <button class="sp-currency-btn active" data-currency="GBP" onclick="spSwitchCurrency('GBP')">GBP</button><button class="sp-currency-btn" data-currency="USD" onclick="spSwitchCurrency('USD')">USD</button><button class="sp-currency-btn" data-currency="EUR" onclick="spSwitchCurrency('EUR')">EUR</button>
       </span>
     </p>
+    <div class="sp-discount-preview">20% off preview</div>
     <div class="row justify-content-center g-4 mt-2">
       
       <div class="col-12 col-md-4">
@@ -822,7 +826,7 @@
             
             <ul class="sp-tier-benefits">
               
-              <li>Table (150 × 100cm) with a 24-inch monitor</li>
+              <li>Table (150 × 100cm), optional 24-inch monitor</li>
               
               <li>Electricity, Wi-Fi, space for a rollup banner</li>
               
@@ -1055,6 +1059,8 @@
     }, 180);
     var sdCard = document.querySelector('.sp-tier-card[data-tier-id="startup_discount"]');
     if (sdCard) sdCard.classList.toggle('sp-discount-card-active', on);
+    var preview = document.querySelector('.sp-discount-preview');
+    if (preview) preview.classList.toggle('active', on);
   };
 })();
 </script>
