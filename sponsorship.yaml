@@ -102,7 +102,7 @@ tiers:
       - "Price per person depends on the item"
 
   - id: startup_discount
-    name: "Check if you are eligible for"
+    name: "Check eligibility for"
     price_label: "20% Discount"
     benefits:
       - "Early-stage startups under $5M in funding"
