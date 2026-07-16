@@ -35,6 +35,17 @@ tiers:
       - "30-minute morning slot"
       - "100% audience — no parallel talks"
 
+  - id: workshop
+    name: "Workshop"
+
+    price:
+      small: 1000
+      medium: 3000
+      large: 5000
+    benefits:
+      - "60-minute slot"
+      - "Let attendees play with your tech"
+
   - id: talk
     name: "Regular Session Slot"
 
@@ -90,14 +101,6 @@ tiers:
       - "Your logo on t-shirts, hoodies, socks, etc."
       - "£10–£30 per person, depending on the item"
 
-  - id: tickets
-    name: "Discounted Ticket Pack"
-
-    price_label: "20% off 5+ tickets"
-    benefits:
-      - "Purchase 5 or more tickets at a discount"
-      - "Share your vouchers with anyone"
-
   - id: startup_discount
     name: "Startup Discount"
     subtitle: "Check if you are eligible for"
@@ -115,11 +118,6 @@ tiers:
 
   - id: co_located
     name: "Co-Located Event"
-
-    price_label: "On request"
-
-  - id: workshop
-    name: "Workshop"
 
     price_label: "On request"
 
