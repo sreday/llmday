@@ -53,6 +53,34 @@
 #sp-dark-body .sp-section-title { color: #fff; }
 #sp-dark-body .sp-gbp-note    { color: #666; }
 
+/* ── Currency toggle ────────────────────────────────── */
+.sp-currency-toggle {
+  display: inline-flex;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+  vertical-align: middle;
+}
+.sp-currency-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: .85rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  line-height: 1;
+}
+.sp-currency-btn:hover { color: #ccc; }
+.sp-currency-btn.active {
+  background: var(--sp-accent);
+  color: #fff;
+}
+
 /* ── Sponsor pills ───────────────────────────────────── */
 .sp-pill {
   display: inline-block;
@@ -329,7 +357,8 @@
   box-shadow: 0 0 22px rgba(180, 130, 20, .22), 0 0 50px rgba(180, 130, 20, .08);
 }
 .sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
-.sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; }
+.sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; transition: opacity .18s ease; }
+.sp-tier-price.sp-fade { opacity: 0; }
 .sp-tier-body     { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .sp-tier-benefits { list-style: none; padding: 0; margin: 0 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
@@ -444,13 +473,22 @@
 <section class="sp-section" id="opportunities">
   <div class="container">
     <h2 class="sp-section-title text-center">Sponsorship opportunities</h2>
-    <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">Pricing in GBP / £ — British Pound Sterling.<br>We are a London-based company organizing conferences worldwide.</p>
+    <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">
+      We are a London-based company organizing conferences worldwide.<br>
+      The base, default pricing is in GBP / £ &mdash; British Pound Sterling.
+    </p>
+    <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.5rem;margin-bottom:1.5rem;">
+      Convert:
+      <span class="sp-currency-toggle">
+        {% for cur_code, cur_info in exchange_rates.items() %}<button class="sp-currency-btn{% if cur_code == 'GBP' %} active{% endif %}" data-currency="{{ cur_code }}" onclick="spSwitchCurrency('{{ cur_code }}')">{{ cur_code }}</button>{% endfor %}
+      </span>
+    </p>
     <div class="row justify-content-center g-4 mt-2">
       {% for tier in sponsorship_tiers %}
       <div class="col-12 col-md-4">
         <div class="sp-tier-card">
           <div class="sp-tier-name">{{ tier.name }}</div>
-          <div class="sp-tier-price">
+          <div class="sp-tier-price"{% for cur_code, cur_data in tier.currencies.items() %} data-price-{{ cur_code|lower }}="{% if cur_data.price_label is defined %}{% if cur_data.price_label is mapping %}{{ cur_data.price_label[event_size] }}{% else %}{{ cur_data.price_label }}{% endif %}{% elif cur_data.price is defined %}{{ cur_data.symbol }}{{ cur_data.price[event_size] }}{% endif %}"{% endfor %}>
             {% if tier.price_label %}{% if tier.price_label is mapping %}{{ tier.price_label[event_size] }}{% else %}{{ tier.price_label }}{% endif %}{% else %}£{{ tier.price[event_size] }}{% endif %}
           </div>
           <div class="sp-tier-body">
@@ -491,6 +529,24 @@
     </div>
   </div>
 </section>
+
+<script>
+(function() {
+  window.spSwitchCurrency = function(code) {
+    var attr = 'data-price-' + code.toLowerCase();
+    var btns = document.querySelectorAll('.sp-currency-btn');
+    for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', btns[i].getAttribute('data-currency') === code);
+    var els = document.querySelectorAll('.sp-tier-price[' + attr + ']');
+    for (var j = 0; j < els.length; j++) els[j].classList.add('sp-fade');
+    setTimeout(function() {
+      for (var j = 0; j < els.length; j++) {
+        els[j].textContent = els[j].getAttribute(attr);
+        els[j].classList.remove('sp-fade');
+      }
+    }, 180);
+  };
+})();
+</script>
 
 {# ── Conference stats button + expandable panel ──────── #}
 <section class="sp-section" id="stats" style="padding-top: 0; padding-bottom: 40px;">

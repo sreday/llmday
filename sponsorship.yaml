@@ -1,3 +1,17 @@
+exchange_rates:
+  GBP:
+    symbol: "£"
+    rate: 1.0
+    name: "British Pound Sterling"
+  USD:
+    symbol: "$"
+    rate: 1.27
+    name: "US Dollar"
+  EUR:
+    symbol: "€"
+    rate: 1.17
+    name: "Euro"
+
 tiers:
   - id: leads
     name: "Conference Leads"
