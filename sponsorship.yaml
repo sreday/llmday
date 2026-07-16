@@ -111,12 +111,12 @@ tiers:
 #on request:
 
   - id: host
-    name: "Bring the conference to your city"
+    name: "Host LLMday / SREday / PLATFORMday"
 
     price_label: "On request"
 
   - id: co_located
-    name: "Co-Located Event"
+    name: "Co-located Event"
 
     price_label: "On request"
 
@@ -127,6 +127,11 @@ tiers:
 
   - id: meetup
     name: "Post-Conference Meetup"
+
+    price_label: "On request"
+
+  - id: speakers_dinner
+    name: "Speaker's Dinner"
 
     price_label: "On request"
 
