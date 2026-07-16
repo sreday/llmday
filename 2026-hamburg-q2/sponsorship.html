@@ -464,16 +464,7 @@
 .sp-tier-benefits { list-style: none; padding: 0; margin: 0 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
 .sp-tier-benefits li::before { content: "✓ "; color: #26986A; font-weight: 700; }
-.sp-tier-requires {
-  font-size: .9rem;
-  color: #f5d800;
-  margin-top: 5px;
-  padding: 6px 10px;
-  background: rgba(245,216,0,.1);
-  border: 1px solid rgba(245,216,0,.3);
-  border-radius: 6px;
-  text-align: center;
-}
+.sp-tier-benefits li.sp-tier-warn::before { content: "⚠ "; color: #f5d800; }
 
 /* ── Get in touch / CTA buttons ──────────────────────── */
 #sp-dark-body .btn-outline-secondary {
@@ -736,10 +727,10 @@
               
               <li>Receive full attendee contact list</li>
               
+              
+              <li class="sp-tier-warn">Cannot be purchased solo</li>
+              
             </ul>
-            
-            
-            <div class="sp-tier-requires">⚠ Cannot be purchased solo ⚠</div>
             
           </div>
         </div>
@@ -762,8 +753,8 @@
               
               <li>100% audience — no parallel talks</li>
               
+              
             </ul>
-            
             
           </div>
         </div>
@@ -786,8 +777,8 @@
               
               <li>Let attendees play with your tech</li>
               
+              
             </ul>
-            
             
           </div>
         </div>
@@ -810,8 +801,8 @@
               
               <li>May run alongside parallel tracks</li>
               
+              
             </ul>
-            
             
           </div>
         </div>
@@ -834,8 +825,8 @@
               
               <li>Electricity, Wi-Fi, space for a rollup banner</li>
               
+              
             </ul>
-            
             
           </div>
         </div>
@@ -843,7 +834,7 @@
       
       <div class="col-12 col-md-4">
         <div class="sp-tier-card" data-tier-id="logo_swag">
-          <div class="sp-tier-name">Logo Sponsor + Swag Distribution<span class="sp-tier-original"></span></div>
+          <div class="sp-tier-name">Logo Sponsor + Swag<span class="sp-tier-original"></span></div>
           
           
           <div class="sp-tier-price" data-price-gbp="£1000" data-dprice-gbp="£800" data-price-usd="$1300" data-dprice-usd="$1000" data-price-eur="€1200" data-dprice-eur="€1000">
@@ -858,8 +849,8 @@
               
               <li>Swag distributed to all attendees</li>
               
+              
             </ul>
-            
             
           </div>
         </div>
@@ -867,7 +858,7 @@
       
       <div class="col-12 col-md-4">
         <div class="sp-tier-card" data-tier-id="food">
-          <div class="sp-tier-name">Coffee Break / Lunch / Happy Hour<span class="sp-tier-original"></span></div>
+          <div class="sp-tier-name">Coffee Break / Lunch / Happy Hour</div>
           
           
           <div class="sp-tier-price" data-price-gbp="£1000 + £15pp" data-dprice-gbp="£800 + £12pp" data-price-usd="$1300 + $20pp" data-dprice-usd="$1000 + $16pp" data-price-eur="€1200 + €20pp" data-dprice-eur="€1000 + €16pp">
@@ -882,8 +873,8 @@
               
               <li>Distribute your swag alongside food & drinks</li>
               
+              
             </ul>
-            
             
           </div>
         </div>
@@ -891,7 +882,7 @@
       
       <div class="col-12 col-md-4">
         <div class="sp-tier-card" data-tier-id="clothing">
-          <div class="sp-tier-name">Branded Wearables<span class="sp-tier-original"></span></div>
+          <div class="sp-tier-name">Branded Wearables</div>
           
           
           <div class="sp-tier-price" data-price-gbp="£1000 + variable" data-dprice-gbp="£800 + variable" data-price-usd="$1300 + variable" data-dprice-usd="$1000 + variable" data-price-eur="€1200 + variable" data-dprice-eur="€1000 + variable">
@@ -904,10 +895,10 @@
               
               <li>Your logo on t-shirts, hoodies, socks, etc.</li>
               
-              <li>£10–£30 per person, depending on the item</li>
+              <li>Price per person depends on the item</li>
+              
               
             </ul>
-            
             
           </div>
         </div>
@@ -915,8 +906,8 @@
       
       <div class="col-12 col-md-4">
         <div class="sp-tier-card" data-tier-id="startup_discount">
-          <div class="sp-tier-name">Startup Discount</div>
-          <div class="sp-tier-subtitle">Check if you are eligible for</div>
+          <div class="sp-tier-name">Check if you are eligible for</div>
+          
           
           <div class="sp-tier-price">
             <label class="sp-discount-toggle-label">
@@ -934,8 +925,8 @@
               
               <li>Sponsoring 3+ events in a year</li>
               
+              
             </ul>
-            
             
           </div>
         </div>
