@@ -405,8 +405,61 @@
   box-shadow: 0 0 22px rgba(180, 130, 20, .22), 0 0 50px rgba(180, 130, 20, .08);
 }
 .sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
+.sp-tier-subtitle { font-size: .85rem; color: #999; margin-bottom: 2px; }
 .sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; transition: opacity .18s ease; }
 .sp-tier-price.sp-fade { opacity: 0; }
+.sp-tier-price.sp-discounted { color: #4adb8b; }
+
+/* ── Discount toggle switch ────────────────────────── */
+.sp-discount-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 2.2rem;
+  font-weight: 800;
+  user-select: none;
+}
+.sp-discount-check { display: none; }
+.sp-discount-switch {
+  width: 44px; height: 24px;
+  background: #444;
+  border-radius: 12px;
+  position: relative;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.sp-discount-switch::after {
+  content: '';
+  width: 20px; height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px; left: 2px;
+  transition: transform .2s;
+}
+.sp-discount-check:checked + .sp-discount-switch {
+  background: var(--sp-accent);
+}
+.sp-discount-check:checked + .sp-discount-switch::after {
+  transform: translateX(20px);
+}
+
+/* Strikethrough original price */
+.sp-tier-original {
+  display: none;
+  float: right;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #888;
+  text-decoration: line-through;
+}
+
+/* Active discount card glow */
+.sp-discount-card-active {
+  border-color: var(--sp-accent) !important;
+  box-shadow: 0 0 20px rgba(38,152,106,.25) !important;
+}
 .sp-tier-body     { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .sp-tier-benefits { list-style: none; padding: 0; margin: 0 0 12px; }
 .sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
@@ -669,11 +722,14 @@
     <div class="row justify-content-center g-4 mt-2">
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
-          <div class="sp-tier-name">Conference Leads</div>
-          <div class="sp-tier-price" data-price-gbp="£1000" data-price-usd="$1300" data-price-eur="€1200">
+        <div class="sp-tier-card" data-tier-id="leads">
+          <div class="sp-tier-name">Conference Leads<span class="sp-tier-original"></span></div>
+          
+          
+          <div class="sp-tier-price" data-price-gbp="£1000" data-dprice-gbp="£800" data-price-usd="$1300" data-dprice-usd="$1000" data-price-eur="€1200" data-dprice-eur="€1000">
             £1000
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
@@ -690,11 +746,14 @@
       </div>
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
-          <div class="sp-tier-name">Keynote Session</div>
-          <div class="sp-tier-price" data-price-gbp="£3000" data-price-usd="$3800" data-price-eur="€3500">
+        <div class="sp-tier-card" data-tier-id="keynote">
+          <div class="sp-tier-name">Keynote Session<span class="sp-tier-original"></span></div>
+          
+          
+          <div class="sp-tier-price" data-price-gbp="£3000" data-dprice-gbp="£2400" data-price-usd="$3800" data-dprice-usd="$3000" data-price-eur="€3500" data-dprice-eur="€2800">
             £3000
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
@@ -711,11 +770,14 @@
       </div>
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
-          <div class="sp-tier-name">Regular Session Slot</div>
-          <div class="sp-tier-price" data-price-gbp="£2000" data-price-usd="$2500" data-price-eur="€2300">
+        <div class="sp-tier-card" data-tier-id="talk">
+          <div class="sp-tier-name">Regular Session Slot<span class="sp-tier-original"></span></div>
+          
+          
+          <div class="sp-tier-price" data-price-gbp="£2000" data-dprice-gbp="£1600" data-price-usd="$2500" data-dprice-usd="$2000" data-price-eur="€2300" data-dprice-eur="€1800">
             £2000
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
@@ -732,11 +794,14 @@
       </div>
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
-          <div class="sp-tier-name">Booth / Table</div>
-          <div class="sp-tier-price" data-price-gbp="£2000" data-price-usd="$2500" data-price-eur="€2300">
+        <div class="sp-tier-card" data-tier-id="booth">
+          <div class="sp-tier-name">Booth / Table<span class="sp-tier-original"></span></div>
+          
+          
+          <div class="sp-tier-price" data-price-gbp="£2000" data-dprice-gbp="£1600" data-price-usd="$2500" data-dprice-usd="$2000" data-price-eur="€2300" data-dprice-eur="€1800">
             £2000
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
@@ -753,11 +818,14 @@
       </div>
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
-          <div class="sp-tier-name">Logo Sponsor + Swag Distribution</div>
-          <div class="sp-tier-price" data-price-gbp="£1000" data-price-usd="$1300" data-price-eur="€1200">
+        <div class="sp-tier-card" data-tier-id="logo_swag">
+          <div class="sp-tier-name">Logo Sponsor + Swag Distribution<span class="sp-tier-original"></span></div>
+          
+          
+          <div class="sp-tier-price" data-price-gbp="£1000" data-dprice-gbp="£800" data-price-usd="$1300" data-dprice-usd="$1000" data-price-eur="€1200" data-dprice-eur="€1000">
             £1000
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
@@ -774,11 +842,14 @@
       </div>
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
-          <div class="sp-tier-name">Coffee Break / Lunch / Happy Hour</div>
-          <div class="sp-tier-price" data-price-gbp="£1000 + £15pp" data-price-usd="$1300 + $20pp" data-price-eur="€1200 + €20pp">
+        <div class="sp-tier-card" data-tier-id="food">
+          <div class="sp-tier-name">Coffee Break / Lunch / Happy Hour<span class="sp-tier-original"></span></div>
+          
+          
+          <div class="sp-tier-price" data-price-gbp="£1000 + £15pp" data-dprice-gbp="£800 + £12pp" data-price-usd="$1300 + $20pp" data-dprice-usd="$1000 + $16pp" data-price-eur="€1200 + €20pp" data-dprice-eur="€1000 + €16pp">
             £1000 + £15pp
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
@@ -795,11 +866,14 @@
       </div>
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
-          <div class="sp-tier-name">Branded Wearables</div>
-          <div class="sp-tier-price" data-price-gbp="£1000 + variable" data-price-usd="$1300 + variable" data-price-eur="€1200 + variable">
+        <div class="sp-tier-card" data-tier-id="clothing">
+          <div class="sp-tier-name">Branded Wearables<span class="sp-tier-original"></span></div>
+          
+          
+          <div class="sp-tier-price" data-price-gbp="£1000 + variable" data-dprice-gbp="£800 + variable" data-price-usd="$1300 + variable" data-dprice-usd="$1000 + variable" data-price-eur="€1200 + variable" data-dprice-eur="€1000 + variable">
             £1000 + variable
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
@@ -816,11 +890,14 @@
       </div>
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
-          <div class="sp-tier-name">Discounted Ticket Pack</div>
-          <div class="sp-tier-price" data-price-gbp="20% off 5+ tickets" data-price-usd="20% off 5+ tickets" data-price-eur="20% off 5+ tickets">
+        <div class="sp-tier-card" data-tier-id="tickets">
+          <div class="sp-tier-name">Discounted Ticket Pack<span class="sp-tier-original"></span></div>
+          
+          
+          <div class="sp-tier-price" data-price-gbp="20% off 5+ tickets" data-dprice-gbp="20% off 5+ tickets" data-price-usd="20% off 5+ tickets" data-dprice-usd="20% off 5+ tickets" data-price-eur="20% off 5+ tickets" data-dprice-eur="20% off 5+ tickets">
             20% off 5+ tickets
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
@@ -837,18 +914,25 @@
       </div>
       
       <div class="col-12 col-md-4">
-        <div class="sp-tier-card">
+        <div class="sp-tier-card" data-tier-id="startup_discount">
           <div class="sp-tier-name">Startup Discount</div>
-          <div class="sp-tier-price" data-price-gbp="20% off anything" data-price-usd="20% off anything" data-price-eur="20% off anything">
-            20% off anything
+          <div class="sp-tier-subtitle">Check if you are eligible for</div>
+          
+          <div class="sp-tier-price">
+            <label class="sp-discount-toggle-label">
+              <input type="checkbox" class="sp-discount-check" onchange="spToggleDiscount(this.checked)">
+              <span class="sp-discount-switch"></span>
+              20% Discount
+            </label>
           </div>
+          
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
               
               <li>Early-stage startups under $5M in funding</li>
               
-              <li>Contact us to apply</li>
+              <li>Sponsoring 3+ events in a year</li>
               
             </ul>
             
@@ -891,18 +975,94 @@
 
 <script>
 (function() {
+  var spCurrentCurrency = 'GBP';
+  var spDiscountActive = false;
+
+  /* ── Countdown (number-rolling) transition for currency switch ── */
+  function spCountdown(el, newText, duration) {
+    if (el._countdownId) cancelAnimationFrame(el._countdownId);
+    var oldText = el.textContent.trim();
+    var oldNums = (oldText.match(/\d+/g) || []).map(Number);
+    var newNums = (newText.match(/\d+/g) || []).map(Number);
+    if (oldNums.length !== newNums.length || newNums.length === 0) {
+      el.textContent = newText;
+      return;
+    }
+    var start = performance.now();
+    function step(now) {
+      var t = Math.min((now - start) / duration, 1);
+      var ease = 1 - Math.pow(1 - t, 3);
+      var idx = 0;
+      el.textContent = newText.replace(/\d+/g, function() {
+        var v = Math.round(oldNums[idx] + (newNums[idx] - oldNums[idx]) * ease);
+        idx++;
+        return String(v);
+      });
+      if (t < 1) el._countdownId = requestAnimationFrame(step);
+      else el._countdownId = null;
+    }
+    el._countdownId = requestAnimationFrame(step);
+  }
+
   window.spSwitchCurrency = function(code) {
-    var attr = 'data-price-' + code.toLowerCase();
+    spCurrentCurrency = code;
+    var priceAttr = spDiscountActive ? 'data-dprice-' : 'data-price-';
+    var attr = priceAttr + code.toLowerCase();
+    var origAttr = 'data-price-' + code.toLowerCase();
     var btns = document.querySelectorAll('.sp-currency-btn');
     for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', btns[i].getAttribute('data-currency') === code);
     var els = document.querySelectorAll('.sp-tier-price[' + attr + ']');
-    for (var j = 0; j < els.length; j++) els[j].classList.add('sp-fade');
+    for (var j = 0; j < els.length; j++) {
+      var el = els[j];
+      var newPrice = el.getAttribute(attr);
+      var origPrice = el.getAttribute(origAttr);
+      spCountdown(el, newPrice, 400);
+      var card = el.closest('.sp-tier-card');
+      var origSpan = card ? card.querySelector('.sp-tier-original') : null;
+      if (origSpan) {
+        if (spDiscountActive && origPrice !== newPrice) {
+          origSpan.textContent = origPrice;
+          origSpan.style.display = 'inline';
+        } else {
+          origSpan.style.display = 'none';
+        }
+      }
+    }
+  };
+
+  /* ── Fade transition for discount toggle ─────────────────────── */
+  window.spToggleDiscount = function(on) {
+    spDiscountActive = on;
+    var cc = spCurrentCurrency.toLowerCase();
+    var priceAttr = on ? 'data-dprice-' + cc : 'data-price-' + cc;
+    var origAttr = 'data-price-' + cc;
+    var els = document.querySelectorAll('.sp-tier-price[data-dprice-' + cc + ']');
+    for (var j = 0; j < els.length; j++) {
+      if (els[j]._countdownId) { cancelAnimationFrame(els[j]._countdownId); els[j]._countdownId = null; }
+      els[j].classList.add('sp-fade');
+    }
     setTimeout(function() {
       for (var j = 0; j < els.length; j++) {
-        els[j].textContent = els[j].getAttribute(attr);
-        els[j].classList.remove('sp-fade');
+        var el = els[j];
+        var newPrice = el.getAttribute(priceAttr);
+        var origPrice = el.getAttribute(origAttr);
+        el.textContent = newPrice;
+        el.classList.remove('sp-fade');
+        el.classList.toggle('sp-discounted', on && origPrice !== newPrice);
+        var card = el.closest('.sp-tier-card');
+        var origSpan = card ? card.querySelector('.sp-tier-original') : null;
+        if (origSpan) {
+          if (on && origPrice !== newPrice) {
+            origSpan.textContent = origPrice;
+            origSpan.style.display = 'inline';
+          } else {
+            origSpan.style.display = 'none';
+          }
+        }
       }
     }, 180);
+    var sdCard = document.querySelector('.sp-tier-card[data-tier-id="startup_discount"]');
+    if (sdCard) sdCard.classList.toggle('sp-discount-card-active', on);
   };
 })();
 </script>
