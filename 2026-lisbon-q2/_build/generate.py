@@ -612,12 +612,14 @@ def _apply_discount(amount, discount=0.80):
     return int(round(v / 100) * 100) if v >= 100 else int(round(v))
 
 def _discount_price_label(label_str, symbol, discount=0.80):
-    """Apply 20% discount to all currency amounts in a label string."""
+    """Apply 20% discount to currency amounts in a label string, skipping per-person (pp) amounts."""
     escaped = re.escape(symbol)
     def _repl(m):
+        if m.group(2):  # followed by "pp" — keep original
+            return m.group(0)
         v = int(m.group(1)) * discount
         return symbol + str(int(round(v / 100) * 100) if v >= 100 else int(round(v)))
-    return re.sub(escaped + r'(\d+)', _repl, label_str)
+    return re.sub(escaped + r'(\d+)(pp)?', _repl, label_str)
 
 for _tier in _sponsorship_tiers:
     for _cc, _cd in _tier['currencies'].items():
