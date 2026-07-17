@@ -5,11 +5,11 @@ exchange_rates:
     name: "British Pound Sterling"
   USD:
     symbol: "$"
-    rate: 1.27
+    rate: 1.35
     name: "US Dollar"
   EUR:
     symbol: "€"
-    rate: 1.17
+    rate: 1.18
     name: "Euro"
 
 tiers:

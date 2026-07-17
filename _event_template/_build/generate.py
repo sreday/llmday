@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import datetime
+import math
 import re
 import csv
 import textwrap
@@ -575,8 +576,8 @@ _on_request_tiers  = [t for t in _all_tiers if t.get('price_label') == 'On reque
 _exchange_rates = _sponsorship_config.get('exchange_rates', {})
 
 def _convert_price(gbp_value, rate):
-    """Convert GBP amount to target currency, round to nearest 100."""
-    return int(round(gbp_value * rate / 100) * 100)
+    """Convert GBP amount to target currency, round up to nearest 100."""
+    return int(math.ceil(gbp_value * rate / 100) * 100)
 
 def _convert_price_label(label_str, symbol, rate):
     """Replace all £<number> in a price_label string with the target currency.
@@ -587,7 +588,7 @@ def _convert_price_label(label_str, symbol, rate):
         return label_str
     def _repl(m):
         v = int(m.group(1)) * rate
-        rounded = int(round(v / 100) * 100) if v >= 100 else int(round(v / 5) * 5)
+        rounded = int(math.ceil(v / 100) * 100) if v >= 100 else int(math.ceil(v / 5) * 5)
         return symbol + str(rounded)
     return re.sub(r'£(\d+)', _repl, label_str)
 
