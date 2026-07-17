@@ -195,15 +195,15 @@
 .sp-stats-s-sub   { font-size: .9rem; color: #555; margin-bottom: 24px; }
 
 /* big number pills */
-.sp-stats-big-numbers { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+.sp-stats-big-numbers { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
 .sp-stats-big-num {
   display: inline-flex; flex-direction: column; align-items: center;
-  padding: 14px 24px; border: 1px solid var(--spi-green-mid);
+  padding: 11px 19px; border: 1px solid var(--spi-green-mid);
   border-radius: 999px; background: var(--spi-green-light); text-align: center;
 }
-.sp-stats-big-num-value { font-family: 'Montserrat', sans-serif; font-size: 1.9rem; font-weight: 700; color: #1a5c3a; line-height: 1; letter-spacing: -.01em; }
-.sp-stats-big-num-value sup { font-size: .9rem; color: var(--spi-green); vertical-align: super; font-weight: 700; }
-.sp-stats-big-num-label { font-size: .72rem; color: #3a8a60; text-transform: uppercase; letter-spacing: .07em; margin-top: 5px; }
+.sp-stats-big-num-value { font-family: 'Montserrat', sans-serif; font-size: 1.52rem; font-weight: 700; color: #1a5c3a; line-height: 1; letter-spacing: -.01em; }
+.sp-stats-big-num-value sup { font-size: .72rem; color: var(--spi-green); vertical-align: super; font-weight: 700; }
+.sp-stats-big-num-label { font-size: .58rem; color: #3a8a60; text-transform: uppercase; letter-spacing: .07em; margin-top: 4px; }
 
 /* TLDR pill */
 .sp-stats-tldr {
@@ -418,6 +418,13 @@
   font-weight: 600;
   color: #888;
   text-decoration: line-through;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+.sp-tier-original.sp-slide-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Active discount card glow */
@@ -676,7 +683,7 @@
     }
   };
 
-  /* ── Fade transition for discount toggle ─────────────────────── */
+  /* ── Countdown + slide transition for discount toggle ────────── */
   window.spToggleDiscount = function(on) {
     spDiscountActive = on;
     var cc = spCurrentCurrency.toLowerCase();
@@ -684,29 +691,24 @@
     var origAttr = 'data-price-' + cc;
     var els = document.querySelectorAll('.sp-tier-price[data-dprice-' + cc + ']');
     for (var j = 0; j < els.length; j++) {
-      if (els[j]._countdownId) { cancelAnimationFrame(els[j]._countdownId); els[j]._countdownId = null; }
-      els[j].classList.add('sp-fade');
-    }
-    setTimeout(function() {
-      for (var j = 0; j < els.length; j++) {
-        var el = els[j];
-        var newPrice = el.getAttribute(priceAttr);
-        var origPrice = el.getAttribute(origAttr);
-        el.textContent = newPrice;
-        el.classList.remove('sp-fade');
-        el.classList.toggle('sp-discounted', on && origPrice !== newPrice);
-        var card = el.closest('.sp-tier-card');
-        var origSpan = card ? card.querySelector('.sp-tier-original') : null;
-        if (origSpan) {
-          if (on && origPrice !== newPrice) {
-            origSpan.textContent = origPrice;
-            origSpan.style.display = 'inline';
-          } else {
-            origSpan.style.display = 'none';
-          }
+      var el = els[j];
+      var newPrice = el.getAttribute(priceAttr);
+      var origPrice = el.getAttribute(origAttr);
+      spCountdown(el, newPrice, 400);
+      el.classList.toggle('sp-discounted', on && origPrice !== newPrice);
+      var card = el.closest('.sp-tier-card');
+      var origSpan = card ? card.querySelector('.sp-tier-original') : null;
+      if (origSpan) {
+        if (on && origPrice !== newPrice) {
+          origSpan.textContent = origPrice;
+          origSpan.style.display = 'inline';
+          requestAnimationFrame(function(s) { return function() { s.classList.add('sp-slide-in'); }; }(origSpan));
+        } else {
+          origSpan.classList.remove('sp-slide-in');
+          setTimeout(function(s) { return function() { s.style.display = 'none'; }; }(origSpan), 300);
         }
       }
-    }, 180);
+    }
     var sdCard = document.querySelector('.sp-tier-card[data-tier-id="startup_discount"]');
     if (sdCard) sdCard.classList.toggle('sp-discount-card-active', on);
   };
