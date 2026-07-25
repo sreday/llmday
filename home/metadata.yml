@@ -96,7 +96,7 @@ events_past:
     photo_url: ./assets/images/events/llmday-2026-san-francisco-q2.png
     url: ./2026-san-francisco-q2/
     size: medium
-    youtube_playlist:
+    youtube_playlist: https://www.youtube.com/playlist?list=PLZxJmhybxtbc
 
   - name: LLMday NYC 2026 Q1
     location: VIAM, New York, United States
