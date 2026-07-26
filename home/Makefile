@@ -8,7 +8,7 @@ clean:
 	rm -rf ./static/*
 
 theme:
-	cp -r template/assets static/assets
+	cp -r ../_assets/template_v1/assets static/assets
 	cp -r template/favicon.ico static
 	cp -r assets static
 	mkdir -p static/videos && cp -r ../videos/* static/videos/ 2>/dev/null || true
