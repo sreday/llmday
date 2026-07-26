@@ -8,6 +8,7 @@ start_time: "2026-10-01T09:00:00-07:00"
 event_state: before
 date_string: "October 1, 2026"
 location_string: "Redwood City, California, US"
+city_name: "Redwood City"
 # get this from the event url
 luma_evt: evt-SdoxdX4lCePHZws
 cfp_url: https://cfp.ninja/e/llmday-2026-redwood-city-q4

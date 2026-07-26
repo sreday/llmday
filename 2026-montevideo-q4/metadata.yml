@@ -8,6 +8,7 @@ start_time: "2026-12-05T09:00:00-03:00"
 event_state: before
 date_string: "December 5, 2026"
 location_string: "Montevideo, Uruguay"
+city_name: "Montevideo"
 # get this from the event url
 luma_evt: evt-THcPEG50zx51MsC
 cfp_url: https://cfp.ninja/e/llmday-2026-montevideo-q4
