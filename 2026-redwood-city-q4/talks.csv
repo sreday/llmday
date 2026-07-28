@@ -1,2 +1,14 @@
-YouTube,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
-,confirmed,Miko Pawlikowski,1,1,SRE Author,Miko Pawlikowski.png,https://www.linkedin.com/in/mikolajpawlikowski/,,Keynote: The Evolution of Ops,Let's explore how the Ops landscape has evolved in recent years and examine key trends shaping its future.,,@mikopawlikowski,,
+YouTubel,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
+,confirmed,Lior Schejter,1,1,,Lior Schejter.png,https://www.linkedin.com/in/liors/,,,,From Tool Calls to Revenue: Metering and Billing AI workfloads at Scale,"Building an MCP server is getting easier. Monetizing one is not.
+
+At first, usage-based billing looks simple: count tool calls, aggregate them monthly, and send an invoice. But once AI workloads move into production agent workflows, the definition of “usage” becomes much harder. Was that one tool call or ten? Should you bill for tokens, API calls, records retrieved, compute time, successful outcomes, or prepaid credits consumed? What happens when an agent retries, chains tools, streams results, or calls the same resource through multiple clients?
+
+In this session, we’ll dive into the infrastructure behind trustworthy metering and pricing for MCP-native products. We’ll cover how to design a billing pipeline that can:
+
+- Count usage once and only once, even with retries, failures, and agent loops
+- Handle high-volume event streams from MCP tool calls
+- Give customers real-time visibility into current-period usage
+- Support pay-as-you-go, prepaid credits, drawdown models, and hybrid pricing
+- Preserve developer trust by making usage explainable and auditable",,"A software professional for over 20 years and software enthusiast for over 40 years.
+Still curious about how to develop software better, in whatever scale.
+And generally curious about how things work in the world."
