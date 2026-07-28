@@ -1,5 +1,5 @@
 YouTubel,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
-,confirmed,Lior Schejter,1,1,,Lior Schejter.png,https://www.linkedin.com/in/liors/,,,,From Tool Calls to Revenue: Metering and Billing AI workfloads at Scale,"Building an MCP server is getting easier. Monetizing one is not.
+https://youtu.be/3E5-iLSqkxU,confirmed,Lior Mechlovich,1,1,Salespeak,Lior Mechlovich.png,https://www.linkedin.com/in/lior-mechlovich/,,,,From Tool Calls to Revenue: Metering and Billing AI workfloads at Scale,"Building an MCP server is getting easier. Monetizing one is not.
 
 At first, usage-based billing looks simple: count tool calls, aggregate them monthly, and send an invoice. But once AI workloads move into production agent workflows, the definition of “usage” becomes much harder. Was that one tool call or ten? Should you bill for tokens, API calls, records retrieved, compute time, successful outcomes, or prepaid credits consumed? What happens when an agent retries, chains tools, streams results, or calls the same resource through multiple clients?
 
@@ -9,6 +9,4 @@ In this session, we’ll dive into the infrastructure behind trustworthy meterin
 - Handle high-volume event streams from MCP tool calls
 - Give customers real-time visibility into current-period usage
 - Support pay-as-you-go, prepaid credits, drawdown models, and hybrid pricing
-- Preserve developer trust by making usage explainable and auditable",,"A software professional for over 20 years and software enthusiast for over 40 years.
-Still curious about how to develop software better, in whatever scale.
-And generally curious about how things work in the world."
+- Preserve developer trust by making usage explainable and auditable",,"Lior Mechlovich is the CTO and co-founder of salespeak.ai. Before Salespeak, he was the co-founder of amberflo.io and led engineering teams at AWS and Informatica."
