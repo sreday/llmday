@@ -87,6 +87,25 @@ with open('metadata.yml', encoding='utf-8') as f:
     context = yaml.load(f, Loader=yaml.FullLoader)
     BASE_FOLDER = "./" + context.get("base_folder")
 
+
+def luma_is_free(evt_id):
+    if not evt_id:
+        return False
+    try:
+        import urllib.request
+        req = urllib.request.Request(
+            "https://luma.com/embed/event/%s/simple" % evt_id,
+            headers={"User-Agent": "Mozilla/5.0"})
+        body = urllib.request.urlopen(req, timeout=10).read().decode("utf-8", "ignore")
+        return '"is_free":true' in body
+    except Exception as e:
+        print("WARN: could not check Luma pricing (%s); assuming paid" % e)
+        return False
+
+
+context["luma_is_free"] = luma_is_free(context.get("luma_evt"))
+print("Luma event %s is_free=%s" % (context.get("luma_evt") or "(none)", context["luma_is_free"]))
+
 # pick up the ids & photos
 for i, talk in enumerate(talks_raw):
     talk["id"] = str(i)
