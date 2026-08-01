@@ -89,7 +89,7 @@ events_past:
     photo_url: ./assets/images/events/llmday-2026-austin-q2.png
     url: ./2026-austin-q2/
     size: medium
-    youtube_playlist:
+    youtube_playlist: https://www.youtube.com/playlist?list=PLa_m14ZukUWg
 
   - name: LLMday San Francisco 2026 Q2
     location: Harness, San Francisco, United States
