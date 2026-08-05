@@ -268,7 +268,7 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">The Best Laid Spans: An AI Agent That Instruments Your Code with OpenTelemetry</h1>
+    <h1 class="section-heading text-center mb-3">Your Internal Developer Platform's Next Interface Is an AI Agent</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
@@ -297,7 +297,7 @@
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Every team says they want better observability, but adding OpenTelemetry instrumentation is repetitive, tedious, convention-heavy work. Wah wah wahhhh, what a drag. Enter Spinybacked Orbweaver to save the day! Spinybacked Orbweaver is an AI-powered telemetry agent that can analyze your code, add the instrumentation, check its own work, and open a pull request. And it can do it consistently well, following your company's telemetry standards! This speaker built it, and she'll demo it live. Sparkles and rainbows! But here's where it gets interesting: how does the agent know if it did a good job? Two things. First, the OpenTelemetry project has a tool called Weaver that lets you define your team's telemetry standards as a machine-readable schema. Second, there's an emerging open specification called the Instrumentation Score that rates instrumentation quality on a 0-to-100 scale using standardized rules. The agent validates against both of these, plus some custom rules. When the agent fails its own checks, it gets the feedback and tries again. Generate, validate, learn, retry. You'll watch the whole thing happen against a real codebase. The agent discovers what to instrument, writes the code, gets rejected by its own quality checks, fixes its mistakes, and produces a PR. Along the way, you'll get grounded in what OpenTelemetry, Weaver, and the Instrumentation Score are, why they exist, and why good telemetry is worth caring about... but not enough to suffer the tedium of manual code instrumentation.</p></p>
+                <p><p>Platform engineers provide capabilities to internal developers, and they build interfaces to those capabilities that meet developers where they are already working, be it web portal, CLI, or API. But lately, "where developers are already working" is alongside their AI coding assistant. Developers want to be able to ask the platform natural language questions like "Why won't my application deploy?" and "What types of databases are available to me?," and receive helpful answers. Developers want their coding assistant to investigate the platform's underlying Kubernetes cluster, surface the problem, and then apply fixes or recommend capabilities. This session is a live demo of exactly that: an AI agent that a coding assistant can use to interface with an internal platform on the developer's behalf. It is built from scratch with LangGraph, a vector database, and OpenTelemetry instrumentation. It is available to the coding assistant via MCP and CLI interfaces. LangGraph handles the Kubernetes cluster investigation tools. Then the vector database makes the cluster's capabilities searchable by natural language query. Finally, the traces help platform engineers understand how developers are using the agent: every LLM call, every tool execution, every reasoning step visible in an observability backend. This talk will show you why custom AI agents are wildly useful as a platform interface, and how to start building one at your organization.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -307,6 +307,13 @@
                 <p><p>Whitney Lee is a creator and systems thinker who explores how observability, AI, and platform engineering connect across the cloud native ecosystem. She brings humor, depth, and clarity to complex technologies while building original frameworks that help others understand how systems fit together. She runs a vibrant YouTube channel, hosts Datadog Illuminated and Software Defined Interviews, has delivered two KubeCon keynotes and countless breakout talks, and combines storytelling and technical rigor to illuminate the human side of cloud native engineering.</p></p>
               </div>
 
+              
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Video</h5>
+                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                  <iframe src="https://www.youtube.com/embed/hB9xi6Z8ns0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              </div>
               
 
           </div><!--//card-->

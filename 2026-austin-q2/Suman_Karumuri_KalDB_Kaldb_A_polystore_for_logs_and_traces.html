@@ -268,22 +268,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">Your MLOps Pipeline is your Agentic AI Guardrail</h1>
+    <h1 class="section-heading text-center mb-3">Kaldb: A polystore for logs and traces</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
-          <img src="../speakers/Michael Forrester.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Suman Karumuri.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Michael Forrester</h5>
+            <h5 class="card-title mb-2">Suman Karumuri</h5>
             <div class="card-text mb-3">
-              <div class="meta">KodeKloud</div>
+              <div class="meta">KalDB</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/michaelrishiforrester/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mansu/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -297,16 +297,27 @@
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.</p></p>
+                <p><p>Observability data isn't homogeneous. Security logs require needle-in-haystack searches with multi-year compliance retention. Kernel logs are uncompressible text. Structured logs enable fast aggregations, while semi-structured logs explode cardinality. Traces demand different access patterns entirely.</p>
+<p>Modern requirements compound this. Observability must join with other data sources. Agentic AI systems generate massive volumes of unstructured and semi-structured logs and traces. Big data platforms have emerged as popular storage alternatives.</p>
+<p>Forcing everything into one system creates impossible tradeoffs: slow queries, runaway costs, frustrated users.</p>
+<p>At Airbnb and Slack, operating thousands of tenants across hundreds of clusters, we built a polystore architecture routing workloads to specialized engines, unified behind a single query interface. This required changes across the entire stack: instrumentation, collection, storage, and query layers.</p>
+<p>This talk shares routing criteria, backend tradeoffs, and techniques for unified querying. Attendees will learn to optimize observability for better performance and lower costs.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Principal Training Architect with 30 years of infrastructure experience across federal, Fortune 50, and startup environments. Has personally taught over 100,000 engineers platform engineering and AI/ML infrastructure. Workshop ranked third most-selected at KCD Texas 2026. Speaker at KubeCon EU Cloud Native University and KubeAuto AI Day Europe, Amsterdam. The cluster deletion incident described in this talk actually happened.</p></p>
+                <p><p>Suman Karumuri is a systems and infrastructure engineer focused on observability and distributed systems. He is the founder of KalDB, a serverless observability platform for agentic workloads. Previously, he was a Principal Engineer at Airbnb, where he led observability and reliability efforts, and held engineering roles at Slack, Pinterest, and Twitter, building large-scale logging, metrics, and tracing systems.</p></p>
               </div>
 
+              
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Video</h5>
+                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                  <iframe src="https://www.youtube.com/embed/7iYYO8yYYGU" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              </div>
               
 
           </div><!--//card-->

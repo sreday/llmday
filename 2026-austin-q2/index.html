@@ -668,7 +668,7 @@
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">single track</span>
       <span class="schedule-meta-divider">•</span>
-      <span class="schedule-meta-item">10AM - 5:30PM</span>
+      <span class="schedule-meta-item">10AM - 6:30PM</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">Austin, in-person</span>
     </div>
@@ -702,12 +702,14 @@
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: I Was Promised a Beach: Why AI Hasn’t Taken Your Pager (Yet)</a>
+                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: 7 Deadly Traps of SRE</a>
               </h3>
-              <div class="location mb-3">Tech Author</div>
-              <div class="desc schedule-abstract">AI keeps getting sharper, faster, and more embedded in how we build and run systems. It can summarize incidents, suggest fixes, and even take action. Yet when things break at 3 a.m., the pager still lands on a human.
+              <div class="location mb-3">SRE Author<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/aUe-dEHk-78" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">Site Reliability Engineering was never meant to be about firefighting, yet too many teams find themselves stuck in an endless cycle of pages, postmortems, and quick fixes. Why? Because SRE is full of hidden traps — patterns that look like best practices on the surface but slowly erode reliability, burn out engineers, and stall progress.
 
-This keynote explores the gap between impressive AI capability and real operational trust. We will look at where agentic systems are already delivering value, where they quietly fall apart, and why reliability, context, and accountability remain hard problems. The promise of fully autonomous operations is getting closer, but we are not off the hook yet.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
+In this talk, we’ll expose the 7 Deadly Traps of SRE, from the obsession with chasing “five nines,” to the cult of on-call heroism, to the false comfort of tooling and checklists. For each trap, we’ll unpack why it’s so seductive, how it quietly sabotages your team, and what to do instead.
+
+You’ll walk away with a clearer lens on the pitfalls holding SRE organizations back, and a practical playbook to help your team escape firefighting mode and reclaim the true purpose of SRE: building systems - and cultures - that are resilient, scalable, and human-friendly.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
               
             </div>
           </div>
@@ -715,6 +717,31 @@ This keynote explores the gap between impressive AI capability and real operatio
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">10:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Eric Tschetter.png" alt=""></a>
+                <div class="name">Eric Tschetter</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Keynote: Decoupling Observability for Incident Response at Scale</a>
+              </h3>
+              <div class="location mb-3">Imply<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/VQsKDDLFxFY" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">On-call incidents don’t fail because teams lack dashboards. They fail because observability systems slow down under real investigative load.
+
+As telemetry volumes grow and retention windows expand, SRE teams are being asked to run deeper, broader investigations—often under time pressure—on platforms that were designed for steady-state monitoring, not bursty incident response. Tightly coupled observability stacks bind storage, compute, and query together, forcing teams to overprovision infrastructure, limit retention, or accept degraded performance during incidents.
+
+In this talk, we’ll explore why decoupling observability architectures is becoming essential for SRE teams operating at scale. Using a real incident investigation workflow, we’ll break down how separating data storage, compute, and interaction layers allows teams to keep fast, reliable monitoring while elastically scaling investigations when incidents occur.
+
+We’ll connect these patterns to lessons learned in other data-intensive systems, but stay grounded in the day-to-day realities of on-call life: faster root cause analysis, fewer tradeoffs during incidents, and observability systems that hold up when you need them most.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">11:00</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -730,38 +757,25 @@ This keynote explores the gap between impressive AI capability and real operatio
 
           <div class="item item-talk">
             <div class="meta">
-              <h4 class="time mb-3">11:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Sandhya Subramani.png" alt=""></a>
-                <div class="name">Sandhya Subramani</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Towards Self-Evolving Autonomous AI Agents</a>
-              </h3>
-              <div class="location mb-3">AWS</div>
-              <div class="desc schedule-abstract">What happens when AI agents encounter tasks they cannot solve?  Most agents fail because their capabilities are fixed. This talk explores a new approach using only open-source frameworks where agents can now adapt themselves by dynamically generating and integrating new tools at runtime. We will examine the architectural mechanisms that enable this, including how new functionality is validated and incorporated safely during execution. Through a live demo, attendees will see an agent encounter a novel task, build the required capability, and complete the workflow without redeployment. Attendees will additionally gain practical engineering insights into the tradeoffs and design considerations involved in building autonomous agentic systems that evolve beyond their original design.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
               <h4 class="time mb-3">11:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img class="profile-image rounded-circle mb-2" src="../speakers/Whitney Lee.png" alt=""></a>
-                <div class="name">Whitney Lee</div>
+                <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img class="profile-image rounded-circle mb-2" src="../speakers/Jim Hirschauer.png" alt=""></a>
+                <div class="name">Jim Hirschauer</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">The Best Laid Spans: An AI Agent That Instruments Your Code with OpenTelemetry</a>
+                <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">The Anatomy of a Bad Incident - Group Therapy</a>
               </h3>
-              <div class="location mb-3">Datadog</div>
-              <div class="desc schedule-abstract">Every team says they want better observability, but adding OpenTelemetry instrumentation is repetitive, tedious, convention-heavy work. Wah wah wahhhh, what a drag. Enter Spinybacked Orbweaver to save the day! Spinybacked Orbweaver is an AI-powered telemetry agent that can analyze your code, add the instrumentation, check its own work, and open a pull request. And it can do it consistently well, following your company's telemetry standards! This speaker built it, and she'll demo it live. Sparkles and rainbows! But here's where it gets interesting: how does the agent know if it did a good job? Two things. First, the OpenTelemetry project has a tool called Weaver that lets you define your team's telemetry standards as a machine-readable schema. Second, there's an emerging open specification called the Instrumentation Score that rates instrumentation quality on a 0-to-100 scale using standardized rules. The agent validates against both of these, plus some custom rules. When the agent fails its own checks, it gets the feedback and tries again. Generate, validate, learn, retry. You'll watch the whole thing happen against a real codebase. The agent discovers what to instrument, writes the code, gets rejected by its own quality checks, fixes its mistakes, and produces a PR. Along the way, you'll get grounded in what OpenTelemetry, Weaver, and the Instrumentation Score are, why they exist, and why good telemetry is worth caring about... but not enough to suffer the tedium of manual code instrumentation.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
+              <div class="location mb-3">Xurrent<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/dztVud6f-MU" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">Every incident has the same bones: detection, declaration, assembly, diagnosis, resolution, postmortem. And every team bleeds in the same places.
+
+This isn't a "presentation". It's a structured conversation. We'll walk through each stage of a bad incident together, name the friction points that never make it into the postmortem, and hear from the room: your war stories, your workarounds, your hard-won fixes.
+
+No slides full of vendor claims. No theory. Just practitioners in a room being honest about what breaks, and what actually helps.
+
+Come ready to talk.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
               
             </div>
           </div>
@@ -770,17 +784,20 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">12:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/Alfonso Cancellara.png" alt=""></a>
-                <div class="name">Alfonso Cancellara</div>
+                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/John Jamie.png" alt=""></a>
+                <div class="name">John Jamie</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Beyond the Hype: Navigating "Openwashing" and the Real Open Source AI</a>
+                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Keynote: State of Reliability data (insights from 80K+ incidents)</a>
               </h3>
-              <div class="location mb-3">Red Hat</div>
-              <div class="desc schedule-abstract">As AI moves from experimental pilots to production MLOps pipelines, defining what truly constitutes **"Open Source AI"** has become a critical engineering challenge. This session cuts through the hype to provide ML engineers, data scientists, and infrastructure architects with practical frameworks to evaluate model transparency, mitigate licensing risks, and navigate the complexities of deploying "open" foundation models. Attendees will walk away with the skills to: - **Deconstruct the AI Stack**: Understand the core differences between traditional open-source software and the AI triad. - **Evaluate True Openness**: Apply frameworks like the Open Source AI Definition (OSAID) to assess model viability for fine-tuning. - **Spot "Openwashing"**: Identify the operational risks and licensing traps hidden behind "open weights" models to protect your deployment pipelines and long-term infrastructure.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
+              <div class="location mb-3">StackGen<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/eRTv8Beqn50" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">The industry is currently racing to integrate AI agents into systems originally designed for human intervention, where reliability still hinges on "human glue"—tribal knowledge, outdated runbooks, and fragmented dashboards. This session posits that achieving trustworthy production autonomy requires a fundamental shift: a new operating layer for SRE. We will explore the concept of an Agentic OS grounded in four essential bodies of truth: code, infrastructure state, runtime signals, and operational knowledge. By moving beyond disconnected artifacts like Git repos, Terraform plans, and traces, we can create a live context graph that agents can query, update, and audit in real time.
+
+We will examine how an AI-native operations layer can be embedded directly into the delivery and runtime path. By continuously ingesting data from CI/CD pipelines, infrastructure drift, and SLO violations, this system produces durable decision traces rather than simple one-off automations. Grounded in real-world architectures and failure scenarios, this session focuses on the practical requirements for transitioning from manual scripts and alerts to truly trustworthy, autonomous SRE systems that provide a clear "why" behind every automated action.
+<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
               
             </div>
           </div>
@@ -789,17 +806,17 @@ This keynote explores the gap between impressive AI capability and real operatio
             <div class="meta">
               <h4 class="time mb-3">12:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Ankit Talwar.png" alt=""></a>
-                <div class="name">Ankit Talwar</div>
+                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Michael Forrester.png" alt=""></a>
+                <div class="name">Michael Forrester</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</a>
+                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">The Day an AI Agent Deleted My Cluster (And the Guardrails That Would Have Stopped It)</a>
               </h3>
-              <div class="location mb-3">Dell Technologies</div>
-              <div class="desc schedule-abstract">Most enterprise AI never makes it past the pilot phase. The systems that do survive production at Fortune 50 scale — across hundreds of thousands of daily transactions, thousands of human operators, and dozens of countries — share architectural patterns that aren’t obvious at the demo stage. This talk distills those patterns from two production AI programs built and deployed over the past decade: a digital supply-chain transformation platform supporting 220,000 orders per day across 392,000 SKUs, documented as MIT Sloan / Ivey case study W24797 (a Harvard Business Publishing bestseller, taught at MIT, Rutgers, NUS, and IE Business School); and STRIDE, a closed-loop AI service architecture supporting customer support organization, recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. Both programs faced the same failure modes that LLM teams hit today: hallucinated outputs, brittle integration boundaries, runaway cost curves, and slow learning loops. Both succeeded by converging on the same underlying architecture — continuous telemetry feeding decision engines feeding learning loops, with humans gating the boundaries rather than sitting in the critical path. The talk walks through the architectural decisions that determined whether each system shipped or stalled, including build-vs-buy under vendor immaturity, phased rollout under quality risk, and tiered automation under fraud exposure. <a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
+              <div class="location mb-3">KodeKloud<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/EoQ-knQKMek" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">I gave Claude Code full Kubernetes cluster access and told it to fix a networking issue. It escalated through troubleshooting sessions, force-overrode etcd, and deleted netplan configurations across all control plane nodes. The cluster was gone. Forty minutes. No gate stopped it anywhere in the chain. This talk is the full incident: the actual command sequence, why the AI thought each escalation was reasonable, the moment I realized what was happening, and why the obvious fix (put a human back in the loop) is the wrong lesson. The whole point of AI agents in operations is autonomous speed. If you slow them down with manual approval on every action, you've just built an expensive autocomplete. The real question is: how do you let an agent operate fast inside a boundary it can't break out of? I spent the next six months answering that question. The result is an Eight Guardrails Framework enforced across multiple layers of the stack. I'll show you what those layers are, how they interact, where each one catches failures the others miss, and why the most important guardrail is the one most teams skip entirely. If your team is experimenting with AI agents in infrastructure, you're going to hit this wall. The question is whether you hit it in production or in this talk.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
               
             </div>
           </div>
@@ -807,6 +824,33 @@ This keynote explores the gap between impressive AI capability and real operatio
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">13:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Leila Anderson.png" alt=""></a>
+                <div class="name">Leila Anderson</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Your On-Call System Is Making You Worse at Your Job</a>
+              </h3>
+              <div class="location mb-3">Upheal<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/YBs03Cld-qA" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">On-call exists to improve system reliability. But over time, many teams find the opposite happening: more pages, slower recovery, and engineers who are technically capable but increasingly reactive under pressure.
+
+This is a feedback loop, not just a workload problem.
+
+In this talk, I’ll introduce a pattern I call The On-Call Trap, a system dynamic where repeated incident response gradually shifts teams from proactive to reactive modes of operation. As load increases, attention narrows, decision-making speeds up but degrades in quality, and teams unintentionally reinforce the very conditions that generate more incidents.
+
+We’ll break down how this loop forms, why common fixes (more tooling, more alerts, more process) often make it worse, and what actually interrupts the cycle.
+
+You’ll leave with a mental model for recognizing when your team is entering this pattern, along with practical ways to restore capacity for proactive reliability work without sacrificing responsiveness.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">13:30</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -822,44 +866,27 @@ This keynote explores the gap between impressive AI capability and real operatio
 
           <div class="item item-talk">
             <div class="meta">
-              <h4 class="time mb-3">14:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Mingxuan Zhao.png" alt=""></a>
-                <div class="name">Mingxuan Zhao</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Unlocking Document Intelligence with Open-Source AI</a>
-              </h3>
-              <div class="location mb-3">IBM</div>
-              <div class="desc schedule-abstract">Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.
-
-In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
-We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI & Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.
-
-Docling is fully open-source under MIT license, so you can run it locally for sensitive data and air-gapped environments.
-<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
               <h4 class="time mb-3">14:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Michael Forrester.png" alt=""></a>
-                <div class="name">Michael Forrester</div>
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Suman Karumuri.png" alt=""></a>
+                <div class="name">Suman Karumuri</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Your MLOps Pipeline is your Agentic AI Guardrail</a>
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Kaldb: A polystore for logs and traces</a>
               </h3>
-              <div class="location mb-3">KodeKloud</div>
-              <div class="desc schedule-abstract">In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+              <div class="location mb-3">KalDB<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/7iYYO8yYYGU" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">Observability data isn't homogeneous. Security logs require needle-in-haystack searches with multi-year compliance retention. Kernel logs are uncompressible text. Structured logs enable fast aggregations, while semi-structured logs explode cardinality. Traces demand different access patterns entirely.
+
+Modern requirements compound this. Observability must join with other data sources. Agentic AI systems generate massive volumes of unstructured and semi-structured logs and traces. Big data platforms have emerged as popular storage alternatives.
+
+Forcing everything into one system creates impossible tradeoffs: slow queries, runaway costs, frustrated users.
+
+At Airbnb and Slack, operating thousands of tenants across hundreds of clusters, we built a polystore architecture routing workloads to specialized engines, unified behind a single query interface. This required changes across the entire stack: instrumentation, collection, storage, and query layers.
+
+This talk shares routing criteria, backend tradeoffs, and techniques for unified querying. Attendees will learn to optimize observability for better performance and lower costs.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
               
             </div>
           </div>
@@ -868,17 +895,17 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <div class="meta">
               <h4 class="time mb-3">15:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Varun Joshi.png" alt=""></a>
-                <div class="name">Varun Joshi</div>
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Steven Nguyen.png" alt=""></a>
+                <div class="name">Steven Nguyen</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Why Most LLM Systems Fail in Production and How to Fix Them</a>
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Optimizing the Software Development Process with Internal Developer Platform and Kusion</a>
               </h3>
-              <div class="location mb-3">AWS</div>
-              <div class="desc schedule-abstract">Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              <div class="location mb-3">The University of Texas at San Antonio</div>
+              <div class="desc schedule-abstract">With the rapid evolution of information technology, particularly the integration of new technologies and systems with cloud computing, the software development process has advanced significantly. This integration has resulted in enhancements in software quality and performance. However, the continuous introduction of new technologies and tools means that software engineers must continually acquire new skills, leading to potential delays in product launches and impacting business revenue. In this talk, I will present the following issues: Introducing Kusion - first-ever open-source project which included in both the CNCF SandBox and the Platform Tooling Landscape: An intent-driven Platform Orchestrator, that sits at the core of an Internal Developer Platform (IDP). With Kusion you can enable app-centric development, your developers only need to write a single application specification. It helps app developers who are responsible for creating applications and the platform engineers responsible for maintaining the infrastructure the applications run on. Internal Developer Platform (IDP) building solution to optimize the software development process with Cloud Native/Platform tools and integrate with cloud resources of all cloud providers with Kusion (Platform Orchestrator).<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
               
             </div>
           </div>
@@ -886,6 +913,25 @@ Docling is fully open-source under MIT license, so you can run it locally for se
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">15:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Maxwell Myers.png" alt=""></a>
+                <div class="name">Maxwell Myers</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Killing the Cloud Sandbox: Secure AI Agents on WebAssembly</a>
+              </h3>
+              <div class="location mb-3">LILO<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/S5o2oHlrUIk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">Are your AI agents generating untrusted code, forcing you to spin up slow, expensive Docker containers or microVMs just to safely execute it? Have you looked at your AWS compute bill and realized that scaling agentic coding loops in the cloud is financially unsustainable? At LILO, we bypassed the cloud tax entirely by building a zero-cost execution engine using WebAssembly. In this talk, we will pop the hood on this architecture, showing you how to push compute to the edge for microsecond cold starts, mathematically proven memory isolation, and a zero-dollar infrastructure bill.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:00</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -901,38 +947,19 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
           <div class="item item-talk">
             <div class="meta">
-              <h4 class="time mb-3">16:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Farhan Shahnewaz.png" alt=""></a>
-                <div class="name">Farhan Shahnewaz</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Multi-Agent Workflows with Human-in-the-Loop Control</a>
-              </h3>
-              <div class="location mb-3">Microsoft</div>
-              <div class="desc schedule-abstract">Most enterprise AI demos start with a single assistant or copilot. However, real business workflows require orchestration, validation, approval, monitoring, and integration with existing systems. This talk explains how to design multi-agent workflows with human-in-the-loop control so LLM applications can move from demos to production.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
               <h4 class="time mb-3">16:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Jim Markunas.png" alt=""></a>
-                <div class="name">Jim Markunas</div>
+                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Whitney Lee.png" alt=""></a>
+                <div class="name">Whitney Lee</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">From Copilots to Agents: Designing LLM Workflows for Real Organizations</a>
+                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Your Internal Developer Platform's Next Interface Is an AI Agent</a>
               </h3>
-              <div class="location mb-3">The Austin Consulting Group</div>
-              <div class="desc schedule-abstract">LLMs are useful as copilots, but the real shift begins when they coordinate work across people, systems, and decisions. This talk shows how organizations design agentic workflows with guardrails, escalation paths, and real operational value.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
+              <div class="location mb-3">Datadog<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/hB9xi6Z8ns0" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">Platform engineers provide capabilities to internal developers, and they build interfaces to those capabilities that meet developers where they are already working, be it web portal, CLI, or API. But lately, "where developers are already working" is alongside their AI coding assistant. Developers want to be able to ask the platform natural language questions like "Why won't my application deploy?" and "What types of databases are available to me?," and receive helpful answers. Developers want their coding assistant to investigate the platform's underlying Kubernetes cluster, surface the problem, and then apply fixes or recommend capabilities. This session is a live demo of exactly that: an AI agent that a coding assistant can use to interface with an internal platform on the developer's behalf. It is built from scratch with LangGraph, a vector database, and OpenTelemetry instrumentation. It is available to the coding assistant via MCP and CLI interfaces. LangGraph handles the Kubernetes cluster investigation tools. Then the vector database makes the cluster's capabilities searchable by natural language query. Finally, the traces help platform engineers understand how developers are using the agent: every LLM call, every tool execution, every reasoning step visible in an observability backend. This talk will show you why custom AI agents are wildly useful as a platform interface, and how to start building one at your organization.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
               
             </div>
           </div>
@@ -941,17 +968,23 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <div class="meta">
               <h4 class="time mb-3">17:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/Srinivas Pochincharla.png" alt=""></a>
-                <div class="name">Srinivas Pochincharla</div>
+                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/Shaalmali Ray.png" alt=""></a>
+                <div class="name">Shaalmali Ray</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">From Automation to Autonomy: Building Product-Led Agentic AI Systems That Scale</a>
+                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">From confusion to clarity - Detecting Hidden Downstream failures</a>
               </h3>
-              <div class="location mb-3">AWS</div>
-              <div class="desc schedule-abstract">Modern enterprises face a critical paradox: despite processing billions of records and building sophisticated data infrastructure, business users often remain trapped in manual spreadsheets and wait days for simple insights. I solved this challenge by implementing agentic AI on top of an AWS data pipeline processing 45 billion records per month, enabling over 2,000 users across 37 teams to perform autonomous natural language analysis. This implementation achieved 25-40% productivity gains and a 60% reduction in time-to-insight. This talk explores the evolution from traditional BI dashboards to AI copilots and fully autonomous agents, demonstrating how agentic AI transforms data accessibility and shifts data teams from report factories to strategic partners.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
+              <div class="location mb-3">PayPal<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/lKC6MRcBJAk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">Time to clarity is the real incident bottleneck, and hidden downstream failures are a major reason why."
+
+Modern systems rarely fail at the point where the real problem begins. A seemingly healthy service can silently degrade another system downstream, causing incidents that surface far from the original fault and much later in time.
+
+In this talk, i will introduce the concept of hidden downstream failures - failures that propagate quietly through dependencies and delay detection, diagnosis and recovery. I will present a simple mental model for recognizing these patterns and share practical signals SREs can use to reach clarity faster during incidents.
+
+Attendees will leave with a new way to reason about failure propagation and a few concrete ideas they can apply immediately to reduce time spent debugging the wrong thing.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
               
             </div>
           </div>
@@ -959,6 +992,44 @@ Docling is fully open-source under MIT license, so you can run it locally for se
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">17:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img class="profile-image rounded-circle mb-2" src="../speakers/Aaron Hunter.png" alt=""></a>
+                <div class="name">Aaron Hunter</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">My Kids Couldn't Spell "Because" So I Built an App That Couldn't Afford to Fail</a>
+              </h3>
+              <div class="location mb-3">AWS<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/Pyy_J6ZIgDg" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">My kids brought home spelling lists every week, but memorizing words wasn't improving their legibility or accuracy. So I built Bee Hunter... an app that uses computer vision to evaluate handwriting directly from a photo and provide real-time feedback. Building it meant applying the same reliability thinking used in production systems, but with a very different user base. When your users are in elementary school, you can't afford high latency or an outage. Here's what I learned designing for reliability when your error budget is a kid's attention span: * Why a spelling app taught me more about feedback loop latency than most production systems I've run * The observability patterns that helped me understand what was actually degrading the experience * What it looks like to define an SLO when your user can't file a ticket... they just quit * The edge cases I had to engineer around: varying lighting, backwards letters, kitchen table chaos I'll walk through the architecture decisions and the tradeoffs I made to keep it reliable under real-world conditions. You'll see what a reliability mindset looks like in practice... and how the lessons translate directly back to the systems you're running today. Sometimes the best reliability engineering happens outside the datacenter, with your kids by your side.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">18:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12"><img class="profile-image rounded-circle mb-2" src="../speakers/Jack Sullivan.png" alt=""></a>
+                <div class="name">Jack Sullivan</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Model Evaluations Are Not Smoke Tests</a>
+              </h3>
+              <div class="location mb-3">GetReal<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/x7XFXMLNDYg" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
+              <div class="desc schedule-abstract">Deterministic infrastructure testing and probabilistic models are incongruent, yet must be reconciled. Model evaluations are the answer to this question, yet do not behave as unit tests or smoke tests because they require a large body of data that represents the phenomena being modeled. To make systems reliable with unwieldy, ever-changing data distributions, product-scope evaluations of machine learning systems, beyond the individual models, are a must.<a class="schedule-abstract-read-more" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">18:30</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -1063,12 +1134,20 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 
 
+
+
+
+
+
+
+
+
           <tr>
             <td class="time-cell">10:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: I Was Promised a Beach: Why AI Hasn’t Taken Your Pager (Yet)</a>
-              <div class="speaker-info">Miko Pawlikowski <span class="affiliation">• Tech Author</span></div>
+              <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Keynote: 7 Deadly Traps of SRE</a>
+              <div class="speaker-info">Miko Pawlikowski <span class="affiliation">• SRE Author</span></div>
 
             </td>
           </tr>
@@ -1084,7 +1163,27 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 
           <tr>
-            <td class="time-cell merged-cell">10:30</td>
+            <td class="time-cell">10:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Keynote: Decoupling Observability for Incident Response at Scale</a>
+              <div class="speaker-info">Eric Tschetter <span class="affiliation">• Imply</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">11:00</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Coffee break
@@ -1103,31 +1202,11 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 
           <tr>
-            <td class="time-cell">11:00</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Towards Self-Evolving Autonomous AI Agents</a>
-              <div class="speaker-info">Sandhya Subramani <span class="affiliation">• AWS</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
             <td class="time-cell">11:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">The Best Laid Spans: An AI Agent That Instruments Your Code with OpenTelemetry</a>
-              <div class="speaker-info">Whitney Lee <span class="affiliation">• Datadog</span></div>
+              <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">The Anatomy of a Bad Incident - Group Therapy</a>
+              <div class="speaker-info">Jim Hirschauer <span class="affiliation">• Xurrent</span></div>
 
             </td>
           </tr>
@@ -1146,8 +1225,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">12:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Beyond the Hype: Navigating "Openwashing" and the Real Open Source AI</a>
-              <div class="speaker-info">Alfonso Cancellara <span class="affiliation">• Red Hat</span></div>
+              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Keynote: State of Reliability data (insights from 80K+ incidents)</a>
+              <div class="speaker-info">John Jamie <span class="affiliation">• StackGen</span></div>
 
             </td>
           </tr>
@@ -1166,8 +1245,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">12:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</a>
-              <div class="speaker-info">Ankit Talwar <span class="affiliation">• Dell Technologies</span></div>
+              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">The Day an AI Agent Deleted My Cluster (And the Guardrails That Would Have Stopped It)</a>
+              <div class="speaker-info">Michael Forrester <span class="affiliation">• KodeKloud</span></div>
 
             </td>
           </tr>
@@ -1183,7 +1262,27 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 
           <tr>
-            <td class="time-cell merged-cell">13:00</td>
+            <td class="time-cell">13:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Your On-Call System Is Making You Worse at Your Job</a>
+              <div class="speaker-info">Leila Anderson <span class="affiliation">• Upheal</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">13:30</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Lunch & networking
@@ -1202,31 +1301,11 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 
           <tr>
-            <td class="time-cell">14:00</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Unlocking Document Intelligence with Open-Source AI</a>
-              <div class="speaker-info">Mingxuan Zhao <span class="affiliation">• IBM</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
             <td class="time-cell">14:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Your MLOps Pipeline is your Agentic AI Guardrail</a>
-              <div class="speaker-info">Michael Forrester <span class="affiliation">• KodeKloud</span></div>
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Kaldb: A polystore for logs and traces</a>
+              <div class="speaker-info">Suman Karumuri <span class="affiliation">• KalDB</span></div>
 
             </td>
           </tr>
@@ -1245,8 +1324,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">15:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Why Most LLM Systems Fail in Production and How to Fix Them</a>
-              <div class="speaker-info">Varun Joshi <span class="affiliation">• AWS</span></div>
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Optimizing the Software Development Process with Internal Developer Platform and Kusion</a>
+              <div class="speaker-info">Steven Nguyen <span class="affiliation">• The University of Texas at San Antonio</span></div>
 
             </td>
           </tr>
@@ -1262,7 +1341,27 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 
           <tr>
-            <td class="time-cell merged-cell">15:30</td>
+            <td class="time-cell">15:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Killing the Cloud Sandbox: Secure AI Agents on WebAssembly</a>
+              <div class="speaker-info">Maxwell Myers <span class="affiliation">• LILO</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">16:00</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Networking & sponsor crawl
@@ -1281,31 +1380,11 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 
           <tr>
-            <td class="time-cell">16:00</td>
-            <td class="talk-cell" colspan="1">
-
-              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Multi-Agent Workflows with Human-in-the-Loop Control</a>
-              <div class="speaker-info">Farhan Shahnewaz <span class="affiliation">• Microsoft</span></div>
-
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-
-
-
-          <tr>
             <td class="time-cell">16:30</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">From Copilots to Agents: Designing LLM Workflows for Real Organizations</a>
-              <div class="speaker-info">Jim Markunas <span class="affiliation">• The Austin Consulting Group</span></div>
+              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Your Internal Developer Platform's Next Interface Is an AI Agent</a>
+              <div class="speaker-info">Whitney Lee <span class="affiliation">• Datadog</span></div>
 
             </td>
           </tr>
@@ -1324,8 +1403,8 @@ Docling is fully open-source under MIT license, so you can run it locally for se
             <td class="time-cell">17:00</td>
             <td class="talk-cell" colspan="1">
 
-              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">From Automation to Autonomy: Building Product-Led Agentic AI Systems That Scale</a>
-              <div class="speaker-info">Srinivas Pochincharla <span class="affiliation">• AWS</span></div>
+              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">From confusion to clarity - Detecting Hidden Downstream failures</a>
+              <div class="speaker-info">Shaalmali Ray <span class="affiliation">• PayPal</span></div>
 
             </td>
           </tr>
@@ -1341,7 +1420,47 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 
           <tr>
-            <td class="time-cell merged-cell">17:30</td>
+            <td class="time-cell">17:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">My Kids Couldn't Spell "Because" So I Built an App That Couldn't Afford to Fail</a>
+              <div class="speaker-info">Aaron Hunter <span class="affiliation">• AWS</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">18:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Model Evaluations Are Not Smoke Tests</a>
+              <div class="speaker-info">Jack Sullivan <span class="affiliation">• GetReal</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">18:30</td>
             <td class="talk-cell merged-cell" colspan="1">
 
               Wrap up
@@ -1397,21 +1516,21 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img src="../speakers/Alfonso Cancellara.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img src="../speakers/Aaron Hunter.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Alfonso Cancellara</h5>
+            <h5 class="card-title mb-2">Aaron Hunter</h5>
             <div class="card-text mb-3">
-              <div class="meta">Red Hat</div>
+              <div class="meta">AWS</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Alfonso_Cancellara_Red_Hat_Beyond_the_Hype_Navigating_Openwashing_and_the_Real_Open_Source_AI#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Aaron_Hunter_AWS_My_Kids_Couldnt_Spell_Because_So_I_Built_an_App_That_Couldnt_Afford_to_Fail#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/Pyy_J6ZIgDg" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/alfonso-cancellara/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/aaronshunter/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1423,21 +1542,21 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img src="../speakers/Ankit Talwar.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img src="../speakers/Eric Tschetter.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Ankit Talwar</h5>
+            <h5 class="card-title mb-2">Eric Tschetter</h5>
             <div class="card-text mb-3">
-              <div class="meta">Dell Technologies</div>
+              <div class="meta">Imply</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Ankit_Talwar_Dell_Technologies_Production_AI_at_Enterprise_Scale_Lessons_from_Two_Fortune_50_Deploym#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Eric_Tschetter_Imply_Keynote_Decoupling_Observability_for_Incident_Response_at_Scale#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/VQsKDDLFxFY" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/ankittalwar/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/cheddar/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1449,21 +1568,21 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img src="../speakers/Farhan Shahnewaz.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12"><img src="../speakers/Jack Sullivan.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Farhan Shahnewaz</h5>
+            <h5 class="card-title mb-2">Jack Sullivan</h5>
             <div class="card-text mb-3">
-              <div class="meta">Microsoft</div>
+              <div class="meta">GetReal</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Farhan_Shahnewaz_Microsoft_MultiAgent_Workflows_with_HumanintheLoop_Control#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Jack_Sullivan_GetReal_Model_Evaluations_Are_Not_Smoke_Tests#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/x7XFXMLNDYg" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/farhanshahnewaz/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/jack-sullivan-1a066389/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1475,21 +1594,21 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img src="../speakers/Jim Markunas.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img src="../speakers/Jim Hirschauer.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Jim Markunas</h5>
+            <h5 class="card-title mb-2">Jim Hirschauer</h5>
             <div class="card-text mb-3">
-              <div class="meta">The Austin Consulting Group</div>
+              <div class="meta">Xurrent</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Jim_Markunas_The_Austin_Consulting_Group_From_Copilots_to_Agents_Designing_LLM_Workflows_for_Real_Or#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Jim_Hirschauer_Xurrent_The_Anatomy_of_a_Bad_Incident__Group_Therapy#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/dztVud6f-MU" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/jimmarkunas"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/j-hirsch/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1501,15 +1620,93 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Michael Forrester.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img src="../speakers/John Jamie.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">John Jamie</h5>
+            <div class="card-text mb-3">
+              <div class="meta">StackGen</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./John_Jamie_StackGen_Keynote_State_of_Reliability_data_insights_from_80K_incidents#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/eRTv8Beqn50" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/johnjamie/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Leila Anderson.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Leila Anderson</h5>
+            <div class="card-text mb-3">
+              <div class="meta">Upheal</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Leila_Anderson_Upheal_Your_OnCall_System_Is_Making_You_Worse_at_Your_Job#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/YBs03Cld-qA" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/leilaanderson/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img src="../speakers/Maxwell Myers.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Maxwell Myers</h5>
+            <div class="card-text mb-3">
+              <div class="meta">LILO</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Maxwell_Myers_LILO_Killing_the_Cloud_Sandbox_Secure_AI_Agents_on_WebAssembly#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/S5o2oHlrUIk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/maxwellmyers1/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img src="../speakers/Michael Forrester.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Michael Forrester</h5>
             <div class="card-text mb-3">
               <div class="meta">KodeKloud</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Michael_Forrester_KodeKloud_Your_MLOps_Pipeline_is_your_Agentic_AI_Guardrail#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Michael_Forrester_KodeKloud_The_Day_an_AI_Agent_Deleted_My_Cluster_And_the_Guardrails_That_Would_Hav#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/EoQ-knQKMek" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
@@ -1531,11 +1728,11 @@ Docling is fully open-source under MIT license, so you can run it locally for se
           <div class="card-body">
             <h5 class="card-title mb-2">Miko Pawlikowski</h5>
             <div class="card-text mb-3">
-              <div class="meta">Tech Author</div>
+              <div class="meta">SRE Author</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Miko_Pawlikowski_Tech_Author_Keynote_I_Was_Promised_a_Beach_Why_AI_Hasnt_Taken_Your_Pager_Yet#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Miko_Pawlikowski_SRE_Author_Keynote_7_Deadly_Traps_ofSRE#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/aUe-dEHk-78" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
@@ -1553,21 +1750,21 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img src="../speakers/Mingxuan Zhao.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img src="../speakers/Shaalmali Ray.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Mingxuan Zhao</h5>
+            <h5 class="card-title mb-2">Shaalmali Ray</h5>
             <div class="card-text mb-3">
-              <div class="meta">IBM</div>
+              <div class="meta">PayPal</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Mingxuan_Zhao_IBM_Unlocking_Document_Intelligence_with_OpenSource_AI#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Shaalmali_Ray_PayPal_From_confusion_to_clarity__Detecting_Hidden_Downstream_failures#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/lKC6MRcBJAk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/shaalmali-r-6b6560111/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1579,21 +1776,21 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img src="../speakers/Sandhya Subramani.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Steven Nguyen.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Sandhya Subramani</h5>
+            <h5 class="card-title mb-2">Steven Nguyen</h5>
             <div class="card-text mb-3">
-              <div class="meta">AWS</div>
+              <div class="meta">The University of Texas at San Antonio</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Sandhya_Subramani_AWS_Towards_SelfEvolving_Autonomous_AI_Agents#speakers-section" class="event-read-more-btn">Read more</a>
+              <a href="./Steven_Nguyen_The_University_of_Texas_at_San_Antonio_Optimizing_the_Software_Development_Process_wit#speakers-section" class="event-read-more-btn">Read more</a>
               
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/sandhyasubramani/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/hoangndst/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1605,21 +1802,21 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img src="../speakers/Srinivas Pochincharla.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img src="../speakers/Suman Karumuri.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
-            <h5 class="card-title mb-2">Srinivas Pochincharla</h5>
+            <h5 class="card-title mb-2">Suman Karumuri</h5>
             <div class="card-text mb-3">
-              <div class="meta">AWS</div>
+              <div class="meta">KalDB</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Srinivas_Pochincharla_AWS_From_Automation_to_Autonomy_Building_ProductLed_Agentic_AI_Systems_That_Sc#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Suman_Karumuri_KalDB_Kaldb_A_polystore_for_logs_and_traces#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/7iYYO8yYYGU" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/srinivaspochincharla/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mansu/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -1631,41 +1828,15 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Varun Joshi.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Varun Joshi</h5>
-            <div class="card-text mb-3">
-              <div class="meta">AWS</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Varun_Joshi_AWS_Why_Most_LLM_Systems_Fail_in_Production_and_How_to_Fix_Them#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/varun-joshi-1b165685/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img src="../speakers/Whitney Lee.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img src="../speakers/Whitney Lee.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Whitney Lee</h5>
             <div class="card-text mb-3">
               <div class="meta">Datadog</div>
             </div><!--//card-text-->
             <div class="event-card-buttons">
-              <a href="./Whitney_Lee_Datadog_The_Best_Laid_Spans_An_AI_Agent_That_Instruments_Your_Code_with_OpenTelemetry#speakers-section" class="event-read-more-btn">Read more</a>
-              
+              <a href="./Whitney_Lee_Datadog_Your_Internal_Developer_Platforms_Next_Interface_Is_an_AI_Agent#speakers-section" class="event-read-more-btn">Read more</a>
+              <a class="event-watch-btn" href="https://youtu.be/hB9xi6Z8ns0" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>
             </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
@@ -1787,49 +1958,6 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 </style>
 
 
-<!-- Modal Speaker 1 -->
-<div class="modal modal-speaker modal-speaker-1" id="modal-speaker-1" tabindex="-1" role="dialog" aria-labelledby="speaker-1-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Sandhya Subramani.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Sandhya Subramani</h2>
-                          <div class="meta mb-2">AWS</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/sandhyasubramani/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Towards Self-Evolving Autonomous AI Agents</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>What happens when AI agents encounter tasks they cannot solve?  Most agents fail because their capabilities are fixed. This talk explores a new approach using only open-source frameworks where agents can now adapt themselves by dynamically generating and integrating new tools at runtime. We will examine the architectural mechanisms that enable this, including how new functionality is validated and incorporated safely during execution. Through a live demo, attendees will see an agent encounter a novel task, build the required capability, and complete the workflow without redeployment. Attendees will additionally gain practical engineering insights into the tradeoffs and design considerations involved in building autonomous agentic systems that evolve beyond their original design.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Sandhya Subramani is a Senior Developer Advocate for Generative AI at Amazon Web Services, specializing in applied AI research and production-grade machine learning systems. She previously served as a Lead Applied AI Scientist at a stealth AI startup and as a Data Scientist at Warner Bros. Discovery, where she focused on applied AI/ML research and data-driven product development. Earlier in her career, she worked as an AI Engineer at Fidelity Investments within enterprise cybersecurity. Sandhya’s expertise spans generative AI, NLP, applied machine learning research, and translating advanced AI capabilities into real-world applications.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
 <!-- Modal Speaker 2 -->
 <div class="modal modal-speaker modal-speaker-2" id="modal-speaker-2" tabindex="-1" role="dialog" aria-labelledby="speaker-2-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -1839,25 +1967,28 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Whitney Lee.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Jim Hirschauer.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Whitney Lee</h2>
-                          <div class="meta mb-2">Datadog</div>
+                          <h2 class="name mb-2">Jim Hirschauer</h2>
+                          <div class="meta mb-2">Xurrent</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/whitneylee/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/j-hirsch/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">The Best Laid Spans: An AI Agent That Instruments Your Code with OpenTelemetry</div>
+              <div class="talk-title-bar">The Anatomy of a Bad Incident - Group Therapy</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Every team says they want better observability, but adding OpenTelemetry instrumentation is repetitive, tedious, convention-heavy work. Wah wah wahhhh, what a drag. Enter Spinybacked Orbweaver to save the day! Spinybacked Orbweaver is an AI-powered telemetry agent that can analyze your code, add the instrumentation, check its own work, and open a pull request. And it can do it consistently well, following your company's telemetry standards! This speaker built it, and she'll demo it live. Sparkles and rainbows! But here's where it gets interesting: how does the agent know if it did a good job? Two things. First, the OpenTelemetry project has a tool called Weaver that lets you define your team's telemetry standards as a machine-readable schema. Second, there's an emerging open specification called the Instrumentation Score that rates instrumentation quality on a 0-to-100 scale using standardized rules. The agent validates against both of these, plus some custom rules. When the agent fails its own checks, it gets the feedback and tries again. Generate, validate, learn, retry. You'll watch the whole thing happen against a real codebase. The agent discovers what to instrument, writes the code, gets rejected by its own quality checks, fixes its mistakes, and produces a PR. Along the way, you'll get grounded in what OpenTelemetry, Weaver, and the Instrumentation Score are, why they exist, and why good telemetry is worth caring about... but not enough to suffer the tedium of manual code instrumentation.</p></p>
+                <p><p>Every incident has the same bones: detection, declaration, assembly, diagnosis, resolution, postmortem. And every team bleeds in the same places.</p>
+<p>This isn't a "presentation". It's a structured conversation. We'll walk through each stage of a bad incident together, name the friction points that never make it into the postmortem, and hear from the room: your war stories, your workarounds, your hard-won fixes.</p>
+<p>No slides full of vendor claims. No theory. Just practitioners in a room being honest about what breaks, and what actually helps.</p>
+<p>Come ready to talk.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -1865,7 +1996,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Whitney Lee is a creator and systems thinker who explores how observability, AI, and platform engineering connect across the cloud native ecosystem. She brings humor, depth, and clarity to complex technologies while building original frameworks that help others understand how systems fit together. She runs a vibrant YouTube channel, hosts Datadog Illuminated and Software Defined Interviews, has delivered two KubeCon keynotes and countless breakout talks, and combines storytelling and technical rigor to illuminate the human side of cloud native engineering.</p></p>
+                <p><p>Jim Hirschauer is a growth-focused technology executive and category builder currently with Xurrent (formerly 4me). Based in Austin, Texas, he is focused on shaping the ITxM category through strategic messaging, market development, and industry engagement. With a background rooted in technology and business development, Jim combines sales leadership with a strong understanding of IT service management and enterprise solutions.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -1882,25 +2013,26 @@ Docling is fully open-source under MIT license, so you can run it locally for se
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Alfonso Cancellara.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/John Jamie.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Alfonso Cancellara</h2>
-                          <div class="meta mb-2">Red Hat</div>
+                          <h2 class="name mb-2">John Jamie</h2>
+                          <div class="meta mb-2">StackGen</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/alfonso-cancellara/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/johnjamie/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Beyond the Hype: Navigating "Openwashing" and the Real Open Source AI</div>
+              <div class="talk-title-bar">Keynote: State of Reliability data (insights from 80K+ incidents)</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>As AI moves from experimental pilots to production MLOps pipelines, defining what truly constitutes <strong>"Open Source AI"</strong> has become a critical engineering challenge. This session cuts through the hype to provide ML engineers, data scientists, and infrastructure architects with practical frameworks to evaluate model transparency, mitigate licensing risks, and navigate the complexities of deploying "open" foundation models. Attendees will walk away with the skills to: - <strong>Deconstruct the AI Stack</strong>: Understand the core differences between traditional open-source software and the AI triad. - <strong>Evaluate True Openness</strong>: Apply frameworks like the Open Source AI Definition (OSAID) to assess model viability for fine-tuning. - <strong>Spot "Openwashing"</strong>: Identify the operational risks and licensing traps hidden behind "open weights" models to protect your deployment pipelines and long-term infrastructure.</p></p>
+                <p><p>The industry is currently racing to integrate AI agents into systems originally designed for human intervention, where reliability still hinges on "human glue"—tribal knowledge, outdated runbooks, and fragmented dashboards. This session posits that achieving trustworthy production autonomy requires a fundamental shift: a new operating layer for SRE. We will explore the concept of an Agentic OS grounded in four essential bodies of truth: code, infrastructure state, runtime signals, and operational knowledge. By moving beyond disconnected artifacts like Git repos, Terraform plans, and traces, we can create a live context graph that agents can query, update, and audit in real time.</p>
+<p>We will examine how an AI-native operations layer can be embedded directly into the delivery and runtime path. By continuously ingesting data from CI/CD pipelines, infrastructure drift, and SLO violations, this system produces durable decision traces rather than simple one-off automations. Grounded in real-world architectures and failure scenarios, this session focuses on the practical requirements for transitioning from manual scripts and alerts to truly trustworthy, autonomous SRE systems that provide a clear "why" behind every automated action.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -1908,7 +2040,7 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Alfonso Cancellara is an OpenShift-focused Red Hat Technical Account Manager. Beyond his day-to-day role, he's a passionate Open Source advocate and a speaker at conferences and industry events, exploring how Open Source Software fuels innovation.</p></p>
+                <p><p>John Jamie is part of StackGen, an Autonomous Infrastructure Platform (AIP) company based in the San Francisco Bay Area. He studied at the University of Pennsylvania’s Wharton School and works at the intersection of infrastructure automation and platform engineering.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -1918,95 +2050,6 @@ Docling is fully open-source under MIT license, so you can run it locally for se
 
 <!-- Modal Speaker 4 -->
 <div class="modal modal-speaker modal-speaker-4" id="modal-speaker-4" tabindex="-1" role="dialog" aria-labelledby="speaker-4-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Ankit Talwar.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Ankit Talwar</h2>
-                          <div class="meta mb-2">Dell Technologies</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/ankittalwar/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Production AI at Enterprise Scale: Lessons from Two Fortune 50 Deployments</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most enterprise AI never makes it past the pilot phase. The systems that do survive production at Fortune 50 scale — across hundreds of thousands of daily transactions, thousands of human operators, and dozens of countries — share architectural patterns that aren’t obvious at the demo stage. This talk distills those patterns from two production AI programs built and deployed over the past decade: a digital supply-chain transformation platform supporting 220,000 orders per day across 392,000 SKUs, documented as MIT Sloan / Ivey case study W24797 (a Harvard Business Publishing bestseller, taught at MIT, Rutgers, NUS, and IE Business School); and STRIDE, a closed-loop AI service architecture supporting customer support organization, recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. Both programs faced the same failure modes that LLM teams hit today: hallucinated outputs, brittle integration boundaries, runaway cost curves, and slow learning loops. Both succeeded by converging on the same underlying architecture — continuous telemetry feeding decision engines feeding learning loops, with humans gating the boundaries rather than sitting in the critical path. The talk walks through the architectural decisions that determined whether each system shipped or stalled, including build-vs-buy under vendor immaturity, phased rollout under quality risk, and tiered automation under fraud exposure. </p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Ankit Talwar is Director of Product Management for AI at Dell Technologies and a Distinguished Fellow of the Soft Computing Research Society (SCRS). He led the product strategy for the digital supply chain transformation documented by researchers at the Massachusetts Institute of Technology (MIT Digital Supply Chain case study, “Dell: Roadmap of a Digital Supply Chain Transformation,” Case No. W24797), and directed the STRIDE service AI ecosystem recognized with the 2025 TSIA STAR Award for Innovation in Analytics and AI for Service Excellence. His work synthesizes patterns from these programs across eight years (2017–2025). Mr. Talwar serves as a judge for MIT Hack-Nation’s Global AI Hackathon (three consecutive editions and the Venture Lab) and as a proposal reviewer for Manning Publications on agentic AI titles.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 5 -->
-<div class="modal modal-speaker modal-speaker-5" id="modal-speaker-5" tabindex="-1" role="dialog" aria-labelledby="speaker-5-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Mingxuan Zhao.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Mingxuan Zhao</h2>
-                          <div class="meta mb-2">IBM</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mingxuan-z-9a5a6419a/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Unlocking Document Intelligence with Open-Source AI</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most LLM training data and enterprise RAG pipelines depend on document ingestion, yet traditional tools waste tokens on lossy formats and struggle with real-world PDFs. The cost compounds at scale: inefficient document representation means higher training costs, larger context windows consumed, and degraded retrieval quality.</p>
-<p>In this talk, I'll introduce Docling, an open-source document processing engine that takes a different approach. Docling uses purpose-built deep learning models to parse documents the way humans read them, preserving hierarchy, extracting tables, and maintaining reading order. I'll also introduce DocTags, a markup language we designed specifically for LLM tokenizers. DocTags uses 30-45% fewer tokens than HTML for the same content, and each tag maps directly to a single token, so you're not wasting context window space on markup overhead.
-We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs for the FinePDFs dataset, extracting 3 trillion tokens at 50x lower cost than VLM-based approaches. I'll also cover IBM's work through LF AI &amp; Data to establish DocTags as an ISO standard, creating a shared representation format that's optimized for both LLM training and inference.</p>
-<p>Docling is fully open-source under MIT license, so you can run it locally for sensitive data and air-gapped environments.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Mingxuan Zhao is a Software Developer II at IBM working in Open Technology. A graduate of the Cockrell School of Engineering at the University of Texas at Austin, Mingxuan focuses on building developer-focused tools and contributing to modern web and cloud technologies. Based in New York, Mingxuan works on open and collaborative engineering initiatives within IBM.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 6 -->
-<div class="modal modal-speaker modal-speaker-6" id="modal-speaker-6" tabindex="-1" role="dialog" aria-labelledby="speaker-6-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -2029,10 +2072,10 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Your MLOps Pipeline is your Agentic AI Guardrail</div>
+              <div class="talk-title-bar">The Day an AI Agent Deleted My Cluster (And the Guardrails That Would Have Stopped It)</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.</p></p>
+                <p><p>I gave Claude Code full Kubernetes cluster access and told it to fix a networking issue. It escalated through troubleshooting sessions, force-overrode etcd, and deleted netplan configurations across all control plane nodes. The cluster was gone. Forty minutes. No gate stopped it anywhere in the chain. This talk is the full incident: the actual command sequence, why the AI thought each escalation was reasonable, the moment I realized what was happening, and why the obvious fix (put a human back in the loop) is the wrong lesson. The whole point of AI agents in operations is autonomous speed. If you slow them down with manual approval on every action, you've just built an expensive autocomplete. The real question is: how do you let an agent operate fast inside a boundary it can't break out of? I spent the next six months answering that question. The result is an Eight Guardrails Framework enforced across multiple layers of the stack. I'll show you what those layers are, how they interact, where each one catches failures the others miss, and why the most important guardrail is the one most teams skip entirely. If your team is experimenting with AI agents in infrastructure, you're going to hit this wall. The question is whether you hit it in production or in this talk.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2041,6 +2084,101 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Principal Training Architect with 30 years of infrastructure experience across federal, Fortune 50, and startup environments. Has personally taught over 100,000 engineers platform engineering and AI/ML infrastructure. Workshop ranked third most-selected at KCD Texas 2026. Speaker at KubeCon EU Cloud Native University and KubeAuto AI Day Europe, Amsterdam. The cluster deletion incident described in this talk actually happened.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 5 -->
+<div class="modal modal-speaker modal-speaker-5" id="modal-speaker-5" tabindex="-1" role="dialog" aria-labelledby="speaker-5-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Leila Anderson.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Leila Anderson</h2>
+                          <div class="meta mb-2">Upheal</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/leilaanderson/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Your On-Call System Is Making You Worse at Your Job</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>On-call exists to improve system reliability. But over time, many teams find the opposite happening: more pages, slower recovery, and engineers who are technically capable but increasingly reactive under pressure.</p>
+<p>This is a feedback loop, not just a workload problem.</p>
+<p>In this talk, I’ll introduce a pattern I call The On-Call Trap, a system dynamic where repeated incident response gradually shifts teams from proactive to reactive modes of operation. As load increases, attention narrows, decision-making speeds up but degrades in quality, and teams unintentionally reinforce the very conditions that generate more incidents.</p>
+<p>We’ll break down how this loop forms, why common fixes (more tooling, more alerts, more process) often make it worse, and what actually interrupts the cycle.</p>
+<p>You’ll leave with a mental model for recognizing when your team is entering this pattern, along with practical ways to restore capacity for proactive reliability work without sacrificing responsiveness.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Leila Anderson studies failure in human systems.</p>
+<p>As a therapist and Clinical AI Prompt Engineer at Upheal, she works at the intersection of mental health, product design, and operational performance, with a focus on how high-performing individuals and teams break down under sustained pressure. Her work centers on identifying hidden feedback loops that drive reactivity, reduce adaptability, and quietly degrade reliability over time.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 6 -->
+<div class="modal modal-speaker modal-speaker-6" id="modal-speaker-6" tabindex="-1" role="dialog" aria-labelledby="speaker-6-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Suman Karumuri.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Suman Karumuri</h2>
+                          <div class="meta mb-2">KalDB</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mansu/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Kaldb: A polystore for logs and traces</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Observability data isn't homogeneous. Security logs require needle-in-haystack searches with multi-year compliance retention. Kernel logs are uncompressible text. Structured logs enable fast aggregations, while semi-structured logs explode cardinality. Traces demand different access patterns entirely.</p>
+<p>Modern requirements compound this. Observability must join with other data sources. Agentic AI systems generate massive volumes of unstructured and semi-structured logs and traces. Big data platforms have emerged as popular storage alternatives.</p>
+<p>Forcing everything into one system creates impossible tradeoffs: slow queries, runaway costs, frustrated users.</p>
+<p>At Airbnb and Slack, operating thousands of tenants across hundreds of clusters, we built a polystore architecture routing workloads to specialized engines, unified behind a single query interface. This required changes across the entire stack: instrumentation, collection, storage, and query layers.</p>
+<p>This talk shares routing criteria, backend tradeoffs, and techniques for unified querying. Attendees will learn to optimize observability for better performance and lower costs.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Suman Karumuri is a systems and infrastructure engineer focused on observability and distributed systems. He is the founder of KalDB, a serverless observability platform for agentic workloads. Previously, he was a Principal Engineer at Airbnb, where he led observability and reliability efforts, and held engineering roles at Slack, Pinterest, and Twitter, building large-scale logging, metrics, and tracing systems.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2057,25 +2195,25 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Varun Joshi.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Steven Nguyen.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Varun Joshi</h2>
-                          <div class="meta mb-2">AWS</div>
+                          <h2 class="name mb-2">Steven Nguyen</h2>
+                          <div class="meta mb-2">The University of Texas at San Antonio</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/varun-joshi-1b165685/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/hoangndst/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Why Most LLM Systems Fail in Production and How to Fix Them</div>
+              <div class="talk-title-bar">Optimizing the Software Development Process with Internal Developer Platform and Kusion</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Large language models have moved rapidly from experimentation to production, yet many real world systems fail to deliver reliable outcomes. From hallucinations and inconsistent responses to latency spikes and escalating costs, the gap between demo and production remains significant. This talk explores why most LLM systems break in production and how to design them differently. Drawing from hands on experience building large scale user facing systems, the session highlights common failure modes and the architectural decisions that address them. We will dive into practical patterns such as retrieval augmented generation (RAG), prompt orchestration, evaluation pipelines, and cost aware design. The talk will also cover real trade offs such as accuracy versus latency, flexibility versus control, and innovation versus reliability. Attendees will leave with a clear framework for building LLM systems that are not just impressive in demos but dependable in production.</p></p>
+                <p><p>With the rapid evolution of information technology, particularly the integration of new technologies and systems with cloud computing, the software development process has advanced significantly. This integration has resulted in enhancements in software quality and performance. However, the continuous introduction of new technologies and tools means that software engineers must continually acquire new skills, leading to potential delays in product launches and impacting business revenue. In this talk, I will present the following issues: Introducing Kusion - first-ever open-source project which included in both the CNCF SandBox and the Platform Tooling Landscape: An intent-driven Platform Orchestrator, that sits at the core of an Internal Developer Platform (IDP). With Kusion you can enable app-centric development, your developers only need to write a single application specification. It helps app developers who are responsible for creating applications and the platform engineers responsible for maintaining the infrastructure the applications run on. Internal Developer Platform (IDP) building solution to optimize the software development process with Cloud Native/Platform tools and integrate with cloud resources of all cloud providers with Kusion (Platform Orchestrator).</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2083,7 +2221,7 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p><strong><a href="https://www.linkedin.com/in/varun-joshi-1b165685/">Varun Joshi</a></strong> is a Senior Data Engineer at Amazon Web Services (AWS) based in the Greater Seattle Area, with over 12 years of experience in data integration, data modeling, optimization, and engineering. He is an alumnus of the University of South Florida and has built a strong professional network with 4,500+ followers on LinkedIn.</p></p>
+                <p><p>Steven Nguyen works as a Platform Engineer, responsible for developing solutions for cloud platform services (Kubernetes Engine, Cloud Observability, and Internal Developer Platform) on the Public Cloud, and also serves as a maintainer of the KusionStack Community.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2100,25 +2238,25 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Farhan Shahnewaz.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Maxwell Myers.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Farhan Shahnewaz</h2>
-                          <div class="meta mb-2">Microsoft</div>
+                          <h2 class="name mb-2">Maxwell Myers</h2>
+                          <div class="meta mb-2">LILO</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/farhanshahnewaz/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/maxwellmyers1/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Multi-Agent Workflows with Human-in-the-Loop Control</div>
+              <div class="talk-title-bar">Killing the Cloud Sandbox: Secure AI Agents on WebAssembly</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most enterprise AI demos start with a single assistant or copilot. However, real business workflows require orchestration, validation, approval, monitoring, and integration with existing systems. This talk explains how to design multi-agent workflows with human-in-the-loop control so LLM applications can move from demos to production.</p></p>
+                <p><p>Are your AI agents generating untrusted code, forcing you to spin up slow, expensive Docker containers or microVMs just to safely execute it? Have you looked at your AWS compute bill and realized that scaling agentic coding loops in the cloud is financially unsustainable? At LILO, we bypassed the cloud tax entirely by building a zero-cost execution engine using WebAssembly. In this talk, we will pop the hood on this architecture, showing you how to push compute to the edge for microsecond cold starts, mathematically proven memory isolation, and a zero-dollar infrastructure bill.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2126,7 +2264,7 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Farhan Shahnewaz is an AI &amp; Cloud Solutions Engineer at Microsoft with over 20+ years of experience across AI, Azure, cloud architecture, and enterprise solution design. He has worked in principal cloud architect roles, also in software engineering and research positions. Farhan is also the author of <a href="https://www.amazon.com/dp/B0FHGDX8TW?ref=cm_sw_r_ffobk_cp_ud_dp_2F7Y091P2THT91GYD6H2&amp;ref_=cm_sw_r_ffobk_cp_ud_dp_2F7Y091P2THT91GYD6H2&amp;social_share=cm_sw_r_ffobk_cp_ud_dp_2F7Y091P2THT91GYD6H2&amp;bestFormat=true&amp;previewDohEventScheduleTesting=C&amp;csmig=1">SMART NPC: AI for Game Character</a>.</p></p>
+                <p><p>Maxwell Myers is the CEO and Co-Founder of Pathion, an EdTech startup powered by a proprietary WebAssembly Execution-as-a-Service infrastructure, and a Software Engineer on the Microsoft Edge team. Drawing on his expertise in browser infrastructure and developer-facing APIs, he built Pathion's zero-cost, zero-latency edge execution environments. He specializes in cloud architecture, telemetry, and scaling secure, on-device sandboxes.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2143,25 +2281,25 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Jim Markunas.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Whitney Lee.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Jim Markunas</h2>
-                          <div class="meta mb-2">The Austin Consulting Group</div>
+                          <h2 class="name mb-2">Whitney Lee</h2>
+                          <div class="meta mb-2">Datadog</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/jimmarkunas"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/whitneylee/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">From Copilots to Agents: Designing LLM Workflows for Real Organizations</div>
+              <div class="talk-title-bar">Your Internal Developer Platform's Next Interface Is an AI Agent</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>LLMs are useful as copilots, but the real shift begins when they coordinate work across people, systems, and decisions. This talk shows how organizations design agentic workflows with guardrails, escalation paths, and real operational value.</p></p>
+                <p><p>Platform engineers provide capabilities to internal developers, and they build interfaces to those capabilities that meet developers where they are already working, be it web portal, CLI, or API. But lately, "where developers are already working" is alongside their AI coding assistant. Developers want to be able to ask the platform natural language questions like "Why won't my application deploy?" and "What types of databases are available to me?," and receive helpful answers. Developers want their coding assistant to investigate the platform's underlying Kubernetes cluster, surface the problem, and then apply fixes or recommend capabilities. This session is a live demo of exactly that: an AI agent that a coding assistant can use to interface with an internal platform on the developer's behalf. It is built from scratch with LangGraph, a vector database, and OpenTelemetry instrumentation. It is available to the coding assistant via MCP and CLI interfaces. LangGraph handles the Kubernetes cluster investigation tools. Then the vector database makes the cluster's capabilities searchable by natural language query. Finally, the traces help platform engineers understand how developers are using the agent: every LLM call, every tool execution, every reasoning step visible in an observability backend. This talk will show you why custom AI agents are wildly useful as a platform interface, and how to start building one at your organization.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2169,7 +2307,7 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Jim Markunas is a Senior Technical Program and Project Manager and Technical Product Owner who specializes in helping enterprise teams deliver reliable eCommerce and SDLC releases. With experience at organizations like DIRECTV, CPS Energy, and New York Life, he leads complex platform modernization and integration initiatives, bringing structure and clarity to teams facing delivery challenges. Known for his data-driven approach, he focuses on restoring stakeholder confidence and ensuring predictable, high-quality product launches.</p></p>
+                <p><p>Whitney Lee is a creator and systems thinker who explores how observability, AI, and platform engineering connect across the cloud native ecosystem. She brings humor, depth, and clarity to complex technologies while building original frameworks that help others understand how systems fit together. She runs a vibrant YouTube channel, hosts Datadog Illuminated and Software Defined Interviews, has delivered two KubeCon keynotes and countless breakout talks, and combines storytelling and technical rigor to illuminate the human side of cloud native engineering.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2186,25 +2324,28 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Srinivas Pochincharla.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Shaalmali Ray.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Srinivas Pochincharla</h2>
-                          <div class="meta mb-2">AWS</div>
+                          <h2 class="name mb-2">Shaalmali Ray</h2>
+                          <div class="meta mb-2">PayPal</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/srinivaspochincharla/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/shaalmali-r-6b6560111/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">From Automation to Autonomy: Building Product-Led Agentic AI Systems That Scale</div>
+              <div class="talk-title-bar">From confusion to clarity - Detecting Hidden Downstream failures</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Modern enterprises face a critical paradox: despite processing billions of records and building sophisticated data infrastructure, business users often remain trapped in manual spreadsheets and wait days for simple insights. I solved this challenge by implementing agentic AI on top of an AWS data pipeline processing 45 billion records per month, enabling over 2,000 users across 37 teams to perform autonomous natural language analysis. This implementation achieved 25-40% productivity gains and a 60% reduction in time-to-insight. This talk explores the evolution from traditional BI dashboards to AI copilots and fully autonomous agents, demonstrating how agentic AI transforms data accessibility and shifts data teams from report factories to strategic partners.</p></p>
+                <p><p>Time to clarity is the real incident bottleneck, and hidden downstream failures are a major reason why."</p>
+<p>Modern systems rarely fail at the point where the real problem begins. A seemingly healthy service can silently degrade another system downstream, causing incidents that surface far from the original fault and much later in time.</p>
+<p>In this talk, i will introduce the concept of hidden downstream failures - failures that propagate quietly through dependencies and delay detection, diagnosis and recovery. I will present a simple mental model for recognizing these patterns and share practical signals SREs can use to reach clarity faster during incidents.</p>
+<p>Attendees will leave with a new way to reason about failure propagation and a few concrete ideas they can apply immediately to reduce time spent debugging the wrong thing.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2212,7 +2353,93 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Srinivas Pochincharla is a Senior Technical Program Manager at AWS, focused on building and scaling large enterprise data platforms. He specializes in data architecture and agile program delivery, leading initiatives like high-volume data pipelines that process billions of records to support cost allocation and forecasting.</p></p>
+                <p><p>Shaalmali Raychaudhury is a Site Reliability Engineer at PayPal, specializing in system reliability, analytics, and operational excellence. With expertise in tools like Splunk, SQL, and Linux, she brings a strong background in production support and technology leadership across large-scale enterprise environments.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 11 -->
+<div class="modal modal-speaker modal-speaker-11" id="modal-speaker-11" tabindex="-1" role="dialog" aria-labelledby="speaker-11-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Aaron Hunter.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Aaron Hunter</h2>
+                          <div class="meta mb-2">AWS</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/aaronshunter/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">My Kids Couldn't Spell "Because" So I Built an App That Couldn't Afford to Fail</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>My kids brought home spelling lists every week, but memorizing words wasn't improving their legibility or accuracy. So I built Bee Hunter... an app that uses computer vision to evaluate handwriting directly from a photo and provide real-time feedback. Building it meant applying the same reliability thinking used in production systems, but with a very different user base. When your users are in elementary school, you can't afford high latency or an outage. Here's what I learned designing for reliability when your error budget is a kid's attention span: * Why a spelling app taught me more about feedback loop latency than most production systems I've run * The observability patterns that helped me understand what was actually degrading the experience * What it looks like to define an SLO when your user can't file a ticket... they just quit * The edge cases I had to engineer around: varying lighting, backwards letters, kitchen table chaos I'll walk through the architecture decisions and the tradeoffs I made to keep it reliable under real-world conditions. You'll see what a reliability mindset looks like in practice... and how the lessons translate directly back to the systems you're running today. Sometimes the best reliability engineering happens outside the datacenter, with your kids by your side.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Aaron is a Principal Developer Advocate at AWS based in Frisco, TX. With over 15 years of experience spanning system administration, networking, and training, he brings more than a decade of cloud expertise to help Engineers, Developers, Builders, and tech enthusiasts master AWS technologies. His philosophy is simple: always be learning something new, and have fun while doing it! Aaron shares his knowledge through workshops, online courses, mentoring, and live streaming – making complex cloud concepts accessible and enjoyable. When he's not building in the cloud, you'll find him exploring craft beer scenes in new cities or teaming up with friends in Marvel Rivals on his PlayStation, because even superheroes need good teammates!</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 12 -->
+<div class="modal modal-speaker modal-speaker-12" id="modal-speaker-12" tabindex="-1" role="dialog" aria-labelledby="speaker-12-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Jack Sullivan.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Jack Sullivan</h2>
+                          <div class="meta mb-2">GetReal</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/jack-sullivan-1a066389/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Model Evaluations Are Not Smoke Tests</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Deterministic infrastructure testing and probabilistic models are incongruent, yet must be reconciled. Model evaluations are the answer to this question, yet do not behave as unit tests or smoke tests because they require a large body of data that represents the phenomena being modeled. To make systems reliable with unwieldy, ever-changing data distributions, product-scope evaluations of machine learning systems, beyond the individual models, are a must.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Jack Sullivan is a machine learning engineer with GetReal Security in Austin, with a focus on enhancing identity verification for all. His experience spans startups, consulting, and large, federally-funded scientific organizations in machine learning and applied physics research, as well as platform and DevOps engineering.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -2234,7 +2461,7 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
 
                       <div class="col text-center text-md-start mx-auto">
                           <h2 class="name mb-2">Miko Pawlikowski</h2>
-                          <div class="meta mb-2">Tech Author</div>
+                          <div class="meta mb-2">SRE Author</div>
                           <ul class="social-list list-inline mb-0">
                             <li class="list-inline-item"><a  href="https://twitter.com/@mikopawlikowski"><i class="fab fa-twitter fa-fw"></i></a></li>
                             <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mikolajpawlikowski/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
@@ -2244,11 +2471,12 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Keynote: I Was Promised a Beach: Why AI Hasn’t Taken Your Pager (Yet)</div>
+              <div class="talk-title-bar">Keynote: 7 Deadly Traps of SRE</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>AI keeps getting sharper, faster, and more embedded in how we build and run systems. It can summarize incidents, suggest fixes, and even take action. Yet when things break at 3 a.m., the pager still lands on a human.</p>
-<p>This keynote explores the gap between impressive AI capability and real operational trust. We will look at where agentic systems are already delivering value, where they quietly fall apart, and why reliability, context, and accountability remain hard problems. The promise of fully autonomous operations is getting closer, but we are not off the hook yet.</p></p>
+                <p><p>Site Reliability Engineering was never meant to be about firefighting, yet too many teams find themselves stuck in an endless cycle of pages, postmortems, and quick fixes. Why? Because SRE is full of hidden traps — patterns that look like best practices on the surface but slowly erode reliability, burn out engineers, and stall progress.</p>
+<p>In this talk, we’ll expose the 7 Deadly Traps of SRE, from the obsession with chasing “five nines,” to the cult of on-call heroism, to the false comfort of tooling and checklists. For each trap, we’ll unpack why it’s so seductive, how it quietly sabotages your team, and what to do instead.</p>
+<p>You’ll walk away with a clearer lens on the pitfalls holding SRE organizations back, and a practical playbook to help your team escape firefighting mode and reclaim the true purpose of SRE: building systems - and cultures - that are resilient, scalable, and human-friendly.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -2257,6 +2485,52 @@ We'll look at how IBM and Hugging Face used Docling to process 475 million PDFs 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Miko Pawlikowski is an SRE Author and a platform engineer at Quadrature. He has led large-scale infrastructure and SRE initiatives at Citadel and Bloomberg, with deep expertise in Kubernetes, cloud computing, and chaos engineering. Passionate about building resilient systems and communities, he brings together engineers worldwide through conferences and media projects.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 1 -->
+<div class="modal modal-speaker modal-speaker-1" id="modal-speaker-1" tabindex="-1" role="dialog" aria-labelledby="speaker-1-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Eric Tschetter.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Eric Tschetter</h2>
+                          <div class="meta mb-2">Imply</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/cheddar/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Keynote: Decoupling Observability for Incident Response at Scale</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>On-call incidents don’t fail because teams lack dashboards. They fail because observability systems slow down under real investigative load.</p>
+<p>As telemetry volumes grow and retention windows expand, SRE teams are being asked to run deeper, broader investigations—often under time pressure—on platforms that were designed for steady-state monitoring, not bursty incident response. Tightly coupled observability stacks bind storage, compute, and query together, forcing teams to overprovision infrastructure, limit retention, or accept degraded performance during incidents.</p>
+<p>In this talk, we’ll explore why decoupling observability architectures is becoming essential for SRE teams operating at scale. Using a real incident investigation workflow, we’ll break down how separating data storage, compute, and interaction layers allows teams to keep fast, reliable monitoring while elastically scaling investigations when incidents occur.</p>
+<p>We’ll connect these patterns to lessons learned in other data-intensive systems, but stay grounded in the day-to-day realities of on-call life: faster root cause analysis, fewer tradeoffs during incidents, and observability systems that hold up when you need them most.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Eric is Chief Architect at Imply and a driving force behind Imply Lumi, an Observability Warehouse. His work focuses on keeping more data searchable at a lower cost while accelerating investigations with no workflow disruptions. Eric is one of the original authors of the open source Apache Druid® project. Eric's expertise spans his roles as a Fellow at Splunk, Distinguished Engineer at Yahoo Inc, member of the founding team at Tidepool, among other roles.</p></p>
               </div>
 
           </div><!--//modal-body-->
