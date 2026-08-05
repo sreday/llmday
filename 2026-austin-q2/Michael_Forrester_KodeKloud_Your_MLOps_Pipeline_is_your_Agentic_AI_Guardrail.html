@@ -235,8 +235,8 @@
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
 					<div class="item">
-						<div class="number">2</div>
-						<div class="unit">Tracks</div>
+						<div class="number">1</div>
+						<div class="unit">Track</div>
 					</div><!--//item-->
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
@@ -268,22 +268,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">We’re Giving AI Agents Too Much Power</h1>
+    <h1 class="section-heading text-center mb-3">Your MLOps Pipeline is your Agentic AI Guardrail</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
-          <img src="../speakers/Titus Capilnean.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Michael Forrester.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Titus Capilnean</h5>
+            <h5 class="card-title mb-2">Michael Forrester</h5>
             <div class="card-text mb-3">
-              <div class="meta">Civic</div>
+              <div class="meta">KodeKloud</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/tituscapilnean/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/michaelrishiforrester/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -297,23 +297,16 @@
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>AI agents can now run workflows, access tools, and make decisions across real systems. Projects like OpenClaw show how fast autonomous agents are evolving. But in the rush to make agents more capable, we’ve skipped an important question: what should they actually be allowed to do? This talk explores why guardrails are becoming essential infrastructure for AI, and how teams can safely give agents access to real tools without losing control.</p></p>
+                <p><p>In 2025 I gave an AI agent cluster-level permissions and walked away. Forty minutes later I had no cluster. The agent didn't hallucinate. It didn't go rogue. It force-refreshed etcd, then while trying to fix that, wiped the netplan configuration on every Linux node in the cluster. One bad decision made things worse. No gate stopped it anywhere in the chain. The instinct after an incident like that is to put humans back in the loop. That's the wrong lesson. The whole point of agentic AI is autonomous operation at machine speed. Slowing it down with manual approval gates defeats the purpose. The right fix is deterministic programmatic gates that let the agent move fast within a defined safe boundary. Most operations should never require a human. A deletion that meets the right criteria gets approved automatically. A deletion that doesn't gets blocked automatically. The safety guarantee comes from the gate logic, not from someone watching the terminal. This talk walks through the full failure chain and the Eight Guardrails Framework that came out of it: three enforcement layers spanning Claude Code pre-tool-use hooks, Git hooks, and Kubernetes infrastructure controls. These are not probabilistic guardrails. They are deterministic checks that fire before execution, enforce IaC-only infrastructure changes, apply least privilege so a dev-context agent can't reach control plane nodes, and trigger automated rollback when something goes wrong. The agent operates autonomously inside that boundary. Outside it, the pipeline stops it cold. The core principle: don't use probabilistic AI to enforce deterministic requirements. Build the gates programmatically, test them the same way you test your code, and let the agent run. Attendees will leave with the exact failure chain mapped to the gate that would have stopped it, the Eight Guardrails applied to concrete controls across their pipeline, and a gap checklist to find where their own setup lets agents operate outside a safe boundary.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Titus Capilnean is the VP of Go-to-Market at Civic, which builds guardrails that let developers safely run AI agents with access to real tools and systems. He has spent his career leading marketing and growth at startups and tech companies bringing emerging technologies to market. He’s a passionate advocate for building AI systems that are secure, transparent, and accountable.</p></p>
+                <p><p>Principal Training Architect with 30 years of infrastructure experience across federal, Fortune 50, and startup environments. Has personally taught over 100,000 engineers platform engineering and AI/ML infrastructure. Workshop ranked third most-selected at KCD Texas 2026. Speaker at KubeCon EU Cloud Native University and KubeAuto AI Day Europe, Amsterdam. The cluster deletion incident described in this talk actually happened.</p></p>
               </div>
 
-              
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Video</h5>
-                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-                  <iframe src="https://www.youtube.com/embed/5NNg7uwft6o" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-              </div>
               
 
           </div><!--//card-->
