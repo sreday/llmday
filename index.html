@@ -1284,6 +1284,10 @@ function toggleNote(id) {
 .card { transition: box-shadow .4s ease, border-color .4s ease; border: 1px solid transparent; }
 #events .card:hover { border-color: rgba(60,180,130,.35); box-shadow: 0 0 20px rgba(60,180,130,.18), 0 0 48px rgba(60,180,130,.07); }
 #past-events .card:hover { border-color: rgba(255,255,255,.25); box-shadow: 0 0 20px rgba(255,255,255,.12), 0 0 48px rgba(255,255,255,.05); }
+#ambassadors img.rounded-circle { transition: filter .2s ease; }
+#ambassadors img.rounded-circle:hover { filter: brightness(1.1) contrast(0.9); }
+#events .card-img-top, #past-events .card-img-top { transition: filter .2s ease; }
+#events .card-img-top:hover, #past-events .card-img-top:hover { filter: brightness(1.1) contrast(0.9); }
 </style>
 <script>
 function showMoreAmb() {
@@ -1564,7 +1568,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           filter: grayscale(20%);
           transition: filter 0.2s ease;
         }
-        .sponsor-carousel-item img:hover { filter: grayscale(0%) brightness(1.2) saturate(0.85); }
+        .sponsor-carousel-item img:hover { filter: grayscale(0%) brightness(1.1) contrast(0.9); }
         @keyframes sponsor-scroll {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
@@ -1677,7 +1681,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           height: 120px; width: auto; max-width: 288px;
           object-fit: contain; filter: grayscale(20%); transition: filter 0.2s ease;
         }
-        .partner-carousel-item img:hover { filter: grayscale(0%) brightness(1.2) saturate(0.85); }
+        .partner-carousel-item img:hover { filter: grayscale(0%) brightness(1.1) contrast(0.9); }
         @keyframes partner-scroll {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
