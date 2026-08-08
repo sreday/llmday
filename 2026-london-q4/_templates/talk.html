@@ -1,0 +1,104 @@
+{% extends "_base.html" %}
+
+{% block content %}
+
+<style>
+  .talk-content .desc p,
+  .talk-content .desc li {
+    text-align: justify;
+    line-height: 1.75;
+    color: #444;
+    font-size: 0.95rem;
+  }
+  .talk-content .desc {
+    padding-bottom: 0.25rem;
+  }
+</style>
+
+<section id="speakers-section" class="speakers-section section">
+  <div class="container">
+    <h1 class="section-heading text-center mb-3">{{ talk.title }}</h1>
+    <div class="row">
+
+      <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
+        <div class="card rounded-0">
+          <img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt="">
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ talk.name }}</h5>
+            <div class="card-text mb-3">
+              <div class="meta">{{ talk.organization }}</div>
+            </div><!--//card-text-->
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              {% if talk.twitter %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+              {% if talk.linkedin %}<li class="list-inline-item"><a  href="{{ talk.linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+              {% if talk.twitter2 %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
+              {% if talk.linkedin2 %}<li class="list-inline-item"><a  href="{{ talk.linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      <div class="col-6 col-lg-9 mb-4">
+        <div class="card rounded-0 talk-content">
+          <div class="card-body">
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p>{{ talk.abstract | markdown }}</p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p>{{ talk.description | markdown }}</p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p>{{ talk.bio | markdown }}</p>
+              </div>
+
+              {% if talk.youtube_embed_url %}
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Video</h5>
+                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                  <iframe src="{{ talk.youtube_embed_url }}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              </div>
+              {% endif %}
+
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+          </div>
+        </div><!--//card-->
+      </div><!--//col--> 
+
+    </div><!--//row-->
+  <div class="text-center mt-4 mb-2">
+    <a class="btn btn-secondary btn-lg" href="./">Full lineup and tickets</a>
+  </div>
+  </div><!--//container-->
+
+</section><!--//speakers-section-->
+
+
+{% if sponsors %}
+<section id="sponsors-section" class="sponsors-section section">
+  <div class="container">
+    <h3 class="section-heading text-center mb-3">Sponsors &amp; Partners</h3>
+    <div class="section-intro text-center single-col-max mx-auto mb-5">Want to become a sponsor? Get in touch!</div>
+    <div class="row logos justify-content-center">
+      {% for sponsor in sponsors %}
+      <div class="logo-item col-6 col-md-4 col-lg-2"><a href="{{sponsor.url}}" target="_blank"><img src="../sponsors/{{ sponsor.logo }}" alt=""></a></div>
+      {% endfor %}
+    </div><!--//row-->
+    <div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="{{ mailto }}">Become A Sponsor</a></div>
+  </div><!--//container-->
+</section><!--//sponsors-section-->
+{% else %}
+<section id="sponsors-section" class="sponsors-section section">
+  <div class="container">
+    <div class="sponsors-cta text-center pt-3 pb-3"><a class="btn-primary btn btn-lg" href="{{ mailto }}">Become A Sponsor</a></div>
+  </div><!--//container-->
+</section><!--//sponsors-section-->
+{% endif %}
+
+{% endblock %}
