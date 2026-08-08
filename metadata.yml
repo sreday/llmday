@@ -40,6 +40,13 @@ events:
     size: medium
     youtube_playlist:
 
+  - name: LLMday London + Prompt Engineering Conference 2026 Q4
+    location: Everyman Canary Wharf, London, UK
+    photo_url: ./assets/images/events/llmday-2026-london-q4.png
+    url: ./2026-london-q4/
+    size: large
+    youtube_playlist:
+
   - name: LLMday Montevideo 2026 Q4
     location: World Trade Center Montevideo - Torre 4, Montevideo, Uruguay
     photo_url: ./assets/images/events/llmday-2026-montevideo-q4.png
