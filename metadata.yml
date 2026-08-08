@@ -40,7 +40,7 @@ events:
     size: medium
     youtube_playlist:
 
-  - name: LLMday London + PEC London 2026 Q4
+  - name: LLMday + PEC London 2026 Q4
     location: Everyman Canary Wharf, London, UK
     photo_url: ./assets/images/events/llmday-2026-london-q4.png
     url: ./2026-london-q4/
