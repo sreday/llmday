@@ -1,25 +1,27 @@
 # TODO - change these
 
 # start time includes timezone at the end relative to UTC
-start_time: "2125-11-06T09:00:00-08:00"
+start_time: "2026-11-26T09:00:00+00:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
 event_state: before
-date_string: "November 7, 2025"
-location_string: "Mars, Milky Way"
+date_string: "November 26, 2026"
+location_string: "Everyman Canary Wharf, London, UK"
 # get this from the event url
-luma_evt: evt-xAhCqaXMWAXAEEm
-cfp_url: https://cfp.ninja/e/llmday-amsterdam-2025-q4
+luma_evt: evt-plTUz2bsyWurucv
+cfp_url: https://cfp.ninja/e/llmday-london-2026-q4
 
 # the number of tracks needs to be the same per day
 # the tracks will be taken in the order they appear in the CSV file
 days: 1
-attendees: 100
-speakers: 10+
+attendees: 150
+speakers: 30+
 
 rooms:
-- main room
+- screen 1
+- screen 2
+- screen 3
 
 breaks:
 - title: Coffee break
@@ -30,11 +32,7 @@ breaks:
 - title: Lunch & networking
   duration: 60
   comment: Main lobby
-  talks_before: 4
-- title: Networking & sponsor crawl
-  duration: 30
-  comment: Main lobby
-  talks_before: 4
+  talks_before: 5
 
 sponsors:
   - logo: harness.png
@@ -57,7 +55,7 @@ brand_name: "LLMday"
 brand_domain: "llmday.com"
 brand_description: "Conference on Large Language Models, Agents & AI Systems"
 brand_tagline: "Large Language Models, Agents & AI Systems"
-brand_og_pitch: "Probably the most awesome LLM conference!"
+brand_og_pitch: "Probably the most awesome LLM conference in"
 brand_color: "#26986A"
 brand_twitter: "@llmday_com"
 brand_ga_id: "G-CQ2KV6LK8G"
@@ -72,4 +70,8 @@ twitter_url: https://twitter.com/llmday_com
 linkedin_url: https://www.linkedin.com/company/llmday/
 youtube_url: https://www.youtube.com/@llmday
 mailto: "mailto:hello@llmday.com"
+
+venue_name: "Everyman Canary Wharf"
+calendly_sponsor_url: "https://calendly.com/mark-llmday/30-sponsor"
+city_name: "London"
 youtube_playlist:
