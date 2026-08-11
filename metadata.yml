@@ -61,7 +61,7 @@ events_past:
     photo_url: ./assets/images/events/llmday-2026-lisbon-q2.png
     url: ./2026-lisbon-q2/
     size: small
-    youtube_playlist:
+    youtube_playlist: https://www.youtube.com/playlist?list=PLR815egZu2os
 
   - name: LLMday Bangalore 2026 Q2
     location: Harness, Bangalore, India
