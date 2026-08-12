@@ -506,6 +506,32 @@
 
       <div class="col mb-4">
         <div class="card rounded">
+          <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img src="../speakers/Maureese Williams.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Maureese Williams</h5>
+            <div class="card-text mb-3">
+              <div class="meta">Disney</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Maureese_Williams_Disney_What_Did_Your_Agent_Actually_Do#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/maureese-williams"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
           <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img src="../speakers/Sam Currie.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Sam Currie</h5>
@@ -749,6 +775,49 @@
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Zach Gruenberg started at CyberArk as the company’s first AI SME, then moved to Palo Alto Networks as a CyberArk SME following PANW’s acquisition. He’s now a Solution Architect at Oasis Security, focused on non-human identity and agentic access management. He teaches an online community sharing his technical background and spends his time building and rebuilding his own agent infrastructure to work through the identity and auth problems agentic systems create in production.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 2 -->
+<div class="modal modal-speaker modal-speaker-2" id="modal-speaker-2" tabindex="-1" role="dialog" aria-labelledby="speaker-2-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Maureese Williams.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Maureese Williams</h2>
+                          <div class="meta mb-2">Disney</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/maureese-williams"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">What Did Your Agent Actually Do?</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>An agent runs forty steps against a real repository. It reports success. Something breaks in production an hour later. Which step did it? For most agent stacks the honest answer is that nobody knows. The trace is a pile of model outputs describing what the agent <em>believed</em> it was doing, the run isn't reproducible, and re-running it produces a different plan anyway. Three properties fix this, and none of them require a better model. <strong>Reliability.</strong> The agent's world state comes from deterministic sensors, never from the model's own claims. When the model asserts "tests passed" and the sensor disagrees, that's a logged incident, not a state transition. Across an integration suite spanning six system archetypes, 611 of 611 injected false claims were refused, with zero false refusals on honest ones. <strong>Reproducibility.</strong> No RNG anywhere, ties broken lexicographically, plans replayed bit-exact from a hash-chained journal. Same input, same plan, every time: 120 of 120 generated systems deterministic, 114 of 114 crash-and-resume runs converging to the same state. <strong>Auditability.</strong> Every step writes an append-only record containing the full decision table that produced it. Tamper with any of it and the chain breaks (3,894 of 3,894 mutations detected). You can ask the system <em>why</em> it chose an action and get the actual reason, not a rationalization generated after the fact. Long horizons are where this pays for itself. At three steps you can eyeball the trace. At forty, determinism is the only thing standing between you and archaeology. I'll show LEDGER running against a real repository, break it on purpose, and replay the failure bit-exact. Then I'll be specific about the cost: what you give up, where the model still genuinely earns its place, and what this approach cannot do.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Maureese Williams is an AI/Data Engineer at Disney, building RAG and retrieval infrastructure for production systems, with 5+ years across distributed data and ML platforms on AWS and GCP. Co-author of <strong>GATS</strong> (Graph-Augmented Tree Search, arXiv:2607.08894), a planning framework that replaces per-step LLM calls with search over a persistent, verified world model, with zero model calls at plan time and zero plan variance. Presented the agent-verification side of this work at <strong>DEF CON 34</strong>.</p></p>
               </div>
 
           </div><!--//modal-body-->
