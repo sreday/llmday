@@ -375,6 +375,12 @@
 .sp-tier-price.sp-fade { opacity: 0; }
 .sp-tier-price.sp-discounted { color: #4adb8b; }
 
+/* Currency symbol slide/fade on currency switch */
+.sp-cur-sym { display: inline-block; transition: transform .18s ease, opacity .18s ease; }
+.sp-cur-sym.sp-sym-out  { transform: translateY(-10px); opacity: 0; }
+.sp-cur-sym.sp-sym-prep { transition: none; transform: translateY(10px); opacity: 0; }
+.sp-num { display: inline-block; }
+
 /* ── Discount toggle switch ────────────────────────── */
 .sp-discount-toggle-label {
   display: inline-flex;
@@ -614,26 +620,100 @@
   var spCurrentCurrency = 'GBP';
   var spDiscountActive = false;
 
-  /* ── Countdown (number-rolling) transition for currency switch ── */
-  function spCountdown(el, newText, duration) {
-    if (el._countdownId) cancelAnimationFrame(el._countdownId);
-    var oldText = el.textContent.trim();
-    var oldNums = (oldText.match(/\d+/g) || []).map(Number);
-    var newNums = (newText.match(/\d+/g) || []).map(Number);
-    if (oldNums.length !== newNums.length || newNums.length === 0) {
-      el.textContent = newText;
+  /* ── Tokenize a price string into symbol / number / text tokens ── */
+  function spTokenize(text) {
+    var tokens = [];
+    var re = /([£$€])|(\d+)/g;
+    var last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      if (m.index > last) tokens.push({ t: 'txt', v: text.slice(last, m.index) });
+      if (m[1]) tokens.push({ t: 'sym', v: m[1] });
+      else tokens.push({ t: 'num', v: m[2] });
+      last = re.lastIndex;
+    }
+    if (last < text.length) tokens.push({ t: 'txt', v: text.slice(last) });
+    return tokens;
+  }
+
+  /* ── Render a price as structure-preserving spans ──────────────── */
+  function spRenderStructure(el, text) {
+    var tokens = spTokenize(text);
+    el.textContent = '';
+    for (var i = 0; i < tokens.length; i++) {
+      var tk = tokens[i];
+      if (tk.t === 'txt') {
+        el.appendChild(document.createTextNode(tk.v));
+      } else {
+        var s = document.createElement('span');
+        s.className = tk.t === 'sym' ? 'sp-cur-sym' : 'sp-num';
+        s.textContent = tk.v;
+        el.appendChild(s);
+      }
+    }
+  }
+
+  function spShape(tokens) {
+    var shape = '';
+    for (var i = 0; i < tokens.length; i++) shape += tokens[i].t + ',';
+    return shape;
+  }
+
+  /* ── Animate a price element to newText ────────────────────────────
+     Digits roll (countdown); currency symbols slide up & fade out,
+     then the new symbol slides up into place — only when the symbol
+     actually changes (currency switch, not discount toggle). ── */
+  function spAnimatePrice(el, newText, duration, symbolChange) {
+    if (el._countdownId) { cancelAnimationFrame(el._countdownId); el._countdownId = null; }
+    if (!el.querySelector('.sp-num')) spRenderStructure(el, el.textContent.trim());
+    var newTokens = spTokenize(newText);
+    var oldTokens = spTokenize(el.textContent.trim());
+    var numSpans = el.querySelectorAll('.sp-num');
+    var symSpans = el.querySelectorAll('.sp-cur-sym');
+    var newNums = [], newSyms = [];
+    for (var i = 0; i < newTokens.length; i++) {
+      if (newTokens[i].t === 'num') newNums.push(newTokens[i].v);
+      if (newTokens[i].t === 'sym') newSyms.push(newTokens[i].v);
+    }
+    if (spShape(oldTokens) !== spShape(newTokens) ||
+        numSpans.length !== newNums.length ||
+        symSpans.length !== newSyms.length ||
+        newNums.length === 0) {
+      spRenderStructure(el, newText);
       return;
+    }
+
+    /* symbols: slide out, swap character, slide back in */
+    if (symbolChange) {
+      for (var s = 0; s < symSpans.length; s++) {
+        (function(span, ch) {
+          if (span.textContent === ch) return;
+          if (span._symTimer) clearTimeout(span._symTimer);
+          span.classList.add('sp-sym-out');
+          span._symTimer = setTimeout(function() {
+            span.textContent = ch;
+            span.classList.remove('sp-sym-out');
+            span.classList.add('sp-sym-prep');
+            void span.offsetWidth; /* force reflow so the prep position applies */
+            span.classList.remove('sp-sym-prep');
+            span._symTimer = null;
+          }, 180);
+        })(symSpans[s], newSyms[s]);
+      }
+    }
+
+    /* digits: rolling countdown per number span */
+    var oldVals = [], newVals = [];
+    for (var n = 0; n < numSpans.length; n++) {
+      oldVals.push(parseInt(numSpans[n].textContent, 10) || 0);
+      newVals.push(parseInt(newNums[n], 10));
     }
     var start = performance.now();
     function step(now) {
       var t = Math.min((now - start) / duration, 1);
       var ease = 1 - Math.pow(1 - t, 3);
-      var idx = 0;
-      el.textContent = newText.replace(/\d+/g, function() {
-        var v = Math.round(oldNums[idx] + (newNums[idx] - oldNums[idx]) * ease);
-        idx++;
-        return String(v);
-      });
+      for (var k = 0; k < numSpans.length; k++) {
+        numSpans[k].textContent = String(Math.round(oldVals[k] + (newVals[k] - oldVals[k]) * ease));
+      }
       if (t < 1) el._countdownId = requestAnimationFrame(step);
       else el._countdownId = null;
     }
@@ -655,6 +735,12 @@
     spMoveSlider(document.querySelector('.sp-currency-btn.active'));
   });
 
+  // Wrap initial price text into symbol/number spans
+  var spPriceEls = document.querySelectorAll('.sp-tier-price[data-price-gbp]');
+  for (var p = 0; p < spPriceEls.length; p++) {
+    spRenderStructure(spPriceEls[p], spPriceEls[p].textContent.trim());
+  }
+
   window.spSwitchCurrency = function(code) {
     spCurrentCurrency = code;
     var priceAttr = spDiscountActive ? 'data-dprice-' : 'data-price-';
@@ -670,7 +756,7 @@
       var el = els[j];
       var newPrice = el.getAttribute(attr);
       var origPrice = el.getAttribute(origAttr);
-      spCountdown(el, newPrice, 400);
+      spAnimatePrice(el, newPrice, 400, true);
       var card = el.closest('.sp-tier-card');
       var origSpan = card ? card.querySelector('.sp-tier-original') : null;
       if (origSpan) {
@@ -695,7 +781,7 @@
       var el = els[j];
       var newPrice = el.getAttribute(priceAttr);
       var origPrice = el.getAttribute(origAttr);
-      spCountdown(el, newPrice, 400);
+      spAnimatePrice(el, newPrice, 400, false);
       el.classList.toggle('sp-discounted', on && origPrice !== newPrice);
       var card = el.closest('.sp-tier-card');
       var origSpan = card ? card.querySelector('.sp-tier-original') : null;
