@@ -53,3 +53,16 @@ events:
     url: ./2026-tokyo-q1/
 ...
 ```
+
+## Home-page sponsor vs partner carousels
+
+The main website's two logo carousels are categorized via `partners.yaml` at the
+repo root (home page only - conference pages are unaffected):
+
+- **Paying sponsor**: drop the logo file into `sponsors/` - it shows up in the
+  home Sponsor carousel automatically.
+- **Partner** (community meetup, media/non-sponsor org, sister conference, job
+  board): drop the logo into `sponsors/` AND add its filename to the right list
+  in `partners.yaml` - it shows up in the Partner carousel instead.
+- **Duplicates**: if a company has more than one logo file, list the extra
+  variants under `hidden_duplicates` so it only appears once on the home page.

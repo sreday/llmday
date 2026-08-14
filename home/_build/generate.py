@@ -144,21 +144,17 @@ for logo_path in sorted(glob.glob("../sponsors/*.png") + glob.glob("../sponsors/
         print(f"  {filename}")
 sponsor_logos.sort(key=lambda x: x.lower())
 
-# Split sponsors from community partners / sister conferences
+# Split sponsors from partners via ../partners.yaml (shared with the event builds)
+with open('../partners.yaml', encoding='utf-8') as _pf:
+    _partners_config = yaml.load(_pf, Loader=yaml.FullLoader) or {}
 _sp_exclude_logos = {
-    'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png',
-    'jug-amsterdam.png', 'k8sug.png',
-    'kube-events.png', 'kube_events.png', 'kube_careers.png', 'kubespaces.png',
-    'gdg_london.png', 'NL_MEETUP.png',
-    'chennaisre.png', 'srecommunitycoimbatore.png', 'aigeeks.png',
-    'cloud native lisbon.png', 'cloud native porto.png',
-    'devops braga.png', 'devops lisbon.png',
-    'kcd porto.png', 'leiria tech talks.png', 'viseu tech talks.png',
-    'lisbon genai community.png', 'aws porto.png',
-    'IacConf.png', 'DevIT.png', 'DevIT_black.png',
+    l.lower()
+    for _key in ('non_sponsor_orgs', 'community_partners', 'sister_conferences_job_boards')
+    for l in (_partners_config.get(_key) or [])
 }
-partner_logos = sorted([l for l in sponsor_logos if l in _sp_exclude_logos], key=lambda x: x.lower())
-sponsor_logos = sorted([l for l in sponsor_logos if l not in _sp_exclude_logos], key=lambda x: x.lower())
+_sp_hidden = {l.lower() for l in (_partners_config.get('hidden_duplicates') or [])}
+partner_logos = sorted([l for l in sponsor_logos if l.lower() in _sp_exclude_logos and l.lower() not in _sp_hidden], key=lambda x: x.lower())
+sponsor_logos = sorted([l for l in sponsor_logos if l.lower() not in _sp_exclude_logos and l.lower() not in _sp_hidden], key=lambda x: x.lower())
 context["sponsor_logos"] = sponsor_logos
 context["partner_logos"] = partner_logos
 print(f"  Total: {len(sponsor_logos)} sponsor logos, {len(partner_logos)} partner logos")
