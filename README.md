@@ -42,6 +42,7 @@ make serve
     1. Modify the `home/metadata.yaml` file:
         1. Add a new item to the events list
         1. Make sure the url matches the format, e.g `2026-tokyo-q1`
+        1. The `photo_url` card image doubles as the social link preview (og:image) for all of that event's pages; until it is uploaded, the build warns and falls back to the default hero photo
 
 ```yaml
 events:

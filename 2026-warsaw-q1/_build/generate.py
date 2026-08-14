@@ -106,6 +106,31 @@ def luma_is_free(evt_id):
 context["luma_is_free"] = luma_is_free(context.get("luma_evt"))
 print("Luma event %s is_free=%s" % (context.get("luma_evt") or "(none)", context["luma_is_free"]))
 
+# og:image / twitter:image — use this event's card image from home/metadata.yml
+# (the single source of truth for the events list), falling back to the first
+# hero picture when the event has no card yet
+import os as _os
+_og_photo = None
+_og_home_meta_path = '../home/metadata.yml'
+if _os.path.exists(_og_home_meta_path):
+    with open(_og_home_meta_path, encoding='utf-8') as _f:
+        _og_home_meta = yaml.load(_f, Loader=yaml.FullLoader)
+    _og_current_folder = _os.path.basename(_os.getcwd())
+    for _he in (_og_home_meta.get('events') or []) + (_og_home_meta.get('events_past') or []):
+        if _he.get('url', '').strip('./').rstrip('/') == _og_current_folder and _he.get('photo_url'):
+            _og_candidate = _he['photo_url'].lstrip('./')
+            if _os.path.exists(_os.path.join('..', 'home', _og_candidate)):
+                _og_photo = _og_candidate
+            else:
+                print("WARNING: event thumbnail %s not uploaded yet" % _og_candidate)
+            break
+if _og_photo:
+    context['og_image_url'] = 'https://%s/%s' % (context['brand_domain'], _og_photo)
+else:
+    print("WARNING: no event thumbnail available -- og:image falls back to default hero photo")
+    context['og_image_url'] = 'https://%s/photos/%s' % (context['brand_domain'], context['hero_pictures'][0].split('/')[-1])
+print("og:image = %s" % context['og_image_url'])
+
 # pick up the ids & photos
 for i, talk in enumerate(talks_raw):
     talk["id"] = str(i)
