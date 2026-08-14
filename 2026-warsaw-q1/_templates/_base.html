@@ -23,7 +23,7 @@
 	<!-- Theme CSS -->
 	<link id="theme-style" rel="stylesheet" href="assets/css/theme.css">
 
-    <meta name="image" property="og:image" content="https://{{ brand_domain }}/photos/{{ hero_pictures[0].split('/')[-1] }}">
+    <meta name="image" property="og:image" content="{{ og_image_url }}">
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="{{ brand_name }} - {{ location_string }} - {{ date_string }}"/>
     <meta property="og:description" content="{{ brand_description }}. {{ brand_og_pitch }} {{ location_string }}!"/>
@@ -37,7 +37,7 @@
 	<meta name="twitter:creator" content="{{ brand_twitter }}">
     <meta name="twitter:title" content="{{ brand_name }} - {{ location_string }} - {{ date_string }}"/>
     <meta name="twitter:description" content="{{ brand_description }}. {{ brand_og_pitch }} {{ location_string }}!"/>
-    <meta name="twitter:image" content="https://{{ brand_domain }}/photos/{{ hero_pictures[0].split('/')[-1] }}">
+    <meta name="twitter:image" content="{{ og_image_url }}">
 
 
 <!-- Twitter conversion tracking base code -->

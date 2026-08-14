@@ -47,8 +47,9 @@ home/metadata.yml       ← single source of truth for all events list
 
 After changing `_event_template/_build/generate.py` or any file in `_event_template/_templates/`, propagate with:
 ```bash
-for event in 2026-austin-q2 2026-london-q2 2026-nyc-q1 2026-nyc-q2 2026-san-francisco-q2 2026-warsaw-q1; do
+for event in 20*/; do
   cp _event_template/_build/generate.py $event/_build/generate.py
+  cp _event_template/_templates/_base.html $event/_templates/_base.html
   cp _event_template/_templates/sponsorship.html $event/_templates/sponsorship.html
 done
 ```
@@ -56,7 +57,7 @@ done
 ## Key templates
 - `_templates/sponsorship.html` — sponsorship page; pricing tiers + expandable stats panel
 - `_templates/index.html` — event homepage
-- `_templates/_base.html` — shared layout
+- `_templates/_base.html` — shared layout; its og:image/twitter:image use the event's `photo_url` card image from `home/metadata.yml` (computed as `og_image_url` in generate.py, falling back to the first hero photo with a build warning)
 
 ## Stats panel (sp-stats-inner)
 The "I need more stats" expandable section on the sponsorship page has two kinds of content:
