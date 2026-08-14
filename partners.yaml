@@ -1,0 +1,47 @@
+# Home-page carousel categorization - read by home/_build/generate.py ONLY.
+# Conference/event pages are not affected by this file.
+#
+# Rules:
+# - A paying sponsor: just drop its logo into sponsors/ (nothing to add here).
+# - Anything that is NOT a paying sponsor (community meetups, media/non-sponsor
+#   orgs, sister conferences, job boards): drop the logo into sponsors/ AND list
+#   its filename below - listed logos render in the home Partner carousel.
+# - Never show the same company twice on the home page: extra logo variants of
+#   an already-shown company go under hidden_duplicates.
+# Matching is case-insensitive.
+
+non_sponsor_orgs:
+  - hockeystick.png
+  - arf.png
+  - ksug.ai.png
+  - filmforum.png
+  - uhub.png
+
+community_partners:
+  - aws porto.png
+  - cloud native lisbon.png
+  - cloud native porto.png
+  - devops braga.png
+  - devops lisbon.png
+  - kcd porto.png
+  - leiria tech talks.png
+  - viseu tech talks.png
+  - lisbon genai community.png
+  - AIFRONTIERS.png
+  - houseofai.png
+  - synvert xgeeks.png
+  - rtfm.png            # AI Talks NYC meetup (luma.com/ai-talks-nyc)
+
+sister_conferences_job_boards:
+  - DevIT_black.png
+  - DevIT-usa.png
+  - devevents.png       # dev.events conference listing
+  - dev_events.png
+  - "dev@1x_logo.png"
+
+# Extra logo files of companies already shown under another filename
+hidden_duplicates:
+  - AI FRONTIERS.png    # duplicate of AIFRONTIERS.png
+  - dev_events.png      # dev.events - shown as devevents.png
+  - "dev@1x_logo.png"   # dev.events - shown as devevents.png
+  - DevIT-usa.png       # DevITjobs - shown as DevIT_black.png
