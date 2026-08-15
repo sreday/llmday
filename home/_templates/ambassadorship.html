@@ -109,6 +109,28 @@
 .amb-bg-peach { background: linear-gradient(135deg, #fff 0%, var(--amb-peach) 100%); }
 .amb-bg-lavender { background: linear-gradient(135deg, var(--amb-lavender) 0%, #fff 100%); }
 
+/* ── Stat pills ───────────────────────────────────────────────── */
+.amb-stat-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin: 6px 0 34px;
+}
+.amb-stat-pills span {
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: .95rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #2d3436;
+}
+.amb-stat-pills span:nth-child(1) { background: var(--amb-green); }
+.amb-stat-pills span:nth-child(2) { background: var(--amb-blue); }
+.amb-stat-pills span:nth-child(3) { background: var(--amb-pink-light); }
+.amb-stat-pills span:nth-child(4) { background: var(--amb-yellow); }
+
 /* ── Team cards ───────────────────────────────────────────────── */
 .team-card {
   text-align: center;
@@ -173,6 +195,14 @@
   width: 280px;
   border-radius: 12px 0 0 12px;
 }
+.amb-table a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+.amb-table a:hover { color: #1d4d38; }
 .amb-table td:last-child {
   border-radius: 0 12px 12px 0;
 }
@@ -273,7 +303,9 @@
   box-shadow: 0 8px 25px rgba(0,0,0,.12);
 }
 .btn-email  { background: var(--amb-green); color: #2d6a4f; }
+.btn-more-perks { background: var(--amb-yellow); color: #7c6a0a; border: none; cursor: pointer; font-size: 1rem; padding: 12px 30px; }
 .btn-linkedin { background: var(--amb-blue); color: #1a5276; }
+.btn-whatsapp-amb { background: var(--amb-lavender); color: #5b4a8a; }
 
 /* ── Decorative bubbles (shared) ─────────────────────────────── */
 .amb-bubbles { position: relative; overflow: hidden; }
@@ -377,6 +409,12 @@
       <p>Miko (site reliability engineer) and Mark (festival organizer) joined forces in London back in 2019, bootstrapping a series of tech conferences. We build developer communities!</p>
       <p>Both strictly in-person: <a href="https://sreday.com" target="_blank">sreday.com</a>, <a href="https://llmday.com" target="_blank">llmday.com</a>, <a href="https://platformday.com" target="_blank">platformday.com</a>, and online &mdash; <a href="https://conf42.com" target="_blank">conf42.com</a>.</p>
       <p>We are a core team of 5 people, with the founders based in the United Kingdom:</p>
+    </div>
+    <div class="amb-stat-pills">
+      <span>{{ counts.events }} events</span>
+      <span>{{ counts.countries }} countries</span>
+      <span>{{ ambassadors|length }} ambassadors</span>
+      <span>{{ counts.attendees }} attendees</span>
     </div>
     <div class="row justify-content-center">
       <div class="col-6 col-md"><div class="team-card">
@@ -497,6 +535,10 @@
         <img src="/assets/images/ambassadorship/cat-huh.jpeg" alt="Curious cat" style="max-width:260px;width:100%;border-radius:20px;">
       </div>
     </div>
+    <div class="mt-5">
+      {% set map_block_heading = False %}
+      {% include "_map_block.html" %}
+    </div>
   </div>
 </section>
 
@@ -527,12 +569,15 @@
           <td><strong>Priority talk submissions</strong> with strong consideration for relevant topics</td>
         </tr>
         <tr>
+          <td>Event hosting priority</td>
+          <td><strong>Propose new locations</strong> and hosting companies, <a href="/host">free sponsorships for hosts</a></td>
+        </tr>
+      </table>
+      <div id="amb-more-perks" style="display:none;">
+      <table class="amb-table perks-table">
+        <tr>
           <td>Employer sponsorship discounts</td>
           <td><strong>20% off</strong> sponsorship opportunities for your company &amp; employer</td>
-        </tr>
-        <tr>
-          <td>Event hosting priority</td>
-          <td><strong>Propose new locations</strong> and hosting companies, free sponsorships for hosts</td>
         </tr>
         <tr>
           <td>Speaker and ambassador recommendations</td>
@@ -555,6 +600,19 @@
           <td><strong>Limited edition gear</strong> and personalized gifts, handed out at events</td>
         </tr>
       </table>
+      </div>
+      <div class="text-center mt-3">
+        <button type="button" class="btn-amb btn-more-perks" onclick="ambTogglePerks()">Show 6 more perks</button>
+      </div>
+      <script>
+      function ambTogglePerks() {
+        var d = document.getElementById('amb-more-perks');
+        var b = document.querySelector('.btn-more-perks');
+        var open = d.style.display === 'none';
+        d.style.display = open ? 'block' : 'none';
+        b.textContent = open ? 'Show fewer perks' : 'Show 6 more perks';
+      }
+      </script>
     </div>
   </div>
 </section>
@@ -586,7 +644,7 @@
         </tr>
         <tr>
           <td>International growth help</td>
-          <td>Assist with launching events in new locations, help us reach potential hosts / companies</td>
+          <td>Assist with launching events in new locations, help us reach <a href="/host">potential hosts</a> / companies</td>
         </tr>
         <tr>
           <td>Invite friends to attend</td>
@@ -640,6 +698,49 @@
   </div>
 </section>
 
+<!-- ═══════════════════════ MEET AMBASSADORS ═══════════════════════════ -->
+<section id="meet" class="amb-section amb-bg-blue amb-bubbles">
+  <div class="bubble" style="width:140px;height:140px;background:var(--amb-pink);top:-30px;left:6%;opacity:.2;"></div>
+  <div class="bubble" style="width:90px;height:90px;background:var(--amb-yellow);bottom:10%;right:5%;opacity:.25;"></div>
+  <div class="container">
+    <h2 class="text-center">Meet some of our ambassadors</h2>
+    <div class="row justify-content-center g-4 mt-2">
+      {% for ambassador in ambassadors[:3] %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card rounded h-100 shadow-sm border-0">
+          <div class="card-body text-center">
+            <div class="mb-3">
+              <img src="/ambassadors/{{ ambassador.Headshot }}"
+                   class="rounded-circle img-fluid shadow-sm"
+                   style="width: 150px; height: 150px; object-fit: cover;"
+                   alt="{{ ambassador.Name }}">
+            </div>
+            <h4 class="card-title mb-1">
+              {{ ambassador.Name }}
+              {% if ambassador.Linkedin %}
+              <a target="_blank" href="{{ ambassador.Linkedin }}" class="text-primary ms-1" style="font-size: 0.9rem;"><i class="fab fa-linkedin-in fa-fw"></i></a>
+              {% endif %}
+            </h4>
+            <div class="text-muted mb-3">
+              <div class="fw-bold">{{ ambassador.Job }}</div>
+              {% if ambassador.Company %}
+              <div class="small">{{ ambassador.Company }}</div>
+              {% endif %}
+            </div>
+            <div class="card-text text-start" style="font-size:.92rem;color:#555;">
+              {{ ambassador.Note[:140] }}{% if ambassador.Note|length > 140 %}&hellip;{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="/#ambassadors" class="btn-amb btn-email">Meet all our ambassadors &rarr;</a>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════ CTA ════════════════════════════════════ -->
 <section id="apply" class="amb-cta amb-bubbles">
   <div class="bubble" style="width:180px;height:180px;background:var(--amb-yellow);top:-50px;right:5%;opacity:.25;"></div>
@@ -659,6 +760,9 @@
       </a>
       <a href="https://www.linkedin.com/in/marekpawlikowski/" target="_blank" class="btn-amb btn-linkedin">
         <i class="fab fa-linkedin-in me-2"></i>Ping Mark on LinkedIn
+      </a>
+      <a href="https://wa.me/447307415008" target="_blank" rel="noopener noreferrer" class="btn-amb btn-whatsapp-amb">
+        <i class="fab fa-whatsapp me-2"></i>DM Mark on WhatsApp
       </a>
     </div>
     <div class="brand-logos mt-5">
