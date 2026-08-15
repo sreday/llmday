@@ -187,7 +187,8 @@
   fill: #C9E2F6;
   transition: fill .15s;
 }
-.map-svg path:hover { fill: #9CC7EC; }
+.map-svg path:hover,
+.map-svg path.country-hover { fill: #9CC7EC; }
 .map-dot {
   position: absolute;
   width: 11px; height: 11px;
@@ -531,33 +532,33 @@
     <div>
       <div class="map-wrap">
         {% include "_world_map_svg.html" %}
-        {#- (name, lat, lon, brand, dlon) — one dot per city; 'dual' = LLMday + SREday split dot; dlon nudges near-neighbor cities apart; map spans lat 85..-60, lon -180..180 -#}
+        {#- (name, country, lat, lon, brand, dlon) — one dot per city; 'dual' = LLMday + SREday split dot; dlon nudges near-neighbor cities apart; country must match the SVG path <title>; map spans lat 85..-60, lon -180..180 -#}
         {% set map_cities = [
-          ('London', 51.51, -0.13, 'dual', 0),
-          ('NYC', 40.71, -74.01, 'dual', 0),
-          ('San Francisco', 37.77, -122.42, 'dual', -1),
-          ('Redwood City', 37.49, -122.23, 'green', 2),
-          ('Austin', 30.27, -97.74, 'dual', 0),
-          ('Warsaw', 52.23, 21.01, 'dual', 0),
-          ('Lisbon', 38.72, -9.14, 'dual', 0),
-          ('Bangalore', 12.97, 77.59, 'dual', 0),
-          ('Hamburg', 53.55, 9.99, 'green', 0),
-          ('Montevideo', -34.90, -56.19, 'green', 0),
-          ('Amsterdam', 52.37, 4.90, 'purple', 0),
-          ('Cologne', 50.94, 6.96, 'purple', 0),
-          ('Paris', 48.86, 2.35, 'purple', 0),
-          ('Munich', 48.14, 11.58, 'purple', 0),
-          ('Barcelona', 41.39, 2.17, 'purple', 0),
-          ('Katowice', 50.26, 19.02, 'purple', 0),
-          ('Seattle', 47.61, -122.33, 'purple', -1),
-          ('Redmond', 47.67, -122.12, 'purple', 2),
-          ('Dallas', 32.78, -96.80, 'purple', 0),
-          ('Campinas', -22.91, -47.06, 'purple', 0),
-          ('Chennai', 13.08, 80.27, 'purple', 2),
-          ('Hyderabad', 17.39, 78.49, 'purple', 0),
+          ('London', 'United Kingdom', 51.51, -0.13, 'dual', 0),
+          ('NYC', 'United States of America', 40.71, -74.01, 'dual', 0),
+          ('San Francisco', 'United States of America', 37.77, -122.42, 'dual', -1),
+          ('Redwood City', 'United States of America', 37.49, -122.23, 'green', 2),
+          ('Austin', 'United States of America', 30.27, -97.74, 'dual', 0),
+          ('Warsaw', 'Poland', 52.23, 21.01, 'dual', 0),
+          ('Lisbon', 'Portugal', 38.72, -9.14, 'dual', 0),
+          ('Bangalore', 'India', 12.97, 77.59, 'dual', 0),
+          ('Hamburg', 'Germany', 53.55, 9.99, 'green', 0),
+          ('Montevideo', 'Uruguay', -34.90, -56.19, 'green', 0),
+          ('Amsterdam', 'Netherlands', 52.37, 4.90, 'purple', 0),
+          ('Cologne', 'Germany', 50.94, 6.96, 'purple', 0),
+          ('Paris', 'France', 48.86, 2.35, 'purple', 0),
+          ('Munich', 'Germany', 48.14, 11.58, 'purple', 0),
+          ('Barcelona', 'Spain', 41.39, 2.17, 'purple', 0),
+          ('Katowice', 'Poland', 50.26, 19.02, 'purple', 0),
+          ('Seattle', 'United States of America', 47.61, -122.33, 'purple', -1),
+          ('Redmond', 'United States of America', 47.67, -122.12, 'purple', 2),
+          ('Dallas', 'United States of America', 32.78, -96.80, 'purple', 0),
+          ('Campinas', 'Brazil', -22.91, -47.06, 'purple', 0),
+          ('Chennai', 'India', 13.08, 80.27, 'purple', 2),
+          ('Hyderabad', 'India', 17.39, 78.49, 'purple', 0),
         ] %}
-        {% for name, lat, lon, brand, dlon in map_cities %}
-        <span class="map-dot map-dot-{{ brand }}" data-city="{{ name }}" style="left:{{ '%.2f'|format((lon + dlon + 180) / 3.6) }}%;top:{{ '%.2f'|format((85 - lat) / 1.45) }}%;"></span>
+        {% for name, country, lat, lon, brand, dlon in map_cities %}
+        <span class="map-dot map-dot-{{ brand }}" data-city="{{ name }}" data-country="{{ country }}" style="left:{{ '%.2f'|format((lon + dlon + 180) / 3.6) }}%;top:{{ '%.2f'|format((85 - lat) / 1.45) }}%;"></span>
         {% endfor %}
       </div>
       <div class="map-legend">
@@ -720,6 +721,23 @@
     </div>
   </div>
 </section>
+
+<!-- Dim the country while hovering its city dot -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var countryPaths = {};
+  document.querySelectorAll('.map-svg path').forEach(function(path) {
+    var title = path.querySelector('title');
+    if (title) countryPaths[title.textContent] = path;
+  });
+  document.querySelectorAll('.map-wrap .map-dot').forEach(function(dot) {
+    var path = countryPaths[dot.getAttribute('data-country')];
+    if (!path) return;
+    dot.addEventListener('mouseenter', function() { path.classList.add('country-hover'); });
+    dot.addEventListener('mouseleave', function() { path.classList.remove('country-hover'); });
+  });
+});
+</script>
 
 <!-- Replace nav links for this page -->
 <script>
