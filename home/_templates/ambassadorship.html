@@ -169,8 +169,8 @@
 }
 .amb-table td:first-child {
   font-weight: 700;
-  white-space: nowrap;
   width: 280px;
+  min-width: 280px;
   border-radius: 12px 0 0 12px;
 }
 .amb-table a {
@@ -281,7 +281,7 @@
   box-shadow: 0 8px 25px rgba(0,0,0,.12);
 }
 .btn-email  { background: var(--amb-green); color: #2d6a4f; }
-.btn-more-perks { background: var(--amb-yellow); color: #7c6a0a; border: none; cursor: pointer; font-size: 1rem; padding: 12px 30px; }
+.btn-more { background: var(--amb-yellow); color: #7c6a0a; border: none; cursor: pointer; }
 .btn-linkedin { background: var(--amb-blue); color: #1a5276; }
 .btn-whatsapp-amb { background: var(--amb-lavender); color: #5b4a8a; }
 
@@ -570,17 +570,8 @@
       </table>
       </div>
       <div class="text-center mt-3">
-        <button type="button" class="btn-amb btn-more-perks" onclick="ambTogglePerks()">Show 6 more perks</button>
+        <button type="button" class="btn-amb btn-more" onclick="ambToggleMore('amb-more-perks', this, 'perks')">Show 6 more perks</button>
       </div>
-      <script>
-      function ambTogglePerks() {
-        var d = document.getElementById('amb-more-perks');
-        var b = document.querySelector('.btn-more-perks');
-        var open = d.style.display === 'none';
-        d.style.display = open ? 'block' : 'none';
-        b.textContent = open ? 'Show fewer perks' : 'Show 6 more perks';
-      }
-      </script>
     </div>
   </div>
 </section>
@@ -614,6 +605,9 @@
           <td>International growth help</td>
           <td>Assist with launching events in new locations, help us reach <a href="/host">potential hosts</a> / companies</td>
         </tr>
+      </table>
+      <div id="amb-more-resp" style="display:none;">
+      <table class="amb-table resp-table">
         <tr>
           <td>Invite friends to attend</td>
           <td>Look up the upcoming conferences, recommend them to your friends using your +1 or 50% codes</td>
@@ -639,6 +633,10 @@
           <td><strong>As needed</strong> &mdash; help welcome and guide new ambassadors</td>
         </tr>
       </table>
+      </div>
+      <div class="text-center mt-3">
+        <button type="button" class="btn-amb btn-more" onclick="ambToggleMore('amb-more-resp', this, 'responsibilities')">Show 6 more responsibilities</button>
+      </div>
     </div>
   </div>
 </section>
@@ -741,6 +739,15 @@
     </div>
   </div>
 </section>
+
+<script>
+function ambToggleMore(id, btn, noun) {
+  var d = document.getElementById(id);
+  var open = d.style.display === 'none';
+  d.style.display = open ? 'block' : 'none';
+  btn.textContent = open ? 'Show fewer ' + noun : 'Show 6 more ' + noun;
+}
+</script>
 
 <!-- Replace nav links for this page -->
 <script>
