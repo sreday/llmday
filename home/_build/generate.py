@@ -169,6 +169,18 @@ for page in pages:
         template = env.get_template(page)
         f.write(template.render(page=page, **context))
 
+# HOST PAGE — served from /host/, so _base.html's relative asset paths must become root-absolute
+print(DIVIDER)
+print("Generating host page: host/index.html")
+os.makedirs(BASE_FOLDER + "/host", exist_ok=True)
+host_html = env.get_template("host.html").render(page="host.html", **context)
+for _rel, _abs in (('href="assets/', 'href="/assets/'), ('src="assets/', 'src="/assets/'),
+                   ('href="./assets/', 'href="/assets/'), ('src="./assets/', 'src="/assets/')):
+    host_html = host_html.replace(_rel, _abs)
+with open(BASE_FOLDER + "/host/index.html", "w", encoding="utf-8") as f:
+    print("Writing out", f.name)
+    f.write(host_html)
+
 # MEETUPS
 print(DIVIDER)
 meetups = context.get("meetups") + context.get("meetups_past")
