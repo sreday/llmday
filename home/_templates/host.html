@@ -141,25 +141,6 @@
 .trinity-card h5 { font-weight: 800; margin: 0; font-size: 1.25rem; color: var(--host-ink); }
 .trinity-card p { color: #666; font-size: 0.95rem; margin: 0; }
 
-/* ── Statement pills (no fee / no team) ───────────────────────── */
-.statement-pills {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 14px;
-}
-.statement-pills span {
-  background: var(--host-ink);
-  color: #fff;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  padding: 13px 28px;
-  border-radius: 50px;
-}
-
 /* ── Logo marquee pill ("in good company") ────────────────────── */
 .host-logo-pill {
   background: #fff;
@@ -485,23 +466,6 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════ THE IDEA ═══════════════════════════════ -->
-<section id="idea" class="host-section host-bg-green host-bubbles">
-  <div class="bubble" style="width:160px;height:160px;background:var(--host-green-mid);top:-40px;right:5%;"></div>
-  <div class="bubble" style="width:100px;height:100px;background:var(--host-orange-mid);bottom:30px;left:3%;"></div>
-  <div class="bubble" style="width:60px;height:60px;background:var(--host-purple-mid);top:40%;left:10%;"></div>
-  <div class="container text-center">
-    <h2>You provide the space. We bring the conference.</h2>
-    <div class="lead-text mx-auto">
-      <p>A ready-to-go engineering conference without putting another big project on your marketing team's plate.</p>
-    </div>
-    <div class="statement-pills">
-      <span>No hosting fee</span>
-      <span>No event team required</span>
-    </div>
-  </div>
-</section>
-
 <!-- ═══════════════════════ GOOD COMPANY ═══════════════════════════════ -->
 <section id="company" class="host-section host-bg-orange host-bubbles">
   <div class="bubble" style="width:140px;height:140px;background:var(--host-orange-mid);top:-30px;left:6%;"></div>
@@ -758,7 +722,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!nav) return;
   nav.innerHTML =
     '<li class="nav-item"><a class="nav-link" href="/">Home</a></li>' +
-    '<li class="nav-item"><a class="nav-link scrollto" href="#idea">The idea</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#who">Who does what</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#thankyou">Thank-you</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#stats">Stats</a></li>' +
