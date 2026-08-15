@@ -216,6 +216,7 @@
 }
 .map-dot-green  { background: var(--host-green); }
 .map-dot-purple { background: var(--host-purple); }
+.map-dot-dual   { background: linear-gradient(135deg, var(--host-green) 50%, var(--host-purple) 50%); }
 .map-legend {
   display: flex;
   justify-content: center;
@@ -514,16 +515,16 @@
     <div>
       <div class="map-wrap">
         <img src="/assets/images/world-map.svg" alt="World map of our event cities">
-        {#- (name, lat, lon, brand, dlon) — dlon nudges dots apart in dual-brand cities; map spans lat 85..-60, lon -180..180 -#}
+        {#- (name, lat, lon, brand, dlon) — one dot per city; 'dual' = LLMday + SREday split dot; dlon nudges near-neighbor cities apart; map spans lat 85..-60, lon -180..180 -#}
         {% set map_cities = [
-          ('London', 51.51, -0.13, 'green', -2), ('London', 51.51, -0.13, 'purple', 2),
-          ('NYC', 40.71, -74.01, 'green', -2), ('NYC', 40.71, -74.01, 'purple', 2),
-          ('San Francisco', 37.77, -122.42, 'green', -2), ('San Francisco', 37.77, -122.42, 'purple', 2),
-          ('Redwood City', 37.49, -122.23, 'green', 0),
-          ('Austin', 30.27, -97.74, 'green', -2), ('Austin', 30.27, -97.74, 'purple', 2),
-          ('Warsaw', 52.23, 21.01, 'green', -2), ('Warsaw', 52.23, 21.01, 'purple', 2),
-          ('Lisbon', 38.72, -9.14, 'green', -2), ('Lisbon', 38.72, -9.14, 'purple', 2),
-          ('Bangalore', 12.97, 77.59, 'green', -2), ('Bangalore', 12.97, 77.59, 'purple', 2),
+          ('London', 51.51, -0.13, 'dual', 0),
+          ('NYC', 40.71, -74.01, 'dual', 0),
+          ('San Francisco', 37.77, -122.42, 'dual', -1),
+          ('Redwood City', 37.49, -122.23, 'green', 2),
+          ('Austin', 30.27, -97.74, 'dual', 0),
+          ('Warsaw', 52.23, 21.01, 'dual', 0),
+          ('Lisbon', 38.72, -9.14, 'dual', 0),
+          ('Bangalore', 12.97, 77.59, 'dual', 0),
           ('Hamburg', 53.55, 9.99, 'green', 0),
           ('Montevideo', -34.90, -56.19, 'green', 0),
           ('Amsterdam', 52.37, 4.90, 'purple', 0),
@@ -546,6 +547,7 @@
       <div class="map-legend">
         <span><span class="map-dot map-dot-green legend-dot"></span>LLMday</span>
         <span><span class="map-dot map-dot-purple legend-dot"></span>SREday</span>
+        <span><span class="map-dot map-dot-dual legend-dot"></span>Both</span>
       </div>
     </div>
   </div>
