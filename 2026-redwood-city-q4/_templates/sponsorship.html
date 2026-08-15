@@ -344,6 +344,8 @@
 }
 .sp-custom-ideas li { font-size: .9rem; color: #d0d0d0; padding: 4px 0; }
 .sp-custom-ideas li::before { content: "✓ "; color: #26986A; font-weight: 700; }
+.sp-custom-ideas a { color: inherit; text-decoration: underline; }
+.sp-custom-ideas a:hover { color: #fff; }
 @media (max-width: 640px) {
   .sp-custom-card { grid-template-columns: 1fr; }
   .sp-custom-card-left { border-right: none; border-bottom: 1px solid rgba(38,152,106,.3); padding-right: 0; padding-bottom: 20px; margin-bottom: 20px; }
@@ -600,12 +602,12 @@
           </div>
           <ul class="sp-custom-ideas">
             {% for tier in on_request_tiers[:3] %}
-            <li>{{ tier.name }}</li>
+            <li>{% if tier.url %}<a href="{{ tier.url }}" target="_blank">{{ tier.name }}</a>{% else %}{{ tier.name }}{% endif %}</li>
             {% endfor %}
           </ul>
           <ul class="sp-custom-ideas">
             {% for tier in on_request_tiers[3:] %}
-            <li>{{ tier.name }}</li>
+            <li>{% if tier.url %}<a href="{{ tier.url }}" target="_blank">{{ tier.name }}</a>{% else %}{{ tier.name }}{% endif %}</li>
             {% endfor %}
           </ul>
         </div>
