@@ -398,11 +398,13 @@
 .host-amb-note a {
   color: var(--host-green-mid);
   font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color .15s;
+  text-decoration: none;
+  transition: color .2s, text-shadow .2s;
 }
-.host-amb-note a:hover { color: #fff; }
+.host-amb-note a:hover {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(191,231,212,.9), 0 0 26px rgba(191,231,212,.45);
+}
 @media (max-width: 768px) {
   .host-hero h1 { font-size: 1.92rem; }
   .host-section h2 { font-size: 2rem; }
@@ -704,7 +706,8 @@
         <a href="mailto:hello@llmday.com?subject=Hosting%20inquiry" class="btn-host btn-host-purple"><i class="fas fa-envelope me-2"></i>Email Mark</a>
         <a href="https://wa.me/447307415008" target="_blank" rel="noopener noreferrer" class="btn-host btn-host-green"><i class="fab fa-whatsapp me-2"></i>DM Mark</a>
       </div>
-      <p class="host-amb-note">On a personal level, helping host our conferences is a <a href="/ambassadorship">fast track to becoming an Ambassador!</a></p>
+      <p class="host-amb-note">On a personal level, helping host our conferences is a<br>
+      <a href="/ambassadorship">fast-track to becoming an Ambassador!</a></p>
     </div>
   </div>
 </section>
