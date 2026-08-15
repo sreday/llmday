@@ -263,6 +263,7 @@
 }
 .map-dot-green  { background: var(--host-green); }
 .map-dot-purple { background: var(--host-purple); }
+.map-dot-dual   { background: linear-gradient(135deg, var(--host-green) 50%, var(--host-purple) 50%); }
 .map-legend {
   display: flex;
   justify-content: center;
@@ -819,35 +820,21 @@ section[id] {
       <div class="map-wrap">
         <img src="/assets/images/world-map.svg" alt="World map of our event cities">
         
-        <span class="map-dot map-dot-green" data-city="London" style="left:49.41%;top:23.10%;"></span>
+        <span class="map-dot map-dot-dual" data-city="London" style="left:49.96%;top:23.10%;"></span>
         
-        <span class="map-dot map-dot-purple" data-city="London" style="left:50.52%;top:23.10%;"></span>
+        <span class="map-dot map-dot-dual" data-city="NYC" style="left:29.44%;top:30.54%;"></span>
         
-        <span class="map-dot map-dot-green" data-city="NYC" style="left:28.89%;top:30.54%;"></span>
+        <span class="map-dot map-dot-dual" data-city="San Francisco" style="left:15.72%;top:32.57%;"></span>
         
-        <span class="map-dot map-dot-purple" data-city="NYC" style="left:30.00%;top:30.54%;"></span>
+        <span class="map-dot map-dot-green" data-city="Redwood City" style="left:16.60%;top:32.77%;"></span>
         
-        <span class="map-dot map-dot-green" data-city="San Francisco" style="left:15.44%;top:32.57%;"></span>
+        <span class="map-dot map-dot-dual" data-city="Austin" style="left:22.85%;top:37.74%;"></span>
         
-        <span class="map-dot map-dot-purple" data-city="San Francisco" style="left:16.55%;top:32.57%;"></span>
+        <span class="map-dot map-dot-dual" data-city="Warsaw" style="left:55.84%;top:22.60%;"></span>
         
-        <span class="map-dot map-dot-green" data-city="Redwood City" style="left:16.05%;top:32.77%;"></span>
+        <span class="map-dot map-dot-dual" data-city="Lisbon" style="left:47.46%;top:31.92%;"></span>
         
-        <span class="map-dot map-dot-green" data-city="Austin" style="left:22.29%;top:37.74%;"></span>
-        
-        <span class="map-dot map-dot-purple" data-city="Austin" style="left:23.41%;top:37.74%;"></span>
-        
-        <span class="map-dot map-dot-green" data-city="Warsaw" style="left:55.28%;top:22.60%;"></span>
-        
-        <span class="map-dot map-dot-purple" data-city="Warsaw" style="left:56.39%;top:22.60%;"></span>
-        
-        <span class="map-dot map-dot-green" data-city="Lisbon" style="left:46.91%;top:31.92%;"></span>
-        
-        <span class="map-dot map-dot-purple" data-city="Lisbon" style="left:48.02%;top:31.92%;"></span>
-        
-        <span class="map-dot map-dot-green" data-city="Bangalore" style="left:71.00%;top:49.68%;"></span>
-        
-        <span class="map-dot map-dot-purple" data-city="Bangalore" style="left:72.11%;top:49.68%;"></span>
+        <span class="map-dot map-dot-dual" data-city="Bangalore" style="left:71.55%;top:49.68%;"></span>
         
         <span class="map-dot map-dot-green" data-city="Hamburg" style="left:52.77%;top:21.69%;"></span>
         
@@ -881,6 +868,7 @@ section[id] {
       <div class="map-legend">
         <span><span class="map-dot map-dot-green legend-dot"></span>LLMday</span>
         <span><span class="map-dot map-dot-purple legend-dot"></span>SREday</span>
+        <span><span class="map-dot map-dot-dual legend-dot"></span>Both</span>
       </div>
     </div>
   </div>
@@ -948,7 +936,7 @@ section[id] {
           <div class="trio-bar trio-bar-purple"></div>
           <div class="trio-body">
             <h4>A thank-you for hosting</h4>
-            <p>Hosting 100+ engineers takes work. <strong>We appreciate it.</strong></p>
+            <p>Hosting 80+ people in your space takes work. <strong>We appreciate it.</strong></p>
             <p>That's why hosts get sponsorship benefits we'd normally charge for, <strong>for free.</strong></p>
             <p class="perk-line">Conference leads | Keynote | Panel | Booth</p>
             <p>Pick what works for you.</p>
