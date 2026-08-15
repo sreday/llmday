@@ -228,12 +228,6 @@
 }
 
 /* ── World map ("28 cities and counting") ─────────────────────── */
-.map-card {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.06);
-  padding: 30px;
-}
 .map-wrap { position: relative; }
 .map-wrap img { width: 100%; height: auto; display: block; }
 .map-dot {
@@ -243,6 +237,29 @@
   border: 2px solid #fff;
   transform: translate(-50%, -50%);
   box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+.map-wrap .map-dot:hover { z-index: 5; }
+.map-wrap .map-dot::after {
+  content: attr(data-city);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%) translateY(3px);
+  background: var(--host-ink);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 6px 11px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s, transform .15s;
+}
+.map-wrap .map-dot:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 .map-dot-green  { background: var(--host-green); }
 .map-dot-purple { background: var(--host-purple); }
@@ -841,67 +858,67 @@ section[id] {
   <div class="bubble" style="width:80px;height:80px;background:var(--host-purple-mid);bottom:15%;right:5%;"></div>
   <div class="container">
     <h2 class="text-center">28 cities and counting</h2>
-    <div class="map-card">
+    <div>
       <div class="map-wrap">
         <img src="/assets/images/world-map.svg" alt="World map of our event cities">
         
-        <span class="map-dot map-dot-green" title="London" style="left:49.41%;top:23.10%;"></span>
+        <span class="map-dot map-dot-green" data-city="London" style="left:49.41%;top:23.10%;"></span>
         
-        <span class="map-dot map-dot-purple" title="London" style="left:50.52%;top:23.10%;"></span>
+        <span class="map-dot map-dot-purple" data-city="London" style="left:50.52%;top:23.10%;"></span>
         
-        <span class="map-dot map-dot-green" title="NYC" style="left:28.89%;top:30.54%;"></span>
+        <span class="map-dot map-dot-green" data-city="NYC" style="left:28.89%;top:30.54%;"></span>
         
-        <span class="map-dot map-dot-purple" title="NYC" style="left:30.00%;top:30.54%;"></span>
+        <span class="map-dot map-dot-purple" data-city="NYC" style="left:30.00%;top:30.54%;"></span>
         
-        <span class="map-dot map-dot-green" title="San Francisco" style="left:15.44%;top:32.57%;"></span>
+        <span class="map-dot map-dot-green" data-city="San Francisco" style="left:15.44%;top:32.57%;"></span>
         
-        <span class="map-dot map-dot-purple" title="San Francisco" style="left:16.55%;top:32.57%;"></span>
+        <span class="map-dot map-dot-purple" data-city="San Francisco" style="left:16.55%;top:32.57%;"></span>
         
-        <span class="map-dot map-dot-green" title="Redwood City" style="left:16.05%;top:32.77%;"></span>
+        <span class="map-dot map-dot-green" data-city="Redwood City" style="left:16.05%;top:32.77%;"></span>
         
-        <span class="map-dot map-dot-green" title="Austin" style="left:22.29%;top:37.74%;"></span>
+        <span class="map-dot map-dot-green" data-city="Austin" style="left:22.29%;top:37.74%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Austin" style="left:23.41%;top:37.74%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Austin" style="left:23.41%;top:37.74%;"></span>
         
-        <span class="map-dot map-dot-green" title="Warsaw" style="left:55.28%;top:22.60%;"></span>
+        <span class="map-dot map-dot-green" data-city="Warsaw" style="left:55.28%;top:22.60%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Warsaw" style="left:56.39%;top:22.60%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Warsaw" style="left:56.39%;top:22.60%;"></span>
         
-        <span class="map-dot map-dot-green" title="Lisbon" style="left:46.91%;top:31.92%;"></span>
+        <span class="map-dot map-dot-green" data-city="Lisbon" style="left:46.91%;top:31.92%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Lisbon" style="left:48.02%;top:31.92%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Lisbon" style="left:48.02%;top:31.92%;"></span>
         
-        <span class="map-dot map-dot-green" title="Bangalore" style="left:71.00%;top:49.68%;"></span>
+        <span class="map-dot map-dot-green" data-city="Bangalore" style="left:71.00%;top:49.68%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Bangalore" style="left:72.11%;top:49.68%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Bangalore" style="left:72.11%;top:49.68%;"></span>
         
-        <span class="map-dot map-dot-green" title="Hamburg" style="left:52.77%;top:21.69%;"></span>
+        <span class="map-dot map-dot-green" data-city="Hamburg" style="left:52.77%;top:21.69%;"></span>
         
-        <span class="map-dot map-dot-green" title="Montevideo" style="left:34.39%;top:82.69%;"></span>
+        <span class="map-dot map-dot-green" data-city="Montevideo" style="left:34.39%;top:82.69%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Amsterdam" style="left:51.36%;top:22.50%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Amsterdam" style="left:51.36%;top:22.50%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Cologne" style="left:51.93%;top:23.49%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Cologne" style="left:51.93%;top:23.49%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Paris" style="left:50.65%;top:24.92%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Paris" style="left:50.65%;top:24.92%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Munich" style="left:53.22%;top:25.42%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Munich" style="left:53.22%;top:25.42%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Barcelona" style="left:50.60%;top:30.08%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Barcelona" style="left:50.60%;top:30.08%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Katowice" style="left:55.28%;top:23.96%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Katowice" style="left:55.28%;top:23.96%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Seattle" style="left:15.74%;top:25.79%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Seattle" style="left:15.74%;top:25.79%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Redmond" style="left:16.63%;top:25.74%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Redmond" style="left:16.63%;top:25.74%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Dallas" style="left:23.11%;top:36.01%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Dallas" style="left:23.11%;top:36.01%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Campinas" style="left:36.93%;top:74.42%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Campinas" style="left:36.93%;top:74.42%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Chennai" style="left:72.85%;top:49.60%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Chennai" style="left:72.85%;top:49.60%;"></span>
         
-        <span class="map-dot map-dot-purple" title="Hyderabad" style="left:71.80%;top:46.63%;"></span>
+        <span class="map-dot map-dot-purple" data-city="Hyderabad" style="left:71.80%;top:46.63%;"></span>
         
       </div>
       <div class="map-legend">
