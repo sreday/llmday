@@ -112,6 +112,7 @@ tiers:
 
   - id: host
     name: "Host LLMday / SREday / PLATFORMday"
+    url: "/host"
 
     price_label: "On request"
 
