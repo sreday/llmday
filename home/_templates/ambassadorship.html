@@ -109,28 +109,6 @@
 .amb-bg-peach { background: linear-gradient(135deg, #fff 0%, var(--amb-peach) 100%); }
 .amb-bg-lavender { background: linear-gradient(135deg, var(--amb-lavender) 0%, #fff 100%); }
 
-/* ── Stat pills ───────────────────────────────────────────────── */
-.amb-stat-pills {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 14px;
-  margin: 6px 0 34px;
-}
-.amb-stat-pills span {
-  padding: 12px 24px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: .95rem;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: #2d3436;
-}
-.amb-stat-pills span:nth-child(1) { background: var(--amb-green); }
-.amb-stat-pills span:nth-child(2) { background: var(--amb-blue); }
-.amb-stat-pills span:nth-child(3) { background: var(--amb-pink-light); }
-.amb-stat-pills span:nth-child(4) { background: var(--amb-yellow); }
-
 /* ── Team cards ───────────────────────────────────────────────── */
 .team-card {
   text-align: center;
@@ -288,7 +266,7 @@
   text-align: center;
 }
 .amb-cta h2 { font-weight: 800; color: #2d3436; }
-.amb-cta .btn-amb {
+.btn-amb {
   display: inline-block;
   padding: 14px 36px;
   border-radius: 50px;
@@ -298,7 +276,7 @@
   margin: 8px;
   transition: transform .2s, box-shadow .2s;
 }
-.amb-cta .btn-amb:hover {
+.btn-amb:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0,0,0,.12);
 }
@@ -409,12 +387,6 @@
       <p>Miko (site reliability engineer) and Mark (festival organizer) joined forces in London back in 2019, bootstrapping a series of tech conferences. We build developer communities!</p>
       <p>Both strictly in-person: <a href="https://sreday.com" target="_blank">sreday.com</a>, <a href="https://llmday.com" target="_blank">llmday.com</a>, <a href="https://platformday.com" target="_blank">platformday.com</a>, and online &mdash; <a href="https://conf42.com" target="_blank">conf42.com</a>.</p>
       <p>We are a core team of 5 people, with the founders based in the United Kingdom:</p>
-    </div>
-    <div class="amb-stat-pills">
-      <span>{{ counts.events }} events</span>
-      <span>{{ counts.countries }} countries</span>
-      <span>{{ ambassadors|length }} ambassadors</span>
-      <span>{{ counts.attendees }} attendees</span>
     </div>
     <div class="row justify-content-center">
       <div class="col-6 col-md"><div class="team-card">
@@ -534,10 +506,6 @@
       <div class="col-12 col-lg-4 text-center">
         <img src="/assets/images/ambassadorship/cat-huh.jpeg" alt="Curious cat" style="max-width:260px;width:100%;border-radius:20px;">
       </div>
-    </div>
-    <div class="mt-5">
-      {% set map_block_heading = False %}
-      {% include "_map_block.html" %}
     </div>
   </div>
 </section>
@@ -703,7 +671,7 @@
   <div class="bubble" style="width:140px;height:140px;background:var(--amb-pink);top:-30px;left:6%;opacity:.2;"></div>
   <div class="bubble" style="width:90px;height:90px;background:var(--amb-yellow);bottom:10%;right:5%;opacity:.25;"></div>
   <div class="container">
-    <h2 class="text-center">Meet some of our ambassadors</h2>
+    <h2 class="text-center">Meet other ambassadors</h2>
     <div class="row justify-content-center g-4 mt-2">
       {% for ambassador in ambassadors[:3] %}
       <div class="col-12 col-md-6 col-lg-4">
@@ -736,7 +704,7 @@
       {% endfor %}
     </div>
     <div class="text-center mt-4">
-      <a href="/#ambassadors" class="btn-amb btn-email">Meet all our ambassadors &rarr;</a>
+      <a href="/#ambassadors" class="btn-amb btn-email">All ambassadors</a>
     </div>
   </div>
 </section>
