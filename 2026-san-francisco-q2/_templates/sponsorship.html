@@ -1041,6 +1041,30 @@ function spToggleStats() {
   panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
   btn.setAttribute('aria-expanded', String(open));
 }
+
+// Auto-expand collapsible panels when reaching #stats / #faq via link, navbar or hash change
+function spAutoExpand(hash) {
+  var map = { '#stats': ['sp-stats-toggle', 'spToggleStats'], '#faq': ['sp-faq-toggle', 'spToggleFaq'] };
+  var m = map[hash];
+  if (!m) return;
+  var btn = document.getElementById(m[0]);
+  if (btn && btn.getAttribute('aria-expanded') !== 'true') {
+    window[m[1]]();
+    setTimeout(function() {
+      var sec = document.getElementById(hash.slice(1));
+      if (sec) sec.scrollIntoView({behavior: 'smooth'});
+    }, 150);
+  }
+}
+document.addEventListener('DOMContentLoaded', function() {
+  spAutoExpand(window.location.hash);
+  document.querySelectorAll('a[href="#stats"], a[href="#faq"]').forEach(function(a) {
+    a.addEventListener('click', function() {
+      setTimeout(function() { spAutoExpand(a.getAttribute('href')); }, 0);
+    });
+  });
+});
+window.addEventListener('hashchange', function() { spAutoExpand(window.location.hash); });
 </script>
 
 {# ── Confirmed sponsors ─────────────────────────────── #}
