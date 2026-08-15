@@ -111,6 +111,13 @@
   text-align: center;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  transition: transform .2s, box-shadow .2s;
+}
+.trinity-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.12);
+  text-decoration: none;
 }
 .trinity-card .trinity-head {
   color: #fff;
@@ -131,7 +138,7 @@
   flex-grow: 1;
 }
 .trinity-card img { height: 96px; }
-.trinity-card h5 { font-weight: 800; margin: 0; font-size: 1.25rem; }
+.trinity-card h5 { font-weight: 800; margin: 0; font-size: 1.25rem; color: var(--host-ink); }
 .trinity-card p { color: #666; font-size: 0.95rem; margin: 0; }
 
 /* ── Statement pills (no fee / no team) ───────────────────────── */
@@ -437,34 +444,34 @@
   <div class="container">
     <div class="row g-4 justify-content-center">
       <div class="col-12 col-md-4">
-        <div class="trinity-card trinity-green">
+        <a class="trinity-card trinity-green" href="https://www.llmday.com" target="_blank" rel="noopener noreferrer">
           <div class="trinity-head">BUILD IT</div>
           <div class="trinity-body">
             <img src="/assets/images/llmday_sticker_new.png" alt="LLMday">
             <h5>LLMday</h5>
             <p>Large Language Models, AI agents and machine learning.</p>
           </div>
-        </div>
+        </a>
       </div>
       <div class="col-12 col-md-4">
-        <div class="trinity-card trinity-orange">
+        <a class="trinity-card trinity-orange" href="https://platformday.com" target="_blank" rel="noopener noreferrer">
           <div class="trinity-head">SHIP IT</div>
           <div class="trinity-body">
             <img src="/assets/images/platformday_sticker.png" alt="PLATFORMday">
             <h5>PLATFORMday</h5>
             <p>Platform engineering, DevOps and DevEx.</p>
           </div>
-        </div>
+        </a>
       </div>
       <div class="col-12 col-md-4">
-        <div class="trinity-card trinity-purple">
+        <a class="trinity-card trinity-purple" href="https://sreday.com" target="_blank" rel="noopener noreferrer">
           <div class="trinity-head">RUN IT</div>
           <div class="trinity-body">
             <img src="/assets/images/sreday_sticker.png" alt="SREday">
             <h5>SREday</h5>
             <p>Reliability, cloud, observability and production systems.</p>
           </div>
-        </div>
+        </a>
       </div>
     </div>
     <div class="lead-text mx-auto text-center mt-5">
