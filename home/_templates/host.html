@@ -471,11 +471,11 @@
   <div class="bubble" style="width:140px;height:140px;background:var(--host-orange-mid);top:-30px;left:6%;"></div>
   <div class="bubble" style="width:90px;height:90px;background:var(--host-green-mid);bottom:10%;right:4%;"></div>
   <div class="container">
+    {% set host_logos = ['catawiki', 'criteo', 'datadog', 'dynatrace', 'evolv', 'ford', 'gable', 'google', 'harness', 'houseofai', 'ilert', 'ing', 'kyndryl', 'maibornwolff', 'microsoft', 'monday', 'pagerduty', 'viam', 'xurrent'] %}
     <h2 class="text-center">We're in good company</h2>
     <div class="lead-text mx-auto text-center mb-4">
-      <p>We've been trusted by 10+ hosting companies worldwide</p>
+      <p>We've been trusted by {{ host_logos|length }} hosting companies worldwide</p>
     </div>
-    {% set host_logos = ['catawiki', 'criteo', 'datadog', 'dynatrace', 'evolv', 'ford', 'gable', 'google', 'harness', 'houseofai', 'ilert', 'ing', 'kyndryl', 'maibornwolff', 'microsoft', 'monday', 'pagerduty', 'viam', 'xurrent'] %}
     <div class="host-logo-pill">
       <div class="host-logo-track">
         {% for logo in host_logos %}
