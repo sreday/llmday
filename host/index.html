@@ -445,11 +445,13 @@
 .host-amb-note a {
   color: var(--host-green-mid);
   font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color .15s;
+  text-decoration: none;
+  transition: color .2s, text-shadow .2s;
 }
-.host-amb-note a:hover { color: #fff; }
+.host-amb-note a:hover {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(191,231,212,.9), 0 0 26px rgba(191,231,212,.45);
+}
 @media (max-width: 768px) {
   .host-hero h1 { font-size: 1.92rem; }
   .host-section h2 { font-size: 2rem; }
@@ -735,6 +737,23 @@ section[id] {
   </div>
 </section>
 
+<!-- ═══════════════════════ TYPICAL CONFERENCE ═════════════════════════ -->
+<section id="typical" class="host-section host-bg-white host-bubbles">
+  <div class="bubble" style="width:110px;height:110px;background:var(--host-purple-mid);top:-20px;right:8%;"></div>
+  <div class="bubble" style="width:70px;height:70px;background:var(--host-green-mid);bottom:15%;left:4%;"></div>
+  <div class="container text-center">
+    <h2>A typical conference</h2>
+    <div class="stat-pills">
+      <span>Single day</span>
+      <span>9AM &ndash; 5PM</span>
+      <span>80&ndash;150 attendees</span>
+      <span>1&ndash;3 tracks</span>
+      <span>15&ndash;40 sessions</span>
+    </div>
+    <p class="lead-text mx-auto">Keynotes, talks, workshops, panels and plenty of time to network.</p>
+  </div>
+</section>
+
 <!-- ═══════════════════════ GOOD COMPANY ═══════════════════════════════ -->
 <section id="company" class="host-section host-bg-orange host-bubbles">
   <div class="bubble" style="width:140px;height:140px;background:var(--host-orange-mid);top:-30px;left:6%;"></div>
@@ -906,23 +925,6 @@ section[id] {
   </div>
 </section>
 
-<!-- ═══════════════════════ TYPICAL CONFERENCE ═════════════════════════ -->
-<section id="typical" class="host-section host-bg-white host-bubbles">
-  <div class="bubble" style="width:110px;height:110px;background:var(--host-purple-mid);top:-20px;right:8%;"></div>
-  <div class="bubble" style="width:70px;height:70px;background:var(--host-green-mid);bottom:15%;left:4%;"></div>
-  <div class="container text-center">
-    <h2>A typical conference</h2>
-    <div class="stat-pills">
-      <span>Single day</span>
-      <span>9AM &ndash; 5PM</span>
-      <span>80&ndash;150 attendees</span>
-      <span>1&ndash;3 tracks</span>
-      <span>15&ndash;40 sessions</span>
-    </div>
-    <p class="lead-text mx-auto">Keynotes, talks, workshops, panels and plenty of time to network.</p>
-  </div>
-</section>
-
 <!-- ═══════════════════════════ WHO DOES WHAT ══════════════════════════ -->
 <section id="responsibilities" class="host-section host-bg-purple host-bubbles">
   <div class="bubble" style="width:150px;height:150px;background:var(--host-purple-mid);top:-40px;left:5%;"></div>
@@ -1053,7 +1055,8 @@ section[id] {
         <a href="mailto:hello@llmday.com?subject=Hosting%20inquiry" class="btn-host btn-host-purple"><i class="fas fa-envelope me-2"></i>Email Mark</a>
         <a href="https://wa.me/447307415008" target="_blank" rel="noopener noreferrer" class="btn-host btn-host-green"><i class="fab fa-whatsapp me-2"></i>DM Mark</a>
       </div>
-      <p class="host-amb-note">On a personal level, helping host our conferences is a <a href="/ambassadorship">fast track to becoming an Ambassador!</a></p>
+      <p class="host-amb-note">On a personal level, helping host our conferences is a<br>
+      <a href="/ambassadorship">fast-track to becoming an Ambassador!</a></p>
     </div>
   </div>
 </section>
