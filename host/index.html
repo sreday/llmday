@@ -383,49 +383,6 @@
 }
 .trio-card .trio-link:hover { text-decoration: underline; color: var(--host-purple); }
 
-/* ── Community stats cards ────────────────────────────────────── */
-.stats-card {
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.06);
-  overflow: hidden;
-  height: 100%;
-  text-align: center;
-  text-decoration: none;
-  transition: transform .2s, box-shadow .2s;
-}
-.stats-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.12);
-  text-decoration: none;
-}
-.stats-card .stats-bar { height: 10px; }
-.stats-card .stats-body {
-  padding: 26px 20px 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  flex-grow: 1;
-}
-.stats-card img { height: 74px; }
-.stats-card h5 {
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: var(--host-ink);
-  margin: 0;
-}
-.stats-card .stats-sub { color: #888; font-size: .9rem; }
-.stats-card .stats-cta { font-weight: 700; font-size: .95rem; }
-.stats-green  .stats-bar { background: var(--host-green); }
-.stats-green  .stats-cta { color: var(--host-green); }
-.stats-orange .stats-bar { background: var(--host-orange); }
-.stats-orange .stats-cta { color: var(--host-orange); }
-.stats-purple .stats-bar { background: var(--host-purple); }
-.stats-purple .stats-cta { color: var(--host-purple); }
-
 /* ── Buttons ──────────────────────────────────────────────────── */
 .btn-host {
   display: inline-block;
@@ -1034,40 +991,10 @@ section[id] {
     <div class="lead-text mx-auto text-center mb-5">
       <p>We grow through <strong>attendees, speakers, ambassadors, and local engineering communities.</strong> You can be a part of this!</p>
     </div>
-    <div class="row g-4 justify-content-center">
-      <div class="col-12 col-md-4">
-        <a class="stats-card stats-green" href="/2026-london-q4/sponsorship.html#stats" target="_blank">
-          <div class="stats-bar"></div>
-          <div class="stats-body">
-            <img src="/assets/images/llmday_sticker_new.png" alt="LLMday">
-            <h5>LLMday community stats</h5>
-            <div class="stats-sub">Attendees, speakers, roles &amp; companies</div>
-            <div class="stats-cta">Dive into the numbers &rarr;</div>
-          </div>
-        </a>
-      </div>
-      <div class="col-12 col-md-4">
-        <a class="stats-card stats-orange" href="https://platformday.com" target="_blank">
-          <div class="stats-bar"></div>
-          <div class="stats-body">
-            <img src="/assets/images/platformday_sticker.png" alt="PLATFORMday">
-            <h5>PLATFORMday community stats</h5>
-            <div class="stats-sub">Attendees, speakers, roles &amp; companies</div>
-            <div class="stats-cta">Dive into the numbers &rarr;</div>
-          </div>
-        </a>
-      </div>
-      <div class="col-12 col-md-4">
-        <a class="stats-card stats-purple" href="https://sreday.com/2026-london-q3/sponsorship.html#stats" target="_blank">
-          <div class="stats-bar"></div>
-          <div class="stats-body">
-            <img src="/assets/images/sreday_sticker.png" alt="SREday">
-            <h5>SREday community stats</h5>
-            <div class="stats-sub">Attendees, speakers, roles &amp; companies</div>
-            <div class="stats-cta">Dive into the numbers &rarr;</div>
-          </div>
-        </a>
-      </div>
+    <div class="text-center">
+      <a href="/2026-london-q4/sponsorship.html#stats" target="_blank" class="btn-host btn-host-green">LLMday community stats</a>
+      <a href="https://platformday.com" target="_blank" class="btn-host btn-host-orange">PLATFORMday community stats</a>
+      <a href="https://sreday.com/2026-london-q3/sponsorship.html#stats" target="_blank" class="btn-host btn-host-purple">SREday community stats</a>
     </div>
   </div>
 </section>
