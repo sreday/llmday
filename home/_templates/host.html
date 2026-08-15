@@ -189,7 +189,12 @@
 
 /* ── World map ("28 cities and counting") ─────────────────────── */
 .map-wrap { position: relative; }
-.map-wrap .map-svg { width: 100%; height: auto; display: block; }
+.map-wrap .map-svg {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1000 / 463; /* ~15% vertical stretch vs the 402.8-tall viewBox */
+  display: block;
+}
 .map-svg path {
   fill: #C9E2F6;
   transition: fill .15s;
