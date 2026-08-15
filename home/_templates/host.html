@@ -335,12 +335,23 @@
 }
 .trio-card .trio-link {
   margin-top: auto;
-  padding-top: 8px;
+  align-self: flex-start;
+  display: inline-block;
+  background: var(--host-purple);
+  color: #fff;
   font-weight: 700;
+  font-size: .95rem;
   text-decoration: none;
-  color: var(--host-purple);
+  padding: 12px 24px;
+  border-radius: 50px;
+  transition: transform .2s, box-shadow .2s;
 }
-.trio-card .trio-link:hover { text-decoration: underline; color: var(--host-purple); }
+.trio-card .trio-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,.2);
+  color: #fff;
+  text-decoration: none;
+}
 
 /* ── Buttons ──────────────────────────────────────────────────── */
 .btn-host {
