@@ -392,8 +392,8 @@
 }
 .sp-custom-ideas li { font-size: .9rem; color: #d0d0d0; padding: 4px 0; }
 .sp-custom-ideas li::before { content: "✓ "; color: #26986A; font-weight: 700; }
-.sp-custom-ideas a { color: inherit; text-decoration: underline; }
-.sp-custom-ideas a:hover { color: #fff; }
+.sp-custom-ideas a { color: inherit; font-weight: 700; text-decoration: none; transition: color .2s, text-shadow .2s; }
+.sp-custom-ideas a:hover { color: #fff; text-shadow: 0 0 12px rgba(255,255,255,.8), 0 0 26px rgba(255,255,255,.4); }
 @media (max-width: 640px) {
   .sp-custom-card { grid-template-columns: 1fr; }
   .sp-custom-card-left { border-right: none; border-bottom: 1px solid rgba(38,152,106,.3); padding-right: 0; padding-bottom: 20px; margin-bottom: 20px; }
@@ -1524,7 +1524,7 @@
         </div>
 
         <div class="text-center" style="margin-top:32px;">
-          <button class="btn-stats-close" onclick="spToggleStats(); setTimeout(function(){ window.location.hash='stats'; }, 10);">
+          <button class="btn-stats-close" onclick="spToggleStats(); setTimeout(function(){ document.getElementById('stats').scrollIntoView({behavior:'smooth'}); }, 10);">
             Close stats
             <span style="display:flex;align-items:center;">
               <svg width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);">
@@ -1633,7 +1633,7 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
         <p class="sp-faq-a">We price items separately so you can mix and match, based on the competition and what feels fair. If your budget is tight, we can talk.</p>
 
         <div class="text-center" style="margin-top:32px;">
-          <button class="btn-stats-close" onclick="spToggleFaq(); setTimeout(function(){ window.location.hash='faq'; }, 10);">
+          <button class="btn-stats-close" onclick="spToggleFaq(); setTimeout(function(){ document.getElementById('faq').scrollIntoView({behavior:'smooth'}); }, 10);">
             Close FAQ
             <span style="display:flex;align-items:center;">
               <svg width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);">
