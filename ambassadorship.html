@@ -173,6 +173,8 @@
 
 /* ── Conference cards ─────────────────────────────────────────── */
 .conf-card {
+  text-decoration: none;
+  transition: transform .2s, box-shadow .2s;
   background: #fff;
   border-radius: 18px;
   padding: 30px 24px;
@@ -190,7 +192,12 @@
   background: var(--amb-blue-light);
   padding: 10px;
 }
-.conf-card h5 { font-weight: 700; margin-bottom: 4px; }
+.conf-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.1);
+  text-decoration: none;
+}
+.conf-card h5 { font-weight: 700; margin-bottom: 4px; color: #2d3436; }
 .conf-card .badge-type {
   display: inline-block;
   padding: 3px 12px;
@@ -688,44 +695,44 @@ section[id] {
     <h2 class="text-center">Our conferences</h2>
     <div class="row g-4 mt-2">
       <div class="col-12 col-md-6">
-        <div class="conf-card">
+        <a class="conf-card" href="https://sreday.com" target="_blank" rel="noopener noreferrer">
           <img src="/assets/images/sreday_sticker.png" alt="SREday">
           <div>
             <h5>SREday</h5>
             <span class="badge-type badge-inperson">in-person</span>
             <p>Site Reliability, DevOps, Cloud, Observability &amp; Monitoring, Testing, Scalability, Security</p>
           </div>
-        </div>
+        </a>
       </div>
       <div class="col-12 col-md-6">
-        <div class="conf-card">
+        <a class="conf-card" href="https://www.llmday.com" target="_blank" rel="noopener noreferrer">
           <img src="/assets/images/llmday_sticker_new.png" alt="LLMday">
           <div>
             <h5>LLMday</h5>
             <span class="badge-type badge-inperson">in-person</span>
             <p>Large Language Models, AI, ML, GenAI, Cloud &amp; Local, Fine Tuning, Deploying, Prompt Engineering</p>
           </div>
-        </div>
+        </a>
       </div>
       <div class="col-12 col-md-6">
-        <div class="conf-card">
+        <a class="conf-card" href="https://platformday.com" target="_blank" rel="noopener noreferrer">
           <img src="/assets/images/platformday_sticker.png" alt="PLATFORMday">
           <div>
             <h5>PLATFORMday</h5>
             <span class="badge-type badge-inperson">in-person</span>
             <p>Platform Engineering, Internal Developer Platforms, DevOps, Infrastructure, Cloud Native</p>
           </div>
-        </div>
+        </a>
       </div>
       <div class="col-12 col-md-6">
-        <div class="conf-card">
+        <a class="conf-card" href="https://www.conf42.com" target="_blank" rel="noopener noreferrer">
           <img src="/assets/images/conf42_sticker.png" alt="Conf42">
           <div>
             <h5>Conf42</h5>
             <span class="badge-type badge-online">online</span>
             <p>A balanced mix of topics, 10-20 events every year</p>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
