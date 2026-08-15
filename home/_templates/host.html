@@ -164,23 +164,31 @@
   border-radius: 50px;
 }
 
-/* ── Logo card ("in good company") ────────────────────────────── */
-.host-logo-card {
+/* ── Logo marquee pill ("in good company") ────────────────────── */
+.host-logo-pill {
   background: #fff;
-  border-radius: 18px;
+  border-radius: 999px;
   box-shadow: 0 4px 20px rgba(0,0,0,.07);
-  padding: 34px 30px;
+  padding: 28px 0;
+  overflow: hidden;
 }
-.host-logo-card .logo-item {
+.host-logo-track {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 22px 18px;
+  gap: 4.5rem;
+  width: max-content;
+  animation: host-logo-scroll 40s linear infinite;
 }
-.host-logo-card img {
-  max-width: 80%;
-  max-height: 74px;
+.host-logo-pill:hover .host-logo-track { animation-play-state: paused; }
+.host-logo-item img {
+  height: 88px;
+  width: auto;
+  max-width: 280px;
   object-fit: contain;
+}
+@keyframes host-logo-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ── Stat pills ("a typical conference") ──────────────────────── */
@@ -481,22 +489,27 @@
   <div class="bubble" style="width:90px;height:90px;background:var(--host-green-mid);bottom:10%;right:4%;"></div>
   <div class="container">
     <h2 class="text-center">We're in good company.</h2>
-    <div class="host-logo-card">
-      <div class="row justify-content-center align-items-center">
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/harness.png" alt="Harness"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/microsoft.png" alt="Microsoft"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/google.png" alt="Google"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/datadog.png" alt="Datadog"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/dynatrace.png" alt="Dynatrace"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/pagerduty.png" alt="PagerDuty"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/ing.png" alt="ING"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/criteo.png" alt="Criteo"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/kyndryl.png" alt="Kyndryl"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/viam.png" alt="VIAM"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/houseofai.png" alt="House of AI"></div>
-        <div class="col-6 col-md-4 col-lg-3 logo-item"><img src="/assets/images/hosts/maibornwolff.png" alt="MaibornWolff"></div>
+    {% set host_logos = ['harness', 'microsoft', 'google', 'datadog', 'dynatrace', 'pagerduty', 'ing', 'criteo', 'kyndryl', 'viam', 'houseofai', 'maibornwolff'] %}
+    <div class="host-logo-pill">
+      <div class="host-logo-track">
+        {% for logo in host_logos %}
+        <div class="host-logo-item"><img src="/assets/images/hosts/{{ logo }}.png" alt="{{ logo }}"></div>
+        {% endfor %}
+        {% for logo in host_logos %}
+        <div class="host-logo-item"><img src="/assets/images/hosts/{{ logo }}.png" alt="{{ logo }}"></div>
+        {% endfor %}
       </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var track = document.querySelector('.host-logo-track');
+      if (track) {
+        var SPEED = 25; // pixels per second
+        var totalWidth = track.scrollWidth / 2;
+        track.style.animationDuration = (totalWidth / SPEED) + 's';
+      }
+    });
+    </script>
   </div>
 </section>
 
