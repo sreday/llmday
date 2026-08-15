@@ -103,7 +103,7 @@
   opacity: .4;
 }
 .host-hero h1 {
-  font-size: 3.2rem;
+  font-size: 2.56rem;
   font-weight: 800;
   color: var(--host-ink);
   position: relative;
@@ -336,7 +336,6 @@
 }
 .we-list li::before  { background: var(--host-green); }
 .you-list li::before { background: var(--host-orange); }
-.you-list li:first-child { font-weight: 700; }
 
 /* ── Trio cards (thank-you / break-even / small team) ─────────── */
 .trio-card {
@@ -403,6 +402,7 @@
   text-decoration: none;
 }
 .btn-host-green  { background: var(--host-green); }
+.btn-host-coral  { background: #EC645E; }
 .btn-host-orange { background: var(--host-orange); }
 .btn-host-purple { background: var(--host-purple); }
 
@@ -435,7 +435,7 @@
 .host-dark-panel .host-step h5 { font-weight: 800; margin-bottom: 6px; color: #fff; }
 .host-dark-panel .host-step p { color: #aeb7c2; margin: 0; font-size: .95rem; }
 @media (max-width: 768px) {
-  .host-hero h1 { font-size: 2.4rem; }
+  .host-hero h1 { font-size: 1.92rem; }
   .host-section h2 { font-size: 2rem; }
   .who-card { padding: 28px 24px; }
   .host-dark-panel { padding: 40px 26px; }
@@ -670,6 +670,9 @@ section[id] {
     <p class="subtitle">
       We run three global conference brands, all built by the same team. You can host the ones that best fit your people, location and goals.
     </p>
+    <div class="mt-4" style="position:relative;z-index:1;">
+      <a href="#start" class="btn-host btn-host-coral scrollto">Let's do this!</a>
+    </div>
   </div>
 </section>
 
@@ -711,7 +714,7 @@ section[id] {
       </div>
     </div>
     <div class="lead-text mx-auto text-center mt-5">
-      <p>Each community is built for practitioners: the engineers who build, ship and run modern software systems. Our mission is to create places where they can share what works, learn from each other and strengthen the engineering communities around them.</p>
+      <p>Each community is built for practitioners: the engineers who build, ship and run modern software systems in the age of AI. Our mission is to create places where they can share what works, learn from each other and strengthen the engineering communities around them.</p>
     </div>
   </div>
 </section>
@@ -916,10 +919,10 @@ section[id] {
         <div class="col-12 col-md-7">
           <h4>We take care of</h4>
           <ul class="who-list we-list">
-            <li>Backend: website, ticketing, CFP, agenda</li>
+            <li>Backend: website, ticketing, call for papers, agenda</li>
             <li>Organic promotion</li>
-            <li>Logistics &amp; onsite event coordination</li>
-            <li>Sponsors</li>
+            <li>Our own logistics</li>
+            <li>On-site event coordination</li>
           </ul>
         </div>
         <div class="col-12 col-md-5">
@@ -948,9 +951,9 @@ section[id] {
         <div class="trio-card">
           <div class="trio-bar trio-bar-purple"></div>
           <div class="trio-body">
-            <h4>A thank-you for hosting</h4>
+            <h4>FREE Sponsorship</h4>
             <p>Hosting 80+ people in your space takes work. <strong>We appreciate it.</strong></p>
-            <p>That's why hosts get sponsorship benefits we'd normally charge for, <strong>for free.</strong></p>
+            <p>That's why hosts get <strong>FREE</strong> sponsorship benefits we'd normally charge for.</p>
             <p class="perk-line">Conference leads | Keynote | Panel | Booth</p>
             <a class="trio-link btn-host btn-host-purple btn-host-sm" href="/2026-london-q4/sponsorship#opportunities" target="_blank">See what we normally charge &rarr;</a>
           </div>
@@ -961,7 +964,7 @@ section[id] {
           <div class="trio-bar trio-bar-orange"></div>
           <div class="trio-body">
             <h4>How do we break even?</h4>
-            <p>Mostly <strong>tickets and sponsors.</strong></p>
+            <p>Mostly with <strong>tickets and other sponsors.</strong></p>
             <p>We like to be able to sell tickets and invite a small number of relevant external sponsors. <strong>You remain the host and the main brand.</strong></p>
             <p>Need free tickets? No competing sponsors? <strong>No problem. We adapt the model together.</strong></p>
           </div>
@@ -1063,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', function() {
   nav.innerHTML =
     '<li class="nav-item"><a class="nav-link" href="/">Home</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#who">Who does what</a></li>' +
-    '<li class="nav-item"><a class="nav-link scrollto" href="#thankyou">Thank-you</a></li>' +
+    '<li class="nav-item"><a class="nav-link scrollto" href="#thankyou">Details</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#stats">Stats</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#start">Get started</a></li>';
 });
