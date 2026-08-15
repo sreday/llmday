@@ -169,17 +169,18 @@ for page in pages:
         template = env.get_template(page)
         f.write(template.render(page=page, **context))
 
-# HOST PAGE — served from /host/, so _base.html's relative asset paths must become root-absolute
+# CLEAN-URL PAGES — served from /<folder>/, so _base.html's relative asset paths must become root-absolute
 print(DIVIDER)
-print("Generating host page: host/index.html")
-os.makedirs(BASE_FOLDER + "/host", exist_ok=True)
-host_html = env.get_template("host.html").render(page="host.html", **context)
-for _rel, _abs in (('href="assets/', 'href="/assets/'), ('src="assets/', 'src="/assets/'),
-                   ('href="./assets/', 'href="/assets/'), ('src="./assets/', 'src="/assets/')):
-    host_html = host_html.replace(_rel, _abs)
-with open(BASE_FOLDER + "/host/index.html", "w", encoding="utf-8") as f:
-    print("Writing out", f.name)
-    f.write(host_html)
+for _page, _folder in (("host.html", "host"), ("ambassadorship.html", "ambassadorship")):
+    print(f"Generating clean-url page: {_folder}/index.html")
+    os.makedirs(BASE_FOLDER + "/" + _folder, exist_ok=True)
+    _html = env.get_template(_page).render(page=_page, **context)
+    for _rel, _abs in (('href="assets/', 'href="/assets/'), ('src="assets/', 'src="/assets/'),
+                       ('href="./assets/', 'href="/assets/'), ('src="./assets/', 'src="/assets/')):
+        _html = _html.replace(_rel, _abs)
+    with open(BASE_FOLDER + "/" + _folder + "/index.html", "w", encoding="utf-8") as f:
+        print("Writing out", f.name)
+        f.write(_html)
 
 # MEETUPS
 print(DIVIDER)

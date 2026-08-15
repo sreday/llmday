@@ -168,71 +168,6 @@
   100% { transform: translateX(-50%); }
 }
 
-/* ── World map ("28 cities and counting") ─────────────────────── */
-.map-wrap { position: relative; }
-.map-wrap .map-svg {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1000 / 463; /* ~15% vertical stretch vs the 402.8-tall viewBox */
-  display: block;
-}
-.map-svg path {
-  fill: #C9E2F6;
-  transition: fill .15s;
-}
-.map-svg path:hover,
-.map-svg path.country-hover { fill: #9CC7EC; }
-.map-dot {
-  position: absolute;
-  width: 11px; height: 11px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 1px 4px rgba(0,0,0,.3);
-}
-.map-wrap .map-dot:hover { z-index: 5; }
-.map-wrap .map-dot::after {
-  content: attr(data-city);
-  position: absolute;
-  bottom: calc(100% + 7px);
-  left: 50%;
-  transform: translateX(-50%) translateY(3px);
-  background: var(--host-ink);
-  color: #fff;
-  font-size: .8rem;
-  font-weight: 700;
-  line-height: 1;
-  padding: 6px 11px;
-  border-radius: 8px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .15s, transform .15s;
-}
-.map-wrap .map-dot:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-.map-dot-green  { background: var(--host-green); }
-.map-dot-purple { background: var(--host-purple); }
-.map-dot-dual   { background: linear-gradient(135deg, var(--host-green) 50%, var(--host-purple) 50%); }
-.map-legend {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  margin-top: 20px;
-  font-weight: 700;
-  color: var(--host-ink);
-}
-.map-legend .legend-dot {
-  position: static;
-  display: inline-block;
-  transform: none;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
 /* ── Stat pills ("a typical conference") ──────────────────────── */
 .stat-pills {
   display: flex;
@@ -532,47 +467,8 @@
   <div class="bubble" style="width:120px;height:120px;background:var(--host-green-mid);top:-30px;left:4%;"></div>
   <div class="bubble" style="width:80px;height:80px;background:var(--host-purple-mid);bottom:15%;right:5%;"></div>
   <div class="container">
-    {#- (name, country, lat, lon, brand, dlon) — one dot per city; 'dual' = LLMday + SREday split dot; dlon nudges near-neighbor cities apart; country must match the SVG path <title>; map spans lat 85..-60, lon -180..180 -#}
-    {% set map_cities = [
-      ('London', 'United Kingdom', 51.51, -0.13, 'dual', 0),
-      ('NYC', 'United States of America', 40.71, -74.01, 'dual', 0),
-      ('San Francisco', 'United States of America', 37.77, -122.42, 'dual', -1),
-      ('Redwood City', 'United States of America', 37.49, -122.23, 'green', 2),
-      ('Austin', 'United States of America', 30.27, -97.74, 'dual', 0),
-      ('Warsaw', 'Poland', 52.23, 21.01, 'dual', 0),
-      ('Lisbon', 'Portugal', 38.72, -9.14, 'dual', 0),
-      ('Bangalore', 'India', 12.97, 77.59, 'dual', 0),
-      ('Hamburg', 'Germany', 53.55, 9.99, 'green', 0),
-      ('Montevideo', 'Uruguay', -34.90, -56.19, 'green', 0),
-      ('Amsterdam', 'Netherlands', 52.37, 4.90, 'purple', 0),
-      ('Cologne', 'Germany', 50.94, 6.96, 'purple', 0),
-      ('Paris', 'France', 48.86, 2.35, 'purple', 0),
-      ('Munich', 'Germany', 48.14, 11.58, 'purple', 0),
-      ('Barcelona', 'Spain', 41.39, 2.17, 'purple', 0),
-      ('Katowice', 'Poland', 50.26, 19.02, 'purple', 0),
-      ('Seattle', 'United States of America', 47.61, -122.33, 'purple', -1),
-      ('Redmond', 'United States of America', 47.67, -122.12, 'purple', 2),
-      ('Dallas', 'United States of America', 32.78, -96.80, 'purple', 0),
-      ('Campinas', 'Brazil', -22.91, -47.06, 'purple', 0),
-      ('Chennai', 'India', 13.08, 80.27, 'purple', 2),
-      ('Hyderabad', 'India', 17.39, 78.49, 'purple', 0),
-    ] %}
-    {% set map_countries = [] %}
-    {% for name, country, lat, lon, brand, dlon in map_cities %}{% if country not in map_countries %}{% set _ = map_countries.append(country) %}{% endif %}{% endfor %}
-    <h2 class="text-center">{{ map_cities|length }} cities, {{ map_countries|length }} countries</h2>
-    <div>
-      <div class="map-wrap">
-        {% include "_world_map_svg.html" %}
-        {% for name, country, lat, lon, brand, dlon in map_cities %}
-        <span class="map-dot map-dot-{{ brand }}" data-city="{{ name }}" data-country="{{ country }}" style="left:{{ '%.2f'|format((lon + dlon + 180) / 3.6) }}%;top:{{ '%.2f'|format((85 - lat) / 1.45) }}%;"></span>
-        {% endfor %}
-      </div>
-      <div class="map-legend">
-        <span><span class="map-dot map-dot-green legend-dot"></span>LLMday</span>
-        <span><span class="map-dot map-dot-purple legend-dot"></span>SREday</span>
-        <span><span class="map-dot map-dot-dual legend-dot"></span>Both</span>
-      </div>
-    </div>
+    {% set map_block_heading = True %}
+    {% include "_map_block.html" %}
   </div>
 </section>
 
@@ -712,22 +608,7 @@
   </div>
 </section>
 
-<!-- Dim the country while hovering its city dot -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var countryPaths = {};
-  document.querySelectorAll('.map-svg path').forEach(function(path) {
-    var title = path.querySelector('title');
-    if (title) countryPaths[title.textContent] = path;
-  });
-  document.querySelectorAll('.map-wrap .map-dot').forEach(function(dot) {
-    var path = countryPaths[dot.getAttribute('data-country')];
-    if (!path) return;
-    dot.addEventListener('mouseenter', function() { path.classList.add('country-hover'); });
-    dot.addEventListener('mouseleave', function() { path.classList.remove('country-hover'); });
-  });
-});
-</script>
+
 
 <!-- Replace nav links for this page -->
 <script>
