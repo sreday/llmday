@@ -181,12 +181,6 @@
 }
 
 /* ── World map ("28 cities and counting") ─────────────────────── */
-.map-card {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.06);
-  padding: 30px;
-}
 .map-wrap { position: relative; }
 .map-wrap img { width: 100%; height: auto; display: block; }
 .map-dot {
@@ -196,6 +190,29 @@
   border: 2px solid #fff;
   transform: translate(-50%, -50%);
   box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+.map-wrap .map-dot:hover { z-index: 5; }
+.map-wrap .map-dot::after {
+  content: attr(data-city);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%) translateY(3px);
+  background: var(--host-ink);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 6px 11px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s, transform .15s;
+}
+.map-wrap .map-dot:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 .map-dot-green  { background: var(--host-green); }
 .map-dot-purple { background: var(--host-purple); }
@@ -537,7 +554,7 @@
   <div class="bubble" style="width:80px;height:80px;background:var(--host-purple-mid);bottom:15%;right:5%;"></div>
   <div class="container">
     <h2 class="text-center">28 cities and counting</h2>
-    <div class="map-card">
+    <div>
       <div class="map-wrap">
         <img src="/assets/images/world-map.svg" alt="World map of our event cities">
         {#- (name, lat, lon, brand, dlon) — dlon nudges dots apart in dual-brand cities; map spans lat 85..-60, lon -180..180 -#}
@@ -566,7 +583,7 @@
           ('Hyderabad', 17.39, 78.49, 'purple', 0),
         ] %}
         {% for name, lat, lon, brand, dlon in map_cities %}
-        <span class="map-dot map-dot-{{ brand }}" title="{{ name }}" style="left:{{ '%.2f'|format((lon + dlon + 180) / 3.6) }}%;top:{{ '%.2f'|format((85 - lat) / 1.45) }}%;"></span>
+        <span class="map-dot map-dot-{{ brand }}" data-city="{{ name }}" style="left:{{ '%.2f'|format((lon + dlon + 180) / 3.6) }}%;top:{{ '%.2f'|format((85 - lat) / 1.45) }}%;"></span>
         {% endfor %}
       </div>
       <div class="map-legend">
