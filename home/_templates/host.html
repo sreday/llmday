@@ -182,7 +182,12 @@
 
 /* ── World map ("28 cities and counting") ─────────────────────── */
 .map-wrap { position: relative; }
-.map-wrap img { width: 100%; height: auto; display: block; }
+.map-wrap .map-svg { width: 100%; height: auto; display: block; }
+.map-svg path {
+  fill: #C9E2F6;
+  transition: fill .15s;
+}
+.map-svg path:hover { fill: #9CC7EC; }
 .map-dot {
   position: absolute;
   width: 11px; height: 11px;
@@ -514,7 +519,7 @@
     <h2 class="text-center">28 cities and counting</h2>
     <div>
       <div class="map-wrap">
-        <img src="/assets/images/world-map.svg" alt="World map of our event cities">
+        {% include "_world_map_svg.html" %}
         {#- (name, lat, lon, brand, dlon) — one dot per city; 'dual' = LLMday + SREday split dot; dlon nudges near-neighbor cities apart; map spans lat 85..-60, lon -180..180 -#}
         {% set map_cities = [
           ('London', 51.51, -0.13, 'dual', 0),
