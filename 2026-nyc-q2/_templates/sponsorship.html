@@ -344,8 +344,8 @@
 }
 .sp-custom-ideas li { font-size: .9rem; color: #d0d0d0; padding: 4px 0; }
 .sp-custom-ideas li::before { content: "✓ "; color: #26986A; font-weight: 700; }
-.sp-custom-ideas a { color: inherit; text-decoration: underline; }
-.sp-custom-ideas a:hover { color: #fff; }
+.sp-custom-ideas a { color: inherit; font-weight: 700; text-decoration: none; transition: color .2s, text-shadow .2s; }
+.sp-custom-ideas a:hover { color: #fff; text-shadow: 0 0 12px rgba(255,255,255,.8), 0 0 26px rgba(255,255,255,.4); }
 @media (max-width: 640px) {
   .sp-custom-card { grid-template-columns: 1fr; }
   .sp-custom-card-left { border-right: none; border-bottom: 1px solid rgba(38,152,106,.3); padding-right: 0; padding-bottom: 20px; margin-bottom: 20px; }
