@@ -1757,12 +1757,15 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         </div>
         <style>
         .sponsor-carousel-wrap { position: relative; }
+        /* spacing via margin, not flex gap: translateX(-50%) is only seamless
+           when half the track width is an exact item boundary - a gap between
+           the two halves made every loop end with a half-gap jump */
+        .sponsor-carousel-item { margin-right: 4.5rem; }
         .sponsor-carousel-track {
           display: flex;
           align-items: center;
-          gap: 4.5rem;
           width: max-content;
-          animation: sponsor-scroll 40s linear infinite;
+          will-change: transform;
         }
         .sponsor-carousel-wrap:hover .sponsor-carousel-track { animation-play-state: paused; }
         .sponsor-carousel-item img {
@@ -1774,26 +1777,31 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         }
         .sponsor-carousel-item img:hover { filter: grayscale(0%) brightness(1.1) contrast(0.9); }
         @keyframes sponsor-scroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0%   { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
         }
         </style>
         <script>
         window.addEventListener('load', function() {
           var track = document.querySelector('.sponsor-carousel-track');
-          if (!track) return;
+          if (!track || !track.children.length) return;
           var wrap = track.parentElement;
-          // Short logo lists: append full copies (two at a time, so the track
-          // stays two identical halves for the seamless -50% loop) until one
-          // half spans the pill - avoids a visible gap when logos are few.
-          var half = Array.prototype.slice.call(track.children, 0, track.children.length / 2);
-          while (track.scrollWidth / 2 < wrap.offsetWidth && track.children.length < 300) {
-            for (var pass = 0; pass < 2; pass++)
-              for (var i = 0; i < half.length; i++)
-                track.appendChild(half[i].cloneNode(true));
+          var half = track.children.length / 2;
+          if (track.scrollWidth / 2 <= wrap.offsetWidth) {
+            // Not enough logos to fill the pill: drop the duplicate half and
+            // show a static centered row instead of a scrolling loop.
+            while (track.children.length > half) track.removeChild(track.lastElementChild);
+            track.lastElementChild.style.marginRight = '0';
+            track.style.margin = '0 auto';
+            return;
           }
+          // Start the animation only now, with real image widths known - a
+          // duration change mid-animation makes the track visibly jump.
           var SPEED = 30; // pixels per second
           track.style.animationDuration = (track.scrollWidth / 2 / SPEED) + 's';
+          track.style.animationName = 'sponsor-scroll';
+          track.style.animationTimingFunction = 'linear';
+          track.style.animationIterationCount = 'infinite';
         });
         </script>
         
@@ -1984,9 +1992,11 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         </div>
         <style>
         .partner-carousel-wrap { position: relative; }
+        /* margin spacing instead of flex gap - see sponsor carousel note */
+        .partner-carousel-item { margin-right: 4.5rem; }
         .partner-carousel-track {
-          display: flex; align-items: center; gap: 4.5rem;
-          width: max-content; animation: partner-scroll 40s linear infinite;
+          display: flex; align-items: center;
+          width: max-content; will-change: transform;
         }
         .partner-carousel-wrap:hover .partner-carousel-track { animation-play-state: paused; }
         .partner-carousel-item img {
@@ -1995,26 +2005,31 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         }
         .partner-carousel-item img:hover { filter: grayscale(0%) brightness(1.1) contrast(0.9); }
         @keyframes partner-scroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0%   { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
         }
         </style>
         <script>
         window.addEventListener('load', function() {
           var track = document.querySelector('.partner-carousel-track');
-          if (!track) return;
+          if (!track || !track.children.length) return;
           var wrap = track.parentElement;
-          // Short logo lists: append full copies (two at a time, so the track
-          // stays two identical halves for the seamless -50% loop) until one
-          // half spans the pill - avoids a visible gap when logos are few.
-          var half = Array.prototype.slice.call(track.children, 0, track.children.length / 2);
-          while (track.scrollWidth / 2 < wrap.offsetWidth && track.children.length < 300) {
-            for (var pass = 0; pass < 2; pass++)
-              for (var i = 0; i < half.length; i++)
-                track.appendChild(half[i].cloneNode(true));
+          var half = track.children.length / 2;
+          if (track.scrollWidth / 2 <= wrap.offsetWidth) {
+            // Not enough logos to fill the pill: drop the duplicate half and
+            // show a static centered row instead of a scrolling loop.
+            while (track.children.length > half) track.removeChild(track.lastElementChild);
+            track.lastElementChild.style.marginRight = '0';
+            track.style.margin = '0 auto';
+            return;
           }
+          // Start the animation only now, with real image widths known - a
+          // duration change mid-animation makes the track visibly jump.
           var SPEED = 30; // pixels per second
           track.style.animationDuration = (track.scrollWidth / 2 / SPEED) + 's';
+          track.style.animationName = 'partner-scroll';
+          track.style.animationTimingFunction = 'linear';
+          track.style.animationIterationCount = 'infinite';
         });
         </script>
         
