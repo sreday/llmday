@@ -9,16 +9,30 @@
 # - Never show the same company twice on the home page: extra logo variants of
 #   an already-shown company go under hidden_duplicates.
 # Matching is case-insensitive.
+#
+# This file is homogenized across sreday and llmday - keep both copies in sync.
 
 non_sponsor_orgs:
   - hockeystick.png
   - arf.png
   - ksug.ai.png
+  - starterai.png
   - filmforum.png
   - uhub.png
 
 community_partners:
-  - aws porto.png
+  - jug-amsterdam.png
+  - k8sug.png
+  - kube-events.png
+  - kube_events.png
+  - kube_careers.png
+  - kubespaces.png
+  - gdg_london.png
+  - NL_MEETUP.png
+  - chennaisre.png
+  - srecommunitycoimbatore.png
+  - srehyderabadi.png
+  - aigeeks.png
   - cloud native lisbon.png
   - cloud native porto.png
   - devops braga.png
@@ -27,21 +41,28 @@ community_partners:
   - leiria tech talks.png
   - viseu tech talks.png
   - lisbon genai community.png
+  - aws porto.png
+  - synvert xgeeks.png
   - AIFRONTIERS.png
   - houseofai.png
-  - synvert xgeeks.png
   - rtfm.png            # AI Talks NYC meetup (luma.com/ai-talks-nyc)
 
 sister_conferences_job_boards:
-  - DevIT_black.png
+  - IacConf.png
+  - devit.png
+  - devitjobs.png
   - DevIT-usa.png
+  - DevIT_black.png
   - devevents.png       # dev.events conference listing
   - dev_events.png
   - "dev@1x_logo.png"
 
 # Extra logo files of companies already shown under another filename
 hidden_duplicates:
+  - kube_events.png     # duplicate of kube-events.png
   - AI FRONTIERS.png    # duplicate of AIFRONTIERS.png
+  - devit.png           # DevITjobs - shown as DevIT-usa.png (latest logo)
+  - devitjobs.png       # DevITjobs - shown as DevIT-usa.png (latest logo)
+  - DevIT_black.png     # DevITjobs - shown as DevIT-usa.png (latest logo)
   - dev_events.png      # dev.events - shown as devevents.png
   - "dev@1x_logo.png"   # dev.events - shown as devevents.png
-  - DevIT-usa.png       # DevITjobs - shown as DevIT_black.png
