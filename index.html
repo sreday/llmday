@@ -1437,7 +1437,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <h3 class="section-heading text-center text-white">Sponsor</h3>
 
         
-        <div class="sponsor-carousel-wrap" style="background:#fff;border-radius:8px;padding:2rem 0;margin:1.95rem auto 1.5rem;overflow:hidden;width:60%;">
+        <div class="sponsor-carousel-wrap" style="background:#fff;border-radius:999px;box-shadow:0 4px 20px rgba(0,0,0,.07);padding:28px 0;margin:1.95rem auto 1.5rem;overflow:hidden;width:100%;">
           <div class="sponsor-carousel-track">
             
             <div class="sponsor-carousel-item"><img src="./sponsors/aliengiraffe.png" alt="aliengiraffe"></div>
@@ -1540,17 +1540,16 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         .sponsor-carousel-track {
           display: flex;
           align-items: center;
-          gap: 3rem;
+          gap: 4.5rem;
           width: max-content;
           animation: sponsor-scroll 40s linear infinite;
         }
         .sponsor-carousel-wrap:hover .sponsor-carousel-track { animation-play-state: paused; }
         .sponsor-carousel-item img {
-          height: 120px;
+          height: 114px;
           width: auto;
-          max-width: 288px;
+          max-width: 364px;
           object-fit: contain;
-          filter: grayscale(20%);
           transition: filter 0.2s ease;
         }
         .sponsor-carousel-item img:hover { filter: grayscale(0%) brightness(1.1) contrast(0.9); }
@@ -1563,7 +1562,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         (function() {
           var track = document.querySelector('.sponsor-carousel-track');
           if (track) {
-            var SPEED = 25; // pixels per second
+            var SPEED = 30; // pixels per second
             var totalWidth = track.scrollWidth / 2;
             track.style.animationDuration = (totalWidth / SPEED) + 's';
           }
@@ -1589,7 +1588,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <h3 class="section-heading text-center mb-3">Partner</h3>
 
         
-        <div class="partner-carousel-wrap" style="background:#fff;border-radius:8px;padding:2rem 0;margin:1.95rem auto 1.5rem;overflow:hidden;width:60%;">
+        <div class="partner-carousel-wrap" style="background:#fff;border-radius:999px;box-shadow:0 4px 20px rgba(0,0,0,.07);padding:28px 0;margin:1.95rem auto 1.5rem;overflow:hidden;width:100%;">
           <div class="partner-carousel-track">
             
             <div class="partner-carousel-item"><img src="./sponsors/AIFRONTIERS.png" alt="AIFRONTIERS"></div>
@@ -1678,13 +1677,13 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <style>
         .partner-carousel-wrap { position: relative; }
         .partner-carousel-track {
-          display: flex; align-items: center; gap: 3rem;
+          display: flex; align-items: center; gap: 4.5rem;
           width: max-content; animation: partner-scroll 40s linear infinite;
         }
         .partner-carousel-wrap:hover .partner-carousel-track { animation-play-state: paused; }
         .partner-carousel-item img {
-          height: 120px; width: auto; max-width: 288px;
-          object-fit: contain; filter: grayscale(20%); transition: filter 0.2s ease;
+          height: 114px; width: auto; max-width: 364px;
+          object-fit: contain; transition: filter 0.2s ease;
         }
         .partner-carousel-item img:hover { filter: grayscale(0%) brightness(1.1) contrast(0.9); }
         @keyframes partner-scroll {
@@ -1696,7 +1695,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         (function() {
           var track = document.querySelector('.partner-carousel-track');
           if (track) {
-            var SPEED = 25;
+            var SPEED = 30;
             var totalWidth = track.scrollWidth / 2;
             track.style.animationDuration = (totalWidth / SPEED) + 's';
           }
