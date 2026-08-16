@@ -1779,14 +1779,22 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         }
         </style>
         <script>
-        (function() {
+        window.addEventListener('load', function() {
           var track = document.querySelector('.sponsor-carousel-track');
-          if (track) {
-            var SPEED = 30; // pixels per second
-            var totalWidth = track.scrollWidth / 2;
-            track.style.animationDuration = (totalWidth / SPEED) + 's';
+          if (!track) return;
+          var wrap = track.parentElement;
+          // Short logo lists: append full copies (two at a time, so the track
+          // stays two identical halves for the seamless -50% loop) until one
+          // half spans the pill - avoids a visible gap when logos are few.
+          var half = Array.prototype.slice.call(track.children, 0, track.children.length / 2);
+          while (track.scrollWidth / 2 < wrap.offsetWidth && track.children.length < 300) {
+            for (var pass = 0; pass < 2; pass++)
+              for (var i = 0; i < half.length; i++)
+                track.appendChild(half[i].cloneNode(true));
           }
-        })();
+          var SPEED = 30; // pixels per second
+          track.style.animationDuration = (track.scrollWidth / 2 / SPEED) + 's';
+        });
         </script>
         
 
@@ -1992,14 +2000,22 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         }
         </style>
         <script>
-        (function() {
+        window.addEventListener('load', function() {
           var track = document.querySelector('.partner-carousel-track');
-          if (track) {
-            var SPEED = 30;
-            var totalWidth = track.scrollWidth / 2;
-            track.style.animationDuration = (totalWidth / SPEED) + 's';
+          if (!track) return;
+          var wrap = track.parentElement;
+          // Short logo lists: append full copies (two at a time, so the track
+          // stays two identical halves for the seamless -50% loop) until one
+          // half spans the pill - avoids a visible gap when logos are few.
+          var half = Array.prototype.slice.call(track.children, 0, track.children.length / 2);
+          while (track.scrollWidth / 2 < wrap.offsetWidth && track.children.length < 300) {
+            for (var pass = 0; pass < 2; pass++)
+              for (var i = 0; i < half.length; i++)
+                track.appendChild(half[i].cloneNode(true));
           }
-        })();
+          var SPEED = 30; // pixels per second
+          track.style.animationDuration = (track.scrollWidth / 2 / SPEED) + 's';
+        });
         </script>
         
 
