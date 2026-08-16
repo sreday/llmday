@@ -1,0 +1,1196 @@
+{% extends "_base.html" %}
+
+{% block head_extra %}
+<meta name="robots" content="noindex, nofollow">
+<style>
+/* ── Sponsorship page styles ─────────────────────────── */
+:root { --sp-accent: #26986A; }
+
+.sp-hero {
+  position: relative;
+  height: 620px;
+  padding-top: 125px;
+  overflow: hidden;
+  background: url('../photos/llmday-paint.png') center/cover no-repeat;
+}
+.sp-hero-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,.45);
+  z-index: 1;
+}
+.sp-hero .container {
+  position: relative;
+  z-index: 2;
+}
+.sp-badge-noindex {
+  display: inline-block;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.4);
+  color: #fff;
+  font-size: .72rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 1.2rem;
+}
+.sp-stat-bar { background: var(--sp-accent); color: #fff; padding: 20px 0; }
+.sp-stat-bar .number { font-size: 2rem; font-weight: 700; }
+.sp-stat-bar .unit   { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; }
+
+.sp-section { padding: 60px 0; }
+.sp-section-title { font-size: 1.82rem; font-weight: 700; margin-bottom: 1.5rem; }
+
+/* ── Dark body ───────────────────────────────────────── */
+#sp-dark-body {
+  background: #111;
+  color: #d0d0d0;
+}
+#sp-dark-body .sp-section     { background: #111; }
+#sp-dark-body .sp-section-alt { background: #0d0d0d; }
+#sp-dark-body .sp-section-title { color: #fff; }
+#sp-dark-body .sp-gbp-note    { color: #666; }
+
+/* ── Currency toggle ────────────────────────────────── */
+.sp-currency-toggle {
+  display: inline-flex;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+  vertical-align: middle;
+  position: relative;
+}
+.sp-currency-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  height: calc(100% - 6px);
+  border-radius: 999px;
+  background: var(--sp-accent);
+  transition: transform .3s cubic-bezier(.4,0,.2,1), width .3s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+  z-index: 0;
+}
+.sp-currency-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: .85rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color .2s;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+.sp-currency-btn:hover { color: #ccc; }
+.sp-currency-btn.active {
+  color: #fff;
+}
+
+/* ── Sponsor pills ───────────────────────────────────── */
+.sp-pill {
+  display: inline-block;
+  background: #1a2e24;
+  color: var(--sp-accent);
+  border: 1px solid rgba(38,152,106,.35);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: .82rem;
+  margin: 4px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* ── Stats toggle button ─────────────────────────────── */
+.btn-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--sp-accent);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 34px;
+  font-size: 1.14rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: .01em;
+  transition: background .2s, box-shadow .2s;
+}
+.btn-stats:hover  { background: #1e7a55; box-shadow: 0 4px 18px rgba(38,152,106,.4); }
+.btn-stats:active { transform: scale(.97); }
+.btn-stats-icon { display: flex; align-items: center; flex-shrink: 0; }
+.btn-stats-chevron { transition: transform .3s ease; }
+.btn-stats.open .btn-stats-chevron { transform: rotate(180deg); }
+
+/* ── FAQ section bg — matches CTA section above it ───── */
+#faq { background: #000000; }
+
+/* ── FAQ toggle button — soft purple ─────────────────── */
+#sp-faq-toggle { background: #6C5CE7; color: #fff; }
+#sp-faq-toggle:hover  { background: #5a4bd1; box-shadow: 0 4px 18px rgba(108,92,231,.4); }
+#sp-faq-toggle:active { transform: scale(.97); }
+
+/* ── Stats expandable panel (intentionally white) ────── */
+.sp-stats-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .585s cubic-bezier(.4,0,.2,1);
+}
+.sp-stats-inner {
+  background: #fff;
+  border-radius: 16px;
+  margin-top: 20px;
+  padding: 36px 40px;
+  color: #111;
+}
+.sp-stats-block-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 16px;
+}
+.sp-stats-sep {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 28px 0;
+}
+.sp-stats-speakers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 8px 20px;
+}
+.sp-stats-speaker-name { font-size: .88rem; font-weight: 500; color: #222; }
+.sp-stats-speaker-org  { font-size: .78rem; color: #999; }
+.sp-stats-co-row   { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.sp-stats-co-rank  { width: 20px; text-align: right; color: #bbb; font-size: .8rem; flex-shrink: 0; }
+.sp-stats-co-name  { font-size: .88rem; color: #333; min-width: 120px; }
+.sp-stats-co-bars  { flex: 1; background: #f0f0f0; border-radius: 4px; height: 6px; overflow: hidden; }
+.sp-stats-co-bar   { height: 100%; background: var(--sp-accent); border-radius: 4px; }
+.sp-stats-co-count { font-size: .8rem; color: #aaa; min-width: 24px; text-align: right; }
+.sp-stats-empty    { color: #999; font-size: .9rem; margin: 0; }
+/* Pills inside white panel override the dark pill rule */
+#sp-dark-body .sp-stats-inner .sp-pill {
+  background: #f0faf5;
+  color: var(--sp-accent);
+  border-color: #a7d9bf;
+}
+
+/* ── New stats panel styles ──────────────────────────── */
+.sp-stats-inner {
+  --spi-green:       #26986A;
+  --spi-green-light: #e8f7ef;
+  --spi-green-mid:   #b6dfc9;
+  --spi-border:      #efefef;
+  --spi-faint:       #f5f5f5;
+}
+.sp-stats-s-title { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; color: #111; margin-bottom: 2px; line-height: 1.3; }
+.sp-stats-s-sub   { font-size: .9rem; color: #555; margin-bottom: 24px; }
+
+/* big number pills */
+.sp-stats-big-numbers { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.sp-stats-big-num {
+  display: inline-flex; flex-direction: column; align-items: center;
+  padding: 11px 19px; border: 1px solid var(--spi-green-mid);
+  border-radius: 999px; background: var(--spi-green-light); text-align: center;
+}
+.sp-stats-big-num-value { font-family: 'Montserrat', sans-serif; font-size: 1.52rem; font-weight: 700; color: #1a5c3a; line-height: 1; letter-spacing: -.01em; }
+.sp-stats-big-num-value sup { font-size: .72rem; color: var(--spi-green); vertical-align: super; font-weight: 700; }
+.sp-stats-big-num-label { font-size: .58rem; color: #3a8a60; text-transform: uppercase; letter-spacing: .07em; margin-top: 4px; }
+
+/* TLDR pill */
+.sp-stats-tldr {
+  display: inline-block; background: var(--spi-green-light); border: 1px solid var(--spi-green-mid);
+  border-radius: 999px; padding: 8px 18px; font-size: .9rem; color: #1a5c3a; margin-bottom: 22px;
+}
+
+/* 2-col grid + cards */
+.sp-stats-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; align-items: stretch; }
+@media (max-width: 640px) { .sp-stats-grid-2 { grid-template-columns: 1fr; } }
+.sp-stats-card { border: 1px solid #f0f0f0; border-radius: 12px; padding: 20px 22px; background: #fdfdfd; height: 100%; box-sizing: border-box; }
+.sp-stats-card-title { font-family: 'Montserrat', sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #444; margin-bottom: 16px; }
+
+/* bar chart */
+.sp-stats-bar-list  { list-style: none; }
+.sp-stats-bar-item  { margin-bottom: 9px; }
+.sp-stats-bar-item:last-child { margin-bottom: 0; }
+.sp-stats-bar-header { display: flex; justify-content: space-between; margin-bottom: 3px; }
+.sp-stats-bar-name  { font-size: .9rem; color: #111; }
+.sp-stats-bar-count { font-size: .85rem; color: #555; font-variant-numeric: tabular-nums; }
+.sp-stats-bar-track { background: #f0f0f0; border-radius: 3px; height: 4px; }
+.sp-stats-bar-fill  { height: 100%; border-radius: 3px; background: var(--spi-green); }
+
+/* tag cloud */
+.sp-stats-tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+.sp-stats-tag     { background: var(--spi-faint); border: 1px solid #e8e8e8; border-radius: 999px; padding: 4px 12px; font-size: .85rem; color: #111; }
+.sp-stats-tag.hot { background: var(--spi-green-light); border-color: var(--spi-green-mid); color: var(--spi-green); font-weight: 700; }
+
+/* pastel green pill grid (white panel version) */
+.sp-stats-pill-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.sp-stats-pill {
+  display: inline-flex; align-items: center;
+  border-radius: 999px; padding: 6px 16px;
+  font-size: .9rem; border: 1px solid var(--spi-green-mid);
+  background: var(--spi-green-light); color: #1a5c3a;
+  text-decoration: none; transition: background .15s, border-color .15s;
+}
+.sp-stats-pill:hover { background: var(--spi-green-light); border-color: var(--spi-green-mid); color: #1a5c3a; cursor: default; }
+
+/* timeline */
+.sp-stats-timeline { position: relative; padding: 20px 0 8px; margin-bottom: 8px; }
+.sp-stats-tl-line {
+  position: absolute; top: 26px; left: 0; right: 0; height: 2px;
+  background: var(--spi-green-mid); z-index: 0;
+}
+.sp-stats-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+.sp-stats-tl-event  { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+.sp-stats-tl-dot {
+  width: 12px; height: 12px; border-radius: 50%; background: var(--spi-green);
+  border: 2px solid #fff; outline: 2px solid var(--spi-green);
+  margin-bottom: 10px; flex-shrink: 0; z-index: 1;
+}
+.sp-stats-tl-dot.past { background: #999; outline-color: #999; }
+.sp-stats-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
+.sp-stats-tl-chip.past .sp-stats-tl-city { color: #555; }
+.sp-stats-tl-chip.past .sp-stats-tl-date { color: #777; }
+.sp-stats-tl-chip.past .sp-stats-tl-seats { color: #777; }
+.sp-stats-tl-chip.past:hover { background: #d8d8d8; border-color: #bbb; color: #555; }
+.sp-stats-tl-chip {
+  background: var(--spi-green-light); border: 1px solid var(--spi-green-mid);
+  border-radius: 8px; padding: 8px 10px; text-align: center;
+  text-decoration: none; width: 100%; transition: background .15s;
+}
+.sp-stats-tl-chip:hover { background: #d4f0e2; text-decoration: none; }
+.sp-stats-tl-prospectus {
+  display: block;
+  margin-top: 6px;
+  background: var(--spi-green-light);
+  border: 1px solid var(--spi-green-mid);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: .75rem;
+  color: #1a5c3a;
+  text-align: center;
+  text-decoration: none;
+  transition: background .15s;
+}
+.sp-stats-tl-prospectus:hover { background: #d4f0e2; text-decoration: none; color: #1a5c3a; }
+.sp-stats-tl-prospectus.past { background: #e8e8e8; border-color: #ccc; color: #555; }
+.sp-stats-tl-prospectus.past:hover { background: #d8d8d8; text-decoration: none; color: #555; }
+.sp-stats-tl-city  { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: #1a5c3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sp-stats-tl-date  { font-size: .75rem; color: #3a8a60; margin-top: 2px; }
+.sp-stats-tl-seats { font-size: .75rem; color: #3a8a60; }
+.sp-stats-tl-past  { font-size: .7rem; color: #8fcfb0; font-style: italic; }
+.sp-stats-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 0; }
+.sp-stats-tl-pin { font-size: 2.25rem; line-height: 1; color: #1a6b4a; margin-bottom: 10px; position: relative; top: -4px; }
+
+/* GIF */
+.sp-stats-gif-wrap { margin-top: 32px; border-radius: 12px; overflow: hidden; width: 90%; margin-left: auto; margin-right: auto; }
+.sp-stats-gif-wrap img { width: 100%; display: block; }
+
+/* ── Header two-column layout ────────────────────────── */
+.sp-stats-header-row { display: flex; align-items: flex-start; gap: 28px; margin-bottom: 0; }
+.sp-stats-header-left { flex: 1; min-width: 0; }
+.sp-stats-header-gif { flex: 0 0 260px; width: 260px; border-radius: 12px; overflow: hidden; align-self: center; }
+.sp-stats-header-gif img { width: 100%; display: block; }
+@media (max-width: 640px) { .sp-stats-header-row { flex-direction: column; } .sp-stats-header-gif { width: 100%; flex: none; } }
+@media (min-width: 768px) { .sp-stats-header-gif-img { display:block !important; } }
+
+/* ── Custom / on-request card ────────────────────────── */
+.sp-custom-card {
+  border-radius: 12px;
+  padding: 36px 32px;
+  background: #1c2a22;
+  border: 1px solid rgba(38,152,106,.3);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  align-items: center;
+}
+.sp-custom-card-left {
+  padding-right: 32px;
+  border-right: 1px solid rgba(38,152,106,.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sp-custom-card-left h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.sp-custom-card-left .sp-custom-subtitle {
+  font-size: 1rem;
+  color: #7bc49a;
+  margin-bottom: 0;
+}
+.sp-custom-divider { display: none; }
+.sp-custom-ideas {
+  list-style: none;
+  padding: 0 0 0 32px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sp-custom-ideas li { font-size: .9rem; color: #d0d0d0; padding: 4px 0; }
+.sp-custom-ideas li::before { content: "✓ "; color: #26986A; font-weight: 700; }
+.sp-custom-ideas a { color: inherit; font-weight: 700; text-decoration: none; transition: color .2s, text-shadow .2s; }
+.sp-custom-ideas a:hover { color: #fff; text-shadow: 0 0 12px rgba(255,255,255,.8), 0 0 26px rgba(255,255,255,.4); }
+@media (max-width: 640px) {
+  .sp-custom-card { grid-template-columns: 1fr; }
+  .sp-custom-card-left { border-right: none; border-bottom: 1px solid rgba(38,152,106,.3); padding-right: 0; padding-bottom: 20px; margin-bottom: 20px; }
+  .sp-custom-ideas { padding-left: 0; }
+  .sp-stats-tl-events { display: grid; grid-template-columns: 1fr 1fr; overflow-x: visible; }
+  .sp-stats-tl-pin-event { grid-column: 1 / -1; }
+}
+
+/* ── Pricing cards ───────────────────────────────────── */
+.sp-tier-card {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 26px 24px;
+  background: #1e1e1e;
+  height: 100%;
+  position: relative;
+  color: #d0d0d0;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .4s ease, border-color .4s ease;
+}
+.sp-tier-card:hover {
+  border-color: rgba(180, 130, 20, .5);
+  box-shadow: 0 0 22px rgba(180, 130, 20, .22), 0 0 50px rgba(180, 130, 20, .08);
+}
+.sp-tier-name     { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
+.sp-tier-subtitle { font-size: .85rem; color: #999; margin-bottom: 2px; }
+.sp-tier-price    { font-size: 2.2rem; font-weight: 800; color: #fff; transition: opacity .18s ease; }
+.sp-tier-price.sp-fade { opacity: 0; }
+.sp-tier-price.sp-discounted { color: #4adb8b; }
+
+/* Currency symbol slide/fade on currency switch */
+.sp-cur-sym { display: inline-block; transition: transform .18s ease, opacity .18s ease; }
+.sp-cur-sym.sp-sym-out  { transform: translateY(-10px); opacity: 0; }
+.sp-cur-sym.sp-sym-prep { transition: none; transform: translateY(10px); opacity: 0; }
+.sp-num { display: inline-block; }
+
+/* ── Discount toggle switch ────────────────────────── */
+.sp-discount-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 2.2rem;
+  font-weight: 800;
+  user-select: none;
+}
+.sp-discount-check { display: none; }
+.sp-discount-switch {
+  width: 44px; height: 24px;
+  background: #444;
+  border-radius: 12px;
+  position: relative;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.sp-discount-switch::after {
+  content: '';
+  width: 20px; height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px; left: 2px;
+  transition: transform .2s;
+}
+.sp-discount-check:checked + .sp-discount-switch {
+  background: var(--sp-accent);
+}
+.sp-discount-check:checked + .sp-discount-switch::after {
+  transform: translateX(20px);
+}
+
+/* Strikethrough original price */
+.sp-tier-original {
+  display: none;
+  float: right;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #888;
+  text-decoration: line-through;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+.sp-tier-original.sp-slide-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Active discount card glow */
+.sp-discount-card-active {
+  border-color: var(--sp-accent) !important;
+  box-shadow: 0 0 20px rgba(38,152,106,.25) !important;
+  background: #1e2e24 !important;
+}
+.sp-tier-body     { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.sp-tier-benefits { list-style: none; padding: 0; margin: 0 0 12px; }
+.sp-tier-benefits li { padding: 5px 0; font-size: .9rem; color: #d0d0d0; }
+.sp-tier-benefits li::before { content: "✓ "; color: #26986A; font-weight: 700; }
+.sp-tier-benefits li.sp-tier-warn { color: #f5d800; }
+.sp-tier-benefits li.sp-tier-warn::before { content: "⚠ "; color: #f5d800; }
+
+/* ── Get in touch / CTA buttons ──────────────────────── */
+#sp-dark-body .btn-outline-secondary {
+  color: #ccc;
+  border-color: rgba(255,255,255,.3);
+}
+#sp-dark-body .btn-outline-secondary:hover {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border-color: rgba(255,255,255,.5);
+}
+.btn-whatsapp {
+  background: #25d366;
+  color: #fff;
+  border: none;
+  text-decoration: none;
+}
+.btn-whatsapp:hover { background: #1daa52; color: #fff; text-decoration: none; }
+.sp-cta-btn { font-size: 1.26rem !important; padding: .5rem 1rem !important; }
+.btn-stats-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #888;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 34px;
+  font-size: 1.14rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: .01em;
+  transition: background .2s;
+}
+.btn-stats-close:hover { background: #777; }
+
+/* ── Sister brands ───────────────────────────────────── */
+#sp-dark-body .sp-sisters-section {
+  padding: 30px 0;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+#sp-dark-body .text-muted { color: #555 !important; }
+.sp-sisters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 49px;
+}
+.sp-sisters a { display: inline-flex; text-decoration: none; opacity: .85; transition: opacity .2s; }
+.sp-sisters a:hover { opacity: 1; }
+.sp-sisters img { height: 150px; width: auto; border-radius: 8px; display: block; }
+
+/* ── FAQ expandable panel ────────────────────────────── */
+.sp-faq-inner {
+  background: #ffffff;
+  border-radius: 16px;
+  margin-top: 20px;
+  padding: 36px 40px;
+  color: #111;
+}
+.sp-faq-q {
+  font-weight: 700;
+  color: #1a6e4a;
+  margin-bottom: 6px;
+  font-size: .95rem;
+}
+.sp-faq-a {
+  color: #333;
+  margin-bottom: 24px;
+  font-size: .92rem;
+  line-height: 1.6;
+}
+.sp-faq-a:last-child { margin-bottom: 0; }
+</style>
+{% endblock %}
+
+{% block hero %}
+<div id="home" class="hero-block sp-hero">
+	<div class="sp-hero-overlay"></div>
+	<div class="container">
+		<div class="hero-text-block text-center" style="max-width: 100%;">
+			{% if logo_image %}<h1 class="logo retro"><img src="{{ logo_image }}" alt="{{ brand_name }}" style="max-width: 350px; height: auto;" /></h1>{% else %}<h1 class="logo retro"><img src="/assets/LLMday Sticker.png" alt="LLMday" style="height: 200px;"></h1>{% endif %}
+			<h2 class="text-white">Sponsorship Prospectus - {{ brand_name }} {{ city_name }}</h2>
+			<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>{{ date_string }} <i class="fas fa-map-marker-alt mx-2"></i>{{ location_string }}</h3>
+			<div class="hero-cta mt-5">
+				<a class="btn btn-danger btn-lg" href="#buy" style="text-decoration:none;">Secure your Sponsorship</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="sp-dark-body">
+
+{# ── Pricing tiers ───────────────────────────────────── #}
+<section class="sp-section" id="opportunities">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Sponsorship opportunities</h2>
+    <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">
+      We are a London-based company organizing conferences worldwide.<br>
+      Sponsors are invoiced in GBP / £ &mdash; British Pound Sterling.<br>
+      The conversions are for reference and may not be 100% accurate.
+    </p>
+    <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.5rem;margin-bottom:1.5rem;">
+      Convert:
+      <span class="sp-currency-toggle">
+        <span class="sp-currency-slider"></span>
+        {% for cur_code, cur_info in exchange_rates.items() %}<button class="sp-currency-btn{% if cur_code == 'GBP' %} active{% endif %}" data-currency="{{ cur_code }}" onclick="spSwitchCurrency('{{ cur_code }}')">{{ cur_code }}</button>{% endfor %}
+      </span>
+    </p>
+    <div class="row justify-content-center g-4 mt-2">
+      {% for tier in sponsorship_tiers %}
+      <div class="col-12 col-md-4">
+        <div class="sp-tier-card" data-tier-id="{{ tier.id }}">
+          <div class="sp-tier-name">{{ tier.name }}{% if tier.id not in ('startup_discount', 'food', 'clothing') %}<span class="sp-tier-original"></span>{% endif %}</div>
+          {% if tier.subtitle %}<div class="sp-tier-subtitle">{{ tier.subtitle }}</div>{% endif %}
+          {% if tier.id == 'startup_discount' %}
+          <div class="sp-tier-price">
+            <label class="sp-discount-toggle-label">
+              <input type="checkbox" class="sp-discount-check" onchange="spToggleDiscount(this.checked)">
+              <span class="sp-discount-switch"></span>
+              {{ tier.price_label }}
+            </label>
+          </div>
+          {% else %}
+          <div class="sp-tier-price"{% for cur_code, cur_data in tier.currencies.items() %} data-price-{{ cur_code|lower }}="{% if cur_data.price_label is defined %}{% if cur_data.price_label is mapping %}{{ cur_data.price_label[event_size] }}{% else %}{{ cur_data.price_label }}{% endif %}{% elif cur_data.price is defined %}{{ cur_data.symbol }}{{ cur_data.price[event_size] }}{% endif %}" data-dprice-{{ cur_code|lower }}="{% if cur_data.discounted_price_label is defined %}{% if cur_data.discounted_price_label is mapping %}{{ cur_data.discounted_price_label[event_size] }}{% else %}{{ cur_data.discounted_price_label }}{% endif %}{% elif cur_data.discounted_price is defined %}{{ cur_data.symbol }}{{ cur_data.discounted_price[event_size] }}{% endif %}"{% endfor %}>
+            {% if tier.price_label %}{% if tier.price_label is mapping %}{{ tier.price_label[event_size] }}{% else %}{{ tier.price_label }}{% endif %}{% else %}£{{ tier.price[event_size] }}{% endif %}
+          </div>
+          {% endif %}
+          <div class="sp-tier-body">
+            {% if tier.benefits or tier.requires %}
+            <ul class="sp-tier-benefits">
+              {% for b in tier.benefits %}
+              <li>{{ b }}</li>
+              {% endfor %}
+              {% if tier.requires %}
+              <li class="sp-tier-warn">{{ tier.requires }}</li>
+              {% endif %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% if on_request_tiers %}
+      <div class="col-12">
+        <div class="sp-custom-card">
+          <div class="sp-custom-card-left">
+            <h3>Something else in mind?</h3>
+            <p class="sp-custom-subtitle">Let's figure it out together!</p>
+          </div>
+          <ul class="sp-custom-ideas">
+            {% for tier in on_request_tiers[:3] %}
+            <li>{% if tier.url %}<a href="{{ tier.url }}" target="_blank">{{ tier.name }}</a>{% else %}{{ tier.name }}{% endif %}</li>
+            {% endfor %}
+          </ul>
+          <ul class="sp-custom-ideas">
+            {% for tier in on_request_tiers[3:] %}
+            <li>{% if tier.url %}<a href="{{ tier.url }}" target="_blank">{{ tier.name }}</a>{% else %}{{ tier.name }}{% endif %}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var spCurrentCurrency = 'GBP';
+  var spDiscountActive = false;
+
+  /* ── Tokenize a price string into symbol / number / text tokens ── */
+  function spTokenize(text) {
+    var tokens = [];
+    var re = /([£$€])|(\d+)/g;
+    var last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      if (m.index > last) tokens.push({ t: 'txt', v: text.slice(last, m.index) });
+      if (m[1]) tokens.push({ t: 'sym', v: m[1] });
+      else tokens.push({ t: 'num', v: m[2] });
+      last = re.lastIndex;
+    }
+    if (last < text.length) tokens.push({ t: 'txt', v: text.slice(last) });
+    return tokens;
+  }
+
+  /* ── Render a price as structure-preserving spans ──────────────── */
+  function spRenderStructure(el, text) {
+    var tokens = spTokenize(text);
+    el.textContent = '';
+    for (var i = 0; i < tokens.length; i++) {
+      var tk = tokens[i];
+      if (tk.t === 'txt') {
+        el.appendChild(document.createTextNode(tk.v));
+      } else {
+        var s = document.createElement('span');
+        s.className = tk.t === 'sym' ? 'sp-cur-sym' : 'sp-num';
+        s.textContent = tk.v;
+        el.appendChild(s);
+      }
+    }
+  }
+
+  function spShape(tokens) {
+    var shape = '';
+    for (var i = 0; i < tokens.length; i++) shape += tokens[i].t + ',';
+    return shape;
+  }
+
+  /* ── Animate a price element to newText ────────────────────────────
+     Digits roll (countdown); currency symbols slide up & fade out,
+     then the new symbol slides up into place — only when the symbol
+     actually changes (currency switch, not discount toggle). ── */
+  function spAnimatePrice(el, newText, duration, symbolChange) {
+    if (el._countdownId) { cancelAnimationFrame(el._countdownId); el._countdownId = null; }
+    if (!el.querySelector('.sp-num')) spRenderStructure(el, el.textContent.trim());
+    var newTokens = spTokenize(newText);
+    var oldTokens = spTokenize(el.textContent.trim());
+    var numSpans = el.querySelectorAll('.sp-num');
+    var symSpans = el.querySelectorAll('.sp-cur-sym');
+    var newNums = [], newSyms = [];
+    for (var i = 0; i < newTokens.length; i++) {
+      if (newTokens[i].t === 'num') newNums.push(newTokens[i].v);
+      if (newTokens[i].t === 'sym') newSyms.push(newTokens[i].v);
+    }
+    if (spShape(oldTokens) !== spShape(newTokens) ||
+        numSpans.length !== newNums.length ||
+        symSpans.length !== newSyms.length ||
+        newNums.length === 0) {
+      spRenderStructure(el, newText);
+      return;
+    }
+
+    /* symbols: slide out, swap character, slide back in */
+    if (symbolChange) {
+      for (var s = 0; s < symSpans.length; s++) {
+        (function(span, ch) {
+          if (span.textContent === ch) return;
+          if (span._symTimer) clearTimeout(span._symTimer);
+          span.classList.add('sp-sym-out');
+          span._symTimer = setTimeout(function() {
+            span.textContent = ch;
+            span.classList.remove('sp-sym-out');
+            span.classList.add('sp-sym-prep');
+            void span.offsetWidth; /* force reflow so the prep position applies */
+            span.classList.remove('sp-sym-prep');
+            span._symTimer = null;
+          }, 180);
+        })(symSpans[s], newSyms[s]);
+      }
+    }
+
+    /* digits: rolling countdown per number span */
+    var oldVals = [], newVals = [];
+    for (var n = 0; n < numSpans.length; n++) {
+      oldVals.push(parseInt(numSpans[n].textContent, 10) || 0);
+      newVals.push(parseInt(newNums[n], 10));
+    }
+    var start = performance.now();
+    function step(now) {
+      var t = Math.min((now - start) / duration, 1);
+      var ease = 1 - Math.pow(1 - t, 3);
+      for (var k = 0; k < numSpans.length; k++) {
+        numSpans[k].textContent = String(Math.round(oldVals[k] + (newVals[k] - oldVals[k]) * ease));
+      }
+      if (t < 1) el._countdownId = requestAnimationFrame(step);
+      else el._countdownId = null;
+    }
+    el._countdownId = requestAnimationFrame(step);
+  }
+
+  function spMoveSlider(btn) {
+    var slider = document.querySelector('.sp-currency-slider');
+    if (!slider || !btn) return;
+    var toggle = btn.parentElement;
+    var tRect = toggle.getBoundingClientRect();
+    var bRect = btn.getBoundingClientRect();
+    slider.style.width = bRect.width + 'px';
+    slider.style.transform = 'translateX(' + (bRect.left - tRect.left - 3) + 'px)';
+  }
+
+  // Position slider on load
+  requestAnimationFrame(function() {
+    spMoveSlider(document.querySelector('.sp-currency-btn.active'));
+  });
+
+  // Wrap initial price text into symbol/number spans
+  var spPriceEls = document.querySelectorAll('.sp-tier-price[data-price-gbp]');
+  for (var p = 0; p < spPriceEls.length; p++) {
+    spRenderStructure(spPriceEls[p], spPriceEls[p].textContent.trim());
+  }
+
+  window.spSwitchCurrency = function(code) {
+    spCurrentCurrency = code;
+    var priceAttr = spDiscountActive ? 'data-dprice-' : 'data-price-';
+    var attr = priceAttr + code.toLowerCase();
+    var origAttr = 'data-price-' + code.toLowerCase();
+    var btns = document.querySelectorAll('.sp-currency-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', btns[i].getAttribute('data-currency') === code);
+      if (btns[i].getAttribute('data-currency') === code) spMoveSlider(btns[i]);
+    }
+    var els = document.querySelectorAll('.sp-tier-price[' + attr + ']');
+    for (var j = 0; j < els.length; j++) {
+      var el = els[j];
+      var newPrice = el.getAttribute(attr);
+      var origPrice = el.getAttribute(origAttr);
+      spAnimatePrice(el, newPrice, 400, true);
+      var card = el.closest('.sp-tier-card');
+      var origSpan = card ? card.querySelector('.sp-tier-original') : null;
+      if (origSpan) {
+        if (spDiscountActive && origPrice !== newPrice) {
+          origSpan.textContent = origPrice;
+          origSpan.style.display = 'inline';
+        } else {
+          origSpan.style.display = 'none';
+        }
+      }
+    }
+  };
+
+  /* ── Countdown + slide transition for discount toggle ────────── */
+  window.spToggleDiscount = function(on) {
+    spDiscountActive = on;
+    var cc = spCurrentCurrency.toLowerCase();
+    var priceAttr = on ? 'data-dprice-' + cc : 'data-price-' + cc;
+    var origAttr = 'data-price-' + cc;
+    var els = document.querySelectorAll('.sp-tier-price[data-dprice-' + cc + ']');
+    for (var j = 0; j < els.length; j++) {
+      var el = els[j];
+      var newPrice = el.getAttribute(priceAttr);
+      var origPrice = el.getAttribute(origAttr);
+      spAnimatePrice(el, newPrice, 400, false);
+      el.classList.toggle('sp-discounted', on && origPrice !== newPrice);
+      var card = el.closest('.sp-tier-card');
+      var origSpan = card ? card.querySelector('.sp-tier-original') : null;
+      if (origSpan) {
+        if (on && origPrice !== newPrice) {
+          origSpan.textContent = origPrice;
+          origSpan.style.display = 'inline';
+          requestAnimationFrame(function(s) { return function() { s.classList.add('sp-slide-in'); }; }(origSpan));
+        } else {
+          origSpan.classList.remove('sp-slide-in');
+          setTimeout(function(s) { return function() { s.style.display = 'none'; }; }(origSpan), 300);
+        }
+      }
+    }
+    var sdCard = document.querySelector('.sp-tier-card[data-tier-id="startup_discount"]');
+    if (sdCard) sdCard.classList.toggle('sp-discount-card-active', on);
+  };
+})();
+</script>
+
+{# ── Conference stats button + expandable panel ──────── #}
+<section class="sp-section" id="stats" style="padding-top: 0; padding-bottom: 40px;">
+  <div class="container">
+    <div class="text-center">
+      <button class="btn-stats" id="sp-stats-toggle" onclick="spToggleStats()" aria-expanded="false">
+        Community stats
+        <span class="btn-stats-icon" aria-hidden="true">
+          <svg class="btn-stats-chevron" width="17" height="10" viewBox="0 0 14 8" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1,1 7,7 13,1"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <div class="sp-stats-panel" id="sp-stats-panel">
+      <div class="sp-stats-inner">
+
+        {# ── HEADLINE NUMBERS (dynamic from generate.py) ── #}
+        <div style="display:flex; align-items:flex-start; gap:32px; margin-bottom:0;">
+          <div style="flex:1; min-width:0;">
+            <div class="sp-stats-s-title">Let's start with some numbers</div>
+            <div class="sp-stats-s-sub">Across all {{ brand_name }} editions worldwide</div>
+            <div class="sp-stats-big-numbers">
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">{{ total_attendees }}</div>
+                <div class="sp-stats-big-num-label">Attendees to date</div>
+              </div>
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">{{ total_speakers }}</div>
+                <div class="sp-stats-big-num-label">Speakers to date</div>
+              </div>
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">{{ total_events }}</div>
+                <div class="sp-stats-big-num-label">Events so far</div>
+              </div>
+            </div>
+            <div class="sp-stats-big-numbers" style="margin-top:10px;">
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">{{ total_countries }}</div>
+                <div class="sp-stats-big-num-label">Countries</div>
+              </div>
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">{{ total_cities }}</div>
+                <div class="sp-stats-big-num-label">Cities</div>
+              </div>
+              <div class="sp-stats-big-num">
+                <div class="sp-stats-big-num-value">{{ total_ambassadors }}</div>
+                <div class="sp-stats-big-num-label">Brand ambassadors</div>
+              </div>
+            </div>
+          </div>
+          <video src="assets/images/llm conspiracy.mp4" autoplay loop muted playsinline class="sp-stats-header-gif-img" style="width:529px; border-radius:12px; flex-shrink:0; aspect-ratio:16/9; object-fit:contain; display:none;"></video>
+        </div>
+
+        <hr class="sp-stats-sep">
+
+        <div class="sp-stats-s-title">Attendee profile</div>
+        <div class="sp-stats-s-sub">Based on anonymized past attendee stats</div>
+
+        <div class="sp-stats-tldr">
+          <strong>TLDR:</strong> A hands-on crowd of engineers, ML practitioners, and technical leaders from startups and enterprises — actively shipping AI products into production. Senior practitioners who care about architecture, reliability, and cost, figuring out how to make agents work at scale.
+        </div>
+
+        <div class="sp-stats-card" style="margin-bottom:32px">
+          <div class="sp-stats-card-title">Top companies that have attended</div>
+          <div class="sp-stats-pill-grid" style="margin-bottom:0">
+            <span class="sp-stats-pill">AWS</span>
+            <span class="sp-stats-pill">Adobe</span>
+            <span class="sp-stats-pill">Amazon</span>
+            <span class="sp-stats-pill">DataDog</span>
+            <span class="sp-stats-pill">eBay</span>
+            <span class="sp-stats-pill">Microsoft</span>
+            <span class="sp-stats-pill">Red Hat</span>
+            <span class="sp-stats-pill">Redis</span>
+            <span class="sp-stats-pill">Uber</span>
+            <span class="sp-stats-pill">Walmart</span>
+          </div>
+        </div>
+
+        <div class="sp-stats-grid-2">
+
+          <div class="sp-stats-card">
+            <div class="sp-stats-card-title">Role breakdown</div>
+            <ul class="sp-stats-bar-list">
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Software / Platform / DevOps</span><span class="sp-stats-bar-count">46.7%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:46.7%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Executive / Founder / Leadership</span><span class="sp-stats-bar-count">25.6%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:25.6%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">ML / AI / Data</span><span class="sp-stats-bar-count">20%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:20%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Business / Consulting / Product</span><span class="sp-stats-bar-count">7.8%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:7.8%"></div></div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="sp-stats-card">
+            <div class="sp-stats-card-title">Company size</div>
+            <ul class="sp-stats-bar-list">
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Medium &amp; Startup</span><span class="sp-stats-bar-count">49%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:49%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Enterprise</span><span class="sp-stats-bar-count">36%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:36%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Solo Founders</span><span class="sp-stats-bar-count">15%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:15%"></div></div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="sp-stats-card">
+            <div class="sp-stats-card-title">Attendee seniority</div>
+            <ul class="sp-stats-bar-list">
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Mid-Level</span><span class="sp-stats-bar-count">57%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:57%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Senior / Lead / Manager</span><span class="sp-stats-bar-count">21%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:21%"></div></div>
+              </li>
+              <li class="sp-stats-bar-item">
+                <div class="sp-stats-bar-header"><span class="sp-stats-bar-name">Executive</span><span class="sp-stats-bar-count">22%</span></div>
+                <div class="sp-stats-bar-track"><div class="sp-stats-bar-fill" style="width:22%"></div></div>
+              </li>
+            </ul>
+          </div>
+
+          {# ── ATTENDEE PROFILE (static - update by running _build/analyze_attendees.py) ── #}
+          <div class="sp-stats-card">
+            <div class="sp-stats-card-title">What they are working on</div>
+            <div class="sp-stats-tag-cloud">
+              <span class="sp-stats-tag hot">Agents &amp; Automation</span>
+              <span class="sp-stats-tag hot">Applied / Product AI</span>
+              <span class="sp-stats-tag hot">Production &amp; Reliability</span>
+              <span class="sp-stats-tag">LLM Infrastructure &amp; Cost</span>
+              <span class="sp-stats-tag">LLM Evaluation &amp; Testing</span>
+              <span class="sp-stats-tag">Open Source &amp; Edge</span>
+              <span class="sp-stats-tag">RAG &amp; Retrieval</span>
+              <span class="sp-stats-tag">Prompt &amp; Context Engineering</span>
+              <span class="sp-stats-tag">Multimodal &amp; Specialized AI</span>
+              <span class="sp-stats-tag">AI Ethics &amp; Governance</span>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="sp-stats-sep">
+
+        {# ── SPEAKER COMPANIES (dynamic — top 10 from all events' talks.csv) ── #}
+        <div class="sp-stats-s-title">Speaker companies</div>
+        <div class="sp-stats-s-sub">Top 10 orgs sending speakers for non-sponsored talks</div>
+
+        <div class="sp-stats-pill-grid">
+          {% for company, count in global_top_companies %}
+          <span class="sp-stats-pill">{{ company }}</span>
+          {% endfor %}
+        </div>
+
+        <hr class="sp-stats-sep">
+
+        {# ── OTHER SPONSORS (dynamic — deduplicated across all events) ── #}
+        <div class="sp-stats-s-title">Other sponsors</div>
+        <div class="sp-stats-s-sub">Top 20 companies supporting {{ brand_name }} - current &amp; past</div>
+
+        <div class="sp-stats-pill-grid">
+          {% for s in global_sponsors %}
+          <span class="sp-stats-pill">{{ s.name }}</span>
+          {% endfor %}
+        </div>
+
+        <hr class="sp-stats-sep">
+
+        {# ── TIMELINE (dynamic — from home/metadata.yml) ── #}
+        <div class="sp-stats-s-title">Where we meet</div>
+        <div class="sp-stats-s-sub">Nearest past and upcoming conferences</div>
+
+        <div class="sp-stats-timeline">
+          <div class="sp-stats-tl-line"></div>
+          <div class="sp-stats-tl-events">
+            {% set ns = namespace(pin_shown=false) %}
+            {% for ev in timeline_events %}
+            {% if not ns.pin_shown and ev.state != 'past' and ev.state != 'after' %}
+            {% set ns.pin_shown = true %}
+            <div class="sp-stats-tl-pin-event">
+              <div class="sp-stats-tl-pin">▼</div>
+            </div>
+            {% endif %}
+            <div class="sp-stats-tl-event">
+              <div class="sp-stats-tl-dot {% if ev.state == 'past' or ev.state == 'after' %}past{% endif %}"></div>
+              <a href="{{ ev.url }}" class="sp-stats-tl-chip{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">
+                <div class="sp-stats-tl-city">{{ ev.city }}</div>
+                <div class="sp-stats-tl-date" style="font-style:normal;">{{ ev.country }}</div>
+                <div class="sp-stats-tl-date">{{ ev.date_string }}</div>
+                {% if ev.attendees %}<div class="sp-stats-tl-seats">{{ ev.attendees }} seats</div>{% endif %}
+              </a>
+              <a href="{{ ev.url }}sponsorship" class="sp-stats-tl-prospectus{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">Prospectus</a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="text-center" style="margin-top:32px;">
+          <button class="btn-stats-close" onclick="spToggleStats(); setTimeout(function(){ document.getElementById('stats').scrollIntoView({behavior:'smooth'}); }, 10);">
+            Close stats
+            <span style="display:flex;align-items:center;">
+              <svg width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);">
+                <polyline points="1,1 7,7 13,1"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+function spToggleStats() {
+  var btn   = document.getElementById('sp-stats-toggle');
+  var panel = document.getElementById('sp-stats-panel');
+  var open  = btn.classList.toggle('open');
+  panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  btn.setAttribute('aria-expanded', String(open));
+}
+
+// Auto-expand collapsible panels when reaching #stats / #faq via link, navbar or hash change
+function spAutoExpand(hash) {
+  var map = { '#stats': ['sp-stats-toggle', 'spToggleStats'], '#faq': ['sp-faq-toggle', 'spToggleFaq'] };
+  var m = map[hash];
+  if (!m) return;
+  var btn = document.getElementById(m[0]);
+  if (btn && btn.getAttribute('aria-expanded') !== 'true') {
+    window[m[1]]();
+    setTimeout(function() {
+      var sec = document.getElementById(hash.slice(1));
+      if (sec) sec.scrollIntoView({behavior: 'smooth'});
+    }, 150);
+  }
+}
+document.addEventListener('DOMContentLoaded', function() {
+  spAutoExpand(window.location.hash);
+  document.querySelectorAll('a[href="#stats"], a[href="#faq"]').forEach(function(a) {
+    a.addEventListener('click', function() {
+      setTimeout(function() { spAutoExpand(a.getAttribute('href')); }, 0);
+    });
+  });
+});
+window.addEventListener('hashchange', function() { spAutoExpand(window.location.hash); });
+</script>
+
+{# ── Confirmed sponsors ─────────────────────────────── #}
+{% if sponsors %}
+<section class="sp-section" id="already-sponsoring" style="background:#1a1a1a;">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Confirmed sponsors</h2>
+    <div class="row logos justify-content-center" style="background:#fff;border-radius:999px;padding:20px 60px;margin:0 auto;">
+      {% for sponsor in sponsors %}
+      <div class="logo-item col-6 col-md-4 col-lg-2"><a href="{{ sponsor.url }}" target="_blank"><img src="../sponsors/{{ sponsor.logo }}" alt=""></a></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ── Get in touch ────────────────────────────────────── #}
+<section class="sp-section sp-section-alt" id="buy">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Ready to give LLMday a try?</h2>
+    <p class="text-center" style="color:#aaa;margin-top:-.6rem;margin-bottom:1.5rem;">Secure your sponsorship with <a href="https://www.linkedin.com/in/marek-pawlikowski/" target="_blank" rel="noopener noreferrer" style="color:#7bc49a;">Mark Pawlikowski</a></p>
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10 d-flex flex-wrap justify-content-center gap-3">
+        <a href="{{ calendly_sponsor_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary sp-cta-btn">Hop on a call</a>
+        <a href="{{ mailto }}" class="btn btn-primary sp-cta-btn">✉ Email Mark</a>
+        <a href="https://wa.me/447307415008" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp sp-cta-btn"><i class="fab fa-whatsapp me-2"></i>DM Mark</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── FAQ button + expandable panel ──────────────────── #}
+<section class="sp-section" id="faq" style="padding-top: 0; padding-bottom: 40px;">
+  <div class="container">
+    <div class="text-center">
+      <button class="btn-stats" id="sp-faq-toggle" onclick="spToggleFaq()" aria-expanded="false">
+        FAQ
+        <span class="btn-stats-icon" aria-hidden="true">
+          <svg class="btn-stats-chevron" width="17" height="10" viewBox="0 0 14 8" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1,1 7,7 13,1"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <div class="sp-stats-panel" id="sp-faq-panel">
+      <div class="sp-faq-inner">
+
+        <p class="sp-faq-q">1. When do I need to confirm my sponsorship?</p>
+        <p class="sp-faq-a">We recommend locking it in at least one month before the event. Last-minute is possible, but it can be a bit rushed for your team.</p>
+
+        <p class="sp-faq-q">2. Do sponsors get free conference passes?</p>
+        <p class="sp-faq-a">Yes. The number of passes depends on your setup. Some teams send one speaker, others bring a bigger team. We'll figure it out together.</p>
+
+        <p class="sp-faq-q">3. Can I invite my own network or community?</p>
+        <p class="sp-faq-a">Yes. We can offer a few free passes for key people, plus discounted tickets for your wider community.</p>
+
+        <p class="sp-faq-q">4. You say you run "community events" - what's that at the core?</p>
+        <p class="sp-faq-a">Most attendees are hands-on people working on real problems every day. It works best if you bring team members who understand their world and can have real conversations, providing solutions for their struggles.</p>
+
+        <p class="sp-faq-q">5. How many people should we send?</p>
+        <p class="sp-faq-a">It's up to you. However, for an event of around 100 people, we'd suggest no more than five people from your team.</p>
+
+        <p class="sp-faq-q">6. When can we set up our booth?</p>
+        <p class="sp-faq-a">You can arrive on the day, up to one hour before the event starts. Booth/table setup usually takes 15 to 30 minutes.</p>
+
+        <p class="sp-faq-q">7. Can we bring a bigger screen for our booth?</p>
+        <p class="sp-faq-a">We provide a 24-inch monitor with HDMI and USB-C connectors. If you want a bigger TV, you can rent it out yourself, just check with us first so we make sure it fits your booth space.</p>
+
+        <p class="sp-faq-q">8. Do you offer discounts for multiple sponsorships?</p>
+        <p class="sp-faq-a">We price items separately so you can mix and match, based on the competition and what feels fair. If your budget is tight, we can talk.</p>
+
+        <div class="text-center" style="margin-top:32px;">
+          <button class="btn-stats-close" onclick="spToggleFaq(); setTimeout(function(){ document.getElementById('faq').scrollIntoView({behavior:'smooth'}); }, 10);">
+            Close FAQ
+            <span style="display:flex;align-items:center;">
+              <svg width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);">
+                <polyline points="1,1 7,7 13,1"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+function spToggleFaq() {
+  var btn   = document.getElementById('sp-faq-toggle');
+  var panel = document.getElementById('sp-faq-panel');
+  var open  = btn.classList.toggle('open');
+  panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  btn.setAttribute('aria-expanded', String(open));
+}
+</script>
+
+{# ── Sister brands ───────────────────────────────────── #}
+<section class="sp-sisters-section">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Sister brands</h2>
+    <p class="text-center" style="color:#aaa;margin-top:-.6rem;margin-bottom:1.5rem;">Other conferences we organize: in-person & online</p>
+    <div class="sp-sisters">
+      {% for brand in sister_brands %}
+      <a href="{{ brand.url }}" target="_blank" rel="noopener noreferrer">
+        <img src="{{ brand.logo }}" alt="{{ brand.name }}">
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="sp-sisters-section" style="background:#0d0d0d;">
+  <div class="container">
+    <h2 class="sp-section-title text-center">Our Open Source Tools</h2>
+    <p class="text-center" style="color:#aaa;margin-top:-.6rem;margin-bottom:1.5rem;">To help fellow community builders</p>
+    <div class="sp-sisters">
+      {% for tool in open_source_tools %}
+      <a href="{{ tool.url }}" target="_blank" rel="noopener noreferrer">
+        <img src="{{ tool.logo }}" alt="{{ tool.name }}">
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+</div><!-- /#sp-dark-body -->
+{% endblock %}
