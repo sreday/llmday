@@ -3,16 +3,16 @@ base_folder: "static"
 # before - no schedule
 # active - schedule
 # after  - hide tickets
-event_state: after
-start_time: "2026-05-11T10:00:00-05:00"
-date_string: "May 12, 2026"
+event_state: before
+start_time: "2026-10-14T10:00:00-05:00"
+date_string: "October 14, 2026"
 location_string: "Austin, Texas, USA"
 
-cfp_url: https://cfp.ninja/e/llmday-2026-austin-q2
+cfp_url: https://cfp.ninja/e/llmday-2026-austin-q4
 twitter_url: https://twitter.com/sreday_com
 linkedin_url: https://www.linkedin.com/company/llmday/
 youtube_url: https://www.youtube.com/@llmday
-luma_evt: evt-c4GCCY74gEHeD4q
+luma_evt:
 mailto: "mailto:hello@llmday.com"
 
 # the number of tracks needs to be the same per day
