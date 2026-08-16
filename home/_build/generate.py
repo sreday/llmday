@@ -149,7 +149,7 @@ with open('../partners.yaml', encoding='utf-8') as _pf:
     _partners_config = yaml.load(_pf, Loader=yaml.FullLoader) or {}
 _sp_exclude_logos = {
     l.lower()
-    for _key in ('non_sponsor_orgs', 'community_partners', 'sister_conferences_job_boards')
+    for _key in ('non_sponsor_orgs', 'community_partners', 'sister_conferences_job_boards', 'minor_companies')
     for l in (_partners_config.get(_key) or [])
 }
 _sp_hidden = {l.lower() for l in (_partners_config.get('hidden_duplicates') or [])}
