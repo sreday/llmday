@@ -669,3 +669,13 @@
 
 
 
+
+/* Hero social icons on a brand-color pill so they stand out from the hero photo */
+.hero-block .social-list {
+	display: inline-flex;
+	align-items: center;
+	background: #26986A;
+	border-radius: 999px;
+	padding: 12px 30px;
+	box-shadow: 0 4px 20px rgba(0,0,0,.25);
+}
