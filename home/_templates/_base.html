@@ -180,11 +180,6 @@ section[id] {
 				{% endfor %}
 			</div>
 
-			<div class="carousel-indicators">
-				{% for pic in hero_pictures %}
-				<button type="button" data-bs-target="#hero-carousel" class="{{ 'active' if loop.index == 1 else ''}}" data-bs-slide-to="{{loop.index0}}"></button>
-				{% endfor %}
-			</div>
 		</div>
 		<div class="container">
 			<div class="hero-text-block text-center" style="max-width: 100%;">
