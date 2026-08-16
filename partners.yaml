@@ -19,6 +19,7 @@ non_sponsor_orgs:
   - starterai.png
   - filmforum.png
   - uhub.png
+  - packt.png           # publisher / media partner
 
 community_partners:
   - jug-amsterdam.png
@@ -56,6 +57,40 @@ sister_conferences_job_boards:
   - devevents.png       # dev.events conference listing
   - dev_events.png
   - "dev@1x_logo.png"
+  - oxfordknight.png    # tech recruitment agency
+
+# Smaller / niche companies - shown in the Partner carousel, not the
+# Sponsor one, to keep the sponsor pill to recognizable names only
+minor_companies:
+  - aliengiraffe.png
+  - atlas.png
+  - beeechoo.png
+  - bluebricks.png
+  - cardinal.png
+  - codejet.png
+  - codiac.png
+  - dougbr.png
+  - ewake.png
+  - guhatek.png
+  - hyground.png
+  - incidentfox.png
+  - kerno.png
+  - nofire.png
+  - phoebe.png
+  - qubit.png
+  - quesma.png
+  - riversafe.png
+  - seattlesystems.png
+  - senser-tech.png
+  - shipfox.png
+  - stackroute.png
+  - stigian.png
+  - tracer.png
+  - ttthinking.png
+  - ultimosoft.png
+  - unpack.png
+  - wildmoose.png
+  - withjamie.png
 
 # Extra logo files of companies already shown under another filename
 hidden_duplicates:
