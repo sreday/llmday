@@ -678,9 +678,12 @@
 	border-radius: 999px;
 	padding: 12px 30px;
 	box-shadow: 0 4px 20px rgba(0,0,0,.25);
-	transition: transform .2s ease, box-shadow .2s ease;
 }
-.hero-block .social-list:hover {
+.hero-block .social-list li a {
+	display: inline-block;
+	transition: transform .2s ease, text-shadow .2s ease;
+}
+.hero-block .social-list li a:hover {
 	transform: translateY(-2px);
-	box-shadow: 0 8px 28px rgba(0,0,0,.32);
+	text-shadow: 0 6px 14px rgba(0,0,0,.45);
 }
