@@ -196,12 +196,15 @@
   padding: 28px 0;
   overflow: hidden;
 }
+/* spacing via margin, not flex gap: translateX(-50%) is only seamless when
+   half the track width is an exact item boundary - a gap between the two
+   halves made every loop end with a half-gap jump */
+.host-logo-item { margin-right: 4.5rem; }
 .host-logo-track {
   display: flex;
   align-items: center;
-  gap: 4.5rem;
   width: max-content;
-  animation: host-logo-scroll 40s linear infinite;
+  will-change: transform;
 }
 .host-logo-pill:hover .host-logo-track { animation-play-state: paused; }
 .host-logo-item img {
@@ -211,8 +214,8 @@
   object-fit: contain;
 }
 @keyframes host-logo-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 
 /* ── Stat pills ("a typical conference") ──────────────────────── */
@@ -782,13 +785,27 @@ section[id] {
       </div>
     </div>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('load', function() {
       var track = document.querySelector('.host-logo-track');
-      if (track) {
-        var SPEED = 30; // pixels per second
-        var totalWidth = track.scrollWidth / 2;
-        track.style.animationDuration = (totalWidth / SPEED) + 's';
+      if (!track || !track.children.length) return;
+      var wrap = track.parentElement;
+      var half = track.children.length / 2;
+      if (track.scrollWidth / 2 <= wrap.offsetWidth) {
+        // Not enough logos to fill the pill: drop the duplicate half and
+        // show a static centered row instead of a scrolling loop.
+        while (track.children.length > half) track.removeChild(track.lastElementChild);
+        track.lastElementChild.style.marginRight = '0';
+        track.style.margin = '0 auto';
+        return;
       }
+      // Start the animation only now, with real image widths known - waiting
+      // for load also fixes the speed: at DOMContentLoaded the images had no
+      // width yet, so the computed duration was far too short.
+      var SPEED = 30; // pixels per second
+      track.style.animationDuration = (track.scrollWidth / 2 / SPEED) + 's';
+      track.style.animationName = 'host-logo-scroll';
+      track.style.animationTimingFunction = 'linear';
+      track.style.animationIterationCount = 'infinite';
     });
     </script>
   </div>
