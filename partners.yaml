@@ -59,38 +59,14 @@ sister_conferences_job_boards:
   - "dev@1x_logo.png"
   - oxfordknight.png    # tech recruitment agency
 
-# Smaller / niche companies - shown in the Partner carousel, not the
-# Sponsor one, to keep the sponsor pill to recognizable names only
+# Non-tech or vague/unidentifiable entities - shown in the Partner
+# carousel, not the Sponsor one. Small TECH companies stay in sponsors.
 minor_companies:
-  - aliengiraffe.png
-  - atlas.png
-  - beeechoo.png
-  - bluebricks.png
-  - cardinal.png
-  - codejet.png
-  - codiac.png
-  - dougbr.png
-  - ewake.png
-  - guhatek.png
-  - hyground.png
-  - incidentfox.png
-  - kerno.png
-  - nofire.png
-  - phoebe.png
-  - qubit.png
-  - quesma.png
-  - riversafe.png
-  - seattlesystems.png
-  - senser-tech.png
-  - shipfox.png
-  - stackroute.png
-  - stigian.png
-  - tracer.png
-  - ttthinking.png
-  - ultimosoft.png
-  - unpack.png
-  - wildmoose.png
-  - withjamie.png
+  - beeechoo.png        # unidentifiable brand
+  - dougbr.png          # personal/creator brand
+  - stackroute.png      # NIIT training arm - education, not a tech vendor
+  - ttthinking.png      # unidentifiable brand
+  - withjamie.png       # personal/creator brand
 
 # Extra logo files of companies already shown under another filename
 hidden_duplicates:
