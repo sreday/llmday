@@ -255,22 +255,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">Gen AI Product Strategy</h1>
+    <h1 class="section-heading text-center mb-3">Your Agent's Tools Are the Attack Surface</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
-          <img src="../speakers/Funmilade A. Lesi.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Pranav Saji.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Funmilade A. Lesi</h5>
+            <h5 class="card-title mb-2">Pranav Saji</h5>
             <div class="card-text mb-3">
-              <div class="meta">Root Inc.</div>
+              <div class="meta">Symosis Security</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/funmilesi/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="linkedin.com/in/pranav-saji"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -284,15 +284,16 @@
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Generative AI is rapidly transforming how products are conceived, built, and delivered—but realizing its value requires more than simply integrating an AI model into an existing workflow. This presentation explores a practical framework for identifying where GenAI can create meaningful business and customer value, prioritizing the right opportunities, and translating those opportunities into scalable AI-powered products.
-The goal is to provide product leaders and innovators with a practical approach to turning generative AI from an emerging technology into a durable source of product differentiation, operational efficiency, and measurable business impact.</p></p>
+                <p><p>Every agent framework now ships tool calling, and MCP has made it trivial to plug a model into hundreds of third party servers. That convenience moved the security boundary somewhere most teams are not looking: not the model, not the prompt, but the tool layer underneath. A poisoned tool description, a mutated schema after install, or a server that quietly reads outside its declared scope will bypass every guardrail sitting in front of the model, because the model was never the thing that got compromised.
+This session walks through what actually breaks in production agent systems and the controls that hold. I will cover tool poisoning and rug pull attacks against MCP servers, indirect prompt injection arriving through retrieved content and tool output, and the combination of private data access, untrusted input, and external communication that turns a useful agent into an exfiltration path. Then the defensive half: auditing MCP servers before install and continuously after, pinning and diffing tool schemas, enforcing least privilege on non human identities that agents run as, and the architectural rule that has held up best across the systems I have shipped, which is that the model reasons but deterministic, unit tested code enforces every policy decision. That rule comes from arithmetic rather than preference: five chained steps at ninety percent accuracy each lands near fifty nine percent end to end, so anything you need to be right has to leave the probabilistic path.
+Attendees will leave with a concrete threat model for the agent tool layer, a checklist for evaluating any MCP server they are about to trust, and detection and enforcement patterns that can be dropped into an existing agent stack without rewriting it. Examples are drawn from open source tooling I maintain and from production AI security platforms deployed in enterprise environments.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Product leader with experience across Root Insurance, Box, and Meta, driving enterprise SaaS growth and building transformative platforms at scale. Proven track record of taking products from 0→1 through global scale, leading high-impact platform and infrastructure initiatives across Fortune 500 and mid-market organizations. Combines deep product strategy, technical leadership, and commercial acumen to build platforms that unlock new revenue, accelerate enterprise adoption, and create durable competitive advantage.</p></p>
+                <p><p>Pranav Saji is an AI and AI security engineer in the San Francisco Bay Area, most recently Head of AI Security at Symosis Security, where he was the sole engineer on a suite of production AI security and governance platforms covering prompt injection defense, MCP auditing, agentic red teaming, and non human identity governance. He is a two time startup CTO and a Y Combinator F24 founding engineer, and has delivered machine learning and security engineering work for LinkedIn and Fortune 500 clients at Deloitte. He maintains MCPGuard and AgentGuard, open source security tooling for the agent era, and writes for HackerNoon on prompt injection and MCP supply chain attacks. He is a selected trainer at OWASP Global AppSec USA 2026 on AI agent security and the tool layer attack surface, and a core judge at the USAII Global AI Hackathon 2026.</p></p>
               </div>
 
               
