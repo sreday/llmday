@@ -2,6 +2,7 @@
 
 {% block head_extra %}
 <meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 <style>
 /* ── Host Us Page — brand-tint palette ────────────────────────── */
 :root {
@@ -143,9 +144,11 @@
 
 /* ── Punchline under trinity cards ────────────────────────────── */
 .host-punchline {
-  font-size: 1.9rem;
-  font-weight: 800;
-  letter-spacing: .06em;
+  font-family: 'Anton', 'Montserrat', sans-serif;
+  font-size: 2.7rem;
+  font-weight: 400;
+  letter-spacing: .05em;
+  line-height: 1.25;
   text-transform: uppercase;
   color: var(--host-ink);
   text-align: center;
@@ -155,7 +158,7 @@
 .host-punchline .pl-ship  { color: var(--host-orange); }
 .host-punchline .pl-run   { color: var(--host-purple); }
 @media (max-width: 768px) {
-  .host-punchline { font-size: 1.35rem; }
+  .host-punchline { font-size: 1.8rem; }
 }
 
 /* ── Logo marquee pill ("in good company") ────────────────────── */
@@ -427,7 +430,7 @@
         </a>
       </div>
     </div>
-    <p class="host-punchline">Making AI make sense<br>from <span class="pl-build">build</span> to <span class="pl-run">production</span></p>
+    <p class="host-punchline">Making AI <span class="pl-ship">make sense</span><br>from <span class="pl-build">build</span> to <span class="pl-run">production</span></p>
     <div class="lead-text mx-auto text-center mt-4">
       <p>Each community is for practitioners shaping how modern software is built, shipped and run in the age of AI. A place to share what works, what doesn&rsquo;t and what&rsquo;s on the horizon.</p>
     </div>
