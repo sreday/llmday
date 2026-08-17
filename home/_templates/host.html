@@ -242,8 +242,9 @@
   width: 10px; height: 10px;
   border-radius: 50%;
 }
-.we-list li::before  { background: var(--host-green); }
-.you-list li::before { background: var(--host-orange); }
+.we-list li::before   { background: var(--host-green); }
+.you-list li::before  { background: var(--host-orange); }
+.nice-list li::before { background: var(--host-purple); }
 
 /* ── Trio cards (thank-you / break-even / small team) ─────────── */
 .trio-card {
@@ -514,9 +515,9 @@
   <div class="bubble" style="width:60px;height:60px;background:var(--host-green-mid);top:35%;right:7%;"></div>
   <div class="container">
     <h2 class="text-center">Responsibilities</h2>
-    <div class="who-card">
-      <div class="row g-4">
-        <div class="col-12 col-md-7">
+    <div class="row g-4">
+      <div class="col-12 col-md-7">
+        <div class="who-card h-100">
           <h4>Our Team</h4>
           <ul class="who-list we-list">
             <li>Website, ticketing, call for papers, agenda</li>
@@ -525,10 +526,19 @@
             <li>On-site event coordination</li>
           </ul>
         </div>
-        <div class="col-12 col-md-5">
+      </div>
+      <div class="col-12 col-md-5 d-flex flex-column gap-4">
+        <div class="who-card">
           <h4>Your Team</h4>
           <ul class="who-list you-list">
             <li>Venue with working A/V, 80+ people capacity</li>
+          </ul>
+        </div>
+        <div class="who-card flex-grow-1">
+          <h4>Nice to Have</h4>
+          <ul class="who-list nice-list">
+            <li>Help with catering, covering food and drinks</li>
+            <li>Introduce us to local engineering communities and companies</li>
           </ul>
         </div>
       </div>
