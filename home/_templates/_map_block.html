@@ -66,39 +66,39 @@
   vertical-align: middle;
 }
 </style>
-    {#- (name, country, lat, lon, brand, dlon) — one dot per city; 'dual' = LLMday + SREday split dot; dlon nudges near-neighbor cities apart; country must match the SVG path <title>; map spans lat 85..-60, lon -180..180 -#}
+    {#- (name, country, lat, lon, brand, dlon, url) — one dot per city; 'dual' = LLMday + SREday split dot; dlon nudges near-neighbor cities apart; country must match the SVG path <title>; map spans lat 85..-60, lon -180..180; url = the city's event with the max start_time across both brands (furthest in the future, else closest in the past) -#}
     {% set map_cities = [
-      ('London', 'United Kingdom', 51.51, -0.13, 'dual', 0),
-      ('NYC', 'United States of America', 40.71, -74.01, 'dual', 0),
-      ('San Francisco', 'United States of America', 37.77, -122.42, 'dual', -1),
-      ('Redwood City', 'United States of America', 37.49, -122.23, 'green', 2),
-      ('Austin', 'United States of America', 30.27, -97.74, 'dual', 0),
-      ('Warsaw', 'Poland', 52.23, 21.01, 'dual', 0),
-      ('Lisbon', 'Portugal', 38.72, -9.14, 'dual', 0),
-      ('Bangalore', 'India', 12.97, 77.59, 'dual', 0),
-      ('Hamburg', 'Germany', 53.55, 9.99, 'green', 0),
-      ('Montevideo', 'Uruguay', -34.90, -56.19, 'green', 0),
-      ('Amsterdam', 'Netherlands', 52.37, 4.90, 'purple', 0),
-      ('Cologne', 'Germany', 50.94, 6.96, 'purple', 0),
-      ('Paris', 'France', 48.86, 2.35, 'purple', 0),
-      ('Munich', 'Germany', 48.14, 11.58, 'purple', 0),
-      ('Barcelona', 'Spain', 41.39, 2.17, 'purple', 0),
-      ('Katowice', 'Poland', 50.26, 19.02, 'purple', 0),
-      ('Seattle', 'United States of America', 47.61, -122.33, 'purple', -1),
-      ('Redmond', 'United States of America', 47.67, -122.12, 'purple', 2),
-      ('Dallas', 'United States of America', 32.78, -96.80, 'purple', 0),
-      ('Campinas', 'Brazil', -22.91, -47.06, 'purple', 0),
-      ('Chennai', 'India', 13.08, 80.27, 'purple', 2),
-      ('Hyderabad', 'India', 17.39, 78.49, 'purple', 0),
+      ('London', 'United Kingdom', 51.51, -0.13, 'dual', 0, 'https://llmday.com/2026-london-q4/'),
+      ('NYC', 'United States of America', 40.71, -74.01, 'dual', 0, 'https://sreday.com/2026-nyc-q4/'),
+      ('San Francisco', 'United States of America', 37.77, -122.42, 'dual', -1, 'https://sreday.com/2026-san-francisco-q4/'),
+      ('Redwood City', 'United States of America', 37.49, -122.23, 'green', 2, 'https://llmday.com/2026-redwood-city-q4/'),
+      ('Austin', 'United States of America', 30.27, -97.74, 'dual', 0, 'https://llmday.com/2026-austin-q4/'),
+      ('Warsaw', 'Poland', 52.23, 21.01, 'dual', 0, 'https://sreday.com/2026-warsaw-q4/'),
+      ('Lisbon', 'Portugal', 38.72, -9.14, 'dual', 0, 'https://sreday.com/2026-lisbon-q2/'),
+      ('Bangalore', 'India', 12.97, 77.59, 'dual', 0, 'https://sreday.com/2026-bangalore-q2/'),
+      ('Hamburg', 'Germany', 53.55, 9.99, 'green', 0, 'https://llmday.com/2026-hamburg-q2/'),
+      ('Montevideo', 'Uruguay', -34.90, -56.19, 'green', 0, 'https://llmday.com/2026-montevideo-q4/'),
+      ('Amsterdam', 'Netherlands', 52.37, 4.90, 'purple', 0, 'https://sreday.com/2026-amsterdam-q4/'),
+      ('Cologne', 'Germany', 50.94, 6.96, 'purple', 0, 'https://sreday.com/2026-cologne-q2/'),
+      ('Paris', 'France', 48.86, 2.35, 'purple', 0, 'https://sreday.com/2026-paris-q2/'),
+      ('Munich', 'Germany', 48.14, 11.58, 'purple', 0, 'https://sreday.com/2026-munich-q2/'),
+      ('Barcelona', 'Spain', 41.39, 2.17, 'purple', 0, 'https://sreday.com/2026-barcelona-q2/'),
+      ('Katowice', 'Poland', 50.26, 19.02, 'purple', 0, 'https://sreday.com/2027-katowice-q2/'),
+      ('Seattle', 'United States of America', 47.61, -122.33, 'purple', -1, 'https://sreday.com/2026-seattle-q2/'),
+      ('Redmond', 'United States of America', 47.67, -122.12, 'purple', 2, 'https://sreday.com/2025-redmond-q2/'),
+      ('Dallas', 'United States of America', 32.78, -96.80, 'purple', 0, 'https://sreday.com/2026-dallas-q4/'),
+      ('Campinas', 'Brazil', -22.91, -47.06, 'purple', 0, 'https://sreday.com/2026-campinas-q4/'),
+      ('Chennai', 'India', 13.08, 80.27, 'purple', 2, 'https://sreday.com/2025-chennai-q4/'),
+      ('Hyderabad', 'India', 17.39, 78.49, 'purple', 0, 'https://sreday.com/2026-hyderabad-q2/'),
     ] %}
     {% set map_countries = [] %}
-    {% for name, country, lat, lon, brand, dlon in map_cities %}{% if country not in map_countries %}{% set _ = map_countries.append(country) %}{% endif %}{% endfor %}
+    {% for name, country, lat, lon, brand, dlon, url in map_cities %}{% if country not in map_countries %}{% set _ = map_countries.append(country) %}{% endif %}{% endfor %}
     {% if map_block_heading %}<h2 class="text-center">{{ map_cities|length }} cities, {{ map_countries|length }} countries</h2>{% endif %}
     <div>
       <div class="map-wrap">
         {% include "_world_map_svg.html" %}
-        {% for name, country, lat, lon, brand, dlon in map_cities %}
-        <span class="map-dot map-dot-{{ brand }}" data-city="{{ name }}" data-country="{{ country }}" style="left:{{ '%.2f'|format((lon + dlon + 180) / 3.6) }}%;top:{{ '%.2f'|format((85 - lat) / 1.45) }}%;"></span>
+        {% for name, country, lat, lon, brand, dlon, url in map_cities %}
+        <a class="map-dot map-dot-{{ brand }}" href="{{ url }}" target="_blank" rel="noopener noreferrer" data-city="{{ name }}" data-country="{{ country }}" style="left:{{ '%.2f'|format((lon + dlon + 180) / 3.6) }}%;top:{{ '%.2f'|format((85 - lat) / 1.45) }}%;"></a>
         {% endfor %}
       </div>
     </div>
