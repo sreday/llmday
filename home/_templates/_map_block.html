@@ -101,11 +101,6 @@
         <span class="map-dot map-dot-{{ brand }}" data-city="{{ name }}" data-country="{{ country }}" style="left:{{ '%.2f'|format((lon + dlon + 180) / 3.6) }}%;top:{{ '%.2f'|format((85 - lat) / 1.45) }}%;"></span>
         {% endfor %}
       </div>
-      <div class="map-legend">
-        <span><span class="map-dot map-dot-green legend-dot"></span>LLMday</span>
-        <span><span class="map-dot map-dot-purple legend-dot"></span>SREday</span>
-        <span><span class="map-dot map-dot-dual legend-dot"></span>Both</span>
-      </div>
     </div>
 <!-- Dim the country while hovering its city dot -->
 <script>
