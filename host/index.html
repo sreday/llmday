@@ -188,6 +188,23 @@
 .trinity-card h5 { font-weight: 800; margin: 0; font-size: 1.25rem; color: var(--host-ink); }
 .trinity-card p { color: #666; font-size: 0.95rem; margin: 0; }
 
+/* ── Punchline under trinity cards ────────────────────────────── */
+.host-punchline {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--host-ink);
+  text-align: center;
+  margin: 48px 0 0;
+}
+.host-punchline .pl-build { color: var(--host-green); }
+.host-punchline .pl-ship  { color: var(--host-orange); }
+.host-punchline .pl-run   { color: var(--host-purple); }
+@media (max-width: 768px) {
+  .host-punchline { font-size: 1.35rem; }
+}
+
 /* ── Logo marquee pill ("in good company") ────────────────────── */
 .host-logo-pill {
   background: #fff;
@@ -652,8 +669,9 @@ section[id] {
         </a>
       </div>
     </div>
-    <div class="lead-text mx-auto text-center mt-5">
-      <p>Each community is built for practitioners: the engineers who build, ship and run modern software systems in the age of AI. Our mission is to create places where they can share what works, learn from each other and strengthen the engineering communities around them.</p>
+    <p class="host-punchline">Making AI make sense<br>from <span class="pl-build">build</span> to <span class="pl-run">production</span></p>
+    <div class="lead-text mx-auto text-center mt-4">
+      <p>Each community is for practitioners shaping how modern software is built, shipped and run in the age of AI. A place to share what works, what doesn&rsquo;t and what&rsquo;s on the horizon.</p>
     </div>
   </div>
 </section>
@@ -949,11 +967,11 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="bubble" style="width:100px;height:100px;background:var(--host-orange-mid);bottom:-20px;right:3%;"></div>
   <div class="bubble" style="width:60px;height:60px;background:var(--host-green-mid);top:35%;right:7%;"></div>
   <div class="container">
-    <h2 class="text-center">Who does what?</h2>
+    <h2 class="text-center">Responsibilities</h2>
     <div class="who-card">
       <div class="row g-4">
         <div class="col-12 col-md-7">
-          <h4>We take care of</h4>
+          <h4>Our Team</h4>
           <ul class="who-list we-list">
             <li>Backend: website, ticketing, call for papers, agenda</li>
             <li>Organic promotion</li>
@@ -962,9 +980,9 @@ document.addEventListener('DOMContentLoaded', function() {
           </ul>
         </div>
         <div class="col-12 col-md-5">
-          <h4>You take care of</h4>
+          <h4>Your Team</h4>
           <ul class="who-list you-list">
-            <li>The venue</li>
+            <li>Venue with working A/V, 80+ people capacity</li>
           </ul>
         </div>
       </div>
