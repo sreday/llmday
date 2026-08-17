@@ -162,6 +162,38 @@
   .host-punchline { font-size: 1.5rem; }
 }
 
+/* ── Benefit cards ("what's in it for you") ───────────────────── */
+.benefit-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  padding: 32px 28px;
+  height: 100%;
+  text-align: center;
+}
+.benefit-card .benefit-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  margin: 0 auto 18px;
+}
+.benefit-green .benefit-icon  { background: var(--host-green); }
+.benefit-orange .benefit-icon { background: var(--host-orange); }
+.benefit-purple .benefit-icon { background: var(--host-purple); }
+.benefit-card h4 {
+  font-weight: 800;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--host-ink);
+  margin-bottom: 12px;
+}
+.benefit-card p { color: #555; font-size: .98rem; line-height: 1.65; margin: 0; }
+
 /* ── Logo marquee pill ("in good company") ────────────────────── */
 .host-logo-pill {
   background: #fff;
@@ -455,6 +487,41 @@
   </div>
 </section>
 
+<!-- ═══════════════════════ BENEFITS OF HOSTING ════════════════════════ -->
+<section id="benefits" class="host-section host-bg-green host-bubbles">
+  <div class="bubble" style="width:130px;height:130px;background:var(--host-green-mid);top:-30px;right:6%;"></div>
+  <div class="bubble" style="width:80px;height:80px;background:var(--host-orange-mid);bottom:15%;left:4%;"></div>
+  <div class="container">
+    <h2 class="text-center">Benefits of hosting</h2>
+    <div class="lead-text mx-auto text-center mb-5">
+      <p><strong>What&rsquo;s in it for you?</strong> You provide the space. We bring the conference, the community and the content.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-12 col-lg-4">
+        <div class="benefit-card benefit-green">
+          <div class="benefit-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <h4>Put your company on the community map</h4>
+          <p>Open your doors to local engineers and become known as the place the tech community wants to be. Employer branding that doesn&rsquo;t feel like employer branding.</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="benefit-card benefit-orange">
+          <div class="benefit-icon"><i class="fas fa-comments"></i></div>
+          <h4>Learn from your peers</h4>
+          <p>Different companies, same problems, one room. Swap ideas, compare approaches and find out how everyone else cracked the thing you&rsquo;re stuck on.</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="benefit-card benefit-purple">
+          <div class="benefit-icon"><i class="fas fa-microphone"></i></div>
+          <h4>Show your technical leadership</h4>
+          <p>Customers, partners and the wider ecosystem in your space &mdash; and your own engineers on stage, showing what they know.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════ GOOD COMPANY ═══════════════════════════════ -->
 <section id="company" class="host-section host-bg-orange host-bubbles">
   <div class="bubble" style="width:140px;height:140px;background:var(--host-orange-mid);top:-30px;left:6%;"></div>
@@ -660,6 +727,7 @@ document.addEventListener('DOMContentLoaded', function() {
   nav.innerHTML =
     '<li class="nav-item"><a class="nav-link" href="/">Home</a></li>' +
     '<li class="nav-item"><a class="nav-link" href="https://llmday.com/host">Host us</a></li>' +
+    '<li class="nav-item"><a class="nav-link scrollto" href="#benefits">Benefits</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#responsibilities">Responsibilities</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#details">Details</a></li>' +
     '<li class="nav-item"><a class="nav-link scrollto" href="#start">Get started</a></li>';
