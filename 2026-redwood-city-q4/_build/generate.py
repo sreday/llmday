@@ -369,6 +369,7 @@ for _gf in _all_siblings:
 _global_speaker_count = len(_global_speaker_names)
 _spk_rem = _global_speaker_count % 10
 _spk_rounded = (_global_speaker_count - _spk_rem) if _spk_rem <= 4 else (_global_speaker_count + (10 - _spk_rem))
+_spk_rounded = max(10, _spk_rounded)  # never show 0+ on a fresh brand
 
 # round attendees (same as home page banner: remainder ≥50 → up to next 100, <50 → down)
 _att_rem = _total_attendees_raw % 100
