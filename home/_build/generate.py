@@ -102,6 +102,7 @@ for _csv_path in glob.glob("../20*/_db/*.csv"):
         pass
 _spk_rem = len(_speakers) % 10
 _spk_rounded = (len(_speakers) - _spk_rem) if _spk_rem <= 4 else (len(_speakers) + (10 - _spk_rem))
+_spk_rounded = max(10, _spk_rounded)  # never show 0+ on a fresh brand
 print(f"  Speakers: {len(_speakers)} raw -> {_spk_rounded}+")
 
 # Attendees = sum of per-event attendee counts, rounded by remainder
