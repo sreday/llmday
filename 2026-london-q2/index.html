@@ -355,53 +355,76 @@
     
     </div>
   </div>
+  <style>
+    /* ======= Countdown pill ========= */
+    .countdown-box {
+      display: inline-flex;
+      background: #2f2f2f;
+      border-radius: 999px;
+      padding: 10px 30px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.18);
+    }
+    .countdown-box .number { color: #fff; }
+    .countdown-box .unit { color: rgba(255,255,255,.7); }
+    @keyframes cd-roll {
+      from { transform: translateY(-0.55em); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+    .countdown-box .number.cd-roll { animation: cd-roll .45s ease; }
+    @media (max-width: 575px) {
+      .countdown-box { padding: 8px 14px; }
+      .countdown-box span { min-width: 62px; padding: .5rem .25rem; }
+    }
+  </style>
   <script>
     /* ======= Countdown ========= */
     // set the date we're counting down to
     var target_date = new Date("2026-05-28T09:00:00+00:00").getTime();
-     
-    // variables for time units
-    var days, hours, minutes, seconds;
-     
-    // get tag element
-    var countdown =  document.getElementById("countdown-box");
-    var days_span = document.createElement("SPAN");
-    days_span.className = 'days';
-    countdown.appendChild(days_span);
-    var hours_span = document.createElement("SPAN");
-    hours_span.className = 'hours';
-    countdown.appendChild(hours_span);
-    var minutes_span = document.createElement("SPAN");
-    minutes_span.className = 'minutes';
-    countdown.appendChild(minutes_span);
-    var secs_span = document.createElement("SPAN");
-    secs_span.className = 'secs';
-    countdown.appendChild(secs_span);
-     
-    // update the tag with id "countdown" every 1 second
-    setInterval(function () {
-     
-        // find the amount of "seconds" between now and target
-        var current_date = new Date().getTime();
-        var seconds_left = Math.max(0, (target_date - current_date) / 1000);
-     
-        // do some time calculations
-        days = parseInt(seconds_left / 86400);
+
+    // get tag element (absent on past events)
+    var countdown = document.getElementById("countdown-box");
+    if (countdown) {
+      var makeUnit = function (cls, label) {
+        var wrap = document.createElement("SPAN");
+        wrap.className = cls;
+        var num = document.createElement("SPAN");
+        num.className = "number";
+        num.textContent = "0";
+        var unit = document.createElement("SPAN");
+        unit.className = "unit";
+        unit.textContent = label;
+        wrap.appendChild(num);
+        wrap.appendChild(unit);
+        countdown.appendChild(wrap);
+        return num;
+      };
+      var days_el = makeUnit("days", "Days");
+      var hours_el = makeUnit("hours", "Hrs");
+      var minutes_el = makeUnit("minutes", "Mins");
+      var secs_el = makeUnit("secs", "Secs");
+
+      // update a digit with a rolling animation, only when it changes
+      var setNum = function (el, v) {
+        v = String(v);
+        if (el.textContent === v) return;
+        el.textContent = v;
+        el.classList.remove("cd-roll");
+        void el.offsetWidth; /* restart the animation */
+        el.classList.add("cd-roll");
+      };
+
+      var tick = function () {
+        var seconds_left = Math.max(0, (target_date - new Date().getTime()) / 1000);
+        setNum(days_el, parseInt(seconds_left / 86400));
         seconds_left = seconds_left % 86400;
-         
-        hours = parseInt(seconds_left / 3600);
+        setNum(hours_el, parseInt(seconds_left / 3600));
         seconds_left = seconds_left % 3600;
-         
-        minutes = parseInt(seconds_left / 60);
-        seconds = parseInt(seconds_left % 60);
-         
-        // format countdown string + set tag value.
-        days_span.innerHTML = '<span class="number">' + days + '</span>' + '<span class="unit">Days</span>';
-        hours_span.innerHTML = '<span class="number">' + hours + '</span>' + '<span class="unit">Hrs</span>';
-        minutes_span.innerHTML = '<span class="number">' + minutes + '</span>' + '<span class="unit">Mins</span>';
-        secs_span.innerHTML = '<span class="number">' + seconds + '</span>' + '<span class="unit">Secs</span>'; 
-     
-    }, 1000);
+        setNum(minutes_el, parseInt(seconds_left / 60));
+        setNum(secs_el, parseInt(seconds_left % 60));
+      };
+      tick();
+      setInterval(tick, 1000);
+    }
     </script>
 </section>
 
