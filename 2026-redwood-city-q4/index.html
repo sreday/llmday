@@ -261,11 +261,6 @@
     }
     .countdown-box .number { color: #fff; }
     .countdown-box .unit { color: rgba(255,255,255,.7); }
-    @keyframes cd-roll {
-      from { transform: translateY(-0.55em); opacity: 0; }
-      to   { transform: translateY(0); opacity: 1; }
-    }
-    .countdown-box .number.cd-roll { animation: cd-roll .45s ease; }
     @media (max-width: 575px) {
       .countdown-box { padding: 8px 14px; }
       .countdown-box span { min-width: 62px; padding: .5rem .25rem; }
@@ -298,14 +293,22 @@
       var minutes_el = makeUnit("minutes", "Mins");
       var secs_el = makeUnit("secs", "Secs");
 
-      // update a digit with a rolling animation, only when it changes
+      // roll a number to its new value (same countdown tween as the
+      // sponsorship page's currency switch)
       var setNum = function (el, v) {
-        v = String(v);
-        if (el.textContent === v) return;
-        el.textContent = v;
-        el.classList.remove("cd-roll");
-        void el.offsetWidth; /* restart the animation */
-        el.classList.add("cd-roll");
+        v = parseInt(v, 10);
+        var cur = parseInt(el.textContent, 10) || 0;
+        if (cur === v) return;
+        if (el._rollId) cancelAnimationFrame(el._rollId);
+        var start = performance.now();
+        var step = function (now) {
+          var t = Math.min((now - start) / 400, 1);
+          var ease = 1 - Math.pow(1 - t, 3);
+          el.textContent = String(Math.round(cur + (v - cur) * ease));
+          if (t < 1) el._rollId = requestAnimationFrame(step);
+          else el._rollId = null;
+        };
+        el._rollId = requestAnimationFrame(step);
       };
 
       var tick = function () {
