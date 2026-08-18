@@ -16,3 +16,11 @@
 .hero-block .social-list{display:inline-flex;align-items:center;background:#26986A;border-radius:999px;padding:12px 30px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
 .hero-block .social-list li a{display:inline-block;transition:transform .2s ease,text-shadow .2s ease}
 .hero-block .social-list li a:hover{transform:translateY(-2px);text-shadow:0 6px 14px rgba(0,0,0,.45)}
+
+/* Hero CTA row: pill-shaped buttons flanking the always-centered social pill */
+.hero-block .hero-cta-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px}
+.hero-block .hero-cta-row .btn{border-radius:999px;padding:12px 30px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+.hero-block .hero-cta-row .cta-left{grid-column:1;justify-self:end}
+.hero-block .hero-cta-row .social-list{grid-column:2}
+.hero-block .hero-cta-row .cta-right{grid-column:3;justify-self:start}
+@media (max-width: 767.98px){.hero-block .hero-cta-row{display:flex;flex-direction:column;gap:14px}}

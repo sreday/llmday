@@ -184,11 +184,11 @@
 				{% else %}
 				<h2 class="text-white">{{ brand_tagline }}</h2>
 				<h3 class="text-white"><i class="far fa-calendar-alt me-2"></i>{{ date_string }} <i class="fas fa-map-marker-alt mx-2"></i>{{ location_string }}</h3>
-				<div class="hero-cta mt-5" style="display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:14px;">
+				<div class="hero-cta hero-cta-row mt-5">
 					{% if youtube_playlist %}
-					<a class="btn btn-secondary btn-lg" href="{{ youtube_playlist }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="white" style="vertical-align:middle;margin-right:6px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Playlist</a>
+					<a class="btn btn-secondary btn-lg cta-left" href="{{ youtube_playlist }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="white" style="vertical-align:middle;margin-right:6px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Playlist</a>
 					{% elif event_state != 'after' %}
-					<a class="btn btn-secondary btn-lg" href="{% if talk %}./#tickets{% else %}#tickets{% endif %}">Get Tickets</a>
+					<a class="btn btn-secondary btn-lg cta-left" href="{% if talk %}./#tickets{% else %}#tickets{% endif %}">Get Tickets</a>
 					{% endif %}
 					<ul class="social-list list-inline" style="margin:0;">
 						<li class="list-inline-item me-3"><a target="_blank" href="https://luma.com/sre" style="text-decoration:none;">✦</a></li>
@@ -198,7 +198,7 @@
 						<li class="list-inline-item me-0"><a target="_blank" rel="noopener noreferrer" href="{{ youtube_url }}"><i class="fab fa-youtube fa-fw"></i></a></li>
 					</ul>
 					{% if event_state != 'after' %}
-					<a class="btn btn-primary btn-lg" href="{{ cfp_url }}" target="_blank">CFP</a>
+					<a class="btn btn-primary btn-lg cta-right" href="{{ cfp_url }}" target="_blank">CFP</a>
 					{% endif %}
 			    </div>
 				{% endif %}
