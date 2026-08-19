@@ -4,7 +4,7 @@
 
 <!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────────── -->
 {% if about_blurb %}
-<section id="about" class="section pt-4 pb-0">
+<section id="about" class="section pt-5 pb-0">
   <div class="container text-center">
     <button class="btn-about-conf" type="button" aria-expanded="false"
             aria-controls="about-conf-panel" onclick="acToggle(this)">
@@ -68,6 +68,8 @@
     transition: background .2s, box-shadow .2s;
   }
   .btn-about-conf:hover { background: var(--brand-dark); box-shadow: 0 4px 18px rgba(0,0,0,.18); }
+  .btn-about-conf:hover, .btn-about-conf:focus, .btn-about-conf:active,
+  .btn-about-conf[aria-expanded="true"] { color: #fff; }
   .btn-about-conf:active { transform: scale(.97); }
   .ac-chevron { display: flex; align-items: center; transition: transform .3s ease; }
   .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
