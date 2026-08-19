@@ -9,7 +9,7 @@
 #   - each talk lands in exactly one category (highest score; earlier category
 #     wins ties); unmatched talks go under "...and more"
 blurb: >-
-  LLMday is a worldwide series of community events for engineers building
+  <strong>LLMday</strong> is a worldwide series of community events for engineers building
   with large language models, AI agents and machine learning. Across cities
   around the world, we bring together practitioners working on AI-powered
   products and systems to share real-world experience, learn from each other

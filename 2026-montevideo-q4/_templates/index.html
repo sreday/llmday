@@ -34,7 +34,8 @@
           </ul>
         </div>
         {% endfor %}
-        {% else %}
+        {% endif %}
+        {% if about_more_soon %}
         <p class="ac-more-soon">We'll announce more talks soon, stay tuned!</p>
         {% endif %}
         <button class="ac-close-row" type="button" onclick="acClose()" aria-label="Close About the conference">
@@ -82,8 +83,8 @@
   .ac-topic-group { margin-top: 10px; }
   .ac-topic-name { font-weight: 700; color: var(--brand); }
   .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
-  .ac-topic-talks a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
-  .ac-topic-talks a:hover { color: var(--brand); }
+  .ac-topic-talks a { color: inherit; text-decoration: none; }
+  .ac-topic-talks a:hover { color: #999; }
   .ac-close-row {
     display: flex;
     align-items: center;
