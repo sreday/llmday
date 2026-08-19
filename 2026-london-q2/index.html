@@ -431,6 +431,148 @@
     </script>
 </section>
 
+<!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────── -->
+
+<section id="about-conf" class="section pt-0 pb-4">
+  <div class="container text-center">
+    <button class="btn-about-conf" type="button" aria-expanded="false"
+            aria-controls="about-conf-panel" onclick="acToggle(this)">
+      About the conference <span class="ac-chevron">&#9662;</span>
+    </button>
+    <div id="about-conf-panel" class="ac-panel mx-auto text-start">
+      <div class="ac-panel-inner">
+        <p class="ac-blurb">LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
+        
+        <h5 class="ac-topics-heading">Topics so far:</h5>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">Large Language Models</div>
+          <ul class="ac-topic-talks">
+            <li>Operating LLMs Where Failure Isn’t an Option</li>
+            <li>Growing AI Projects: Where Science Meets Engineering</li>
+            <li>Llama Watching - Visualising a LLM in Action</li>
+            <li>Purpose-Built AI Ontologies: Why Data Modeling Determines LLM Performance</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Agents</div>
+          <ul class="ac-topic-talks">
+            <li>I Locked My Laptop. My Agent Never Did</li>
+            <li>The Long Road to Self-Evolving Agents</li>
+            <li>Teaching Coding Agents to Master Spreadsheets</li>
+            <li>The Agentic Engine Room: Pre-warmed Firecracker sandboxes for safe AI execution</li>
+            <li>Trustable: building a private “Lovable-like” AI using only open source</li>
+            <li>Async Agents in Production: Failure Modes and Fixes</li>
+            <li>Stop Building Agents. Build Sandboxes.</li>
+            <li>Create Your Own Role-Playing Game with Agentic AI using Strands Agents</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">Machine Learning</div>
+          <ul class="ac-topic-talks">
+            <li>Telepathy Is Just Pattern Recognition: Why Brain Signals Are Just Another Language AI Can Learn</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">RAG & Knowledge Systems</div>
+          <ul class="ac-topic-talks">
+            <li>Teaching RAG to read: making charts, tables and equations reliable on individual learners&#39; budget</li>
+            <li>Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling</li>
+            <li>When Software Stops Being Deterministic: Rethinking Architecture for RAG and LLM Systems</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Engineering</div>
+          <ul class="ac-topic-talks">
+            <li>Does AI Deliver Waterfall? An exploration of the metaphors we still live by and how they are changing with AI</li>
+            <li>From Context To Impact: How To Ship An AI App In A Day</li>
+            <li>Context Matters</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">Evaluation & Testing</div>
+          <ul class="ac-topic-talks">
+            <li>LLM Evals in Production: How to Know When Your Model Is Lying to You</li>
+            <li>Battle of VLMs and Traditional Pipelines in Automatic Vehicle Type Classification and License Plate Recognition</li>
+            <li>What’s Wrong With Them? How Misunderstandings (and AI) Can Become Intercultural Insight</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Applications & Products</div>
+          <ul class="ac-topic-talks">
+            <li>When Engineers Stop Thinking: How to Make AI Serve Us, Not Replace Us</li>
+            <li>Building a Safe and Effective Mental Health Support Bot: The Mental Health Foundation Approach</li>
+            <li>Hybrid Rule+MLLLM Moderation at Scale</li>
+            <li>The Future of the Subscription Economy: How AI Will Learn to Optimise Our Spending Better Than We Can</li>
+            <li>What breaks in production ML systems, even when all metrics look healthy</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">...and more</div>
+          <ul class="ac-topic-talks">
+            <li>Two designers walk into an AI conference...</li>
+            <li>AI Is Changing How We Think: Are We Ready for What Comes Next?</li>
+            <li>Sovereign AI: discussing design choices and control</li>
+            <li>Keynote: Designing Data Systems That Keep Up with AI</li>
+            <li>Keynote: From Code to Conviction: Using Neuroscience to Deliver Technical Talks That Influence</li>
+            
+          </ul>
+        </div>
+        
+        
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .btn-about-conf {
+    background: transparent;
+    border: 1px solid var(--brand);
+    color: var(--brand-dark);
+    border-radius: 999px;
+    padding: 8px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    transition: background .2s, color .2s;
+  }
+  .btn-about-conf:hover { background: var(--brand-pale); }
+  .btn-about-conf[aria-expanded="true"] { background: var(--brand); color: #fff; }
+  .ac-chevron { display: inline-block; margin-left: 6px; transition: transform .3s; }
+  .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
+  .ac-panel { max-width: 800px; overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
+  .ac-panel-inner { padding: 18px 4px 6px; }
+  .ac-blurb { color: #555; }
+  .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
+  .ac-topic-group { margin-top: 10px; }
+  .ac-topic-name { font-weight: 700; color: var(--brand); }
+  .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
+</style>
+<script>
+  function acToggle(btn) {
+    var panel = document.getElementById('about-conf-panel');
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  }
+</script>
+
+<!-- ── END ABOUT THE CONFERENCE ──────────────────────────────────────── -->
+
 
 
 <style>

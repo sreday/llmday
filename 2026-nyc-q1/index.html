@@ -433,6 +433,116 @@
     </script>
 </section>
 
+<!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────── -->
+
+<section id="about-conf" class="section pt-0 pb-4">
+  <div class="container text-center">
+    <button class="btn-about-conf" type="button" aria-expanded="false"
+            aria-controls="about-conf-panel" onclick="acToggle(this)">
+      About the conference <span class="ac-chevron">&#9662;</span>
+    </button>
+    <div id="about-conf-panel" class="ac-panel mx-auto text-start">
+      <div class="ac-panel-inner">
+        <p class="ac-blurb">LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
+        
+        <h5 class="ac-topics-heading">Topics so far:</h5>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">Large Language Models</div>
+          <ul class="ac-topic-talks">
+            <li>Don&#39;t Panic: It&#39;s Not Just You - LLM Trace Sampling Doesn&#39;t Work</li>
+            <li>The way to Edge AI</li>
+            <li>Reimagined AI-DLC Manifesto: Moving Beyond the Productivity Paradox to Engineering Predictability</li>
+            <li>Fine‑Tuning LLMs for Voice‑First Consumer Experiences</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Agents</div>
+          <ul class="ac-topic-talks">
+            <li>Securing &amp; Building Agentic OSS Environments</li>
+            <li>From TrafficAI to GhostBreakers: Building Stateful AI Agents with Cortex, OpenFlow, and Snowflake Postgres</li>
+            <li>10 Lessons from building High-Stakes Agents</li>
+            <li>Multi-Agent Architectures: Solving Production LLM Reliability at Scale</li>
+            <li>Building Evaluation Systems for AI Coding Agents at Scale</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">Machine Learning</div>
+          <ul class="ac-topic-talks">
+            <li>Exploring the Convergence of Machine Learning, AI, and Cloud-Native Technologies in Automation</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Engineering</div>
+          <ul class="ac-topic-talks">
+            <li>Engineering Better Prompts for AI Assisted Development</li>
+            <li>Context Matters</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Applications & Products</div>
+          <ul class="ac-topic-talks">
+            <li>The Limits of Vibe Coding: What Happens When AI-Generated Code Lands in Your Cluster</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">...and more</div>
+          <ul class="ac-topic-talks">
+            <li>Welcome message</li>
+            
+          </ul>
+        </div>
+        
+        
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .btn-about-conf {
+    background: transparent;
+    border: 1px solid var(--brand);
+    color: var(--brand-dark);
+    border-radius: 999px;
+    padding: 8px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    transition: background .2s, color .2s;
+  }
+  .btn-about-conf:hover { background: var(--brand-pale); }
+  .btn-about-conf[aria-expanded="true"] { background: var(--brand); color: #fff; }
+  .ac-chevron { display: inline-block; margin-left: 6px; transition: transform .3s; }
+  .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
+  .ac-panel { max-width: 800px; overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
+  .ac-panel-inner { padding: 18px 4px 6px; }
+  .ac-blurb { color: #555; }
+  .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
+  .ac-topic-group { margin-top: 10px; }
+  .ac-topic-name { font-weight: 700; color: var(--brand); }
+  .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
+</style>
+<script>
+  function acToggle(btn) {
+    var panel = document.getElementById('about-conf-panel');
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  }
+</script>
+
+<!-- ── END ABOUT THE CONFERENCE ──────────────────────────────────────── -->
+
 
 
 <style>

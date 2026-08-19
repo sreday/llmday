@@ -433,6 +433,130 @@
     </script>
 </section>
 
+<!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────── -->
+
+<section id="about-conf" class="section pt-0 pb-4">
+  <div class="container text-center">
+    <button class="btn-about-conf" type="button" aria-expanded="false"
+            aria-controls="about-conf-panel" onclick="acToggle(this)">
+      About the conference <span class="ac-chevron">&#9662;</span>
+    </button>
+    <div id="about-conf-panel" class="ac-panel mx-auto text-start">
+      <div class="ac-panel-inner">
+        <p class="ac-blurb">LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
+        
+        <h5 class="ac-topics-heading">Topics so far:</h5>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">Large Language Models</div>
+          <ul class="ac-topic-talks">
+            <li>Neuroinspired AI: From Analogy to Mechanism</li>
+            <li>From Voice to Cognitive Insights: Building KinaBot, an AI System for Early Cognitive Awareness</li>
+            <li>Capacity Planning for LLMs: Sizing and Funding Clusters Before You Know Your Workload</li>
+            <li>LLM-Driven Auto Replenishment: From Reactive to Predictive Retail</li>
+            <li>AI Powered Developer Productivity in Enterprise LLM Driven Engineering</li>
+            <li>Human-in-the-Loop UI Design for Generative AI Systems</li>
+            <li>Semantic Condensation: Making High-Cardinality Time Series Usable for LLM-Driven Observability</li>
+            <li>The Infrastructure of AI: How SmartNICs and RDMA Power the Cloud</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Agents</div>
+          <ul class="ac-topic-talks">
+            <li>MAD About Software Design - When AI Architects Argue</li>
+            <li>From Dashboards to Agents: Building an AI ROI Strategist with MCP and n8n</li>
+            <li>Towards Self-Evolving Autonomous AI Agents</li>
+            <li>Architecting enterprise-grade AI agents: Reliability, orchestration, and system integration</li>
+            <li>We’re Giving AI Agents Too Much Power</li>
+            <li>Building Production Multi-Agent Systems: Memory, Orchestration &amp; Evaluation at Scale</li>
+            <li>Agentic AI in Production: Debugging and Fixing Pipelines with LangSmith</li>
+            <li>Enabling Agents to Pay: Implementation Challenges of x402 in Production Systems</li>
+            <li>Adaptive Defenses for Agentic AI Pipelines</li>
+            <li>Commerce Without Boundaries: Agentic AI Meets Universal Protocols</li>
+            <li>Standardizing First-Class Identity for Autonomous AI Agents</li>
+            <li>Your Agent Doesn&#39;t Need More Evals. It Needs an Environment.</li>
+            <li>AI That Makes AI Faster</li>
+            <li>Keynote: From Data Platform to Agent Platform: Building Structured Intelligence with Knowledge Graphs and MCP</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">RAG & Knowledge Systems</div>
+          <ul class="ac-topic-talks">
+            <li>Stop AI Agents from Making Up Facts: Graph-RAG for Reliable Data Retrieval</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">LLMOps & AI Infrastructure</div>
+          <ul class="ac-topic-talks">
+            <li>One GPU to Rule Them All</li>
+            <li>Unlocking Clinical Data with AI: The Rise of LCLMs</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Applications & Products</div>
+          <ul class="ac-topic-talks">
+            <li>Digital PMOs for Retail: Transparent Governance with Jira–Confluence</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">...and more</div>
+          <ul class="ac-topic-talks">
+            <li>Interviewing Engineers in the Age of AI</li>
+            <li>The Case for Making Your (Business) Case</li>
+            
+          </ul>
+        </div>
+        
+        
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .btn-about-conf {
+    background: transparent;
+    border: 1px solid var(--brand);
+    color: var(--brand-dark);
+    border-radius: 999px;
+    padding: 8px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    transition: background .2s, color .2s;
+  }
+  .btn-about-conf:hover { background: var(--brand-pale); }
+  .btn-about-conf[aria-expanded="true"] { background: var(--brand); color: #fff; }
+  .ac-chevron { display: inline-block; margin-left: 6px; transition: transform .3s; }
+  .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
+  .ac-panel { max-width: 800px; overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
+  .ac-panel-inner { padding: 18px 4px 6px; }
+  .ac-blurb { color: #555; }
+  .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
+  .ac-topic-group { margin-top: 10px; }
+  .ac-topic-name { font-weight: 700; color: var(--brand); }
+  .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
+</style>
+<script>
+  function acToggle(btn) {
+    var panel = document.getElementById('about-conf-panel');
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  }
+</script>
+
+<!-- ── END ABOUT THE CONFERENCE ──────────────────────────────────────── -->
+
 
 
 <style>

@@ -431,6 +431,109 @@
     </script>
 </section>
 
+<!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────── -->
+
+<section id="about-conf" class="section pt-0 pb-4">
+  <div class="container text-center">
+    <button class="btn-about-conf" type="button" aria-expanded="false"
+            aria-controls="about-conf-panel" onclick="acToggle(this)">
+      About the conference <span class="ac-chevron">&#9662;</span>
+    </button>
+    <div id="about-conf-panel" class="ac-panel mx-auto text-start">
+      <div class="ac-panel-inner">
+        <p class="ac-blurb">LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
+        
+        <h5 class="ac-topics-heading">Topics so far:</h5>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">Large Language Models</div>
+          <ul class="ac-topic-talks">
+            <li>Your LLM Doesn&#39;t Know What &#39;ARR&#39; Means (Yet): A survey of semantic layers</li>
+            <li>Human-in-the-Loop UI Design for Generative AI Systems</li>
+            <li>Beyond Prompts: Context Architecture for Reliable LLM Systems</li>
+            <li>AI Agents as Decision Co Pilots: Scaling LLM Driven Intelligent Systems</li>
+            <li>Your AI Is Making Things Up. Here Is How to Stop It.</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Agents</div>
+          <ul class="ac-topic-talks">
+            <li>Beyond IAM: Building the Accountability Layer for Autonomous Agents</li>
+            <li>The Missing Layer in Agentic AI: Governance</li>
+            <li>Your AI Agent Has Notes</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">LLMOps & AI Infrastructure</div>
+          <ul class="ac-topic-talks">
+            <li>Gemma4 Tips and Tricks</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">Evaluation & Testing</div>
+          <ul class="ac-topic-talks">
+            <li>Imperfect Is Fine (When It’s You)</li>
+            <li>Stop Paying Opus Prices for Haiku Problems</li>
+            <li>Keynote: Decision Intelligence under Uncertainty with Generative AI</li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Applications & Products</div>
+          <ul class="ac-topic-talks">
+            <li>Scaled approaches to managing AI workloads</li>
+            <li>From Prompt to Production</li>
+            
+          </ul>
+        </div>
+        
+        
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .btn-about-conf {
+    background: transparent;
+    border: 1px solid var(--brand);
+    color: var(--brand-dark);
+    border-radius: 999px;
+    padding: 8px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    transition: background .2s, color .2s;
+  }
+  .btn-about-conf:hover { background: var(--brand-pale); }
+  .btn-about-conf[aria-expanded="true"] { background: var(--brand); color: #fff; }
+  .ac-chevron { display: inline-block; margin-left: 6px; transition: transform .3s; }
+  .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
+  .ac-panel { max-width: 800px; overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
+  .ac-panel-inner { padding: 18px 4px 6px; }
+  .ac-blurb { color: #555; }
+  .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
+  .ac-topic-group { margin-top: 10px; }
+  .ac-topic-name { font-weight: 700; color: var(--brand); }
+  .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
+</style>
+<script>
+  function acToggle(btn) {
+    var panel = document.getElementById('about-conf-panel');
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  }
+</script>
+
+<!-- ── END ABOUT THE CONFERENCE ──────────────────────────────────────── -->
+
 
 
 <style>
