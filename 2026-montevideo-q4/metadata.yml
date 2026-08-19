@@ -38,6 +38,8 @@ breaks:
   talks_before: 4
 
 sponsors:
+  - logo: owu.png
+    url: https://www.owu.uy/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
 
