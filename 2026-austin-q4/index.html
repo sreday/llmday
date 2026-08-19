@@ -240,6 +240,100 @@
 <!-- CONTENT -->
 
 
+<!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────────── -->
+
+<section id="about-conf" class="section pt-4 pb-0">
+  <div class="container text-center">
+    <button class="btn-about-conf" type="button" aria-expanded="false"
+            aria-controls="about-conf-panel" onclick="acToggle(this)">
+      About the conference
+      <span class="ac-chevron" aria-hidden="true">
+        <svg width="17" height="10" viewBox="0 0 14 8" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1,1 7,7 13,1"/>
+        </svg>
+      </span>
+    </button>
+    <div id="about-conf-panel" class="ac-panel mx-auto text-start">
+      <div class="ac-panel-inner">
+        <p class="ac-blurb">LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
+        
+        <div class="text-center" style="margin-top:24px;">
+          <button class="btn-about-close" type="button" onclick="acClose()">
+            Close
+            <span style="display:flex;align-items:center;" aria-hidden="true">
+              <svg width="17" height="10" viewBox="0 0 14 8" fill="none"
+                   stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                   style="transform:rotate(180deg);">
+                <polyline points="1,1 7,7 13,1"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .btn-about-conf {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #e8e8e8;
+    color: var(--brand-dark);
+    border: none;
+    border-radius: 999px;
+    padding: 13px 34px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.14rem;
+    font-weight: 600;
+    letter-spacing: .01em;
+    cursor: pointer;
+    transition: background .2s, box-shadow .2s;
+  }
+  .btn-about-conf:hover { background: #dedede; box-shadow: 0 4px 18px rgba(0,0,0,.12); }
+  .btn-about-conf:active { transform: scale(.97); }
+  .ac-chevron { display: flex; align-items: center; transition: transform .3s ease; }
+  .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
+  .ac-panel { max-width: 800px; overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
+  .ac-panel-inner { padding: 18px 4px 6px; }
+  .ac-blurb { color: #555; }
+  .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
+  .ac-topic-group { margin-top: 10px; }
+  .ac-topic-name { font-weight: 700; color: var(--brand); }
+  .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
+  .btn-about-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 13px 34px;
+    font-size: 1.14rem;
+    font-weight: 600;
+    letter-spacing: .01em;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .btn-about-close:hover { background: #777; }
+</style>
+<script>
+  function acToggle(btn) {
+    var panel = document.getElementById('about-conf-panel');
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  }
+  function acClose() {
+    acToggle(document.querySelector('#about-conf .btn-about-conf'));
+    setTimeout(function() { document.getElementById('about-conf').scrollIntoView({behavior: 'smooth'}); }, 10);
+  }
+</script>
+
+<!-- ── END ABOUT THE CONFERENCE ────────────────────────────────────── -->
+
 <section id="about" class="about-section section">
 
   <div class="container">
@@ -326,56 +420,8 @@
     </script>
 </section>
 
-<!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────── -->
 
-<section id="about-conf" class="section pt-0 pb-4">
-  <div class="container text-center">
-    <button class="btn-about-conf" type="button" aria-expanded="false"
-            aria-controls="about-conf-panel" onclick="acToggle(this)">
-      About the conference <span class="ac-chevron">&#9662;</span>
-    </button>
-    <div id="about-conf-panel" class="ac-panel mx-auto text-start">
-      <div class="ac-panel-inner">
-        <p class="ac-blurb">LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
-        
-      </div>
-    </div>
-  </div>
-</section>
-<style>
-  .btn-about-conf {
-    background: transparent;
-    border: 1px solid var(--brand);
-    color: var(--brand-dark);
-    border-radius: 999px;
-    padding: 8px 24px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: .9rem;
-    transition: background .2s, color .2s;
-  }
-  .btn-about-conf:hover { background: var(--brand-pale); }
-  .btn-about-conf[aria-expanded="true"] { background: var(--brand); color: #fff; }
-  .ac-chevron { display: inline-block; margin-left: 6px; transition: transform .3s; }
-  .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
-  .ac-panel { max-width: 800px; overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
-  .ac-panel-inner { padding: 18px 4px 6px; }
-  .ac-blurb { color: #555; }
-  .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
-  .ac-topic-group { margin-top: 10px; }
-  .ac-topic-name { font-weight: 700; color: var(--brand); }
-  .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
-</style>
-<script>
-  function acToggle(btn) {
-    var panel = document.getElementById('about-conf-panel');
-    var open = btn.getAttribute('aria-expanded') !== 'true';
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
-  }
-</script>
 
-<!-- ── END ABOUT THE CONFERENCE ──────────────────────────────────────── -->
 
 
 <section id="tickets" class="tickets-section section">
