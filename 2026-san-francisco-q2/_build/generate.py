@@ -221,7 +221,15 @@ if len(_about_talks) >= 3:
                 _about_companies.append(_org)
     _about_companies.sort(key=lambda s: s.lower())
 context["about_companies"] = _about_companies
-context["about_more_soon"] = len(_about_talks) < 7
+# "more talks soon" shows while confirmed talks are below 60% of the event's
+# intended speaker count (metadata `speakers`, e.g. "30+"); fallback cutoff 7
+_about_target = str(context.get("speakers", "")).replace("+", "").strip()
+try:
+    _about_target = int(_about_target)
+except ValueError:
+    _about_target = 0
+_about_more_cut = math.ceil(_about_target * 0.6) if _about_target > 0 else 7
+context["about_more_soon"] = len(_about_talks) < _about_more_cut
 
 _about_topics = []
 _about_cats = _about_config.get("categories") or []
