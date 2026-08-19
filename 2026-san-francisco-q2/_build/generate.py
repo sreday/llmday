@@ -239,8 +239,11 @@ if len(_about_talks) >= 3 and _about_cats:
     for _t in _about_talks:
         _hay_title = _t["title"].strip().lower()
         _hay_abs = (_t.get("abstract") or "").lower()
+        _about_title_disp = _t["title"].strip()
+        if _about_title_disp.lower().startswith("keynote:"):
+            _about_title_disp = _about_title_disp[len("keynote:"):].strip()
         _about_entry = {
-            "title": _t["title"].strip(),
+            "title": _about_title_disp,
             "url": ((_t.get("short_url") or "").replace(".html", "") + ".html#speakers-section") if _t.get("short_url") else "",
         }
         _best_i, _best_score = None, 0
