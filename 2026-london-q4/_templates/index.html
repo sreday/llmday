@@ -4,7 +4,7 @@
 
 <!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────────── -->
 {% if about_blurb %}
-<section id="about-conf" class="section pt-4 pb-0">
+<section id="about" class="section pt-4 pb-0">
   <div class="container text-center">
     <button class="btn-about-conf" type="button" aria-expanded="false"
             aria-controls="about-conf-panel" onclick="acToggle(this)">
@@ -30,19 +30,18 @@
           </ul>
         </div>
         {% endfor %}
+        {% else %}
+        <p class="ac-more-soon">We'll announce more talks soon, stay tuned!</p>
         {% endif %}
-        <div class="text-center" style="margin-top:24px;">
-          <button class="btn-about-close" type="button" onclick="acClose()">
-            Close
-            <span style="display:flex;align-items:center;" aria-hidden="true">
-              <svg width="17" height="10" viewBox="0 0 14 8" fill="none"
-                   stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
-                   style="transform:rotate(180deg);">
-                <polyline points="1,1 7,7 13,1"/>
-              </svg>
-            </span>
-          </button>
-        </div>
+        <button class="ac-close-row" type="button" onclick="acClose()" aria-label="Close About the conference">
+          <span class="ac-close-chip">Close
+            <svg width="12" height="7" viewBox="0 0 14 8" fill="none" aria-hidden="true"
+                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                 style="transform:rotate(180deg);">
+              <polyline points="1,1 7,7 13,1"/>
+            </svg>
+          </span>
+        </button>
       </div>
     </div>
   </div>
@@ -52,8 +51,8 @@
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    background: #e8e8e8;
-    color: var(--brand-dark);
+    background: var(--brand);
+    color: #fff;
     border: none;
     border-radius: 999px;
     padding: 13px 34px;
@@ -64,33 +63,49 @@
     cursor: pointer;
     transition: background .2s, box-shadow .2s;
   }
-  .btn-about-conf:hover { background: #dedede; box-shadow: 0 4px 18px rgba(0,0,0,.12); }
+  .btn-about-conf:hover { background: var(--brand-dark); box-shadow: 0 4px 18px rgba(0,0,0,.18); }
   .btn-about-conf:active { transform: scale(.97); }
   .ac-chevron { display: flex; align-items: center; transition: transform .3s ease; }
   .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
   .ac-panel { max-width: 800px; overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
   .ac-panel-inner { padding: 18px 4px 6px; }
   .ac-blurb { color: #555; }
+  .ac-more-soon { color: #888; font-style: italic; }
   .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
   .ac-topic-group { margin-top: 10px; }
   .ac-topic-name { font-weight: 700; color: var(--brand); }
   .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
-  .btn-about-close {
+  .ac-close-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 24px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .ac-close-row::before, .ac-close-row::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e0e0e0;
+  }
+  .ac-close-chip {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    background: #888;
-    color: #fff;
-    border: none;
+    gap: 6px;
+    margin: 0 10px;
+    padding: 3px 12px;
+    border: 1px solid #e0e0e0;
     border-radius: 999px;
-    padding: 13px 34px;
-    font-size: 1.14rem;
+    background: #fff;
+    color: #999;
+    font-size: .78rem;
     font-weight: 600;
-    letter-spacing: .01em;
-    cursor: pointer;
-    transition: background .2s;
+    transition: color .2s, border-color .2s;
   }
-  .btn-about-close:hover { background: #777; }
+  .ac-close-row:hover .ac-close-chip { color: #666; border-color: #bbb; }
 </style>
 <script>
   function acToggle(btn) {
@@ -100,14 +115,27 @@
     panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
   }
   function acClose() {
-    acToggle(document.querySelector('#about-conf .btn-about-conf'));
-    setTimeout(function() { document.getElementById('about-conf').scrollIntoView({behavior: 'smooth'}); }, 10);
+    acToggle(document.querySelector('#about .btn-about-conf'));
+    setTimeout(function() { document.getElementById('about').scrollIntoView({behavior: 'smooth'}); }, 10);
   }
+  function acAutoExpand() {
+    var btn = document.querySelector('#about .btn-about-conf');
+    if (btn && btn.getAttribute('aria-expanded') !== 'true') acToggle(btn);
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.hash === '#about') acAutoExpand();
+    document.querySelectorAll('a[href$="#about"]').forEach(function(a) {
+      a.addEventListener('click', function() { setTimeout(acAutoExpand, 0); });
+    });
+  });
+  window.addEventListener('hashchange', function() {
+    if (window.location.hash === '#about') acAutoExpand();
+  });
 </script>
 {% endif %}
 <!-- ── END ABOUT THE CONFERENCE ────────────────────────────────────── -->
 
-<section id="about" class="about-section section">
+<section id="countdown" class="about-section section">
 
   <div class="container">
     <div class="event-countdown text-center mb-3">
