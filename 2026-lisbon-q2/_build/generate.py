@@ -204,6 +204,20 @@ for _t in talks + keynotes:
         _about_seen.add(_about_title.lower())
         _about_talks.append(_t)
 
+_about_companies = []
+if len(_about_talks) >= 5:
+    _about_skip_orgs = {'stealth startup', 'sre author', '',
+                        'independent', 'freelance', 'self-employed', 'consultant'}
+    _about_seen_orgs = set()
+    for _t in _about_talks:
+        for _org in (_t.get("organization") or "").split('&'):
+            _org = _org.strip()
+            if _org and _org.lower() not in _about_skip_orgs and _org.lower() not in _about_seen_orgs:
+                _about_seen_orgs.add(_org.lower())
+                _about_companies.append(_org)
+    _about_companies.sort(key=lambda s: s.lower())
+context["about_companies"] = _about_companies
+
 _about_topics = []
 _about_cats = _about_config.get("categories") or []
 if len(_about_talks) >= 5 and _about_cats:

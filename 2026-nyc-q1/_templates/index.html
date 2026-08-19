@@ -19,6 +19,10 @@
     <div id="about-conf-panel" class="ac-panel mx-auto text-start">
       <div class="ac-panel-inner">
         <p class="ac-blurb">{{ about_blurb }}</p>
+        {% if about_companies %}
+        <h5 class="ac-topics-heading">Companies presenting:</h5>
+        <p class="ac-companies">{{ about_companies|join(', ')|e }}</p>
+        {% endif %}
         {% if about_topics %}
         <h5 class="ac-topics-heading">Topics so far:</h5>
         {% for group in about_topics %}
@@ -72,6 +76,7 @@
   .ac-blurb { color: #555; }
   .ac-more-soon { color: #888; font-style: italic; }
   .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
+  .ac-companies { color: #555; font-size: .9rem; }
   .ac-topic-group { margin-top: 10px; }
   .ac-topic-name { font-weight: 700; color: var(--brand); }
   .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
