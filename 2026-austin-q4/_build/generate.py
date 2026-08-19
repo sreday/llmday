@@ -212,6 +212,10 @@ if len(_about_talks) >= 5 and _about_cats:
     for _t in _about_talks:
         _hay_title = _t["title"].strip().lower()
         _hay_abs = (_t.get("abstract") or "").lower()
+        _about_entry = {
+            "title": _t["title"].strip(),
+            "url": ((_t.get("short_url") or "").replace(".html", "") + ".html") if _t.get("short_url") else "",
+        }
         _best_i, _best_score = None, 0
         for _ci, _cat in enumerate(_about_cats):
             _score = 0
@@ -226,9 +230,9 @@ if len(_about_talks) >= 5 and _about_cats:
             if _score > _best_score:
                 _best_i, _best_score = _ci, _score
         if _best_i is None:
-            _about_misc.append(_t["title"].strip())
+            _about_misc.append(_about_entry)
         else:
-            _about_buckets[_best_i].append(_t["title"].strip())
+            _about_buckets[_best_i].append(_about_entry)
     _about_topics = [{"category": _c["name"], "talks": _about_buckets[_ci]}
                      for _ci, _c in enumerate(_about_cats) if _about_buckets[_ci]]
     if _about_misc:

@@ -25,7 +25,7 @@
         <div class="ac-topic-group">
           <div class="ac-topic-name">{{ group.category }}</div>
           <ul class="ac-topic-talks">
-            {% for t in group.talks %}<li>{{ t|e }}</li>
+            {% for t in group.talks %}<li>{% if t.url %}<a href="{{ t.url }}">{{ t.title|e }}</a>{% else %}{{ t.title|e }}{% endif %}</li>
             {% endfor %}
           </ul>
         </div>
@@ -75,6 +75,8 @@
   .ac-topic-group { margin-top: 10px; }
   .ac-topic-name { font-weight: 700; color: var(--brand); }
   .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
+  .ac-topic-talks a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .ac-topic-talks a:hover { color: var(--brand); }
   .ac-close-row {
     display: flex;
     align-items: center;
