@@ -205,22 +205,27 @@ for _t in talks + keynotes:
         _about_talks.append(_t)
 
 _about_companies = []
-if len(_about_talks) >= 5:
-    _about_skip_orgs = {'stealth startup', 'sre author', '',
-                        'independent', 'freelance', 'self-employed', 'consultant'}
+if len(_about_talks) >= 3:
+    _about_skip_orgs = {'stealth startup', 'stealth', 'sre author', '',
+                        'independent', 'independent researcher',
+                        'freelance', 'self-employed', 'consultant', 'university'}
     _about_seen_orgs = set()
     for _t in _about_talks:
         for _org in (_t.get("organization") or "").split('&'):
             _org = _org.strip()
-            if _org and _org.lower() not in _about_skip_orgs and _org.lower() not in _about_seen_orgs:
-                _about_seen_orgs.add(_org.lower())
+            _org_l = _org.lower()
+            if (_org and _org_l not in _about_skip_orgs
+                    and 'university' not in _org_l
+                    and _org_l not in _about_seen_orgs):
+                _about_seen_orgs.add(_org_l)
                 _about_companies.append(_org)
     _about_companies.sort(key=lambda s: s.lower())
 context["about_companies"] = _about_companies
+context["about_more_soon"] = len(_about_talks) < 7
 
 _about_topics = []
 _about_cats = _about_config.get("categories") or []
-if len(_about_talks) >= 5 and _about_cats:
+if len(_about_talks) >= 3 and _about_cats:
     _about_buckets = [[] for _c in _about_cats]
     _about_misc = []
     for _t in _about_talks:
@@ -228,7 +233,7 @@ if len(_about_talks) >= 5 and _about_cats:
         _hay_abs = (_t.get("abstract") or "").lower()
         _about_entry = {
             "title": _t["title"].strip(),
-            "url": ((_t.get("short_url") or "").replace(".html", "") + ".html") if _t.get("short_url") else "",
+            "url": ((_t.get("short_url") or "").replace(".html", "") + ".html#speakers-section") if _t.get("short_url") else "",
         }
         _best_i, _best_score = None, 0
         for _ci, _cat in enumerate(_about_cats):
