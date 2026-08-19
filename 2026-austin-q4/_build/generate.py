@@ -179,6 +179,63 @@ keynotes = [
 context["talks"] = talks
 context["keynotes"] = keynotes
 
+# ── ABOUT THE CONFERENCE (expandable blurb + "Topics so far") ────────────────
+# Brand blurb + topic categories live in the repo-root about.yaml (not synced);
+# talks are keyword-matched into categories at build time.
+import os as _os_about
+_about_config = {}
+if _os_about.path.exists('../about.yaml'):
+    with open('../about.yaml', encoding='utf-8') as _f:
+        _about_config = yaml.load(_f, Loader=yaml.FullLoader) or {}
+context["about_blurb"] = _about_config.get("blurb", "")
+
+def _about_kw_rx(kw):
+    # keywords of <=3 chars match whole words only (plus optional plural "s");
+    # longer keywords are prefix matches anchored at a word boundary
+    kw = kw.strip().lower()
+    if len(kw) <= 3:
+        return re.compile(r'\b' + re.escape(kw) + r's?\b')
+    return re.compile(r'\b' + re.escape(kw))
+
+_about_talks, _about_seen = [], set()
+for _t in talks + keynotes:
+    _about_title = (_t.get("title") or "").strip()
+    if _about_title and _about_title.lower() not in _about_seen:
+        _about_seen.add(_about_title.lower())
+        _about_talks.append(_t)
+
+_about_topics = []
+_about_cats = _about_config.get("categories") or []
+if len(_about_talks) >= 5 and _about_cats:
+    _about_buckets = [[] for _c in _about_cats]
+    _about_misc = []
+    for _t in _about_talks:
+        _hay_title = _t["title"].strip().lower()
+        _hay_abs = (_t.get("abstract") or "").lower()
+        _best_i, _best_score = None, 0
+        for _ci, _cat in enumerate(_about_cats):
+            _score = 0
+            for _kw in _cat.get("keywords") or []:
+                # title hit = 3 pts, abstract hit = 1 pt; phrases count double
+                _w = 2 if " " in str(_kw).strip() else 1
+                _rx = _about_kw_rx(str(_kw))
+                if _rx.search(_hay_title):
+                    _score += 3 * _w
+                elif _rx.search(_hay_abs):
+                    _score += _w
+            if _score > _best_score:
+                _best_i, _best_score = _ci, _score
+        if _best_i is None:
+            _about_misc.append(_t["title"].strip())
+        else:
+            _about_buckets[_best_i].append(_t["title"].strip())
+    _about_topics = [{"category": _c["name"], "talks": _about_buckets[_ci]}
+                     for _ci, _c in enumerate(_about_cats) if _about_buckets[_ci]]
+    if _about_misc:
+        _about_topics.append({"category": "...and more", "talks": _about_misc})
+context["about_topics"] = _about_topics
+# ── END ABOUT THE CONFERENCE ─────────────────────────────────────────────────
+
 # we order the tracks in how they appear in the CSV file
 tracks_ordered = []
 # all talks sorted in tracks

@@ -1,0 +1,37 @@
+# "About the conference" panel on every event index page.
+# blurb: paragraph shown when the panel is expanded.
+# categories: the buckets under "Topics so far:" (order = display order AND
+#   tiebreak priority). Keyword matching (see the ABOUT block in generate.py):
+#   - case-insensitive; keywords of <=3 chars match whole words only (plus
+#     optional plural "s"); longer keywords are word-boundary prefix matches
+#     ("observab" matches "observability")
+#   - a title hit scores 3, an abstract hit 1; multi-word phrases count double
+#   - each talk lands in exactly one category (highest score; earlier category
+#     wins ties); unmatched talks go under "...and more"
+blurb: >-
+  LLMday is a worldwide series of community events for engineers building
+  with large language models, AI agents and machine learning. Across cities
+  around the world, we bring together practitioners working on AI-powered
+  products and systems to share real-world experience, learn from each other
+  and explore how software engineering is changing in the age of AI.
+categories:
+  - name: Large Language Models
+    keywords: [llm, large language model, gpt, claude, gemini, llama, foundation model, transformer]
+  - name: AI Agents
+    keywords: [agent, agentic, multi-agent, autonomous, orchestrat, mcp, tool use]
+  - name: Machine Learning
+    keywords: [machine learning, deep learning, neural, fine-tun, finetun, training, pytorch, model weights]
+  - name: RAG & Knowledge Systems
+    keywords: [rag, retrieval, vector, embedding, knowledge graph, semantic search, grounding]
+  - name: AI Engineering
+    keywords: [ai engineering, prompt, context engineering, inference, token, context window, structured output]
+  - name: LLMOps & AI Infrastructure
+    keywords: [llmops, mlops, gpu, serving, deployment, observab, monitoring, kubernetes, scaling]
+  - name: Evaluation & Testing
+    keywords: [eval, benchmark, testing, hallucin, accuracy, quality, regression]
+  - name: AI Security & Safety
+    keywords: [security, safety, jailbreak, prompt injection, guardrail, alignment, privacy, red team]
+  - name: Data & Model Pipelines
+    keywords: [data pipeline, etl, dataset, data quality, annotation, synthetic data, data engineering]
+  - name: AI Applications & Products
+    keywords: [product, application, chatbot, copilot, assistant, customer, case study, startup]
