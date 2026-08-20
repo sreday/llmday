@@ -6,10 +6,10 @@ base_folder: "static"
 event_state: before
 start_time: "2026-10-14T10:00:00-05:00"
 date_string: "October 14, 2026"
-location_string: "Austin, Texas, USA"
+location_string: "The Sunset Room, Austin, Texas, USA"
 
 cfp_url: https://cfp.ninja/e/llmday-2026-austin-q4
-twitter_url: https://twitter.com/sreday_com
+twitter_url: https://twitter.com/llmday_com
 linkedin_url: https://www.linkedin.com/company/llmday/
 youtube_url: https://www.youtube.com/@llmday
 luma_evt: evt-BkgBHKV6Cghvmk3
