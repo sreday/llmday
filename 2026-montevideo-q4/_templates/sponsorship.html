@@ -528,6 +528,7 @@
   transition: transform .25s ease;
 }
 .sp-faq-item[open] > .sp-faq-q::after { transform: rotate(45deg); }
+.sp-faq-item[data-expanded="0"] > .sp-faq-q::after { transform: none; }
 .sp-faq-a {
   color: #333;
   padding: 0 24px 18px 0;
@@ -535,6 +536,24 @@
   line-height: 1.6;
 }
 .sp-faq-a a { color: var(--sp-accent); }
+.sp-faq-toolbar { padding: 14px 0 2px; text-align: left; }
+.sp-faq-expand-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--sp-accent);
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.sp-faq-expand-all:hover { opacity: .72; }
+.sp-faq-all-chevron { transition: transform .3s ease; }
+.sp-faq-expand-all[aria-expanded="true"] .sp-faq-all-chevron { transform: rotate(180deg); }
 </style>
 {% endblock %}
 
@@ -1148,10 +1167,16 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
   <div class="container">
     <h2 class="sp-section-title text-center">FAQ</h2>
     <div class="sp-faq-inner">
+      <div class="sp-faq-toolbar">
+        <button class="sp-faq-expand-all" id="sp-faq-expand-all" onclick="spFaqToggleAll()" aria-expanded="false">
+          <svg class="sp-faq-all-chevron" width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,1 7,7 13,1"/></svg>
+          <span id="sp-faq-all-label">Show all</span>
+        </button>
+      </div>
       {% for item in faq_items %}
       <details class="sp-faq-item">
         <summary class="sp-faq-q">{{ item.q }}</summary>
-        <div class="sp-faq-a">{{ item.a }}</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">{{ item.a }}</div></div>
       </details>
       {% endfor %}
     </div>
@@ -1170,6 +1195,88 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
     {% endfor %}
   ]
 }
+</script>
+<script>
+// FAQ accordion: smooth unravel animation + show/hide all
+(function() {
+  var items = Array.prototype.slice.call(document.querySelectorAll('#faq .sp-faq-item'));
+  if (!items.length) return;
+  var allBtn = document.getElementById('sp-faq-expand-all');
+  var allLabel = document.getElementById('sp-faq-all-label');
+
+  items.forEach(function(d) {
+    var wrap = d.querySelector('.sp-faq-a-wrap');
+    d.dataset.expanded = d.open ? '1' : '0';
+    wrap.style.overflow = 'hidden';
+    wrap.style.transition = 'max-height .45s cubic-bezier(.4,0,.2,1)';
+    if (!d.open) wrap.style.maxHeight = '0px';
+    wrap.addEventListener('transitionend', function(ev) {
+      if (ev.propertyName !== 'max-height') return;
+      if (d.dataset.expanded === '1') { wrap.style.maxHeight = 'none'; }
+      else { d.open = false; }
+    });
+    d.querySelector('.sp-faq-q').addEventListener('click', function(e) {
+      e.preventDefault();
+      setExpanded(d, d.dataset.expanded !== '1', 0);
+      syncAllBtn();
+    });
+  });
+
+  function setExpanded(d, on, delay) {
+    if ((d.dataset.expanded === '1') === on) return;
+    d.dataset.expanded = on ? '1' : '0';
+    var wrap = d.querySelector('.sp-faq-a-wrap');
+    setTimeout(function() {
+      if (on) {
+        d.open = true;
+        wrap.style.maxHeight = '0px';
+        wrap.getBoundingClientRect();
+        wrap.style.maxHeight = wrap.scrollHeight + 'px';
+      } else {
+        if (wrap.style.maxHeight === 'none' || wrap.style.maxHeight === '') {
+          wrap.style.maxHeight = wrap.scrollHeight + 'px';
+          wrap.getBoundingClientRect();
+        }
+        wrap.style.maxHeight = '0px';
+      }
+    }, delay || 0);
+  }
+
+  function syncAllBtn(force) {
+    var all = (typeof force === 'boolean') ? force : items.every(function(d) { return d.dataset.expanded === '1'; });
+    allBtn.setAttribute('aria-expanded', String(all));
+    allLabel.textContent = all ? 'Hide all' : 'Show all';
+  }
+
+  function expandAll() {
+    var k = 0;
+    items.forEach(function(d) {
+      if (d.dataset.expanded === '1') return;
+      setExpanded(d, true, k * 45); k++;
+    });
+    syncAllBtn(true);
+  }
+  function collapseAll() {
+    var k = 0;
+    items.forEach(function(d) {
+      if (d.dataset.expanded !== '1') return;
+      setExpanded(d, false, k * 30); k++;
+    });
+    syncAllBtn(false);
+  }
+
+  window.spFaqToggleAll = function() {
+    if (items.every(function(d) { return d.dataset.expanded === '1'; })) collapseAll(); else expandAll();
+  };
+
+  // Reaching #faq via navbar link or hash unravels every question
+  function faqAutoExpand(hash) { if (hash === '#faq') expandAll(); }
+  document.addEventListener('DOMContentLoaded', function() { faqAutoExpand(window.location.hash); });
+  document.querySelectorAll('a[href="#faq"]').forEach(function(a) {
+    a.addEventListener('click', function() { setTimeout(expandAll, 0); });
+  });
+  window.addEventListener('hashchange', function() { faqAutoExpand(window.location.hash); });
+})();
 </script>
 
 {# ── Sister brands ───────────────────────────────────── #}
