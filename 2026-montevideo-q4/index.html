@@ -260,7 +260,7 @@
         <p class="ac-blurb"><strong>LLMday</strong> is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
         
         <h5 class="ac-topics-heading">Companies presenting:</h5>
-        <p class="ac-companies">Apple, Riverstone Insights - Iowa, Total Performance Consulting</p>
+        <p class="ac-companies">Apple, Riverstone Insights - Iowa, Total Performance Consulting, Zyte</p>
         
         
         <h5 class="ac-topics-heading">Topics so far:</h5>
@@ -269,6 +269,14 @@
           <div class="ac-topic-name">Large Language Models</div>
           <ul class="ac-topic-talks">
             <li><a href="Marcelo_B_San_Martin_Total_Performance_Consulting_The_Great_AI_Role_Rewrite.html#speakers-section">The Great AI Role Rewrite</a></li>
+            
+          </ul>
+        </div>
+        
+        <div class="ac-topic-group">
+          <div class="ac-topic-name">AI Agents</div>
+          <ul class="ac-topic-talks">
+            <li><a href="Joaquin_Bonifacino_Zyte_Long_Running_Agents_The_Harness_Is_the_Product.html#speakers-section">Long Running Agents: The Harness Is the Product</a></li>
             
           </ul>
         </div>
@@ -677,6 +685,32 @@
 
       <div class="col mb-4">
         <div class="card rounded">
+          <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img src="../speakers/Joaquin Bonifacino.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Joaquin Bonifacino</h5>
+            <div class="card-text mb-3">
+              <div class="meta">Zyte</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Joaquin_Bonifacino_Zyte_Long_Running_Agents_The_Harness_Is_the_Product#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/joaquin-bonifacino/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
           <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img src="../speakers/Leon Achata.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Leon Achata</h5>
@@ -992,6 +1026,52 @@ The central idea is simple: a RAG system does not need to find the most similar 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Leon Achata is a Generative AI Engineer focused on building production-grade LLM applications, RAG systems, and intelligent agents. He currently works on enterprise GenAI solutions at Apple via TCS, designing LLM-powered workflows, retrieval systems, and agent orchestration for large-scale international environments. Previously, he worked on multi-agent systems, RAG pipelines, and AI infrastructure across AWS and other cloud platforms. His background combines software engineering, AI/ML, and biomedical engineering, giving him a practical perspective on applying LLMs to complex real-world problems.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 3 -->
+<div class="modal modal-speaker modal-speaker-3" id="modal-speaker-3" tabindex="-1" role="dialog" aria-labelledby="speaker-3-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Joaquin Bonifacino.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Joaquin Bonifacino</h2>
+                          <div class="meta mb-2">Zyte</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/joaquin-bonifacino/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Long Running Agents: The Harness Is the Product</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Most agent demos run for thirty seconds. Production agents run for hours, and almost everything that breaks at that timescale has nothing to do with the model. Drawn from building an agentic data-QA engine running at 20B+ tokens per week in production.
+Why long-running agents fail: context degradation, silent tool failure, unrecoverable state, cost drift, and why demos never catch them.
+How harness design answers each one: compaction and memory, per-role model routing, sandboxed execution, checkpointing and recovery.
+Where to start: what to build first moving an agent from demo to production, and what to instrument on day one.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>AI/ML Engineer at Zyte, technical lead for LLMNL, an AI-powered data-QA engine running agentic workloads at 20B+ tokens per week. Previously led Promtior's Augmented Behaviors Lab (applied R&amp;D in agent memory, voice and multimodal). Teaches Applied AI at ORT University, Montevideo.</p></p>
               </div>
 
           </div><!--//modal-body-->
