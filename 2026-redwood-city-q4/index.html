@@ -260,7 +260,7 @@
         <p class="ac-blurb"><strong>LLMday</strong> is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
         
         <h5 class="ac-topics-heading">Companies presenting:</h5>
-        <p class="ac-companies">Amazon, AWS, Meta, Miriel AI, Noodle Seed, Prest0, Root Inc., Salespeak, Symosis Security, UC Berkeley</p>
+        <p class="ac-companies">Amazon, AWS, eBay, Meta, Miriel AI, Noodle Seed, Prest0, Root Inc., Salespeak, Symosis Security, UC Berkeley</p>
         
         
         <h5 class="ac-topics-heading">Topics so far:</h5>
@@ -282,6 +282,7 @@
             <li><a href="Andrew_Barkett_Miriel_AI_Your_Agent_Needs_a_Kernel__Not_a_Better_Prompt.html#speakers-section">Your Agent Needs a Kernel, Not a Better Prompt</a></li>
             <li><a href="Pranav_Saji_Symosis_Security_Your_Agents_Tools_Are_the_Attack_Surface.html#speakers-section">Your Agent&#39;s Tools Are the Attack Surface</a></li>
             <li><a href="Sujoy_Datta_Choudhury_Amazon_Why_Your_Agent_Fails_The_SelfCorrection_Paradox.html#speakers-section">Why Your Agent Fails: The Self-Correction Paradox</a></li>
+            <li><a href="Saurabh_Yergattikar_eBay_ShieldMCP_MCPs_Missing_Firewall.html#speakers-section">ShieldMCP: MCP&#39;s Missing Firewall</a></li>
             
           </ul>
         </div>
@@ -984,6 +985,32 @@
 
       <div class="col mb-4">
         <div class="card rounded">
+          <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12"><img src="../speakers/Saurabh Yergattikar.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Saurabh Yergattikar</h5>
+            <div class="card-text mb-3">
+              <div class="meta">eBay</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Saurabh_Yergattikar_eBay_ShieldMCP_MCPs_Missing_Firewall#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/saurabh-yergattikar-736bab62/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
           <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img src="../speakers/Sujoy Datta Choudhury.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Sujoy Datta Choudhury</h5>
@@ -1650,6 +1677,53 @@ Attendees will leave with a concrete threat model for the agent tool layer, a ch
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Sujoy Datta Choudhury is a Software Architect with 20+ years of experience in distributed systems, AI platforms, and cloud infrastructure. As Technical Architect at Amazon Ads, he oversees platforms processing billions of daily requests and $1.1B+ in ad volume. Previously VP at BlackRock, he built mission-critical Fintech platforms and founded their global AI hackathon. An AWS Labs maintainer and published researcher, he holds an M.S. in Data Science.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 12 -->
+<div class="modal modal-speaker modal-speaker-12" id="modal-speaker-12" tabindex="-1" role="dialog" aria-labelledby="speaker-12-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Saurabh Yergattikar.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Saurabh Yergattikar</h2>
+                          <div class="meta mb-2">eBay</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/saurabh-yergattikar-736bab62/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">ShieldMCP: MCP's Missing Firewall</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Every MCP server you connect is a new attack surface, and most production agent stacks are shipping without a threat model. I'm a SIG member and contributor to SAFE MCP, Linux Foundation Project &amp; the open security framework for the Model Context Protocol governed under the Linux Foundation and OpenSSF, which now catalogues 78+ adversarial attack vectors against MCP fully mapped to MITRE ATT&amp;CK - tool poisoning, rug pulls, cross-server shadowing, and prompt injection chains that survive every guardrail teams currently trust. This talk walks the live attack classes we've documented, shows what each one actually looks like inside a running agent, and then covers the defense: ShieldMCP, a transparent security proxy implementing 3-stage validation that drops in front of existing agents and servers with zero code changes on either side.
+ShieldMCP is open source, and its architecture is the subject of my published sole-authored paper at ACL 2026 A* Conference (Industry Track); the SAFE MCP framework was the subject of OpenSSF's official Tech Talk on Securing Agentic AI in March. I'll ground all of it in what it takes to run this in regulated financial infrastructure - I am Technology Leader at eBay and architect softwares serving large number of sellers across the US, UK, and Germany Attendees leave with the threat catalogue, a working proxy they can deploy, and a concrete checklist for auditing their own MCP surface before someone else does it for them.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Saurabh Yergattikar is a technology leader at eBay, where he builds software infrastructure serving large number of sellers globally. He is a SIG member and contributor to SAFE MCP under the Linux Foundation and OpenSSF, and the creator of ShieldMCP (Open Source System).
+An IEEE Senior Member with three peer-reviewed papers published in 2026 (ACL Industry Track, IEEE AIIoT ×2), He has spoken at SXSW, the Linux Foundation Members Summit, MCP Conference NYC, and NEARCON, Delivered 90 minutes workshop 3 times at Austin , San Francisco Bay Area.
+and serves on the program committees for ACM CCS 2026 and ICML 2026 workshops. His work on agent infrastructure has been covered by Inverse and OpenSSF.
+Photo</p></p>
               </div>
 
           </div><!--//modal-body-->
