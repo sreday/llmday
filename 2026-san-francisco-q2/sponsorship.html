@@ -576,6 +576,7 @@
   transition: transform .25s ease;
 }
 .sp-faq-item[open] > .sp-faq-q::after { transform: rotate(45deg); }
+.sp-faq-item[data-expanded="0"] > .sp-faq-q::after { transform: none; }
 .sp-faq-a {
   color: #333;
   padding: 0 24px 18px 0;
@@ -583,6 +584,24 @@
   line-height: 1.6;
 }
 .sp-faq-a a { color: var(--sp-accent); }
+.sp-faq-toolbar { padding: 14px 0 2px; text-align: left; }
+.sp-faq-expand-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--sp-accent);
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.sp-faq-expand-all:hover { opacity: .72; }
+.sp-faq-all-chevron { transition: transform .3s ease; }
+.sp-faq-expand-all[aria-expanded="true"] .sp-faq-all-chevron { transform: rotate(180deg); }
 </style>
 
 </head>
@@ -1629,80 +1648,86 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
   <div class="container">
     <h2 class="sp-section-title text-center">FAQ</h2>
     <div class="sp-faq-inner">
+      <div class="sp-faq-toolbar">
+        <button class="sp-faq-expand-all" id="sp-faq-expand-all" onclick="spFaqToggleAll()" aria-expanded="false">
+          <svg class="sp-faq-all-chevron" width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,1 7,7 13,1"/></svg>
+          <span id="sp-faq-all-label">Show all</span>
+        </button>
+      </div>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Who attends LLMday events?</summary>
-        <div class="sp-faq-a">Mostly hands-on people working on real problems: across our events, roughly 59% are software, platform and DevOps engineers, 22% founders and engineering leaders, 14% business, consulting and product, and 5% ML/AI/data. The audience skews mid-to-senior. It works best if you bring team members who understand their world and can have real conversations. Anonymized job-title and company lists from past editions are available on request.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Mostly hands-on people working on real problems: across our events, roughly 59% are software, platform and DevOps engineers, 22% founders and engineering leaders, 14% business, consulting and product, and 5% ML/AI/data. The audience skews mid-to-senior. It works best if you bring team members who understand their world and can have real conversations. Anonymized job-title and company lists from past editions are available on request.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">How many people will be there?</summary>
-        <div class="sp-faq-a">This edition is set up for around 100 people. Registrations usually run a bit above the seat count, so expect a full room across the whole day - these are 9-to-5 community conferences, not evening meetups.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">This edition is set up for around 100 people. Registrations usually run a bit above the seat count, so expect a full room across the whole day - these are 9-to-5 community conferences, not evening meetups.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Can we combine items into a package?</summary>
-        <div class="sp-faq-a">Yes. We price items separately so you can mix and match - booth plus a session plus leads is a common combination. If you have a specific budget in mind, tell us what it is and we'll put together something that works.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Yes. We price items separately so you can mix and match - booth plus a session plus leads is a common combination. If you have a specific budget in mind, tell us what it is and we'll put together something that works.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Do you offer discounts?</summary>
-        <div class="sp-faq-a">Yes. Sponsoring 3 or more events across LLMday, SREday and PLATFORMday in a year gets 20% off the whole package. Early-stage startups (under $5M funding) also qualify for 20% off. If your budget is tight, we can talk.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Yes. Sponsoring 3 or more events across LLMday, SREday and PLATFORMday in a year gets 20% off the whole package. Early-stage startups (under $5M funding) also qualify for 20% off. If your budget is tight, we can talk.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">What does the booth look like?</summary>
-        <div class="sp-faq-a">A table (around 150 x 100 cm) with electricity, Wi-Fi and space for your roll-up banner. A monitor is available on request. Whatever you bring can go on top of the table. The exact setup differs per venue, so ask us about the specifics of your event.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">A table (around 150 x 100 cm) with electricity, Wi-Fi and space for your roll-up banner. A monitor is available on request. Whatever you bring can go on top of the table. The exact setup differs per venue, so ask us about the specifics of your event.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">When can we set up, and can we bring extra equipment?</summary>
-        <div class="sp-faq-a">Arrive on the day, up to one hour before doors open - setup usually takes 15 to 30 minutes. If you want to bring a bigger screen or anything beyond the usual table setup, check with us first so we make sure it fits the space.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Arrive on the day, up to one hour before doors open - setup usually takes 15 to 30 minutes. If you want to bring a bigger screen or anything beyond the usual table setup, check with us first so we make sure it fits the space.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">How do the speaking slots work?</summary>
-        <div class="sp-faq-a">Keynotes run in the morning with the full audience in the room - no parallel talks. Regular sessions run in the afternoon and may run alongside parallel tracks. Workshops are 60-minute hands-on slots. All are 30 minutes unless noted, and all are sold as separate items you can add to your package.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Keynotes run in the morning with the full audience in the room - no parallel talks. Regular sessions run in the afternoon and may run alongside parallel tracks. Workshops are 60-minute hands-on slots. All are 30 minutes unless noted, and all are sold as separate items you can add to your package.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Are the talks recorded?</summary>
-        <div class="sp-faq-a">Yes. Talks are recorded and published on our YouTube channel a few weeks after the event, sponsored sessions included.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Yes. Talks are recorded and published on our YouTube channel a few weeks after the event, sponsored sessions included.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Do we get the attendee list, and when?</summary>
-        <div class="sp-faq-a">The Conference Leads item includes the full attendee contact list. You receive the pre-event registration list in the week before the event, and the final list shortly after. Leads are sold alongside other items, not on their own.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">The Conference Leads item includes the full attendee contact list. You receive the pre-event registration list in the week before the event, and the final list shortly after. Leads are sold alongside other items, not on their own.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">How many passes do we get for our team?</summary>
-        <div class="sp-faq-a">As many as you need - we'll share a sponsor code for your team. That said, for an event of around 100 people we'd recommend sending 2-3 people so the room doesn't tip toward vendors.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">As many as you need - we'll share a sponsor code for your team. That said, for an event of around 100 people we'd recommend sending 2-3 people so the room doesn't tip toward vendors.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Can we invite our own network or community?</summary>
-        <div class="sp-faq-a">Yes. We can offer a few free passes for key people, plus discounted tickets for your wider community.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Yes. We can offer a few free passes for key people, plus discounted tickets for your wider community.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">When do we need to confirm?</summary>
-        <div class="sp-faq-a">We recommend locking it in at least one month before the event. Last-minute is possible, but it can be a bit rushed for your team.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">We recommend locking it in at least one month before the event. Last-minute is possible, but it can be a bit rushed for your team.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">What do you need from us to get started?</summary>
-        <div class="sp-faq-a">Three things: your full company name, the company address, and the signee's name, email and role. We'll send over a simple agreement and the invoice, and you're set.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Three things: your full company name, the company address, and the signee's name, email and role. We'll send over a simple agreement and the invoice, and you're set.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Can we host an event at our offices instead?</summary>
-        <div class="sp-faq-a">Yes, and it's a good deal: hosts get the full set of sponsorship benefits - keynote, booth, attendee list and the rest - at no charge, in return for providing the venue. Get in touch if you have a space for 80+ people. More info at <a href='/host'>llmday.com/host</a>.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Yes, and it's a good deal: hosts get the full set of sponsorship benefits - keynote, booth, attendee list and the rest - at no charge, in return for providing the venue. Get in touch if you have a space for 80+ people. More info at <a href='/host'>llmday.com/host</a>.</div></div>
       </details>
       
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Anything else we should know about pricing?</summary>
-        <div class="sp-faq-a">Sponsorships are invoiced in GBP - British Pound Sterling. If your company is VAT-registered in the UK, 20% VAT applies on top.</div>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">Sponsorships are invoiced in GBP - British Pound Sterling. If your company is VAT-registered in the UK, 20% VAT applies on top.</div></div>
       </details>
       
     </div>
@@ -1791,6 +1816,88 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
     
   ]
 }
+</script>
+<script>
+// FAQ accordion: smooth unravel animation + show/hide all
+(function() {
+  var items = Array.prototype.slice.call(document.querySelectorAll('#faq .sp-faq-item'));
+  if (!items.length) return;
+  var allBtn = document.getElementById('sp-faq-expand-all');
+  var allLabel = document.getElementById('sp-faq-all-label');
+
+  items.forEach(function(d) {
+    var wrap = d.querySelector('.sp-faq-a-wrap');
+    d.dataset.expanded = d.open ? '1' : '0';
+    wrap.style.overflow = 'hidden';
+    wrap.style.transition = 'max-height .45s cubic-bezier(.4,0,.2,1)';
+    if (!d.open) wrap.style.maxHeight = '0px';
+    wrap.addEventListener('transitionend', function(ev) {
+      if (ev.propertyName !== 'max-height') return;
+      if (d.dataset.expanded === '1') { wrap.style.maxHeight = 'none'; }
+      else { d.open = false; }
+    });
+    d.querySelector('.sp-faq-q').addEventListener('click', function(e) {
+      e.preventDefault();
+      setExpanded(d, d.dataset.expanded !== '1', 0);
+      syncAllBtn();
+    });
+  });
+
+  function setExpanded(d, on, delay) {
+    if ((d.dataset.expanded === '1') === on) return;
+    d.dataset.expanded = on ? '1' : '0';
+    var wrap = d.querySelector('.sp-faq-a-wrap');
+    setTimeout(function() {
+      if (on) {
+        d.open = true;
+        wrap.style.maxHeight = '0px';
+        wrap.getBoundingClientRect();
+        wrap.style.maxHeight = wrap.scrollHeight + 'px';
+      } else {
+        if (wrap.style.maxHeight === 'none' || wrap.style.maxHeight === '') {
+          wrap.style.maxHeight = wrap.scrollHeight + 'px';
+          wrap.getBoundingClientRect();
+        }
+        wrap.style.maxHeight = '0px';
+      }
+    }, delay || 0);
+  }
+
+  function syncAllBtn(force) {
+    var all = (typeof force === 'boolean') ? force : items.every(function(d) { return d.dataset.expanded === '1'; });
+    allBtn.setAttribute('aria-expanded', String(all));
+    allLabel.textContent = all ? 'Hide all' : 'Show all';
+  }
+
+  function expandAll() {
+    var k = 0;
+    items.forEach(function(d) {
+      if (d.dataset.expanded === '1') return;
+      setExpanded(d, true, k * 45); k++;
+    });
+    syncAllBtn(true);
+  }
+  function collapseAll() {
+    var k = 0;
+    items.forEach(function(d) {
+      if (d.dataset.expanded !== '1') return;
+      setExpanded(d, false, k * 30); k++;
+    });
+    syncAllBtn(false);
+  }
+
+  window.spFaqToggleAll = function() {
+    if (items.every(function(d) { return d.dataset.expanded === '1'; })) collapseAll(); else expandAll();
+  };
+
+  // Reaching #faq via navbar link or hash unravels every question
+  function faqAutoExpand(hash) { if (hash === '#faq') expandAll(); }
+  document.addEventListener('DOMContentLoaded', function() { faqAutoExpand(window.location.hash); });
+  document.querySelectorAll('a[href="#faq"]').forEach(function(a) {
+    a.addEventListener('click', function() { setTimeout(expandAll, 0); });
+  });
+  window.addEventListener('hashchange', function() { faqAutoExpand(window.location.hash); });
+})();
 </script>
 
 
