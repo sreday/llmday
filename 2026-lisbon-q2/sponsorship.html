@@ -181,11 +181,6 @@
 /* ── FAQ section bg — matches CTA section above it ───── */
 #faq { background: #000000; }
 
-/* ── FAQ toggle button — soft purple ─────────────────── */
-#sp-faq-toggle { background: #6C5CE7; color: #fff; }
-#sp-faq-toggle:hover  { background: #5a4bd1; box-shadow: 0 4px 18px rgba(108,92,231,.4); }
-#sp-faq-toggle:active { transform: scale(.97); }
-
 /* ── Stats expandable panel (intentionally white) ────── */
 .sp-stats-panel {
   overflow: hidden;
@@ -548,27 +543,46 @@
 .sp-sisters a:hover { opacity: 1; }
 .sp-sisters img { height: 150px; width: auto; border-radius: 8px; display: block; }
 
-/* ── FAQ expandable panel ────────────────────────────── */
+/* ── FAQ accordion ───────────────────────────────────── */
 .sp-faq-inner {
   background: #ffffff;
   border-radius: 16px;
   margin-top: 20px;
-  padding: 36px 40px;
+  padding: 12px 40px;
   color: #111;
 }
+.sp-faq-item { border-bottom: 1px solid #ececec; }
+.sp-faq-item:last-child { border-bottom: none; }
 .sp-faq-q {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 0;
   font-weight: 700;
-  color: #1a6e4a;
-  margin-bottom: 6px;
   font-size: .95rem;
+  color: #1a6e4a;
 }
+.sp-faq-q::-webkit-details-marker { display: none; }
+.sp-faq-q::after {
+  content: '+';
+  flex-shrink: 0;
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--sp-accent);
+  transition: transform .25s ease;
+}
+.sp-faq-item[open] > .sp-faq-q::after { transform: rotate(45deg); }
 .sp-faq-a {
   color: #333;
-  margin-bottom: 24px;
+  padding: 0 24px 18px 0;
   font-size: .92rem;
   line-height: 1.6;
 }
-.sp-faq-a:last-child { margin-bottom: 0; }
+.sp-faq-a a { color: var(--sp-accent); }
 </style>
 
 </head>
@@ -1549,9 +1563,9 @@ function spToggleStats() {
   btn.setAttribute('aria-expanded', String(open));
 }
 
-// Auto-expand collapsible panels when reaching #stats / #faq via link, navbar or hash change
+// Auto-expand the stats panel when reaching #stats via link, navbar or hash change
 function spAutoExpand(hash) {
-  var map = { '#stats': ['sp-stats-toggle', 'spToggleStats'], '#faq': ['sp-faq-toggle', 'spToggleFaq'] };
+  var map = { '#stats': ['sp-stats-toggle', 'spToggleStats'] };
   var m = map[hash];
   if (!m) return;
   var btn = document.getElementById(m[0]);
@@ -1565,7 +1579,7 @@ function spAutoExpand(hash) {
 }
 document.addEventListener('DOMContentLoaded', function() {
   spAutoExpand(window.location.hash);
-  document.querySelectorAll('a[href="#stats"], a[href="#faq"]').forEach(function(a) {
+  document.querySelectorAll('a[href="#stats"]').forEach(function(a) {
     a.addEventListener('click', function() {
       setTimeout(function() { spAutoExpand(a.getAttribute('href')); }, 0);
     });
@@ -1606,69 +1620,173 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
 </section>
 
 
+
+
 <section class="sp-section" id="faq" style="padding-top: 0; padding-bottom: 40px;">
   <div class="container">
-    <div class="text-center">
-      <button class="btn-stats" id="sp-faq-toggle" onclick="spToggleFaq()" aria-expanded="false">
-        FAQ
-        <span class="btn-stats-icon" aria-hidden="true">
-          <svg class="btn-stats-chevron" width="17" height="10" viewBox="0 0 14 8" fill="none"
-               stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="1,1 7,7 13,1"/>
-          </svg>
-        </span>
-      </button>
-    </div>
-
-    <div class="sp-stats-panel" id="sp-faq-panel">
-      <div class="sp-faq-inner">
-
-        <p class="sp-faq-q">1. When do I need to confirm my sponsorship?</p>
-        <p class="sp-faq-a">We recommend locking it in at least one month before the event. Last-minute is possible, but it can be a bit rushed for your team.</p>
-
-        <p class="sp-faq-q">2. Do sponsors get free conference passes?</p>
-        <p class="sp-faq-a">Yes. The number of passes depends on your setup. Some teams send one speaker, others bring a bigger team. We'll figure it out together.</p>
-
-        <p class="sp-faq-q">3. Can I invite my own network or community?</p>
-        <p class="sp-faq-a">Yes. We can offer a few free passes for key people, plus discounted tickets for your wider community.</p>
-
-        <p class="sp-faq-q">4. You say you run "community events" - what's that at the core?</p>
-        <p class="sp-faq-a">Most attendees are hands-on people working on real problems every day. It works best if you bring team members who understand their world and can have real conversations, providing solutions for their struggles.</p>
-
-        <p class="sp-faq-q">5. How many people should we send?</p>
-        <p class="sp-faq-a">It's up to you. However, for an event of around 100 people, we'd suggest no more than five people from your team.</p>
-
-        <p class="sp-faq-q">6. When can we set up our booth?</p>
-        <p class="sp-faq-a">You can arrive on the day, up to one hour before the event starts. Booth/table setup usually takes 15 to 30 minutes.</p>
-
-        <p class="sp-faq-q">7. Can we bring a bigger screen for our booth?</p>
-        <p class="sp-faq-a">We provide a 24-inch monitor with HDMI and USB-C connectors. If you want a bigger TV, you can rent it out yourself, just check with us first so we make sure it fits your booth space.</p>
-
-        <p class="sp-faq-q">8. Do you offer discounts for multiple sponsorships?</p>
-        <p class="sp-faq-a">We price items separately so you can mix and match, based on the competition and what feels fair. If your budget is tight, we can talk.</p>
-
-        <div class="text-center" style="margin-top:32px;">
-          <button class="btn-stats-close" onclick="spToggleFaq(); setTimeout(function(){ document.getElementById('faq').scrollIntoView({behavior:'smooth'}); }, 10);">
-            Close FAQ
-            <span style="display:flex;align-items:center;">
-              <svg width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);">
-                <polyline points="1,1 7,7 13,1"/>
-              </svg>
-            </span>
-          </button>
-        </div>
-
-      </div>
+    <h2 class="sp-section-title text-center">FAQ</h2>
+    <div class="sp-faq-inner">
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Who attends LLMday events?</summary>
+        <div class="sp-faq-a">Mostly hands-on people working on real problems: across our events, roughly 59% are software, platform and DevOps engineers, 22% founders and engineering leaders, 14% business, consulting and product, and 5% ML/AI/data. The audience skews mid-to-senior. It works best if you bring team members who understand their world and can have real conversations. Anonymized job-title and company lists from past editions are available on request.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">How many people will be there?</summary>
+        <div class="sp-faq-a">This edition is set up for around 50 people. Registrations usually run a bit above the seat count, so expect a full room across the whole day - these are 9-to-5 community conferences, not evening meetups.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Can we combine items into a package?</summary>
+        <div class="sp-faq-a">Yes. We price items separately so you can mix and match - booth plus a session plus leads is a common combination. If you have a specific budget in mind, tell us what it is and we'll put together something that works.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Do you offer discounts?</summary>
+        <div class="sp-faq-a">Yes. Sponsoring 3 or more events across LLMday, SREday and PLATFORMday in a year gets 20% off the whole package. Early-stage startups (under $5M funding) also qualify for 20% off. If your budget is tight, we can talk.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">What does the booth look like?</summary>
+        <div class="sp-faq-a">A table (around 150 x 100 cm) with electricity, Wi-Fi and space for your roll-up banner. A monitor is available on request. Whatever you bring can go on top of the table. The exact setup differs per venue, so ask us about the specifics of your event.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">When can we set up, and can we bring extra equipment?</summary>
+        <div class="sp-faq-a">Arrive on the day, up to one hour before doors open - setup usually takes 15 to 30 minutes. If you want to bring a bigger screen or anything beyond the usual table setup, check with us first so we make sure it fits the space.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">How do the speaking slots work?</summary>
+        <div class="sp-faq-a">Keynotes run in the morning with the full audience in the room - no parallel talks. Regular sessions run in the afternoon and may run alongside parallel tracks. Workshops are 60-minute hands-on slots. All are 30 minutes unless noted, and all are sold as separate items you can add to your package.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Are the talks recorded?</summary>
+        <div class="sp-faq-a">Yes. Talks are recorded and published on our YouTube channel a few weeks after the event, sponsored sessions included.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Do we get the attendee list, and when?</summary>
+        <div class="sp-faq-a">The Conference Leads item includes the full attendee contact list. You receive the pre-event registration list in the week before the event, and the final list shortly after. Leads are sold alongside other items, not on their own.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">How many passes do we get for our team?</summary>
+        <div class="sp-faq-a">As many as you need - we'll share a sponsor code for your team. That said, for an event of around 50 people we'd recommend sending 2-3 people so the room doesn't tip toward vendors.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Can we invite our own network or community?</summary>
+        <div class="sp-faq-a">Yes. We can offer a few free passes for key people, plus discounted tickets for your wider community.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">When do we need to confirm?</summary>
+        <div class="sp-faq-a">We recommend locking it in at least one month before the event. Last-minute is possible, but it can be a bit rushed for your team.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">What do you need from us to get started?</summary>
+        <div class="sp-faq-a">Three things: your full company name, the company address, and the signee's name, email and role. We'll send over a simple agreement and the invoice, and you're set.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Can we host an event at our offices instead?</summary>
+        <div class="sp-faq-a">Yes, and it's a good deal: hosts get the full set of sponsorship benefits - keynote, booth, attendee list and the rest - at no charge, in return for providing the venue. Get in touch if you have a space for 100+ people.</div>
+      </details>
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Anything else we should know about pricing?</summary>
+        <div class="sp-faq-a">Prices are quoted in GBP. If your company is VAT-registered in the UK, 20% VAT applies on top.</div>
+      </details>
+      
     </div>
   </div>
 </section>
-<script>
-function spToggleFaq() {
-  var btn   = document.getElementById('sp-faq-toggle');
-  var panel = document.getElementById('sp-faq-panel');
-  var open  = btn.classList.toggle('open');
-  panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
-  btn.setAttribute('aria-expanded', String(open));
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    
+    { "@type": "Question",
+      "name": "Who attends LLMday events?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Mostly hands-on people working on real problems: across our events, roughly 59% are software, platform and DevOps engineers, 22% founders and engineering leaders, 14% business, consulting and product, and 5% ML/AI/data. The audience skews mid-to-senior. It works best if you bring team members who understand their world and can have real conversations. Anonymized job-title and company lists from past editions are available on request." }
+    },
+    
+    { "@type": "Question",
+      "name": "How many people will be there?",
+      "acceptedAnswer": { "@type": "Answer", "text": "This edition is set up for around 50 people. Registrations usually run a bit above the seat count, so expect a full room across the whole day - these are 9-to-5 community conferences, not evening meetups." }
+    },
+    
+    { "@type": "Question",
+      "name": "Can we combine items into a package?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We price items separately so you can mix and match - booth plus a session plus leads is a common combination. If you have a specific budget in mind, tell us what it is and we\u0027ll put together something that works." }
+    },
+    
+    { "@type": "Question",
+      "name": "Do you offer discounts?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Sponsoring 3 or more events across LLMday, SREday and PLATFORMday in a year gets 20% off the whole package. Early-stage startups (under $5M funding) also qualify for 20% off. If your budget is tight, we can talk." }
+    },
+    
+    { "@type": "Question",
+      "name": "What does the booth look like?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A table (around 150 x 100 cm) with electricity, Wi-Fi and space for your roll-up banner. A monitor is available on request. Whatever you bring can go on top of the table. The exact setup differs per venue, so ask us about the specifics of your event." }
+    },
+    
+    { "@type": "Question",
+      "name": "When can we set up, and can we bring extra equipment?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Arrive on the day, up to one hour before doors open - setup usually takes 15 to 30 minutes. If you want to bring a bigger screen or anything beyond the usual table setup, check with us first so we make sure it fits the space." }
+    },
+    
+    { "@type": "Question",
+      "name": "How do the speaking slots work?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Keynotes run in the morning with the full audience in the room - no parallel talks. Regular sessions run in the afternoon and may run alongside parallel tracks. Workshops are 60-minute hands-on slots. All are 30 minutes unless noted, and all are sold as separate items you can add to your package." }
+    },
+    
+    { "@type": "Question",
+      "name": "Are the talks recorded?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Talks are recorded and published on our YouTube channel a few weeks after the event, sponsored sessions included." }
+    },
+    
+    { "@type": "Question",
+      "name": "Do we get the attendee list, and when?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The Conference Leads item includes the full attendee contact list. You receive the pre-event registration list in the week before the event, and the final list shortly after. Leads are sold alongside other items, not on their own." }
+    },
+    
+    { "@type": "Question",
+      "name": "How many passes do we get for our team?",
+      "acceptedAnswer": { "@type": "Answer", "text": "As many as you need - we\u0027ll share a sponsor code for your team. That said, for an event of around 50 people we\u0027d recommend sending 2-3 people so the room doesn\u0027t tip toward vendors." }
+    },
+    
+    { "@type": "Question",
+      "name": "Can we invite our own network or community?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We can offer a few free passes for key people, plus discounted tickets for your wider community." }
+    },
+    
+    { "@type": "Question",
+      "name": "When do we need to confirm?",
+      "acceptedAnswer": { "@type": "Answer", "text": "We recommend locking it in at least one month before the event. Last-minute is possible, but it can be a bit rushed for your team." }
+    },
+    
+    { "@type": "Question",
+      "name": "What do you need from us to get started?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Three things: your full company name, the company address, and the signee\u0027s name, email and role. We\u0027ll send over a simple agreement and the invoice, and you\u0027re set." }
+    },
+    
+    { "@type": "Question",
+      "name": "Can we host an event at our offices instead?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, and it\u0027s a good deal: hosts get the full set of sponsorship benefits - keynote, booth, attendee list and the rest - at no charge, in return for providing the venue. Get in touch if you have a space for 100+ people." }
+    },
+    
+    { "@type": "Question",
+      "name": "Anything else we should know about pricing?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Prices are quoted in GBP. If your company is VAT-registered in the UK, 20% VAT applies on top." }
+    }
+    
+  ]
 }
 </script>
 
