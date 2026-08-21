@@ -226,8 +226,8 @@
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
 					<div class="item">
-						<div class="number">{{ [tracks | length, 1] | max }}</div>
-						<div class="unit">{{ "Track" if tracks | length <= 1 else "Tracks" }}</div>
+						<div class="number">{{ tracks_display }}</div>
+						<div class="unit">{{ "Track" if tracks_display <= 1 else "Tracks" }}</div>
 					</div><!--//item-->
 				</div><!--//col-->
 				<div class="col-6 col-md-3">

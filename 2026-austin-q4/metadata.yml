@@ -20,6 +20,7 @@ mailto: "mailto:hello@llmday.com"
 days: 1
 attendees: 100
 speakers: 10+
+tracks: 1
 
 rooms:
 - main room

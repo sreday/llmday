@@ -280,7 +280,11 @@ for talk in talks:
         tracks[track] = []
         tracks_ordered.append(track)
     tracks[track].append(talk)
+# metadata.yml may declare the planned track count ("tracks: N") - that wins
+# for display so pages show the plan before talks are announced
+_planned_tracks = context.get("tracks") if isinstance(context.get("tracks"), int) else None
 context["tracks"] = tracks_ordered
+context["tracks_display"] = _planned_tracks or max(len(tracks_ordered), 1)
 
 # insert breaks & wrap up into each track
 breaks = context.get("breaks")

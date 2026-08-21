@@ -547,7 +547,7 @@
     <div class="schedule-meta">
       <span class="schedule-meta-item">{{ date_string }}</span>
       <span class="schedule-meta-divider">•</span>
-      <span class="schedule-meta-item">{% if tracks|length == 1 %}single track{% else %}{{ tracks|length }} parallel tracks{% endif %}</span>
+      <span class="schedule-meta-item">{% if tracks_display == 1 %}single track{% else %}{{ tracks_display }} parallel tracks{% endif %}</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">{{ schedule_time_bracket }}</span>
       <span class="schedule-meta-divider">•</span>
