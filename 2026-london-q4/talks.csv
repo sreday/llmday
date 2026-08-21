@@ -1,2 +1,7 @@
-YouTube,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
-,confirmed,Miko Pawlikowski,1,1,SRE Author,Miko Pawlikowski.png,https://www.linkedin.com/in/mikolajpawlikowski/,,Keynote: The Evolution of Ops,Let's explore how the Ops landscape has evolved in recent years and examine key trends shaping its future.,,@mikopawlikowski,,
+YouTubel,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
+,confirmed,Rafael Pierre,1,1,Citi,Rafael Pierre.png,https://www.linkedin.com/in/rafaelpierre/,,,,Agents Improving Agents: Closing the Loop with Evals and Observability,"Building AI agents is getting easier. Improving them systematically is still hard.
+
+In this talk, I’ll show how we can close that loop by combining automated experiments, evaluation, observability, and coding assistants. Using Pegasus, a platform I built to automate agent experiments and evals, I’ll demonstrate how OpenTelemetry traces and spans can become feedback that a coding assistant can inspect directly. The assistant can analyse how an agent behaved, identify failure modes, make changes, rerun experiments, and evaluate whether those changes actually improved the system.
+
+Attendees will learn how to build a practical self-improvement flywheel around agentic systems: observe what happened, understand why it happened, change the system, measure the result, and repeat.
+",,"Rafael Pierre is a Lead AI Engineer specialising in production AI systems, agentic applications, evaluation, and observability. He currently leads the development of Pegasus, an evaluation and observability platform for production AI agents. Over the past 7+ years, he has built and deployed AI and ML systems across organisations including Citi, Hugging Face, Databricks, ING, and ABN AMRO, with a focus on taking complex AI systems from prototype to reliable production deployments."
