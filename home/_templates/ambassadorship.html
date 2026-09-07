@@ -75,12 +75,11 @@
   z-index: 1;
 }
 .amb-hero .logo-orbit {
-  --r: 110px;
   --t: 40s;
   position: relative;
   z-index: 1;
-  width: 330px;
-  height: 330px;
+  width: 340px;
+  height: 340px;
   margin: 20px auto 0;
 }
 .amb-hero .orbiter {
@@ -90,10 +89,16 @@
   animation: amb-orbit var(--t) linear infinite;
   animation-delay: var(--d, 0s);
 }
+/* each bubble gets its own phase, radius and drift rhythm so the
+   shared circular path is not readable at a glance */
+.amb-hero .orbiter:nth-child(1) { --d: 0s;   --r: 78px; --bt: 5.2s; }
+.amb-hero .orbiter:nth-child(2) { --d: -10s; --r: 98px; --bt: 6.6s; }
+.amb-hero .orbiter:nth-child(3) { --d: -20s; --r: 66px; --bt: 7.4s; }
+.amb-hero .orbiter:nth-child(4) { --d: -30s; --r: 90px; --bt: 5.8s; }
 .amb-hero .logo-bubble {
   position: absolute;
   top: 0; left: 0;
-  width: 110px; height: 110px;
+  width: 143px; height: 143px;
   background: #fff;
   border-radius: 50%;
   box-shadow: 0 4px 20px rgba(0,0,0,.07);
@@ -106,7 +111,7 @@
 .amb-hero .logo-bubble img {
   max-width: 72%;
   max-height: 72%;
-  animation: amb-bob 5s ease-in-out infinite alternate;
+  animation: amb-drift var(--bt, 6s) ease-in-out infinite alternate;
   animation-delay: var(--d, 0s);
 }
 @keyframes amb-orbit {
@@ -117,9 +122,9 @@
   from { transform: translateX(var(--r)) translate(-50%,-50%) rotate(0deg); }
   to   { transform: translateX(var(--r)) translate(-50%,-50%) rotate(-360deg); }
 }
-@keyframes amb-bob {
-  from { transform: translateY(-4px); }
-  to   { transform: translateY(4px); }
+@keyframes amb-drift {
+  from { transform: translate(-9px, -11px); }
+  to   { transform: translate(9px, 11px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .amb-hero .logo-orbit {
@@ -275,8 +280,12 @@
     text-align: center;
   }
   .amb-hero h1 { font-size: 2.4rem; }
-  .amb-hero .logo-orbit { --r: 78px; width: 236px; height: 236px; }
-  .amb-hero .logo-bubble { width: 78px; height: 78px; }
+  .amb-hero .logo-orbit { width: 240px; height: 240px; }
+  .amb-hero .orbiter:nth-child(1) { --r: 55px; }
+  .amb-hero .orbiter:nth-child(2) { --r: 68px; }
+  .amb-hero .orbiter:nth-child(3) { --r: 46px; }
+  .amb-hero .orbiter:nth-child(4) { --r: 63px; }
+  .amb-hero .logo-bubble { width: 100px; height: 100px; }
 }
 
 /* ── Reassurance speech bubbles ───────────────────────────────── */
@@ -434,10 +443,10 @@
       It's not only free swag!
     </p>
     <div class="logo-orbit">
-      <div class="orbiter" style="--d:0s;"><div class="logo-bubble"><img src="/assets/images/llmday_sticker_new.png" alt="LLMday"></div></div>
-      <div class="orbiter" style="--d:-10s;"><div class="logo-bubble"><img src="/assets/images/sreday_sticker.png" alt="SREday"></div></div>
-      <div class="orbiter" style="--d:-20s;"><div class="logo-bubble"><img src="/assets/images/platformday_sticker.png" alt="PLATFORMday"></div></div>
-      <div class="orbiter" style="--d:-30s;"><div class="logo-bubble"><img src="/assets/images/conf42_sticker.png" alt="Conf42"></div></div>
+      <div class="orbiter"><div class="logo-bubble"><img src="/assets/images/llmday_sticker_new.png" alt="LLMday"></div></div>
+      <div class="orbiter"><div class="logo-bubble"><img src="/assets/images/sreday_sticker.png" alt="SREday"></div></div>
+      <div class="orbiter"><div class="logo-bubble"><img src="/assets/images/platformday_sticker.png" alt="PLATFORMday"></div></div>
+      <div class="orbiter"><div class="logo-bubble"><img src="/assets/images/conf42_sticker.png" alt="Conf42"></div></div>
     </div>
   </div>
 </section>
