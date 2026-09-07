@@ -10,6 +10,7 @@ date_string: "June 23, 2026"
 location_string: "PagerDuty, Lisbon, Portugal"
 city_name: "Lisbon"
 venue_name: "PagerDuty"
+calendly_sponsor_url: "https://calendly.com/sreday/30min"
 # get this from the event url
 luma_evt: evt-gNWNB8rIs45HwO4
 cfp_url: https://cfp.ninja/e/llmday-2026-lisbon-q2
