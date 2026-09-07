@@ -157,9 +157,15 @@ section[id] {
 							
 							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>                                              
 							<li class="nav-item"><a class="nav-link scrollto" href="#events">Upcoming events</a></li>
+							{% if ambassadors %}
 							<li class="nav-item"><a class="nav-link scrollto" href="#ambassadors">Ambassadors</a></li>
+							{% endif %}
+							{% if events_past or meetups_past %}
 							<li class="nav-item"><a class="nav-link scrollto" href="#past-events">Past events</a></li>
+							{% endif %}
+							{% if testimonials %}
 							<li class="nav-item"><a class="nav-link scrollto" href="#testimonials">Testimonials</a></li>
+							{% endif %}
 							<li class="nav-item"><a class="nav-link scrollto" href="#sponsor">Sponsor</a></li>
 							<li class="nav-item"><a class="nav-link scrollto" href="#partner">Partner</a></li>
 							<li class="nav-item"><a class="nav-link" target="_blank" href="./assets/tnc.pdf">Terms & Conditions</a></li>
