@@ -2,8 +2,8 @@
  * Sponsor lead form backend - Google Apps Script web app.
  *
  * Receives the JSON posted by the "Email us" form on the home page (home/_templates/index.html)
- * and sends ONE email to the brand inbox AND the sponsor, so the thread is open for both sides
- * straight away. Reply-all keeps everyone on it.
+ * and sends ONE email To the sponsor with the brand inbox in Cc, so the thread is open for both
+ * sides straight away. Reply-all keeps everyone on it.
  * The thread is moved to the Inbox as unread + important under the "Sponsor leads" label, because a
  * message sent from this account would otherwise only show up (read) in "Sent".
  *
@@ -83,14 +83,16 @@ function doPost(e) {
     'Best,\n' +
     'Mark';
 
-  var options = { name: SENDER_NAME };
+  // Sponsor in To, brand inbox in Cc: a plain Reply from Mark then goes to the sponsor and
+  // Reply-all keeps hello@ on the thread (set Gmail's default reply behaviour to Reply all).
+  var options = { name: SENDER_NAME, cc: brand.inbox };
   // Send from the brand alias when this account has it configured ("Send mail as"); otherwise the
   // primary address is used. getAliases() never lists the primary address, so that case falls through.
   if (GmailApp.getAliases().indexOf(brand.from) !== -1) options.from = brand.from;
 
   // Send via a draft so we get the message back: a mail sent from this very account would otherwise
   // sit read-only in "Sent". Pull its thread into the Inbox, unread + important, under a label.
-  var message = GmailApp.createDraft(brand.inbox + ',' + email, subject, body, options).send();
+  var message = GmailApp.createDraft(email, subject, body, options).send();
   try {
     var thread = message.getThread();
     thread.moveToInbox();
