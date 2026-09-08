@@ -349,7 +349,7 @@ Working at the intersection of AI engineering, cloud platforms, and biomedical r
         <label class="lead-field lead-field-wide"><span>Work email</span><input type="email" name="email" autocomplete="email" required maxlength="254"></label>
       </div>
       <div class="lead-group" data-group="interests">
-        <div class="lead-group-label">I'm interested in <em>(one or more)</em></div>
+        <div class="lead-group-label">We'd like to <em>(one or more)</em></div>
         <div class="lead-chips">
           
           <label class="lead-chip"><input type="checkbox" name="interests" value="Sponsor"><span>Sponsor</span></label>
@@ -451,7 +451,8 @@ Working at the intersection of AI engineering, cloud platforms, and biomedical r
 .lead-field input.is-invalid { border-color: #EC645E; }
 .lead-group { margin-bottom: 18px; }
 .lead-group-label { font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 8px; letter-spacing: .02em; }
-.lead-group-label em { font-style: normal; font-weight: 400; color: #888; }
+.lead-group-label em { display: none; font-style: normal; font-weight: 400; color: #888; }
+.lead-group.is-invalid .lead-group-label em { display: inline; }
 .lead-group-hint { display: none; font-size: .8rem; color: #c0392b; margin-top: 6px; }
 .lead-group.is-invalid .lead-group-hint { display: block; }
 .lead-group.is-invalid .lead-chip span { border-color: #EC645E; }
@@ -467,7 +468,9 @@ Working at the intersection of AI engineering, cloud platforms, and biomedical r
 .lead-chip input:checked + span { background: var(--lead-accent); border-color: var(--lead-accent); color: #fff; }
 .lead-chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(var(--lead-accent-rgb),.3); }
 .lead-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .9rem; color: #333; }
-.lead-consent-label input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: var(--lead-accent); cursor: pointer; }
+.lead-consent-label input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid #bbb; border-radius: 4px; background: #fff; cursor: pointer; }
+.lead-consent-label input:checked { background: var(--lead-accent) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; border-color: var(--lead-accent); }
+.lead-consent-label input:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(var(--lead-accent-rgb),.3); }
 .lead-group.is-invalid .lead-consent-label { color: #c0392b; }
 /* conference chips wear their own brand colours */
 .lead-chip-sreday input:checked + span { background: #713660; border-color: #713660; color: #fff; }
@@ -509,7 +512,8 @@ Working at the intersection of AI engineering, cloud platforms, and biomedical r
 .lead-group-hint, .lead-error { color: #ffb3ad; }
 .lead-error a { color: #f0b95a; }
 .lead-consent-label { color: #f2f2f2; }
-.lead-consent-label input { accent-color: var(--lead-accent); }
+.lead-consent-label input { border-color: #777; background: #e9e9e9; }
+.lead-consent-label input:checked { background: var(--lead-accent) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; border-color: var(--lead-accent); }
 .lead-group.is-invalid .lead-consent-label { color: #ffb3ad; }
 .lead-mailto-link { color: #cfcfcf; }
 .lead-mailto-link:hover, .lead-mailto-link:focus { color: #fff; }
