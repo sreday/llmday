@@ -97,7 +97,7 @@ function doPost(e) {
   var htmlBody =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#111">' +
     nl2br(esc(intro)) +
-    esc(name) + ' from ' + esc(company) + ' would like to learn more about ' + interestHtml + ':<br><br>' +
+    '<b>' + esc(name) + '</b> from <b>' + esc(company) + '</b> would like to learn more about ' + interestHtml + ':<br><br>' +
     lines.map(esc).join('<br>') +
     nl2br(esc(outro)).replace(esc(CALENDLY_URL), '<a href="' + CALENDLY_URL + '">' + CALENDLY_URL + '</a>') +
     '</div>';
