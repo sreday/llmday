@@ -2138,8 +2138,8 @@ This ability to connect diverse biological layers through natural language que
 .lead-group-label { font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 8px; letter-spacing: .02em; }
 .lead-group-label em { display: none; font-style: normal; font-weight: 400; color: #888; }
 .lead-group.is-invalid .lead-group-label em { display: inline; }
-.lead-group-hint { display: none; font-size: .8rem; color: #c0392b; margin-top: 6px; }
-.lead-group.is-invalid .lead-group-hint { display: block; }
+.lead-group-hint { display: block; visibility: hidden; font-size: .8rem; line-height: 1.2; min-height: 1.2em; color: #c0392b; margin-top: 6px; }
+.lead-group.is-invalid .lead-group-hint { visibility: visible; }
 .lead-group.is-invalid .lead-chip span { border-color: #EC645E; }
 .lead-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .lead-chip { position: relative; margin: 0; cursor: pointer; }
@@ -2276,7 +2276,7 @@ function leadValidate(form, d) {
     group.classList.toggle('is-invalid', bad);
     if (bad && !firstBad) firstBad = group.querySelector('input');
   });
-  if (firstBad) { firstBad.focus({ preventScroll: true }); firstBad.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  if (firstBad) firstBad.focus({ preventScroll: true });   // mark + focus, but never scroll the page
   leadFit();
   return !firstBad;
 }
