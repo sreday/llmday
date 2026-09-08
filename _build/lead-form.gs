@@ -55,6 +55,7 @@ function doPost(e) {
   var brands = pick(data.brands, ALLOWED_BRANDS);
   var regions = pick(data.regions, ALLOWED_REGIONS);
   var budget = ALLOWED_BUDGETS.indexOf(data.budget) !== -1 ? data.budget : '';
+  var source = sourceFromPage(clean(data.page, 300));
   var consent = data.consent === true;
 
   // Everything is mandatory: the form enforces it, this is the backstop.
@@ -77,7 +78,8 @@ function doPost(e) {
     '- Company: ' + company + '\n' +
     '- Conferences: ' + brands.join(', ') + '\n' +
     '- Regions: ' + regions.join(', ') + '\n' +
-    '- Budget: ' + budget + '\n\n' +
+    '- Budget: ' + budget + '\n' +
+    '- Form sent from: ' + source + '\n\n' +
     'If you\'d like to double down with a meeting, here\'s your link: ' + CALENDLY_URL + '\n\n' +
     'Take it from here folks!\n\n' +
     'Best,\n' +
@@ -104,7 +106,7 @@ function doPost(e) {
     Logger.log('Sent, but could not file the thread: ' + err);
   }
   Logger.log('Lead sent: %s <%s> (%s) -> %s [%s / %s / %s / %s]', name, email, company, brand.inbox,
-             interests.join('+'), brands.join('+'), regions.join('+'), budget);
+             interests.join('+'), brands.join('+'), regions.join('+'), budget + ' from ' + source);
   return respond({ ok: true });
 }
 
@@ -125,6 +127,17 @@ function pick(values, allowed) {
   return allowed.filter(function (a) { return values.indexOf(a) !== -1; });
 }
 
+// Page URL the form was submitted from -> clean origin for the email:
+// 'https://www.llmday.com/#sponsor' -> 'https://llmday.com/', '.../2026-nyc-q4/index.html?x' -> 'https://llmday.com/2026-nyc-q4/'
+function sourceFromPage(url) {
+  var m = /^https?:\/\/([^\/?#]+)([^?#]*)/.exec(url || '');
+  if (!m) return 'unknown';
+  var host = m[1].toLowerCase().replace(/^www\./, '');
+  var path = (m[2] || '/').replace(/index\.html$/, '');
+  if (!path) path = '/';
+  return 'https://' + host + path;
+}
+
 // ['A'] -> 'A'; ['A','B'] -> 'A and B'; ['A','B','C'] -> 'A, B and C'
 function joinProse(arr) {
   if (arr.length <= 1) return arr.join('');
@@ -136,7 +149,7 @@ function testLead() {
   var e = { postData: { contents: JSON.stringify({
     name: 'Anna Kowalska', email: 'hello@llmday.com', company: 'Chainguard',
     interests: ['Sponsor', 'Host'], brands: ['LLMday', 'SREday'], regions: ['EU'], budget: '$5K-10K', consent: true,
-    brand: 'llmday', page: 'https://www.llmday.com/#sponsor'
+    brand: 'llmday', page: 'https://www.llmday.com/2026-redwood-city-q4/?v=2#sponsors'
   }) } };
   Logger.log(doPost(e).getContent());
 }
