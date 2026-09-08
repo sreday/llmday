@@ -324,6 +324,7 @@
       
     </div><!--//row-->
     <div class="sponsors-cta text-center pt-5">
+<div class="lead-scope">
 <div class="text-center">
   <button class="btn-lead" id="lead-toggle" type="button" onclick="leadToggle()" aria-expanded="false" aria-controls="lead-panel">
     Become A Sponsor
@@ -411,7 +412,9 @@
     <div class="lead-done" id="lead-done" hidden></div>
   </div>
 </div>
+</div>
 <style>
+.lead-scope { --lead-accent: #26986A; --lead-accent-hover: #2dae7a; --lead-accent-rgb: 38,152,106; --lead-pill-text: #26986A; }
 .btn-lead {
   display: inline-flex; align-items: center; gap: 12px;
   background: #EC645E; color: #fff; border: none; border-radius: 999px;
@@ -439,7 +442,7 @@
   width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #111;
   background: #fff; outline: none; transition: border-color .2s, box-shadow .2s;
 }
-.lead-field input:focus { border-color: #26986A; box-shadow: 0 0 0 3px rgba(38,152,106,.15); }
+.lead-field input:focus { border-color: var(--lead-accent); box-shadow: 0 0 0 3px rgba(var(--lead-accent-rgb),.15); }
 .lead-field input.is-invalid { border-color: #EC645E; }
 .lead-group { margin-bottom: 18px; }
 .lead-group-label { font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 8px; letter-spacing: .02em; }
@@ -451,15 +454,15 @@
 .lead-chip { position: relative; margin: 0; cursor: pointer; }
 .lead-chip input { position: absolute; opacity: 0; width: 0; height: 0; }
 .lead-chip span {
-  display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid #b6dfc9;
-  background: #e8f7ef; color: #1e7a55; font-size: .9rem; font-weight: 600; user-select: none;
+  display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid #ddd;
+  background: #f0f0f0; color: #555; font-size: .9rem; font-weight: 600; user-select: none;
   transition: background .15s, color .15s, border-color .15s;
 }
-.lead-chip:hover span { border-color: #26986A; }
-.lead-chip input:checked + span { background: #26986A; border-color: #26986A; color: #fff; }
-.lead-chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(38,152,106,.3); }
+.lead-chip:hover span { border-color: var(--lead-accent); }
+.lead-chip input:checked + span { background: var(--lead-accent); border-color: var(--lead-accent); color: #fff; }
+.lead-chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(var(--lead-accent-rgb),.3); }
 .lead-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .9rem; color: #333; }
-.lead-consent-label input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: #26986A; cursor: pointer; }
+.lead-consent-label input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: var(--lead-accent); cursor: pointer; }
 .lead-group.is-invalid .lead-consent-label { color: #c0392b; }
 /* conference chips wear their own brand colours */
 .lead-chip-sreday input:checked + span { background: #713660; border-color: #713660; color: #fff; }
@@ -468,13 +471,13 @@
 .lead-chip-platformday input:focus-visible + span { box-shadow: 0 0 0 3px rgba(226,151,29,.35); }
 .lead-hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 .lead-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 6px; }
-.btn-lead-send { min-width: 140px; background: #26986A; color: #fff; border: none; }
-.btn-lead-send:hover, .btn-lead-send:focus { background: #2dae7a; color: #fff; }
+.btn-lead-send { min-width: 140px; background: var(--lead-accent); color: #fff; border: none; }
+.btn-lead-send:hover, .btn-lead-send:focus { background: var(--lead-accent-hover); color: #fff; }
 .btn-lead-send[disabled] { opacity: .65; cursor: default; }
 .lead-mailto-link { font-size: .9rem; color: #888; text-decoration: none; }
 .lead-mailto-link:hover, .lead-mailto-link:focus { color: #555; text-decoration: underline; }
 .lead-error { font-size: .9rem; color: #c0392b; }
-.lead-error a { color: #26986A; font-weight: 600; }
+.lead-error a { color: var(--lead-accent); font-weight: 600; }
 .lead-done { font-size: 1rem; color: #111; line-height: 1.6; }
 .lead-done strong { font-family: 'Montserrat', sans-serif; }
 @media (max-width: 575.98px) {
@@ -488,12 +491,12 @@
 .lead-field > span, .lead-group-label { color: #e6e6e6; }
 .lead-group-label em { color: #b5b5b5; }
 .lead-field input { background: #e9e9e9; border-color: #e9e9e9; color: #111; }
-.lead-field input:focus { border-color: #26986A; box-shadow: 0 0 0 3px rgba(38,152,106,.3); }
+.lead-field input:focus { border-color: var(--lead-accent); box-shadow: 0 0 0 3px rgba(var(--lead-accent-rgb),.3); }
 .lead-field input.is-invalid { border-color: #EC645E; box-shadow: 0 0 0 2px rgba(236,100,94,.35); }
 .lead-chip span { background: #3a3a3a; border-color: #4d4d4d; color: #f2f2f2; }
-.lead-chip:hover span { border-color: #26986A; }
-.lead-chip input:checked + span { background: #26986A; border-color: #26986A; color: #fff; }
-.lead-chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(38,152,106,.4); }
+.lead-chip:hover span { border-color: var(--lead-accent); }
+.lead-chip input:checked + span { background: var(--lead-accent); border-color: var(--lead-accent); color: #fff; }
+.lead-chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(var(--lead-accent-rgb),.4); }
 .lead-chip-llmday input:checked + span { background: #26986A; border-color: #26986A; color: #fff; }
 .lead-chip-sreday input:checked + span { background: #713660; border-color: #713660; color: #fff; }
 .lead-chip-platformday input:checked + span { background: #E2971D; border-color: #E2971D; color: #fff; }
@@ -501,7 +504,7 @@
 .lead-group-hint, .lead-error { color: #ffb3ad; }
 .lead-error a { color: #f0b95a; }
 .lead-consent-label { color: #f2f2f2; }
-.lead-consent-label input { accent-color: #26986A; }
+.lead-consent-label input { accent-color: var(--lead-accent); }
 .lead-group.is-invalid .lead-consent-label { color: #ffb3ad; }
 .lead-mailto-link { color: #cfcfcf; }
 .lead-mailto-link:hover, .lead-mailto-link:focus { color: #fff; }
