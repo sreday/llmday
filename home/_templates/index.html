@@ -497,7 +497,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
               <div class="lead-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
               <div class="lead-actions">
                 <button type="submit" class="btn btn-brand-primary btn-lg" id="lead-submit">Send</button>
-                <a href="{{ mailto }}" class="lead-mailto-link" id="lead-mailto">use mailto instead</a>
+                <a href="{{ mailto }}?subject=We%27d%20like%20to%20sponsor" class="lead-mailto-link" id="lead-mailto">use mailto instead</a>
                 <div class="lead-error" id="lead-error" hidden></div>
               </div>
             </form>
@@ -589,6 +589,15 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           }, 600);
         }
         window.addEventListener('resize', leadFit);
+        // Open (never close) the panel - used when the visitor arrives via the navbar "Sponsor" link or #sponsor
+        function leadOpen() {
+          if (!document.getElementById('lead-toggle').classList.contains('open')) leadToggle();
+        }
+        if (location.hash === '#sponsor') document.addEventListener('DOMContentLoaded', leadOpen);
+        window.addEventListener('hashchange', function() { if (location.hash === '#sponsor') leadOpen(); });
+        document.querySelectorAll('a[href="#sponsor"]').forEach(function(a) {
+          a.addEventListener('click', function() { setTimeout(leadOpen, 0); });
+        });
 
         function leadCollect(form) {
           var fd = new FormData(form);
