@@ -69,24 +69,38 @@ function doPost(e) {
 
   var subject = company + ' <> ' + brands.join(', ');
 
+  var confLabel = brands.length > 1 ? 'Conferences' : 'Conference';
+  var intro = firstName + ',' + '\n\n' +
+    'Thank you for submitting the form, here' + '\'' + 's what we' + '\'' + 're working with:' + '\n\n';
+  var bullets = [
+    'Email: ' + email,
+    confLabel + ': ' + brands.join(', '),
+    'Regions: ' + regions.join(', '),
+    'Budget: ' + budget,
+    'Form sent from: ' + source
+  ];
+  var outro = '\nMark will reply soon. In the meantime, you can schedule a quick call here: ' + CALENDLY_URL + '\n\n' +
+    'Best,' + '\n' + 'Mark';
+
+  // plain-text version (fallback for clients that do not render HTML)
   var body =
-    'Hey ' + firstName + ',\n\n' +
-    'Thanks for reaching out, we\'ll be in touch soon.\n\n' +
-    name + ' from ' + company + ' would like to learn more about ' + interestPhrase + ':\n\n' +
-    '- Name: ' + name + '\n' +
-    '- Email: ' + email + '\n' +
-    '- Company: ' + company + '\n' +
-    '- Conferences: ' + brands.join(', ') + '\n' +
-    '- Regions: ' + regions.join(', ') + '\n' +
-    '- Budget: ' + budget + '\n' +
-    '- Form sent from: ' + source + '\n\n' +
-    'If you\'d like to double down with a meeting, here\'s your link: ' + CALENDLY_URL + '\n\n' +
-    'I\'ll reply in this thread soon,\n' +
-    'Mark';
+    'Hey ' + intro +
+    name + ' from ' + company + ' would like to learn more about ' + interestPhrase + ':' + '\n\n' +
+    bullets.map(function (b) { return '- ' + b; }).join('\n') + '\n' +
+    outro;
+
+  // HTML version: same text, with the name and company in bold
+  var htmlBody =
+    '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#111">' +
+    nl2br(esc('Hey ' + intro)) +
+    '<b>' + esc(name) + '</b> from <b>' + esc(company) + '</b> would like to learn more about ' + esc(interestPhrase) + ':<br><br>' +
+    '<ul style="margin:0 0 0 18px;padding:0">' + bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>' +
+    nl2br(esc(outro)).replace(esc(CALENDLY_URL), '<a href="' + CALENDLY_URL + '">' + CALENDLY_URL + '</a>') +
+    '</div>';
 
   // Sponsor in To, brand inbox in Cc: a plain Reply from Mark then goes to the sponsor and
   // Reply-all keeps hello@ on the thread (set Gmail's default reply behaviour to Reply all).
-  var options = { name: SENDER_NAME, cc: brand.inbox };
+  var options = { name: SENDER_NAME, cc: brand.inbox, htmlBody: htmlBody };
   // Send from the brand alias when this account has it configured ("Send mail as"); otherwise the
   // primary address is used. getAliases() never lists the primary address, so that case falls through.
   if (GmailApp.getAliases().indexOf(brand.from) !== -1) options.from = brand.from;
@@ -118,6 +132,14 @@ function respond(obj) {
 // Trim, collapse whitespace, strip control characters, cap the length.
 function clean(v, max) {
   return String(v == null ? '' : v).replace(/[\x00-\x1f\x7f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+// Minimal HTML escaping for user-supplied strings in the HTML body
+function esc(v) {
+  return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function nl2br(v) {
+  return String(v).replace(/\n/g, '<br>');
 }
 
 // Keep only allowed values, in the allowed list's order, without duplicates.
