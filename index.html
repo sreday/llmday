@@ -1837,12 +1837,12 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <div class="lead-panel" id="lead-panel">
           <div class="lead-inner">
             <form id="lead-form" novalidate>
-              <div class="lead-title">Tell us a bit about you</div>
-              <div class="lead-sub">Takes 20 seconds. You get a copy of the email too.</div>
+              <div class="lead-title">Start conversation</div>
+              <div class="lead-sub">We'll email you and our team in one go, so we can start cooking right away.</div>
               <div class="lead-grid">
                 <label class="lead-field"><span>Name</span><input type="text" name="name" autocomplete="name" required maxlength="80"></label>
-                <label class="lead-field"><span>Work email</span><input type="email" name="email" autocomplete="email" required maxlength="254"></label>
-                <label class="lead-field lead-field-wide"><span>Company</span><input type="text" name="company" autocomplete="organization" required maxlength="120"></label>
+                <label class="lead-field"><span>Company</span><input type="text" name="company" autocomplete="organization" required maxlength="120"></label>
+                <label class="lead-field lead-field-wide"><span>Work email</span><input type="email" name="email" autocomplete="email" required maxlength="254"></label>
               </div>
               <div class="lead-group" data-group="interests">
                 <div class="lead-group-label">I'm interested in <em>(one or more)</em></div>
@@ -1897,6 +1897,10 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
                   
                 </div>
                 <div class="lead-group-hint">Pick one</div>
+              </div>
+              <div class="lead-group lead-consent" data-group="consent">
+                <label class="lead-consent-label"><input type="checkbox" name="consent" value="yes" required><span>I agree to share my email with the organizer</span></label>
+                <div class="lead-group-hint">Required</div>
               </div>
               
               <div class="lead-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -1955,6 +1959,9 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         .lead-chip:hover span { border-color: #26986A; }
         .lead-chip input:checked + span { background: #26986A; border-color: #26986A; color: #fff; }
         .lead-chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(38,152,106,.3); }
+        .lead-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .9rem; color: #333; }
+        .lead-consent-label input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: #26986A; cursor: pointer; }
+        .lead-group.is-invalid .lead-consent-label { color: #c0392b; }
         .lead-hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
         .lead-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 6px; }
         .lead-actions .btn-brand-primary { min-width: 140px; }
@@ -1999,6 +2006,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
             brands:    fd.getAll('brands'),
             regions:   fd.getAll('regions'),
             budget:    fd.get('budget') || '',
+            consent:   fd.get('consent') === 'yes',
             website:   fd.get('website') || '',
             brand:     LEAD_BRAND,
             page:      location.href
@@ -2010,7 +2018,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           return parts.length ? parts.join(' and ') : 'Sponsoring';
         }
         function leadMailto(d) {
-          var subject = d.name + ' (' + d.company + ') - ' + leadInterestPhrase(d) + ': ' + d.brands.join(', ') + ' in ' + d.regions.join(', ') + (d.budget ? ' (' + d.budget + ')' : '');
+          var subject = d.company + ' <> ' + d.brands.join(', ');
           var body = 'Hi Mark,\n\n' + d.name + ' from ' + d.company + ' would like to learn more about ' + leadInterestPhrase(d) + ':\n\n' +
                      '- Name: ' + d.name + '\n- Email: ' + d.email + '\n- Company: ' + d.company + '\n' +
                      '- Conferences: ' + d.brands.join(', ') + '\n- Regions: ' + d.regions.join(', ') + '\n- Budget: ' + d.budget + '\n\nThanks!';
@@ -2024,7 +2032,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
             el.classList.toggle('is-invalid', bad);
             if (bad && !firstBad) firstBad = el;
           });
-          ['interests', 'brands', 'regions', 'budget'].forEach(function(k) {
+          ['interests', 'brands', 'regions', 'budget', 'consent'].forEach(function(k) {
             var group = form.querySelector('.lead-group[data-group="' + k + '"]');
             var bad = Array.isArray(d[k]) ? d[k].length === 0 : !d[k];
             group.classList.toggle('is-invalid', bad);
