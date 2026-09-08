@@ -13,6 +13,92 @@ import markdown
 from jinja2 import Environment, FileSystemLoader
 from jinja_markdown import MarkdownExtension
 
+# ── "Companies presenting" hygiene ────────────────────────────────────────────
+# Speakers who prefer to stay stealth often put a JOB TITLE in the organization
+# column ("Principal Software Engineer", "Team Lead, SRE", "ex-Google SRE").
+# looks_like_job_title() decides, per "&"-separated part, whether a value is a
+# title rather than a company, so it never reaches the About panel or the
+# sponsorship stats. Company names that merely contain such words survive
+# ("Varnish Software", "Reliability Engineering Lab", "Pawel Bulowski AI Consulting").
+import re as _jt_re
+
+_JT_EXPLICIT = {
+    'stealth', 'stealth startup', 'stealth mode', 'sre author', 'independent', 'freelance',
+    'freelancer', 'self-employed', 'self employed', 'consultant', 'n/a', 'na', 'none', 'tbd', '-',
+    'various', 'multiple', 'private', 'personal', 'confidential', 'undisclosed', 'own company',
+}
+# a value ENDING in one of these words is a role, not a company
+_JT_ROLE_NOUNS = {
+    'engineer', 'engineers', 'developer', 'developers', 'architect', 'scientist', 'researcher',
+    'consultant', 'advisor', 'adviser', 'lead', 'manager', 'director', 'founder', 'co-founder',
+    'cofounder', 'cto', 'ceo', 'cio', 'coo', 'cpo', 'ciso', 'vp', 'head', 'sre', 'devops',
+    'evangelist', 'advocate', 'specialist', 'analyst', 'author', 'student', 'professor',
+    'contractor', 'principal', 'intern', 'owner', 'strategist', 'practitioner', 'expert', 'coach',
+    'trainer', 'programmer', 'administrator', 'technologist', 'executive', 'officer', 'president',
+    'speaker', 'blogger', 'investor', 'mentor', 'fellow', 'phd', 'entrepreneur', 'designer',
+    'writer', 'hacker', 'tester', 'freelancer',
+}
+# words that only ever appear in titles, never as the distinctive part of a company name
+_JT_VOCAB = {
+    'senior', 'sr', 'junior', 'jr', 'staff', 'principal', 'lead', 'chief', 'head', 'of', 'and',
+    'the', 'a', 'ai', 'ml', 'mlops', 'devops', 'devsecops', 'sre', 'data', 'cloud', 'platform',
+    'software', 'site', 'reliability', 'security', 'full', 'stack', 'fullstack', 'full-stack',
+    'backend', 'back-end', 'frontend', 'front-end', 'web', 'mobile', 'systems', 'system',
+    'infrastructure', 'infra', 'engineering', 'science', 'product', 'technical', 'tech', 'it',
+    'observability', 'kubernetes', 'network', 'solutions', 'team', 'engineer', 'developer',
+    'architect', 'scientist', 'researcher', 'consultant', 'advisor', 'manager', 'director',
+    'founder', 'analyst', 'specialist', 'evangelist', 'advocate', 'freelance', 'independent',
+    'contractor', 'author', 'expert', 'practitioner', 'strategist', 'programmer', 'ex',
+} | _JT_ROLE_NOUNS
+_JT_SENIORITY = _jt_re.compile(r'\b(senior|sr\.?|junior|jr\.?|staff|principal|chief|head of|vp of|director of|team lead)\b', _jt_re.I)
+# generic tech nouns: a short part made only of these next to a title part is a title fragment
+_JT_GENERIC = {'cloud', 'software', 'data', 'ai', 'ml', 'platform', 'security', 'systems', 'infrastructure', 'azure', 'aws', 'gcp'}
+
+
+def _jt_tokens(part):
+    return [t for t in _jt_re.split(r"[\s,/|]+", part.lower().strip()) if t]
+
+
+def _jt_part_is_title(part):
+    p = part.strip()
+    if not p:
+        return True
+    low = p.lower()
+    if low in _JT_EXPLICIT:
+        return True
+    toks = _jt_tokens(p)
+    if not toks:
+        return True
+    last = toks[-1].strip('.()')
+    if last in _JT_ROLE_NOUNS:
+        return True
+    if toks[0].startswith('ex-') or ' ex-' in low:
+        return True
+    if _JT_SENIORITY.search(p) and any(t.strip('.()') in _JT_ROLE_NOUNS for t in toks):
+        return True
+    if all(t.strip('.()') in _JT_VOCAB for t in toks):
+        return True
+    return False
+
+
+def looks_like_job_title(org):
+    """True when the whole organization value should be dropped (every part is a title)."""
+    return all(_jt_part_is_title(p) for p in org.split('&'))
+
+
+def company_parts(org):
+    """The parts of an organization value that are real companies (titles removed)."""
+    parts = [p.strip() for p in org.split('&')]
+    flags = [_jt_part_is_title(p) for p in parts]
+    if any(flags):
+        # sibling rule: "Azure Cloud & AI Architect and Advisor" -> "Azure Cloud" is a title fragment
+        for i, p in enumerate(parts):
+            toks = _jt_tokens(p)
+            if not flags[i] and 0 < len(toks) <= 2 and all(t in _JT_GENERIC for t in toks):
+                flags[i] = True
+    return [p for p, f in zip(parts, flags) if p and not f]
+# ─────────────────────────────────────────────────────────────────────────────
+
 DIVIDER = "#"*80
 DEFAULT_TALK_DURATION = 30
 SITEMAP_URLS = []
@@ -207,20 +293,22 @@ for _t in talks + keynotes:
         _about_talks.append(_t)
 
 _about_companies = []
+_about_dropped = []
 if len(_about_talks) >= 3:
-    _about_skip_orgs = {'stealth startup', 'stealth', 'sre author', '',
-                        'independent', 'independent researcher',
-                        'freelance', 'self-employed', 'consultant', 'university'}
     _about_seen_orgs = set()
     for _t in _about_talks:
-        for _org in (_t.get("organization") or "").split('&'):
-            _org = _org.strip()
+        _raw = (_t.get("organization") or "")
+        _kept = company_parts(_raw)
+        for _p in (p.strip() for p in _raw.split('&')):
+            if _p and _p not in _kept and _p not in _about_dropped:
+                _about_dropped.append(_p)
+        for _org in _kept:
             _org_l = _org.lower()
-            if (_org and _org_l not in _about_skip_orgs
-                    and 'university' not in _org_l
-                    and _org_l not in _about_seen_orgs):
+            if 'university' not in _org_l and _org_l not in _about_seen_orgs:
                 _about_seen_orgs.add(_org_l)
                 _about_companies.append(_org)
+    if _about_dropped:
+        print("About panel: dropped job-title organizations: " + "; ".join(_about_dropped))
     _about_companies.sort(key=lambda s: s.lower())
 context["about_companies"] = _about_companies
 # "more talks soon" shows while confirmed talks are below 60% of the event's
@@ -443,10 +531,8 @@ for _gf in _all_siblings:
                 if _spk_name:
                     _global_speaker_names.add(_spk_name)
                 _org_raw = _t.get('organization', '').strip()
-                _skip_orgs = {'stealth startup', 'sre author', '',
-                              'independent', 'freelance', 'self-employed', 'consultant'}
-                for _org in (o.strip() for o in _org_raw.split('&')):
-                    if _org and _org.lower() not in _skip_orgs:
+                for _org in company_parts(_org_raw):
+                    if _org:
                         _org_display = _normalize_company_name(_org)
                         _global_org_counts[_org_display] = _global_org_counts.get(_org_display, 0) + 1
     # sponsors & attendee counts
