@@ -497,6 +497,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
               <div class="lead-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
               <div class="lead-actions">
                 <button type="submit" class="btn btn-brand-primary btn-lg" id="lead-submit">Send</button>
+                <a href="#" class="lead-mailto-link" id="lead-mailto">use mailto instead</a>
                 <div class="lead-error" id="lead-error" hidden></div>
               </div>
             </form>
@@ -557,6 +558,8 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         .lead-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 6px; }
         .lead-actions .btn-brand-primary { min-width: 140px; }
         .lead-actions .btn-brand-primary[disabled] { opacity: .65; cursor: default; }
+        .lead-mailto-link { font-size: .9rem; color: #888; text-decoration: none; }
+        .lead-mailto-link:hover, .lead-mailto-link:focus { color: #555; text-decoration: underline; }
         .lead-error { font-size: .9rem; color: #c0392b; }
         .lead-error a { color: #26986A; font-weight: 600; }
         .lead-done { font-size: 1rem; color: #111; line-height: 1.6; }
@@ -609,7 +612,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           return parts.length ? parts.join(' and ') : 'Sponsoring';
         }
         function leadMailto(d) {
-          var subject = d.company + ' <> ' + d.brands.join(', ');
+          var subject = (d.company || 'Sponsorship inquiry') + (d.brands.length ? ' <> ' + d.brands.join(', ') : '');
           var body = 'Hi Mark,\n\n' + d.name + ' from ' + d.company + ' would like to learn more about ' + leadInterestPhrase(d) + ':\n\n' +
                      '- Name: ' + d.name + '\n- Email: ' + d.email + '\n- Company: ' + d.company + '\n' +
                      '- Conferences: ' + d.brands.join(', ') + '\n- Regions: ' + d.regions.join(', ') + '\n- Budget: ' + d.budget + '\n\nThanks!';
@@ -639,6 +642,11 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           err.hidden = false;
           leadFit();
         }
+        // "use mailto instead": open the visitor's mail client with whatever is filled in so far
+        document.getElementById('lead-mailto').addEventListener('click', function(ev) {
+          ev.preventDefault();
+          location.href = leadMailto(leadCollect(document.getElementById('lead-form')));
+        });
         // Clear a group's "pick at least one" marker as soon as something is picked
         document.getElementById('lead-form').addEventListener('change', function(ev) {
           var group = ev.target.closest('.lead-group');
