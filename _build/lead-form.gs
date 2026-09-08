@@ -24,7 +24,7 @@ var BRANDS = {
 };
 var ALLOWED_INTERESTS = ['Sponsor', 'Host'];
 var ALLOWED_BRANDS = ['LLMday', 'SREday', 'PLATFORMday'];
-var ALLOWED_REGIONS = ['EU', 'US', 'LATAM', 'ASIA'];
+var ALLOWED_REGIONS = ['US', 'EU', 'ASIA', 'LATAM'];
 var ALLOWED_BUDGETS = ['No budget', '$1K-5K', '$5K-10K', '$10K+'];
 var INTEREST_WORDS = { Sponsor: 'Sponsoring', Host: 'Hosting' };
 var CALENDLY_URL = 'https://calendly.com/sreday/30min';
