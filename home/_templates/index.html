@@ -683,7 +683,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
               if (!res || !res.ok) throw new Error((res && res.error) || 'rejected');
               var first = d.name.split(/\s+/)[0].replace(/[<>&"]/g, '');
               var done = document.getElementById('lead-done');
-              done.innerHTML = "<strong>Thanks " + first + "!</strong> Check your inbox, a copy is on its way to you. We'll be in touch soon.";
+              done.innerHTML = "<strong>Thanks " + first + "!</strong> Check your inbox and spam, we'll be in touch soon.";
               form.hidden = true; done.hidden = false;
               if (typeof gtag === 'function') gtag('event', 'lead_form_submit', { brand: LEAD_BRAND });
               leadFit();
