@@ -423,19 +423,12 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         </script>
         {% endif %}
 
-        <div class="sponsors-cta text-center">
-<!-- Calendly inline widget begin -->
-<div class="calendly-inline-widget" data-url="https://calendly.com/sreday/30min" style="min-width:320px;height:700px;"></div>
-<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-<!-- Calendly inline widget end -->
-        </div>
-
         {# ── "Email us" lead form: expandable panel under the Calendly widget.
              Mirrors the /sponsorship "Community stats" toggle (pill + chevron + max-height panel).
              Posts JSON to lead_form_url (Google Apps Script, see _build/lead-form.gs); when that key
              is empty or the request fails, falls back to a prefilled mailto: so no lead is lost.
              Every field is mandatory (chip groups need at least one pick); the script re-validates. ── #}
-        <div class="lead-scope">
+        <div class="lead-scope" style="margin-bottom:28px;">
         <div class="text-center" style="margin-top:28px;">
           <button class="btn-lead" id="lead-toggle" type="button" onclick="leadToggle()" aria-expanded="false" aria-controls="lead-panel">
             Email us
@@ -696,6 +689,13 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
             .then(function() { if (timer) clearTimeout(timer); });
         });
         </script>
+        <div class="sponsors-cta text-center">
+<!-- Calendly inline widget begin -->
+<div class="calendly-inline-widget" data-url="https://calendly.com/sreday/30min" style="min-width:320px;height:700px;"></div>
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<!-- Calendly inline widget end -->
+        </div>
+
       </div>
     </div>
   </div>
