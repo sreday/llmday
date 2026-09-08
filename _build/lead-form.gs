@@ -22,11 +22,11 @@ var BRANDS = {
   sreday: { inbox: 'hello@sreday.com', from: 'mark@sreday.com', site: 'sreday.com' },
   platformday: { inbox: 'hello@platformday.com', from: 'mark@platformday.com', site: 'platformday.com' }
 };
-var ALLOWED_INTERESTS = ['Sponsor', 'Host'];
+var ALLOWED_INTERESTS = ['Sponsor', 'Host', 'Partner'];
 var ALLOWED_BRANDS = ['LLMday', 'SREday', 'PLATFORMday'];
 var ALLOWED_REGIONS = ['US', 'EU', 'ASIA', 'LATAM'];
 var ALLOWED_BUDGETS = ['No budget', '$1K-5K', '$5K-10K', '$10K+'];
-var INTEREST_WORDS = { Sponsor: 'Sponsoring', Host: 'Hosting' };
+var INTEREST_WORDS = { Sponsor: 'Sponsoring', Host: 'Hosting', Partner: 'Partnering' };
 var CALENDLY_URL = 'https://calendly.com/sreday/30min';
 var SENDER_NAME = 'Mark Pawlikowski';
 var LEAD_LABEL = 'Sponsor leads'; // Gmail label the lead threads are filed under (created on first use)
@@ -67,8 +67,10 @@ function doPost(e) {
   var firstName = name.split(/\s+/)[0];
   // 'Sponsoring' / 'Hosting' / 'Sponsoring and potentially also Hosting' (bold words in the HTML version)
   var words = interests.map(function (i) { return INTEREST_WORDS[i]; });
-  var interestPhrase = words.join(' and potentially also ');
-  var interestHtml = words.map(function (w) { return '<b>' + w + '</b>'; }).join(' and potentially also ');
+  // 'Sponsoring' / 'Sponsoring and potentially also Hosting' / 'Sponsoring and potentially also Hosting and Partnering'
+  var interestPhrase = words[0] + (words.length > 1 ? ' and potentially also ' + joinProse(words.slice(1)) : '');
+  var bold = words.map(function (w) { return '<b>' + w + '</b>'; });
+  var interestHtml = bold[0] + (bold.length > 1 ? ' and potentially also ' + joinProse(bold.slice(1)) : '');
 
   var subject = company + ' <> ' + brands.join(', ');
 
