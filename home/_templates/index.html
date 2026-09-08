@@ -433,7 +433,8 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         {# ── "Email us" lead form: expandable panel under the Calendly widget.
              Mirrors the /sponsorship "Community stats" toggle (pill + chevron + max-height panel).
              Posts JSON to lead_form_url (Google Apps Script, see _build/lead-form.gs); when that key
-             is empty or the request fails, falls back to a prefilled mailto: so no lead is lost. ── #}
+             is empty or the request fails, falls back to a prefilled mailto: so no lead is lost.
+             Every field is mandatory (chip groups need at least one pick); the script re-validates. ── #}
         <div class="text-center" style="margin-top:28px;">
           <button class="btn-lead" id="lead-toggle" type="button" onclick="leadToggle()" aria-expanded="false" aria-controls="lead-panel">
             Email us
@@ -446,27 +447,47 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           <div class="lead-inner">
             <form id="lead-form" novalidate>
               <div class="lead-title">Tell us a bit about you</div>
-              <div class="lead-sub">We'll email you and our team in one go, so the conversation is open right away.</div>
+              <div class="lead-sub">Takes 20 seconds. You get a copy of the email too.</div>
               <div class="lead-grid">
                 <label class="lead-field"><span>Name</span><input type="text" name="name" autocomplete="name" required maxlength="80"></label>
                 <label class="lead-field"><span>Work email</span><input type="email" name="email" autocomplete="email" required maxlength="254"></label>
                 <label class="lead-field lead-field-wide"><span>Company</span><input type="text" name="company" autocomplete="organization" required maxlength="120"></label>
               </div>
-              <div class="lead-group">
-                <div class="lead-group-label">Conferences you're interested in</div>
+              <div class="lead-group" data-group="interests">
+                <div class="lead-group-label">I'm interested in <em>(one or more)</em></div>
+                <div class="lead-chips">
+                  {% for i in ['Sponsor', 'Host'] %}
+                  <label class="lead-chip"><input type="checkbox" name="interests" value="{{ i }}"><span>{{ i }}</span></label>
+                  {% endfor %}
+                </div>
+                <div class="lead-group-hint">Pick at least one</div>
+              </div>
+              <div class="lead-group" data-group="brands">
+                <div class="lead-group-label">Conferences <em>(one or more)</em></div>
                 <div class="lead-chips">
                   {% for b in ['LLMday', 'SREday', 'PLATFORMday'] %}
                   <label class="lead-chip"><input type="checkbox" name="brands" value="{{ b }}"{% if b == brand_name %} checked{% endif %}><span>{{ b }}</span></label>
                   {% endfor %}
                 </div>
+                <div class="lead-group-hint">Pick at least one</div>
               </div>
-              <div class="lead-group">
-                <div class="lead-group-label">Regions</div>
+              <div class="lead-group" data-group="regions">
+                <div class="lead-group-label">Regions <em>(one or more)</em></div>
                 <div class="lead-chips">
                   {% for r in ['EU', 'US', 'LATAM', 'ASIA'] %}
                   <label class="lead-chip"><input type="checkbox" name="regions" value="{{ r }}"><span>{{ r }}</span></label>
                   {% endfor %}
                 </div>
+                <div class="lead-group-hint">Pick at least one</div>
+              </div>
+              <div class="lead-group" data-group="budget">
+                <div class="lead-group-label">Budget</div>
+                <div class="lead-chips">
+                  {% for m in ['No budget', '$1K-5K', '$5K-10K', '$10K+'] %}
+                  <label class="lead-chip"><input type="radio" name="budget" value="{{ m }}"><span>{{ m }}</span></label>
+                  {% endfor %}
+                </div>
+                <div class="lead-group-hint">Pick one</div>
               </div>
               {# honeypot: real people never see or fill this #}
               <div class="lead-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -510,6 +531,10 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         .lead-field input.is-invalid { border-color: #EC645E; }
         .lead-group { margin-bottom: 18px; }
         .lead-group-label { font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 8px; letter-spacing: .02em; }
+        .lead-group-label em { font-style: normal; font-weight: 400; color: #888; }
+        .lead-group-hint { display: none; font-size: .8rem; color: #c0392b; margin-top: 6px; }
+        .lead-group.is-invalid .lead-group-hint { display: block; }
+        .lead-group.is-invalid .lead-chip span { border-color: #EC645E; }
         .lead-chips { display: flex; flex-wrap: wrap; gap: 8px; }
         .lead-chip { position: relative; margin: 0; cursor: pointer; }
         .lead-chip input { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -558,32 +583,47 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         function leadCollect(form) {
           var fd = new FormData(form);
           return {
-            name:    (fd.get('name') || '').trim(),
-            email:   (fd.get('email') || '').trim(),
-            company: (fd.get('company') || '').trim(),
-            brands:  fd.getAll('brands'),
-            regions: fd.getAll('regions'),
-            website: fd.get('website') || '',
-            brand:   LEAD_BRAND,
-            page:    location.href
+            name:      (fd.get('name') || '').trim(),
+            email:     (fd.get('email') || '').trim(),
+            company:   (fd.get('company') || '').trim(),
+            interests: fd.getAll('interests'),
+            brands:    fd.getAll('brands'),
+            regions:   fd.getAll('regions'),
+            budget:    fd.get('budget') || '',
+            website:   fd.get('website') || '',
+            brand:     LEAD_BRAND,
+            page:      location.href
           };
         }
+        function leadInterestPhrase(d) {
+          var map = { Sponsor: 'Sponsoring', Host: 'Hosting' };
+          var parts = d.interests.map(function(i) { return map[i] || i; });
+          return parts.length ? parts.join(' and ') : 'Sponsoring';
+        }
         function leadMailto(d) {
-          var subject = d.name + ' (' + d.company + ') - ' + (d.brands.length ? d.brands.join(', ') : 'conference') + ' sponsorship' + (d.regions.length ? ' in ' + d.regions.join(', ') : '');
-          var body = 'Hi Mark,\n\n' + d.name + ' from ' + d.company + ' would like to learn more about ' +
-                     (d.brands.length ? d.brands.join(' and ') : 'your') + ' conferences' + (d.regions.length ? ' in ' + d.regions.join(', ') : '') + '.\n\n' +
-                     'Name: ' + d.name + '\nCompany: ' + d.company + '\nEmail: ' + d.email + '\n\nThanks!';
+          var subject = d.name + ' (' + d.company + ') - ' + leadInterestPhrase(d) + ': ' + d.brands.join(', ') + ' in ' + d.regions.join(', ') + (d.budget ? ' (' + d.budget + ')' : '');
+          var body = 'Hi Mark,\n\n' + d.name + ' from ' + d.company + ' would like to learn more about ' + leadInterestPhrase(d) + ':\n\n' +
+                     '- Name: ' + d.name + '\n- Email: ' + d.email + '\n- Company: ' + d.company + '\n' +
+                     '- Conferences: ' + d.brands.join(', ') + '\n- Regions: ' + d.regions.join(', ') + '\n- Budget: ' + d.budget + '\n\nThanks!';
           return LEAD_MAILTO + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
         }
         function leadValidate(form, d) {
-          var ok = true;
+          var firstBad = null;
           ['name', 'email', 'company'].forEach(function(k) {
             var el = form.elements[k];
             var bad = !d[k] || (k === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d[k]));
             el.classList.toggle('is-invalid', bad);
-            if (bad && ok) { el.focus(); ok = false; }
+            if (bad && !firstBad) firstBad = el;
           });
-          return ok;
+          ['interests', 'brands', 'regions', 'budget'].forEach(function(k) {
+            var group = form.querySelector('.lead-group[data-group="' + k + '"]');
+            var bad = Array.isArray(d[k]) ? d[k].length === 0 : !d[k];
+            group.classList.toggle('is-invalid', bad);
+            if (bad && !firstBad) firstBad = group.querySelector('input');
+          });
+          if (firstBad) { firstBad.focus({ preventScroll: true }); firstBad.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+          leadFit();
+          return !firstBad;
         }
         function leadShowError(msg, d) {
           var err = document.getElementById('lead-error');
@@ -591,6 +631,13 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           err.hidden = false;
           leadFit();
         }
+        // Clear a group's "pick at least one" marker as soon as something is picked
+        document.getElementById('lead-form').addEventListener('change', function(ev) {
+          var group = ev.target.closest('.lead-group');
+          if (group) group.classList.remove('is-invalid');
+          if (ev.target.classList) ev.target.classList.remove('is-invalid');
+          leadFit();
+        });
         document.getElementById('lead-form').addEventListener('submit', function(ev) {
           ev.preventDefault();
           var form = this, d = leadCollect(form);
@@ -607,7 +654,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
               if (!res || !res.ok) throw new Error((res && res.error) || 'rejected');
               var first = d.name.split(/\s+/)[0].replace(/[<>&"]/g, '');
               var done = document.getElementById('lead-done');
-              done.innerHTML = "<strong>Thanks " + first + "!</strong> We've just emailed you and our team, so the thread is already open. We'll be in touch shortly.";
+              done.innerHTML = "<strong>Thanks " + first + "!</strong> Check your inbox, a copy is on its way to you. We'll be in touch soon.";
               form.hidden = true; done.hidden = false;
               if (typeof gtag === 'function') gtag('event', 'lead_form_submit', { brand: LEAD_BRAND });
               leadFit();
