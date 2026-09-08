@@ -3233,7 +3233,7 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
       
       <div class="lead-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <div class="lead-actions">
-        <button type="submit" class="btn btn-brand-primary btn-lg" id="lead-submit">Send</button>
+        <button type="submit" class="btn btn-lead-send btn-lg" id="lead-submit">Send</button>
         <a href="mailto:hello@llmday.com?subject=We%27d%20like%20to%20sponsor" class="lead-mailto-link" id="lead-mailto">use mailto instead</a>
         <div class="lead-error" id="lead-error" hidden></div>
       </div>
@@ -3302,8 +3302,9 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
 .lead-chip-platformday input:focus-visible + span { box-shadow: 0 0 0 3px rgba(226,151,29,.35); }
 .lead-hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 .lead-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 6px; }
-.lead-actions .btn-brand-primary { min-width: 140px; }
-.lead-actions .btn-brand-primary[disabled] { opacity: .65; cursor: default; }
+.btn-lead-send { min-width: 140px; background: #EC645E; color: #fff; border: none; }
+.btn-lead-send:hover, .btn-lead-send:focus { background: #e73830; color: #fff; }
+.btn-lead-send[disabled] { opacity: .65; cursor: default; }
 .lead-mailto-link { font-size: .9rem; color: #888; text-decoration: none; }
 .lead-mailto-link:hover, .lead-mailto-link:focus { color: #555; text-decoration: underline; }
 .lead-error { font-size: .9rem; color: #c0392b; }
@@ -3314,6 +3315,37 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
   .lead-inner { padding: 26px 20px; }
   .lead-grid { grid-template-columns: 1fr; }
 }
+/* ── dark variant for event pages (white page background) ── */
+.lead-inner { background: #1a1a1a; color: #eee; border: 1px solid #2a2a2a; box-shadow: 0 10px 30px rgba(0,0,0,.18); }
+.lead-title { color: #fff; }
+.lead-sub { color: #aaa; }
+.lead-field > span, .lead-group-label { color: #ccc; }
+.lead-group-label em { color: #777; }
+.lead-field input { background: #262626; border-color: #3a3a3a; color: #fff; }
+.lead-field input:focus { border-color: #EC645E; box-shadow: 0 0 0 3px rgba(236,100,94,.2); }
+.lead-field input.is-invalid { border-color: #ff8a80; }
+.lead-chip span { background: #2a2a2a; border-color: #3d3d3d; color: #ddd; }
+.lead-chip:hover span { border-color: #EC645E; }
+.lead-chip input:checked + span { background: #EC645E; border-color: #EC645E; color: #fff; }
+.lead-chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(236,100,94,.35); }
+.lead-chip-llmday span { background: rgba(38,152,106,.15); border-color: rgba(38,152,106,.5); color: #7bd3a6; }
+.lead-chip-llmday:hover span { border-color: #26986A; }
+.lead-chip-llmday input:checked + span { background: #26986A; border-color: #26986A; color: #fff; }
+.lead-chip-sreday span { background: rgba(142,77,124,.2); border-color: rgba(142,77,124,.6); color: #d9a8cc; }
+.lead-chip-sreday:hover span { border-color: #8e4d7c; }
+.lead-chip-sreday input:checked + span { background: #713660; border-color: #713660; color: #fff; }
+.lead-chip-platformday span { background: rgba(226,151,29,.15); border-color: rgba(226,151,29,.5); color: #f0b95a; }
+.lead-chip-platformday:hover span { border-color: #E2971D; }
+.lead-chip-platformday input:checked + span { background: #E2971D; border-color: #E2971D; color: #fff; }
+.lead-group.is-invalid .lead-chip span { border-color: #ff8a80; }
+.lead-group-hint, .lead-error { color: #ff8a80; }
+.lead-error a { color: #f0b95a; }
+.lead-consent-label { color: #ddd; }
+.lead-consent-label input { accent-color: #EC645E; }
+.lead-group.is-invalid .lead-consent-label { color: #ff8a80; }
+.lead-mailto-link { color: #999; }
+.lead-mailto-link:hover, .lead-mailto-link:focus { color: #ccc; }
+.lead-done { color: #eee; }
 </style>
 <script>
 var LEAD_FORM_URL = "https://script.google.com/macros/s/AKfycbxq_ZaBpS3C0vp9OIGZz3VboGh83sgfW9D-nTF3s_8HSmdWICh268bXqmTpsgOV8CslDw/exec";
