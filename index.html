@@ -1906,7 +1906,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
               <div class="lead-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
               <div class="lead-actions">
                 <button type="submit" class="btn btn-brand-primary btn-lg" id="lead-submit">Send</button>
-                <a href="#" class="lead-mailto-link" id="lead-mailto">use mailto instead</a>
+                <a href="mailto:hello@llmday.com" class="lead-mailto-link" id="lead-mailto">use mailto instead</a>
                 <div class="lead-error" id="lead-error" hidden></div>
               </div>
             </form>
@@ -2051,11 +2051,6 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           err.hidden = false;
           leadFit();
         }
-        // "use mailto instead": open the visitor's mail client with whatever is filled in so far
-        document.getElementById('lead-mailto').addEventListener('click', function(ev) {
-          ev.preventDefault();
-          location.href = leadMailto(leadCollect(document.getElementById('lead-form')));
-        });
         // Clear a group's "pick at least one" marker as soon as something is picked
         document.getElementById('lead-form').addEventListener('change', function(ev) {
           var group = ev.target.closest('.lead-group');
