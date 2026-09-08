@@ -66,3 +66,16 @@ repo root (home page only - conference pages are unaffected):
   in `partners.yaml` - it shows up in the Partner carousel instead.
 - **Duplicates**: if a company has more than one logo file, list the extra
   variants under `hidden_duplicates` so it only appears once on the home page.
+
+## Sponsor lead form
+
+The home page `#sponsor` section has an "Email us" expandable form under the Calendly widget
+(`home/_templates/index.html`). It posts JSON to a Google Apps Script web app whose source lives in
+`_build/lead-form.gs`; the script emails `hello@llmday.com` **and** the sponsor in one message
+(from `mark@llmday.com`) so the thread is open for both sides immediately.
+
+- The deployed `/exec` URL lives in `home/metadata.yml` -> `lead_form_url`. When it is empty the form
+  falls back to a prefilled `mailto:` link, so the UI can ship before the script is deployed.
+- Deploy / re-deploy steps are in the header comment of `_build/lead-form.gs` (Web app, Execute as: Me,
+  Who has access: Anyone). Editing the script needs a new deployment *version*; the URL stays the same.
+- Same deployment can serve sreday/platformday: the form sends `brand`, the script maps it to inbox + alias.
