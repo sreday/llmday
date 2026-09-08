@@ -35,7 +35,7 @@
       <div class="lead-group" data-group="brands">
         <div class="lead-group-label">Conferences <em>(one or more)</em></div>
         <div class="lead-chips">
-          {% for b in ['LLMday', 'SREday', 'PLATFORMday'] %}
+          {% for b in [brand_name] + (['LLMday', 'SREday', 'PLATFORMday'] | reject('equalto', brand_name) | list) %}
           <label class="lead-chip lead-chip-{{ b | lower }}"><input type="checkbox" name="brands" value="{{ b }}"{% if b == brand_name %} checked{% endif %}><span>{{ b }}</span></label>
           {% endfor %}
         </div>
