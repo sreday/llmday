@@ -64,6 +64,8 @@ The "I need more stats" expandable section on the sponsorship page has two kinds
 - **Dynamic** (from generate.py): total_attendees, total_speakers, total_events, total_countries, global_top_companies (top 10 speaker orgs across all events), global_sponsors (deduplicated sponsors), timeline_events
 - **Static** (hardcoded, derived from attendee CSV analysis): role breakdown, seniority, company size, top attendee companies
 
+**Job-title filter:** `looks_like_job_title()` / `company_parts()` near the top of `_build/generate.py` keep speakers' job titles ("Principal Software Engineer", "Team Lead, SRE", "ex-Google SRE", stealth/independent/freelance) out of both the About panel's "Companies presenting" list and the sponsorship top-companies stats. A value is a title when its last word is a role noun, it carries seniority + a role word, starts with `ex-`, or consists only of role/tech vocabulary; company names with a proper noun survive ("Varnish Software", "Reliability Engineering Lab"). Dropped values are printed at build time. To extend, add words to `_JT_ROLE_NOUNS` / `_JT_VOCAB` / `_JT_EXPLICIT` in `_event_template/_build/generate.py` and propagate. Same code in sreday, platformday and PEC.
+
 ## Sister repos
 Same structure: `sreday`. Changes to shared templates/logic often need to be applied to both.
 
