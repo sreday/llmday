@@ -115,6 +115,8 @@ _og_home_meta_path = '../home/metadata.yml'
 if _os.path.exists(_og_home_meta_path):
     with open(_og_home_meta_path, encoding='utf-8') as _f:
         _og_home_meta = yaml.load(_f, Loader=yaml.FullLoader)
+    # sponsor lead form endpoint: home/metadata.yml is the single source of truth (backend: _build/lead-form.gs)
+    context.setdefault('lead_form_url', (_og_home_meta or {}).get('lead_form_url', ''))
     _og_current_folder = _os.path.basename(_os.getcwd())
     for _he in (_og_home_meta.get('events') or []) + (_og_home_meta.get('events_past') or []):
         if _he.get('url', '').strip('./').rstrip('/') == _og_current_folder and _he.get('photo_url'):
@@ -280,7 +282,11 @@ for talk in talks:
         tracks[track] = []
         tracks_ordered.append(track)
     tracks[track].append(talk)
+# metadata.yml may declare the planned track count ("tracks: N") - that wins
+# for display so pages show the plan before talks are announced
+_planned_tracks = context.get("tracks") if isinstance(context.get("tracks"), int) else None
 context["tracks"] = tracks_ordered
+context["tracks_display"] = _planned_tracks or max(len(tracks_ordered), 1)
 
 # insert breaks & wrap up into each track
 breaks = context.get("breaks")

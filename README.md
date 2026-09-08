@@ -79,3 +79,8 @@ The home page `#sponsor` section has an "Email us" expandable form under the Cal
 - Deploy / re-deploy steps are in the header comment of `_build/lead-form.gs` (Web app, Execute as: Me,
   Who has access: Anyone). Editing the script needs a new deployment *version*; the URL stays the same.
 - Same deployment can serve sreday/platformday: the form sends `brand`, the script maps it to inbox + alias.
+- Event pages (event index + talk pages) use the same form as the "Become A Sponsor" pill via
+  `_event_template/_templates/_lead_form.html` (propagated into every `20*/_templates/`); the event build
+  reads `lead_form_url` from `home/metadata.yml`. That partial is a deliberate COPY of the home-page block in
+  `home/_templates/index.html` (label, pill colour, card border and navbar hash differ) - when changing fields
+  or copy, edit both, then propagate the partial to all event folders.
