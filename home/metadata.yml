@@ -5,6 +5,9 @@ twitter_url: https://twitter.com/llmday_com
 linkedin_url: https://www.linkedin.com/company/llmday/
 youtube_url: https://www.youtube.com/@llmday
 mailto: "mailto:hello@llmday.com"
+# Google Apps Script web-app URL (.../exec) behind the home-page "Email us" sponsor form.
+# Empty = the form falls back to a prefilled mailto:. Source + deploy steps: _build/lead-form.gs
+lead_form_url: "https://script.google.com/macros/s/AKfycbxq_ZaBpS3C0vp9OIGZz3VboGh83sgfW9D-nTF3s_8HSmdWICh268bXqmTpsgOV8CslDw/exec"
 
 hero_video: videos/hero.mp4
 
