@@ -1680,7 +1680,285 @@ From agent frameworks to runtime interactions, this talk provides a security-fir
       <div class="logo-item col-6 col-md-4 col-lg-2"><a href="https://www.hockeystick.show" target="_blank"><img src="../sponsors/hockeystick.png" alt=""></a></div>
       
     </div><!--//row-->
-    <div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="mailto:hello@llmday.com">Become A Sponsor</a></div>
+    <div class="sponsors-cta text-center pt-5">
+<div class="text-center">
+  <button class="btn-lead" id="lead-toggle" type="button" onclick="leadToggle()" aria-expanded="false" aria-controls="lead-panel">
+    Become A Sponsor
+    <span class="btn-lead-icon" aria-hidden="true">
+      <svg class="btn-lead-chevron" width="17" height="10" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,1 7,7 13,1"/></svg>
+    </span>
+  </button>
+</div>
+<div class="lead-panel" id="lead-panel">
+  <div class="lead-inner">
+    <form id="lead-form" novalidate>
+      <div class="lead-title">Let's talk!</div>
+      <div class="lead-sub">We'll email you and share prospectuses for relevant events.</div>
+      <div class="lead-grid">
+        <label class="lead-field"><span>Name</span><input type="text" name="name" autocomplete="name" required maxlength="80"></label>
+        <label class="lead-field"><span>Company</span><input type="text" name="company" autocomplete="organization" required maxlength="120"></label>
+        <label class="lead-field lead-field-wide"><span>Work email</span><input type="email" name="email" autocomplete="email" required maxlength="254"></label>
+      </div>
+      <div class="lead-group" data-group="interests">
+        <div class="lead-group-label">I'm interested in <em>(one or more)</em></div>
+        <div class="lead-chips">
+          
+          <label class="lead-chip"><input type="checkbox" name="interests" value="Sponsor"><span>Sponsor</span></label>
+          
+          <label class="lead-chip"><input type="checkbox" name="interests" value="Host"><span>Host</span></label>
+          
+        </div>
+        <div class="lead-group-hint">Pick at least one</div>
+      </div>
+      <div class="lead-group" data-group="brands">
+        <div class="lead-group-label">Conferences <em>(one or more)</em></div>
+        <div class="lead-chips">
+          
+          <label class="lead-chip lead-chip-llmday"><input type="checkbox" name="brands" value="LLMday" checked><span>LLMday</span></label>
+          
+          <label class="lead-chip lead-chip-sreday"><input type="checkbox" name="brands" value="SREday"><span>SREday</span></label>
+          
+          <label class="lead-chip lead-chip-platformday"><input type="checkbox" name="brands" value="PLATFORMday"><span>PLATFORMday</span></label>
+          
+        </div>
+        <div class="lead-group-hint">Pick at least one</div>
+      </div>
+      <div class="lead-group" data-group="regions">
+        <div class="lead-group-label">Regions <em>(one or more)</em></div>
+        <div class="lead-chips">
+          
+          <label class="lead-chip"><input type="checkbox" name="regions" value="US"><span>US</span></label>
+          
+          <label class="lead-chip"><input type="checkbox" name="regions" value="EU"><span>EU</span></label>
+          
+          <label class="lead-chip"><input type="checkbox" name="regions" value="ASIA"><span>ASIA</span></label>
+          
+          <label class="lead-chip"><input type="checkbox" name="regions" value="LATAM"><span>LATAM</span></label>
+          
+        </div>
+        <div class="lead-group-hint">Pick at least one</div>
+      </div>
+      <div class="lead-group" data-group="budget">
+        <div class="lead-group-label">Budget</div>
+        <div class="lead-chips">
+          
+          <label class="lead-chip"><input type="radio" name="budget" value="No budget"><span>No budget</span></label>
+          
+          <label class="lead-chip"><input type="radio" name="budget" value="$1K-5K"><span>$1K-5K</span></label>
+          
+          <label class="lead-chip"><input type="radio" name="budget" value="$5K-10K"><span>$5K-10K</span></label>
+          
+          <label class="lead-chip"><input type="radio" name="budget" value="$10K+"><span>$10K+</span></label>
+          
+        </div>
+        <div class="lead-group-hint">Pick one</div>
+      </div>
+      <div class="lead-group lead-consent" data-group="consent">
+        <label class="lead-consent-label"><input type="checkbox" name="consent" value="yes" required><span>I agree to share my email with the organizer</span></label>
+        <div class="lead-group-hint">Required</div>
+      </div>
+      
+      <div class="lead-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="lead-actions">
+        <button type="submit" class="btn btn-brand-primary btn-lg" id="lead-submit">Send</button>
+        <a href="mailto:hello@llmday.com?subject=We%27d%20like%20to%20sponsor" class="lead-mailto-link" id="lead-mailto">use mailto instead</a>
+        <div class="lead-error" id="lead-error" hidden></div>
+      </div>
+    </form>
+    <div class="lead-done" id="lead-done" hidden></div>
+  </div>
+</div>
+<style>
+.btn-lead {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: #EC645E; color: #fff; border: none; border-radius: 999px;
+  padding: 13px 34px; font-family: 'Montserrat', sans-serif; font-size: 1.14rem; font-weight: 600;
+  letter-spacing: .01em; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,.07);
+  transition: background .2s, transform .1s, box-shadow .2s;
+}
+.btn-lead:hover  { background: #e73830; box-shadow: 0 4px 18px rgba(236,100,94,.35); }
+.btn-lead:active { transform: scale(.97); }
+.btn-lead-icon { display: flex; align-items: center; flex-shrink: 0; }
+.btn-lead-chevron { transition: transform .3s ease; }
+.btn-lead.open .btn-lead-chevron { transform: rotate(180deg); }
+.lead-panel { overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
+.lead-inner {
+  background: #fff; color: #111; border: 1px solid #eee; border-radius: 16px; margin: 20px auto 0; padding: 36px 40px;
+  max-width: 640px; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,.07);
+}
+.lead-title { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; color: #111; margin-bottom: 2px; }
+.lead-sub { font-size: .9rem; color: #555; margin-bottom: 22px; }
+.lead-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; margin-bottom: 20px; }
+.lead-field { display: block; margin: 0; }
+.lead-field-wide { grid-column: 1 / -1; }
+.lead-field > span { display: block; font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 5px; letter-spacing: .02em; }
+.lead-field input {
+  width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #111;
+  background: #fff; outline: none; transition: border-color .2s, box-shadow .2s;
+}
+.lead-field input:focus { border-color: #26986A; box-shadow: 0 0 0 3px rgba(38,152,106,.15); }
+.lead-field input.is-invalid { border-color: #EC645E; }
+.lead-group { margin-bottom: 18px; }
+.lead-group-label { font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 8px; letter-spacing: .02em; }
+.lead-group-label em { font-style: normal; font-weight: 400; color: #888; }
+.lead-group-hint { display: none; font-size: .8rem; color: #c0392b; margin-top: 6px; }
+.lead-group.is-invalid .lead-group-hint { display: block; }
+.lead-group.is-invalid .lead-chip span { border-color: #EC645E; }
+.lead-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.lead-chip { position: relative; margin: 0; cursor: pointer; }
+.lead-chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+.lead-chip span {
+  display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid #b6dfc9;
+  background: #e8f7ef; color: #1e7a55; font-size: .9rem; font-weight: 600; user-select: none;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.lead-chip:hover span { border-color: #26986A; }
+.lead-chip input:checked + span { background: #26986A; border-color: #26986A; color: #fff; }
+.lead-chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(38,152,106,.3); }
+.lead-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .9rem; color: #333; }
+.lead-consent-label input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: #26986A; cursor: pointer; }
+.lead-group.is-invalid .lead-consent-label { color: #c0392b; }
+/* conference chips wear their own brand colours */
+.lead-chip-sreday span { background: #f3e8f0; border-color: #d9bfd2; color: #713660; }
+.lead-chip-sreday:hover span { border-color: #713660; }
+.lead-chip-sreday input:checked + span { background: #713660; border-color: #713660; color: #fff; }
+.lead-chip-sreday input:focus-visible + span { box-shadow: 0 0 0 3px rgba(113,54,96,.3); }
+.lead-chip-platformday span { background: #FDF3E0; border-color: #F8DFAE; color: #BA7B12; }
+.lead-chip-platformday:hover span { border-color: #E2971D; }
+.lead-chip-platformday input:checked + span { background: #E2971D; border-color: #E2971D; color: #fff; }
+.lead-chip-platformday input:focus-visible + span { box-shadow: 0 0 0 3px rgba(226,151,29,.35); }
+.lead-hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+.lead-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 6px; }
+.lead-actions .btn-brand-primary { min-width: 140px; }
+.lead-actions .btn-brand-primary[disabled] { opacity: .65; cursor: default; }
+.lead-mailto-link { font-size: .9rem; color: #888; text-decoration: none; }
+.lead-mailto-link:hover, .lead-mailto-link:focus { color: #555; text-decoration: underline; }
+.lead-error { font-size: .9rem; color: #c0392b; }
+.lead-error a { color: #26986A; font-weight: 600; }
+.lead-done { font-size: 1rem; color: #111; line-height: 1.6; }
+.lead-done strong { font-family: 'Montserrat', sans-serif; }
+@media (max-width: 575.98px) {
+  .lead-inner { padding: 26px 20px; }
+  .lead-grid { grid-template-columns: 1fr; }
+}
+</style>
+<script>
+var LEAD_FORM_URL = "https://script.google.com/macros/s/AKfycbxq_ZaBpS3C0vp9OIGZz3VboGh83sgfW9D-nTF3s_8HSmdWICh268bXqmTpsgOV8CslDw/exec";
+var LEAD_BRAND    = "llmday";
+var LEAD_MAILTO   = "mailto:hello@llmday.com";
+
+function leadFit() {
+  var btn = document.getElementById('lead-toggle'), panel = document.getElementById('lead-panel');
+  if (btn.classList.contains('open')) panel.style.maxHeight = panel.scrollHeight + 'px';
+}
+function leadToggle() {
+  var btn = document.getElementById('lead-toggle'), panel = document.getElementById('lead-panel');
+  var open = btn.classList.toggle('open');
+  panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+  btn.setAttribute('aria-expanded', String(open));
+  if (open) setTimeout(function() {
+    var first = panel.querySelector('input[name="name"]');
+    if (first && !first.disabled) first.focus({ preventScroll: true });
+  }, 600);
+}
+window.addEventListener('resize', leadFit);
+// Open (never close) the panel - used when the visitor arrives via the navbar "Sponsor" link or #sponsor
+function leadOpen() {
+  if (!document.getElementById('lead-toggle').classList.contains('open')) leadToggle();
+}
+if (location.hash === '#sponsors') document.addEventListener('DOMContentLoaded', leadOpen);
+window.addEventListener('hashchange', function() { if (location.hash === '#sponsors') leadOpen(); });
+document.querySelectorAll('a[href="#sponsors"]').forEach(function(a) {
+  a.addEventListener('click', function() { setTimeout(leadOpen, 0); });
+});
+
+function leadCollect(form) {
+  var fd = new FormData(form);
+  return {
+    name:      (fd.get('name') || '').trim(),
+    email:     (fd.get('email') || '').trim(),
+    company:   (fd.get('company') || '').trim(),
+    interests: fd.getAll('interests'),
+    brands:    fd.getAll('brands'),
+    regions:   fd.getAll('regions'),
+    budget:    fd.get('budget') || '',
+    consent:   fd.get('consent') === 'yes',
+    website:   fd.get('website') || '',
+    brand:     LEAD_BRAND,
+    page:      location.href
+  };
+}
+function leadInterestPhrase(d) {
+  var map = { Sponsor: 'Sponsoring', Host: 'Hosting' };
+  var parts = d.interests.map(function(i) { return map[i] || i; });
+  return parts.length ? parts.join(' and ') : 'Sponsoring';
+}
+function leadMailto(d) {
+  var subject = (d.company || 'Sponsorship inquiry') + (d.brands.length ? ' <> ' + d.brands.join(', ') : '');
+  var body = 'Hi Mark,\n\n' + d.name + ' from ' + d.company + ' would like to learn more about ' + leadInterestPhrase(d) + ':\n\n' +
+             '- Name: ' + d.name + '\n- Email: ' + d.email + '\n- Company: ' + d.company + '\n' +
+             '- Conferences: ' + d.brands.join(', ') + '\n- Regions: ' + d.regions.join(', ') + '\n- Budget: ' + d.budget + '\n\nThanks!';
+  return LEAD_MAILTO + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+}
+function leadValidate(form, d) {
+  var firstBad = null;
+  ['name', 'email', 'company'].forEach(function(k) {
+    var el = form.elements[k];
+    var bad = !d[k] || (k === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d[k]));
+    el.classList.toggle('is-invalid', bad);
+    if (bad && !firstBad) firstBad = el;
+  });
+  ['interests', 'brands', 'regions', 'budget', 'consent'].forEach(function(k) {
+    var group = form.querySelector('.lead-group[data-group="' + k + '"]');
+    var bad = Array.isArray(d[k]) ? d[k].length === 0 : !d[k];
+    group.classList.toggle('is-invalid', bad);
+    if (bad && !firstBad) firstBad = group.querySelector('input');
+  });
+  if (firstBad) { firstBad.focus({ preventScroll: true }); firstBad.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  leadFit();
+  return !firstBad;
+}
+function leadShowError(msg, d) {
+  var err = document.getElementById('lead-error');
+  err.innerHTML = msg + ' <a href="' + leadMailto(d) + '">Email us directly</a> instead.';
+  err.hidden = false;
+  leadFit();
+}
+// Clear a group's "pick at least one" marker as soon as something is picked
+document.getElementById('lead-form').addEventListener('change', function(ev) {
+  var group = ev.target.closest('.lead-group');
+  if (group) group.classList.remove('is-invalid');
+  if (ev.target.classList) ev.target.classList.remove('is-invalid');
+  leadFit();
+});
+document.getElementById('lead-form').addEventListener('submit', function(ev) {
+  ev.preventDefault();
+  var form = this, d = leadCollect(form);
+  var err = document.getElementById('lead-error'); err.hidden = true;
+  if (!leadValidate(form, d)) return;
+  if (!LEAD_FORM_URL) { location.href = leadMailto(d); return; }   // endpoint not configured yet
+  var btn = document.getElementById('lead-submit');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var timer = ctrl ? setTimeout(function() { ctrl.abort(); }, 12000) : null;
+  fetch(LEAD_FORM_URL, { method: 'POST', body: JSON.stringify(d), signal: ctrl ? ctrl.signal : undefined })
+    .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
+    .then(function(res) {
+      if (!res || !res.ok) throw new Error((res && res.error) || 'rejected');
+      var first = d.name.split(/\s+/)[0].replace(/[<>&"]/g, '');
+      var done = document.getElementById('lead-done');
+      done.innerHTML = "<strong>Thanks " + first + "!</strong> Check your inbox and spam, we'll be in touch soon.";
+      form.hidden = true; done.hidden = false;
+      if (typeof gtag === 'function') gtag('event', 'lead_form_submit', { brand: LEAD_BRAND });
+      leadFit();
+    })
+    .catch(function() {
+      btn.disabled = false; btn.textContent = 'Send';
+      leadShowError("Hmm, that didn't go through.", d);
+    })
+    .then(function() { if (timer) clearTimeout(timer); });
+});
+</script></div>
   </div><!--//container-->
 </section><!--//sponsors-section-->
 
