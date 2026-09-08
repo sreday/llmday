@@ -65,36 +65,40 @@ function doPost(e) {
   }
 
   var firstName = name.split(/\s+/)[0];
-  var interestPhrase = joinProse(interests.map(function (i) { return INTEREST_WORDS[i]; }));
+  // 'Sponsoring' / 'Hosting' / 'Sponsoring and potentially also Hosting' (bold words in the HTML version)
+  var words = interests.map(function (i) { return INTEREST_WORDS[i]; });
+  var interestPhrase = words.join(' and potentially also ');
+  var interestHtml = words.map(function (w) { return '<b>' + w + '</b>'; }).join(' and potentially also ');
 
   var subject = company + ' <> ' + brands.join(', ');
 
   var confLabel = brands.length > 1 ? 'Conferences' : 'Conference';
-  var intro = firstName + ',' + '\n\n' +
-    'Thank you for submitting the form, here' + '\'' + 's what we' + '\'' + 're working with:' + '\n\n';
-  var bullets = [
+  var intro = 'Hey ' + firstName + ',' + '\n\n' +
+    'Thank you for submitting the form, here\'s what we\'re working with:' + '\n\n';
+  var lines = [
     confLabel + ': ' + brands.join(', '),
     'Regions: ' + regions.join(', '),
     'Budget: ' + budget,
-    'Sender' + '\'' + 's email: ' + email,
+    'Sender\'s email: ' + email,
     'Form sent from: ' + source
   ];
-  var outro = '\nMark will reply soon. In the meantime, you can schedule a quick call here: ' + CALENDLY_URL + '\n\n' +
+  var outro = '\n\nMark will reply and share the relevant prospectuses soon.' + '\n\n' +
+    'In the meantime, you can schedule a quick call here: ' + CALENDLY_URL + '\n\n' +
     'Best,' + '\n' + 'Mark';
 
   // plain-text version (fallback for clients that do not render HTML)
   var body =
-    'Hey ' + intro +
+    intro +
     name + ' from ' + company + ' would like to learn more about ' + interestPhrase + ':' + '\n\n' +
-    bullets.map(function (b) { return '- ' + b; }).join('\n') + '\n' +
+    lines.join('\n') +
     outro;
 
-  // HTML version: same text, with the name and company in bold
+  // HTML version: same text, interest words in bold
   var htmlBody =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#111">' +
-    nl2br(esc('Hey ' + intro)) +
-    '<b>' + esc(name) + '</b> from <b>' + esc(company) + '</b> would like to learn more about ' + esc(interestPhrase) + ':<br><br>' +
-    '<ul style="margin:0 0 0 18px;padding:0">' + bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>' +
+    nl2br(esc(intro)) +
+    esc(name) + ' from ' + esc(company) + ' would like to learn more about ' + interestHtml + ':<br><br>' +
+    lines.map(esc).join('<br>') +
     nl2br(esc(outro)).replace(esc(CALENDLY_URL), '<a href="' + CALENDLY_URL + '">' + CALENDLY_URL + '</a>') +
     '</div>';
 
