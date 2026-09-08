@@ -55,18 +55,18 @@ function doPost(e) {
   var brands = pick(data.brands, ALLOWED_BRANDS);
   var regions = pick(data.regions, ALLOWED_REGIONS);
   var budget = ALLOWED_BUDGETS.indexOf(data.budget) !== -1 ? data.budget : '';
+  var consent = data.consent === true;
 
   // Everything is mandatory: the form enforces it, this is the backstop.
   if (!name || !company || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-      !interests.length || !brands.length || !regions.length || !budget) {
+      !interests.length || !brands.length || !regions.length || !budget || !consent) {
     return respond({ ok: false, error: 'invalid fields' });
   }
 
   var firstName = name.split(/\s+/)[0];
   var interestPhrase = joinProse(interests.map(function (i) { return INTEREST_WORDS[i]; }));
 
-  var subject = name + ' (' + company + ') - ' + interestPhrase + ': ' +
-                brands.join(', ') + ' in ' + regions.join(', ') + ' (' + budget + ')';
+  var subject = company + ' <> ' + brands.join(', ');
 
   var body =
     'Hey ' + firstName + ',\n\n' +
@@ -133,7 +133,7 @@ function joinProse(arr) {
 function testLead() {
   var e = { postData: { contents: JSON.stringify({
     name: 'Anna Kowalska', email: 'hello@llmday.com', company: 'Chainguard',
-    interests: ['Sponsor', 'Host'], brands: ['LLMday', 'SREday'], regions: ['EU'], budget: '$5K-10K',
+    interests: ['Sponsor', 'Host'], brands: ['LLMday', 'SREday'], regions: ['EU'], budget: '$5K-10K', consent: true,
     brand: 'llmday', page: 'https://www.llmday.com/#sponsor'
   }) } };
   Logger.log(doPost(e).getContent());
