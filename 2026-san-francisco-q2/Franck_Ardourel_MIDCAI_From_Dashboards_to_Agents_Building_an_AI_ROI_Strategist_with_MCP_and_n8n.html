@@ -371,6 +371,8 @@ Franck has led large-scale transformations—from growing 24 Hour Fitness from $
           
           <label class="lead-chip"><input type="checkbox" name="interests" value="Host"><span>Host</span></label>
           
+          <label class="lead-chip"><input type="checkbox" name="interests" value="Partner"><span>Partner</span></label>
+          
         </div>
         <div class="lead-group-hint">Pick at least one</div>
       </div>
@@ -581,7 +583,7 @@ function leadCollect(form) {
   };
 }
 function leadInterestPhrase(d) {
-  var map = { Sponsor: 'Sponsoring', Host: 'Hosting' };
+  var map = { Sponsor: 'Sponsoring', Host: 'Hosting', Partner: 'Partnering' };
   var parts = d.interests.map(function(i) { return map[i] || i; });
   return parts.length ? parts.join(' and ') : 'Sponsoring';
 }
