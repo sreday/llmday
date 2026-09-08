@@ -73,10 +73,10 @@ function doPost(e) {
   var intro = firstName + ',' + '\n\n' +
     'Thank you for submitting the form, here' + '\'' + 's what we' + '\'' + 're working with:' + '\n\n';
   var bullets = [
-    'Email: ' + email,
     confLabel + ': ' + brands.join(', '),
     'Regions: ' + regions.join(', '),
     'Budget: ' + budget,
+    'Sender' + '\'' + 's email: ' + email,
     'Form sent from: ' + source
   ];
   var outro = '\nMark will reply soon. In the meantime, you can schedule a quick call here: ' + CALENDLY_URL + '\n\n' +
