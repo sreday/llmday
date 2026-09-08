@@ -547,7 +547,7 @@
     <div class="schedule-meta">
       <span class="schedule-meta-item">{{ date_string }}</span>
       <span class="schedule-meta-divider">•</span>
-      <span class="schedule-meta-item">{% if tracks|length == 1 %}single track{% else %}{{ tracks|length }} parallel tracks{% endif %}</span>
+      <span class="schedule-meta-item">{% if tracks_display == 1 %}single track{% else %}{{ tracks_display }} parallel tracks{% endif %}</span>
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">{{ schedule_time_bracket }}</span>
       <span class="schedule-meta-divider">•</span>
@@ -777,7 +777,7 @@
       <div class="logo-item col-6 col-md-4 col-lg-2"><a href="{{sponsor.url}}" target="_blank"><img src="../sponsors/{{ sponsor.logo }}" alt=""></a></div>
       {% endfor %}
     </div><!--//row-->
-    <div class="sponsors-cta text-center pt-5"><a class="btn-primary btn btn-lg" href="{{ mailto }}">Become A Sponsor</a></div>
+    <div class="sponsors-cta text-center pt-5">{% include '_lead_form.html' %}</div>
   </div><!--//container-->
 </section><!--//sponsors-section-->
 {% endif %}
