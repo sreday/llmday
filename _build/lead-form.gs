@@ -81,8 +81,7 @@ function doPost(e) {
     '- Budget: ' + budget + '\n' +
     '- Form sent from: ' + source + '\n\n' +
     'If you\'d like to double down with a meeting, here\'s your link: ' + CALENDLY_URL + '\n\n' +
-    'Take it from here folks!\n\n' +
-    'Best,\n' +
+    'I\'ll reply in this thread soon,\n' +
     'Mark';
 
   // Sponsor in To, brand inbox in Cc: a plain Reply from Mark then goes to the sponsor and
