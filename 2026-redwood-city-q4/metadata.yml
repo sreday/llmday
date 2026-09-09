@@ -22,6 +22,7 @@ tracks: 2
 
 rooms:
 - main room
+- meeting room
 
 breaks:
 - title: Coffee break
