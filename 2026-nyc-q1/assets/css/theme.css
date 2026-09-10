@@ -28,3 +28,5 @@
 @media (max-width: 767.98px){.hero-block .hero-cta-row{display:flex;flex-direction:column;justify-content:center;gap:14px}}
 /* Anchors whose heading sits at the very top of the section (no section padding): leave room under the 70px fixed header. html #x outranks the inline section[id] rule in _base.html. */
 html #about, html #stats, html #faq, html #sisters, html .track-section-header[id], html [id^="track-"] { scroll-margin-top: 100px; }
+/* Footer mascot GIF (<img style="height:400px"> in home + event _base.html) must not overflow phones */
+@media (max-width: 767.98px){.footer img{max-width:100%;height:auto !important}}
