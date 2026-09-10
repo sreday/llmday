@@ -100,11 +100,11 @@
 
         <div class="row">
             {% for ambassador in ambassadors %}
-            <div class="col-12 col-md-6 col-lg-4 mb-4{% if loop.index > 9 %} amb-extra{% endif %}">
+            <div class="col-12 col-md-6 col-lg-4 mb-4{% if loop.index > 9 %} amb-extra{% endif %}{% if loop.index > 2 %} amb-extra-m{% endif %}">
                 <div class="card rounded h-100 shadow-sm border-0">
                     <div class="card-body text-center">
                         <div class="mb-3">
-                            <img src="./ambassadors/{{ ambassador.Headshot }}"
+                            <img src="./ambassadors/{{ ambassador.Headshot }}" loading="lazy" decoding="async"
                                  class="rounded-circle img-fluid shadow-sm"
                                  style="width: 150px; height: 150px; object-fit: cover;"
                                  alt="{{ ambassador.Name }}">
@@ -129,7 +129,7 @@
                             {% if ambassador.Note|length > 100 %}
                                 <span id="short-note-{{ loop.index }}">{{ ambassador.Note[:100] }}...</span>
                                 <span id="long-note-{{ loop.index }}" style="display: none;">{{ ambassador.Note }}</span>
-                                <a href="javascript:void(0);" id="link-{{ loop.index }}" class="ms-1 fw-bold" onclick="toggleNote({{ loop.index }})">Read more</a>
+                                <a href="javascript:void(0);" id="link-{{ loop.index }}" class="ms-1 fw-bold note-toggle" onclick="toggleNote({{ loop.index }})">Read more</a>
                             {% else %}
                                 {{ ambassador.Note }}
                             {% endif %}
@@ -139,9 +139,9 @@
             </div>
             {% endfor %}
         </div>
-        {% if ambassadors|length > 9 %}
+        {% if ambassadors|length > 2 %}
         <div class="text-center mt-2 mb-4">
-          <a href="javascript:void(0);" id="show-more-amb" class="btn btn-outline-secondary" onclick="showMoreAmb()">Show {{ ambassadors|length - 9 }} more</a>
+          <a href="javascript:void(0);" id="show-more-amb" class="btn btn-outline-secondary show-more-btn{% if ambassadors|length <= 9 %} d-md-none{% endif %}" data-total="{{ ambassadors|length }}" data-desktop="9" data-mobile="2" onclick="showMoreAmb()">Show {{ ambassadors|length - 9 }} more</a>
         </div>
         {% endif %}
     </div>
@@ -175,10 +175,10 @@ function toggleNote(id) {
 
       {% for event in events_past %}
 
-      <div class="col-12 col-lg-6 mb-4{% if loop.index > 10 %} past-conf-extra{% endif %}">
+      <div class="col-12 col-lg-6 mb-4{% if loop.index > 10 %} past-conf-extra{% endif %}{% if loop.index > 2 %} past-conf-extra-m{% endif %}">
         <div class="card rounded">
           <a href="{{ event.url }}">
-            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
+            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="" loading="lazy" decoding="async">
           </a>
           <div class="card-body">
             <h5 class="card-title mb-2">{{ event.name }}</h5>
@@ -199,9 +199,9 @@ function toggleNote(id) {
 
       {% endfor %}
     </div>
-    {% if events_past|length > 10 %}
+    {% if events_past|length > 2 %}
     <div class="text-center mt-2 mb-4">
-      <a href="javascript:void(0);" id="show-more-past-conf" class="btn btn-past-more" onclick="showMorePastConf()">Show {{ events_past|length - 10 }} more</a>
+      <a href="javascript:void(0);" id="show-more-past-conf" class="btn btn-past-more show-more-btn{% if events_past|length <= 10 %} d-md-none{% endif %}" data-total="{{ events_past|length }}" data-desktop="10" data-mobile="2" onclick="showMorePastConf()">Show {{ events_past|length - 10 }} more</a>
     </div>
     {% endif %}
     {% endif %}
@@ -211,10 +211,10 @@ function toggleNote(id) {
 
       {% for event in meetups_past %}
 
-      <div class="col-12 col-lg-6 mb-4{% if loop.index > 10 %} past-meetup-extra{% endif %}">
+      <div class="col-12 col-lg-6 mb-4{% if loop.index > 10 %} past-meetup-extra{% endif %}{% if loop.index > 2 %} past-meetup-extra-m{% endif %}">
         <div class="card rounded">
           <a href="./{{ event.url }}">
-            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
+            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="" loading="lazy" decoding="async">
           </a>
           <div class="card-body">
             <h5 class="card-title mb-2">
@@ -232,25 +232,31 @@ function toggleNote(id) {
 
       {% endfor %}
     </div>
-    {% if meetups_past|length > 10 %}
+    {% if meetups_past|length > 2 %}
     <div class="text-center mt-2">
-      <a href="javascript:void(0);" id="show-more-past-meetup" class="btn btn-past-more" onclick="showMorePastMeetup()">Show {{ meetups_past|length - 10 }} more</a>
+      <a href="javascript:void(0);" id="show-more-past-meetup" class="btn btn-past-more show-more-btn{% if meetups_past|length <= 10 %} d-md-none{% endif %}" data-total="{{ meetups_past|length }}" data-desktop="10" data-mobile="2" onclick="showMorePastMeetup()">Show {{ meetups_past|length - 10 }} more</a>
     </div>
     {% endif %}
     {% endif %}
   </div>
 </section>
+{% endif %}
+{# style + script kept outside the events_past conditional so the Read-more /
+   Playlist buttons and show-more helpers also work when there are no past events #}
 <style>
 .past-conf-extra, .past-meetup-extra, .amb-extra { display: none; }
+@media (max-width: 767.98px) { .amb-extra-m, .past-conf-extra-m, .past-meetup-extra-m, .testimonial-extra-m { display: none; } }
+.note-toggle { display: inline-block; padding: .6rem 0; }
+@media (max-width: 767.98px) { .yt-playlist-btn { margin-left: 0; margin-top: .5rem; } }
 .btn-past-more { text-decoration: none; }
 .btn-past-more:hover, .btn-past-more:focus { text-decoration: none; }
 #show-more-amb { background: #26986A; color: #fff; border-color: #26986A; text-decoration: none; }
 #show-more-amb:hover, #show-more-amb:focus { background: #3db07f; color: #fff; border-color: #3db07f; text-decoration: none; }
 .btn-past-more { color: #000; background: #fff; border: 2px solid #fff; }
 .btn-past-more:hover, .btn-past-more:focus { background: #f0f0f0; color: #000; border-color: #f0f0f0; }
-.yt-playlist-btn { display: inline-block; margin-left: 12px; padding: 8px 18px; background: #EC645E; color: #fff; border-radius: 6px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 700; transition: background 0.2s ease; }
+.yt-playlist-btn { display: inline-block; margin-left: 12px; padding: 10px 18px; min-height: 44px; line-height: 24px; background: #EC645E; color: #fff; border-radius: 6px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 700; transition: background 0.2s ease; }
 .yt-playlist-btn:hover, .yt-playlist-btn:focus { background: #f08580; color: #fff; text-decoration: none; }
-.event-read-more-btn { display: inline-block; padding: 8px 18px; background: #26986A; color: #fff; border-radius: 6px; text-decoration: none; transition: background 0.2s ease; font-family: 'Montserrat', sans-serif; font-weight: 700; }
+.event-read-more-btn { display: inline-block; padding: 10px 18px; min-height: 44px; line-height: 24px; background: #26986A; color: #fff; border-radius: 6px; text-decoration: none; transition: background 0.2s ease; font-family: 'Montserrat', sans-serif; font-weight: 700; }
 .event-read-more-btn:hover, .event-read-more-btn:focus { background: #3db07f; color: #fff; text-decoration: none; }
 .card { transition: box-shadow .4s ease, border-color .4s ease; border: 1px solid transparent; }
 #events .card:hover { border-color: rgba(60,180,130,.35); box-shadow: 0 0 20px rgba(60,180,130,.18), 0 0 48px rgba(60,180,130,.07); }
@@ -261,20 +267,32 @@ function toggleNote(id) {
 #events .card-img-top:hover, #past-events .card-img-top:hover { filter: brightness(1.1) contrast(0.9); }
 </style>
 <script>
-function showMoreAmb() {
-  document.querySelectorAll('.amb-extra').forEach(function(el) { el.classList.remove('amb-extra'); });
-  document.getElementById('show-more-amb').style.display = 'none';
+/* Show-more lists: desktop hides items past the desktop limit (.x-extra),
+   phones (<768px) additionally hide everything past the 2nd item (.x-extra-m).
+   One tap reveals the whole list on either viewport. */
+function showMoreList(cls, btnId) {
+  document.querySelectorAll('.' + cls + ', .' + cls + '-m').forEach(function (el) {
+    el.classList.remove(cls); el.classList.remove(cls + '-m');
+  });
+  var b = document.getElementById(btnId);
+  if (b) { b.dataset.expanded = '1'; b.style.display = 'none'; }
 }
-function showMorePastConf() {
-  document.querySelectorAll('.past-conf-extra').forEach(function(el) { el.classList.remove('past-conf-extra'); });
-  document.getElementById('show-more-past-conf').style.display = 'none';
+function showMoreAmb()        { showMoreList('amb-extra', 'show-more-amb'); }
+function showMorePastConf()   { showMoreList('past-conf-extra', 'show-more-past-conf'); }
+function showMorePastMeetup() { showMoreList('past-meetup-extra', 'show-more-past-meetup'); }
+var mobileMQ = window.matchMedia('(max-width: 767.98px)');
+function updateShowMoreLabels() {
+  document.querySelectorAll('.show-more-btn').forEach(function (b) {
+    if (b.dataset.expanded) return;
+    var limit = mobileMQ.matches ? +b.dataset.mobile : +b.dataset.desktop;
+    b.textContent = 'Show ' + (+b.dataset.total - limit) + ' more';
+  });
+  if (typeof hideShortReadMore === 'function') hideShortReadMore();
 }
-function showMorePastMeetup() {
-  document.querySelectorAll('.past-meetup-extra').forEach(function(el) { el.classList.remove('past-meetup-extra'); });
-  document.getElementById('show-more-past-meetup').style.display = 'none';
-}
+document.addEventListener('DOMContentLoaded', updateShowMoreLabels);
+(mobileMQ.addEventListener ? mobileMQ.addEventListener('change', updateShowMoreLabels) : mobileMQ.addListener(updateShowMoreLabels));
+window.addEventListener('resize', function () { clearTimeout(window.__showMoreT); window.__showMoreT = setTimeout(updateShowMoreLabels, 150); });
 </script>
-{% endif %}
 
 
 {% if testimonials %}
@@ -285,9 +303,9 @@ function showMorePastMeetup() {
 
       {% for testimonial in testimonials %}
 
-      <div class="col-6 col-lg mb-4 testimonial-col{% if loop.index > 10 %} testimonial-extra{% endif %}">
+      <div class="col-12 col-md-6 col-lg mb-4 testimonial-col{% if loop.index > 10 %} testimonial-extra{% endif %}{% if loop.index > 2 %} testimonial-extra-m{% endif %}">
         <div class="card rounded">
-          <img src="./assets/images/profiles/{{ testimonial.Headshot }}" class="card-img-top rounded-0" alt="">
+          <img src="./assets/images/profiles/{{ testimonial.Headshot }}" class="card-img-top rounded-0" alt="" loading="lazy" decoding="async">
           <div class="card-body">
             <h5 class="card-title mb-2">{{ testimonial.Name }}</h5>
             <div class="card-text mb-3 text-muted">
@@ -297,7 +315,7 @@ function showMorePastMeetup() {
               {% endif %}
             </div>
             <div class="card-text mb-3 testimonial-body" id="tbody-{{ loop.index0 }}">
-              {{ testimonial.Testimonial }}
+              <div class="testimonial-text">{{ testimonial.Testimonial }}</div>
               <a href="javascript:void(0);" class="testimonial-readmore" onclick="toggleTestimonialBody({{ loop.index0 }}, this)">Read more</a>
             </div>
           </div>
@@ -314,9 +332,9 @@ function showMorePastMeetup() {
 
       {% endfor %}
     </div>
-    {% if testimonials|length > 10 %}
+    {% if testimonials|length > 2 %}
     <div class="text-center mt-3">
-      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-brand-primary" onclick="showMoreTestimonials()">Show {{ testimonials|length - 10 }} more</a>
+      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-brand-primary show-more-btn{% if testimonials|length <= 10 %} d-md-none{% endif %}" data-total="{{ testimonials|length }}" data-desktop="10" data-mobile="2" onclick="showMoreTestimonials()">Show {{ testimonials|length - 10 }} more</a>
     </div>
     {% endif %}
   </div>
@@ -326,28 +344,26 @@ function showMorePastMeetup() {
 .testimonial-extra { display: none; }
 .btn-brand-primary { background: #26986A; color: #fff; border: none; }
 .btn-brand-primary:hover, .btn-brand-primary:focus { background: #2dae7a; color: #fff; }
-.testimonial-body { position: relative; max-height: 4.8em; line-height: 1.6em; overflow: hidden; }
-.testimonial-body.expanded { max-height: none; }
-.testimonial-readmore { position: absolute; bottom: 0; right: 0; background: linear-gradient(to right, transparent, #fff 25%); padding-left: 2em; font-size: 0.85em; text-decoration: none; }
+.testimonial-body { line-height: 1.6em; }
+.testimonial-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.testimonial-body.expanded .testimonial-text { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.testimonial-readmore { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .25rem; font-size: .9em; font-weight: 600; text-decoration: none; }
 .testimonial-readmore:hover, .testimonial-readmore:focus { text-decoration: none; }
 </style>
 <script>
 function showMoreTestimonials() {
-  document.querySelectorAll('.testimonial-extra').forEach(function(el) { el.classList.remove('testimonial-extra'); });
-  document.getElementById('show-more-testimonials').style.display = 'none';
+  showMoreList('testimonial-extra', 'show-more-testimonials');
   hideShortReadMore();
 }
 function toggleTestimonialBody(idx, link) {
   var el = document.getElementById('tbody-' + idx);
-  el.classList.add('expanded');
-  link.style.display = 'none';
+  var open = el.classList.toggle('expanded');
+  link.textContent = open ? 'Show less' : 'Read more';
 }
 function hideShortReadMore() {
-  document.querySelectorAll('.testimonial-body:not(.expanded)').forEach(function(el) {
-    if (el.offsetHeight > 0 && el.scrollHeight <= el.offsetHeight) {
-      var link = el.querySelector('.testimonial-readmore');
-      if (link) link.style.display = 'none';
-    }
+  document.querySelectorAll('.testimonial-body:not(.expanded)').forEach(function (el) {
+    var t = el.querySelector('.testimonial-text'), link = el.querySelector('.testimonial-readmore');
+    if (t && link && t.offsetHeight > 0 && t.scrollHeight <= t.clientHeight + 1) link.style.display = 'none';
   });
 }
 document.addEventListener('DOMContentLoaded', hideShortReadMore);
@@ -365,10 +381,10 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <div class="sponsor-carousel-wrap" style="background:#fff;border-radius:999px;box-shadow:0 4px 20px rgba(0,0,0,.07);padding:28px 0;margin:1.95rem auto 1.5rem;overflow:hidden;width:100%;">
           <div class="sponsor-carousel-track">
             {% for logo in sponsor_logos %}
-            <div class="sponsor-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}"></div>
+            <div class="sponsor-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}" decoding="async"></div>
             {% endfor %}
             {% for logo in sponsor_logos %}
-            <div class="sponsor-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}"></div>
+            <div class="sponsor-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}" decoding="async"></div>
             {% endfor %}
           </div>
         </div>
@@ -393,6 +409,11 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           transition: filter 0.2s ease;
         }
         .sponsor-carousel-item img:hover { filter: grayscale(0%) brightness(1.1) contrast(0.9); }
+        @media (max-width: 767.98px) {
+          .sponsor-carousel-item { margin-right: 1.75rem; }
+          .sponsor-carousel-item img { height: 68px; max-width: 220px; }
+          .sponsor-carousel-wrap { padding: 16px 0 !important; } /* wrap padding is inline */
+        }
         @keyframes sponsor-scroll {
           0%   { transform: translate3d(0, 0, 0); }
           100% { transform: translate3d(-50%, 0, 0); }
@@ -695,8 +716,16 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <div class="section-intro text-center text-white" style="margin-bottom:1rem;">or schedule a call below</div>
         <div class="sponsors-cta text-center">
 <!-- Calendly inline widget begin -->
-<div class="calendly-inline-widget" data-url="https://calendly.com/sreday/30min" style="min-width:320px;height:700px;"></div>
-<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<div class="calendly-inline-widget d-none d-md-block" data-url="https://calendly.com/sreday/30min" style="min-width:320px;height:700px;"></div>
+<a class="btn btn-primary btn-lg w-100 d-md-none" href="https://calendly.com/sreday/30min" target="_blank" rel="noopener noreferrer">Schedule a call</a>
+<script>
+  // Phones get the button above instead of the 700px inline widget; skip widget.js there.
+  if (window.matchMedia('(min-width: 768px)').matches) {
+    var calendlyJs = document.createElement('script');
+    calendlyJs.src = 'https://assets.calendly.com/assets/external/widget.js'; calendlyJs.async = true;
+    document.head.appendChild(calendlyJs);
+  }
+</script>
 <!-- Calendly inline widget end -->
         </div>
 
@@ -715,10 +744,10 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <div class="partner-carousel-wrap" style="background:#fff;border-radius:999px;box-shadow:0 4px 20px rgba(0,0,0,.07);padding:28px 0;margin:1.95rem auto 1.5rem;overflow:hidden;width:100%;">
           <div class="partner-carousel-track">
             {% for logo in partner_logos %}
-            <div class="partner-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}"></div>
+            <div class="partner-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}" decoding="async"></div>
             {% endfor %}
             {% for logo in partner_logos %}
-            <div class="partner-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}"></div>
+            <div class="partner-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}" decoding="async"></div>
             {% endfor %}
           </div>
         </div>
@@ -736,6 +765,11 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
           object-fit: contain; transition: filter 0.2s ease;
         }
         .partner-carousel-item img:hover { filter: grayscale(0%) brightness(1.1) contrast(0.9); }
+        @media (max-width: 767.98px) {
+          .partner-carousel-item { margin-right: 1.75rem; }
+          .partner-carousel-item img { height: 68px; max-width: 220px; }
+          .partner-carousel-wrap { padding: 16px 0 !important; } /* wrap padding is inline */
+        }
         @keyframes partner-scroll {
           0%   { transform: translate3d(0, 0, 0); }
           100% { transform: translate3d(-50%, 0, 0); }

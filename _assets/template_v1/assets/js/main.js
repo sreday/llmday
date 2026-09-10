@@ -62,15 +62,28 @@ scrollLinks.forEach((scrollLink) => {
 		
 		
 		//Collapse mobile menu after clicking
-		if (pageNavWrapper.classList.contains('show')){
-			pageNavWrapper.classList.remove('show');
-		}
+		closeMobileNav();
 
 		
     });
 	
 });
     
+
+/* ===== Mobile menu ===== */
+/* Collapse the open hamburger menu. Used by the .scrollto handler above and by a delegated
+   handler below, so plain nav-link anchors (sreday home, all event pages) close it too. */
+function closeMobileNav() {
+	if (!pageNavWrapper || !pageNavWrapper.classList.contains('show')) return;
+	if (window.bootstrap && bootstrap.Collapse) {
+		bootstrap.Collapse.getOrCreateInstance(pageNavWrapper, { toggle: false }).hide();
+	} else {
+		pageNavWrapper.classList.remove('show');
+	}
+}
+if (pageNavWrapper) {
+	pageNavWrapper.addEventListener('click', (e) => { if (e.target.closest('a')) closeMobileNav(); });
+}
 
 /* ===== Gumshoe SrollSpy ===== */
 /* Ref: https://github.com/cferdinandi/gumshoe  */
