@@ -47,10 +47,11 @@ home/metadata.yml       ← single source of truth for all events list
 
 After changing `_event_template/_build/generate.py` or any file in `_event_template/_templates/`, propagate with:
 ```bash
-for event in 20*/; do
+for event in 2025-* 2026-* 2027-*; do   # never the frozen 2022-2024 folders (sreday only has those)
   cp _event_template/_build/generate.py $event/_build/generate.py
   cp _event_template/_templates/_base.html $event/_templates/_base.html
   cp _event_template/_templates/sponsorship.html $event/_templates/sponsorship.html
+  cp _event_template/_templates/onboarding.html $event/_templates/onboarding.html
 done
 ```
 
