@@ -45,7 +45,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 5 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 6 });
 }
 
 function doPost(e) {
@@ -91,8 +91,14 @@ function doPost(e) {
 
   if (data.action === 'schedule') {
     var due = Date.now() + delay * 60000;
+    try {
+      scheduleTrigger(delay * 60000 + 15000);
+    } catch (err) {                                   // triggers scope not granted yet (run testSchedule once)
+      try { draft.deleteDraft(); } catch (e2) {}
+      Logger.log('Cannot schedule, trigger permission missing: ' + err);
+      return respond({ ok: false, error: 'no trigger permission' });
+    }
     enqueue({ id: draft.getId(), due: due, subject: mail.subject, recipients: emails.ok.length });
-    scheduleTrigger(delay * 60000 + 15000);
     Logger.log('Onboarding scheduled: %s -> %s recipients at %s (draft %s)', ev.event_name, emails.ok.length, new Date(due).toISOString(), draft.getId());
     return respond({ ok: true, scheduled: emails.ok.length, at: new Date(due).toISOString(), delay_minutes: delay });
   }
