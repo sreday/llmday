@@ -6,7 +6,10 @@
  *   { action: 'preview' | 'send', pass, brand, emails: [...], event: {...facts...}, website (honeypot), page }
  * The script owns the ONE universal "Info for speakers" email (composeOnboarding below), fills it with the
  * event facts, and on 'send' emails it From the brand alias, To that same alias (hello@ is deliberately NOT
- * copied - Marek's call 2026-09-12), with every speaker in Bcc.
+ * copied - Marek's call 2026-09-12), with every speaker in Bcc. 'schedule' (delay_minutes, e.g. 60) instead
+ * leaves a Gmail DRAFT and a time-based trigger sends it later (processQueue): Mark can still edit the draft,
+ * and deleting the draft cancels the send. New scope for that: run testSchedule() once from the editor to
+ * grant the triggers permission before redeploying.
  * The thread is then moved to the Inbox as unread + important under the "Speaker onboarding" label, so it
  * shows up like a sponsor lead and speaker "OK" replies land on it. 'preview' returns subject + html only.
  *
@@ -36,12 +39,13 @@ var MAX_RECIPIENTS = 50;           // Apps Script: recipients per message
 var DAILY_MAX_SENDS = 50;
 var DAILY_MAX_RECIPIENTS = 500;
 var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock seconds
+var MAX_DELAY_MINUTES = 24 * 60;   // 'schedule' can defer a send by at most a day
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), version: 4 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 5 });
 }
 
 function doPost(e) {
@@ -75,14 +79,33 @@ function doPost(e) {
     return respond({ ok: true, subject: mail.subject, html: mail.html, text: mail.text, from: from, to: from, recipients: emails.ok.length });
   }
   if (!emails.ok.length) return respond({ ok: false, error: 'no recipients' });
+  var delay = parseInt(data.delay_minutes, 10);
+  delay = delay > 0 ? Math.min(delay, MAX_DELAY_MINUTES) : 0;
+  if (data.action === 'schedule' && !delay) return respond({ ok: false, error: 'bad delay' });
   if (!dailyBudget(emails.ok.length)) return respond({ ok: false, error: 'too many today' });
 
   var options = { name: SENDER_NAME, bcc: emails.ok.join(','), htmlBody: mail.html };
   if (from === brand.from) options.from = brand.from;
-  // Send via a draft so we get the message back, then pull the thread into the Inbox (unread, important,
-  // labelled) - a mail sent from this very account would otherwise sit read in "Sent" only.
   // To = the sending alias itself (Gmail needs one To address); speakers only ever see Bcc.
-  var message = GmailApp.createDraft(from, mail.subject, mail.text, options).send();
+  var draft = GmailApp.createDraft(from, mail.subject, mail.text, options);
+
+  if (data.action === 'schedule') {
+    var due = Date.now() + delay * 60000;
+    enqueue({ id: draft.getId(), due: due, subject: mail.subject, recipients: emails.ok.length });
+    scheduleTrigger(delay * 60000 + 15000);
+    Logger.log('Onboarding scheduled: %s -> %s recipients at %s (draft %s)', ev.event_name, emails.ok.length, new Date(due).toISOString(), draft.getId());
+    return respond({ ok: true, scheduled: emails.ok.length, at: new Date(due).toISOString(), delay_minutes: delay });
+  }
+
+  var message = draft.send();
+  fileThread(message);
+  Logger.log('Onboarding sent: %s -> %s recipients (bcc) from %s [%s]', ev.event_name, emails.ok.length, from, emails.ok.join(', '));
+  return respond({ ok: true, sent: emails.ok.length });
+}
+
+// Pull the sent message's thread into the Inbox (unread, important, labelled) - a mail sent from this very
+// account would otherwise sit read in "Sent" only.
+function fileThread(message) {
   try {
     var thread = message.getThread();
     thread.moveToInbox();
@@ -93,8 +116,62 @@ function doPost(e) {
   } catch (err) {
     Logger.log('Sent, but could not file the thread: ' + err);
   }
-  Logger.log('Onboarding sent: %s -> %s recipients (bcc) from %s [%s]', ev.event_name, emails.ok.length, from, emails.ok.join(', '));
-  return respond({ ok: true, sent: emails.ok.length });
+}
+
+// ---- scheduled sends ----------------------------------------------------------
+// Queue of {id: draftId, due: epoch ms, subject, recipients} in the ONBOARDING_QUEUE property; a one-off
+// time-based trigger runs processQueue(), which sends every due draft still present (a deleted draft = cancelled).
+
+function enqueue(item) {
+  var q = readJson('ONBOARDING_QUEUE');
+  q.items = (q.items || []).concat([item]);
+  props().setProperty('ONBOARDING_QUEUE', JSON.stringify(q));
+}
+
+function scheduleTrigger(ms) {
+  ScriptApp.newTrigger('processQueue').timeBased().after(Math.max(ms, 60000)).create();
+}
+
+function clearQueueTriggers() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'processQueue') ScriptApp.deleteTrigger(t);
+  });
+}
+
+function processQueue() {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    var items = readJson('ONBOARDING_QUEUE').items || [], now = Date.now(), keep = [];
+    items.forEach(function (it) {
+      if (it.due > now + 30000) { keep.push(it); return; }       // not due yet (triggers fire with ~1 min granularity)
+      var draft = null;
+      try { draft = GmailApp.getDraft(it.id); } catch (err) { draft = null; }
+      if (!draft) { Logger.log('Scheduled draft gone, treating as cancelled: ' + it.subject); return; }
+      try {
+        fileThread(draft.send());
+        Logger.log('Scheduled onboarding sent: %s (%s recipients)', it.subject, it.recipients);
+      } catch (err) {
+        Logger.log('Scheduled send FAILED for %s: %s', it.subject, err);
+      }
+    });
+    props().setProperty('ONBOARDING_QUEUE', JSON.stringify({ items: keep }));
+    clearQueueTriggers();
+    if (keep.length) {
+      var next = Math.min.apply(null, keep.map(function (i) { return i.due; }));
+      scheduleTrigger(next - Date.now() + 15000);
+    }
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+// Run ONCE from the editor after pasting v5: creates + removes a trigger so Google asks for the new
+// "manage triggers" permission. Without this, 'schedule' calls from the website fail.
+function testSchedule() {
+  var t = ScriptApp.newTrigger('processQueue').timeBased().after(60 * 60 * 1000).create();
+  ScriptApp.deleteTrigger(t);
+  Logger.log('Trigger permission OK. Queue: ' + JSON.stringify(readJson('ONBOARDING_QUEUE')));
 }
 
 // ---- the email --------------------------------------------------------------

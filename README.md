@@ -89,7 +89,7 @@ The home page `#sponsor` section has an "Email us" expandable form under the Cal
 ## Speaker onboarding (hidden page)
 
 Every non-frozen event gets a hidden page at `/<event>/onboarding/` (e.g. `/2026-london-q3/onboarding/`) with
-a passphrase-gated form: paste one or many speaker emails, **Preview**, **Send**. A Google Apps Script then emails
+a passphrase-gated form: paste one or many speaker emails, **Preview**, **Send now** or **Send in 1 hour** (the latter leaves a Gmail draft that a timed trigger sends; edit the draft meanwhile, delete it to cancel). A Google Apps Script then emails
 the ONE universal "`<Event> - <Month Day> - Info for speakers`" message From `mark@llmday.com` To that same alias (hello@ is not copied)
 with every speaker in **Bcc**, and files the thread in the Inbox unread under the "Speaker onboarding" label
 (speaker "OK" replies land on it).
