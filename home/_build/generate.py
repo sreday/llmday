@@ -183,6 +183,21 @@ for _page, _folder in (("host.html", "host"), ("ambassadorship.html", "ambassado
         print("Writing out", f.name)
         f.write(_html)
 
+# REDIRECTS for renamed event folders (metadata.yml -> redirects: [{from, to}]) + root 404.html
+# that applies the same mapping, so old links to talk pages under the old folder keep working.
+print(DIVIDER)
+_redirects = [r for r in (context.get("redirects") or []) if r.get("from") and r.get("to")]
+for _r in _redirects:
+    _from = str(_r["from"]).strip("/"); _to = str(_r["to"]).strip("/")
+    print(f"Generating redirect: /{_from}/ -> /{_to}/")
+    os.makedirs(BASE_FOLDER + "/" + _from, exist_ok=True)
+    with open(BASE_FOLDER + "/" + _from + "/index.html", "w", encoding="utf-8") as f:
+        f.write(env.get_template("redirect.html").render(**{**context, "from": _from, "to": _to}))
+with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
+    print("Writing out 404.html (%d redirect rules)" % len(_redirects))
+    f.write(env.get_template("404.html").render(**{**context, "redirects": [
+        {"from": str(r["from"]).strip("/"), "to": str(r["to"]).strip("/")} for r in _redirects]}))
+
 # MEETUPS
 print(DIVIDER)
 meetups = context.get("meetups") + context.get("meetups_past")

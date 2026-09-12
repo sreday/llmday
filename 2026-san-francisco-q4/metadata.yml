@@ -7,10 +7,11 @@ start_time: "2026-10-01T09:00:00-07:00"
 # after  - hide ticket sales
 event_state: active
 date_string: "October 1, 2026"
-location_string: "Redwood City, California, US"
-city_name: "Redwood City"
+location_string: "San Francisco, California, US"
+city_name: "San Francisco"
 # get this from the event url
 luma_evt: evt-SdoxdX4lCePHZws
+# cfp.ninja slug kept from the original Redwood City announcement (event rebranded to San Francisco 2026-09-12)
 cfp_url: https://cfp.ninja/e/llmday-2026-redwood-city-q4
 
 # the number of tracks needs to be the same per day

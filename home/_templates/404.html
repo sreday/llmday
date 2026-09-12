@@ -1,0 +1,29 @@
+{# ── GitHub Pages serves this for any missing path. First applies the folder renames from
+     home/metadata.yml -> redirects (so old talk links keep working), otherwise a plain not-found page. ── #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>{{ brand_name }} - page not found</title>
+  <script>
+    (function () {
+      var map = {{ redirects | default([]) | tojson }};
+      var p = location.pathname;
+      for (var i = 0; i < map.length; i++) {
+        var from = '/' + map[i].from + '/', to = '/' + map[i].to + '/';
+        if (p.indexOf(from) === 0) { location.replace(to + p.slice(from.length) + location.search + location.hash); return; }
+      }
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700|Roboto:400&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0;background:#f4f4f6;color:#111;font-family:'Roboto',Arial,sans-serif">
+  <main style="max-width:640px;margin:0 auto;padding:80px 20px;text-align:center">
+    <h1 style="font-family:'Montserrat',sans-serif;font-size:2rem;margin-bottom:10px">Page not found</h1>
+    <p style="color:#555">The page you are looking for does not exist or has moved.</p>
+    <p><a href="/" style="color:{{ brand_color | default('#26986A') }};font-weight:700">Back to {{ brand_name }}</a></p>
+  </main>
+</body>
+</html>
