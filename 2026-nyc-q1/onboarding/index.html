@@ -184,6 +184,7 @@ function showError(err) {
     case 'too many today': msg = 'Daily send limit reached, try again tomorrow.'; break;
     case 'no recipients': msg = 'Add at least one email.'; break;
     case 'bad delay': msg = 'The server did not accept the delay.'; break;
+    case 'no trigger permission': msg = 'Scheduling is not authorised yet: open the Apps Script editor, run testSchedule once and approve the permission.'; break;
     case 'old script': msg = 'Scheduling needs version 5 of the Apps Script. Paste and redeploy it, then run testSchedule once.'; break;
     default: msg = "Hmm, that didn't go through (" + (err.name === 'AbortError' ? 'timeout' : err.message) + '). Try again.';
   }
