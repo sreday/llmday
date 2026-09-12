@@ -140,7 +140,8 @@ function scheduleTrigger(ms) {
 
 function clearQueueTriggers() {
   ScriptApp.getProjectTriggers().forEach(function (t) {
-    if (t.getHandlerFunction() === 'processQueue') ScriptApp.deleteTrigger(t);
+    if (t.getHandlerFunction() !== 'processQueue') return;
+    try { ScriptApp.deleteTrigger(t); } catch (err) { Logger.log('Could not delete trigger (Apps Script flake, harmless): ' + err); }
   });
 }
 
@@ -176,7 +177,9 @@ function processQueue() {
 // "manage triggers" permission. Without this, 'schedule' calls from the website fail.
 function testSchedule() {
   var t = ScriptApp.newTrigger('processQueue').timeBased().after(60 * 60 * 1000).create();
-  ScriptApp.deleteTrigger(t);
+  // deleteTrigger right after create() sometimes throws "Unexpected error ... deleteTrigger" - harmless:
+  // the leftover trigger just runs processQueue once in an hour and cleans itself up.
+  try { ScriptApp.deleteTrigger(t); } catch (err) { Logger.log('Trigger created (permission OK) but immediate delete failed: ' + err); }
   Logger.log('Trigger permission OK. Queue: ' + JSON.stringify(readJson('ONBOARDING_QUEUE')));
 }
 
