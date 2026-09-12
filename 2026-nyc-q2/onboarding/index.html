@@ -82,7 +82,8 @@
     <div class="ob-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
     <div class="ob-row">
       <button type="button" class="btn-ob btn-ob-ghost" id="ob-preview">Preview</button>
-      <button type="submit" class="btn-ob btn-ob-primary" id="ob-send" disabled>Send</button>
+      <button type="submit" class="btn-ob btn-ob-primary" id="ob-send" disabled>Send now</button>
+      <button type="button" class="btn-ob btn-ob-ghost" id="ob-schedule" disabled title="Creates a Gmail draft and sends it automatically in 1 hour. Edit the draft meanwhile, or delete it to cancel.">Send in 1 hour</button>
       <a href="#" class="ob-link" id="ob-lock">lock</a>
       <div class="ob-error" id="ob-error" hidden></div>
     </div>
@@ -147,16 +148,18 @@ function renderChips() {
   if (p.invalid.length) msg += ' · <b style="color:#c0392b">' + p.invalid.length + '</b> invalid, fix or remove';
   if (p.valid.length > OB_MAX) msg += ' · max ' + OB_MAX + ' per send';
   count.innerHTML = msg;
-  $('ob-send').disabled = !p.valid.length || p.invalid.length > 0 || p.valid.length > OB_MAX;
+  var blocked = !p.valid.length || p.invalid.length > 0 || p.valid.length > OB_MAX;
+  $('ob-send').disabled = blocked; $('ob-schedule').disabled = blocked;
   return p;
 }
 textarea.addEventListener('input', renderChips);
 
 // ---- transport -------------------------------------------------------------
-function post(action, emails) {
+function post(action, emails, extra) {
   if (!OB_URL) return Promise.reject(new Error('onboarding_form_url is not configured in home/metadata.yml'));
   var body = { action: action, pass: storedPass(), brand: OB_EVENT.brand, emails: emails, event: OB_EVENT,
                website: form.elements['website'].value || '', page: location.href };
+  if (extra) for (var k in extra) body[k] = extra[k];
   var ctrl = ('AbortController' in window) ? new AbortController() : null;
   var timer = ctrl ? setTimeout(function() { ctrl.abort(); }, 25000) : null;
   return fetch(OB_URL, { method: 'POST', body: JSON.stringify(body), signal: ctrl ? ctrl.signal : undefined })
@@ -180,6 +183,8 @@ function showError(err) {
     case 'too many': msg = 'Too many recipients, max ' + OB_MAX + ' per send.'; break;
     case 'too many today': msg = 'Daily send limit reached, try again tomorrow.'; break;
     case 'no recipients': msg = 'Add at least one email.'; break;
+    case 'bad delay': msg = 'The server did not accept the delay.'; break;
+    case 'old script': msg = 'Scheduling needs version 5 of the Apps Script. Paste and redeploy it, then run testSchedule once.'; break;
     default: msg = "Hmm, that didn't go through (" + (err.name === 'AbortError' ? 'timeout' : err.message) + '). Try again.';
   }
   el.textContent = msg; el.hidden = false;
@@ -212,23 +217,45 @@ $('ob-preview').addEventListener('click', function() {
     previewBox.hidden = false; previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }).catch(function(err) { idle(btn); showError(err); });
 });
-form.addEventListener('submit', function(ev) {
-  ev.preventDefault();
+// Older script versions send immediately whatever the action, so a scheduled send first checks the version.
+function requireScriptVersion(min) {
+  return fetch(OB_URL).then(function(r) { return r.json(); }).then(function(h) {
+    if (!h || !(h.version >= min)) throw new Error('old script');
+  }, function() { throw new Error('old script'); });
+}
+function finish(html) {
+  done.innerHTML = html + ' <a href="#" id="ob-again">Send another batch</a>';
+  form.hidden = true; previewBox.hidden = true; done.hidden = false;
+  $('ob-again').addEventListener('click', function(e) { e.preventDefault(); textarea.value = ''; showForm(); });
+}
+function doSend(mode) {
   $('ob-error').hidden = true;
   var p = renderChips();
   if (!p.valid.length || p.invalid.length) return;
-  if (!confirm('Send the onboarding email to ' + p.valid.length + ' speaker' + (p.valid.length === 1 ? '' : 's') + ' (Bcc)?')) return;
-  var btn = $('ob-send'); busy(btn, 'Sending...');
-  post('send', p.valid).then(function(res) {
-    idle(btn);
-    var n = res.sent || p.valid.length;
-    done.innerHTML = '<strong>Sent to ' + n + ' speaker' + (n === 1 ? '' : 's') + '.</strong> Everyone was in Bcc. ' +
-      'The email is filed unread under "Speaker onboarding" in the inbox. ' +
-      '<a href="#" id="ob-again">Send another batch</a>';
-    form.hidden = true; previewBox.hidden = true; done.hidden = false;
-    $('ob-again').addEventListener('click', function(e) { e.preventDefault(); textarea.value = ''; showForm(); });
-  }).catch(function(err) { idle(btn); showError(err); });
-});
+  var who = p.valid.length + ' speaker' + (p.valid.length === 1 ? '' : 's') + ' (Bcc)';
+  var scheduled = mode === 'schedule';
+  if (!confirm(scheduled ? 'Schedule the onboarding email to ' + who + ' for 1 hour from now?' : 'Send the onboarding email to ' + who + ' now?')) return;
+  var btn = $(scheduled ? 'ob-schedule' : 'ob-send'), other = $(scheduled ? 'ob-send' : 'ob-schedule');
+  busy(btn, scheduled ? 'Scheduling...' : 'Sending...'); other.disabled = true;
+  var go = scheduled
+    ? requireScriptVersion(5).then(function() { return post('schedule', p.valid, { delay_minutes: 60 }); })
+    : post('send', p.valid);
+  go.then(function(res) {
+    idle(btn); other.disabled = false;
+    if (scheduled) {
+      var at = res.at ? new Date(res.at) : new Date(Date.now() + 3600000);
+      var hhmm = at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      finish('<strong>Scheduled for ' + hhmm + '</strong> to ' + (res.scheduled || p.valid.length) + ' speaker' + ((res.scheduled || p.valid.length) === 1 ? '' : 's') + '. ' +
+             'The draft is in Gmail Drafts with everyone in Bcc: you can still edit it, and deleting it cancels the send.');
+    } else {
+      var n = res.sent || p.valid.length;
+      finish('<strong>Sent to ' + n + ' speaker' + (n === 1 ? '' : 's') + '.</strong> Everyone was in Bcc. ' +
+             'The email is filed unread under "Speaker onboarding" in the inbox.');
+    }
+  }).catch(function(err) { idle(btn); other.disabled = false; showError(err); });
+}
+form.addEventListener('submit', function(ev) { ev.preventDefault(); doSend('now'); });
+$('ob-schedule').addEventListener('click', function() { doSend('schedule'); });
 
 // ---- boot ------------------------------------------------------------------
 if (storedPass()) showForm(); else showGate('');
