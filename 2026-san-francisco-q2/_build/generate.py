@@ -203,6 +203,8 @@ if _os.path.exists(_og_home_meta_path):
         _og_home_meta = yaml.load(_f, Loader=yaml.FullLoader)
     # sponsor lead form endpoint: home/metadata.yml is the single source of truth (backend: _build/lead-form.gs)
     context.setdefault('lead_form_url', (_og_home_meta or {}).get('lead_form_url', ''))
+    # speaker onboarding endpoint (hidden /onboarding/ page; backend: _build/onboarding-form.gs in llmday)
+    context.setdefault('onboarding_form_url', (_og_home_meta or {}).get('onboarding_form_url', ''))
     _og_current_folder = _os.path.basename(_os.getcwd())
     for _he in (_og_home_meta.get('events') or []) + (_og_home_meta.get('events_past') or []):
         if _he.get('url', '').strip('./').rstrip('/') == _og_current_folder and _he.get('photo_url'):
@@ -218,6 +220,81 @@ else:
     print("WARNING: no event thumbnail available -- og:image falls back to default hero photo")
     context['og_image_url'] = 'https://%s/photos/%s' % (context['brand_domain'], context['hero_pictures'][0].split('/')[-1])
 print("og:image = %s" % context['og_image_url'])
+
+# ── SPEAKER ONBOARDING: facts for the hidden /onboarding/ page ──────────────
+# The page (onboarding.html) posts this dict to the Apps Script, which fills ONE
+# universal "Info for speakers" email with it. Optional per-event overrides live
+# under `onboarding:` in metadata.yml (event_name, venue_name, venue_address,
+# slot_minutes, dinner, extra). Venue name/address are scraped from venue.html.
+context.setdefault('onboarding_form_url', '')
+_ob_slug = _os.path.basename(_os.getcwd())
+
+
+def _ob_slug_parts(slug):
+    """'2026-san-francisco-q4' -> ('2026', 'San Francisco', 'Q4'); missing parts come back as ''."""
+    m = re.match(r'^(\d{4})-(.+?)(?:-q([1-4]))?$', slug)
+    if not m:
+        return '', '', ''
+    return m.group(1), m.group(2).replace('-', ' ').title(), ('Q' + m.group(3)) if m.group(3) else ''
+
+
+def _ob_event_name(slug, city_name, brand_name):
+    """'2026-san-francisco-q4' -> 'SREday San Francisco 2026 Q4' (city from metadata when present)."""
+    year, slug_city, quarter = _ob_slug_parts(slug)
+    return ' '.join(p for p in [brand_name, city_name or slug_city, year, quarter] if p)
+
+
+def _ob_venue(path='_templates/venue.html'):
+    """(venue_name, venue_address) from the hardcoded venue partial; ('', '') when absent.
+    Name = first <h4>; address = the <p> right after it, <br>-separated lines joined with ', ',
+    stopping at the first blank line (London-q3 lists 'Tube access' after a blank <br />)."""
+    try:
+        with open(path, encoding='utf-8') as _f:
+            html = _f.read()
+    except OSError:
+        return '', ''
+    h4 = re.search(r'<h4[^>]*>(.*?)</h4>', html, re.S | re.I)
+    if not h4:
+        return '', ''
+    name = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', h4.group(1))).strip()
+    p = re.search(r'</h4>\s*<p[^>]*>(.*?)</p>', html, re.S | re.I)
+    if not p:
+        return name, ''
+    lines = []
+    for seg in re.split(r'<br\s*/?>', p.group(1), flags=re.I):
+        seg = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', seg)).strip(' ,;')
+        if not seg:
+            if lines:
+                break
+            continue
+        lines.append(seg)
+    return name, ', '.join(lines)
+
+
+_ob = dict(context.get('onboarding') or {})
+_ob_vname, _ob_vaddr = _ob_venue()
+_ob_date = str(context.get('date_string', ''))
+context['onboarding_event'] = {
+    'brand':         str(context.get('brand_name', '')).lower(),
+    'brand_name':    context.get('brand_name', ''),
+    'slug':          _ob_slug,
+    'event_name':    _ob.get('event_name') or _ob_event_name(_ob_slug, context.get('city_name'), context.get('brand_name', '')),
+    'city':          context.get('city_name') or _ob_slug_parts(_ob_slug)[1],
+    'date':          _ob_date,
+    'month_day':     re.sub(r',\s*\d{4}\s*$', '', _ob_date),
+    'event_url':     context.get('base_path', '') + _ob_slug + '/',
+    'tickets_url':   context.get('base_path', '') + _ob_slug + '/#tickets',
+    'venue_name':    _ob.get('venue_name') or _ob_vname or context.get('location_string', ''),
+    'venue_address': _ob.get('venue_address') or _ob_vaddr or context.get('location_string', ''),
+    'attendees':     context.get('attendees') or 0,
+    'youtube_url':   context.get('youtube_url', ''),
+    'calendly_url':  context.get('calendly_sponsor_url', ''),
+    'slot_minutes':  int(_ob.get('slot_minutes', 30) or 30),
+    'dinner':        str(_ob.get('dinner', 'TBC')),
+    'extra':         str(_ob.get('extra', '') or ''),
+}
+print("Onboarding: %s | %s | %s" % (context['onboarding_event']['event_name'], _ob_vname or '(no <h4> in venue.html)', _ob_vaddr or '-'))
+# ── END SPEAKER ONBOARDING ──────────────────────────────────────────────────
 
 # pick up the ids & photos
 for i, talk in enumerate(talks_raw):
@@ -916,6 +993,13 @@ for page in pages:
         f.write(template.render(page=page, **context))
         if page != "index.html":
             SITEMAP_URLS.append((page.replace(".html",""), 0.75))
+
+# HIDDEN PAGE: /<event>/onboarding/ (speaker onboarding form). Standalone template,
+# noindex, deliberately NOT appended to SITEMAP_URLS.
+_os.makedirs(BASE_FOLDER + "/onboarding", exist_ok=True)
+with open(BASE_FOLDER + "/onboarding/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("onboarding.html").render(page="onboarding.html", **context))
+print("Writing out onboarding/index.html (hidden, not in sitemap)")
 
 # SITEMAP
 print(DIVIDER)
