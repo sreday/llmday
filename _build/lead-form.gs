@@ -176,7 +176,7 @@ function testLead() {
   var e = { postData: { contents: JSON.stringify({
     name: 'Anna Kowalska', email: 'hello@llmday.com', company: 'Chainguard',
     interests: ['Sponsor', 'Host'], brands: ['LLMday', 'SREday'], regions: ['EU'], budget: '$5K-10K', consent: true,
-    brand: 'llmday', page: 'https://www.llmday.com/2026-redwood-city-q4/?v=2#sponsors'
+    brand: 'llmday', page: 'https://www.llmday.com/2026-san-francisco-q4/?v=2#sponsors'
   }) } };
   Logger.log(doPost(e).getContent());
 }

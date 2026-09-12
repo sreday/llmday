@@ -11,6 +11,12 @@ lead_form_url: "https://script.google.com/macros/s/AKfycbxq_ZaBpS3C0vp9OIGZz3Vbo
 # speaker onboarding form (hidden /<event>/onboarding/ pages): Apps Script web app URL, source llmday/_build/onboarding-form.gs; empty = page refuses to send
 onboarding_form_url: "https://script.google.com/macros/s/AKfycbwnEN8BjYxtzXexBCHDk069Jjbag2aioOKzP7hMIkVcrqcCguEy5Cyos9Y3FLisg5qPtw/exec"
 
+# old event URLs -> new ones (folder renames). Build writes static/<from>/index.html (meta refresh,
+# keeps any sub-path such as a talk page) and a root 404.html that applies the same mapping.
+redirects:
+  - from: 2026-redwood-city-q4
+    to: 2026-san-francisco-q4
+
 hero_video: videos/hero.mp4
 
 hero_pictures:
@@ -31,10 +37,10 @@ counts:
 
 events:
 
-  - name: LLMday Redwood City 2026 Q4
-    location: Harness, Redwood City, California, US
-    photo_url: ./assets/images/events/llmday-2026-redwood-city-q4.png
-    url: ./2026-redwood-city-q4/
+  - name: LLMday San Francisco 2026 Q4
+    location: Harness, San Francisco, California, US
+    photo_url: ./assets/images/events/llmday-2026-san-francisco-q4.png
+    url: ./2026-san-francisco-q4/
     size: medium
     youtube_playlist:
 
