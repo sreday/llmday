@@ -192,7 +192,15 @@ for _r in _redirects:
     print(f"Generating redirect: /{_from}/ -> /{_to}/")
     os.makedirs(BASE_FOLDER + "/" + _from, exist_ok=True)
     with open(BASE_FOLDER + "/" + _from + "/index.html", "w", encoding="utf-8") as f:
-        f.write(env.get_template("redirect.html").render(**{**context, "from": _from, "to": _to}))
+        f.write(env.get_template("redirect.html").render(**{**context, "from": _from, "to": _to, "to_path": _to + "/"}))
+    # One stub per page of the renamed event (talk pages etc.), so every old link answers 200 with a
+    # meta refresh + canonical to the new URL - not just a JS hop from 404.html. The root Makefile builds
+    # the event folders before home, so ../<to>/static/ is populated at this point in CI.
+    _pages = sorted(os.path.basename(_f) for _f in glob.glob("../" + _to + "/static/*.html") if not _f.endswith("index.html"))
+    for _page in _pages:
+        with open(BASE_FOLDER + "/" + _from + "/" + _page, "w", encoding="utf-8") as f:
+            f.write(env.get_template("redirect.html").render(**{**context, "from": _from, "to": _to, "to_path": _to + "/" + _page}))
+    print(f"  + {len(_pages)} page stubs under /{_from}/")
 with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
     print("Writing out 404.html (%d redirect rules)" % len(_redirects))
     f.write(env.get_template("404.html").render(**{**context, "redirects": [
