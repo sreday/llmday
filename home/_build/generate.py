@@ -225,7 +225,7 @@ _STATUS_LADDER = [
     (14,    40,   60,   75,   100),   # 8-14 days
     (30,    25,   50,   75,   100),   # 15-30 days (the "one month prior" rule)
     (60,    None, 25,   75,   100),   # 31-60 days: no critical, under 25% bad
-    (None,  None, None, 75,   100),   # more than 60 days: neutral at worst
+    (None,  None, None, 50,   100),   # more than 60 days: neutral at worst, 50%+ already good
 ]
 
 
