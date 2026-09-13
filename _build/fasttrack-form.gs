@@ -36,20 +36,20 @@ var LIMITS = { name: 80, company: 120, jobtitle: 120, email: 254, linkedin: 300,
 // Who did the speaker talk to? Aliases are matched after normalisation (lowercase, no diacritics,
 // letters only). route: '' = nobody extra in Cc; '{brand}' = the brand's domain.
 var TEAM = [
-  { name: 'Miko',       route: 'aleksandra@sreday.com', aliases: ['miko', 'mikolaj', 'mikko', 'micko', 'mikus', 'miko pawlikowski', 'mikolaj pawlikowski'] },
-  { name: 'Mark',       route: 'aleksandra@sreday.com', aliases: ['mark', 'marek', 'marc', 'mareczek', 'mark pawlikowski', 'marek pawlikowski'] },
-  { name: 'Aleksandra', route: 'aleksandra@sreday.com', aliases: ['aleksandra', 'alexandra', 'oleksandra', 'ola', 'olka', 'aleks', 'alex', 'alexa', 'sandra', 'aleksandra los'] },
-  { name: 'Petras',     route: '',                      aliases: ['petras', 'peter', 'piotr', 'pete', 'petr', 'petras bazdaras'] },
-  { name: 'Magdalena',  route: '',                      aliases: ['magdalena', 'magda', 'madga', 'magdalene', 'maggie', 'lena', 'magdalena marcinkiewicz'] },
-  { name: 'Emilia',     route: '',                      aliases: ['emilia', 'emilka', 'emily', 'emilie', 'emi', 'milka'] },
-  { name: 'Anna',       route: 'anna@{brand}',          aliases: ['anna', 'ania', 'anya', 'anka', 'anja', 'ann', 'annie', 'hanna', 'anna andriushchenko'] },
-  { name: 'Blanka',     route: 'anna@{brand}',          aliases: ['blanka', 'blanca', 'bianca', 'blanka pawlikowska', 'blanka pawlikowska michalak', 'blanka michalak'] },
-  { name: 'Sylwia',     route: 'anna@{brand}',          aliases: ['sylwia', 'sylvia', 'sylvie', 'silvia', 'sylwka', 'syl', 'sylwia pawlikowska', 'sylvia pawlikowska'] }
+  { name: 'Miko',       route: 'aleksandra@sreday.com', aliases: ['miko', 'mikolaj', 'mikko', 'micko', 'mico', 'meeko', 'miku', 'mikus', 'mikey', 'mikolay', 'mikolai', 'mikkolaj', 'mikolaj pawlikowski', 'miko pawlikowski', 'nick', 'nicholas', 'nicolas', 'nikolaj', 'nikolai'] },
+  { name: 'Mark',       route: 'aleksandra@sreday.com', aliases: ['mark', 'marek', 'marc', 'marko', 'markus', 'marcus', 'mareczek', 'marecki', 'mareq', 'marek p', 'mark p', 'mark pawlikowski', 'marek pawlikowski', 'marek pawlikowsky', 'mark pawlikowsky'] },
+  { name: 'Aleksandra', route: 'aleksandra@sreday.com', aliases: ['aleksandra', 'alexandra', 'oleksandra', 'alessandra', 'aleksandr', 'ola', 'olka', 'olcia', 'olenka', 'aleks', 'alex', 'alexa', 'alexia', 'sandra', 'sasha', 'sacha', 'los', 'ola los', 'aleksandra los', 'alexandra los'] },
+  { name: 'Petras',     route: '',                      aliases: ['petras', 'peter', 'piotr', 'piotrek', 'pete', 'petr', 'petar', 'petros', 'pietro', 'pedro', 'petrus', 'petra', 'bazdaras', 'petras bazdaras', 'peter bazdaras', 'petras b'] },
+  { name: 'Magdalena',  route: '',                      aliases: ['magdalena', 'magda', 'madga', 'magdalene', 'magdalen', 'magdalenka', 'madzia', 'magdusia', 'maggie', 'maggy', 'lena', 'marcinkiewicz', 'magdalena marcinkiewicz', 'magda marcinkiewicz', 'magda m'] },
+  { name: 'Emilia',     route: '',                      aliases: ['emilia', 'emilka', 'emily', 'emilie', 'emilly', 'emi', 'emmy', 'milka', 'emilja', 'emillia'] },
+  { name: 'Anna',       route: 'anna@{brand}',          aliases: ['anna', 'ania', 'anya', 'anka', 'anja', 'ann', 'annie', 'hanna', 'hania', 'anusia', 'anechka', 'andriushchenko', 'andrushchenko', 'andriuschenko', 'anna andriushchenko', 'anna a'] },
+  { name: 'Blanka',     route: 'anna@{brand}',          aliases: ['blanka', 'blanca', 'bianca', 'blanche', 'blanki', 'blankah', 'blanka pawlikowska', 'blanka pawlikowska michalak', 'blanka michalak', 'michalak'] },
+  { name: 'Sylwia',     route: 'anna@{brand}',          aliases: ['sylwia', 'sylvia', 'sylvie', 'silvia', 'silvie', 'sylwka', 'sylwunia', 'syl', 'sylwia pawlikowska', 'sylvia pawlikowska', 'sylwia p'] }
 ];
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 7,
+  return respond({ ok: true, service: 'fasttrack', version: 8,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
