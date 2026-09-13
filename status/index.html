@@ -38,6 +38,12 @@
     .sisters a { display: inline-flex; align-items: center; border-radius: 999px; padding: 11px 24px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .95rem; color: #fff; text-decoration: none; background: var(--c); transition: filter .15s; }
     .sisters a:hover { filter: brightness(1.1); }
     .foot { color: #999; font-size: .8rem; margin-top: 26px; }
+    .legend-note { color: #888; font-style: italic; }
+    .legend-note::before { display: none; }
+    details.ladder { margin-top: 18px; font-size: .85rem; color: #555; }
+    details.ladder summary { cursor: pointer; color: #666; }
+    details.ladder table { margin-top: 10px; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; overflow: hidden; font-size: .82rem; }
+    details.ladder th, details.ladder td { padding: 8px 12px; }
     @media (max-width: 720px) { .wrap { padding: 28px 12px 60px; } th, td { padding: 10px 8px; } .bar { min-width: 120px; } th.hide, td.hide { display: none; } }
   </style>
 </head>
@@ -47,11 +53,12 @@
   <h1>Upcoming conferences</h1>
   <div class="sub">Confirmed talks against 12 slots per track, plus confirmed sponsors (media and community partners excluded).</div>
   <div class="legend">
-    <span style="--c: var(--critical)">Critical &lt; 25%</span>
-    <span style="--c: var(--bad)">Bad 25–49%</span>
-    <span style="--c: var(--neutral)">Neutral 50–74%</span>
-    <span style="--c: var(--good)">Good 75–99%</span>
+    <span style="--c: var(--critical)">Critical</span>
+    <span style="--c: var(--bad)">Bad</span>
+    <span style="--c: var(--neutral)">Neutral</span>
+    <span style="--c: var(--good)">Good</span>
     <span style="--c: var(--nailed)">Nailed it! 100%+</span>
+    <span class="legend-note">thresholds tighten as the date approaches, see the ladder below</span>
   </div>
 
   <div class="card">
@@ -72,7 +79,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small>October 1, 2026 · active</small></td>
+          <td class="ev"><a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small>October 1, 2026 · in 18 days · active</small></td>
           <td class="num hide">2</td>
           <td class="num"><strong>25</strong> / 24</td>
           <td>
@@ -89,7 +96,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small>October 14, 2026 · before</small></td>
+          <td class="ev"><a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small>October 14, 2026 · in 31 days · before</small></td>
           <td class="num hide">1</td>
           <td class="num"><strong>10</strong> / 12</td>
           <td>
@@ -106,7 +113,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small>October 29, 2026 · before</small></td>
+          <td class="ev"><a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small>October 29, 2026 · in 46 days · before</small></td>
           <td class="num hide">1</td>
           <td class="num"><strong>10</strong> / 12</td>
           <td>
@@ -123,24 +130,24 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small>November 26, 2026 · before</small></td>
+          <td class="ev"><a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small>November 26, 2026 · in 74 days · before</small></td>
           <td class="num hide">3</td>
           <td class="num"><strong>10</strong> / 36</td>
           <td>
             <div class="bar" title="28%">
-              <i style="--c: var(--bad); width: 28%"></i>
+              <i style="--c: var(--neutral); width: 28%"></i>
               
             </div>
             <div class="pct">28%</div>
           </td>
-          <td><span class="pill bad" style="--c: var(--bad)">Bad</span></td>
+          <td><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
         
         
         <tr>
-          <td class="ev"><a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small>December 5, 2026 · before</small></td>
+          <td class="ev"><a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small>December 5, 2026 · in 83 days · before</small></td>
           <td class="num hide">1</td>
           <td class="num"><strong>7</strong> / 12</td>
           <td>
@@ -159,10 +166,24 @@
   
   </div>
 
+  <details class="ladder">
+    <summary>Health ladder (share of 12 slots per track confirmed, by days to the event)</summary>
+    <table>
+      <thead><tr><th>Days to event</th><th>Critical</th><th>Bad</th><th>Neutral</th><th>Good</th><th>Nailed it!</th></tr></thead>
+      <tbody>
+        <tr><td>more than 60</td><td>never</td><td>never</td><td>under 75%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>31–60</td><td>never</td><td>under 25%</td><td>25–74%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>15–30</td><td>under 25%</td><td>25–49%</td><td>50–74%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>8–14</td><td>under 40%</td><td>40–59%</td><td>60–74%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>7 or fewer</td><td>under 50%</td><td>50–69%</td><td>70–84%</td><td>85–99%</td><td>100%+</td></tr>
+      </tbody>
+    </table>
+  </details>
+
   <div class="sisters">
     <a href="https://sreday.com/status/" style="--c: #713660">SREday status</a><a href="https://platformday.com/status/" style="--c: #E2971D">PLATFORMday status</a>
   </div>
-  <div class="foot">Generated 2026-09-13 16:16 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-13 16:19 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 </body>
 </html>
