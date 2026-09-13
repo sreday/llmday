@@ -44,6 +44,31 @@
     .foot { color: #999; font-size: .8rem; margin-top: 26px; }
     .legend-note { color: #888; font-style: italic; }
     .legend-note::before { display: none; }
+    .issues-link { color: #b25a00; text-decoration: none; }
+    .issues-link:hover { text-decoration: underline; }
+    .checks { margin-top: 34px; }
+    .checks h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
+    .checks .sub { margin-bottom: 14px; }
+    .check { background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); margin-bottom: 12px; overflow: hidden; }
+    .check-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; }
+    .check-head a { color: #111; font-weight: 600; text-decoration: none; font-size: .95rem; }
+    .check-head a:hover { color: var(--accent); }
+    .check-head .spacer { flex: 1; }
+    .count { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .74rem; font-weight: 700; color: #fff; white-space: nowrap; }
+    .count.err { background: var(--critical); }
+    .count.warn { background: #e0891a; }
+    .count.ok { background: var(--good); }
+    .check.clean .check-head { border-bottom: none; }
+    .check ul { list-style: none; margin: 0; padding: 6px 0; }
+    .check li { display: grid; grid-template-columns: 12px minmax(120px, 220px) 1fr; gap: 10px; align-items: baseline; padding: 6px 16px; font-size: .86rem; border-bottom: 1px solid #f7f7f7; }
+    .check li:last-child { border-bottom: none; }
+    .check li i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; transform: translateY(1px); }
+    .check li.error i { background: var(--critical); }
+    .check li.warn i { background: #e0891a; }
+    .check li .where { color: #777; font-size: .8rem; word-break: break-word; text-decoration: none; border-bottom: 1px dotted #bbb; }
+    .check li .where:hover { color: var(--accent); border-bottom-color: var(--accent); }
+    .check li .more { color: #999; font-style: italic; grid-column: 2 / -1; }
+    @media (max-width: 720px) { .check li { grid-template-columns: 12px 1fr; } .check li .where { grid-column: 2; } .check li span:last-child { grid-column: 2; } }
     details.ladder { margin-top: 18px; font-size: .85rem; color: #555; }
     details.ladder summary { cursor: pointer; color: #666; }
     details.ladder table { margin-top: 0; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; overflow: hidden; font-size: .82rem; }
@@ -95,7 +120,7 @@
         {% set fill = [r.pct, 100] | min %}
         {% set over = r.pct > 100 %}
         <tr>
-          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}{% if r.state %} · {{ r.state }}{% endif %}</small></td>
+          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}{% if r.state %} · {{ r.state }}{% endif %}{% if r.errors or r.warnings %} · <a class="issues-link" href="#check-{{ r.folder }}">{{ r.errors + r.warnings }} issue{{ 's' if r.errors + r.warnings != 1 }}</a>{% endif %}</small></td>
           <td class="num hide">{{ r.tracks }}</td>
           <td class="num"><strong>{{ r.confirmed }}</strong> / {{ r.available }}</td>
           <td>
@@ -131,6 +156,31 @@
     </table>
     </div></div>
   </details>
+
+  {% if status_rows %}
+  <section class="checks">
+    <h2>Data checks</h2>
+    <div class="sub">Problems found in each event's repo data at build time: confirmed / keynote rows of talks.csv, headshots in speakers/, sponsor logos and links. Red is broken on the live site, orange is worth a look. Each line links to the exact talk page, sponsors section or file to fix.</div>
+    {% for r in status_rows %}
+    <div class="check{% if not r.issues %} clean{% endif %}" id="check-{{ r.folder }}">
+      <div class="check-head">
+        <a href="{{ r.url }}">{{ r.name }}</a>
+        <span class="spacer"></span>
+        {% if r.errors %}<span class="count err">{{ r.errors }} error{{ 's' if r.errors != 1 }}</span>{% endif %}
+        {% if r.warnings %}<span class="count warn">{{ r.warnings }} warning{{ 's' if r.warnings != 1 }}</span>{% endif %}
+        {% if not r.issues %}<span class="count ok">All clear</span>{% endif %}
+      </div>
+      {% if r.issues %}
+      <ul>
+        {% for x in r.issues %}<li class="{{ x.sev }}"><i></i><a class="where" href="{{ x.url }}">{{ x.where }}</a><span>{{ x.msg }}</span></li>
+        {% endfor %}
+        {% if r.issues_more %}<li><i></i><span class="more">and {{ r.issues_more }} more, fix the ones above first</span></li>{% endif %}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
 
   <div class="sisters">
     {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}

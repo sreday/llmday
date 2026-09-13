@@ -209,7 +209,8 @@ with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
 # STATUS PAGE (hidden, /status/): lineup + sponsor progress of every upcoming event.
 # Talks: rows of ../<event>/_db/talks.csv whose status contains "confirmed" or "keynote", against 12 slots
 # per track (tracks from the event metadata). Sponsors: the event's sponsors list minus the partner
-# categories from ../partners.yaml (same split as the "Partners" pill on the site). Not in the sitemap.
+# categories from ../partners.yaml (same split as the "Partners" pill on the site). Below the table,
+# "Data checks" lists per-event repo problems found by _status_lint (see there). Not in the sitemap.
 print(DIVIDER)
 _STATUS_BRANDS = [("SREday", "https://sreday.com/status/", "#713660"),
                   ("LLMday", "https://llmday.com/status/", "#26986A"),
@@ -248,6 +249,195 @@ def _status_days_left(start_time):
         return (_dt.date() - datetime.datetime.now(datetime.timezone.utc).date()).days
     except Exception:
         return 9999
+
+
+# Data checks (Marek 2026-09-13): flag repo problems per event under the table, so the team can fix
+# talks.csv / images without opening every page. Deliberately not picky: only things clearly off the
+# rails (wrong column, missing file, bad link, out-of-range number, a phrase where a name should be),
+# never style. Only rows that render on the site (status confirmed or keynote) are linted, plus the
+# event's sponsor logos. Each issue: {sev: error|warn, where, msg}. To add a rule, add an `add(...)`.
+_LINT_COLUMNS = ["YouTube", "status", "name", "track", "day", "organization", "photo", "linkedin",
+                 "linkedin2", "twitter", "twitter2", "title", "abstract", "description", "bio"]
+_LINT_EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+_LINT_URL = re.compile(r"https?://|www\.", re.I)
+_LINT_PLACEHOLDER = re.compile(r"\b(tbd|tba|tbc|lorem ipsum|placeholder|xxx+|test talk|test speaker)\b", re.I)
+_LINT_MOJIBAKE = re.compile(chr(0xE2) + chr(0x20AC) + "|" + chr(0xC3) + "[" + chr(0x80) + "-" + chr(0xBF) + "]|" + chr(0xFFFD))  # mojibake markers, built with chr() on purpose
+_LINT_MAX_PER_EVENT = 40
+_LINT_CORE_COLUMNS = {"status", "name", "track", "day", "organization", "photo", "linkedin", "title", "abstract", "bio"}
+_LINT_REPO = os.path.basename(os.path.abspath(".."))      # sreday / llmday / platformday (checkout dir in CI too)
+
+
+def _lint_talk_url(folder, row):
+    """Same slug as generate_talk_url in the event build, so an issue links to the exact talk page."""
+    import string as _string
+    url = "{n}{c}{t}".format(
+        n=(row.get("name") or "").replace(" ", "_"),
+        c=("_" + row["organization"].replace(" ", "_")) if row.get("organization") else "",
+        t=("_" + row["title"].replace(",", "_").replace(" ", "_")) if row.get("title") else "")
+    url = "".join(ch for ch in url if ch in _string.printable)
+    url = re.sub(r"[\W]+", "", url)[:100]
+    return "/" + folder + "/" + url + ".html" if url else "/" + folder + "/"
+
+
+def _lint_image(path):
+    """Return (msg, sev) for a headshot / logo file or None when it looks fine."""
+    try:
+        _size = os.path.getsize(path)
+    except OSError:
+        return ("file not found in the repo", "error")
+    if _size < 1024:
+        return ("file is nearly empty (%d bytes), probably a broken upload" % _size, "error")
+    try:
+        from PIL import Image
+        with Image.open(path) as _im:
+            _im.verify()
+        with Image.open(path) as _im:
+            _w, _h = _im.size
+            _fmt = (_im.format or "").lower()
+    except ImportError:
+        return None
+    except Exception:
+        return ("image can't be decoded, probably corrupt or not an image", "error")
+    if _w < 150 or _h < 150:
+        return ("image is tiny (%dx%d)" % (_w, _h), "warn")
+    if _size > 3 * 1024 * 1024:
+        return ("image is heavy (%.1f MB), will slow the page" % (_size / 1048576.0), "warn")
+    return (None, (_w, _h))
+
+
+def _status_lint(folder, meta, tracks):
+    issues = []
+
+    gh = "https://github.com/sreday/%s/blob/main/%s/" % (_LINT_REPO, folder)
+    url = gh + "metadata.yml"                        # default link: the file on GitHub
+
+    def add(sev, where, msg):
+        issues.append({"sev": sev, "where": where, "msg": msg, "url": url})
+
+    days = int(re.sub(r"[^\d]", "", str(meta.get("days") or "1")) or 1)
+    rooms = meta.get("rooms") or []
+    if isinstance(rooms, list) and rooms and len(rooms) != tracks:
+        add("warn", "metadata.yml", "tracks: %d but %d rooms listed" % (tracks, len(rooms)))
+    # sponsors: logo must exist (case-sensitive, the build runs on Linux) and carry a link
+    url = "/" + folder + "/#sponsors"
+    for s in (meta.get("sponsors") or []):
+        if not isinstance(s, dict):
+            continue
+        logo = str(s.get("logo") or "").strip()
+        if not logo:
+            add("error", "metadata.yml sponsors", "sponsor entry without a logo")
+            continue
+        if not os.path.isfile("../sponsors/" + logo):
+            hit = next((f for f in os.listdir("../sponsors") if f.lower() == logo.lower()), None) if os.path.isdir("../sponsors") else None
+            add("error", "sponsor " + logo, "logo not found in sponsors/" + (" (case differs: %s)" % hit if hit else ""))
+        else:
+            r = _lint_image("../sponsors/" + logo)
+            if r and r[0]:
+                add(r[1], "sponsor " + logo, r[0])
+        url = str(s.get("url") or "").strip()
+        if not url:
+            add("warn", "sponsor " + logo, "no url")
+        elif not url.lower().startswith("http"):
+            add("warn", "sponsor " + logo, "url does not start with http: " + url)
+    # talks.csv
+    url = gh + "_db/talks.csv"
+    try:
+        with open("../" + folder + "/_db/talks.csv", encoding="utf-8", errors="replace", newline="") as cf:
+            rd = csv.DictReader(cf)
+            rows = list(rd)
+            cols = [c or "" for c in (rd.fieldnames or [])]
+    except Exception as e:
+        add("error", "talks.csv", "cannot be read: %s" % e)
+        return issues
+    missing = [c for c in _LINT_COLUMNS if c not in cols]
+    extra = [c for c in cols if c and c not in _LINT_COLUMNS]
+    if missing:
+        add("error" if _LINT_CORE_COLUMNS & set(missing) else "warn", "talks.csv header", "missing columns: " + ", ".join(missing))
+    if extra:
+        add("warn", "talks.csv header", "unexpected columns: " + ", ".join(extra))
+    seen_titles = {}
+    for i, row in enumerate(rows, start=2):        # spreadsheet-style line numbers (1 = header)
+        g = lambda k: (row.get(k) or "").strip()
+        st = g("status").lower()
+        url = gh + "_db/talks.csv"
+        if st and "confirmed" not in st and "keynote" not in st:
+            add("warn", "row %d" % i, "unknown status '%s' (row stays hidden)" % g("status")[:40])
+        if "confirmed" not in st and "keynote" not in st:
+            continue                                # hidden rows are not linted further
+        name = g("name")
+        where = "row %d · %s" % (i, name[:40] or "(no name)")
+        url = _lint_talk_url(folder, row)            # row issues link to the talk page itself
+        # emails / urls wandering into the wrong column
+        for f in ("name", "organization", "title", "track", "day", "photo", "status"):
+            if _LINT_EMAIL.search(row.get(f) or ""):
+                add("error", where, "email address in the %s column: %s" % (f, g(f)[:60]))
+        for f in ("name", "organization", "title"):
+            if _LINT_URL.search(row.get(f) or ""):
+                add("warn", where, "URL in the %s column: %s" % (f, g(f)[:60]))
+        # name
+        if not name:
+            add("error", where, "empty name")
+        else:
+            for part in re.split(r"\s*&\s*|,\s*", name):
+                if len(part.split()) > 4 or len(part) > 34:
+                    add("warn", where, "name looks like a phrase, not a person: '%s'" % part[:60])
+                    break
+        # organization
+        org = g("organization")
+        if org and (len(org.split()) > 8 or len(org) > 60):
+            add("warn", where, "company looks like a sentence: '%s'" % org[:60])
+        # photo
+        photo = g("photo")
+        if photo:
+            r = _lint_image("../speakers/" + photo)
+            if r and r[0]:
+                msg = r[0]
+                if msg.startswith("file not found") and os.path.isdir("../speakers"):
+                    hit = next((f for f in os.listdir("../speakers") if f.strip().lower() == photo.lower()), None)
+                    if hit and hit != photo:
+                        msg += " (near match in speakers/: '%s')" % hit
+                add(r[1], where, "headshot '%s': %s" % (photo[:40], msg))
+            elif r and r[1] and max(r[1]) > 1.6 * min(r[1]):
+                add("warn", where, "headshot '%s' is %dx%d, far from square, will crop badly" % (photo[:40], r[1][0], r[1][1]))
+        # links
+        for f in ("linkedin", "linkedin2"):
+            v = g(f)
+            if v and not re.match(r"^https?://([\w-]+\.)?linkedin\.com/", v, re.I):
+                add("error", where, "%s is not a LinkedIn URL: %s" % (f, v[:60]))
+        # title / abstract / bio
+        title = g("title")
+        if not title:
+            add("error", where, "empty title")
+        else:
+            if len(title) > 200:
+                add("warn", where, "title is a paragraph (%d chars), abstract pasted in the title column?" % len(title))
+            if "keynote" in st and not title.lower().startswith("keynote:"):
+                add("warn", where, "status keynote but the title does not start with 'Keynote:'")
+            if "keynote" not in st and title.lower().startswith("keynote:"):
+                add("warn", where, "title starts with 'Keynote:' but status is '%s'" % g("status"))
+            key = re.sub(r"\W+", "", title.lower())
+            if key in seen_titles:
+                add("warn", where, "same title as row %d" % seen_titles[key])
+            seen_titles.setdefault(key, i)
+        abstract = g("abstract")
+        if not abstract:
+            add("error", where, "empty abstract")
+        for f in ("title", "abstract", "bio", "organization", "name"):
+            if _LINT_PLACEHOLDER.search(row.get(f) or ""):
+                add("warn", where, "placeholder text in %s" % f)
+            if _LINT_MOJIBAKE.search(row.get(f) or ""):
+                add("warn", where, "encoding artefacts in %s (mojibake)" % f)
+        # track / day
+        for f, limit, label in (("track", tracks, "tracks"), ("day", days, "days")):
+            v = g(f)
+            if not v:
+                continue
+            if not v.isdigit():
+                add("error", where, "%s is '%s', expected a number" % (f, v[:20]))
+            elif int(v) < 1 or int(v) > limit:
+                add("error", where, "%s %s but the event has %d %s" % (f, v, limit, label))
+    issues.sort(key=lambda x: 0 if x["sev"] == "error" else 1)
+    return issues
 
 
 _status_rows = []
@@ -289,13 +479,17 @@ for _ev in (context.get("events") or []):
         except OSError:
             pass
     _key, _label = _status_health(_pct, _days_left)
+    _issues = _status_lint(_folder, _em, _tracks)
+    _n_err = sum(1 for x in _issues if x["sev"] == "error")
     _status_rows.append({
+        "issues": _issues[:_LINT_MAX_PER_EVENT], "issues_more": max(0, len(_issues) - _LINT_MAX_PER_EVENT),
+        "errors": _n_err, "warnings": len(_issues) - _n_err,
         "name": _ev.get("name") or _folder, "folder": _folder, "url": "/" + _folder + "/",
         "date": str(_em.get("date_string") or ""), "state": str(_em.get("event_state") or ""),
         "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
     })
-    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors")
+    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings")
 _me = str(context.get("brand_name") or "")
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
