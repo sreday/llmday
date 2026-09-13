@@ -207,14 +207,14 @@ with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
         {"from": str(r["from"]).strip("/"), "to": str(r["to"]).strip("/")} for r in _redirects]}))
 
 # STATUS PAGE (hidden, /status/): lineup + sponsor progress of every upcoming event.
-# Talks: rows of ../<event>/_db/talks.csv whose status contains "confirmed" or "keynote", against 10 slots
+# Talks: rows of ../<event>/_db/talks.csv whose status contains "confirmed" or "keynote", against 12 slots
 # per track (tracks from the event metadata). Sponsors: the event's sponsors list minus the partner
 # categories from ../partners.yaml (same split as the "Partners" pill on the site). Not in the sitemap.
 print(DIVIDER)
 _STATUS_BRANDS = [("SREday", "https://sreday.com/status/", "#713660"),
                   ("LLMday", "https://llmday.com/status/", "#26986A"),
                   ("PLATFORMday", "https://platformday.com/status/", "#E2971D")]
-_SLOTS_PER_TRACK = 10
+_SLOTS_PER_TRACK = 12
 
 
 def _status_health(pct):
