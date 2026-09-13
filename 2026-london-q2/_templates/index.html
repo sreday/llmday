@@ -1,6 +1,8 @@
 {% extends "_base.html" %}
 
 {% block content %}
+{#- "Keynote: Title" in talks.csv renders as a golden Keynote pill followed by the title (schedule + modals) -#}
+{% macro kn(title) -%}{% if title and title.lower().startswith('keynote:') %}<span class="kn-pill">Keynote</span>{{ title[8:].strip() }}{% else %}{{ title }}{% endif %}{%- endmacro %}
 
 <!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────────── -->
 {% if about_blurb %}
@@ -52,6 +54,8 @@
   </div>
 </section>
 <style>
+  .kn-pill { display: inline-block; background: #e6b400; color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .6em; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-right: 8px; vertical-align: middle; line-height: 1.4; }
+  .talk-cell .kn-pill { font-size: .7em; padding: 2px 8px; margin-right: 6px; }
   .btn-about-conf {
     display: inline-flex;
     align-items: center;
@@ -589,7 +593,7 @@
             <div class="content">
               {% if talk.name %}
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title }}</a>
+                <a class="theme-link" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ kn(talk.title) }}</a>
               </h3>
               <div class="location mb-3">{{ talk.comment }}{{ talk.organization }}{% if talk.YouTube %}<a class="event-watch-btn event-watch-btn-sm" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}</div>
               <div class="desc schedule-abstract">{{ talk.abstract }}<a class="schedule-abstract-read-more" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">... Read more</a></div>
@@ -661,11 +665,11 @@
 {% endfor %}
 {% if ns2.cell_talk and ns2.cell_talk.name %}
             <td class="talk-cell">
-              <a href="#modal-speaker-{{ ns2.cell_talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ ns2.cell_talk.id }}">{{ ns2.cell_talk.title }}</a>
+              <a href="#modal-speaker-{{ ns2.cell_talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ ns2.cell_talk.id }}">{{ kn(ns2.cell_talk.title) }}</a>
               <div class="speaker-info">{{ ns2.cell_talk.name }}{% if ns2.cell_talk.organization %} <span class="affiliation">• {{ ns2.cell_talk.organization }}</span>{% endif %}</div>
             </td>
 {% elif ns2.cell_talk %}
-            <td class="talk-cell merged-cell">{{ ns2.cell_talk.title }}</td>
+            <td class="talk-cell merged-cell">{{ kn(ns2.cell_talk.title) }}</td>
 {% else %}
             <td class="talk-cell{% if ns_row.all_breaks %} merged-cell{% endif %}"></td>
 {% endif %}
@@ -853,7 +857,7 @@
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">{{ talk.title }}</div>
+              <div class="talk-title-bar">{{ kn(talk.title) }}</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p>{{ talk.abstract | markdown }}</p>
