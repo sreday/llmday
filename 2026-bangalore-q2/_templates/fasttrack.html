@@ -120,7 +120,7 @@
 
   <div class="ft-card ft-done" id="ft-done" hidden></div>
 
-  <div class="ft-muted">This form is an invite-only fast track for speakers we already talked to.{% if fasttrack_event.cfp_url %} If you made it here without invitation, please go to <a href="{{ fasttrack_event.cfp_url }}" target="_blank" rel="noopener">{{ fasttrack_event.cfp_url }}</a>.{% endif %}</div>
+  <div class="ft-muted">{% if fasttrack_event.cfp_url %}If you made it to the fast track without invitation, please submit your talk in <a href="{{ fasttrack_event.cfp_url }}" target="_blank" rel="noopener">the public CFP</a> instead.{% else %}This form is an invite-only fast track for speakers we already talked to.{% endif %}</div>
 </main>
 
 <script>
