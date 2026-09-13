@@ -27,7 +27,9 @@
     .ft-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 16px; padding: 30px 34px; box-shadow: 0 4px 20px rgba(0,0,0,.06); margin-bottom: 22px; }
     .ft-section { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.05rem; margin: 30px 0 14px; color: #222; }
     .ft-section:first-child { margin-top: 0; }
-    .ft-consent { margin-top: 24px; }
+    .ft-consent { margin-top: 0; }
+    .ft-submit { padding: 4px 34px 0; }
+    @media (max-width: 575.98px) { .ft-submit { padding: 4px 18px 0; } }
     .ft-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .92rem; color: #333; }
     .ft-consent-label input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid #bbb; border-radius: 4px; background: #fff; cursor: pointer; }
     .ft-consent-label input:checked { background: var(--ft-accent) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; border-color: var(--ft-accent); }
@@ -89,60 +91,64 @@
     <div class="ft-card ft-invite">
       <label class="ft-field" data-field="outreach"><span>Who from our team invited you to present?</span><input type="text" name="outreach" autocomplete="off" maxlength="80"></label>
     </div>
-    <div class="ft-card">
-    <h2 class="ft-section">About you</h2>
-    <div class="ft-grid">
-      <label class="ft-field" data-field="name"><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
-      <label class="ft-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
-      <label class="ft-field ft-wide" data-field="email"><span>Email</span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
-      <label class="ft-field ft-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
-      <label class="ft-field ft-wide" data-field="bio"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio" rows="5" maxlength="4000"></textarea></label>
-    </div>
 
-    <div class="ft-co-toggle"><button type="button" class="ft-linkbtn pill" id="ft-co-btn">+ Add a co-speaker</button></div>
-    <div id="ft-co" class="ft-co-panel" hidden>
-      <h2 class="ft-section">Co-speaker</h2>
+    <div class="ft-card ft-invite">
+      <h2 class="ft-section">About you</h2>
       <div class="ft-grid">
-        <label class="ft-field" data-field="name2"><span>Co-speaker name</span><input type="text" name="name2" autocomplete="off" maxlength="80"></label>
-        <label class="ft-field" data-field="company2"><span>Company</span><input type="text" name="company2" autocomplete="off" maxlength="120"></label>
-        <label class="ft-field ft-wide" data-field="email2"><span>Email</span><input type="email" name="email2" autocomplete="off" maxlength="254"></label>
-        <label class="ft-field ft-wide" data-field="linkedin2"><span>LinkedIn profile URL</span><input type="url" name="linkedin2" autocomplete="off" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
-        <label class="ft-field ft-wide" data-field="bio2"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio2" rows="4" maxlength="4000"></textarea></label>
-        <div class="ft-field ft-wide" data-field="photo2">
+        <label class="ft-field" data-field="name"><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
+        <label class="ft-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
+        <label class="ft-field ft-wide" data-field="email"><span>Email</span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
+        <label class="ft-field ft-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
+        <label class="ft-field ft-wide" data-field="bio"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio" rows="5" maxlength="4000"></textarea></label>
+        <div class="ft-field ft-wide" data-field="photo">
           <span>Headshot <small>(optional; JPG or PNG; 10MB max)</small></span>
-          <label class="ft-drop" id="ft-drop2">
-            <input type="file" name="photo2" accept="image/*">
-            <img class="ft-thumb" id="ft-thumb2" alt="" hidden>
-            <div class="ft-drop-text" id="ft-drop-text2"><b>Choose a photo</b> or drop it here.</div>
+          <label class="ft-drop" id="ft-drop">
+            <input type="file" name="photo" accept="image/*">
+            <img class="ft-thumb" id="ft-thumb" alt="" hidden>
+            <div class="ft-drop-text" id="ft-drop-text"><b>Choose a photo</b> or drop it here.<br>A clear, well-lit picture of your face works best.</div>
           </label>
-          <div class="ft-hint" id="ft-photo-hint2"></div>
+          <div class="ft-hint" id="ft-photo-hint"></div>
+        </div>
+      </div>
+      <div class="ft-co-toggle"><button type="button" class="ft-linkbtn pill" id="ft-co-btn">+ Add a co-speaker</button></div>
+      <div id="ft-co" class="ft-co-panel" hidden>
+        <h2 class="ft-section">Co-speaker</h2>
+        <div class="ft-grid">
+          <label class="ft-field" data-field="name2"><span>Name</span><input type="text" name="name2" autocomplete="off" maxlength="80"></label>
+          <label class="ft-field" data-field="company2"><span>Company</span><input type="text" name="company2" autocomplete="off" maxlength="120"></label>
+          <label class="ft-field ft-wide" data-field="email2"><span>Email</span><input type="email" name="email2" autocomplete="off" maxlength="254"></label>
+          <label class="ft-field ft-wide" data-field="linkedin2"><span>LinkedIn profile URL</span><input type="url" name="linkedin2" autocomplete="off" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
+          <label class="ft-field ft-wide" data-field="bio2"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio2" rows="4" maxlength="4000"></textarea></label>
+          <div class="ft-field ft-wide" data-field="photo2">
+            <span>Headshot <small>(optional; JPG or PNG; 10MB max)</small></span>
+            <label class="ft-drop" id="ft-drop2">
+              <input type="file" name="photo2" accept="image/*">
+              <img class="ft-thumb" id="ft-thumb2" alt="" hidden>
+              <div class="ft-drop-text" id="ft-drop-text2"><b>Choose a photo</b> or drop it here.</div>
+            </label>
+            <div class="ft-hint" id="ft-photo-hint2"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <h2 class="ft-section">Your session</h2>
-    <div class="ft-grid">
-      <label class="ft-field ft-wide" data-field="title"><span>Talk title <small>(one phrase, shorter = better)</small></span><input type="text" name="title" maxlength="160"></label>
-      <label class="ft-field ft-wide" data-field="abstract"><span>Talk abstract <small>(3+ sentences, markdown supported)</small></span><textarea name="abstract" rows="8" maxlength="8000"></textarea><div class="ft-hint" id="ft-abstract-hint"></div></label>
-      <div class="ft-field ft-wide" data-field="photo">
-        <span>Headshot <small>(optional; JPG or PNG; 10MB max)</small></span>
-        <label class="ft-drop" id="ft-drop">
-          <input type="file" name="photo" accept="image/*">
-          <img class="ft-thumb" id="ft-thumb" alt="" hidden>
-          <div class="ft-drop-text" id="ft-drop-text"><b>Choose a photo</b> or drop it here.<br>A clear, well-lit picture of your face works best.</div>
-        </label>
-        <div class="ft-hint" id="ft-photo-hint"></div>
+    <div class="ft-card ft-invite">
+      <h2 class="ft-section">Your session</h2>
+      <div class="ft-grid">
+        <label class="ft-field ft-wide" data-field="title"><span>Talk title <small>(one phrase, shorter = better)</small></span><input type="text" name="title" maxlength="160"></label>
+        <label class="ft-field ft-wide" data-field="abstract"><span>Talk abstract <small>(3+ sentences, markdown supported)</small></span><textarea name="abstract" rows="8" maxlength="8000"></textarea><div class="ft-hint" id="ft-abstract-hint"></div></label>
       </div>
     </div>
 
-    <div class="ft-field ft-consent" data-field="consent">
-      <label class="ft-consent-label"><input type="checkbox" name="consent" value="yes"><span>I agree to share all the information above with the organizer</span></label>
-    </div>
-    <div class="ft-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-    <div class="ft-row">
-      <button type="submit" class="btn-ft" id="ft-send">Send my talk</button>
-      <div class="ft-error" id="ft-error" hidden></div>
-    </div>
+    <div class="ft-submit">
+      <div class="ft-field ft-consent" data-field="consent">
+        <label class="ft-consent-label"><input type="checkbox" name="consent" value="yes"><span>I agree to share all the information above with the organizer</span></label>
+      </div>
+      <div class="ft-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="ft-row">
+        <button type="submit" class="btn-ft" id="ft-send">Send my talk</button>
+        <div class="ft-error" id="ft-error" hidden></div>
+      </div>
     </div>
   </form>
 
