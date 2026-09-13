@@ -95,7 +95,7 @@ function doPost(e) {
 
 function normalizeName(v) {
   var t = String(v == null ? '' : v).toLowerCase();
-  try { t = t.normalize('NFD').replace(/[̀-ͯ]/g, ''); } catch (err) {}
+  try { t = t.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch (err) {}
   t = t.replace(/ł/g, 'l').replace(/ø/g, 'o').replace(/ß/g, 'ss').replace(/æ/g, 'ae');
   return t.replace(/[^a-z]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
