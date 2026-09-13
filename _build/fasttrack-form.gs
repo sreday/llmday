@@ -49,7 +49,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 9,
+  return respond({ ok: true, service: 'fasttrack', version: 10,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -167,7 +167,7 @@ function composeSubmission(s, ev, match, brand) {
     'Fast track - ' + ev.event_name + '\n\n' +
     rows.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n\n') + '\n';
 
-  var red = '#a61c1c', green = '#2e7d32', accent = brand.color || '#333';
+  var accent = brand.color || '#333';   // all labels in the brand colour
   var html =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#222">' +
     '<h2 style="display:inline-block;background:' + accent + ';color:#fff;font-size:20px;margin:0 0 22px;padding:6px 12px;border-radius:4px">Fast track - ' + esc(ev.event_name) + '</h2>' +
@@ -176,7 +176,7 @@ function composeSubmission(s, ev, match, brand) {
       var v = r[0] === 'Email' ? '<a href="mailto:' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
             : r[0] === 'LinkedIn' ? '<a href="' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
             : esc(r[1]).replace(/\n/g, '<br>');
-      var labelColor = r[0] === 'Invited by' ? green : red;
+      var labelColor = accent;
       return '<tr><td style="color:' + labelColor + ';font-weight:bold;padding:4px 18px 4px 0;vertical-align:top;white-space:nowrap">' + r[0] + '</td>' +
              '<td style="padding:4px 0;vertical-align:top">' + v + '</td></tr>';
     }).join('') +
