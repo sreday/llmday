@@ -278,12 +278,23 @@ for _ev in (context.get("events") or []):
     _available = _tracks * _SLOTS_PER_TRACK
     _pct = round(100.0 * _confirmed / _available) if _available else 0
     _days_left = _status_days_left(_em.get("start_time"))
+    # "Current start / end": the time bracket the event page itself renders in its schedule meta line
+    # (only when event_state is "active"; the event folders are built before home in the root Makefile).
+    _hours = "N/A"
+    if str(_em.get("event_state") or "") == "active":
+        try:
+            with open("../" + _folder + "/static/index.html", encoding="utf-8", errors="replace") as _hf:
+                _m = re.search(r'<span class="schedule-meta-item">(\d{1,2}(?::\d{2})?[AP]M\s*-\s*\d{1,2}(?::\d{2})?[AP]M)</span>', _hf.read())
+            if _m:
+                _hours = _m.group(1)
+        except OSError:
+            pass
     _key, _label = _status_health(_pct, _days_left)
     _status_rows.append({
         "name": _ev.get("name") or _folder, "folder": _folder, "url": "/" + _folder + "/",
         "date": str(_em.get("date_string") or ""), "state": str(_em.get("event_state") or ""),
         "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
-        "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left,
+        "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
     })
     print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors")
 _me = str(context.get("brand_name") or "")
