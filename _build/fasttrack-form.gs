@@ -49,7 +49,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 11,
+  return respond({ ok: true, service: 'fasttrack', version: 12,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -163,14 +163,14 @@ function composeSubmission(s, ev, match, brand) {
     ['Invited by', via], ['Name', s.name], ['Email', s.email], ['Organization', s.company], ['LinkedIn', s.linkedin],
     ['Talk Title', s.title], ['Talk Abstract', s.abstract], ['Bio', s.bio]
   ];
-  if (s.name2) {
-    rows = rows.concat([['Co-speaker', s.name2], ['Co-speaker email', s.email2], ['Co-speaker organization', s.company2],
-                        ['Co-speaker LinkedIn', s.linkedin2], ['Co-speaker bio', s.bio2]]);
+  if (s.name2) {   // visual divide, then the co-speaker block with plain labels
+    rows = rows.concat([['__divider__', 'Co-speaker'], ['Name', s.name2], ['Email', s.email2], ['Organization', s.company2],
+                        ['LinkedIn', s.linkedin2], ['Bio', s.bio2]]);
   }
 
   var text =
     'Fast track - ' + ev.event_name + '\n\n' +
-    rows.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n\n') + '\n';
+    rows.map(function (r) { return r[0] === '__divider__' ? '---------- ' + r[1] + ' ----------' : r[0] + ': ' + r[1]; }).join('\n\n') + '\n';
 
   var accent = brand.color || '#333';   // all labels in the brand colour
   var html =
@@ -178,10 +178,14 @@ function composeSubmission(s, ev, match, brand) {
     '<h2 style="display:inline-block;background:' + accent + ';color:#fff;font-size:20px;margin:0 0 22px;padding:6px 12px;border-radius:4px">Fast track - ' + esc(ev.event_name) + '</h2>' +
     '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:640px">' +
     rows.map(function (r) {
+      if (r[0] === '__divider__') {
+        return '<tr><td colspan="2" style="padding:18px 0 8px"><div style="border-top:2px solid ' + accent + ';margin-bottom:10px"></div>' +
+               '<span style="color:' + accent + ';font-weight:bold;font-size:16px">' + esc(r[1]) + '</span></td></tr>';
+      }
       var v = /email$/i.test(r[0]) ? '<a href="mailto:' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
             : /LinkedIn$/.test(r[0]) ? '<a href="' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
             : esc(r[1]).replace(/\n/g, '<br>');
-      var labelColor = accent;
+      var labelColor = r[0] === 'Invited by' ? '#111' : accent;   // Invited by always black (Marek)
       return '<tr><td style="color:' + labelColor + ';font-weight:bold;padding:4px 18px 4px 0;vertical-align:top;white-space:nowrap">' + r[0] + '</td>' +
              '<td style="padding:4px 0;vertical-align:top">' + v + '</td></tr>';
     }).join('') +
