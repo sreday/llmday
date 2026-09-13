@@ -426,10 +426,11 @@ def _status_lint(folder, meta, tracks, past=False):
                 add("warn", where, "status keynote but the title does not start with 'Keynote:'")
             if not past and "keynote" not in st and title.lower().startswith("keynote:"):
                 add("warn", where, "title starts with 'Keynote:' but status is '%s'" % g("status"))
+            # same title twice is fine for one speaker (a workshop over two slots), suspicious for two speakers
             key = re.sub(r"\W+", "", title.lower())
-            if key in seen_titles:
-                add("warn", where, "same title as row %d" % seen_titles[key])
-            seen_titles.setdefault(key, i)
+            if key in seen_titles and seen_titles[key][1] != name.lower():
+                add("warn", where, "same title as row %d (%s), copy-paste?" % (seen_titles[key][0], seen_titles[key][2][:30]))
+            seen_titles.setdefault(key, (i, name.lower(), name))
         abstract = g("abstract")
         if not abstract:
             add("error", where, "empty abstract")
