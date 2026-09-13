@@ -47,6 +47,17 @@
     details.ladder table { margin-top: 10px; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; overflow: hidden; font-size: .82rem; }
     details.ladder th, details.ladder td { padding: 8px 12px; }
     details.ladder th:not(:first-child), details.ladder td:not(:first-child) { text-align: center; }
+    details.ladder summary::marker { color: var(--accent); }
+    details.ladder .ladder-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.4,0,.2,1); }
+    details.ladder.expanded .ladder-body { grid-template-rows: 1fr; }
+    details.ladder .ladder-inner { overflow: hidden; }
+    details.ladder tbody tr { opacity: 0; transform: translateY(-8px); transition: opacity .35s ease, transform .35s ease; }
+    details.ladder.expanded tbody tr { opacity: 1; transform: none; }
+    details.ladder.expanded tbody tr:nth-child(1) { transition-delay: .12s; }
+    details.ladder.expanded tbody tr:nth-child(2) { transition-delay: .22s; }
+    details.ladder.expanded tbody tr:nth-child(3) { transition-delay: .32s; }
+    details.ladder.expanded tbody tr:nth-child(4) { transition-delay: .42s; }
+    @media (prefers-reduced-motion: reduce) { details.ladder .ladder-body, details.ladder tbody tr { transition: none; } }
     @media (max-width: 720px) { .wrap { padding: 28px 12px 60px; } th, td { padding: 10px 8px; } .bar { min-width: 120px; } th.hide, td.hide { display: none; } }
   </style>
 </head>
@@ -74,7 +85,7 @@
           <th class="num">Talks</th>
           <th>Progress</th>
           <th>Health</th>
-          <th class="hours">Current start / end</th>
+          <th class="hours">Start / end</th>
           <th class="num">Sponsors</th>
         </tr>
       </thead>
@@ -177,6 +188,7 @@
 
   <details class="ladder">
     <summary>Health ladder (share of 12 slots per track confirmed, by days to the event)</summary>
+    <div class="ladder-body"><div class="ladder-inner">
     <table>
       <thead><tr><th>Days to event</th><th>Critical</th><th>Bad</th><th>Neutral</th><th>Good</th><th>Nailed it!</th></tr></thead>
       <tbody>
@@ -186,12 +198,30 @@
         <tr><td>under 14</td><td>under 50%</td><td>50–69%</td><td>70–84%</td><td>85–99%</td><td>100%+</td></tr>
       </tbody>
     </table>
+    </div></div>
   </details>
 
   <div class="sisters">
     <a href="https://sreday.com/status/" style="--c: #713660">SREday status</a><a href="https://platformday.com/status/" style="--c: #E2971D">PLATFORMday status</a>
   </div>
-  <div class="foot">Generated 2026-09-13 18:27 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-13 18:35 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
+<script>
+(function () {
+  var d = document.querySelector('details.ladder'); if (!d) return;
+  var s = d.querySelector('summary'), body = d.querySelector('.ladder-body');
+  s.addEventListener('click', function (e) {
+    if (!d.open) {                                   // opening: let it open, then unwind
+      setTimeout(function () { d.classList.add('expanded'); }, 30);
+      return;
+    }
+    e.preventDefault();                              // closing: wind up first, then close
+    d.classList.remove('expanded');
+    var done = function () { body.removeEventListener('transitionend', done); d.open = false; };
+    body.addEventListener('transitionend', done);
+    setTimeout(done, 600);
+  });
+})();
+</script>
 </body>
 </html>
