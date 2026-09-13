@@ -25,6 +25,14 @@
     .ft-sub a { color: var(--ft-accent); }
     .ft-intro { color: #333; font-size: 1rem; line-height: 1.6; margin-bottom: 26px; }
     .ft-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 16px; padding: 30px 34px; box-shadow: 0 4px 20px rgba(0,0,0,.06); margin-bottom: 22px; }
+    .ft-section { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.05rem; margin: 0 0 14px; color: #222; }
+    .ft-grid + .ft-section { margin-top: 30px; }
+    .ft-consent { margin-top: 24px; }
+    .ft-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .92rem; color: #333; }
+    .ft-consent-label input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid #bbb; border-radius: 4px; background: #fff; cursor: pointer; }
+    .ft-consent-label input:checked { background: var(--ft-accent); border-color: var(--ft-accent); }
+    .ft-consent.is-invalid .ft-consent-label { color: var(--ft-danger); }
+    .ft-consent.is-invalid .ft-consent-label input { border-color: var(--ft-danger); }
     .ft-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
     .ft-wide { grid-column: 1 / -1; }
     .ft-field { display: block; margin: 0; }
@@ -65,21 +73,24 @@
   <div class="ft-brand">{{ brand_name }} · speakers</div>
   <h1 class="ft-title">Speak at {{ fasttrack_event.event_name }}</h1>
   <div class="ft-sub">{{ fasttrack_event.date }} · {{ fasttrack_event.city }} · <a href="{{ fasttrack_event.event_url }}" target="_blank" rel="noopener">event page</a></div>
-  <p class="ft-intro">You talked to one of us and we'd love to have you on stage. Fill this in and we'll take it from here. Same details as the CFP, minus the queue.</p>
+  <p class="ft-intro">You talked to one of us and we'd love to have you on stage. Fill the form and we'll get back to you asap.</p>
 
   <form class="ft-card" id="ft-form" novalidate>
+    <h2 class="ft-section">About you</h2>
     <div class="ft-grid">
-      <label class="ft-field ft-wide" data-field="outreach"><span>Who did you talk to on our team?</span><input type="text" name="outreach" autocomplete="off" placeholder="e.g. Magda, Petras, Anna" maxlength="80"><div class="ft-hint" id="ft-outreach-hint"></div></label>
-      <label class="ft-field" data-field="name"><span>Your name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
+      <label class="ft-field" data-field="name"><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
       <label class="ft-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
-      <label class="ft-field" data-field="jobtitle"><span>Job title <small>(optional)</small></span><input type="text" name="jobtitle" autocomplete="organization-title" maxlength="120"></label>
-      <label class="ft-field" data-field="email"><span>Email</span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
+      <label class="ft-field ft-wide" data-field="email"><span>Email</span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
       <label class="ft-field ft-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
+    </div>
+
+    <h2 class="ft-section">Your session</h2>
+    <div class="ft-grid">
       <label class="ft-field ft-wide" data-field="title"><span>Talk title <small>(one phrase, shorter = better)</small></span><input type="text" name="title" maxlength="160"></label>
-      <label class="ft-field ft-wide" data-field="abstract"><span>Talk abstract <small>(3+ sentences, no cap, markdown is fine)</small></span><textarea name="abstract" rows="8" maxlength="8000"></textarea><div class="ft-hint" id="ft-abstract-hint"></div></label>
-      <label class="ft-field ft-wide" data-field="bio"><span>Short bio <small>(a paragraph, third person, markdown is fine)</small></span><textarea name="bio" rows="5" maxlength="4000"></textarea></label>
+      <label class="ft-field ft-wide" data-field="abstract"><span>Talk abstract <small>(3+ sentences, markdown supported)</small></span><textarea name="abstract" rows="8" maxlength="8000"></textarea><div class="ft-hint" id="ft-abstract-hint"></div></label>
+      <label class="ft-field ft-wide" data-field="bio"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio" rows="5" maxlength="4000"></textarea></label>
       <div class="ft-field ft-wide" data-field="photo">
-        <span>Headshot <small>(JPG or PNG; we crop it square for the website)</small></span>
+        <span>Headshot <small>(JPG or PNG; 10MB max)</small></span>
         <label class="ft-drop" id="ft-drop">
           <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
           <img class="ft-thumb" id="ft-thumb" alt="" hidden>
@@ -87,6 +98,11 @@
         </label>
         <div class="ft-hint" id="ft-photo-hint"></div>
       </div>
+      <label class="ft-field ft-wide" data-field="outreach"><span>Who from our team invited you to present?</span><input type="text" name="outreach" autocomplete="off" placeholder="e.g. Magda, Petras, Anna" maxlength="80"><div class="ft-hint" id="ft-outreach-hint"></div></label>
+    </div>
+
+    <div class="ft-field ft-consent" data-field="consent">
+      <label class="ft-consent-label"><input type="checkbox" name="consent" value="yes"><span>I agree to share all the information above with the organizer</span></label>
     </div>
     <div class="ft-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
     <div class="ft-row">
@@ -97,7 +113,7 @@
 
   <div class="ft-card ft-done" id="ft-done" hidden></div>
 
-  <div class="ft-muted">Invite-only fast track for speakers we already talked to.{% if fasttrack_event.cfp_url %} Everyone else: the public CFP is at <a href="{{ fasttrack_event.cfp_url }}" target="_blank" rel="noopener">{{ fasttrack_event.cfp_url }}</a>.{% endif %}</div>
+  <div class="ft-muted">This form is an invite-only fast track for speakers we already talked to.{% if fasttrack_event.cfp_url %} If you made it here without invitation, please go to <a href="{{ fasttrack_event.cfp_url }}" target="_blank" rel="noopener">{{ fasttrack_event.cfp_url }}</a>.{% endif %}</div>
 </main>
 
 <script>
@@ -186,8 +202,10 @@ function loadImage(file) {
     img.src = url;
   });
 }
+var MAX_FILE = 10 * 1024 * 1024;
 function handlePhoto(file) {
   var hint = $('ft-photo-hint'); hint.className = 'ft-hint'; hint.textContent = 'Processing...';
+  if (file.size > MAX_FILE) { photo = { png: '', jpg: '', ok: false }; hint.className = 'ft-hint warn'; hint.textContent = 'That file is over 10 MB, please pick a smaller one.'; return; }
   photo = { png: '', jpg: '', ok: false };
   loadImage(file).then(function(img) {
     var w = img.naturalWidth, h = img.naturalHeight, s = Math.min(w, h);
@@ -218,7 +236,7 @@ function val(k) { return (form.elements[k].value || '').trim(); }
 function validate() {
   var bad = [];
   var checks = {
-    outreach: !!val('outreach'), name: !!val('name'), company: !!val('company'),
+    outreach: !!val('outreach'), name: !!val('name'), company: !!val('company'), consent: form.elements['consent'].checked,
     email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email')),
     linkedin: /^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin')),
     title: !!val('title'), abstract: !!val('abstract'), bio: !!val('bio'), photo: photo.ok
@@ -229,6 +247,8 @@ function validate() {
     if (k === 'photo') drop.classList.toggle('is-invalid', !checks[k]);
     if (!checks[k]) bad.push(k);
   });
+  var order = ['name', 'company', 'email', 'linkedin', 'title', 'abstract', 'bio', 'photo', 'outreach', 'consent'];
+  bad.sort(function(a, b) { return order.indexOf(a) - order.indexOf(b); });
   if (bad.length) {
     var first = form.querySelector('[data-field="' + bad[0] + '"]');
     first.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -244,11 +264,11 @@ form.addEventListener('submit', function(ev) {
   ev.preventDefault();
   $('ft-error').hidden = true;
   var bad = validate();
-  if (bad.length) { showError(bad.indexOf('photo') !== -1 && bad.length === 1 ? 'Please add a headshot.' : bad.indexOf('linkedin') !== -1 && bad.length === 1 ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in the highlighted fields.'); return; }
+  if (bad.length) { showError(bad.length === 1 && bad[0] === 'photo' ? 'Please add a headshot.' : bad.length === 1 && bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : bad.length === 1 && bad[0] === 'consent' ? 'Please tick the consent box so we can use your details.' : 'Please fill in the highlighted fields.'); return; }
   if (!FT_URL) { showError('This form is not connected yet (fasttrack_form_url is empty). Please email us instead.'); return; }
   var body = {
     brand: FT_EVENT.brand, event: FT_EVENT,
-    outreach: val('outreach'), name: val('name'), company: val('company'), jobtitle: val('jobtitle'),
+    outreach: val('outreach'), name: val('name'), company: val('company'), consent: form.elements['consent'].checked,
     email: val('email'), linkedin: val('linkedin'), title: val('title'),
     abstract: form.elements['abstract'].value.trim(), bio: form.elements['bio'].value.trim(),
     photo_png_b64: photo.png, photo_jpg_b64: photo.jpg,

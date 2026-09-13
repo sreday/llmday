@@ -47,7 +47,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 1,
+  return respond({ ok: true, service: 'fasttrack', version: 2,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -222,8 +222,10 @@ function normalizeSubmission(d) {
     title:    clean(d.title, LIMITS.title),
     abstract: cleanMultiline(d.abstract, LIMITS.abstract),
     bio:      cleanMultiline(d.bio, LIMITS.bio),
+    consent:  d.consent === true || d.consent === 'yes',
     errors:   []
   };
+  if (!s.consent) s.errors.push('consent');     // "I agree to share all the information above with the organizer"
   if (!s.outreach) s.errors.push('outreach');
   if (!s.name) s.errors.push('name');
   if (!s.company) s.errors.push('company');
@@ -308,7 +310,7 @@ function esc(v) {
 function testFasttrack() {
   var tiny = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
   var e = { postData: { contents: JSON.stringify({
-    dry_run: true, brand: 'sreday', outreach: 'Magda',
+    dry_run: true, brand: 'sreday', outreach: 'Magda', consent: true,
     name: 'Leon Lobo', company: 'Oracle', jobtitle: 'Software Engineering Director', email: 'hello@sreday.com',
     linkedin: 'https://www.linkedin.com/in/leonlobo27/', title: 'Designing Hybrid Intelligence for Enterprise Finance',
     abstract: 'AI agents in Enterprise finance products improve user experiences.\n\nHowever, finance processes also depend on strict rules.\nThis session explores the balance.',
