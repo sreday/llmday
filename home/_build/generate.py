@@ -351,6 +351,11 @@ def _status_lint(folder, meta, tracks):
         return issues
     missing = [c for c in _LINT_COLUMNS if c not in cols]
     extra = [c for c in cols if c and c not in _LINT_COLUMNS]
+    for m in list(missing):                       # "YouTubel" for "YouTube": one clear message instead of two
+        typo = next((e for e in extra if e.strip().lower().startswith(m.lower()[:5]) or m.lower().startswith(e.strip().lower()[:5])), None)
+        if typo:
+            add("warn", "talks.csv header", "column '%s' should be '%s'" % (typo, m))
+            missing.remove(m); extra.remove(typo)
     if missing:
         add("error" if _LINT_CORE_COLUMNS & set(missing) else "warn", "talks.csv header", "missing columns: " + ", ".join(missing))
     if extra:
@@ -379,7 +384,7 @@ def _status_lint(folder, meta, tracks):
             add("error", where, "empty name")
         else:
             for part in re.split(r"\s*&\s*|,\s*", name):
-                if len(part.split()) > 4 or len(part) > 34:
+                if len(part.split()) > 5 or len(part) > 45:
                     add("warn", where, "name looks like a phrase, not a person: '%s'" % part[:60])
                     break
         # organization
@@ -402,7 +407,9 @@ def _status_lint(folder, meta, tracks):
         # links
         for f in ("linkedin", "linkedin2"):
             v = g(f)
-            if v and not re.match(r"^https?://([\w-]+\.)?linkedin\.com/", v, re.I):
+            if v and re.match(r"^(www\.)?linkedin\.com/", v, re.I):
+                add("error", where, "%s is missing https://, renders as a broken relative link: %s" % (f, v[:60]))
+            elif v and not re.match(r"^https?://([\w-]+\.)?linkedin\.com/", v, re.I):
                 add("error", where, "%s is not a LinkedIn URL: %s" % (f, v[:60]))
         # title / abstract / bio
         title = g("title")
