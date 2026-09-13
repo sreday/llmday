@@ -221,8 +221,8 @@ _SLOTS_PER_TRACK = 12
 # months out nothing is worse than Neutral; a month out under 50% is Bad and under 25% Critical).
 # Each row: (max days to event, critical_below, bad_below, neutral_below, good_below); None = never.
 _STATUS_LADDER = [                    # tightened 2026-09-13 (each band took the thresholds of the one below it)
-    (14,    50,   70,   85,   100),   # 14 days or fewer: under 50% critical, 50-69 bad, 70-84 neutral, 85-99 good
-    (30,    40,   60,   75,   100),   # 15-30 days
+    (13,    50,   70,   85,   100),   # under 14 days: under 50% critical, 50-69 bad, 70-84 neutral, 85-99 good
+    (30,    40,   60,   75,   100),   # 14-30 days
     (60,    25,   50,   75,   100),   # 31-60 days
     (None,  None, 25,   75,   100),   # more than 60 days: never critical, under 25% bad
 ]
