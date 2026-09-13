@@ -48,7 +48,7 @@
     .ft-drop { border: 2px dashed #ccc; border-radius: 12px; padding: 18px; display: flex; gap: 18px; align-items: center; cursor: pointer; transition: border-color .2s, background .2s; background: #fafafa; }
     .ft-drop:hover, .ft-drop.over { border-color: var(--ft-accent); background: color-mix(in srgb, var(--ft-accent) 5%, #fff); }
     .ft-drop input { display: none; }
-    .ft-thumb { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; background: #eee; flex-shrink: 0; border: 1px solid #ddd; }
+    .ft-thumb { width: 96px; height: 96px; border-radius: 12px; object-fit: contain; background: #eee; flex-shrink: 0; border: 1px solid #ddd; }
     .ft-drop-text { font-size: .92rem; color: #444; line-height: 1.5; }
     .ft-drop-text b { color: var(--ft-accent); }
     .ft-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 22px; }
@@ -156,8 +156,10 @@ function handlePhoto(file) {
   photo = { png: '', jpg: '', ok: false };
   loadImage(file).then(function(img) {
     var w = img.naturalWidth, h = img.naturalHeight, s = Math.min(w, h);
-    var c1 = document.createElement('canvas'); c1.width = 400; c1.height = 400;
-    c1.getContext('2d').drawImage(img, (w - s) / 2, (h - s) / 2, s, s, 0, 0, 400, 400);
+    // no cropping: the site-ready PNG keeps the original proportions, scaled to fit 400x400
+    var k = Math.min(1, 400 / Math.max(w, h));
+    var c1 = document.createElement('canvas'); c1.width = Math.max(1, Math.round(w * k)); c1.height = Math.max(1, Math.round(h * k));
+    c1.getContext('2d').drawImage(img, 0, 0, c1.width, c1.height);
     var pngUrl = c1.toDataURL('image/png');
     var scale = Math.min(1, 1600 / Math.max(w, h));
     var c2 = document.createElement('canvas'); c2.width = Math.round(w * scale); c2.height = Math.round(h * scale);
@@ -167,7 +169,7 @@ function handlePhoto(file) {
     if (png.length > MAX_B64 || jpg.length > MAX_B64) throw new Error('size');
     photo = { png: png, jpg: jpg, ok: true };
     var thumb = $('ft-thumb'); thumb.src = pngUrl; thumb.hidden = false;
-    $('ft-drop-text').innerHTML = '<b>Looks good.</b> ' + w + '×' + h + ' px, cropped to a square for the website.<br>Click or drop to replace.';
+    $('ft-drop-text').innerHTML = '<b>Looks good.</b> ' + w + '×' + h + ' px, resized for the website.<br>Click or drop to replace.';
     hint.textContent = ''; drop.classList.remove('is-invalid');
     if (s < 400) { hint.className = 'ft-hint warn'; hint.textContent = 'Quite small (' + s + ' px). A bigger photo would look sharper.'; }
   }).catch(function(err) {
