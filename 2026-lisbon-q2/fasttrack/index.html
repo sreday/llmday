@@ -27,6 +27,8 @@
     .ft-consent-label input:checked { background: var(--ft-accent); border-color: var(--ft-accent); }
     .ft-consent.is-invalid .ft-consent-label { color: var(--ft-danger); }
     .ft-consent.is-invalid .ft-consent-label input { border-color: var(--ft-danger); }
+    .ft-invite { border-left: 4px solid var(--ft-accent); }
+    .ft-invite .ft-field > span { font-size: .95rem; }
     .ft-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
     .ft-wide { grid-column: 1 / -1; }
     .ft-field { display: block; margin: 0; }
@@ -69,7 +71,11 @@
   <div class="ft-sub">June 23, 2026 · Lisbon · <a href="https://www.llmday.com/2026-lisbon-q2/" target="_blank" rel="noopener">event page</a></div>
   <p class="ft-intro">This is a fast track to speak at the conference. Please use only if someone from our team invited you to present at this particular event. We'll review all information carefully and get back to you asap!</p>
 
-  <form class="ft-card" id="ft-form" novalidate>
+  <form id="ft-form" novalidate>
+    <div class="ft-card ft-invite">
+      <label class="ft-field" data-field="outreach"><span>Who from our team invited you to present?</span><input type="text" name="outreach" autocomplete="off" maxlength="80"></label>
+    </div>
+    <div class="ft-card">
     <h2 class="ft-section">About you</h2>
     <div class="ft-grid">
       <label class="ft-field" data-field="name"><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
@@ -92,7 +98,6 @@
         </label>
         <div class="ft-hint" id="ft-photo-hint"></div>
       </div>
-      <label class="ft-field ft-wide" data-field="outreach"><span>Who from our team invited you to present?</span><input type="text" name="outreach" autocomplete="off" maxlength="80"></label>
     </div>
 
     <div class="ft-field ft-consent" data-field="consent">
@@ -102,6 +107,7 @@
     <div class="ft-row">
       <button type="submit" class="btn-ft" id="ft-send">Send my talk</button>
       <div class="ft-error" id="ft-error" hidden></div>
+    </div>
     </div>
   </form>
 
@@ -187,7 +193,7 @@ function validate() {
     if (k === 'photo') drop.classList.toggle('is-invalid', !checks[k]);
     if (!checks[k]) bad.push(k);
   });
-  var order = ['name', 'company', 'email', 'linkedin', 'title', 'abstract', 'bio', 'photo', 'outreach', 'consent'];
+  var order = ['outreach', 'name', 'company', 'email', 'linkedin', 'title', 'abstract', 'bio', 'photo', 'consent'];
   bad.sort(function(a, b) { return order.indexOf(a) - order.indexOf(b); });
   if (bad.length) {
     var first = form.querySelector('[data-field="' + bad[0] + '"]');
