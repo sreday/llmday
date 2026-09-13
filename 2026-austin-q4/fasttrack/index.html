@@ -93,7 +93,7 @@
       <div class="ft-field ft-wide" data-field="photo">
         <span>Headshot <small>(optional; JPG or PNG; 10MB max)</small></span>
         <label class="ft-drop" id="ft-drop">
-          <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
+          <input type="file" name="photo" accept="image/*">
           <img class="ft-thumb" id="ft-thumb" alt="" hidden>
           <div class="ft-drop-text" id="ft-drop-text"><b>Choose a photo</b> or drop it here.<br>A clear, well-lit picture of your face works best.</div>
         </label>
@@ -120,11 +120,10 @@
 <script>
 var FT_URL   = "https://script.google.com/macros/s/AKfycbwOUn-5SpofzUE96GTzRVV5WjM_OM4FOG6Vor16dEYubS837SZ8S1OXA6GCEYZMMVQ9/exec";
 var FT_EVENT = {"brand": "llmday", "brand_name": "LLMday", "cfp_url": "https://cfp.ninja/e/llmday-2026-austin-q4", "city": "Austin", "date": "October 14, 2026", "event_name": "LLMday Austin 2026 Q4", "event_url": "https://www.llmday.com/2026-austin-q4/", "slug": "2026-austin-q4"};
-var MAX_B64  = 5 * 1024 * 1024 * 4 / 3;   // server rejects attachments over 5 MB
 
 var $ = function(id) { return document.getElementById(id); };
 var form = $('ft-form'), done = $('ft-done');
-var photo = { png: '', jpg: '', ok: false };
+var photo = { b64: '', type: '', name: '', ok: false };
 
 // ---- abstract sentence counter (soft) ------------------------------------------------
 form.elements['abstract'].addEventListener('input', function() {
@@ -144,40 +143,30 @@ fileInput.addEventListener('change', function() { if (this.files && this.files[0
 function loadImage(file) {
   return new Promise(function(resolve, reject) {
     var url = URL.createObjectURL(file), img = new Image();
-    img.onload = function() { URL.revokeObjectURL(url); resolve(img); };
+    img.onload = function() { resolve(img); };
     img.onerror = function() { URL.revokeObjectURL(url); reject(new Error('decode')); };
     img.src = url;
   });
 }
 var MAX_FILE = 10 * 1024 * 1024;
 function handlePhoto(file) {
-  var hint = $('ft-photo-hint'); hint.className = 'ft-hint'; hint.textContent = 'Processing...';
-  if (file.size > MAX_FILE) { photo = { png: '', jpg: '', ok: false }; hint.className = 'ft-hint warn'; hint.textContent = 'That file is over 10 MB, please pick a smaller one.'; return; }
-  photo = { png: '', jpg: '', ok: false };
-  loadImage(file).then(function(img) {
-    var w = img.naturalWidth, h = img.naturalHeight, s = Math.min(w, h);
-    // no cropping: the site-ready PNG keeps the original proportions, scaled to fit 400x400
-    var k = Math.min(1, 400 / Math.max(w, h));
-    var c1 = document.createElement('canvas'); c1.width = Math.max(1, Math.round(w * k)); c1.height = Math.max(1, Math.round(h * k));
-    c1.getContext('2d').drawImage(img, 0, 0, c1.width, c1.height);
-    var pngUrl = c1.toDataURL('image/png');
-    var scale = Math.min(1, 1600 / Math.max(w, h));
-    var c2 = document.createElement('canvas'); c2.width = Math.round(w * scale); c2.height = Math.round(h * scale);
-    c2.getContext('2d').drawImage(img, 0, 0, c2.width, c2.height);
-    var jpg = c2.toDataURL('image/jpeg', .85).split(',')[1];
-    var png = pngUrl.split(',')[1];
-    if (png.length > MAX_B64 || jpg.length > MAX_B64) throw new Error('size');
-    photo = { png: png, jpg: jpg, ok: true };
-    var thumb = $('ft-thumb'); thumb.src = pngUrl; thumb.hidden = false;
-    $('ft-drop-text').innerHTML = '<b>Looks good.</b> ' + w + '×' + h + ' px, resized for the website.<br>Click or drop to replace.';
+  var hint = $('ft-photo-hint'); hint.className = 'ft-hint'; hint.textContent = 'Reading...';
+  photo = { b64: '', type: '', name: '', ok: false };
+  if (file.size > MAX_FILE) { hint.className = 'ft-hint warn'; hint.textContent = 'That file is over 10 MB, please pick a smaller one.'; return; }
+  var reader = new FileReader();
+  reader.onerror = function() { hint.className = 'ft-hint warn'; hint.textContent = "We couldn't read that file, please try another one."; };
+  reader.onload = function() {
+    photo = { b64: String(reader.result).split(',')[1] || '', type: file.type || '', name: file.name || '', ok: true };
+    var size = file.size >= 1048576 ? (file.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(file.size / 1024)) + ' KB';
+    $('ft-drop-text').innerHTML = '<b>Attached.</b> ' + file.name.replace(/[<>&"]/g, '') + ' (' + size + '), sent as is.<br>Click or drop to replace.';
     hint.textContent = ''; drop.classList.remove('is-invalid');
-    if (s < 400) { hint.className = 'ft-hint warn'; hint.textContent = 'Quite small (' + s + ' px). A bigger photo would look sharper.'; }
-  }).catch(function(err) {
-    $('ft-thumb').hidden = true;
-    $('ft-drop-text').innerHTML = '<b>Choose a photo</b> or drop it here.<br>A clear, well-lit picture of your face works best.';
-    hint.className = 'ft-hint warn';
-    hint.textContent = err.message === 'size' ? 'That image is too large even after resizing, please pick a smaller one.' : "We couldn't read that file. Please use a JPG or PNG (iPhone HEIC photos need converting first).";
-  });
+    // preview when the browser can decode it (HEIC usually cannot be previewed but is still sent)
+    loadImage(file).then(function(img) {
+      var thumb = $('ft-thumb'); thumb.src = img.src; thumb.hidden = false;
+      if (Math.max(img.naturalWidth, img.naturalHeight) < 600) { hint.className = 'ft-hint warn'; hint.textContent = 'Quite small (' + img.naturalWidth + '\u00d7' + img.naturalHeight + ' px). A bigger photo would look sharper.'; }
+    }).catch(function() { $('ft-thumb').hidden = true; });
+  };
+  reader.readAsDataURL(file);
 }
 
 // ---- validation + submit --------------------------------------------------------------
@@ -220,7 +209,7 @@ form.addEventListener('submit', function(ev) {
     outreach: val('outreach'), name: val('name'), company: val('company'), consent: form.elements['consent'].checked,
     email: val('email'), linkedin: val('linkedin'), title: val('title'),
     abstract: form.elements['abstract'].value.trim(), bio: form.elements['bio'].value.trim(),
-    photo_png_b64: photo.png, photo_jpg_b64: photo.jpg,
+    photo_b64: photo.b64, photo_type: photo.type, photo_name: photo.name,
     website: form.elements['website'].value || '', page: location.href
   };
   var btn = $('ft-send'); btn.disabled = true; btn.textContent = 'Sending...';
