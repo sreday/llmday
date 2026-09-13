@@ -24,7 +24,6 @@ tracks: 1
 
 rooms:
 - main room
-- mini room
 
 breaks:
 - title: Coffee break
