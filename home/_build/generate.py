@@ -206,6 +206,70 @@ with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("404.html").render(**{**context, "redirects": [
         {"from": str(r["from"]).strip("/"), "to": str(r["to"]).strip("/")} for r in _redirects]}))
 
+# STATUS PAGE (hidden, /status/): lineup + sponsor progress of every upcoming event.
+# Talks: rows of ../<event>/_db/talks.csv whose status contains "confirmed" or "keynote", against 10 slots
+# per track (tracks from the event metadata). Sponsors: the event's sponsors list minus the partner
+# categories from ../partners.yaml (same split as the "Partners" pill on the site). Not in the sitemap.
+print(DIVIDER)
+_STATUS_BRANDS = [("SREday", "https://sreday.com/status/", "#713660"),
+                  ("LLMday", "https://llmday.com/status/", "#26986A"),
+                  ("PLATFORMday", "https://platformday.com/status/", "#E2971D")]
+_SLOTS_PER_TRACK = 10
+
+
+def _status_health(pct):
+    if pct >= 100: return ("nailed", "Nailed it!")
+    if pct >= 75:  return ("good", "Good")
+    if pct >= 50:  return ("neutral", "Neutral")
+    if pct >= 25:  return ("bad", "Bad")
+    return ("critical", "Critical")
+
+
+_status_rows = []
+for _ev in (context.get("events") or []):
+    _folder = str(_ev.get("url") or "").strip("./").rstrip("/")
+    if not _folder or not os.path.isdir("../" + _folder):
+        continue
+    try:
+        with open("../" + _folder + "/metadata.yml", encoding="utf-8") as _f:
+            _em = yaml.load(_f, Loader=yaml.FullLoader) or {}
+    except Exception:
+        _em = {}
+    _tracks = int(re.sub(r"[^\d]", "", str(_em.get("tracks") or "1")) or 1)
+    _confirmed = 0
+    try:
+        with open("../" + _folder + "/_db/talks.csv", encoding="utf-8", errors="replace") as _cf:
+            for _row in csv.DictReader(_cf):
+                _st = str(_row.get("status") or "").lower()
+                if "confirmed" in _st or "keynote" in _st:
+                    _confirmed += 1
+    except Exception:
+        pass
+    _sponsors = [s for s in (_em.get("sponsors") or []) if isinstance(s, dict)
+                 and str(s.get("logo") or "").strip()
+                 and str(s.get("logo")).strip().lower() not in _sp_exclude_logos
+                 and str(s.get("logo")).strip().lower() not in _sp_hidden]
+    _available = _tracks * _SLOTS_PER_TRACK
+    _pct = round(100.0 * _confirmed / _available) if _available else 0
+    _key, _label = _status_health(_pct)
+    _status_rows.append({
+        "name": _ev.get("name") or _folder, "folder": _folder, "url": "/" + _folder + "/",
+        "date": str(_em.get("date_string") or ""), "state": str(_em.get("event_state") or ""),
+        "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
+        "health": _key, "health_label": _label, "sponsors": len(_sponsors),
+    })
+    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}), {len(_sponsors)} sponsors")
+_me = str(context.get("brand_name") or "")
+os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
+with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("status.html").render(
+        status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK,
+        status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
+        status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
+        status_generated=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        **context))
+print("Writing out status/index.html (hidden, not in sitemap)")
+
 # MEETUPS
 print(DIVIDER)
 meetups = context.get("meetups") + context.get("meetups_past")
