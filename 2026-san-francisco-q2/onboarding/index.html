@@ -96,7 +96,7 @@
 
   <div class="ob-card ob-done" id="ob-done" hidden></div>
 
-  <div class="ob-muted">Sent from the brand alias with every speaker in Bcc. The email lands unread in the inbox under the "Speaker onboarding" label; speaker replies join that thread.</div>
+  <div class="ob-muted" id="ob-footer" hidden>Sent from the brand alias with every speaker in Bcc. The email lands unread in the inbox under the "Speaker onboarding" label; speaker replies join that thread.</div>
 </main>
 
 <script>
@@ -113,13 +113,13 @@ function storedPass() { try { return localStorage.getItem(OB_KEY) || ''; } catch
 function storePass(p) { try { if (p) localStorage.setItem(OB_KEY, p); else localStorage.removeItem(OB_KEY); } catch (e) {} }
 
 function showGate(msg) {
-  form.hidden = true; previewBox.hidden = true; done.hidden = true; gate.hidden = false;
+  form.hidden = true; previewBox.hidden = true; done.hidden = true; gate.hidden = false; $('ob-footer').hidden = true;
   var err = $('ob-gate-error'); err.textContent = msg || ''; err.hidden = !msg;
   gate.elements['pass'].value = '';
   setTimeout(function() { gate.elements['pass'].focus(); }, 0);
 }
 function showForm() {
-  gate.hidden = true; form.hidden = false; done.hidden = true;
+  gate.hidden = true; form.hidden = false; done.hidden = true; $('ob-footer').hidden = false;
   $('ob-facts').textContent = JSON.stringify(OB_EVENT, null, 2);
   renderChips();
   setTimeout(function() { textarea.focus(); }, 0);
