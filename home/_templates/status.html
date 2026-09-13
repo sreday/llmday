@@ -164,7 +164,7 @@
   {% if status_rows %}
   <section class="checks">
     <h2>Data checks</h2>
-    <div class="sub">Problems found in each event's repo data at build time: confirmed / keynote rows of talks.csv, headshots in speakers/, sponsor logos and links. Red is broken on the live site, orange is worth a look. Each line links to the exact talk page, sponsors section or file to fix.</div>
+    <div class="sub">Problems found in {{ brand_name | lower }} repo data at build time. Red is broken on the live site, orange is worth a look. Each line links to the exact page where the problem occurs.</div>
     {% for r in status_rows %}
     <div class="check{% if not r.issues %} clean{% endif %}" id="check-{{ r.folder }}">
       <div class="check-head">
