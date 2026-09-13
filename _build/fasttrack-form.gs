@@ -6,7 +6,7 @@
  * (name, company, job title, email, LinkedIn, title, abstract, bio, headshot) plus the name of the team
  * member they spoke with. The script emails ONE organizer-facing message From the brand alias, To that
  * same alias, Cc only the outreach route when the team member is recognised (see TEAM), Reply-To the
- * speaker. Subject "<Name> - Fast track proposal - <Event>"; body = red heading + a Name/Email/
+ * speaker. Subject "<Name> - Fast Track - <Event>"; body = red heading + a Name/Email/
  * Organization/LinkedIn/Talk Title/Talk Abstract/Bio table (Marek's layout, 2026-09-13). The headshot, when
  * given, is attached RAW (the untouched upload) renamed to "<Name>.<original extension>", with no mention in
  * the body. The thread is filed in the Inbox unread + important under "Fast track".
@@ -49,7 +49,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 6,
+  return respond({ ok: true, service: 'fasttrack', version: 7,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -157,7 +157,7 @@ function matchOutreach(text) {
 
 function composeSubmission(s, ev, match, brand) {
   var via = match.person ? match.person.name : (s.outreach ? s.outreach + ' (not matched)' : 'unknown');
-  var subject = s.name + ' - Fast track proposal - ' + ev.event_name;
+  var subject = s.name + ' - Fast Track - ' + ev.event_name;
   var rows = [
     ['Invited by', via], ['Name', s.name], ['Email', s.email], ['Organization', s.company], ['LinkedIn', s.linkedin],
     ['Talk Title', s.title], ['Talk Abstract', s.abstract], ['Bio', s.bio]

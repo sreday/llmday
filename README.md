@@ -134,5 +134,5 @@ posted as JSON to `fasttrack_form_url`.
   the outreach route when the team member is recognised: Miko/Mark/Aleksandra -> `aleksandra@sreday.com`, Anna/Blanka/Sylwia -> `anna@<brand>`,
   Petras/Magdalena/Emilia -> nobody extra. Unrecognised names add no Cc. The alias table (nicknames, typos via
   edit distance) lives in the `.gs`; the page fetches it for the live hint. Body format mirrors Anna's outreach
-  mails: red heading, invited-by line with the form URL, then a Name/Email/Organization/LinkedIn/Talk Title/Talk Abstract/Bio table. Subject `<Name> - Fast track proposal - <Event>`. Headshot optional.
+  mails: red heading, invited-by line with the form URL, then a Name/Email/Organization/LinkedIn/Talk Title/Talk Abstract/Bio table. Subject `<Name> - Fast Track - <Event>`. Headshot optional.
 - Guards: honeypot, 30 submissions/day, 5 MB per attachment, LinkedIn host check, links pinned to the brand domain.
