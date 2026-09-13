@@ -305,7 +305,8 @@ def _lint_image(path):
     return (None, (_w, _h))
 
 
-def _status_lint(folder, meta, tracks):
+def _status_lint(folder, meta, tracks, past=False):
+    """past=True: skip structural checks (rooms/tracks, keynote prefix) that only matter before the event."""
     issues = []
 
     gh = "https://github.com/sreday/%s/blob/main/%s/" % (_LINT_REPO, folder)
@@ -316,7 +317,7 @@ def _status_lint(folder, meta, tracks):
 
     days = int(re.sub(r"[^\d]", "", str(meta.get("days") or "1")) or 1)
     rooms = meta.get("rooms") or []
-    if isinstance(rooms, list) and rooms and len(rooms) != tracks:
+    if not past and isinstance(rooms, list) and rooms and len(rooms) != tracks:
         add("warn", "metadata.yml", "tracks: %d but %d rooms listed" % (tracks, len(rooms)))
     # sponsors: logo must exist (case-sensitive, the build runs on Linux) and carry a link
     url = "/" + folder + "/#sponsors"
@@ -361,6 +362,7 @@ def _status_lint(folder, meta, tracks):
     if extra:
         add("warn", "talks.csv header", "unexpected columns: " + ", ".join(extra))
     seen_titles = {}
+    track_labels = set()
     for i, row in enumerate(rows, start=2):        # spreadsheet-style line numbers (1 = header)
         g = lambda k: (row.get(k) or "").strip()
         st = g("status").lower()
@@ -370,6 +372,8 @@ def _status_lint(folder, meta, tracks):
         if "confirmed" not in st and "keynote" not in st:
             continue                                # hidden rows are not linted further
         name = g("name")
+        if name.startswith("_"):
+            continue                                # "_Registration & Networking": agenda item, not a speaker
         where = "row %d · %s" % (i, name[:40] or "(no name)")
         url = _lint_talk_url(folder, row)            # row issues link to the talk page itself
         # emails / urls wandering into the wrong column
@@ -389,7 +393,7 @@ def _status_lint(folder, meta, tracks):
                     break
         # organization
         org = g("organization")
-        if org and (len(org.split()) > 8 or len(org) > 60):
+        if org and not re.search(r"[,&]", name) and (len(org.split()) > 8 or len(org) > 60):   # panels list several companies
             add("warn", where, "company looks like a sentence: '%s'" % org[:60])
         # photo
         photo = g("photo")
@@ -418,9 +422,9 @@ def _status_lint(folder, meta, tracks):
         else:
             if len(title) > 200:
                 add("warn", where, "title is a paragraph (%d chars), abstract pasted in the title column?" % len(title))
-            if "keynote" in st and not title.lower().startswith("keynote:"):
+            if not past and "keynote" in st and not title.lower().startswith("keynote:"):
                 add("warn", where, "status keynote but the title does not start with 'Keynote:'")
-            if "keynote" not in st and title.lower().startswith("keynote:"):
+            if not past and "keynote" not in st and title.lower().startswith("keynote:"):
                 add("warn", where, "title starts with 'Keynote:' but status is '%s'" % g("status"))
             key = re.sub(r"\W+", "", title.lower())
             if key in seen_titles:
@@ -434,15 +438,16 @@ def _status_lint(folder, meta, tracks):
                 add("warn", where, "placeholder text in %s" % f)
             if _LINT_MOJIBAKE.search(row.get(f) or ""):
                 add("warn", where, "encoding artefacts in %s (mojibake)" % f)
-        # track / day
-        for f, limit, label in (("track", tracks, "tracks"), ("day", days, "days")):
-            v = g(f)
-            if not v:
-                continue
-            if not v.isdigit():
-                add("error", where, "%s is '%s', expected a number" % (f, v[:20]))
-            elif int(v) < 1 or int(v) > limit:
-                add("error", where, "%s %s but the event has %d %s" % (f, v, limit, label))
+        # track is a free label (the schedule groups by it: "1", "day1", "track 2"); day must be a number
+        if g("track"):
+            track_labels.add(g("track"))
+        v = g("day")
+        if v and not v.isdigit():
+            add("error", where, "day is '%s', expected a number" % v[:20])
+        elif v and not past and (int(v) < 1 or int(v) > days):
+            add("warn", where, "day %s but metadata.yml says days: %d" % (v, days))
+    if not past and len(track_labels) > tracks:
+        add("warn", "talks.csv", "%d different track values (%s) but metadata.yml says tracks: %d, the slot count is off" % (len(track_labels), ", ".join(sorted(track_labels)[:6]), tracks))
     issues.sort(key=lambda x: 0 if x["sev"] == "error" else 1)
     return issues
 
@@ -499,6 +504,29 @@ for _ev in (context.get("events") or []):
     print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings")
 _me = str(context.get("brand_name") or "")
 
+# Past events (Marek 2026-09-13: "can it analyse also past events? excluding 2022-2024 sreday of course"):
+# data checks only, no health. Folders from before 2025 are frozen and skipped.
+_status_past = []
+for _ev in (context.get("events_past") or []):
+    _folder = str(_ev.get("url") or "").strip("./").rstrip("/")
+    if not _folder or not os.path.isdir("../" + _folder) or not re.match(r"^20(2[5-9]|[3-9]\d)", _folder):
+        continue
+    try:
+        with open("../" + _folder + "/metadata.yml", encoding="utf-8") as _f:
+            _em = yaml.load(_f, Loader=yaml.FullLoader) or {}
+    except Exception:
+        _em = {}
+    _tracks = int(re.sub(r"[^\d]", "", str(_em.get("tracks") or "1")) or 1)
+    _issues = _status_lint(_folder, _em, _tracks, past=True)
+    _n_err = sum(1 for x in _issues if x["sev"] == "error")
+    _status_past.append({
+        "name": _ev.get("name") or _folder, "folder": _folder, "url": "/" + _folder + "/",
+        "date": str(_em.get("date_string") or ""),
+        "issues": _issues[:_LINT_MAX_PER_EVENT], "issues_more": max(0, len(_issues) - _LINT_MAX_PER_EVENT),
+        "errors": _n_err, "warnings": len(_issues) - _n_err,
+    })
+_status_past_dirty = [r for r in _status_past if r["issues"]]
+
 # Data checks are part of every build (Marek 2026-09-13): a report in the build log, and on GitHub Actions
 # inline annotations (::error/::warning, pointing at the file) plus a job summary with the full list, so a
 # push that breaks data is visible in the Actions run without opening /status/. Never fails the build.
@@ -513,7 +541,12 @@ for r in _status_rows:
     print("  %-4s %s: %d errors, %d warnings" % ("FAIL" if r["errors"] else "WARN", r["name"], r["errors"], r["warnings"]))
     for x in r["issues"]:
         print("       %-5s %s: %s" % (x["sev"], x["where"], x["msg"]))
-if os.environ.get("GITHUB_ACTIONS"):
+print("DATA CHECKS, past events (2025+): %d of %d with issues" % (len(_status_past_dirty), len(_status_past)))
+for r in _status_past_dirty:
+    print("  %-4s %s: %d errors, %d warnings" % ("FAIL" if r["errors"] else "WARN", r["name"], r["errors"], r["warnings"]))
+    for x in r["issues"]:
+        print("       %-5s %s: %s" % (x["sev"], x["where"], x["msg"]))
+if os.environ.get("GITHUB_ACTIONS"):                # annotations for upcoming events only, past ones go to the summary
     _NL, _CR = chr(10), chr(13)
     for r, x in _all_issues:
         _file = r["folder"] + ("/metadata.yml" if x["where"].startswith(("metadata.yml", "sponsor ")) else "/_db/talks.csv")
@@ -532,11 +565,16 @@ if os.environ.get("GITHUB_ACTIONS"):
                 if r["issues_more"]:
                     _sf.write("- and %d more" % r["issues_more"] + _NL)
                 _sf.write(_NL)
+            if _status_past:
+                _sf.write("### Past events (2025+): %d of %d with issues" % (len(_status_past_dirty), len(_status_past)) + _NL)
+                for r in _status_past_dirty:
+                    _sf.write("- **%s**: %d errors, %d warnings" % (r["name"], r["errors"], r["warnings"]) + _NL)
+                _sf.write(_NL)
             _sf.write("Full table: %sstatus/" % _site_root + _NL)
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
-        status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK,
+        status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
         status_generated=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
