@@ -4,10 +4,12 @@
  * Serves the hidden /<event>/fasttrack/ pages (template: _event_template/_templates/fasttrack.html,
  * facts built by _event_template/_build/generate.py). A speaker we already talked to submits their talk
  * (name, company, job title, email, LinkedIn, title, abstract, bio, headshot) plus the name of the team
- * member they spoke with. The script emails ONE message From the brand alias, To that alias, Cc the
- * speaker and - when the team member is recognised - the outreach route (see TEAM), with the headshot
- * attached twice (site-ready PNG named "<Name>.png", max 400px, not cropped + the resized original JPG) and a
- * ready-to-paste _db/talks.csv row. The thread is filed in the Inbox unread + important under "Fast track".
+ * member they spoke with. The script emails ONE organizer-facing message From the brand alias, To that
+ * same alias, Cc only the outreach route when the team member is recognised (see TEAM), Reply-To the
+ * speaker. Subject "<Name> - Fast track proposal - <Event>"; body = red heading + a Name/Email/
+ * Organization/LinkedIn/Talk Title/Talk Abstract/Bio table (Marek's layout, 2026-09-13). The headshot, when
+ * given, is attached twice (site-ready PNG named "<Name>.png", max 400px, not cropped + resized JPG) with no
+ * mention in the body. The thread is filed in the Inbox unread + important under "Fast track".
  *
  * Abuse guards (no passphrase - speakers use this): honeypot, daily cap (FASTTRACK_DAILY property),
  * size/length caps, LinkedIn host check, event URL pinned to the brand domain.
@@ -47,7 +49,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 3,
+  return respond({ ok: true, service: 'fasttrack', version: 4,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -69,21 +71,23 @@ function doPost(e) {
   var png = decodeImage(data.photo_png_b64, 'image/png', s.name + '.png');
   var jpg = decodeImage(data.photo_jpg_b64, 'image/jpeg', s.name + ' - original.jpg');
   if (png === 'too large' || jpg === 'too large') return respond({ ok: false, error: 'image too large' });
-  if (!png) return respond({ ok: false, error: 'invalid', fields: ['photo'] });
+  var attachments = [png, jpg].filter(function (b) { return b && b !== 'too large'; });   // headshot is optional
 
   var match = matchOutreach(s.outreach);
   var from = GmailApp.getAliases().indexOf(brand.from) !== -1 ? brand.from : Session.getEffectiveUser().getEmail();
-  var cc = [s.email];
+  var cc = [];                                                     // organizer-facing: the speaker is NOT copied
   if (match.person && match.person.route) cc.push(match.person.route.replace('{brand}', brand.site));
 
   var mail = composeSubmission(s, ev, match);
   if (data.dry_run) {
     return respond({ ok: true, dry_run: true, subject: mail.subject, from: from, to: from, cc: cc, text: mail.text, html: mail.html,
-                     match: match.person ? match.person.name : null, attachments: [png.getName(), jpg ? jpg.getName() : null] });
+                     match: match.person ? match.person.name : null, attachments: attachments.map(function (b) { return b.getName(); }) });
   }
   if (!dailyBudget()) return respond({ ok: false, error: 'too many today' });
 
-  var options = { name: SENDER_NAME, cc: cc.join(','), replyTo: s.email, htmlBody: mail.html, attachments: jpg ? [png, jpg] : [png] };
+  var options = { name: SENDER_NAME, replyTo: s.email, htmlBody: mail.html };
+  if (cc.length) options.cc = cc.join(',');
+  if (attachments.length) options.attachments = attachments;
   if (from === brand.from) options.from = brand.from;
   var message = GmailApp.createDraft(from, mail.subject, mail.text, options).send();
   fileThread(message);
@@ -153,44 +157,32 @@ function matchOutreach(text) {
 
 function composeSubmission(s, ev, match) {
   var via = match.person ? match.person.name : (s.outreach ? s.outreach + ' (not matched)' : 'unknown');
-  var subject = ev.event_name + ' - Speaker: ' + s.name;
-  var slug = talkSlug(s.name, s.company, s.title);
-  var talkUrl = ev.event_url + slug + '.html';
-  var csvRow = ['', '', s.name, '', '1', s.company, s.name + '.png', s.linkedin, '', '', '', s.title, s.abstract, '', s.bio].map(csvCell).join(',');
-  var csvHeader = 'YouTube,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio';
+  var formUrl = ev.event_url + 'fasttrack/';
+  var subject = s.name + ' - Fast track proposal - ' + ev.event_name;
+  var rows = [
+    ['Name', s.name], ['Email', s.email], ['Organization', s.company], ['LinkedIn', s.linkedin],
+    ['Talk Title', s.title], ['Talk Abstract', s.abstract], ['Bio', s.bio]
+  ];
 
   var text =
-    'Hi Mark! Speaker for ' + ev.event_name + ', via ' + via + ':\n\n' +
-    s.name + '\n' + (s.jobtitle ? s.jobtitle + '\n' : '') + s.company + '\n\n' +
-    'email: ' + s.email + '\n\n' +
-    '1. Title: ' + s.title + '\n' +
-    '2. Abstract: ' + s.abstract + '\n' +
-    '3. Bio: ' + s.bio + '\n' +
-    '4. LinkedIn: ' + s.linkedin + '\n' +
-    '5. Photo is attached (' + s.name + '.png is the site-ready one, max 400px, not cropped)\n\n' +
-    '----\n' +
-    'Talk page once added: ' + talkUrl + '\n\n' +
-    'talks.csv row (append to _db/talks.csv, set status to confirmed when ready, save the PNG into speakers/):\n' +
-    csvHeader + '\n' + csvRow + '\n';
+    'Fast track - ' + ev.event_name + '\n\n' +
+    'Speaker invited by ' + via + ', and they have successfully submitted their talk here: ' + formUrl + '\n\n' +
+    rows.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n\n') + '\n';
 
-  var pre = 'white-space:pre-wrap;font-family:inherit;margin:0';
+  var red = '#a61c1c';
   var html =
-    '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#111">' +
-    '<p>Hi Mark! Speaker for ' + esc(ev.event_name) + ', via <b>' + esc(via) + '</b>:</p>' +
-    '<p style="font-size:18px;margin:0"><b>' + esc(s.name) + '</b></p>' +
-    (s.jobtitle ? '<p style="margin:0">' + esc(s.jobtitle) + '</p>' : '') +
-    '<p style="margin:0 0 14px">' + esc(s.company) + '</p>' +
-    '<p>email: <a href="mailto:' + esc(s.email) + '">' + esc(s.email) + '</a></p>' +
-    '<p><b>1. Title:</b> ' + esc(s.title) + '<br>' +
-    '<b>2. Abstract:</b></p><pre style="' + pre + '">' + esc(s.abstract) + '</pre>' +
-    '<p><b>3. Bio:</b></p><pre style="' + pre + '">' + esc(s.bio) + '</pre>' +
-    '<p><b>4. LinkedIn:</b> <a href="' + esc(s.linkedin) + '">' + esc(s.linkedin) + '</a><br>' +
-    '<b>5. Photo is attached</b> (<code>' + esc(s.name) + '.png</code> is the site-ready one, max 400px, not cropped)</p>' +
-    '<hr style="border:0;border-top:1px solid #ddd;margin:18px 0">' +
-    '<p style="color:#555">Talk page once added: <a href="' + esc(talkUrl) + '">' + esc(talkUrl) + '</a></p>' +
-    '<p style="color:#555">talks.csv row (append to <code>_db/talks.csv</code>, set status to <code>confirmed</code> when ready, save the PNG into <code>speakers/</code>):</p>' +
-    '<pre style="white-space:pre-wrap;background:#f4f4f6;border:1px solid #e6e6e6;border-radius:8px;padding:10px;font-size:12px">' + esc(csvHeader) + '\n' + esc(csvRow) + '</pre>' +
-    '</div>';
+    '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#222">' +
+    '<h2 style="color:' + red + ';font-size:20px;margin:0 0 12px">Fast track - ' + esc(ev.event_name) + '</h2>' +
+    '<p style="margin:0 0 16px">Speaker invited by <b>' + esc(via) + '</b>, and they have successfully submitted their talk here: <a href="' + esc(formUrl) + '">' + esc(formUrl) + '</a></p>' +
+    '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:640px">' +
+    rows.map(function (r) {
+      var v = r[0] === 'Email' ? '<a href="mailto:' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
+            : r[0] === 'LinkedIn' ? '<a href="' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
+            : esc(r[1]).replace(/\n/g, '<br>');
+      return '<tr><td style="color:' + red + ';font-weight:bold;padding:4px 18px 4px 0;vertical-align:top;white-space:nowrap">' + r[0] + '</td>' +
+             '<td style="padding:4px 0;vertical-align:top">' + v + '</td></tr>';
+    }).join('') +
+    '</table></div>';
   return { subject: subject, text: text, html: html };
 }
 

@@ -122,7 +122,7 @@ with every speaker in **Bcc**, and files the thread in the Inbox unread under th
 
 Every non-frozen event also gets `/<event>/fasttrack/`: an invite-only submission form for speakers we already
 talked to (the bypass of the public cfp.ninja CFP). Fields: who they talked to on our team, name, company,
-job title (optional), email, LinkedIn, talk title, abstract (markdown), short bio (markdown), headshot.
+email, LinkedIn, talk title, abstract (markdown), short bio (markdown), headshot (optional).
 The browser turns the headshot into a site-ready **PNG named `<Name>.png`** (max 400px, proportions kept, no crop; plus a resized JPG) and
 posts everything as JSON to `fasttrack_form_url`.
 
@@ -130,9 +130,9 @@ posts everything as JSON to `fasttrack_form_url`.
   three repos); facts come from `fasttrack_event` built in `_event_template/_build/generate.py` (subset of the
   onboarding facts). Backend `_build/fasttrack-form.gs` (kept in the llmday repo, its own Apps Script
   deployment "Fast track"); URL in `home/metadata.yml` -> `fasttrack_form_url`.
-- The email goes From `mark@<brand>` To that alias, Cc the speaker and, when the team member is recognised,
-  the outreach route: Miko/Mark/Aleksandra -> `aleksandra@sreday.com`, Anna/Blanka/Sylwia -> `anna@<brand>`,
+- The email is organizer-facing: From `mark@<brand>` To that alias, Reply-To the speaker (who is NOT copied), Cc only
+  the outreach route when the team member is recognised: Miko/Mark/Aleksandra -> `aleksandra@sreday.com`, Anna/Blanka/Sylwia -> `anna@<brand>`,
   Petras/Magdalena/Emilia -> nobody extra. Unrecognised names add no Cc. The alias table (nicknames, typos via
   edit distance) lives in the `.gs`; the page fetches it for the live hint. Body format mirrors Anna's outreach
-  mails and ends with the predicted talk URL and a ready-to-paste `_db/talks.csv` row (status left empty).
+  mails: red heading, invited-by line with the form URL, then a Name/Email/Organization/LinkedIn/Talk Title/Talk Abstract/Bio table. Subject `<Name> - Fast track proposal - <Event>`. Headshot optional.
 - Guards: honeypot, 30 submissions/day, 5 MB per attachment, LinkedIn host check, links pinned to the brand domain.
