@@ -217,12 +217,38 @@ _STATUS_BRANDS = [("SREday", "https://sreday.com/status/", "#713660"),
 _SLOTS_PER_TRACK = 12
 
 
-def _status_health(pct):
-    if pct >= 100: return ("nailed", "Nailed it!")
-    if pct >= 75:  return ("good", "Good")
-    if pct >= 50:  return ("neutral", "Neutral")
-    if pct >= 25:  return ("bad", "Bad")
-    return ("critical", "Critical")
+# Time-sensitive health: the bar to clear rises as the date approaches (Marek 2026-09-13: more than two
+# months out nothing is worse than Neutral; a month out under 50% is Bad and under 25% Critical).
+# Each row: (max days to event, critical_below, bad_below, neutral_below, good_below); None = never.
+_STATUS_LADDER = [
+    (7,     50,   70,   85,   100),   # final week: under 50% critical, 50-69 bad, 70-84 neutral, 85-99 good
+    (14,    40,   60,   75,   100),   # 8-14 days
+    (30,    25,   50,   75,   100),   # 15-30 days (the "one month prior" rule)
+    (60,    None, 25,   75,   100),   # 31-60 days: no critical, under 25% bad
+    (None,  None, None, 75,   100),   # more than 60 days: neutral at worst
+]
+
+
+def _status_health(pct, days_left):
+    if pct >= 100:
+        return ("nailed", "Nailed it!")
+    for max_days, crit, bad, neutral, good in _STATUS_LADDER:
+        if max_days is None or days_left <= max_days:
+            if crit is not None and pct < crit: return ("critical", "Critical")
+            if bad is not None and pct < bad:   return ("bad", "Bad")
+            if pct < neutral:                   return ("neutral", "Neutral")
+            return ("good", "Good")
+    return ("neutral", "Neutral")
+
+
+def _status_days_left(start_time):
+    try:
+        _dt = start_time if isinstance(start_time, datetime.datetime) else datetime.datetime.fromisoformat(str(start_time))
+        if _dt.tzinfo is None:
+            _dt = _dt.replace(tzinfo=datetime.timezone.utc)
+        return (_dt.date() - datetime.datetime.now(datetime.timezone.utc).date()).days
+    except Exception:
+        return 9999
 
 
 _status_rows = []
@@ -251,14 +277,15 @@ for _ev in (context.get("events") or []):
                  and str(s.get("logo")).strip().lower() not in _sp_hidden]
     _available = _tracks * _SLOTS_PER_TRACK
     _pct = round(100.0 * _confirmed / _available) if _available else 0
-    _key, _label = _status_health(_pct)
+    _days_left = _status_days_left(_em.get("start_time"))
+    _key, _label = _status_health(_pct, _days_left)
     _status_rows.append({
         "name": _ev.get("name") or _folder, "folder": _folder, "url": "/" + _folder + "/",
         "date": str(_em.get("date_string") or ""), "state": str(_em.get("event_state") or ""),
         "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
-        "health": _key, "health_label": _label, "sponsors": len(_sponsors),
+        "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left,
     })
-    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}), {len(_sponsors)} sponsors")
+    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors")
 _me = str(context.get("brand_name") or "")
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:

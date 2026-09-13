@@ -40,6 +40,12 @@
     .sisters a { display: inline-flex; align-items: center; border-radius: 999px; padding: 11px 24px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .95rem; color: #fff; text-decoration: none; background: var(--c); transition: filter .15s; }
     .sisters a:hover { filter: brightness(1.1); }
     .foot { color: #999; font-size: .8rem; margin-top: 26px; }
+    .legend-note { color: #888; font-style: italic; }
+    .legend-note::before { display: none; }
+    details.ladder { margin-top: 18px; font-size: .85rem; color: #555; }
+    details.ladder summary { cursor: pointer; color: #666; }
+    details.ladder table { margin-top: 10px; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; overflow: hidden; font-size: .82rem; }
+    details.ladder th, details.ladder td { padding: 8px 12px; }
     @media (max-width: 720px) { .wrap { padding: 28px 12px 60px; } th, td { padding: 10px 8px; } .bar { min-width: 120px; } th.hide, td.hide { display: none; } }
   </style>
 </head>
@@ -49,11 +55,12 @@
   <h1>Upcoming conferences</h1>
   <div class="sub">Confirmed talks against {{ status_slots }} slots per track, plus confirmed sponsors (media and community partners excluded).</div>
   <div class="legend">
-    <span style="--c: var(--critical)">Critical &lt; 25%</span>
-    <span style="--c: var(--bad)">Bad 25–49%</span>
-    <span style="--c: var(--neutral)">Neutral 50–74%</span>
-    <span style="--c: var(--good)">Good 75–99%</span>
+    <span style="--c: var(--critical)">Critical</span>
+    <span style="--c: var(--bad)">Bad</span>
+    <span style="--c: var(--neutral)">Neutral</span>
+    <span style="--c: var(--good)">Good</span>
     <span style="--c: var(--nailed)">Nailed it! 100%+</span>
+    <span class="legend-note">thresholds tighten as the date approaches, see the ladder below</span>
   </div>
 
   <div class="card">
@@ -74,7 +81,7 @@
         {% set fill = [r.pct, 100] | min %}
         {% set over = r.pct > 100 %}
         <tr>
-          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.state %} · {{ r.state }}{% endif %}</small></td>
+          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}{% if r.state %} · {{ r.state }}{% endif %}</small></td>
           <td class="num hide">{{ r.tracks }}</td>
           <td class="num"><strong>{{ r.confirmed }}</strong> / {{ r.available }}</td>
           <td>
@@ -94,6 +101,20 @@
     <div class="empty">No upcoming events listed in home/metadata.yml.</div>
   {% endif %}
   </div>
+
+  <details class="ladder">
+    <summary>Health ladder (share of {{ status_slots }} slots per track confirmed, by days to the event)</summary>
+    <table>
+      <thead><tr><th>Days to event</th><th>Critical</th><th>Bad</th><th>Neutral</th><th>Good</th><th>Nailed it!</th></tr></thead>
+      <tbody>
+        <tr><td>more than 60</td><td>never</td><td>never</td><td>under 75%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>31–60</td><td>never</td><td>under 25%</td><td>25–74%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>15–30</td><td>under 25%</td><td>25–49%</td><td>50–74%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>8–14</td><td>under 40%</td><td>40–59%</td><td>60–74%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>7 or fewer</td><td>under 50%</td><td>50–69%</td><td>70–84%</td><td>85–99%</td><td>100%+</td></tr>
+      </tbody>
+    </table>
+  </details>
 
   <div class="sisters">
     {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}
