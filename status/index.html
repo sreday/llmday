@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
   <style>
-    :root { --accent: #26986A; --critical: #d63031; --bad: #f4a58a; --neutral: #9aa0a6; --good: #1e88c7; --nailed: #2ecc40; }
+    :root { --accent: #26986A; --critical: #d63031; --bad: #f4a58a; --neutral: #9aa0a6; --good: #2ecc40; --nailed: #e6b400; }
     html, body { margin: 0; background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
     .wrap { max-width: 1040px; margin: 0 auto; padding: 44px 20px 80px; }
     .brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
@@ -31,8 +31,6 @@
     .bar > b { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,.25); }
     .pct { font-size: .82rem; color: #555; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
-    .pill.neutral { color: #222; }
-    .pill.bad { color: #5a2a1a; }
     .empty { padding: 30px; color: #777; text-align: center; }
     .sisters { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
     .sisters a { display: inline-flex; align-items: center; border-radius: 999px; padding: 11px 24px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .95rem; color: #fff; text-decoration: none; background: var(--c); transition: filter .15s; }
@@ -152,12 +150,12 @@
           <td class="num"><strong>7</strong> / 12</td>
           <td>
             <div class="bar" title="58%">
-              <i style="--c: var(--neutral); width: 58%"></i>
+              <i style="--c: var(--good); width: 58%"></i>
               
             </div>
             <div class="pct">58%</div>
           </td>
-          <td><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
+          <td><span class="pill good" style="--c: var(--good)">Good</span></td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -171,7 +169,7 @@
     <table>
       <thead><tr><th>Days to event</th><th>Critical</th><th>Bad</th><th>Neutral</th><th>Good</th><th>Nailed it!</th></tr></thead>
       <tbody>
-        <tr><td>more than 60</td><td>never</td><td>never</td><td>under 75%</td><td>75–99%</td><td>100%+</td></tr>
+        <tr><td>more than 60</td><td>never</td><td>never</td><td>under 50%</td><td>50–99%</td><td>100%+</td></tr>
         <tr><td>31–60</td><td>never</td><td>under 25%</td><td>25–74%</td><td>75–99%</td><td>100%+</td></tr>
         <tr><td>15–30</td><td>under 25%</td><td>25–49%</td><td>50–74%</td><td>75–99%</td><td>100%+</td></tr>
         <tr><td>8–14</td><td>under 40%</td><td>40–59%</td><td>60–74%</td><td>75–99%</td><td>100%+</td></tr>
@@ -183,7 +181,7 @@
   <div class="sisters">
     <a href="https://sreday.com/status/" style="--c: #713660">SREday status</a><a href="https://platformday.com/status/" style="--c: #E2971D">PLATFORMday status</a>
   </div>
-  <div class="foot">Generated 2026-09-13 16:19 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-13 16:44 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 </body>
 </html>
