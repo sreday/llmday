@@ -498,6 +498,41 @@ for _ev in (context.get("events") or []):
     })
     print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings")
 _me = str(context.get("brand_name") or "")
+
+# Data checks are part of every build (Marek 2026-09-13): a report in the build log, and on GitHub Actions
+# inline annotations (::error/::warning, pointing at the file) plus a job summary with the full list, so a
+# push that breaks data is visible in the Actions run without opening /status/. Never fails the build.
+print(DIVIDER)
+_site_root = next((u.replace("status/", "") for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "https://" + _LINT_REPO + ".com/")
+_all_issues = [(r, x) for r in _status_rows for x in r["issues"]]
+_n_err_total = sum(1 for r, x in _all_issues if x["sev"] == "error")
+print("DATA CHECKS: %d errors, %d warnings across %d events" % (_n_err_total, len(_all_issues) - _n_err_total, len(_status_rows)))
+for r in _status_rows:
+    if not r["issues"]:
+        print("  OK   %s" % r["name"]); continue
+    print("  %-4s %s: %d errors, %d warnings" % ("FAIL" if r["errors"] else "WARN", r["name"], r["errors"], r["warnings"]))
+    for x in r["issues"]:
+        print("       %-5s %s: %s" % (x["sev"], x["where"], x["msg"]))
+if os.environ.get("GITHUB_ACTIONS"):
+    _NL, _CR = chr(10), chr(13)
+    for r, x in _all_issues:
+        _file = r["folder"] + ("/metadata.yml" if x["where"].startswith(("metadata.yml", "sponsor ")) else "/_db/talks.csv")
+        _msg = ("%s: %s: %s" % (r["name"], x["where"], x["msg"])).replace("%", "%25").replace(_CR, "%0D").replace(_NL, "%0A")
+        print("::%s file=%s,title=Data check::%s" % ("error" if x["sev"] == "error" else "warning", _file, _msg))
+    _summary = os.environ.get("GITHUB_STEP_SUMMARY")
+    if _summary:
+        with open(_summary, "a", encoding="utf-8") as _sf:
+            _sf.write("## Data checks: %d errors, %d warnings" % (_n_err_total, len(_all_issues) - _n_err_total) + _NL + _NL)
+            for r in _status_rows:
+                _badge = ":white_check_mark:" if not r["issues"] else (":x:" if r["errors"] else ":warning:")
+                _sf.write("### %s %s" % (_badge, r["name"]) + _NL)
+                for x in r["issues"]:
+                    _link = x["url"] if x["url"].startswith("http") else _site_root.rstrip("/") + x["url"]
+                    _sf.write("- %s [%s](%s): %s" % (":red_circle:" if x["sev"] == "error" else ":large_orange_circle:", x["where"], _link, x["msg"].replace("|", "/")) + _NL)
+                if r["issues_more"]:
+                    _sf.write("- and %d more" % r["issues_more"] + _NL)
+                _sf.write(_NL)
+            _sf.write("Full table: %sstatus/" % _site_root + _NL)
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
