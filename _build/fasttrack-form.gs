@@ -6,7 +6,7 @@
  * (name, company, job title, email, LinkedIn, title, abstract, bio, headshot) plus the name of the team
  * member they spoke with. The script emails ONE message From the brand alias, To that alias, Cc the
  * speaker and - when the team member is recognised - the outreach route (see TEAM), with the headshot
- * attached twice (site-ready 400x400 PNG named "<Name>.png" + the resized original JPG) and a
+ * attached twice (site-ready PNG named "<Name>.png", max 400px, not cropped + the resized original JPG) and a
  * ready-to-paste _db/talks.csv row. The thread is filed in the Inbox unread + important under "Fast track".
  *
  * Abuse guards (no passphrase - speakers use this): honeypot, daily cap (FASTTRACK_DAILY property),
@@ -47,7 +47,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 2,
+  return respond({ ok: true, service: 'fasttrack', version: 3,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -167,7 +167,7 @@ function composeSubmission(s, ev, match) {
     '2. Abstract: ' + s.abstract + '\n' +
     '3. Bio: ' + s.bio + '\n' +
     '4. LinkedIn: ' + s.linkedin + '\n' +
-    '5. Photo is attached (' + s.name + '.png is the 400x400 site-ready one)\n\n' +
+    '5. Photo is attached (' + s.name + '.png is the site-ready one, max 400px, not cropped)\n\n' +
     '----\n' +
     'Talk page once added: ' + talkUrl + '\n\n' +
     'talks.csv row (append to _db/talks.csv, set status to confirmed when ready, save the PNG into speakers/):\n' +
@@ -185,7 +185,7 @@ function composeSubmission(s, ev, match) {
     '<b>2. Abstract:</b></p><pre style="' + pre + '">' + esc(s.abstract) + '</pre>' +
     '<p><b>3. Bio:</b></p><pre style="' + pre + '">' + esc(s.bio) + '</pre>' +
     '<p><b>4. LinkedIn:</b> <a href="' + esc(s.linkedin) + '">' + esc(s.linkedin) + '</a><br>' +
-    '<b>5. Photo is attached</b> (<code>' + esc(s.name) + '.png</code> is the 400x400 site-ready one)</p>' +
+    '<b>5. Photo is attached</b> (<code>' + esc(s.name) + '.png</code> is the site-ready one, max 400px, not cropped)</p>' +
     '<hr style="border:0;border-top:1px solid #ddd;margin:18px 0">' +
     '<p style="color:#555">Talk page once added: <a href="' + esc(talkUrl) + '">' + esc(talkUrl) + '</a></p>' +
     '<p style="color:#555">talks.csv row (append to <code>_db/talks.csv</code>, set status to <code>confirmed</code> when ready, save the PNG into <code>speakers/</code>):</p>' +
