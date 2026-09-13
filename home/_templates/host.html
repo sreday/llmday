@@ -331,6 +331,8 @@
 
 /* ── Buttons ──────────────────────────────────────────────────── */
 .host-lead { text-align: left; }
+.btn-host .btn-lead-chevron { margin-left: 9px; vertical-align: middle; transition: transform .3s ease; }
+.btn-host.open .btn-lead-chevron { transform: rotate(180deg); }
 .host-lead .lead-inner { margin-top: 24px; }
 .btn-host {
   display: inline-block;
@@ -717,7 +719,7 @@
       </div>
       <div class="mt-4">
         <a href="https://calendly.com/sreday/30min" target="_blank" rel="noopener noreferrer" class="btn-host btn-host-orange">Hop on a call</a>
-        <a href="#lead-panel" id="lead-toggle" class="btn-host btn-host-purple" onclick="leadToggle(); return false;" aria-expanded="false" aria-controls="lead-panel"><i class="fas fa-envelope me-2"></i>Email Mark</a>
+        <a href="#lead-panel" id="lead-toggle" class="btn-host btn-host-purple" onclick="leadToggle(); return false;" aria-expanded="false" aria-controls="lead-panel"><i class="fas fa-envelope me-2"></i>Email Mark<svg class="btn-lead-chevron" width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1,1 7,7 13,1"/></svg></a>
         <a href="https://wa.me/447307415008" target="_blank" rel="noopener noreferrer" class="btn-host btn-host-green"><i class="fab fa-whatsapp me-2"></i>DM Mark</a>
       </div>
       {# same lead form as the sponsor pages, opened by "Email Mark" above; Host pre-selected #}
