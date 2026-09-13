@@ -117,3 +117,22 @@ with every speaker in **Bcc**, and files the thread in the Inbox unread under th
 - Protection: passphrase in the Script Property `ONBOARDING_PASSPHRASE` (never in the repos); 3 wrong attempts
   lock the endpoint for 15 min, 10 for 24 h (delete the `ONBOARDING_LOCK` property to clear); daily caps of
   50 sends / 500 recipients; max 50 recipients per send. Sender, template and links are pinned server-side.
+
+## Speaker fast track (hidden page)
+
+Every non-frozen event also gets `/<event>/fasttrack/`: an invite-only submission form for speakers we already
+talked to (the bypass of the public cfp.ninja CFP). Fields: who they talked to on our team, name, company,
+job title (optional), email, LinkedIn, talk title, abstract (markdown), short bio (markdown), headshot.
+The browser turns the headshot into a site-ready **400x400 PNG named `<Name>.png`** (plus a resized JPG) and
+posts everything as JSON to `fasttrack_form_url`.
+
+- Template `_event_template/_templates/fasttrack.html` (standalone, noindex, not in the sitemap, identical in all
+  three repos); facts come from `fasttrack_event` built in `_event_template/_build/generate.py` (subset of the
+  onboarding facts). Backend `_build/fasttrack-form.gs` (kept in the llmday repo, its own Apps Script
+  deployment "Fast track"); URL in `home/metadata.yml` -> `fasttrack_form_url`.
+- The email goes From `mark@<brand>` To that alias, Cc the speaker and, when the team member is recognised,
+  the outreach route: Miko/Mark/Aleksandra -> `aleksandra@sreday.com`, Anna/Blanka/Sylwia -> `anna@<brand>`,
+  Petras/Magdalena/Emilia -> nobody extra. Unrecognised names add no Cc. The alias table (nicknames, typos via
+  edit distance) lives in the `.gs`; the page fetches it for the live hint. Body format mirrors Anna's outreach
+  mails and ends with the predicted talk URL and a ready-to-paste `_db/talks.csv` row (status left empty).
+- Guards: honeypot, 30 submissions/day, 5 MB per attachment, LinkedIn host check, links pinned to the brand domain.

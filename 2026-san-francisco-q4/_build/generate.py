@@ -205,6 +205,8 @@ if _os.path.exists(_og_home_meta_path):
     context.setdefault('lead_form_url', (_og_home_meta or {}).get('lead_form_url', ''))
     # speaker onboarding endpoint (hidden /onboarding/ page; backend: _build/onboarding-form.gs in llmday)
     context.setdefault('onboarding_form_url', (_og_home_meta or {}).get('onboarding_form_url', ''))
+    # speaker fast-track endpoint (hidden /fasttrack/ page; backend: _build/fasttrack-form.gs in llmday)
+    context.setdefault('fasttrack_form_url', (_og_home_meta or {}).get('fasttrack_form_url', ''))
     _og_current_folder = _os.path.basename(_os.getcwd())
     for _he in (_og_home_meta.get('events') or []) + (_og_home_meta.get('events_past') or []):
         if _he.get('url', '').strip('./').rstrip('/') == _og_current_folder and _he.get('photo_url'):
@@ -295,6 +297,13 @@ context['onboarding_event'] = {
 }
 print("Onboarding: %s | %s | %s" % (context['onboarding_event']['event_name'], _ob_vname or '(no <h4> in venue.html)', _ob_vaddr or '-'))
 # ── END SPEAKER ONBOARDING ──────────────────────────────────────────────────
+
+# ── SPEAKER FAST TRACK: facts for the hidden /fasttrack/ page (speaker submits talk + headshot) ──
+context.setdefault('fasttrack_form_url', '')
+_ft_src = context['onboarding_event']
+context['fasttrack_event'] = {k: _ft_src[k] for k in ('brand', 'brand_name', 'slug', 'event_name', 'city', 'date', 'event_url')}
+context['fasttrack_event']['cfp_url'] = str(context.get('cfp_url', '') or '')
+# ── END SPEAKER FAST TRACK ──────────────────────────────────────────────────
 
 # pick up the ids & photos
 for i, talk in enumerate(talks_raw):
@@ -1000,6 +1009,12 @@ _os.makedirs(BASE_FOLDER + "/onboarding", exist_ok=True)
 with open(BASE_FOLDER + "/onboarding/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("onboarding.html").render(page="onboarding.html", **context))
 print("Writing out onboarding/index.html (hidden, not in sitemap)")
+
+# HIDDEN PAGE: /<event>/fasttrack/ (invite-only speaker submission form). Same rules as onboarding.
+_os.makedirs(BASE_FOLDER + "/fasttrack", exist_ok=True)
+with open(BASE_FOLDER + "/fasttrack/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("fasttrack.html").render(page="fasttrack.html", **context))
+print("Writing out fasttrack/index.html (hidden, not in sitemap)")
 
 # SITEMAP
 print(DIVIDER)
