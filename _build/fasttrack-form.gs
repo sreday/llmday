@@ -23,9 +23,9 @@
  */
 
 var BRANDS = {
-  sreday:      { from: 'mark@sreday.com',      site: 'sreday.com' },
-  llmday:      { from: 'mark@llmday.com',      site: 'llmday.com' },
-  platformday: { from: 'mark@platformday.com', site: 'platformday.com' }
+  sreday:      { from: 'mark@sreday.com',      site: 'sreday.com',      color: '#713660' },
+  llmday:      { from: 'mark@llmday.com',      site: 'llmday.com',      color: '#26986A' },
+  platformday: { from: 'mark@platformday.com', site: 'platformday.com', color: '#E2971D' }
 };
 var SENDER_NAME = 'Mark Pawlikowski';
 var LEAD_LABEL = 'Fast track';
@@ -49,7 +49,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 5,
+  return respond({ ok: true, service: 'fasttrack', version: 6,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -78,7 +78,7 @@ function doPost(e) {
   var cc = [];                                                     // organizer-facing: the speaker is NOT copied
   if (match.person && match.person.route) cc.push(match.person.route.replace('{brand}', brand.site));
 
-  var mail = composeSubmission(s, ev, match);
+  var mail = composeSubmission(s, ev, match, brand);
   if (data.dry_run) {
     return respond({ ok: true, dry_run: true, subject: mail.subject, from: from, to: from, cc: cc, text: mail.text, html: mail.html,
                      match: match.person ? match.person.name : null, attachments: attachments.map(function (b) { return b.getName(); }) });
@@ -155,31 +155,29 @@ function matchOutreach(text) {
 // ---- the email -------------------------------------------------------------------
 // Format follows Anna's outreach mails ("Marek, hi! Speaker for LLMday Redwood: ... 1. Title 2. Abstract ...").
 
-function composeSubmission(s, ev, match) {
+function composeSubmission(s, ev, match, brand) {
   var via = match.person ? match.person.name : (s.outreach ? s.outreach + ' (not matched)' : 'unknown');
-  var formUrl = ev.event_url + 'fasttrack/';
   var subject = s.name + ' - Fast track proposal - ' + ev.event_name;
   var rows = [
-    ['Name', s.name], ['Email', s.email], ['Organization', s.company], ['LinkedIn', s.linkedin],
+    ['Invited by', via], ['Name', s.name], ['Email', s.email], ['Organization', s.company], ['LinkedIn', s.linkedin],
     ['Talk Title', s.title], ['Talk Abstract', s.abstract], ['Bio', s.bio]
   ];
 
   var text =
     'Fast track - ' + ev.event_name + '\n\n' +
-    'Speaker invited by ' + via + ', and they have successfully submitted their talk here: ' + formUrl + '\n\n' +
     rows.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n\n') + '\n';
 
-  var red = '#a61c1c';
+  var red = '#a61c1c', green = '#2e7d32', accent = brand.color || '#333';
   var html =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#222">' +
-    '<h2 style="color:' + red + ';font-size:20px;margin:0 0 12px">Fast track - ' + esc(ev.event_name) + '</h2>' +
-    '<p style="margin:0 0 16px">Speaker invited by <b>' + esc(via) + '</b>, and they have successfully submitted their talk here: <a href="' + esc(formUrl) + '">' + esc(formUrl) + '</a></p>' +
+    '<h2 style="display:inline-block;background:' + accent + ';color:#fff;font-size:20px;margin:0 0 22px;padding:6px 12px;border-radius:4px">Fast track - ' + esc(ev.event_name) + '</h2>' +
     '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:640px">' +
     rows.map(function (r) {
       var v = r[0] === 'Email' ? '<a href="mailto:' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
             : r[0] === 'LinkedIn' ? '<a href="' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
             : esc(r[1]).replace(/\n/g, '<br>');
-      return '<tr><td style="color:' + red + ';font-weight:bold;padding:4px 18px 4px 0;vertical-align:top;white-space:nowrap">' + r[0] + '</td>' +
+      var labelColor = r[0] === 'Invited by' ? green : red;
+      return '<tr><td style="color:' + labelColor + ';font-weight:bold;padding:4px 18px 4px 0;vertical-align:top;white-space:nowrap">' + r[0] + '</td>' +
              '<td style="padding:4px 0;vertical-align:top">' + v + '</td></tr>';
     }).join('') +
     '</table></div>';
