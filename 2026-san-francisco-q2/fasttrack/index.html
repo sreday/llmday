@@ -31,6 +31,10 @@
     .ft-invite { border-left: 4px solid var(--ft-accent); }
     .ft-invite .ft-field > span { font-size: .95rem; }
     .ft-co-toggle { margin-top: 14px; }
+    .ft-co-panel { margin-top: 16px; padding: 22px 24px; border-radius: 18px; background: color-mix(in srgb, var(--ft-accent) 7%, #fff); border: 1px solid color-mix(in srgb, var(--ft-accent) 28%, #fff); }
+    .ft-co-panel .ft-section { margin-top: 0; color: var(--ft-accent); }
+    .ft-co-panel .ft-drop { background: #fff; }
+    .ft-linkbtn.pill { border: 1px solid color-mix(in srgb, var(--ft-accent) 40%, #fff); background: color-mix(in srgb, var(--ft-accent) 7%, #fff); border-radius: 999px; padding: 7px 16px; }
     .ft-linkbtn { background: none; border: none; padding: 0; color: var(--ft-accent); font: inherit; font-weight: 600; cursor: pointer; }
     .ft-linkbtn:hover { text-decoration: underline; }
     .ft-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
@@ -86,10 +90,11 @@
       <label class="ft-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
       <label class="ft-field ft-wide" data-field="email"><span>Email</span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
       <label class="ft-field ft-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
+      <label class="ft-field ft-wide" data-field="bio"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio" rows="5" maxlength="4000"></textarea></label>
     </div>
 
-    <div class="ft-co-toggle"><button type="button" class="ft-linkbtn" id="ft-co-btn">+ Add a co-speaker</button></div>
-    <div id="ft-co" hidden>
+    <div class="ft-co-toggle"><button type="button" class="ft-linkbtn pill" id="ft-co-btn">+ Add a co-speaker</button></div>
+    <div id="ft-co" class="ft-co-panel" hidden>
       <h2 class="ft-section">Co-speaker</h2>
       <div class="ft-grid">
         <label class="ft-field" data-field="name2"><span>Co-speaker name</span><input type="text" name="name2" autocomplete="off" maxlength="80"></label>
@@ -113,7 +118,6 @@
     <div class="ft-grid">
       <label class="ft-field ft-wide" data-field="title"><span>Talk title <small>(one phrase, shorter = better)</small></span><input type="text" name="title" maxlength="160"></label>
       <label class="ft-field ft-wide" data-field="abstract"><span>Talk abstract <small>(3+ sentences, markdown supported)</small></span><textarea name="abstract" rows="8" maxlength="8000"></textarea><div class="ft-hint" id="ft-abstract-hint"></div></label>
-      <label class="ft-field ft-wide" data-field="bio"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio" rows="5" maxlength="4000"></textarea></label>
       <div class="ft-field ft-wide" data-field="photo">
         <span>Headshot <small>(optional; JPG or PNG; 10MB max)</small></span>
         <label class="ft-drop" id="ft-drop">
@@ -234,7 +238,7 @@ function validate() {
     el.classList.toggle('is-invalid', !checks[k]);
     if (!checks[k]) bad.push(k);
   });
-  var order = ['outreach', 'name', 'company', 'email', 'linkedin', 'name2', 'company2', 'email2', 'linkedin2', 'bio2', 'photo2', 'title', 'abstract', 'bio', 'photo', 'consent'];
+  var order = ['outreach', 'name', 'company', 'email', 'linkedin', 'bio', 'name2', 'company2', 'email2', 'linkedin2', 'bio2', 'photo2', 'title', 'abstract', 'bio', 'photo', 'consent'];
   bad.sort(function(a, b) { return order.indexOf(a) - order.indexOf(b); });
   if (bad.length) {
     var first = form.querySelector('[data-field="' + bad[0] + '"]');
