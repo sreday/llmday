@@ -330,6 +330,8 @@
 }
 
 /* ── Buttons ──────────────────────────────────────────────────── */
+.host-lead { text-align: left; }
+.host-lead .lead-inner { margin-top: 24px; }
 .btn-host {
   display: inline-block;
   padding: 14px 32px;
@@ -715,9 +717,11 @@
       </div>
       <div class="mt-4">
         <a href="https://calendly.com/sreday/30min" target="_blank" rel="noopener noreferrer" class="btn-host btn-host-orange">Hop on a call</a>
-        <a href="mailto:hello@llmday.com?subject=Hosting%20inquiry" class="btn-host btn-host-purple"><i class="fas fa-envelope me-2"></i>Email Mark</a>
+        <a href="#lead-panel" id="lead-toggle" class="btn-host btn-host-purple" onclick="leadToggle(); return false;" aria-expanded="false" aria-controls="lead-panel"><i class="fas fa-envelope me-2"></i>Email Mark</a>
         <a href="https://wa.me/447307415008" target="_blank" rel="noopener noreferrer" class="btn-host btn-host-green"><i class="fab fa-whatsapp me-2"></i>DM Mark</a>
       </div>
+      {# same lead form as the sponsor pages, opened by "Email Mark" above; Host pre-selected #}
+      <div class="lead-scope host-lead">{% set lead_default_interest = 'Host' %}{% include '_lead_form_home.html' %}</div>
       <p class="host-amb-note">On a personal level, helping host our conferences is a<br>
       <a href="/ambassadorship">fast-track to becoming an Ambassador!</a></p>
     </div>
