@@ -56,7 +56,8 @@
     .count.err { background: var(--critical); }
     .count.warn { background: #e0891a; }
     .count.ok { background: var(--good); }
-    .check.clean .check-head { border-bottom: none; }
+    .allclear { margin: 6px 0 14px; }
+    .allclear .count { font-size: .9rem; padding: 7px 16px; }
     .check ul { list-style: none; margin: 0; padding: 6px 0; }
     .check li { display: grid; grid-template-columns: 12px minmax(120px, 220px) 1fr; gap: 10px; align-items: baseline; padding: 6px 16px; font-size: .86rem; border-bottom: 1px solid #f7f7f7; }
     .check li:last-child { border-bottom: none; }
@@ -237,13 +238,14 @@
     <h2>Data checks</h2>
     <div class="sub">Problems found in llmday repo data at build time. Red is broken on the live site, orange is worth a look. Each line links to the exact page where the problem occurs.</div>
     
+    
+    
     <div class="check" id="check-2026-san-francisco-q4">
       <div class="check-head">
         <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a>
         <span class="spacer"></span>
         <span class="count err">1 error</span>
         <span class="count warn">1 warning</span>
-        
       </div>
       
       <ul>
@@ -261,7 +263,6 @@
         <span class="spacer"></span>
         <span class="count err">1 error</span>
         <span class="count warn">1 warning</span>
-        
       </div>
       
       <ul>
@@ -279,7 +280,6 @@
         <span class="spacer"></span>
         
         <span class="count warn">1 warning</span>
-        
       </div>
       
       <ul>
@@ -290,24 +290,12 @@
       
     </div>
     
-    <div class="check clean" id="check-2026-london-q4">
-      <div class="check-head">
-        <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a>
-        <span class="spacer"></span>
-        
-        
-        <span class="count ok">All clear</span>
-      </div>
-      
-    </div>
-    
     <div class="check" id="check-2026-montevideo-q4">
       <div class="check-head">
         <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a>
         <span class="spacer"></span>
         
         <span class="count warn">1 warning</span>
-        
       </div>
       
       <ul>
@@ -399,7 +387,7 @@
   </section>
   
 
-  <div class="foot">Generated 2026-09-13 22:36 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-13 22:40 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {
