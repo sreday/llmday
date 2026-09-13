@@ -97,7 +97,7 @@
       <label class="ft-field ft-wide" data-field="abstract"><span>Talk abstract <small>(3+ sentences, markdown supported)</small></span><textarea name="abstract" rows="8" maxlength="8000"></textarea><div class="ft-hint" id="ft-abstract-hint"></div></label>
       <label class="ft-field ft-wide" data-field="bio"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio" rows="5" maxlength="4000"></textarea></label>
       <div class="ft-field ft-wide" data-field="photo">
-        <span>Headshot <small>(JPG or PNG; 10MB max)</small></span>
+        <span>Headshot <small>(optional; JPG or PNG; 10MB max)</small></span>
         <label class="ft-drop" id="ft-drop">
           <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
           <img class="ft-thumb" id="ft-thumb" alt="" hidden>
@@ -194,7 +194,7 @@ function validate() {
     outreach: !!val('outreach'), name: !!val('name'), company: !!val('company'), consent: form.elements['consent'].checked,
     email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email')),
     linkedin: /^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin')),
-    title: !!val('title'), abstract: !!val('abstract'), bio: !!val('bio'), photo: photo.ok
+    title: !!val('title'), abstract: !!val('abstract'), bio: !!val('bio'), photo: true   // headshot is optional
   };
   Object.keys(checks).forEach(function(k) {
     var el = form.querySelector('[data-field="' + k + '"]');
@@ -219,7 +219,7 @@ form.addEventListener('submit', function(ev) {
   ev.preventDefault();
   $('ft-error').hidden = true;
   var bad = validate();
-  if (bad.length) { showError(bad.length === 1 && bad[0] === 'photo' ? 'Please add a headshot.' : bad.length === 1 && bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : bad.length === 1 && bad[0] === 'consent' ? 'Please tick the consent box so we can use your details.' : 'Please fill in the highlighted fields.'); return; }
+  if (bad.length) { showError(bad.length === 1 && bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : bad.length === 1 && bad[0] === 'consent' ? 'Please tick the consent box so we can use your details.' : 'Please fill in the highlighted fields.'); return; }
   if (!FT_URL) { showError('This form is not connected yet (fasttrack_form_url is empty). Please email us instead.'); return; }
   var body = {
     brand: FT_EVENT.brand, event: FT_EVENT,
@@ -238,7 +238,7 @@ form.addEventListener('submit', function(ev) {
       if (timer) clearTimeout(timer);
       if (!res || !res.ok) { var e = new Error((res && res.error) || 'rejected'); e.res = res || {}; throw e; }
       var first = val('name').split(/\s+/)[0].replace(/[<>&"]/g, '');
-      done.innerHTML = '<strong>Thanks ' + first + '!</strong> We got it, and a copy just went to ' + val('email').replace(/[<>&"]/g, '') + '. Mark will get back to you shortly.';
+      done.innerHTML = '<strong>Thanks ' + first + '!</strong> We got your proposal and will get back to you asap.';
       form.hidden = true; done.hidden = false; done.scrollIntoView({ behavior: 'smooth', block: 'start' });
     })
     .catch(function(err) {
