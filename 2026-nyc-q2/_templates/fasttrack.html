@@ -30,7 +30,8 @@
     .ft-consent { margin-top: 24px; }
     .ft-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .92rem; color: #333; }
     .ft-consent-label input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid #bbb; border-radius: 4px; background: #fff; cursor: pointer; }
-    .ft-consent-label input:checked { background: var(--ft-accent); border-color: var(--ft-accent); }
+    .ft-consent-label input:checked { background: var(--ft-accent) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; border-color: var(--ft-accent); }
+    .ft-consent-label input:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--ft-accent) 30%, transparent); }
     .ft-consent.is-invalid .ft-consent-label { color: var(--ft-danger); }
     .ft-consent.is-invalid .ft-consent-label input { border-color: var(--ft-danger); }
     .ft-invite { border-left: 4px solid var(--ft-accent); }
