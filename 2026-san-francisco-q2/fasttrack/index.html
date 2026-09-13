@@ -19,8 +19,8 @@
     .ft-sub a { color: var(--ft-accent); }
     .ft-intro { color: #333; font-size: 1rem; line-height: 1.6; margin-bottom: 26px; }
     .ft-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 16px; padding: 30px 34px; box-shadow: 0 4px 20px rgba(0,0,0,.06); margin-bottom: 22px; }
-    .ft-section { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.05rem; margin: 0 0 14px; color: #222; }
-    .ft-grid + .ft-section { margin-top: 30px; }
+    .ft-section { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.05rem; margin: 30px 0 14px; color: #222; }
+    .ft-section:first-child { margin-top: 0; }
     .ft-consent { margin-top: 24px; }
     .ft-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .92rem; color: #333; }
     .ft-consent-label input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid #bbb; border-radius: 4px; background: #fff; cursor: pointer; }
@@ -30,6 +30,9 @@
     .ft-consent.is-invalid .ft-consent-label input { border-color: var(--ft-danger); }
     .ft-invite { border-left: 4px solid var(--ft-accent); }
     .ft-invite .ft-field > span { font-size: .95rem; }
+    .ft-co-toggle { margin-top: 14px; }
+    .ft-linkbtn { background: none; border: none; padding: 0; color: var(--ft-accent); font: inherit; font-weight: 600; cursor: pointer; }
+    .ft-linkbtn:hover { text-decoration: underline; }
     .ft-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
     .ft-wide { grid-column: 1 / -1; }
     .ft-field { display: block; margin: 0; }
@@ -85,6 +88,27 @@
       <label class="ft-field ft-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
     </div>
 
+    <div class="ft-co-toggle"><button type="button" class="ft-linkbtn" id="ft-co-btn">+ Add a co-speaker</button></div>
+    <div id="ft-co" hidden>
+      <h2 class="ft-section">Co-speaker</h2>
+      <div class="ft-grid">
+        <label class="ft-field" data-field="name2"><span>Co-speaker name</span><input type="text" name="name2" autocomplete="off" maxlength="80"></label>
+        <label class="ft-field" data-field="company2"><span>Company</span><input type="text" name="company2" autocomplete="off" maxlength="120"></label>
+        <label class="ft-field ft-wide" data-field="email2"><span>Email</span><input type="email" name="email2" autocomplete="off" maxlength="254"></label>
+        <label class="ft-field ft-wide" data-field="linkedin2"><span>LinkedIn profile URL</span><input type="url" name="linkedin2" autocomplete="off" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
+        <label class="ft-field ft-wide" data-field="bio2"><span>Short bio <small>(single paragraph in third person, markdown supported)</small></span><textarea name="bio2" rows="4" maxlength="4000"></textarea></label>
+        <div class="ft-field ft-wide" data-field="photo2">
+          <span>Headshot <small>(optional; JPG or PNG; 10MB max)</small></span>
+          <label class="ft-drop" id="ft-drop2">
+            <input type="file" name="photo2" accept="image/*">
+            <img class="ft-thumb" id="ft-thumb2" alt="" hidden>
+            <div class="ft-drop-text" id="ft-drop-text2"><b>Choose a photo</b> or drop it here.</div>
+          </label>
+          <div class="ft-hint" id="ft-photo-hint2"></div>
+        </div>
+      </div>
+    </div>
+
     <h2 class="ft-section">Your session</h2>
     <div class="ft-grid">
       <label class="ft-field ft-wide" data-field="title"><span>Talk title <small>(one phrase, shorter = better)</small></span><input type="text" name="title" maxlength="160"></label>
@@ -123,7 +147,6 @@ var FT_EVENT = {"brand": "llmday", "brand_name": "LLMday", "cfp_url": "hhttps://
 
 var $ = function(id) { return document.getElementById(id); };
 var form = $('ft-form'), done = $('ft-done');
-var photo = { b64: '', type: '', name: '', ok: false };
 
 // ---- abstract sentence counter (soft) ------------------------------------------------
 form.elements['abstract'].addEventListener('input', function() {
@@ -133,13 +156,7 @@ form.elements['abstract'].addEventListener('input', function() {
   hint.textContent = n >= 3 ? n + ' sentences, nice.' : 'That reads like ' + n + ' sentence' + (n === 1 ? '' : 's') + ', three or more would help attendees pick your talk.';
 });
 
-// ---- headshot: square 400x400 PNG for the site + resized JPG original ------------------
-var drop = $('ft-drop'), fileInput = form.elements['photo'];
-['dragenter', 'dragover'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.add('over'); }); });
-['dragleave', 'drop'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.remove('over'); }); });
-drop.addEventListener('drop', function(e) { if (e.dataTransfer.files && e.dataTransfer.files[0]) handlePhoto(e.dataTransfer.files[0]); });
-fileInput.addEventListener('change', function() { if (this.files && this.files[0]) handlePhoto(this.files[0]); });
-
+// ---- headshots: sent as-is; one drop zone per speaker ---------------------------------
 function loadImage(file) {
   return new Promise(function(resolve, reject) {
     var url = URL.createObjectURL(file), img = new Image();
@@ -149,25 +166,52 @@ function loadImage(file) {
   });
 }
 var MAX_FILE = 10 * 1024 * 1024;
-function handlePhoto(file) {
-  var hint = $('ft-photo-hint'); hint.className = 'ft-hint'; hint.textContent = 'Reading...';
-  photo = { b64: '', type: '', name: '', ok: false };
-  if (file.size > MAX_FILE) { hint.className = 'ft-hint warn'; hint.textContent = 'That file is over 10 MB, please pick a smaller one.'; return; }
-  var reader = new FileReader();
-  reader.onerror = function() { hint.className = 'ft-hint warn'; hint.textContent = "We couldn't read that file, please try another one."; };
-  reader.onload = function() {
-    photo = { b64: String(reader.result).split(',')[1] || '', type: file.type || '', name: file.name || '', ok: true };
-    var size = file.size >= 1048576 ? (file.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(file.size / 1024)) + ' KB';
-    $('ft-drop-text').innerHTML = '<b>Attached.</b> ' + file.name.replace(/[<>&"]/g, '') + ' (' + size + '), sent as is.<br>Click or drop to replace.';
-    hint.textContent = ''; drop.classList.remove('is-invalid');
-    // preview when the browser can decode it (HEIC usually cannot be previewed but is still sent)
-    loadImage(file).then(function(img) {
-      var thumb = $('ft-thumb'); thumb.src = img.src; thumb.hidden = false;
-      if (Math.max(img.naturalWidth, img.naturalHeight) < 600) { hint.className = 'ft-hint warn'; hint.textContent = 'Quite small (' + img.naturalWidth + '\u00d7' + img.naturalHeight + ' px). A bigger photo would look sharper.'; }
-    }).catch(function() { $('ft-thumb').hidden = true; });
-  };
-  reader.readAsDataURL(file);
+function setupPhoto(dropId, inputName, thumbId, textId, hintId) {
+  var state = { b64: '', type: '', name: '', ok: false };
+  var drop = $(dropId), input = form.elements[inputName], hint = $(hintId), text = $(textId), thumb = $(thumbId);
+  var emptyText = text.innerHTML;
+  function handle(file) {
+    hint.className = 'ft-hint'; hint.textContent = 'Reading...';
+    state.b64 = ''; state.type = ''; state.name = ''; state.ok = false;
+    if (file.size > MAX_FILE) { hint.className = 'ft-hint warn'; hint.textContent = 'That file is over 10 MB, please pick a smaller one.'; return; }
+    var reader = new FileReader();
+    reader.onerror = function() { hint.className = 'ft-hint warn'; hint.textContent = "We couldn't read that file, please try another one."; };
+    reader.onload = function() {
+      state.b64 = String(reader.result).split(',')[1] || ''; state.type = file.type || ''; state.name = file.name || ''; state.ok = true;
+      var size = file.size >= 1048576 ? (file.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(file.size / 1024)) + ' KB';
+      text.innerHTML = '<b>Attached.</b> ' + file.name.replace(/[<>&"]/g, '') + ' (' + size + '), sent as is.<br>Click or drop to replace.';
+      hint.textContent = ''; drop.classList.remove('is-invalid');
+      loadImage(file).then(function(img) {
+        thumb.src = img.src; thumb.hidden = false;
+        if (Math.max(img.naturalWidth, img.naturalHeight) < 600) { hint.className = 'ft-hint warn'; hint.textContent = 'Quite small (' + img.naturalWidth + ' x ' + img.naturalHeight + ' px). A bigger photo would look sharper.'; }
+      }).catch(function() { thumb.hidden = true; });
+    };
+    reader.readAsDataURL(file);
+  }
+  ['dragenter', 'dragover'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.remove('over'); }); });
+  drop.addEventListener('drop', function(e) { if (e.dataTransfer.files && e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
+  input.addEventListener('change', function() { if (this.files && this.files[0]) handle(this.files[0]); });
+  state.reset = function() { state.b64 = ''; state.type = ''; state.name = ''; state.ok = false; input.value = ''; thumb.hidden = true; text.innerHTML = emptyText; hint.textContent = ''; };
+  return state;
 }
+var photo = setupPhoto('ft-drop', 'photo', 'ft-thumb', 'ft-drop-text', 'ft-photo-hint');
+var photo2 = setupPhoto('ft-drop2', 'photo2', 'ft-thumb2', 'ft-drop-text2', 'ft-photo-hint2');
+var fileInput = form.elements['photo'];   // kept for tests
+
+// ---- co-speaker toggle -------------------------------------------------------------------
+var coOpen = false;
+$('ft-co-btn').addEventListener('click', function() {
+  coOpen = !coOpen;
+  $('ft-co').hidden = !coOpen;
+  this.textContent = coOpen ? '- Remove the co-speaker' : '+ Add a co-speaker';
+  if (!coOpen) {
+    ['name2', 'company2', 'email2', 'linkedin2', 'bio2'].forEach(function(k) { form.elements[k].value = ''; form.querySelector('[data-field="' + k + '"]').classList.remove('is-invalid'); });
+    photo2.reset();
+  } else {
+    form.elements['name2'].focus();
+  }
+});
 
 // ---- validation + submit --------------------------------------------------------------
 function val(k) { return (form.elements[k].value || '').trim(); }
@@ -179,13 +223,18 @@ function validate() {
     linkedin: /^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin')),
     title: !!val('title'), abstract: !!val('abstract'), bio: !!val('bio'), photo: true   // headshot is optional
   };
+  if (coOpen) {
+    checks.name2 = !!val('name2'); checks.company2 = !!val('company2');
+    checks.email2 = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email2'));
+    checks.linkedin2 = /^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin2'));
+    checks.bio2 = !!val('bio2'); checks.photo2 = true;
+  }
   Object.keys(checks).forEach(function(k) {
     var el = form.querySelector('[data-field="' + k + '"]');
     el.classList.toggle('is-invalid', !checks[k]);
-    if (k === 'photo') drop.classList.toggle('is-invalid', !checks[k]);
     if (!checks[k]) bad.push(k);
   });
-  var order = ['outreach', 'name', 'company', 'email', 'linkedin', 'title', 'abstract', 'bio', 'photo', 'consent'];
+  var order = ['outreach', 'name', 'company', 'email', 'linkedin', 'name2', 'company2', 'email2', 'linkedin2', 'bio2', 'photo2', 'title', 'abstract', 'bio', 'photo', 'consent'];
   bad.sort(function(a, b) { return order.indexOf(a) - order.indexOf(b); });
   if (bad.length) {
     var first = form.querySelector('[data-field="' + bad[0] + '"]');
@@ -202,7 +251,7 @@ form.addEventListener('submit', function(ev) {
   ev.preventDefault();
   $('ft-error').hidden = true;
   var bad = validate();
-  if (bad.length) { showError(bad.length === 1 && bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : bad.length === 1 && bad[0] === 'consent' ? 'Please tick the consent box so we can use your details.' : 'Please fill in the highlighted fields.'); return; }
+  if (bad.length) { showError(bad.length === 1 && (bad[0] === 'linkedin' || bad[0] === 'linkedin2') ? 'The LinkedIn link should start with https://www.linkedin.com/' : bad.length === 1 && bad[0] === 'consent' ? 'Please tick the consent box so we can use your details.' : 'Please fill in the highlighted fields.'); return; }
   if (!FT_URL) { showError('This form is not connected yet (fasttrack_form_url is empty). Please email us instead.'); return; }
   var body = {
     brand: FT_EVENT.brand, event: FT_EVENT,
@@ -210,6 +259,9 @@ form.addEventListener('submit', function(ev) {
     email: val('email'), linkedin: val('linkedin'), title: val('title'),
     abstract: form.elements['abstract'].value.trim(), bio: form.elements['bio'].value.trim(),
     photo_b64: photo.b64, photo_type: photo.type, photo_name: photo.name,
+    name2: coOpen ? val('name2') : '', company2: coOpen ? val('company2') : '', email2: coOpen ? val('email2') : '',
+    linkedin2: coOpen ? val('linkedin2') : '', bio2: coOpen ? form.elements['bio2'].value.trim() : '',
+    photo2_b64: coOpen ? photo2.b64 : '', photo2_type: coOpen ? photo2.type : '', photo2_name: coOpen ? photo2.name : '',
     website: form.elements['website'].value || '', page: location.href
   };
   var btn = $('ft-send'); btn.disabled = true; btn.textContent = 'Sending...';
@@ -220,7 +272,7 @@ form.addEventListener('submit', function(ev) {
     .then(function(res) {
       if (timer) clearTimeout(timer);
       if (!res || !res.ok) { var e = new Error((res && res.error) || 'rejected'); e.res = res || {}; throw e; }
-      var first = val('name').split(/\s+/)[0].replace(/[<>&"]/g, '');
+      var first = val('name').split(/\s+/)[0].replace(/[<>&"]/g, '') + (coOpen && val('name2') ? ' and ' + val('name2').split(/\s+/)[0].replace(/[<>&"]/g, '') : '');
       done.innerHTML = '<strong>Thanks ' + first + '!</strong> We got your proposal and will get back to you asap.';
       form.hidden = true; done.hidden = false; done.scrollIntoView({ behavior: 'smooth', block: 'start' });
     })
