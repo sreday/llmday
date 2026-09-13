@@ -98,7 +98,7 @@
         </label>
         <div class="ft-hint" id="ft-photo-hint"></div>
       </div>
-      <label class="ft-field ft-wide" data-field="outreach"><span>Who from our team invited you to present?</span><input type="text" name="outreach" autocomplete="off" placeholder="e.g. Magda, Petras, Anna" maxlength="80"><div class="ft-hint" id="ft-outreach-hint"></div></label>
+      <label class="ft-field ft-wide" data-field="outreach"><span>Who from our team invited you to present?</span><input type="text" name="outreach" autocomplete="off" maxlength="80"></label>
     </div>
 
     <div class="ft-field ft-consent" data-field="consent">
@@ -124,60 +124,6 @@ var MAX_B64  = 5 * 1024 * 1024 * 4 / 3;   // server rejects attachments over 5 M
 var $ = function(id) { return document.getElementById(id); };
 var form = $('ft-form'), done = $('ft-done');
 var photo = { png: '', jpg: '', ok: false };
-
-// ---- outreach hint (alias table comes from the script's GET, one source of truth) --------
-var TEAM = [];
-function normalizeName(v) {
-  var t = String(v || '').toLowerCase();
-  try { t = t.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch (e) {}
-  return t.replace(/ł/g, 'l').replace(/[^a-z]+/g, ' ').replace(/\s+/g, ' ').trim();
-}
-function editDistance(a, b) {
-  var d = [], i, j;
-  for (i = 0; i <= a.length; i++) d[i] = [i];
-  for (j = 0; j <= b.length; j++) d[0][j] = j;
-  for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++) {
-    var c = a[i - 1] === b[j - 1] ? 0 : 1;
-    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + c);
-    if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
-  }
-  return d[a.length][b.length];
-}
-function matchOutreach(text) {
-  var norm = normalizeName(text);
-  var cands = norm ? [norm].concat(norm.split(' ').filter(function(w) { return w.length >= 2 && w !== norm; })) : [];
-  for (var c = 0; c < cands.length; c++) {
-    var cand = cands[c], t;
-    for (t = 0; t < TEAM.length; t++) if (TEAM[t].aliases.indexOf(cand) !== -1) return TEAM[t].name;
-    if (cand.length >= 3) {
-      var owners = {};
-      TEAM.forEach(function(p) { p.aliases.forEach(function(a) { if (a.indexOf(cand) === 0) owners[p.name] = 1; }); });
-      var names = Object.keys(owners);
-      if (names.length === 1) return names[0];
-    }
-    var best = null, bestScore = 99, tie = false;
-    TEAM.forEach(function(p) { p.aliases.forEach(function(a) {
-      var limit = a.length <= 5 ? 1 : 2, dist = editDistance(cand, a);
-      if (dist > limit) return;
-      if (dist < bestScore) { bestScore = dist; best = p.name; tie = false; }
-      else if (dist === bestScore && best !== p.name) tie = true;
-    }); });
-    if (best && !tie) return best;
-  }
-  return null;
-}
-function outreachHint() {
-  var hint = $('ft-outreach-hint'), v = form.elements['outreach'].value.trim();
-  hint.className = 'ft-hint'; hint.innerHTML = '';
-  if (!v || !TEAM.length) return;
-  var who = matchOutreach(v);
-  if (who) { hint.innerHTML = '<span class="ft-chip">' + who + ' ✓</span>'; }
-  else { hint.className = 'ft-hint warn'; hint.textContent = "We don't recognise that name yet, no worries, Mark will sort it out."; }
-}
-form.elements['outreach'].addEventListener('input', outreachHint);
-if (FT_URL) {
-  fetch(FT_URL).then(function(r) { return r.json(); }).then(function(h) { if (h && h.team) { TEAM = h.team; outreachHint(); } }).catch(function() {});
-}
 
 // ---- abstract sentence counter (soft) ------------------------------------------------
 form.elements['abstract'].addEventListener('input', function() {
