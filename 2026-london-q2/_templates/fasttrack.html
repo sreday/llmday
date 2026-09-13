@@ -1,0 +1,284 @@
+{# ── Speaker fast track (hidden page, /<event>/fasttrack/). Standalone: does NOT extend _base.html.
+     Invite-only submission form for speakers we already talked to: who they spoke with, name, company,
+     job title, email, LinkedIn, talk title, abstract, bio, headshot. The headshot is turned into a
+     site-ready 400x400 PNG (+ a resized JPG) in the browser and posted as base64 JSON to
+     fasttrack_form_url (home/metadata.yml; backend llmday/_build/fasttrack-form.gs), which emails Mark
+     (+ Cc speaker + Cc the outreach route) with attachments and a talks.csv row. Identical in all three
+     repos: the brand colour comes from {{ brand_color }}. Never listed in the sitemap. ── #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Fast track: {{ fasttrack_event.event_name }}</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <style>
+    :root { --ft-accent: {{ brand_color }}; --ft-danger: #c0392b; }
+    html, body { background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
+    .ft-wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+    .ft-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--ft-accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+    .ft-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.8rem; margin: 0 0 6px; line-height: 1.2; }
+    .ft-sub { color: #555; font-size: .95rem; margin-bottom: 14px; }
+    .ft-sub a { color: var(--ft-accent); }
+    .ft-intro { color: #333; font-size: 1rem; line-height: 1.6; margin-bottom: 26px; }
+    .ft-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 16px; padding: 30px 34px; box-shadow: 0 4px 20px rgba(0,0,0,.06); margin-bottom: 22px; }
+    .ft-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
+    .ft-wide { grid-column: 1 / -1; }
+    .ft-field { display: block; margin: 0; }
+    .ft-field > span { display: block; font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 6px; letter-spacing: .02em; }
+    .ft-field > span small { font-weight: 400; color: #888; }
+    .ft-field input[type=text], .ft-field input[type=email], .ft-field input[type=url], .ft-field textarea {
+      width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #111; background: #fff; outline: none; transition: border-color .2s, box-shadow .2s; font-family: inherit;
+    }
+    .ft-field textarea { resize: vertical; line-height: 1.5; }
+    .ft-field input:focus, .ft-field textarea:focus { border-color: var(--ft-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ft-accent) 18%, transparent); }
+    .ft-field.is-invalid input, .ft-field.is-invalid textarea, .ft-drop.is-invalid { border-color: var(--ft-danger) !important; }
+    .ft-hint { font-size: .8rem; color: #888; margin-top: 6px; min-height: 1em; }
+    .ft-hint.warn { color: #b26a00; }
+    .ft-hint.ok { color: #2e7d32; }
+    .ft-chip { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .8rem; border: 1px solid color-mix(in srgb, var(--ft-accent) 45%, #fff); background: color-mix(in srgb, var(--ft-accent) 10%, #fff); color: #222; margin-top: 6px; }
+    .ft-drop { border: 2px dashed #ccc; border-radius: 12px; padding: 18px; display: flex; gap: 18px; align-items: center; cursor: pointer; transition: border-color .2s, background .2s; background: #fafafa; }
+    .ft-drop:hover, .ft-drop.over { border-color: var(--ft-accent); background: color-mix(in srgb, var(--ft-accent) 5%, #fff); }
+    .ft-drop input { display: none; }
+    .ft-thumb { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; background: #eee; flex-shrink: 0; border: 1px solid #ddd; }
+    .ft-drop-text { font-size: .92rem; color: #444; line-height: 1.5; }
+    .ft-drop-text b { color: var(--ft-accent); }
+    .ft-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 22px; }
+    .btn-ft { display: inline-flex; align-items: center; justify-content: center; min-width: 150px; border: none; border-radius: 999px; padding: 12px 28px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.05rem; cursor: pointer; background: var(--ft-accent); color: #fff; transition: filter .15s, transform .1s; }
+    .btn-ft:hover { filter: brightness(1.1); }
+    .btn-ft:active { transform: scale(.97); }
+    .btn-ft[disabled] { opacity: .55; cursor: default; }
+    .ft-error { display: block; width: 100%; font-size: .92rem; color: var(--ft-danger); margin-top: 8px; }
+    .ft-hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .ft-done { font-size: 1.05rem; line-height: 1.6; }
+    .ft-done strong { font-family: 'Montserrat', sans-serif; }
+    .ft-muted { color: #888; font-size: .85rem; margin-top: 30px; }
+    .ft-muted a { color: #666; }
+    @media (max-width: 575.98px) { .ft-card { padding: 22px 18px; } .ft-title { font-size: 1.45rem; } .ft-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main class="ft-wrap">
+  <div class="ft-brand">{{ brand_name }} · speakers</div>
+  <h1 class="ft-title">Speak at {{ fasttrack_event.event_name }}</h1>
+  <div class="ft-sub">{{ fasttrack_event.date }} · {{ fasttrack_event.city }} · <a href="{{ fasttrack_event.event_url }}" target="_blank" rel="noopener">event page</a></div>
+  <p class="ft-intro">You talked to one of us and we'd love to have you on stage. Fill this in and we'll take it from here. Same details as the CFP, minus the queue.</p>
+
+  <form class="ft-card" id="ft-form" novalidate>
+    <div class="ft-grid">
+      <label class="ft-field ft-wide" data-field="outreach"><span>Who did you talk to on our team?</span><input type="text" name="outreach" autocomplete="off" placeholder="e.g. Magda, Petras, Anna" maxlength="80"><div class="ft-hint" id="ft-outreach-hint"></div></label>
+      <label class="ft-field" data-field="name"><span>Your name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
+      <label class="ft-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
+      <label class="ft-field" data-field="jobtitle"><span>Job title <small>(optional)</small></span><input type="text" name="jobtitle" autocomplete="organization-title" maxlength="120"></label>
+      <label class="ft-field" data-field="email"><span>Email</span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
+      <label class="ft-field ft-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
+      <label class="ft-field ft-wide" data-field="title"><span>Talk title <small>(one phrase, shorter = better)</small></span><input type="text" name="title" maxlength="160"></label>
+      <label class="ft-field ft-wide" data-field="abstract"><span>Talk abstract <small>(3+ sentences, no cap, markdown is fine)</small></span><textarea name="abstract" rows="8" maxlength="8000"></textarea><div class="ft-hint" id="ft-abstract-hint"></div></label>
+      <label class="ft-field ft-wide" data-field="bio"><span>Short bio <small>(a paragraph, third person, markdown is fine)</small></span><textarea name="bio" rows="5" maxlength="4000"></textarea></label>
+      <div class="ft-field ft-wide" data-field="photo">
+        <span>Headshot <small>(JPG or PNG; we crop it square for the website)</small></span>
+        <label class="ft-drop" id="ft-drop">
+          <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
+          <img class="ft-thumb" id="ft-thumb" alt="" hidden>
+          <div class="ft-drop-text" id="ft-drop-text"><b>Choose a photo</b> or drop it here.<br>A clear, well-lit picture of your face works best.</div>
+        </label>
+        <div class="ft-hint" id="ft-photo-hint"></div>
+      </div>
+    </div>
+    <div class="ft-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="ft-row">
+      <button type="submit" class="btn-ft" id="ft-send">Send my talk</button>
+      <div class="ft-error" id="ft-error" hidden></div>
+    </div>
+  </form>
+
+  <div class="ft-card ft-done" id="ft-done" hidden></div>
+
+  <div class="ft-muted">Invite-only fast track for speakers we already talked to.{% if fasttrack_event.cfp_url %} Everyone else: the public CFP is at <a href="{{ fasttrack_event.cfp_url }}" target="_blank" rel="noopener">{{ fasttrack_event.cfp_url }}</a>.{% endif %}</div>
+</main>
+
+<script>
+var FT_URL   = "{{ fasttrack_form_url | default('') }}";
+var FT_EVENT = {{ fasttrack_event | tojson }};
+var MAX_B64  = 5 * 1024 * 1024 * 4 / 3;   // server rejects attachments over 5 MB
+
+var $ = function(id) { return document.getElementById(id); };
+var form = $('ft-form'), done = $('ft-done');
+var photo = { png: '', jpg: '', ok: false };
+
+// ---- outreach hint (alias table comes from the script's GET, one source of truth) --------
+var TEAM = [];
+function normalizeName(v) {
+  var t = String(v || '').toLowerCase();
+  try { t = t.normalize('NFD').replace(/[̀-ͯ]/g, ''); } catch (e) {}
+  return t.replace(/ł/g, 'l').replace(/[^a-z]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function editDistance(a, b) {
+  var d = [], i, j;
+  for (i = 0; i <= a.length; i++) d[i] = [i];
+  for (j = 0; j <= b.length; j++) d[0][j] = j;
+  for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++) {
+    var c = a[i - 1] === b[j - 1] ? 0 : 1;
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + c);
+    if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+  }
+  return d[a.length][b.length];
+}
+function matchOutreach(text) {
+  var norm = normalizeName(text);
+  var cands = norm ? [norm].concat(norm.split(' ').filter(function(w) { return w.length >= 2 && w !== norm; })) : [];
+  for (var c = 0; c < cands.length; c++) {
+    var cand = cands[c], t;
+    for (t = 0; t < TEAM.length; t++) if (TEAM[t].aliases.indexOf(cand) !== -1) return TEAM[t].name;
+    if (cand.length >= 3) {
+      var owners = {};
+      TEAM.forEach(function(p) { p.aliases.forEach(function(a) { if (a.indexOf(cand) === 0) owners[p.name] = 1; }); });
+      var names = Object.keys(owners);
+      if (names.length === 1) return names[0];
+    }
+    var best = null, bestScore = 99, tie = false;
+    TEAM.forEach(function(p) { p.aliases.forEach(function(a) {
+      var limit = a.length <= 5 ? 1 : 2, dist = editDistance(cand, a);
+      if (dist > limit) return;
+      if (dist < bestScore) { bestScore = dist; best = p.name; tie = false; }
+      else if (dist === bestScore && best !== p.name) tie = true;
+    }); });
+    if (best && !tie) return best;
+  }
+  return null;
+}
+function outreachHint() {
+  var hint = $('ft-outreach-hint'), v = form.elements['outreach'].value.trim();
+  hint.className = 'ft-hint'; hint.innerHTML = '';
+  if (!v || !TEAM.length) return;
+  var who = matchOutreach(v);
+  if (who) { hint.innerHTML = '<span class="ft-chip">' + who + ' ✓</span>'; }
+  else { hint.className = 'ft-hint warn'; hint.textContent = "We don't recognise that name yet, no worries, Mark will sort it out."; }
+}
+form.elements['outreach'].addEventListener('input', outreachHint);
+if (FT_URL) {
+  fetch(FT_URL).then(function(r) { return r.json(); }).then(function(h) { if (h && h.team) { TEAM = h.team; outreachHint(); } }).catch(function() {});
+}
+
+// ---- abstract sentence counter (soft) ------------------------------------------------
+form.elements['abstract'].addEventListener('input', function() {
+  var n = (this.value.match(/[.!?](\s|$)/g) || []).length, hint = $('ft-abstract-hint');
+  if (!this.value.trim()) { hint.className = 'ft-hint'; hint.textContent = ''; return; }
+  hint.className = 'ft-hint ' + (n >= 3 ? 'ok' : 'warn');
+  hint.textContent = n >= 3 ? n + ' sentences, nice.' : 'That reads like ' + n + ' sentence' + (n === 1 ? '' : 's') + ', three or more would help attendees pick your talk.';
+});
+
+// ---- headshot: square 400x400 PNG for the site + resized JPG original ------------------
+var drop = $('ft-drop'), fileInput = form.elements['photo'];
+['dragenter', 'dragover'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.add('over'); }); });
+['dragleave', 'drop'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.remove('over'); }); });
+drop.addEventListener('drop', function(e) { if (e.dataTransfer.files && e.dataTransfer.files[0]) handlePhoto(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', function() { if (this.files && this.files[0]) handlePhoto(this.files[0]); });
+
+function loadImage(file) {
+  return new Promise(function(resolve, reject) {
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function() { URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = function() { URL.revokeObjectURL(url); reject(new Error('decode')); };
+    img.src = url;
+  });
+}
+function handlePhoto(file) {
+  var hint = $('ft-photo-hint'); hint.className = 'ft-hint'; hint.textContent = 'Processing...';
+  photo = { png: '', jpg: '', ok: false };
+  loadImage(file).then(function(img) {
+    var w = img.naturalWidth, h = img.naturalHeight, s = Math.min(w, h);
+    var c1 = document.createElement('canvas'); c1.width = 400; c1.height = 400;
+    c1.getContext('2d').drawImage(img, (w - s) / 2, (h - s) / 2, s, s, 0, 0, 400, 400);
+    var pngUrl = c1.toDataURL('image/png');
+    var scale = Math.min(1, 1600 / Math.max(w, h));
+    var c2 = document.createElement('canvas'); c2.width = Math.round(w * scale); c2.height = Math.round(h * scale);
+    c2.getContext('2d').drawImage(img, 0, 0, c2.width, c2.height);
+    var jpg = c2.toDataURL('image/jpeg', .85).split(',')[1];
+    var png = pngUrl.split(',')[1];
+    if (png.length > MAX_B64 || jpg.length > MAX_B64) throw new Error('size');
+    photo = { png: png, jpg: jpg, ok: true };
+    var thumb = $('ft-thumb'); thumb.src = pngUrl; thumb.hidden = false;
+    $('ft-drop-text').innerHTML = '<b>Looks good.</b> ' + w + '×' + h + ' px, cropped to a square for the website.<br>Click or drop to replace.';
+    hint.textContent = ''; drop.classList.remove('is-invalid');
+    if (s < 400) { hint.className = 'ft-hint warn'; hint.textContent = 'Quite small (' + s + ' px). A bigger photo would look sharper.'; }
+  }).catch(function(err) {
+    $('ft-thumb').hidden = true;
+    $('ft-drop-text').innerHTML = '<b>Choose a photo</b> or drop it here.<br>A clear, well-lit picture of your face works best.';
+    hint.className = 'ft-hint warn';
+    hint.textContent = err.message === 'size' ? 'That image is too large even after resizing, please pick a smaller one.' : "We couldn't read that file. Please use a JPG or PNG (iPhone HEIC photos need converting first).";
+  });
+}
+
+// ---- validation + submit --------------------------------------------------------------
+function val(k) { return (form.elements[k].value || '').trim(); }
+function validate() {
+  var bad = [];
+  var checks = {
+    outreach: !!val('outreach'), name: !!val('name'), company: !!val('company'),
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email')),
+    linkedin: /^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin')),
+    title: !!val('title'), abstract: !!val('abstract'), bio: !!val('bio'), photo: photo.ok
+  };
+  Object.keys(checks).forEach(function(k) {
+    var el = form.querySelector('[data-field="' + k + '"]');
+    el.classList.toggle('is-invalid', !checks[k]);
+    if (k === 'photo') drop.classList.toggle('is-invalid', !checks[k]);
+    if (!checks[k]) bad.push(k);
+  });
+  if (bad.length) {
+    var first = form.querySelector('[data-field="' + bad[0] + '"]');
+    first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var input = first.querySelector('input, textarea'); if (input && input.type !== 'file') input.focus({ preventScroll: true });
+  }
+  return bad;
+}
+form.addEventListener('input', function(ev) { var f = ev.target.closest('[data-field]'); if (f) f.classList.remove('is-invalid'); });
+
+function showError(msg) { var el = $('ft-error'); el.textContent = msg; el.hidden = false; }
+
+form.addEventListener('submit', function(ev) {
+  ev.preventDefault();
+  $('ft-error').hidden = true;
+  var bad = validate();
+  if (bad.length) { showError(bad.indexOf('photo') !== -1 && bad.length === 1 ? 'Please add a headshot.' : bad.indexOf('linkedin') !== -1 && bad.length === 1 ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in the highlighted fields.'); return; }
+  if (!FT_URL) { showError('This form is not connected yet (fasttrack_form_url is empty). Please email us instead.'); return; }
+  var body = {
+    brand: FT_EVENT.brand, event: FT_EVENT,
+    outreach: val('outreach'), name: val('name'), company: val('company'), jobtitle: val('jobtitle'),
+    email: val('email'), linkedin: val('linkedin'), title: val('title'),
+    abstract: form.elements['abstract'].value.trim(), bio: form.elements['bio'].value.trim(),
+    photo_png_b64: photo.png, photo_jpg_b64: photo.jpg,
+    website: form.elements['website'].value || '', page: location.href
+  };
+  var btn = $('ft-send'); btn.disabled = true; btn.textContent = 'Sending...';
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var timer = ctrl ? setTimeout(function() { ctrl.abort(); }, 45000) : null;
+  fetch(FT_URL, { method: 'POST', body: JSON.stringify(body), signal: ctrl ? ctrl.signal : undefined })
+    .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
+    .then(function(res) {
+      if (timer) clearTimeout(timer);
+      if (!res || !res.ok) { var e = new Error((res && res.error) || 'rejected'); e.res = res || {}; throw e; }
+      var first = val('name').split(/\s+/)[0].replace(/[<>&"]/g, '');
+      done.innerHTML = '<strong>Thanks ' + first + '!</strong> We got it, and a copy just went to ' + val('email').replace(/[<>&"]/g, '') + '. Mark will get back to you shortly.';
+      form.hidden = true; done.hidden = false; done.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })
+    .catch(function(err) {
+      if (timer) clearTimeout(timer);
+      btn.disabled = false; btn.textContent = 'Send my talk';
+      var res = err.res || {}, msg;
+      switch (err.message) {
+        case 'invalid': msg = 'The server did not accept: ' + (res.fields || []).join(', ') + '.'; break;
+        case 'image too large': msg = 'The photo is too large, please pick a smaller one.'; break;
+        case 'too many today': msg = "We've hit today's submission limit, please try again tomorrow or email us."; break;
+        default: msg = "Hmm, that didn't go through (" + (err.name === 'AbortError' ? 'timeout' : err.message) + '). Please try again or email us.';
+      }
+      showError(msg);
+    });
+});
+</script>
+</body>
+</html>
