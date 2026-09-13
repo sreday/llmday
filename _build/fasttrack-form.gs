@@ -41,8 +41,8 @@ var TEAM = [
   { name: 'Magdalena',  route: '',                      aliases: ['magdalena', 'magda', 'madga', 'magdalene', 'maggie', 'lena', 'magdalena marcinkiewicz'] },
   { name: 'Emilia',     route: '',                      aliases: ['emilia', 'emilka', 'emily', 'emilie', 'emi', 'milka'] },
   { name: 'Anna',       route: 'anna@{brand}',          aliases: ['anna', 'ania', 'anya', 'anka', 'anja', 'ann', 'annie', 'hanna', 'anna andriushchenko'] },
-  { name: 'Blanka',     route: 'anna@{brand}',          aliases: ['blanka', 'blanca', 'bianca'] },
-  { name: 'Sylwia',     route: 'anna@{brand}',          aliases: ['sylwia', 'sylvia', 'sylvie', 'silvia', 'sylwka', 'syl'] }
+  { name: 'Blanka',     route: 'anna@{brand}',          aliases: ['blanka', 'blanca', 'bianca', 'blanka pawlikowska', 'blanka pawlikowska michalak', 'blanka michalak'] },
+  { name: 'Sylwia',     route: 'anna@{brand}',          aliases: ['sylwia', 'sylvia', 'sylvie', 'silvia', 'sylwka', 'syl', 'sylwia pawlikowska', 'sylvia pawlikowska'] }
 ];
 
 function doGet() {
