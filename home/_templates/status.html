@@ -170,7 +170,7 @@
     <h2>Data checks</h2>
     <div class="sub">Problems found in {{ brand_name | lower }} repo data at build time. Red is broken on the live site, orange is worth a look. Each line links to the exact page where the problem occurs.</div>
     {% set dirty = status_rows | selectattr('issues') | list %}
-    {% if not dirty %}<div class="allclear"><span class="count ok">All clear &#128077;</span></div>{% endif %}
+    {% if not dirty %}<div class="allclear"><span class="count ok">No problems found &#128077;</span></div>{% endif %}
     {% for r in dirty %}
     <div class="check" id="check-{{ r.folder }}">
       <div class="check-head">
