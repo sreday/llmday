@@ -69,6 +69,10 @@
     .check li .where:hover { color: var(--accent); border-bottom-color: var(--accent); }
     .check li .more { color: #999; font-style: italic; grid-column: 2 / -1; }
     @media (max-width: 720px) { .check li { grid-template-columns: 12px 1fr; } .check li .where { grid-column: 2; } .check li span:last-child { grid-column: 2; } }
+    details.past { margin-top: 18px; }
+    details.past summary { cursor: pointer; color: #666; font-size: .9rem; margin-bottom: 12px; }
+    details.past summary::marker { color: var(--accent); }
+    details.past .check-head small { color: #999; font-size: .8rem; margin-left: 4px; }
     details.ladder { margin-top: 18px; font-size: .85rem; color: #555; }
     details.ladder summary { cursor: pointer; color: #666; }
     details.ladder table { margin-top: 0; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; overflow: hidden; font-size: .82rem; }
@@ -179,6 +183,26 @@
       {% endif %}
     </div>
     {% endfor %}
+    {% if status_past %}
+    <details class="past">
+      <summary>Past events since 2025: {{ status_past_dirty | length }} of {{ status_past | length }} with issues{% if not status_past_dirty %}, all clear{% endif %}</summary>
+      {% for r in status_past_dirty %}
+      <div class="check" id="check-{{ r.folder }}">
+        <div class="check-head">
+          <a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}</small>
+          <span class="spacer"></span>
+          {% if r.errors %}<span class="count err">{{ r.errors }} error{{ 's' if r.errors != 1 }}</span>{% endif %}
+          {% if r.warnings %}<span class="count warn">{{ r.warnings }} warning{{ 's' if r.warnings != 1 }}</span>{% endif %}
+        </div>
+        <ul>
+          {% for x in r.issues %}<li class="{{ x.sev }}"><i></i><a class="where" href="{{ x.url }}">{{ x.where }}</a><span>{{ x.msg }}</span></li>
+          {% endfor %}
+          {% if r.issues_more %}<li><i></i><span class="more">and {{ r.issues_more }} more, fix the ones above first</span></li>{% endif %}
+        </ul>
+      </div>
+      {% endfor %}
+    </details>
+    {% endif %}
   </section>
   {% endif %}
 
