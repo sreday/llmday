@@ -1,0 +1,104 @@
+{# ── /status/ (hidden, organizer-facing). Lineup and sponsor progress of every upcoming event, built by
+     home/_build/generate.py (STATUS PAGE block) from each event's metadata.yml + _db/talks.csv. Identical file in
+     sreday, llmday and platformday; the brand colour comes in as status_color. Never listed in the sitemap. ── #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{ brand_name }} status</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent: {{ status_color }}; --critical: #d63031; --bad: #f4a58a; --neutral: #9aa0a6; --good: #1e88c7; --nailed: #2ecc40; }
+    html, body { margin: 0; background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 44px 20px 80px; }
+    .brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+    h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.8rem; margin: 0 0 6px; }
+    .sub { color: #666; font-size: .92rem; margin-bottom: 24px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; font-size: .82rem; color: #555; margin-bottom: 18px; }
+    .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+    .card { background: #fff; border: 1px solid #e6e6e6; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,.06); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    th { text-align: left; font-family: 'Montserrat', sans-serif; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #777; padding: 14px 16px; border-bottom: 1px solid #eee; background: #fafafa; }
+    td { padding: 14px 16px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .ev a { color: #111; font-weight: 600; text-decoration: none; }
+    .ev a:hover { color: var(--accent); }
+    .ev small { display: block; color: #888; font-weight: 400; font-size: .8rem; margin-top: 2px; }
+    .bar { position: relative; height: 14px; border-radius: 999px; background: #eceef1; min-width: 180px; overflow: hidden; }
+    .bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--c); }
+    .bar > b { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,.25); }
+    .pct { font-size: .82rem; color: #555; margin-top: 4px; font-variant-numeric: tabular-nums; }
+    .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
+    .pill.neutral { color: #222; }
+    .pill.bad { color: #5a2a1a; }
+    .empty { padding: 30px; color: #777; text-align: center; }
+    .sisters { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .sisters a { display: inline-flex; align-items: center; border-radius: 999px; padding: 11px 24px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .95rem; color: #fff; text-decoration: none; background: var(--c); transition: filter .15s; }
+    .sisters a:hover { filter: brightness(1.1); }
+    .foot { color: #999; font-size: .8rem; margin-top: 26px; }
+    @media (max-width: 720px) { .wrap { padding: 28px 12px 60px; } th, td { padding: 10px 8px; } .bar { min-width: 120px; } th.hide, td.hide { display: none; } }
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <div class="brand">{{ brand_name }} · status</div>
+  <h1>Upcoming conferences</h1>
+  <div class="sub">Confirmed talks against {{ status_slots }} slots per track, plus confirmed sponsors (media and community partners excluded).</div>
+  <div class="legend">
+    <span style="--c: var(--critical)">Critical &lt; 25%</span>
+    <span style="--c: var(--bad)">Bad 25–49%</span>
+    <span style="--c: var(--neutral)">Neutral 50–74%</span>
+    <span style="--c: var(--good)">Good 75–99%</span>
+    <span style="--c: var(--nailed)">Nailed it! 100%+</span>
+  </div>
+
+  <div class="card">
+  {% if status_rows %}
+    <table>
+      <thead>
+        <tr>
+          <th>Conference</th>
+          <th class="num hide">Tracks</th>
+          <th class="num">Talks</th>
+          <th>Progress</th>
+          <th>Health</th>
+          <th class="num">Sponsors</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for r in status_rows %}
+        {% set fill = [r.pct, 100] | min %}
+        {% set over = r.pct > 100 %}
+        <tr>
+          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.state %} · {{ r.state }}{% endif %}</small></td>
+          <td class="num hide">{{ r.tracks }}</td>
+          <td class="num"><strong>{{ r.confirmed }}</strong> / {{ r.available }}</td>
+          <td>
+            <div class="bar" title="{{ r.pct }}%">
+              <i style="--c: var(--{{ r.health }}); width: {{ 100 if over else r.pct }}%"></i>
+              {% if over %}<b style="left: {{ (10000 / r.pct) | round(1) }}%" title="100%"></b>{% endif %}
+            </div>
+            <div class="pct">{{ r.pct }}%{% if over %} · {{ r.confirmed - r.available }} over{% endif %}</div>
+          </td>
+          <td><span class="pill {{ r.health }}" style="--c: var(--{{ r.health }})">{{ r.health_label }}</span></td>
+          <td class="num"><strong>{{ r.sponsors }}</strong></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No upcoming events listed in home/metadata.yml.</div>
+  {% endif %}
+  </div>
+
+  <div class="sisters">
+    {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}
+  </div>
+  <div class="foot">Generated {{ status_generated }} at build time. Organizer tool, not linked from the site.</div>
+</main>
+</body>
+</html>
