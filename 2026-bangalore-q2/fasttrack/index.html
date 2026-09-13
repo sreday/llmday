@@ -107,7 +107,7 @@ var photo = { png: '', jpg: '', ok: false };
 var TEAM = [];
 function normalizeName(v) {
   var t = String(v || '').toLowerCase();
-  try { t = t.normalize('NFD').replace(/[̀-ͯ]/g, ''); } catch (e) {}
+  try { t = t.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch (e) {}
   return t.replace(/ł/g, 'l').replace(/[^a-z]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
 function editDistance(a, b) {
