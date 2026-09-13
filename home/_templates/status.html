@@ -24,7 +24,9 @@
     th { text-align: left; font-family: 'Montserrat', sans-serif; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #777; padding: 14px 16px; border-bottom: 1px solid #eee; background: #fafafa; }
     td { padding: 14px 16px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
-    td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    th:not(:first-child), td:not(:first-child) { text-align: center; }
+    td.num, th.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .bar { margin: 0 auto; max-width: 240px; }
     .ev a { color: #111; font-weight: 600; text-decoration: none; }
     .ev a:hover { color: var(--accent); }
     .ev small { display: block; color: #888; font-weight: 400; font-size: .8rem; margin-top: 2px; }
@@ -46,6 +48,7 @@
     details.ladder summary { cursor: pointer; color: #666; }
     details.ladder table { margin-top: 10px; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; overflow: hidden; font-size: .82rem; }
     details.ladder th, details.ladder td { padding: 8px 12px; }
+    details.ladder th:not(:first-child), details.ladder td:not(:first-child) { text-align: center; }
     @media (max-width: 720px) { .wrap { padding: 28px 12px 60px; } th, td { padding: 10px 8px; } .bar { min-width: 120px; } th.hide, td.hide { display: none; } }
   </style>
 </head>
