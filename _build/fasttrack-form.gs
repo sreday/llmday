@@ -49,7 +49,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 10,
+  return respond({ ok: true, service: 'fasttrack', version: 11,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -70,8 +70,9 @@ function doPost(e) {
 
   // headshot is optional; attached raw, renamed to the speaker: "<Name>.<original extension>"
   var photo = decodeImage(data.photo_b64, photoMime(data.photo_type, data.photo_name), s.name + photoExt(data.photo_type, data.photo_name));
-  if (photo === 'too large') return respond({ ok: false, error: 'image too large' });
-  var attachments = photo ? [photo] : [];
+  var photo2 = s.name2 ? decodeImage(data.photo2_b64, photoMime(data.photo2_type, data.photo2_name), s.name2 + photoExt(data.photo2_type, data.photo2_name)) : null;
+  if (photo === 'too large' || photo2 === 'too large') return respond({ ok: false, error: 'image too large' });
+  var attachments = [photo, photo2].filter(function (b) { return b; });
 
   var match = matchOutreach(s.outreach);
   var from = GmailApp.getAliases().indexOf(brand.from) !== -1 ? brand.from : Session.getEffectiveUser().getEmail();
@@ -85,7 +86,7 @@ function doPost(e) {
   }
   if (!dailyBudget()) return respond({ ok: false, error: 'too many today' });
 
-  var options = { name: SENDER_NAME, replyTo: s.email, htmlBody: mail.html };
+  var options = { name: SENDER_NAME, replyTo: s.name2 ? s.email + ',' + s.email2 : s.email, htmlBody: mail.html };
   if (cc.length) options.cc = cc.join(',');
   if (attachments.length) options.attachments = attachments;
   if (from === brand.from) options.from = brand.from;
@@ -157,11 +158,15 @@ function matchOutreach(text) {
 
 function composeSubmission(s, ev, match, brand) {
   var via = match.person ? match.person.name : (s.outreach ? s.outreach + ' (not matched)' : 'unknown');
-  var subject = s.name + ' - Fast Track - ' + ev.event_name;
+  var subject = s.name + (s.name2 ? ' & ' + s.name2 : '') + ' - Fast Track - ' + ev.event_name;
   var rows = [
     ['Invited by', via], ['Name', s.name], ['Email', s.email], ['Organization', s.company], ['LinkedIn', s.linkedin],
     ['Talk Title', s.title], ['Talk Abstract', s.abstract], ['Bio', s.bio]
   ];
+  if (s.name2) {
+    rows = rows.concat([['Co-speaker', s.name2], ['Co-speaker email', s.email2], ['Co-speaker organization', s.company2],
+                        ['Co-speaker LinkedIn', s.linkedin2], ['Co-speaker bio', s.bio2]]);
+  }
 
   var text =
     'Fast track - ' + ev.event_name + '\n\n' +
@@ -173,8 +178,8 @@ function composeSubmission(s, ev, match, brand) {
     '<h2 style="display:inline-block;background:' + accent + ';color:#fff;font-size:20px;margin:0 0 22px;padding:6px 12px;border-radius:4px">Fast track - ' + esc(ev.event_name) + '</h2>' +
     '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:640px">' +
     rows.map(function (r) {
-      var v = r[0] === 'Email' ? '<a href="mailto:' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
-            : r[0] === 'LinkedIn' ? '<a href="' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
+      var v = /email$/i.test(r[0]) ? '<a href="mailto:' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
+            : /LinkedIn$/.test(r[0]) ? '<a href="' + esc(r[1]) + '">' + esc(r[1]) + '</a>'
             : esc(r[1]).replace(/\n/g, '<br>');
       var labelColor = accent;
       return '<tr><td style="color:' + labelColor + ';font-weight:bold;padding:4px 18px 4px 0;vertical-align:top;white-space:nowrap">' + r[0] + '</td>' +
@@ -213,8 +218,19 @@ function normalizeSubmission(d) {
     abstract: cleanMultiline(d.abstract, LIMITS.abstract),
     bio:      cleanMultiline(d.bio, LIMITS.bio),
     consent:  d.consent === true || d.consent === 'yes',
+    name2:    clean(d.name2, LIMITS.name).replace(/[\\\/:*?"<>|]/g, ''),
+    company2: clean(d.company2, LIMITS.company),
+    email2:   clean(d.email2, LIMITS.email).toLowerCase(),
+    linkedin2: clean(d.linkedin2, LIMITS.linkedin),
+    bio2:     cleanMultiline(d.bio2, LIMITS.bio),
     errors:   []
   };
+  if (s.name2) {                                       // optional co-speaker: once named, the rest is required
+    if (!s.company2) s.errors.push('company2');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.email2)) s.errors.push('email2');
+    if (!/^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(s.linkedin2)) s.errors.push('linkedin2');
+    if (!s.bio2) s.errors.push('bio2');
+  }
   if (!s.consent) s.errors.push('consent');     // "I agree to share all the information above with the organizer"
   if (!s.outreach) s.errors.push('outreach');
   if (!s.name) s.errors.push('name');
