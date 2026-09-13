@@ -42,6 +42,31 @@
     .foot { color: #999; font-size: .8rem; margin-top: 26px; }
     .legend-note { color: #888; font-style: italic; }
     .legend-note::before { display: none; }
+    .issues-link { color: #b25a00; text-decoration: none; }
+    .issues-link:hover { text-decoration: underline; }
+    .checks { margin-top: 34px; }
+    .checks h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
+    .checks .sub { margin-bottom: 14px; }
+    .check { background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); margin-bottom: 12px; overflow: hidden; }
+    .check-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; }
+    .check-head a { color: #111; font-weight: 600; text-decoration: none; font-size: .95rem; }
+    .check-head a:hover { color: var(--accent); }
+    .check-head .spacer { flex: 1; }
+    .count { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .74rem; font-weight: 700; color: #fff; white-space: nowrap; }
+    .count.err { background: var(--critical); }
+    .count.warn { background: #e0891a; }
+    .count.ok { background: var(--good); }
+    .check.clean .check-head { border-bottom: none; }
+    .check ul { list-style: none; margin: 0; padding: 6px 0; }
+    .check li { display: grid; grid-template-columns: 12px minmax(120px, 220px) 1fr; gap: 10px; align-items: baseline; padding: 6px 16px; font-size: .86rem; border-bottom: 1px solid #f7f7f7; }
+    .check li:last-child { border-bottom: none; }
+    .check li i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; transform: translateY(1px); }
+    .check li.error i { background: var(--critical); }
+    .check li.warn i { background: #e0891a; }
+    .check li .where { color: #777; font-size: .8rem; word-break: break-word; text-decoration: none; border-bottom: 1px dotted #bbb; }
+    .check li .where:hover { color: var(--accent); border-bottom-color: var(--accent); }
+    .check li .more { color: #999; font-style: italic; grid-column: 2 / -1; }
+    @media (max-width: 720px) { .check li { grid-template-columns: 12px 1fr; } .check li .where { grid-column: 2; } .check li span:last-child { grid-column: 2; } }
     details.ladder { margin-top: 18px; font-size: .85rem; color: #555; }
     details.ladder summary { cursor: pointer; color: #666; }
     details.ladder table { margin-top: 0; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; overflow: hidden; font-size: .82rem; }
@@ -93,7 +118,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small>October 1, 2026 · in 18 days · active</small></td>
+          <td class="ev"><a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small>October 1, 2026 · in 18 days · active · <a class="issues-link" href="#check-2026-san-francisco-q4">3 issues</a></small></td>
           <td class="num hide">2</td>
           <td class="num"><strong>25</strong> / 24</td>
           <td>
@@ -111,7 +136,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small>October 14, 2026 · in 31 days · before</small></td>
+          <td class="ev"><a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small>October 14, 2026 · in 31 days · before · <a class="issues-link" href="#check-2026-austin-q4">4 issues</a></small></td>
           <td class="num hide">1</td>
           <td class="num"><strong>10</strong> / 12</td>
           <td>
@@ -129,7 +154,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small>October 29, 2026 · in 46 days · before</small></td>
+          <td class="ev"><a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small>October 29, 2026 · in 46 days · before · <a class="issues-link" href="#check-2026-nyc-q4">2 issues</a></small></td>
           <td class="num hide">1</td>
           <td class="num"><strong>10</strong> / 12</td>
           <td>
@@ -147,7 +172,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small>November 26, 2026 · in 74 days · before</small></td>
+          <td class="ev"><a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small>November 26, 2026 · in 74 days · before · <a class="issues-link" href="#check-2026-london-q4">2 issues</a></small></td>
           <td class="num hide">3</td>
           <td class="num"><strong>12</strong> / 36</td>
           <td>
@@ -165,7 +190,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small>December 5, 2026 · in 83 days · before</small></td>
+          <td class="ev"><a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small>December 5, 2026 · in 83 days · before · <a class="issues-link" href="#check-2026-montevideo-q4">3 issues</a></small></td>
           <td class="num hide">2</td>
           <td class="num"><strong>7</strong> / 24</td>
           <td>
@@ -200,10 +225,112 @@
     </div></div>
   </details>
 
+  
+  <section class="checks">
+    <h2>Data checks</h2>
+    <div class="sub">Problems found in each event's repo data at build time: confirmed / keynote rows of talks.csv, headshots in speakers/, sponsor logos and links. Red is broken on the live site, orange is worth a look. Each line links to the exact talk page, sponsors section or file to fix.</div>
+    
+    <div class="check" id="check-2026-san-francisco-q4">
+      <div class="check-head">
+        <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a>
+        <span class="spacer"></span>
+        <span class="count err">1 error</span>
+        <span class="count warn">2 warnings</span>
+        
+      </div>
+      
+      <ul>
+        <li class="error"><i></i><a class="where" href="/2026-san-francisco-q4/Pranav_Saji_Symosis_Security_Your_Agents_Tools_Are_the_Attack_Surface.html">row 22 · Pranav Saji</a><span>linkedin is not a LinkedIn URL: linkedin.com/in/pranav-saji</span></li>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-san-francisco-q4/_db/talks.csv">talks.csv header</a><span>missing columns: YouTube</span></li>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-san-francisco-q4/_db/talks.csv">talks.csv header</a><span>unexpected columns: YouTubel</span></li>
+        
+        
+      </ul>
+      
+    </div>
+    
+    <div class="check" id="check-2026-austin-q4">
+      <div class="check-head">
+        <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a>
+        <span class="spacer"></span>
+        <span class="count err">1 error</span>
+        <span class="count warn">3 warnings</span>
+        
+      </div>
+      
+      <ul>
+        <li class="error"><i></i><a class="where" href="/2026-austin-q4/Felix_Njeh_Nelix_Your_AI_Passed_the_Demo_But_Did_It_Pass_Validation.html">row 7 · Felix Njeh</a><span>linkedin is not a LinkedIn URL: linkedin.com/in/fnjeh</span></li>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-austin-q4/metadata.yml">metadata.yml</a><span>tracks: 1 but 2 rooms listed</span></li>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-austin-q4/_db/talks.csv">talks.csv header</a><span>missing columns: YouTube</span></li>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-austin-q4/_db/talks.csv">talks.csv header</a><span>unexpected columns: YouTubel</span></li>
+        
+        
+      </ul>
+      
+    </div>
+    
+    <div class="check" id="check-2026-nyc-q4">
+      <div class="check-head">
+        <a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a>
+        <span class="spacer"></span>
+        
+        <span class="count warn">2 warnings</span>
+        
+      </div>
+      
+      <ul>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-nyc-q4/_db/talks.csv">talks.csv header</a><span>missing columns: YouTube</span></li>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-nyc-q4/_db/talks.csv">talks.csv header</a><span>unexpected columns: YouTubel</span></li>
+        
+        
+      </ul>
+      
+    </div>
+    
+    <div class="check" id="check-2026-london-q4">
+      <div class="check-head">
+        <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a>
+        <span class="spacer"></span>
+        
+        <span class="count warn">2 warnings</span>
+        
+      </div>
+      
+      <ul>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-london-q4/_db/talks.csv">talks.csv header</a><span>missing columns: YouTube</span></li>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-london-q4/_db/talks.csv">talks.csv header</a><span>unexpected columns: YouTubel</span></li>
+        
+        
+      </ul>
+      
+    </div>
+    
+    <div class="check" id="check-2026-montevideo-q4">
+      <div class="check-head">
+        <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a>
+        <span class="spacer"></span>
+        
+        <span class="count warn">3 warnings</span>
+        
+      </div>
+      
+      <ul>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-montevideo-q4/_db/talks.csv">talks.csv header</a><span>missing columns: YouTube</span></li>
+        <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-montevideo-q4/_db/talks.csv">talks.csv header</a><span>unexpected columns: YouTubel</span></li>
+        <li class="warn"><i></i><a class="where" href="/2026-montevideo-q4/Thalita_Regina_Terpilauskas_de_Sa_Riverstone_Insights__Iowa_AI_Isnt_MagicBut_It_Can_Deliver_Remarkab.html">row 2 · Thalita Regina Terpilauskas de Sa</a><span>name looks like a phrase, not a person: 'Thalita Regina Terpilauskas de Sa'</span></li>
+        
+        
+      </ul>
+      
+    </div>
+    
+  </section>
+  
+
   <div class="sisters">
     <a href="https://sreday.com/status/" style="--c: #713660">SREday status</a><a href="https://platformday.com/status/" style="--c: #E2971D">PLATFORMday status</a>
   </div>
-  <div class="foot">Generated 2026-09-13 22:04 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-13 22:05 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {
