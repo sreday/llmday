@@ -67,6 +67,10 @@
     .check li .where:hover { color: var(--accent); border-bottom-color: var(--accent); }
     .check li .more { color: #999; font-style: italic; grid-column: 2 / -1; }
     @media (max-width: 720px) { .check li { grid-template-columns: 12px 1fr; } .check li .where { grid-column: 2; } .check li span:last-child { grid-column: 2; } }
+    details.past { margin-top: 18px; }
+    details.past summary { cursor: pointer; color: #666; font-size: .9rem; margin-bottom: 12px; }
+    details.past summary::marker { color: var(--accent); }
+    details.past .check-head small { color: #999; font-size: .8rem; margin-left: 4px; }
     details.ladder { margin-top: 18px; font-size: .85rem; color: #555; }
     details.ladder summary { cursor: pointer; color: #666; }
     details.ladder table { margin-top: 0; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; overflow: hidden; font-size: .82rem; }
@@ -317,13 +321,91 @@
       
     </div>
     
+    
+    <details class="past">
+      <summary>Past events since 2025: 5 of 9 with issues</summary>
+      
+      <div class="check" id="check-2026-lisbon-q2">
+        <div class="check-head">
+          <a href="/2026-lisbon-q2/">LLMday Lisbon 2026 Q2</a><small>June 23, 2026</small>
+          <span class="spacer"></span>
+          <span class="count err">1 error</span>
+          
+        </div>
+        <ul>
+          <li class="error"><i></i><a class="where" href="/2026-lisbon-q2/Joao_Freitas_PagerDuty_Introduction__meet__greet.html">row 2 · Joao Freitas</a><span>empty abstract</span></li>
+          
+          
+        </ul>
+      </div>
+      
+      <div class="check" id="check-2026-london-q2">
+        <div class="check-head">
+          <a href="/2026-london-q2/">LLMday London 2026 Q2</a><small>May 28, 2026</small>
+          <span class="spacer"></span>
+          <span class="count err">2 errors</span>
+          
+        </div>
+        <ul>
+          <li class="error"><i></i><a class="where" href="/2026-london-q2/Josh_Lee_Altinity_Keynote_Designing_Data_Systems_That_Keep_Up_with_AI.html">row 2 · Josh Lee</a><span>empty abstract</span></li>
+          <li class="error"><i></i><a class="where" href="/2026-london-q2/Filipe_Gracio_Google_Sovereign_AI_discussing_design_choices_and_control.html">row 18 · Filipe Gracio</a><span>empty abstract</span></li>
+          
+          
+        </ul>
+      </div>
+      
+      <div class="check" id="check-2026-austin-q2">
+        <div class="check-head">
+          <a href="/2026-austin-q2/">LLMday Austin 2026 Q2</a><small>May 12, 2026</small>
+          <span class="spacer"></span>
+          
+          <span class="count warn">2 warnings</span>
+        </div>
+        <ul>
+          <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-austin-q2/_db/talks.csv">talks.csv header</a><span>missing columns: YouTube</span></li>
+          <li class="warn"><i></i><a class="where" href="https://github.com/sreday/llmday/blob/main/2026-austin-q2/_db/talks.csv">talks.csv header</a><span>unexpected columns: c</span></li>
+          
+          
+        </ul>
+      </div>
+      
+      <div class="check" id="check-2026-san-francisco-q2">
+        <div class="check-head">
+          <a href="/2026-san-francisco-q2/">LLMday San Francisco 2026 Q2</a><small>April 16, 2026</small>
+          <span class="spacer"></span>
+          <span class="count err">1 error</span>
+          
+        </div>
+        <ul>
+          <li class="error"><i></i><a class="where" href="/2026-san-francisco-q2/Dreema_Patel_Adobe_AI_Powered_Developer_Productivity_in_Enterprise_LLM_Driven_Engineering.html">row 15 · Dreema Patel</a><span>linkedin is not a LinkedIn URL: https://c910d6efd32c57bc92891a42dafb76eb.eu-west-1.resend-cl</span></li>
+          
+          
+        </ul>
+      </div>
+      
+      <div class="check" id="check-2026-warsaw-q1">
+        <div class="check-head">
+          <a href="/2026-warsaw-q1/">LLMday Warsaw 2026 Q1</a><small>February 12, 2026</small>
+          <span class="spacer"></span>
+          
+          <span class="count warn">1 warning</span>
+        </div>
+        <ul>
+          <li class="warn"><i></i><a class="where" href="/2026-warsaw-q1/Piotr_Migdal__Przemyslaw_Hejman_Quesma_1h_Workshop_Handson_AI_agent_evaluation_building_benchmarks_w.html">row 19 · Piotr Migdal & Przemyslaw Hejman</a><span>same title as row 18</span></li>
+          
+          
+        </ul>
+      </div>
+      
+    </details>
+    
   </section>
   
 
   <div class="sisters">
     <a href="https://sreday.com/status/" style="--c: #713660">SREday status</a><a href="https://platformday.com/status/" style="--c: #E2971D">PLATFORMday status</a>
   </div>
-  <div class="foot">Generated 2026-09-13 22:15 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-13 22:32 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {
