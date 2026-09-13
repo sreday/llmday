@@ -123,8 +123,8 @@ with every speaker in **Bcc**, and files the thread in the Inbox unread under th
 Every non-frozen event also gets `/<event>/fasttrack/`: an invite-only submission form for speakers we already
 talked to (the bypass of the public cfp.ninja CFP). Fields: who they talked to on our team, name, company,
 email, LinkedIn, talk title, abstract (markdown), short bio (markdown), headshot (optional).
-The browser turns the headshot into a site-ready **PNG named `<Name>.png`** (max 400px, proportions kept, no crop; plus a resized JPG) and
-posts everything as JSON to `fasttrack_form_url`.
+The headshot is uploaded untouched and arrives attached as **`<Name>.<original extension>`** (10 MB max); everything is
+posted as JSON to `fasttrack_form_url`.
 
 - Template `_event_template/_templates/fasttrack.html` (standalone, noindex, not in the sitemap, identical in all
   three repos); facts come from `fasttrack_event` built in `_event_template/_build/generate.py` (subset of the

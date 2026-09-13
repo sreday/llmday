@@ -8,8 +8,8 @@
  * same alias, Cc only the outreach route when the team member is recognised (see TEAM), Reply-To the
  * speaker. Subject "<Name> - Fast track proposal - <Event>"; body = red heading + a Name/Email/
  * Organization/LinkedIn/Talk Title/Talk Abstract/Bio table (Marek's layout, 2026-09-13). The headshot, when
- * given, is attached twice (site-ready PNG named "<Name>.png", max 400px, not cropped + resized JPG) with no
- * mention in the body. The thread is filed in the Inbox unread + important under "Fast track".
+ * given, is attached RAW (the untouched upload) renamed to "<Name>.<original extension>", with no mention in
+ * the body. The thread is filed in the Inbox unread + important under "Fast track".
  *
  * Abuse guards (no passphrase - speakers use this): honeypot, daily cap (FASTTRACK_DAILY property),
  * size/length caps, LinkedIn host check, event URL pinned to the brand domain.
@@ -30,7 +30,7 @@ var BRANDS = {
 var SENDER_NAME = 'Mark Pawlikowski';
 var LEAD_LABEL = 'Fast track';
 var DAILY_MAX = 30;                       // submissions per day
-var MAX_IMAGE_BYTES = 5 * 1024 * 1024;    // per attachment, after the browser resized it
+var MAX_IMAGE_BYTES = 10 * 1024 * 1024;   // the raw upload, same cap as the page
 var LIMITS = { name: 80, company: 120, jobtitle: 120, email: 254, linkedin: 300, title: 160, abstract: 8000, bio: 4000, outreach: 80 };
 
 // Who did the speaker talk to? Aliases are matched after normalisation (lowercase, no diacritics,
@@ -49,7 +49,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 4,
+  return respond({ ok: true, service: 'fasttrack', version: 5,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -68,10 +68,10 @@ function doPost(e) {
   var s = normalizeSubmission(data);
   if (s.errors.length) return respond({ ok: false, error: 'invalid', fields: s.errors });
 
-  var png = decodeImage(data.photo_png_b64, 'image/png', s.name + '.png');
-  var jpg = decodeImage(data.photo_jpg_b64, 'image/jpeg', s.name + ' - original.jpg');
-  if (png === 'too large' || jpg === 'too large') return respond({ ok: false, error: 'image too large' });
-  var attachments = [png, jpg].filter(function (b) { return b && b !== 'too large'; });   // headshot is optional
+  // headshot is optional; attached raw, renamed to the speaker: "<Name>.<original extension>"
+  var photo = decodeImage(data.photo_b64, photoMime(data.photo_type, data.photo_name), s.name + photoExt(data.photo_type, data.photo_name));
+  if (photo === 'too large') return respond({ ok: false, error: 'image too large' });
+  var attachments = photo ? [photo] : [];
 
   var match = matchOutreach(s.outreach);
   var from = GmailApp.getAliases().indexOf(brand.from) !== -1 ? brand.from : Session.getEffectiveUser().getEmail();
@@ -239,6 +239,23 @@ function normalizeEvent(raw, brand) {
     event_name: clean(raw.event_name, 80) || (clean(raw.brand_name, 40) + ' ' + clean(raw.city, 60)).trim() || brand.site,
     event_url:  okUrl ? url.replace(/\/?$/, '/') : site + (slug ? slug + '/' : '')
   };
+}
+
+var IMAGE_TYPES = { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp', 'image/heic': '.heic', 'image/heif': '.heif', 'image/gif': '.gif', 'image/tiff': '.tif' };
+
+// extension for the renamed attachment: from the mime type, else from the original file name, else .jpg
+function photoExt(type, name) {
+  type = String(type || '').toLowerCase();
+  if (IMAGE_TYPES[type]) return IMAGE_TYPES[type];
+  var m = /\.([a-z0-9]{2,5})$/i.exec(String(name || ''));
+  return m ? '.' + m[1].toLowerCase().replace(/^jpeg$/, 'jpg') : '.jpg';
+}
+function photoMime(type, name) {
+  type = String(type || '').toLowerCase();
+  if (IMAGE_TYPES[type]) return type;
+  var ext = photoExt(type, name);
+  for (var k in IMAGE_TYPES) if (IMAGE_TYPES[k] === ext) return k;
+  return 'application/octet-stream';
 }
 
 // base64 -> Blob; returns null when empty, 'too large' when over the cap
