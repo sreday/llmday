@@ -161,6 +161,9 @@
     </div></div>
   </details>
 
+  <div class="sisters">
+    {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}
+  </div>
   {% if status_rows %}
   <section class="checks">
     <h2>Data checks</h2>
@@ -206,9 +209,6 @@
   </section>
   {% endif %}
 
-  <div class="sisters">
-    {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}
-  </div>
   <div class="foot">Generated {{ status_generated }} at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
