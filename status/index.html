@@ -31,6 +31,8 @@
     .bar > b { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,.25); }
     .pct { font-size: .82rem; color: #555; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
+    td.hours { white-space: nowrap; font-variant-numeric: tabular-nums; }
+    td.hours.na { color: #aaa; }
     .empty { padding: 30px; color: #777; text-align: center; }
     .sisters { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
     .sisters a { display: inline-flex; align-items: center; border-radius: 999px; padding: 11px 24px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .95rem; color: #fff; text-decoration: none; background: var(--c); transition: filter .15s; }
@@ -69,6 +71,7 @@
           <th class="num">Talks</th>
           <th>Progress</th>
           <th>Health</th>
+          <th class="hours">Current start / end</th>
           <th class="num">Sponsors</th>
         </tr>
       </thead>
@@ -88,6 +91,7 @@
             <div class="pct">104% · 1 over</div>
           </td>
           <td><span class="pill nailed" style="--c: var(--nailed)">Nailed it!</span></td>
+          <td class="hours">9AM - 5:30PM</td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -105,6 +109,7 @@
             <div class="pct">83%</div>
           </td>
           <td><span class="pill good" style="--c: var(--good)">Good</span></td>
+          <td class="hours na">N/A</td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -122,6 +127,7 @@
             <div class="pct">83%</div>
           </td>
           <td><span class="pill good" style="--c: var(--good)">Good</span></td>
+          <td class="hours na">N/A</td>
           <td class="num"><strong>2</strong></td>
         </tr>
       
@@ -139,6 +145,7 @@
             <div class="pct">28%</div>
           </td>
           <td><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
+          <td class="hours na">N/A</td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -156,6 +163,7 @@
             <div class="pct">29%</div>
           </td>
           <td><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
+          <td class="hours na">N/A</td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -181,7 +189,7 @@
   <div class="sisters">
     <a href="https://sreday.com/status/" style="--c: #713660">SREday status</a><a href="https://platformday.com/status/" style="--c: #E2971D">PLATFORMday status</a>
   </div>
-  <div class="foot">Generated 2026-09-13 17:44 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-13 17:49 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 </body>
 </html>
