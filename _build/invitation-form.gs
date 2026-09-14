@@ -48,7 +48,7 @@ var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock 
 var MAX_COMPANIES = 10;                              // "Speakers come from A, B, ... and others"
 var MAX_TOPICS = 4;                                  // "Most talks so far are about a, b, c, and d"
 var MAX_SPONSORS = 6;
-var VERSION = 6;   // v5: talk-info line, fit bullet, 'Finally' paragraph, uniform inline fonts; v6: closing lines reworded
+var VERSION = 7;   // v6: closing lines; v7: legibility pass (Marek 2026-09-14), sponsorship page link, subject 'Invitation to speak - <event> - <date>'
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -119,7 +119,7 @@ function fileThread(message) {
 
 // ---- the letter -------------------------------------------------------------
 // Same tiny markup as onboarding-form.gs: *bold*, [label](url), "- " bullets, "" = blank line.
-// Structure and wording: Marek, 2026-09-14 evening (edited from the first real send). Do not re-word without asking.
+// Structure and wording: Marek, 2026-09-14 (edited from real sends, plus the legibility pass). Do not re-word without asking.
 
 function composeInvitation(ev, brand, firstName, hasCc) {
   var talk = Math.max(ev.slot_minutes - 5, 5);
@@ -128,68 +128,70 @@ function composeInvitation(ev, brand, firstName, hasCc) {
     '',
     "We'd love to invite you to speak at [" + ev.event_name + '](' + ev.event_url + ') on ' + ev.date + ' at ' + ev.venue_name + ', ' + ev.city + '.',
     '',
-    hasCc ? "I'm copying your team so they have all the details too." : 'Please feel free to pass this on to your team.',
-    ''
+    hasCc ? 'Copying your team so everyone has the details.' : 'Please feel free to pass this on to your team.',
+    '',
+    '*About the event*'
   ];
-  lines.push('*About the event*');
   lines = lines.concat(aboutBullets(ev, brand));
   lines = lines.concat([
     '',
     '*Please send us your talk info here:* [' + ev.fasttrack_url + '](' + ev.fasttrack_url + ')',
     '',
     '*Talk format*',
-    "- The talk will work best if it's technical or experience-based, vendor pitches are not the best fit.",
     '- ' + ev.slot_minutes + ' minutes on stage, in person (' + talk + ' min talk + 5 min Q&A)',
-    '- We record it and put it on our YouTube channel, free for anyone to watch',
+    '- Technical or experience-based talks work best; vendor pitches are not a good fit.',
+    '- Talks are recorded and published on our YouTube channel after the conference',
     '',
     '*FAQ*',
-    '- Speaking is free. No fee, no sponsorship strings attached.',
+    '- Speaking is free, with no sponsorship strings attached.',
     '- Your company name will appear on the speaker page and in the schedule.',
     '- Unfortunately, we do not cover speaker fee, travel, or accommodation.',
     ''
   ]);
   if (hasCc) {
-    lines.push('And since your team is on this email: we still have sponsorship opportunities available for ' + ev.event_name +
-               ", in case that's of interest. The options are at [" + ev.sponsor_page_url + '](' + ev.sponsor_page_url + ") and I'm happy to walk through them on a call.");
-    lines.push('');
+    lines.push('Since your team is on this email: sponsorship slots for ' + ev.event_name + ' are still open. Options: [' + ev.sponsor_page_url + '](' + ev.sponsor_page_url + '). ' +
+               'Happy to walk you through them on a call: [' + ev.calendly_url + '](' + ev.calendly_url + ')');
+  } else {
+    lines.push('If your team needs anything else from us, just reply here or grab a slot: [' + ev.calendly_url + '](' + ev.calendly_url + ')');
   }
   lines = lines.concat([
-    'If your team needs anything else from us, just reply here or grab a slot: [' + ev.calendly_url + '](' + ev.calendly_url + ')',
     '',
-    "Finally, this invitation means an extremely strong consideration for a talk delivered by you, but we'll still need to review your talk before accepting.",
+    'One caveat: this invitation is a strong signal, but we still review every talk before confirming it.',
     '',
-    'Would be great to have you on the lineup!',
+    "We're excited to have you,",
     'Mark'
   ]);
   return {
-    subject: "You're invited to speak at " + ev.event_name + ' - ' + ev.date,
+    subject: 'Invitation to speak - ' + ev.event_name + ' - ' + ev.date.replace(/,/g, ''),
     text: renderText(lines),
     html: renderHtml(lines)
   };
 }
 
 // The adaptive "About the event" bullets. Tier comes from generate.py (confirmed talks vs 12 slots per track):
-//   strong   (50 % +)  talks / tracks / attendees, speakers + top topics, crowd, sponsors, previous edition
-//   building (25-49 %) "N confirmed so far, around T planned", speakers + topic scope, crowd, sponsors, previous edition
-//   early    (< 25 %)  "N confirmed so far, around T planned", topic scope, crowd, sponsors, previous edition
+//   strong   (50 % +)  "N talks confirmed, T tracks, ~A attendees expected", speakers + top topics, crowd, sponsors, previous edition
+//   building (25-49 %) "N talks confirmed so far, P planned, ...", speakers + topic scope, crowd, sponsors, previous edition
+//   early    (< 25 %)  "N talks confirmed so far, P planned, ...", topic scope, crowd, sponsors, previous edition
 function aboutBullets(ev, brand) {
+  var talks = ev.confirmed + ' talk' + (ev.confirmed === 1 ? '' : 's');
   var tracks = ev.tracks + ' track' + (ev.tracks === 1 ? '' : 's');
-  var out = ['- ' + ev.event_name + ' is a single day, in person event' + (ev.host_company ? ' hosted by ' + ev.host_company : '')];
+  var people = '~' + ev.attendees + ' attendees expected';
+  var out = ['- ' + ev.event_name + ' is a single-day, in-person event' + (ev.host_company ? ' hosted by ' + ev.host_company : '')];
   if (ev.tier === 'strong') {
-    out.push('- ' + ev.confirmed + ' confirmed talks / ' + tracks + ' / ' + ev.attendees + ' expected attendees');
+    out.push('- ' + talks + ' confirmed, ' + tracks + ', ' + people);
     var s = '';
     if (ev.companies.length) s += 'Speakers come from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) + '.';
     if (ev.topics.length) s += (s ? ' ' : '') + 'Most talks so far are about ' + topicsPhrase(ev.topics) + '.';
     if (s) out.push('- ' + s);
   } else {
-    out.push('- ' + ev.confirmed + ' confirmed talk' + (ev.confirmed === 1 ? '' : 's') + ' so far, around ' + ev.talks_target + ' planned / ' + tracks + ' / ' + ev.attendees + ' expected attendees');
+    out.push('- ' + talks + ' confirmed so far, ' + ev.talks_target + ' planned, ' + tracks + ', ' + people);
     if (ev.tier === 'building' && ev.companies.length) {
       out.push('- Speakers so far come from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) + '. Topics span ' + brand.scope + '.');
     } else {
       out.push('- Topics: ' + brand.scope);
     }
   }
-  out.push('- Crowd: ' + brand.crowd + '.');
+  out.push('- Crowd: practitioner-heavy, ' + brand.crowd + '.');
   if (ev.sponsors.length) out.push('- Confirmed sponsors: ' + listOf(ev.sponsors.slice(0, MAX_SPONSORS), ev.sponsors.length > MAX_SPONSORS) + '.');
   if (ev.previous && ev.previous.url) {
     out.push('- ' + (ev.previous.same_city ? 'Previous edition' : 'Our most recent event') + ', for reference: [' + ev.previous.event_name + '](' + ev.previous.url + ')' +
@@ -278,7 +280,7 @@ function normalizeEvent(raw, brand) {
     date:             clean(raw.date, 60) || 'the conference day',
     event_url:        eventUrl,
     fasttrack_url:    okUrl(raw.fasttrack_url, eventUrl + 'fasttrack/'),
-    sponsor_page_url: okUrl(raw.sponsor_page_url, eventUrl + '#sponsors'),
+    sponsor_page_url: okUrl(raw.sponsor_page_url, eventUrl + 'sponsorship.html'),
     venue_name:       clean(raw.venue_name, 120) || 'the venue',
     attendees:        parseInt(raw.attendees, 10) > 0 ? parseInt(raw.attendees, 10) : 100,
     youtube_url:      /^https:\/\/(www\.)?youtube\.com\//.test(String(raw.youtube_url || '')) ? clean(raw.youtube_url, 200) : 'https://www.youtube.com/@' + brand.site.replace(/\.com$/, ''),
@@ -397,7 +399,7 @@ function testInvitation() {
       brand: 'sreday', brand_name: 'SREday', slug: '2026-london-q3',
       event_name: 'SREday London 2026 Q3', city: 'London', date: 'September 24, 2026',
       event_url: 'https://www.sreday.com/2026-london-q3/', fasttrack_url: 'https://www.sreday.com/2026-london-q3/fasttrack/',
-      sponsor_page_url: 'https://www.sreday.com/2026-london-q3/#sponsors',
+      sponsor_page_url: 'https://www.sreday.com/2026-london-q3/sponsorship.html',
       venue_name: 'Everyman Canary Wharf', attendees: 150, youtube_url: 'https://www.youtube.com/@sreday',
       calendly_url: 'https://calendly.com/sreday/30min', slot_minutes: 30,
       tracks: 3, confirmed: 29, talks_target: 36, fill_pct: 81, tier: 'strong',
