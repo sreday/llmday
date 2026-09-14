@@ -197,6 +197,7 @@ print("Luma event %s is_free=%s" % (context.get("luma_evt") or "(none)", context
 # hero picture when the event has no card yet
 import os as _os
 _og_photo = None
+_og_home_meta = {}
 _og_home_meta_path = '../home/metadata.yml'
 if _os.path.exists(_og_home_meta_path):
     with open(_og_home_meta_path, encoding='utf-8') as _f:
@@ -207,6 +208,8 @@ if _os.path.exists(_og_home_meta_path):
     context.setdefault('onboarding_form_url', (_og_home_meta or {}).get('onboarding_form_url', ''))
     # speaker fast-track endpoint (hidden /fasttrack/ page; backend: _build/fasttrack-form.gs in llmday)
     context.setdefault('fasttrack_form_url', (_og_home_meta or {}).get('fasttrack_form_url', ''))
+    # speaker invitation letter endpoint (hidden /invitation/ page; backend: _build/invitation-form.gs in llmday)
+    context.setdefault('invitation_form_url', (_og_home_meta or {}).get('invitation_form_url', ''))
     _og_current_folder = _os.path.basename(_os.getcwd())
     for _he in (_og_home_meta.get('events') or []) + (_og_home_meta.get('events_past') or []):
         if _he.get('url', '').strip('./').rstrip('/') == _og_current_folder and _he.get('photo_url'):
@@ -1003,6 +1006,151 @@ for page in pages:
         if page != "index.html":
             SITEMAP_URLS.append((page.replace(".html",""), 0.75))
 
+# ── SPEAKER INVITATION: facts for the hidden /invitation/ page ──────────────
+# The page (invitation.html) posts this dict to the Apps Script (llmday/_build/invitation-form.gs),
+# which fills ONE "You're invited to speak" letter the speaker can forward to their marketing team.
+# The "About the event" paragraph adapts to how full the lineup is (tier), using the SAME data
+# as the About panel (about_companies, about_topics), the sponsorship page (_confirmed_sponsors)
+# and /status/ (confirmed talks vs 12 slots per track). Nothing here is opinion, only counts/names.
+context.setdefault('invitation_form_url', '')
+_INV_SLOTS_PER_TRACK = 12          # keep in sync with home/_build/generate.py _SLOTS_PER_TRACK
+import csv as _inv_csv
+from urllib.parse import urlparse as _inv_urlparse
+
+
+def _inv_confirmed(rows):
+    """talks.csv rows that count as confirmed on /status/ (status has 'confirmed' or 'keynote';
+    '_Registration & Networking'-style agenda rows skipped)."""
+    return [r for r in rows
+            if re.search(r'confirmed|keynote', str(r.get('status', '')), re.I)
+            and not str(r.get('name', '')).strip().startswith('_')]
+
+
+def _inv_companies(rows):
+    """About-panel rule: company_parts() drops job titles, universities skipped, deduped, alphabetical."""
+    out, seen = [], set()
+    for r in rows:
+        for org in company_parts(str(r.get('organization') or '')):
+            k = org.lower()
+            if 'university' in k or k in seen:
+                continue
+            seen.add(k)
+            out.append(org)
+    out.sort(key=lambda s: s.lower())
+    return out
+
+
+def _inv_host(url):
+    try:
+        return re.sub(r'^www\.', '', (_inv_urlparse(str(url or '')).netloc or '').lower())
+    except ValueError:
+        return ''
+
+
+def _inv_sponsor_names(sponsors):
+    """Display names for the event's confirmed sponsors: metadata `name:` when given, else the
+    home/_db/sponsors.csv row whose id equals the logo file stem, else the csv row with the same
+    website host (only when that host belongs to ONE row: harness.io is shared by Harness and Chaos
+    Carnival), else the logo file name title-cased."""
+    by_id, by_host, ambiguous = {}, {}, set()
+    _csv_path = '../home/_db/sponsors.csv'
+    if _os.path.exists(_csv_path):
+        with open(_csv_path, encoding='utf-8-sig', newline='') as _f:
+            for row in _inv_csv.DictReader(_f):
+                name = str(row.get('name') or '').strip()
+                if not name:
+                    continue
+                by_id.setdefault(str(row.get('id') or '').strip().lower(), name)
+                h = _inv_host(row.get('url'))
+                if h:
+                    ambiguous.add(h) if h in by_host else by_host.setdefault(h, name)
+    out, seen = [], set()
+    for s in sponsors:
+        stem = re.sub(r'\.[a-z0-9]+$', '', str(s.get('logo') or '').strip(), flags=re.I)
+        host = _inv_host(s.get('url'))
+        name = (str(s.get('name') or '').strip() or by_id.get(stem.lower())
+                or (by_host.get(host) if host not in ambiguous else None))
+        if not name:
+            name = re.sub(r'[-_]+', ' ', stem).strip().title()
+        if name and name.lower() not in seen:
+            seen.add(name.lower())
+            out.append(name)
+    return out
+
+
+def _inv_previous_edition(home_meta, city):
+    """Facts about the most recent PAST event in the same city (fallback: the brand's most recent past
+    event anywhere). Only 2025+ folders are read (the sreday 2022-2024 archives stay untouched)."""
+    best_city, best_any = None, None
+    for he in (home_meta.get('events_past') or []):
+        folder = str(he.get('url', '')).strip('./').rstrip('/')
+        if not re.match(r'^20(2[5-9]|[3-9]\d)-', folder) or folder == _ob_slug:
+            continue
+        mpath = _os.path.join('..', folder, 'metadata.yml')
+        if not _os.path.exists(mpath):
+            continue
+        try:
+            with open(mpath, encoding='utf-8') as _f:
+                m = yaml.load(_f, Loader=yaml.FullLoader) or {}
+        except Exception as _e:                                   # noqa: BLE001 - a broken past folder must not break this build
+            print("Invitation: cannot read %s (%s)" % (mpath, _e))
+            continue
+        start = str(m.get('start_time') or '')
+        cand = {'folder': folder, 'start': start, 'meta': m}
+        if not best_any or start > best_any['start']:
+            best_any = cand
+        if str(m.get('city_name') or '').strip().lower() == str(city or '').strip().lower():
+            if not best_city or start > best_city['start']:
+                best_city = cand
+    pick = best_city or best_any
+    if not pick:
+        return None
+    rows = []
+    tpath = _os.path.join('..', pick['folder'], '_db', 'talks.csv')
+    if _os.path.exists(tpath):
+        try:
+            rows = _inv_confirmed(read_csv(tpath))
+        except Exception as _e:                                   # noqa: BLE001
+            print("Invitation: cannot read %s (%s)" % (tpath, _e))
+    m = pick['meta']
+    return {
+        'event_name': _ob_event_name(pick['folder'], m.get('city_name'), context.get('brand_name', '')),
+        'date':       str(m.get('date_string') or ''),
+        'same_city':  pick is best_city,
+        'talks':      len(rows),
+        'companies':  _inv_companies(rows),
+    }
+
+
+_inv_rows = _inv_confirmed(talks_raw)
+_inv_tracks = int(context.get('tracks_display') or 1)
+_inv_target = _INV_SLOTS_PER_TRACK * _inv_tracks
+_inv_pct = int(round(100.0 * len(_inv_rows) / _inv_target)) if _inv_target else 0
+_inv_tier = 'strong' if _inv_pct >= 50 else ('building' if _inv_pct >= 25 else 'early')
+_inv_src = context['onboarding_event']
+context['invitation_event'] = {k: _inv_src[k] for k in ('brand', 'brand_name', 'slug', 'event_name', 'city', 'date', 'event_url',
+                                                        'venue_name', 'attendees', 'youtube_url', 'calendly_url', 'slot_minutes')}
+context['invitation_event'].update({
+    'fasttrack_url':    _inv_src['event_url'] + 'fasttrack/',
+    'sponsor_page_url': _inv_src['event_url'] + '#sponsors',
+    'tracks':           _inv_tracks,
+    'confirmed':        len(_inv_rows),
+    'talks_target':     _inv_target,
+    'fill_pct':         _inv_pct,
+    'tier':             _inv_tier,
+    'companies':        list(context.get('about_companies') or []),
+    'topics':           [{'name': t['category'], 'count': len(t['talks'])}
+                         for t in (context.get('about_topics') or []) if t.get('category') != '...and more'],
+    'sponsors':         _inv_sponsor_names(_confirmed_sponsors),
+    'previous':         _inv_previous_edition(_og_home_meta or {}, context.get('city_name')),
+})
+print("Invitation: %s | %d/%d talks (%d%%, %s) | %d companies | %d topics | sponsors: %s | previous: %s" % (
+    context['invitation_event']['event_name'], len(_inv_rows), _inv_target, _inv_pct, _inv_tier,
+    len(context['invitation_event']['companies']), len(context['invitation_event']['topics']),
+    ', '.join(context['invitation_event']['sponsors']) or '-',
+    (context['invitation_event']['previous'] or {}).get('event_name', '-')))
+# ── END SPEAKER INVITATION ──────────────────────────────────────────────────
+
 # HIDDEN PAGE: /<event>/onboarding/ (speaker onboarding form). Standalone template,
 # noindex, deliberately NOT appended to SITEMAP_URLS.
 _os.makedirs(BASE_FOLDER + "/onboarding", exist_ok=True)
@@ -1015,6 +1163,12 @@ _os.makedirs(BASE_FOLDER + "/fasttrack", exist_ok=True)
 with open(BASE_FOLDER + "/fasttrack/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("fasttrack.html").render(page="fasttrack.html", **context))
 print("Writing out fasttrack/index.html (hidden, not in sitemap)")
+
+# HIDDEN PAGE: /<event>/invitation/ (speaker invitation letter, "convince your boss"). Same rules as onboarding.
+_os.makedirs(BASE_FOLDER + "/invitation", exist_ok=True)
+with open(BASE_FOLDER + "/invitation/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("invitation.html").render(page="invitation.html", **context))
+print("Writing out invitation/index.html (hidden, not in sitemap)")
 
 # SITEMAP
 print(DIVIDER)
