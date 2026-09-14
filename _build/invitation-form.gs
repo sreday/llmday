@@ -48,7 +48,7 @@ var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock 
 var MAX_COMPANIES = 10;                              // "Speakers come from A, B, ... and others"
 var MAX_TOPICS = 4;                                  // "Most talks so far are about a, b, c, and d"
 var MAX_SPONSORS = 6;
-var VERSION = 1;
+var VERSION = 2;   // v2: "This edition is hosted by <company>." when generate.py detects a host sponsor
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -177,10 +177,11 @@ function composeInvitation(ev, brand, firstName, hasCc) {
 function aboutTheEvent(ev, brand) {
   var crowd = brand.crowd, scope = brand.scope;
   var tracks = ev.tracks + ' parallel track' + (ev.tracks === 1 ? '' : 's');
+  var hosted = ev.host_company ? ' This edition is hosted by ' + ev.host_company + '.' : '';
   var out = [];
   if (ev.tier === 'strong') {
     var p = ev.event_name + ' is a single day, in person, ' + ev.confirmed + ' confirmed talks across ' + tracks +
-            ' and around ' + ev.attendees + ' people in the room, ' + crowd + '.';
+            ' and around ' + ev.attendees + ' people in the room, ' + crowd + '.' + hosted;
     if (ev.companies.length) p += ' Speakers come from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) + '.';
     if (ev.topics.length) p += ' Most talks so far are about ' + topicsPhrase(ev.topics) + '.';
     out.push(p);
@@ -191,15 +192,16 @@ function aboutTheEvent(ev, brand) {
   if (ev.tier === 'building') {
     var b = ev.event_name + ' is a single day, in person, ' + tracks + ' and around ' + ev.talks_target + ' talks planned. ' +
             ev.confirmed + ' are confirmed so far' + (ev.companies.length ? ', from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) : '') + '. ' +
-            'Topics span ' + scope + ". We're planning for " + ev.attendees + ' people, ' + crowd + '.';
+            'Topics span ' + scope + ". We're planning for " + ev.attendees + ' people, ' + crowd + '.' + hosted;
     out.push(b);
   } else {
     out.push(ev.event_name + ' is a single day, in person, ' + tracks + ' and around ' + ev.talks_target + ' talks on ' + scope + '. ' +
-             "We're planning for " + ev.attendees + ' people, ' + crowd + ' from companies running things at scale.');
+             "We're planning for " + ev.attendees + ' people, ' + crowd + ' from companies running things at scale.' + hosted);
   }
   out.push('');
   if (ev.previous && ev.previous.talks > 0) {
-    out.push('The last one, ' + ev.previous.event_name + (ev.previous.date ? ' on ' + ev.previous.date : '') + ', had ' + ev.previous.talks + ' talks' +
+    // same city: "The last one, SREday NYC 2026 Q2 ..."; first edition in a city: "Our most recent event, SREday Hyderabad 2026 Q2 ..."
+    out.push((ev.previous.same_city ? 'The last one, ' : 'Our most recent event, ') + ev.previous.event_name + (ev.previous.date ? ' on ' + ev.previous.date : '') + ', had ' + ev.previous.talks + ' talks' +
              (ev.previous.companies.length ? ' from ' + listOf(ev.previous.companies.slice(0, MAX_COMPANIES), ev.previous.companies.length > MAX_COMPANIES) : '') +
              '. Recordings are at [' + ev.youtube_url + '](' + ev.youtube_url + ')');
   } else {
@@ -301,10 +303,12 @@ function normalizeEvent(raw, brand) {
                         return { name: clean(t && t.name, 60), count: parseInt(t && t.count, 10) || 0 };
                       }).filter(function (t) { return t.name && t.count > 0; }),
     sponsors:         names(raw.sponsors, 30, 60),
+    host_company:     clean(raw.host_company, 60),
     previous:         prev ? {
                         event_name: clean(prev.event_name, 80),
                         date:       clean(prev.date, 60),
                         talks:      parseInt(prev.talks, 10) > 0 ? parseInt(prev.talks, 10) : 0,
+                        same_city:  prev.same_city === true,
                         companies:  names(prev.companies, 80, 60)
                       } : null
   };

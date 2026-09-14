@@ -1071,7 +1071,8 @@ def _inv_sponsor_names(sponsors):
         name = (str(s.get('name') or '').strip() or by_id.get(stem.lower())
                 or (by_host.get(host) if host not in ambiguous else None))
         if not name:
-            name = re.sub(r'[-_]+', ' ', stem).strip().title()
+            name = re.sub(r'[-_]+', ' ', stem).strip()
+            name = name.upper() if len(name) <= 3 else name.title()    # ing.png -> ING, harness.png -> Harness
         if name and name.lower() not in seen:
             seen.add(name.lower())
             out.append(name)
@@ -1122,6 +1123,21 @@ def _inv_previous_edition(home_meta, city):
     }
 
 
+def _inv_host_company(sponsors):
+    """The sponsor hosting the event, when the venue / location string names it ("Datadog, New York",
+    "ING Cedar, Amsterdam"). Override with `invitation: host: "..."` in metadata.yml; '' = no host."""
+    _override = (context.get('invitation') or {}).get('host')
+    if _override is not None:
+        return str(_override).strip()
+    hay = ' '.join([str(context['onboarding_event'].get('venue_name') or ''), str(context.get('location_string') or '')]).lower()
+    for s in sponsors:
+        stem = re.sub(r'\.[a-z0-9]+$', '', str(s.get('logo') or '').strip(), flags=re.I).lower()
+        for cand in _inv_sponsor_names([s]) + ([stem] if len(stem) >= 3 else []):
+            if re.search(r'(?<![a-z0-9])' + re.escape(cand.lower()) + r'(?![a-z0-9])', hay):
+                return _inv_sponsor_names([s])[0]
+    return ''
+
+
 _inv_rows = _inv_confirmed(talks_raw)
 _inv_tracks = int(context.get('tracks_display') or 1)
 _inv_target = _INV_SLOTS_PER_TRACK * _inv_tracks
@@ -1142,12 +1158,13 @@ context['invitation_event'].update({
     'topics':           [{'name': t['category'], 'count': len(t['talks'])}
                          for t in (context.get('about_topics') or []) if t.get('category') != '...and more'],
     'sponsors':         _inv_sponsor_names(_confirmed_sponsors),
+    'host_company':     _inv_host_company(_confirmed_sponsors),
     'previous':         _inv_previous_edition(_og_home_meta or {}, context.get('city_name')),
 })
-print("Invitation: %s | %d/%d talks (%d%%, %s) | %d companies | %d topics | sponsors: %s | previous: %s" % (
+print("Invitation: %s | %d/%d talks (%d%%, %s) | %d companies | %d topics | sponsors: %s | host: %s | previous: %s" % (
     context['invitation_event']['event_name'], len(_inv_rows), _inv_target, _inv_pct, _inv_tier,
     len(context['invitation_event']['companies']), len(context['invitation_event']['topics']),
-    ', '.join(context['invitation_event']['sponsors']) or '-',
+    ', '.join(context['invitation_event']['sponsors']) or '-', context['invitation_event']['host_company'] or '-',
     (context['invitation_event']['previous'] or {}).get('event_name', '-')))
 # ── END SPEAKER INVITATION ──────────────────────────────────────────────────
 
