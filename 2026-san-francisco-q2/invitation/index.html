@@ -42,8 +42,12 @@
     .iv-chip.bad { border-color: #f0b4ae; background: #fdecea; color: var(--iv-danger); text-decoration: line-through; }
     .iv-tier { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: #fff; background: #9aa0a6; vertical-align: middle; }
     .iv-tier.strong { background: #2ecc40; } .iv-tier.building { background: #e6b400; } .iv-tier.early { background: #9aa0a6; }
-    .iv-status { font-size: .9rem; color: #555; margin-bottom: 18px; line-height: 1.6; }
-    .iv-status b { color: #222; }
+    .iv-status { margin-bottom: 22px; }
+    .iv-stats { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 12px 0 8px; }
+    .iv-stat b { display: block; font-family: 'Montserrat', sans-serif; font-size: 1.05rem; color: #222; line-height: 1.2; }
+    .iv-stat span { display: block; font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; color: #888; margin-top: 2px; }
+    .iv-prev { font-size: .9rem; color: #555; line-height: 1.5; }
+    .iv-prev b { color: #222; }
     details.iv-facts { margin-top: 14px; font-size: .88rem; color: #555; }
     details.iv-facts summary { cursor: pointer; color: #666; }
     details.iv-facts pre { background: #f7f7f9; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; font-size: .8rem; overflow-x: auto; margin-top: 8px; max-height: 380px; }
@@ -66,7 +70,7 @@
 
   
   <form class="iv-card" id="iv-gate" novalidate>
-    <label class="iv-field"><span>Passphrase <small>(same as onboarding)</small></span><input type="password" name="pass" autocomplete="current-password" autofocus></label>
+    <label class="iv-field"><span>Passphrase</span><input type="password" name="pass" autocomplete="current-password" autofocus></label>
     <div class="iv-row">
       <button type="submit" class="btn-iv btn-iv-primary" id="iv-unlock">Unlock</button>
       <div class="iv-error" id="iv-gate-error" hidden></div>
@@ -77,10 +81,10 @@
   <form class="iv-card" id="iv-form" hidden novalidate>
     <div class="iv-status" id="iv-status"></div>
     <div class="iv-grid">
-      <label class="iv-field"><span>Speaker first name</span><input type="text" name="speaker_name" autocomplete="off" maxlength="60"></label>
-      <label class="iv-field"><span>Speaker email</span><input type="email" name="speaker_email" autocomplete="off" spellcheck="false"></label>
+      <label class="iv-field"><span>Speaker's full name</span><input type="text" name="speaker_name" autocomplete="off" maxlength="80"></label>
+      <label class="iv-field"><span>Speaker's email</span><input type="email" name="speaker_email" autocomplete="off" spellcheck="false"></label>
     </div>
-    <label class="iv-field"><span>Cc <small>(optional: their marketing / comms / manager, comma separated - adds the "your team" and sponsorship lines)</small></span><textarea name="cc_emails" spellcheck="false" autocomplete="off"></textarea></label>
+    <label class="iv-field"><span>Marketing / comms / manager / team <small>(optional, comma separated - they will be added in Cc)</small></span><textarea name="cc_emails" spellcheck="false" autocomplete="off"></textarea></label>
     <div class="iv-chips" id="iv-chips"></div>
     <div class="iv-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
     <div class="iv-row">
@@ -104,7 +108,7 @@
   <div class="iv-card iv-done" id="iv-done" hidden></div>
 
   <div class="iv-muted" id="iv-locked-note">This is a tool for organizers. Nothing to see here for attendees, speakers and sponsors.</div>
-  <div class="iv-muted" id="iv-footer" hidden>Sent from the brand alias straight to the speaker, Cc as given. The thread is filed unread in the inbox under the "Speaker invitations" label; replies join it.</div>
+  <div class="iv-muted" id="iv-footer" hidden>Sent from mark's email straight to the speaker, with optional team members in cc. The thread is filed unread in the inbox under the "Speaker invitations" label; replies join it.</div>
 </main>
 
 <script>
@@ -130,10 +134,12 @@ function showGate(msg) {
 function showForm() {
   gate.hidden = true; form.hidden = false; done.hidden = true; $('iv-footer').hidden = false; $('iv-locked-note').hidden = true;
   $('iv-facts').textContent = JSON.stringify(IV_EVENT, null, 2);
-  var prev = IV_EVENT.previous ? ' · previous edition: <b>' + IV_EVENT.previous.event_name + '</b> (' + IV_EVENT.previous.talks + ' talks)' : ' · no previous edition found';
-  $('iv-status').innerHTML = '<span class="iv-tier ' + IV_EVENT.tier + '">' + tierLabel(IV_EVENT.tier) + '</span> &nbsp;<b>' + IV_EVENT.confirmed + '</b> of ' + IV_EVENT.talks_target +
-    ' talks (' + IV_EVENT.fill_pct + '%) · ' + IV_EVENT.tracks + ' track' + (IV_EVENT.tracks === 1 ? '' : 's') + ' · ' + IV_EVENT.companies.length + ' companies · ' +
-    IV_EVENT.sponsors.length + ' sponsor' + (IV_EVENT.sponsors.length === 1 ? '' : 's') + prev;
+  function stat(value, label) { return '<div class="iv-stat"><b>' + value + '</b><span>' + label + '</span></div>'; }
+  var prev = IV_EVENT.previous ? 'Previous edition: <b>' + IV_EVENT.previous.event_name + '</b>, ' + IV_EVENT.previous.talks + ' talks' : 'No previous edition found';
+  $('iv-status').innerHTML = '<span class="iv-tier ' + IV_EVENT.tier + '">' + tierLabel(IV_EVENT.tier) + '</span>' +
+    '<div class="iv-stats">' + stat(IV_EVENT.confirmed + ' of ' + IV_EVENT.talks_target, 'talks · ' + IV_EVENT.fill_pct + '%') + stat(IV_EVENT.tracks, 'track' + (IV_EVENT.tracks === 1 ? '' : 's')) +
+    stat(IV_EVENT.companies.length, 'companies') + stat(IV_EVENT.sponsors.length, 'sponsor' + (IV_EVENT.sponsors.length === 1 ? '' : 's')) + '</div>' +
+    '<div class="iv-prev">' + prev + '</div>';
   validate();
   setTimeout(function() { nameInput.focus(); }, 0);
 }
@@ -150,6 +156,7 @@ function parseEmails(text) {
   });
   return { valid: valid, invalid: invalid };
 }
+function firstName(full) { return String(full || '').trim().split(/\s+/)[0] || ''; }
 function validate() {
   var cc = parseEmails(ccInput.value), chips = $('iv-chips');
   var speaker = emailInput.value.trim().toLowerCase();
@@ -167,7 +174,7 @@ function validate() {
 // ---- transport -------------------------------------------------------------
 function post(action, v) {
   if (!IV_URL) return Promise.reject(new Error('invitation_form_url is not configured in home/metadata.yml'));
-  var body = { action: action, pass: storedPass(), brand: IV_EVENT.brand, speaker_name: v.name, speaker_email: v.email, cc_emails: v.cc,
+  var body = { action: action, pass: storedPass(), brand: IV_EVENT.brand, speaker_name: firstName(v.name), speaker_full_name: v.name, speaker_email: v.email, cc_emails: v.cc,
                event: IV_EVENT, website: form.elements['website'].value || '', page: location.href };
   var ctrl = ('AbortController' in window) ? new AbortController() : null;
   var timer = ctrl ? setTimeout(function() { ctrl.abort(); }, 25000) : null;
