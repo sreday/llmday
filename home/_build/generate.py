@@ -231,7 +231,7 @@ _STATUS_LADDER = [                    # tightened 2026-09-13 (each band took the
 
 def _status_health(pct, days_left):
     if pct >= 100:
-        return ("nailed", "Nailed it!")
+        return ("nailed", "Full!")
     for max_days, crit, bad, neutral, good in _STATUS_LADDER:
         if max_days is None or days_left <= max_days:
             if crit is not None and pct < crit: return ("critical", "Critical")
