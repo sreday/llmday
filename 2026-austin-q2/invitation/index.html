@@ -231,7 +231,10 @@ $('iv-preview').addEventListener('click', function() {
   busy(btn, 'Loading...');
   post('preview', v).then(function(res) {
     idle(btn);
-    $('iv-from').textContent = res.from || ''; $('iv-to').textContent = res.to || v.email;
+    $('iv-from').textContent = res.from || '';
+    // an empty / invalid speaker email previews with a placeholder server-side, but the To line says so in red (Marek 2026-09-14)
+    if (EMAIL_RE.test(emailInput.value.trim())) { $('iv-to').textContent = res.to || v.email; }
+    else { $('iv-to').innerHTML = '<span style="color:var(--iv-danger)">(email required)</span>'; }
     $('iv-cc').textContent = v.cc.length ? v.cc.join(', ') : '(none)';
     $('iv-subject').textContent = res.subject || '';
     $('iv-html').srcdoc = res.html || '';

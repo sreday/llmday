@@ -213,7 +213,8 @@ $('ob-preview').addEventListener('click', function() {
   post('preview', p.valid).then(function(res) {
     idle(btn);
     $('ob-from').textContent = res.from || ''; $('ob-to').textContent = res.to || '';
-    $('ob-bcc').textContent = p.valid.length ? p.valid.join(', ') : '(none yet)';
+    if (p.valid.length) { $('ob-bcc').textContent = p.valid.join(', '); }
+    else { $('ob-bcc').innerHTML = '<span style="color:var(--ob-danger)">(email required)</span>'; }   // Marek 2026-09-14
     $('ob-subject').textContent = res.subject || '';
     $('ob-html').srcdoc = res.html || '';
     previewBox.hidden = false; previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
