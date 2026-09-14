@@ -49,9 +49,12 @@
     .iv-tier { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: #fff; background: #9aa0a6; vertical-align: middle; }
     .iv-tier.strong { background: #2ecc40; } .iv-tier.building { background: #e6b400; } .iv-tier.early { background: #9aa0a6; }
     .iv-status { margin-bottom: 22px; }
-    .iv-stats { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 12px 0 8px; }
-    .iv-stat b { display: block; font-family: 'Montserrat', sans-serif; font-size: 1.05rem; color: #222; line-height: 1.2; }
-    .iv-stat span { display: block; font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; color: #888; margin-top: 2px; }
+    .iv-status { --iv-tc: #9aa0a6; }
+    .iv-status.strong { --iv-tc: #2ecc40; } .iv-status.building { --iv-tc: #e6b400; } .iv-status.early { --iv-tc: #9aa0a6; }
+    .iv-stats { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 10px; }
+    .iv-stat { display: inline-flex; align-items: baseline; gap: 5px; padding: 4px 12px; border-radius: 999px; font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 600; letter-spacing: .02em; color: #fff; background: var(--iv-tc); white-space: nowrap; }
+    .iv-stat b { font-weight: 700; }
+    .iv-stat span { font-weight: 500; opacity: .92; }
     .iv-prev { font-size: .9rem; color: #555; line-height: 1.5; }
     .iv-prev b { color: #222; }
     details.iv-facts { margin-top: 14px; font-size: .88rem; color: #555; }
@@ -140,7 +143,8 @@ function showGate(msg) {
 function showForm() {
   gate.hidden = true; form.hidden = false; done.hidden = true; $('iv-footer').hidden = false; $('iv-locked-note').hidden = true;
   $('iv-facts').textContent = JSON.stringify(IV_EVENT, null, 2);
-  function stat(value, label) { return '<div class="iv-stat"><b>' + value + '</b><span>' + label + '</span></div>'; }
+  function stat(value, label) { return '<span class="iv-stat"><b>' + value + '</b><span>' + label + '</span></span>'; }
+  $('iv-status').className = 'iv-status ' + IV_EVENT.tier;
   var prev = IV_EVENT.previous ? 'Previous edition: <b>' + IV_EVENT.previous.event_name + '</b>, ' + IV_EVENT.previous.talks + ' talks' : 'No previous edition found';
   $('iv-status').innerHTML = '<span class="iv-tier ' + IV_EVENT.tier + '">' + tierLabel(IV_EVENT.tier) + '</span>' +
     '<div class="iv-stats">' + stat(IV_EVENT.confirmed + ' of ' + IV_EVENT.talks_target, 'talks · ' + IV_EVENT.fill_pct + '%') + stat(IV_EVENT.tracks, 'track' + (IV_EVENT.tracks === 1 ? '' : 's')) +
