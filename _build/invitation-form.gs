@@ -48,7 +48,7 @@ var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock 
 var MAX_COMPANIES = 10;                              // "Speakers come from A, B, ... and others"
 var MAX_TOPICS = 4;                                  // "Most talks so far are about a, b, c, and d"
 var MAX_SPONSORS = 6;
-var VERSION = 3;   // v2: host company; v3: bullet structure (About / apply / Talk format / FAQ), previous edition link
+var VERSION = 4;   // v2: host company; v3: bullet structure; v4: shorter intro, "pass this on to your team" when nobody is in Cc
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -126,14 +126,11 @@ function composeInvitation(ev, brand, firstName, hasCc) {
   var lines = [
     'Hey ' + firstName + ',',
     '',
-    "We'd love to have you speak at [" + ev.event_name + '](' + ev.event_url + ') on ' + ev.date + ' at ' + ev.venue_name + ', ' + ev.city + '. ' +
-      'This is the official invite from the ' + ev.brand_name + ' team, feel free to pass it on to whoever needs to sign off on it.',
+    "We'd love to invite you to speak at [" + ev.event_name + '](' + ev.event_url + ') on ' + ev.date + ' at ' + ev.venue_name + ', ' + ev.city + '.',
+    '',
+    hasCc ? "I'm copying your team so they have all the details too." : 'Please feel free to pass this on to your team.',
     ''
   ];
-  if (hasCc) {
-    lines.push("I'm copying your team so they have all the details too.");
-    lines.push('');
-  }
   lines.push('*About the event*');
   lines = lines.concat(aboutBullets(ev, brand));
   lines = lines.concat([
