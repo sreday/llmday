@@ -125,7 +125,7 @@
         {% set fill = [r.pct, 100] | min %}
         {% set over = r.pct > 100 %}
         <tr>
-          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}{% if r.state %} · {{ r.state }}{% endif %}{% if r.errors or r.warnings %} · <a class="issues-link" href="#check-{{ r.folder }}">{{ r.errors + r.warnings }} issue{{ 's' if r.errors + r.warnings != 1 }}</a>{% endif %}</small></td>
+          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}{% if r.state %} · {{ r.state }}{% endif %}</small></td>
           <td class="num hide">{{ r.tracks }}</td>
           <td class="num"><strong>{{ r.confirmed }}</strong> / {{ r.available }}</td>
           <td>
