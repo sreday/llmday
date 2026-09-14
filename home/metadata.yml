@@ -13,7 +13,7 @@ onboarding_form_url: "https://script.google.com/macros/s/AKfycbwnEN8BjYxtzXexBCH
 # speaker fast-track form (hidden /<event>/fasttrack/ pages): Apps Script web app URL, source llmday/_build/fasttrack-form.gs; empty = page refuses to submit
 fasttrack_form_url: "https://script.google.com/macros/s/AKfycbwOUn-5SpofzUE96GTzRVV5WjM_OM4FOG6Vor16dEYubS837SZ8S1OXA6GCEYZMMVQ9/exec"
 # speaker invitation letter (hidden /<event>/invitation/ pages): Apps Script web app URL, source llmday/_build/invitation-form.gs; empty = page refuses to send
-invitation_form_url: ""
+invitation_form_url: "https://script.google.com/macros/s/AKfycbwf8_4TeXxjnsu5zfQ5DrX50ydRKWC4nA6FWsA_cuFZ9bsPNQanC0as3fMD-RMVPO0_fw/exec"
 
 # old event URLs -> new ones (folder renames). Build writes static/<from>/index.html (meta refresh,
 # keeps any sub-path such as a talk page) and a root 404.html that applies the same mapping.
