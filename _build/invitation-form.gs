@@ -48,7 +48,7 @@ var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock 
 var MAX_COMPANIES = 10;                              // "Speakers come from A, B, ... and others"
 var MAX_TOPICS = 4;                                  // "Most talks so far are about a, b, c, and d"
 var MAX_SPONSORS = 6;
-var VERSION = 4;   // v2: host company; v3: bullet structure; v4: shorter intro, "pass this on to your team" when nobody is in Cc
+var VERSION = 5;   // v3: bullet structure; v4: intro; v5: talk-info line, fit bullet in Talk format, 'Finally' paragraph, uniform inline fonts
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -135,16 +135,16 @@ function composeInvitation(ev, brand, firstName, hasCc) {
   lines = lines.concat(aboutBullets(ev, brand));
   lines = lines.concat([
     '',
-    '*You can apply to speak here:* [' + ev.fasttrack_url + '](' + ev.fasttrack_url + ')',
+    '*Please send us your talk info here:* [' + ev.fasttrack_url + '](' + ev.fasttrack_url + ')',
     '',
     '*Talk format*',
+    "- The talk will work best if it's technical or experience-based, vendor pitches are not the best fit.",
     '- ' + ev.slot_minutes + ' minutes on stage, in person (' + talk + ' min talk + 5 min Q&A)',
     '- We record it and put it on our YouTube channel, free for anyone to watch',
     '',
     '*FAQ*',
     '- Speaking is free. No fee, no sponsorship strings attached.',
     '- Your company name will appear on the speaker page and in the schedule.',
-    "- The talk will work best if it's technical or experience-based, vendor pitches don't work very well with our crowd.",
     '- Unfortunately, we do not cover speaker fee, travel, or accommodation.',
     ''
   ]);
@@ -156,8 +156,10 @@ function composeInvitation(ev, brand, firstName, hasCc) {
   lines = lines.concat([
     'Would be great to have you on the lineup! If your team needs anything else from us, just reply here or grab a slot: [' + ev.calendly_url + '](' + ev.calendly_url + ')',
     '',
-    'Cheers,',
-    'Mark from ' + ev.brand_name + ' Team'
+    'Finally, this invitation means an extremely strong consideration for a talk delivered by you, but we of course will need to review your stuff and double-check the fit before accepting :-)',
+    '',
+    'Looking forward to having you,',
+    'Mark'
   ]);
   return {
     subject: "You're invited to speak at " + ev.event_name + ' - ' + ev.date,
@@ -229,22 +231,24 @@ function renderText(lines) {
   }).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
+// One font declaration on EVERY block (p, ul, li) - Gmail/Outlook restyle bare lists otherwise (Marek 2026-09-14).
+var FONT = 'font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#111;';
 function renderHtml(lines) {
   var out = [], list = false, para = [];
   function closeList() { if (list) { out.push('</ul>'); list = false; } }
-  function flushPara() { if (para.length) { out.push('<p>' + para.join('<br>') + '</p>'); para = []; } }
+  function flushPara() { if (para.length) { out.push('<p style="' + FONT + 'margin:0 0 14px">' + para.join('<br>') + '</p>'); para = []; } }
   function inline(s) {
     return esc(s).replace(INLINE_LINK, function (_, label, url) { return '<a href="' + url + '">' + label + '</a>'; })
                  .replace(INLINE_BOLD, '<b>$1</b>');
   }
   lines.forEach(function (l) {
     var m;
-    if ((m = /^- ([\s\S]*)$/.exec(l))) { flushPara(); if (!list) { out.push('<ul>'); list = true; } out.push('<li>' + inline(m[1]) + '</li>'); }
+    if ((m = /^- ([\s\S]*)$/.exec(l))) { flushPara(); if (!list) { out.push('<ul style="' + FONT + 'margin:0 0 14px;padding-left:24px">'); list = true; } out.push('<li style="' + FONT + '">' + inline(m[1]) + '</li>'); }
     else if (l === '') { flushPara(); closeList(); }
     else { closeList(); para.push(inline(l)); }
   });
   flushPara(); closeList();
-  return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#111">' + out.join('\n') + '</div>';
+  return '<div style="' + FONT + '">' + out.join('\n') + '</div>';
 }
 
 // ---- validation -------------------------------------------------------------
