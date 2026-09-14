@@ -48,7 +48,7 @@ var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock 
 var MAX_COMPANIES = 10;                              // "Speakers come from A, B, ... and others"
 var MAX_TOPICS = 4;                                  // "Most talks so far are about a, b, c, and d"
 var MAX_SPONSORS = 6;
-var VERSION = 7;   // v6: closing lines; v7: legibility pass (Marek 2026-09-14), sponsorship page link, subject 'Invitation to speak - <event> - <date>'
+var VERSION = 8;   // v7: legibility pass, sponsorship page link, 'Invitation to speak' subject; v8: numbers line back to slashes, planned-only when thin
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -169,22 +169,21 @@ function composeInvitation(ev, brand, firstName, hasCc) {
 }
 
 // The adaptive "About the event" bullets. Tier comes from generate.py (confirmed talks vs 12 slots per track):
-//   strong   (50 % +)  "N talks confirmed, T tracks, ~A attendees expected", speakers + top topics, crowd, sponsors, previous edition
-//   building (25-49 %) "N talks confirmed so far, P planned, ...", speakers + topic scope, crowd, sponsors, previous edition
-//   early    (< 25 %)  "N talks confirmed so far, P planned, ...", topic scope, crowd, sponsors, previous edition
+//   strong   (50 % +)  "N confirmed talks / T tracks / A expected attendees", speakers + top topics, crowd, sponsors, previous edition
+//   building (25-49 %) "P talks planned / T tracks / A expected attendees", speakers + topic scope, crowd, sponsors, previous edition
+//   early    (< 25 %)  "P talks planned / T tracks / A expected attendees", topic scope, crowd, sponsors, previous edition
 function aboutBullets(ev, brand) {
-  var talks = ev.confirmed + ' talk' + (ev.confirmed === 1 ? '' : 's');
   var tracks = ev.tracks + ' track' + (ev.tracks === 1 ? '' : 's');
-  var people = '~' + ev.attendees + ' attendees expected';
+  var people = ev.attendees + ' expected attendees';
   var out = ['- ' + ev.event_name + ' is a single-day, in-person event' + (ev.host_company ? ' hosted by ' + ev.host_company : '')];
   if (ev.tier === 'strong') {
-    out.push('- ' + talks + ' confirmed, ' + tracks + ', ' + people);
+    out.push('- ' + ev.confirmed + ' confirmed talk' + (ev.confirmed === 1 ? '' : 's') + ' / ' + tracks + ' / ' + people);
     var s = '';
     if (ev.companies.length) s += 'Speakers come from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) + '.';
     if (ev.topics.length) s += (s ? ' ' : '') + 'Most talks so far are about ' + topicsPhrase(ev.topics) + '.';
     if (s) out.push('- ' + s);
   } else {
-    out.push('- ' + talks + ' confirmed so far, ' + ev.talks_target + ' planned, ' + tracks + ', ' + people);
+    out.push('- ' + ev.talks_target + ' talks planned / ' + tracks + ' / ' + people);   // no confirmed count while the lineup is thin (Marek 2026-09-14)
     if (ev.tier === 'building' && ev.companies.length) {
       out.push('- Speakers so far come from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) + '. Topics span ' + brand.scope + '.');
     } else {
