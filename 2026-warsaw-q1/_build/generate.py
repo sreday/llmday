@@ -1149,7 +1149,7 @@ context['invitation_event'] = {k: _inv_src[k] for k in ('brand', 'brand_name', '
                                                         'venue_name', 'attendees', 'youtube_url', 'calendly_url', 'slot_minutes')}
 context['invitation_event'].update({
     'fasttrack_url':    _inv_src['event_url'] + 'fasttrack/',
-    'sponsor_page_url': _inv_src['event_url'] + '#sponsors',
+    'sponsor_page_url': _inv_src['event_url'] + 'sponsorship.html',
     'tracks':           _inv_tracks,
     'confirmed':        len(_inv_rows),
     'talks_target':     _inv_target,
