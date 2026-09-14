@@ -1116,6 +1116,7 @@ def _inv_previous_edition(home_meta, city):
     m = pick['meta']
     return {
         'event_name': _ob_event_name(pick['folder'], m.get('city_name'), context.get('brand_name', '')),
+        'url':        context.get('base_path', '') + pick['folder'] + '/',
         'date':       str(m.get('date_string') or ''),
         'same_city':  pick is best_city,
         'talks':      len(rows),

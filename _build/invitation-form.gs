@@ -48,7 +48,7 @@ var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock 
 var MAX_COMPANIES = 10;                              // "Speakers come from A, B, ... and others"
 var MAX_TOPICS = 4;                                  // "Most talks so far are about a, b, c, and d"
 var MAX_SPONSORS = 6;
-var VERSION = 2;   // v2: "This edition is hosted by <company>." when generate.py detects a host sponsor
+var VERSION = 3;   // v2: host company; v3: bullet structure (About / apply / Talk format / FAQ), previous edition link
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -119,7 +119,7 @@ function fileThread(message) {
 
 // ---- the letter -------------------------------------------------------------
 // Same tiny markup as onboarding-form.gs: *bold*, [label](url), "- " bullets, "" = blank line.
-// Wording: Marek, 2026-09-14 (Desktop/invitation-form/invitation-letter-copy.txt v4). Do not re-word without asking.
+// Structure and wording: Marek, 2026-09-14 evening (edited from the first real send). Do not re-word without asking.
 
 function composeInvitation(ev, brand, firstName, hasCc) {
   var talk = Math.max(ev.slot_minutes - 5, 5);
@@ -135,21 +135,20 @@ function composeInvitation(ev, brand, firstName, hasCc) {
     lines.push('');
   }
   lines.push('*About the event*');
-  lines = lines.concat(aboutTheEvent(ev, brand));
+  lines = lines.concat(aboutBullets(ev, brand));
   lines = lines.concat([
     '',
-    '*How the talk works*',
+    '*You can apply to speak here:* [' + ev.fasttrack_url + '](' + ev.fasttrack_url + ')',
+    '',
+    '*Talk format*',
     '- ' + ev.slot_minutes + ' minutes on stage, in person (' + talk + ' min talk + 5 min Q&A)',
     '- We record it and put it on our YouTube channel, free for anyone to watch',
-    '- You get a speaker page on [' + ev.event_url + '](' + ev.event_url + ') with your photo, bio and abstract, live before the event',
     '',
-    'Title, abstract, bio and photo go through the fast-track form for this event: [' + ev.fasttrack_url + '](' + ev.fasttrack_url + ')',
-    '',
-    '*Good to know for your team*',
+    '*FAQ*',
     '- Speaking is free. No fee, no sponsorship strings attached.',
     '- Your company name will appear on the speaker page and in the schedule.',
     "- The talk will work best if it's technical or experience-based, vendor pitches don't work very well with our crowd.",
-    '- Unfortunately, we do not cover travel, accommodation or speaker fee.',
+    '- Unfortunately, we do not cover speaker fee, travel, or accommodation.',
     ''
   ]);
   if (hasCc) {
@@ -161,7 +160,7 @@ function composeInvitation(ev, brand, firstName, hasCc) {
     'Would be great to have you on the lineup! If your team needs anything else from us, just reply here or grab a slot: [' + ev.calendly_url + '](' + ev.calendly_url + ')',
     '',
     'Cheers,',
-    'Mark, organizer of ' + ev.brand_name
+    'Mark from ' + ev.brand_name + ' Team'
   ]);
   return {
     subject: "You're invited to speak at " + ev.event_name + ' - ' + ev.date,
@@ -170,42 +169,32 @@ function composeInvitation(ev, brand, firstName, hasCc) {
   };
 }
 
-// The adaptive paragraph. Tier comes from generate.py (confirmed talks vs 12 slots per track):
-//   early    (< 25 %)  what we aim for + who comes + the previous edition as evidence
-//   building (25-49 %) confirmed companies so far + the previous edition
-//   strong   (50 % +)  talks, tracks, companies, top topic areas, sponsors
-function aboutTheEvent(ev, brand) {
-  var crowd = brand.crowd, scope = brand.scope;
-  var tracks = ev.tracks + ' parallel track' + (ev.tracks === 1 ? '' : 's');
-  var hosted = ev.host_company ? ' This edition is hosted by ' + ev.host_company + '.' : '';
-  var out = [];
+// The adaptive "About the event" bullets. Tier comes from generate.py (confirmed talks vs 12 slots per track):
+//   strong   (50 % +)  talks / tracks / attendees, speakers + top topics, crowd, sponsors, previous edition
+//   building (25-49 %) "N confirmed so far, around T planned", speakers + topic scope, crowd, sponsors, previous edition
+//   early    (< 25 %)  "N confirmed so far, around T planned", topic scope, crowd, sponsors, previous edition
+function aboutBullets(ev, brand) {
+  var tracks = ev.tracks + ' track' + (ev.tracks === 1 ? '' : 's');
+  var out = ['- ' + ev.event_name + ' is a single day, in person event' + (ev.host_company ? ' hosted by ' + ev.host_company : '')];
   if (ev.tier === 'strong') {
-    var p = ev.event_name + ' is a single day, in person, ' + ev.confirmed + ' confirmed talks across ' + tracks +
-            ' and around ' + ev.attendees + ' people in the room, ' + crowd + '.' + hosted;
-    if (ev.companies.length) p += ' Speakers come from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) + '.';
-    if (ev.topics.length) p += ' Most talks so far are about ' + topicsPhrase(ev.topics) + '.';
-    out.push(p);
-    if (ev.sponsors.length) out.push('Sponsors this time include ' + listOf(ev.sponsors.slice(0, MAX_SPONSORS), ev.sponsors.length > MAX_SPONSORS) + '.');
-    out.push('Recordings from previous editions are at [' + ev.youtube_url + '](' + ev.youtube_url + ')');
-    return out;
-  }
-  if (ev.tier === 'building') {
-    var b = ev.event_name + ' is a single day, in person, ' + tracks + ' and around ' + ev.talks_target + ' talks planned. ' +
-            ev.confirmed + ' are confirmed so far' + (ev.companies.length ? ', from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) : '') + '. ' +
-            'Topics span ' + scope + ". We're planning for " + ev.attendees + ' people, ' + crowd + '.' + hosted;
-    out.push(b);
+    out.push('- ' + ev.confirmed + ' confirmed talks / ' + tracks + ' / ' + ev.attendees + ' expected attendees');
+    var s = '';
+    if (ev.companies.length) s += 'Speakers come from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) + '.';
+    if (ev.topics.length) s += (s ? ' ' : '') + 'Most talks so far are about ' + topicsPhrase(ev.topics) + '.';
+    if (s) out.push('- ' + s);
   } else {
-    out.push(ev.event_name + ' is a single day, in person, ' + tracks + ' and around ' + ev.talks_target + ' talks on ' + scope + '. ' +
-             "We're planning for " + ev.attendees + ' people, ' + crowd + ' from companies running things at scale.' + hosted);
+    out.push('- ' + ev.confirmed + ' confirmed talk' + (ev.confirmed === 1 ? '' : 's') + ' so far, around ' + ev.talks_target + ' planned / ' + tracks + ' / ' + ev.attendees + ' expected attendees');
+    if (ev.tier === 'building' && ev.companies.length) {
+      out.push('- Speakers so far come from ' + listOf(ev.companies.slice(0, MAX_COMPANIES), ev.companies.length > MAX_COMPANIES) + '. Topics span ' + brand.scope + '.');
+    } else {
+      out.push('- Topics: ' + brand.scope);
+    }
   }
-  out.push('');
-  if (ev.previous && ev.previous.talks > 0) {
-    // same city: "The last one, SREday NYC 2026 Q2 ..."; first edition in a city: "Our most recent event, SREday Hyderabad 2026 Q2 ..."
-    out.push((ev.previous.same_city ? 'The last one, ' : 'Our most recent event, ') + ev.previous.event_name + (ev.previous.date ? ' on ' + ev.previous.date : '') + ', had ' + ev.previous.talks + ' talks' +
-             (ev.previous.companies.length ? ' from ' + listOf(ev.previous.companies.slice(0, MAX_COMPANIES), ev.previous.companies.length > MAX_COMPANIES) : '') +
-             '. Recordings are at [' + ev.youtube_url + '](' + ev.youtube_url + ')');
-  } else {
-    out.push('Recordings from previous ' + ev.brand_name + ' editions are at [' + ev.youtube_url + '](' + ev.youtube_url + ')');
+  out.push('- Crowd: ' + brand.crowd + '.');
+  if (ev.sponsors.length) out.push('- Confirmed sponsors: ' + listOf(ev.sponsors.slice(0, MAX_SPONSORS), ev.sponsors.length > MAX_SPONSORS) + '.');
+  if (ev.previous && ev.previous.url) {
+    out.push('- ' + (ev.previous.same_city ? 'Previous edition' : 'Our most recent event') + ', for reference: [' + ev.previous.event_name + '](' + ev.previous.url + ')' +
+             (ev.previous.talks ? ' (' + ev.previous.talks + ' talks)' : ''));
   }
   return out;
 }
@@ -306,6 +295,7 @@ function normalizeEvent(raw, brand) {
     host_company:     clean(raw.host_company, 60),
     previous:         prev ? {
                         event_name: clean(prev.event_name, 80),
+                        url:        okUrl(prev.url, ''),
                         date:       clean(prev.date, 60),
                         talks:      parseInt(prev.talks, 10) > 0 ? parseInt(prev.talks, 10) : 0,
                         same_city:  prev.same_city === true,
