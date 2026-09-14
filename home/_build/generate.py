@@ -224,7 +224,7 @@ _SLOTS_PER_TRACK = 12
 _STATUS_LADDER = [                    # tightened 2026-09-13 (each band took the thresholds of the one below it)
     (13,    50,   70,   85,   100),   # under 14 days: under 50% critical, 50-69 bad, 70-84 neutral, 85-99 good
     (30,    40,   60,   75,   100),   # 14-30 days
-    (60,    25,   50,   75,   100),   # 31-60 days
+    (60,    None, 50,   75,   100),   # 31-60 days: never critical, under 50% bad (Marek 2026-09-14)
     (None,  None, None, 50,   100),   # more than 60 days: never critical, never bad; under 50% neutral, 50-99 good
 ]
 
