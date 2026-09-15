@@ -305,7 +305,7 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
       var names = picked.map(function (s) { return label(s).toLowerCase(); });
       var which = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : names[0];
       lines = lines.concat([
-        "*We'll need details for " + which + ':*',
+        "*Please send us details of your team's " + which + ':*',
         '',
         '- Please share the speaker details at your earliest convenience, the quickest way is this form: [' + ev.fasttrack_url + '](' + ev.fasttrack_url + '), or just reply with:',
         '',
