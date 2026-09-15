@@ -24,7 +24,7 @@
     .os-field input, .os-field textarea { width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #111; background: #fff; outline: none; transition: border-color .2s, box-shadow .2s; font-family: inherit; }
     .os-field textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
     .os-field input:focus, .os-field textarea:focus { border-color: var(--os-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 18%, transparent); }
-    .os-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 0 16px; }
+    .os-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
     .os-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 6px; }
     .btn-os { display: inline-flex; align-items: center; justify-content: center; min-width: 130px; border: none; border-radius: 999px; padding: 11px 26px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; transition: filter .15s, transform .1s; }
     .btn-os:active { transform: scale(.97); }
@@ -41,10 +41,10 @@
     .os-chip.ok { border-color: color-mix(in srgb, var(--os-accent) 45%, #fff); background: color-mix(in srgb, var(--os-accent) 10%, #fff); color: #222; }
     .os-chip.bad { border-color: #f0b4ae; background: #fdecea; color: var(--os-danger); text-decoration: line-through; }
     /* opportunity toggles: one pill per purchasable sponsorship.yaml tier, same look as the lead form chips */
-    .os-opts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+    .os-opts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 6px; }
     .os-opt { position: relative; margin: 0; cursor: pointer; }
     .os-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
-    .os-opt span { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid #ddd; background: #f0f0f0; color: #555; font-size: .9rem; font-weight: 600; user-select: none; transition: background .15s, color .15s, border-color .15s; }
+    .os-opt span { display: block; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 8px 12px; border-radius: 999px; border: 1px solid #ddd; background: #f0f0f0; color: #555; font-size: .9rem; font-weight: 600; user-select: none; transition: background .15s, color .15s, border-color .15s; }
     .os-opt:hover span { border-color: var(--os-accent); }
     .os-opt input:checked + span { background: var(--os-accent); border-color: var(--os-accent); color: #fff; }
     .os-opt input:focus-visible + span { box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 30%, transparent); }
@@ -61,7 +61,7 @@
     .os-done strong { font-family: 'Montserrat', sans-serif; }
     .os-done a { color: var(--os-accent); }
     .os-muted { color: #888; font-size: .85rem; margin-top: 30px; }
-    @media (max-width: 575.98px) { .os-card { padding: 22px 18px; } .os-title { font-size: 1.4rem; } .os-grid { grid-template-columns: 1fr; } .os-preview-frame { height: 520px; } }
+    @media (max-width: 575.98px) { .os-card { padding: 22px 18px; } .os-title { font-size: 1.4rem; } .os-grid { grid-template-columns: 1fr; } .os-opts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .os-preview-frame { height: 520px; } }
   </style>
 </head>
 <body>
@@ -81,12 +81,12 @@
 
   
   <form class="os-card" id="os-form" hidden novalidate>
-    <div class="os-grid">
-      <label class="os-field"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="80"></label>
-      <label class="os-field"><span>Contact's first name <small>(optional, "Hey Anna")</small></span><input type="text" name="first_name" autocomplete="off" maxlength="40"></label>
-    </div>
-    <label class="os-field"><span>Sponsor team emails <small>(comma separated - everyone goes in To)</small></span><textarea name="emails" spellcheck="false" autocomplete="off"></textarea></label>
+    <label class="os-field"><span>Emails - Sponsor Team <small>(everyone as main recipient of your email)</small></span><textarea name="emails" spellcheck="false" autocomplete="off"></textarea></label>
     <div class="os-chips" id="os-chips"></div>
+    <div class="os-grid">
+      <label class="os-field"><span>Main contact's name <small>(optional)</small></span><input type="text" name="first_name" autocomplete="off" maxlength="80"></label>
+      <label class="os-field"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="80"></label>
+    </div>
 
     <div class="os-label">Opportunities they signed up for <small>(toggle - each one adds its own section to the email)</small></div>
     <div class="os-opts" id="os-opts"></div>
@@ -95,7 +95,8 @@
     <div class="os-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
     <div class="os-row">
       <button type="button" class="btn-os btn-os-ghost" id="os-preview">Preview</button>
-      <button type="submit" class="btn-os btn-os-primary" id="os-send" disabled>Send</button>
+      <button type="submit" class="btn-os btn-os-primary" id="os-send" disabled>Send now</button>
+      <button type="button" class="btn-os btn-os-ghost" id="os-schedule" disabled title="Creates a Gmail draft and sends it automatically in 1 hour. Edit the draft meanwhile, or delete it to cancel.">Send in 1 hour</button>
       <a href="#" class="os-link" id="os-lock">lock</a>
       <div class="os-error" id="os-error" hidden></div>
     </div>
@@ -114,7 +115,7 @@
   <div class="os-card os-done" id="os-done" hidden></div>
 
   <div class="os-muted" id="os-locked-note">This is a tool for organizers. Nothing to see here for attendees, speakers and sponsors.</div>
-  <div class="os-muted" id="os-footer" hidden>Sent from the brand alias straight to the sponsor team (all in To). The thread is filed unread in the inbox under the "Sponsor onboarding" label; replies join it.</div>
+  <div class="os-muted" id="os-footer" hidden>Sent from the brand alias straight to the sponsor team (all in To). The thread is filed unread in the inbox under the "Sponsor onboarding" label; replies join it. "Send in 1 hour" leaves a Gmail draft you can still edit or delete.</div>
 </main>
 
 <script>
@@ -140,7 +141,7 @@ function showForm() {
   gate.hidden = true; form.hidden = false; done.hidden = true; $('os-footer').hidden = false; $('os-locked-note').hidden = true;
   $('os-facts').textContent = JSON.stringify(OS_EVENT, null, 2);
   validate();
-  setTimeout(function() { companyInput.focus(); }, 0);
+  setTimeout(function() { textarea.focus(); }, 0);
 }
 
 // ---- opportunity pills (purchasable sponsorship.yaml tiers) ------------------
@@ -182,15 +183,15 @@ function validate() {
   note.innerHTML = items.length ? '<b>' + items.length + '</b> opportunit' + (items.length === 1 ? 'y' : 'ies') + ' selected'
                                 : 'Nothing selected yet: the email would only carry the general sponsor info (logo, tickets, timeline).';
   var ok = companyInput.value.trim().length > 0 && p.valid.length > 0 && !p.invalid.length && p.valid.length <= OS_MAX;
-  $('os-send').disabled = !ok;
-  return { ok: ok, company: companyInput.value.trim(), first_name: firstNameInput.value.trim(), emails: p.valid, invalid: p.invalid, items: items };
+  $('os-send').disabled = !ok; $('os-schedule').disabled = !ok;
+  return { ok: ok, company: companyInput.value.trim(), first_name: firstNameInput.value.trim().split(/[ ]+/)[0] || '', emails: p.valid, invalid: p.invalid, items: items };
 }
 [companyInput, firstNameInput, textarea].forEach(function(el) { el.addEventListener('input', validate); });
 
 // ---- transport -------------------------------------------------------------
 function post(action, v) {
   if (!OS_URL) return Promise.reject(new Error('sponsor_onboarding_form_url is not configured in home/metadata.yml'));
-  var body = { action: action, pass: storedPass(), brand: OS_EVENT.brand, company: v.company, first_name: v.first_name, emails: v.emails, items: v.items,
+  var body = { action: action, pass: storedPass(), brand: OS_EVENT.brand, company: v.company, first_name: v.first_name, emails: v.emails, items: v.items, delay_minutes: v.delay_minutes || 0,
                event: OS_EVENT, website: form.elements['website'].value || '', page: location.href };
   var ctrl = ('AbortController' in window) ? new AbortController() : null;
   var timer = ctrl ? setTimeout(function() { ctrl.abort(); }, 25000) : null;
@@ -216,6 +217,9 @@ function showError(err) {
     case 'no recipients': msg = 'Add at least one sponsor email.'; break;
     case 'too many': msg = 'Too many recipients, max ' + OS_MAX + ' per send.'; break;
     case 'too many today': msg = 'Daily send limit reached, try again tomorrow.'; break;
+    case 'bad delay': msg = 'The server did not accept the delay.'; break;
+    case 'no trigger permission': msg = 'Scheduling is not authorised yet: open the Apps Script editor, run testSchedule once and approve the permission.'; break;
+    case 'old script': msg = 'Scheduling needs version 3 of the Apps Script. Paste and redeploy it, then run testSchedule once.'; break;
     default: msg = "Hmm, that didn't go through (" + (err.name === 'AbortError' ? 'timeout' : err.message) + '). Try again.';
   }
   el.textContent = msg; el.hidden = false;
@@ -261,20 +265,39 @@ function finish(html) {
     showForm();
   });
 }
-form.addEventListener('submit', function(ev) {
-  ev.preventDefault();
+// Older script versions send immediately whatever the action, so a scheduled send first checks the version.
+function requireScriptVersion(min) {
+  return fetch(OS_URL).then(function(r) { return r.json(); }).then(function(h) {
+    if (!h || !(h.version >= min)) throw new Error('old script');
+  }, function() { throw new Error('old script'); });
+}
+function doSend(mode) {
   $('os-error').hidden = true;
   var v = validate();
   if (!v.ok) return;
   var what = v.items.length ? v.items.length + ' opportunit' + (v.items.length === 1 ? 'y' : 'ies') : 'no opportunities (general info only)';
-  if (!confirm('Send the sponsor onboarding email for ' + v.company + ' to ' + v.emails.join(', ') + ' with ' + what + '?')) return;
-  var btn = $('os-send'); busy(btn, 'Sending...');
-  post('send', v).then(function(res) {
-    idle(btn);
-    finish('<strong>Sent to ' + v.company + '</strong> (' + v.emails.join(', ') + '). ' +
-           'The email is filed unread under "Sponsor onboarding" in the inbox.');
-  }).catch(function(err) { idle(btn); showError(err); });
-});
+  var scheduled = mode === 'schedule';
+  if (!confirm((scheduled ? 'Schedule' : 'Send') + ' the sponsor onboarding email for ' + v.company + ' to ' + v.emails.join(', ') + ' with ' + what + (scheduled ? ' for 1 hour from now?' : ' now?'))) return;
+  var btn = $(scheduled ? 'os-schedule' : 'os-send'), other = $(scheduled ? 'os-send' : 'os-schedule');
+  busy(btn, scheduled ? 'Scheduling...' : 'Sending...'); other.disabled = true;
+  var go = scheduled
+    ? requireScriptVersion(3).then(function() { v.delay_minutes = 60; return post('schedule', v); })
+    : post('send', v);
+  go.then(function(res) {
+    idle(btn); other.disabled = false;
+    if (scheduled) {
+      var at = res.at ? new Date(res.at) : new Date(Date.now() + 3600000);
+      var hhmm = at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      finish('<strong>Scheduled for ' + hhmm + '</strong> to ' + v.company + ' (' + v.emails.join(', ') + '). ' +
+             'The draft is in Gmail Drafts: you can still edit it, and deleting it cancels the send.');
+    } else {
+      finish('<strong>Sent to ' + v.company + '</strong> (' + v.emails.join(', ') + '). ' +
+             'The email is filed unread under "Sponsor onboarding" in the inbox.');
+    }
+  }).catch(function(err) { idle(btn); other.disabled = false; showError(err); });
+}
+form.addEventListener('submit', function(ev) { ev.preventDefault(); doSend('now'); });
+$('os-schedule').addEventListener('click', function() { doSend('schedule'); });
 
 // ---- boot ------------------------------------------------------------------
 if (storedPass()) showForm(); else showGate('');
