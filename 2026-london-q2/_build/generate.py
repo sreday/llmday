@@ -210,6 +210,8 @@ if _os.path.exists(_og_home_meta_path):
     context.setdefault('fasttrack_form_url', (_og_home_meta or {}).get('fasttrack_form_url', ''))
     # speaker invitation letter endpoint (hidden /invitation/ page; backend: _build/invitation-form.gs in llmday)
     context.setdefault('invitation_form_url', (_og_home_meta or {}).get('invitation_form_url', ''))
+    # sponsor onboarding endpoint (hidden /onboardsponsor/ page; backend: _build/sponsor-onboarding-form.gs in llmday)
+    context.setdefault('sponsor_onboarding_form_url', (_og_home_meta or {}).get('sponsor_onboarding_form_url', ''))
     _og_current_folder = _os.path.basename(_os.getcwd())
     for _he in (_og_home_meta.get('events') or []) + (_og_home_meta.get('events_past') or []):
         if _he.get('url', '').strip('./').rstrip('/') == _og_current_folder and _he.get('photo_url'):
@@ -1169,6 +1171,33 @@ print("Invitation: %s | %d/%d talks (%d%%, %s) | %d companies | %d topics | spon
     (context['invitation_event']['previous'] or {}).get('event_name', '-')))
 # ── END SPEAKER INVITATION ──────────────────────────────────────────────────
 
+# ── SPONSOR ONBOARDING: facts for the hidden /onboardsponsor/ page ──────────
+# The page (onboardsponsor.html) posts this dict plus the toggled opportunities to the Apps Script
+# (llmday/_build/sponsor-onboarding-form.gs), which fills ONE "Info for sponsors" email whose
+# sections follow the selection. The opportunities ARE the sponsorship.yaml tiers (minus the
+# discount row), so the pills always match the /sponsorship page. Optional overrides live under
+# `sponsor_onboarding:` in metadata.yml (sponsor_code, extra).
+context.setdefault('sponsor_onboarding_form_url', '')
+_so = dict(context.get('sponsor_onboarding') or {})
+_so_src = context['onboarding_event']
+context['sponsor_onboarding_event'] = {k: _so_src[k] for k in ('brand', 'brand_name', 'slug', 'event_name', 'city', 'date', 'month_day',
+                                                             'event_url', 'tickets_url', 'venue_name', 'venue_address', 'attendees',
+                                                             'youtube_url', 'calendly_url', 'slot_minutes')}
+context['sponsor_onboarding_event'].update({
+    'sponsor_page_url': _so_src['event_url'] + 'sponsorship.html',
+    'host_url':         context.get('base_path', '') + 'host',
+    'event_size':       _event_size,
+    'items':            [{'id': str(t.get('id')), 'name': str(t.get('name') or t.get('id')),
+                          'on_request': t.get('price_label') == 'On request',
+                          'benefits': [str(x) for x in (t.get('benefits') or [])]}
+                         for t in _all_tiers if t.get('id') and t.get('id') != 'startup_discount'],
+    'sponsor_code':     str(_so.get('sponsor_code', '') or ''),
+    'extra':            str(_so.get('extra', '') or ''),
+})
+print("Sponsor onboarding: %s | %d opportunities | size %s" % (
+    context['sponsor_onboarding_event']['event_name'], len(context['sponsor_onboarding_event']['items']), _event_size))
+# ── END SPONSOR ONBOARDING ──────────────────────────────────────────────────
+
 # HIDDEN PAGE: /<event>/onboarding/ (speaker onboarding form). Standalone template,
 # noindex, deliberately NOT appended to SITEMAP_URLS.
 _os.makedirs(BASE_FOLDER + "/onboarding", exist_ok=True)
@@ -1187,6 +1216,12 @@ _os.makedirs(BASE_FOLDER + "/invitation", exist_ok=True)
 with open(BASE_FOLDER + "/invitation/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("invitation.html").render(page="invitation.html", **context))
 print("Writing out invitation/index.html (hidden, not in sitemap)")
+
+# HIDDEN PAGE: /<event>/onboardsponsor/ (sponsor onboarding form). Same rules as onboarding.
+_os.makedirs(BASE_FOLDER + "/onboardsponsor", exist_ok=True)
+with open(BASE_FOLDER + "/onboardsponsor/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("onboardsponsor.html").render(page="onboardsponsor.html", **context))
+print("Writing out onboardsponsor/index.html (hidden, not in sitemap)")
 
 # SITEMAP
 print(DIVIDER)
