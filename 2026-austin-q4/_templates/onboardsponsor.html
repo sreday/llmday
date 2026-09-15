@@ -4,7 +4,7 @@
      the sponsor team's emails (To) and the opportunities they bought, toggled as pills. Posts JSON to
      sponsor_onboarding_form_url (home/metadata.yml; backend llmday/_build/sponsor-onboarding-form.gs). The .gs
      owns the email and fills it with `sponsor_onboarding_event` (built in generate.py from metadata.yml,
-     venue.html and sponsorship.yaml, whose tiers ARE the pills). Identical in all three repos: the brand colour
+     venue.html and sponsorship.yaml, whose purchasable tiers ARE the pills). Identical in all three repos: the brand colour
      comes from {{ brand_color }}. Never listed in the sitemap. ── #}
 <!DOCTYPE html>
 <html lang="en">
@@ -47,20 +47,16 @@
     .os-chip { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .82rem; border: 1px solid #ddd; background: #f0f0f0; color: #444; }
     .os-chip.ok { border-color: color-mix(in srgb, var(--os-accent) 45%, #fff); background: color-mix(in srgb, var(--os-accent) 10%, #fff); color: #222; }
     .os-chip.bad { border-color: #f0b4ae; background: #fdecea; color: var(--os-danger); text-decoration: line-through; }
-    /* opportunity toggles: one pill per sponsorship.yaml tier, grey until selected */
+    /* opportunity toggles: one pill per purchasable sponsorship.yaml tier, same look as the lead form chips */
     .os-opts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
-    .os-opt { position: relative; display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 999px; border: 1px solid #d9d9d9; background: #f4f4f6; color: #444; font-size: .9rem; cursor: pointer; user-select: none; transition: background .15s, border-color .15s, color .15s; }
+    .os-opt { position: relative; margin: 0; cursor: pointer; }
     .os-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
-    .os-opt .os-tick { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #bbb; background: #fff; flex: none; display: inline-flex; align-items: center; justify-content: center; }
-    .os-opt .os-tick::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: transparent; }
-    .os-opt:hover { border-color: color-mix(in srgb, var(--os-accent) 45%, #fff); }
-    .os-opt.on { background: color-mix(in srgb, var(--os-accent) 12%, #fff); border-color: color-mix(in srgb, var(--os-accent) 55%, #fff); color: #111; font-weight: 500; }
-    .os-opt.on .os-tick { border-color: var(--os-accent); }
-    .os-opt.on .os-tick::after { background: var(--os-accent); }
-    .os-opt input:focus-visible + .os-tick { box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 25%, transparent); }
+    .os-opt span { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid #ddd; background: #f0f0f0; color: #555; font-size: .9rem; font-weight: 600; user-select: none; transition: background .15s, color .15s, border-color .15s; }
+    .os-opt:hover span { border-color: var(--os-accent); }
+    .os-opt input:checked + span { background: var(--os-accent); border-color: var(--os-accent); color: #fff; }
+    .os-opt input:focus-visible + span { box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 30%, transparent); }
     .os-opts-note { font-size: .8rem; color: #888; margin: 4px 0 14px; }
     .os-opts-note b { color: #333; }
-    .os-req { font-size: .78rem; color: #999; margin: 10px 0 4px; letter-spacing: .04em; text-transform: uppercase; }
     details.os-facts { margin-top: 14px; font-size: .88rem; color: #555; }
     details.os-facts summary { cursor: pointer; color: #666; }
     details.os-facts pre { background: #f7f7f9; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; font-size: .8rem; overflow-x: auto; margin-top: 8px; max-height: 380px; }
@@ -101,8 +97,6 @@
 
     <div class="os-label">Opportunities they signed up for <small>(toggle - each one adds its own section to the email)</small></div>
     <div class="os-opts" id="os-opts"></div>
-    <div class="os-req" id="os-req-label" hidden>On request</div>
-    <div class="os-opts" id="os-opts-req"></div>
     <div class="os-opts-note" id="os-opts-note"></div>
 
     <div class="os-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -156,19 +150,17 @@ function showForm() {
   setTimeout(function() { companyInput.focus(); }, 0);
 }
 
-// ---- opportunity pills (from sponsorship.yaml tiers) -------------------------
+// ---- opportunity pills (purchasable sponsorship.yaml tiers) ------------------
 (function buildOpts() {
-  var items = OS_EVENT.items || [], anyReq = false;
-  items.forEach(function(it) {
+  (OS_EVENT.items || []).forEach(function(it) {
     var lab = document.createElement('label');
-    lab.className = 'os-opt'; lab.title = (it.benefits || []).join(' · ');
+    lab.className = 'os-opt'; lab.title = (it.benefits || []).join(' / ');
     var cb = document.createElement('input'); cb.type = 'checkbox'; cb.name = 'items'; cb.value = it.id;
-    var tick = document.createElement('span'); tick.className = 'os-tick';
-    lab.appendChild(cb); lab.appendChild(tick); lab.appendChild(document.createTextNode(it.name));
-    cb.addEventListener('change', function() { lab.classList.toggle('on', cb.checked); validate(); });
-    if (it.on_request) { anyReq = true; $('os-opts-req').appendChild(lab); } else { $('os-opts').appendChild(lab); }
+    var txt = document.createElement('span'); txt.textContent = it.name;
+    lab.appendChild(cb); lab.appendChild(txt);
+    cb.addEventListener('change', validate);
+    $('os-opts').appendChild(lab);
   });
-  $('os-req-label').hidden = !anyReq;
 })();
 function selectedItems() {
   return Array.prototype.slice.call(form.querySelectorAll('input[name="items"]:checked')).map(function(cb) { return cb.value; });
@@ -195,7 +187,7 @@ function validate() {
   });
   var note = $('os-opts-note');
   note.innerHTML = items.length ? '<b>' + items.length + '</b> opportunit' + (items.length === 1 ? 'y' : 'ies') + ' selected'
-                                : 'Nothing selected yet: the email would only carry the general sponsor info (logo, tickets, timeline, contract).';
+                                : 'Nothing selected yet: the email would only carry the general sponsor info (logo, tickets, timeline).';
   var ok = companyInput.value.trim().length > 0 && p.valid.length > 0 && !p.invalid.length && p.valid.length <= OS_MAX;
   $('os-send').disabled = !ok;
   return { ok: ok, company: companyInput.value.trim(), first_name: firstNameInput.value.trim(), emails: p.valid, invalid: p.invalid, items: items };
@@ -272,7 +264,7 @@ function finish(html) {
   form.hidden = true; previewBox.hidden = true; done.hidden = false;
   $('os-again').addEventListener('click', function(e) {
     e.preventDefault(); companyInput.value = ''; firstNameInput.value = ''; textarea.value = '';
-    Array.prototype.slice.call(form.querySelectorAll('input[name="items"]')).forEach(function(cb) { cb.checked = false; cb.parentNode.classList.remove('on'); });
+    Array.prototype.slice.call(form.querySelectorAll('input[name="items"]')).forEach(function(cb) { cb.checked = false; });
     showForm();
   });
 }
