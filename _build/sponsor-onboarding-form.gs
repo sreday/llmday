@@ -228,7 +228,7 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
 
   // -- what they signed (only when something is toggled)
   if (items.length) {
-    lines.push('*We signed the following opportunities:*');
+    lines.push('*We signed for the following opportunities:*');
     lines.push('');
     items.forEach(function (id) { lines.push('- ' + (LIST_NAMES[id] || label(id))); });
     lines.push('');
@@ -257,7 +257,7 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   var sections = {
     leads: [
       "- We share the pre-conference leads 3 days before the conference, and then the final list on the next working day after the conference. Tell us if there's a special email to send them to.",
-      "- There's no lead scanner available, but all attendees have their LinkedIn QR codes on the badges, so your team can scan and connect on the spot. Attendees accept to be contacted by sponsors in our terms and conditions.",
+      "- We don't use lead scanners, but all attendees have their LinkedIn QR codes on the badges, so your team can connect on the spot.",
       "- Warm intros: after the event you can also pick up to 10 attendees / speakers you'd genuinely like to connect with but your team missed on the day, and we'll send a friendly intro email with your team in cc."
     ],
     booth: [
