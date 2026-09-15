@@ -197,7 +197,8 @@ function testSchedule() {
 // line (HTML only). renderText()/renderHtml() turn the same lines into the plain-text and HTML bodies.
 // Wording mined from Mark's real sponsor emails (2024-2026) + the /sponsorship FAQ; v2 = Marek's edits 2026-09-15
 // (no paperwork block, no 'reply OK' line, FAQ link instead of the package upsell); v3 = sections in pill order with the
-// short names as headings. Do not re-word without asking.
+// short names as headings; 2026-09-15 later: no in-person line, 2-line intro (greeting + venue), 'Your sponsorship'.
+// Do not re-word without asking.
 
 function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   var has = function (id) { return items.indexOf(id) !== -1; };
@@ -208,19 +209,15 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   var lines = [
     firstName ? 'Hey ' + firstName + ',' : 'Hello!',
     '',
-    'Great to have ' + company + ' on board for [' + ev.event_name + '](' + ev.event_url + ') on ' + ev.date + "! Here's everything your team needs to get ready, feel free to forward this to whoever handles logistics on your side.",
-    '',
+    'Great to have ' + company + ' on board for [' + ev.event_name + '](' + ev.event_url + ') on ' + ev.date + '!',
     'Venue: *' + ev.venue_name + '*' + (ev.venue_address && ev.venue_address !== ev.venue_name ? ', ' + ev.venue_address : ''),
-    'Work-in-progress schedule: [' + ev.event_url + '](' + ev.event_url + ')',
-    '',
-    "[y] This conference is strictly in-person, there's no remote or hybrid participation.",
     ''
   ];
   if (ev.extra) { lines.push(ev.extra); lines.push(''); }
 
   // -- what they signed up for (only when something is toggled)
   if (items.length) {
-    lines.push('*Your package:*');
+    lines.push('*Your sponsorship:*');
     lines.push('');
     items.forEach(function (id) {
       var it = ev.items_by_id[id];
