@@ -42,7 +42,7 @@ var MAX_RECIPIENTS = 10;
 var DAILY_MAX_SENDS = 30;
 var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock seconds
 var MAX_DELAY_MINUTES = 24 * 60;   // 'schedule' can defer a send by at most a day
-var KNOWN_ITEMS = ['leads', 'keynote', 'workshop', 'talk', 'booth', 'logo_swag', 'food', 'clothing'];
+var KNOWN_ITEMS = ['leads', 'booth', 'keynote', 'workshop', 'talk', 'logo_swag', 'food', 'clothing'];   // = pill order on the page
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -427,7 +427,7 @@ function normalizeItems(values) {
     var id = String(v || '').toLowerCase();
     if (KNOWN_ITEMS.indexOf(id) !== -1 && out.indexOf(id) === -1) out.push(id);
   });
-  // keep the sponsorship.yaml order, whatever order the page sent them in
+  // keep the pill order, whatever order the page sent them in
   return KNOWN_ITEMS.filter(function (id) { return out.indexOf(id) !== -1; });
 }
 

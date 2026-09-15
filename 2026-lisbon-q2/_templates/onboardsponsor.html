@@ -187,7 +187,7 @@ function validate() {
     s.className = 'os-chip ' + (EMAIL_RE.test(e) ? 'ok' : 'bad'); s.textContent = e; chips.appendChild(s);
   });
   var note = $('os-opts-note');
-  note.innerHTML = items.length ? '<b>' + items.length + '</b> opportunit' + (items.length === 1 ? 'y' : 'ies') + ' selected'
+  note.innerHTML = items.length ? 'They purchased <b>' + items.length + '</b> opportunit' + (items.length === 1 ? 'y' : 'ies')
                                 : 'Nothing selected yet: the email would only carry the general sponsor info (logo, tickets, timeline).';
   var ok = companyInput.value.trim().length > 0 && p.valid.length > 0 && !p.invalid.length && p.valid.length <= OS_MAX;
   $('os-send').disabled = !ok; $('os-schedule').disabled = !ok;
