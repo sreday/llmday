@@ -50,7 +50,10 @@
     .os-opt input:focus-visible + span { box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 30%, transparent); }
     .os-opts-note { font-size: .8rem; color: #888; margin: 4px 0 14px; }
     .os-check { display: flex; align-items: flex-start; gap: 10px; font-size: .92rem; color: #333; margin: 4px 0 18px; line-height: 1.45; }
-    .os-check input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--os-accent); flex: none; cursor: pointer; }
+    .os-check input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin: 2px 0 0; flex: none; cursor: pointer; border: 1.5px solid #bbb; border-radius: 5px; background: #fff; transition: background .15s, border-color .15s; }
+    .os-check input:hover { border-color: var(--os-accent); }
+    .os-check input:checked { background: var(--os-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E") center / 13px no-repeat; border-color: var(--os-accent); }
+    .os-check input:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 30%, transparent); outline: none; }
     .os-check label { cursor: pointer; }
     .os-check a { color: var(--os-accent); word-break: break-all; }
     .os-opts-note b { color: #333; }
