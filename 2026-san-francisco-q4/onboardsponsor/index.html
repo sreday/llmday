@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Onboard a sponsor to LLMday San Francisco 2026 Q4</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <style>
+    :root { --os-accent: #26986A; --os-danger: #c0392b; }
+    html, body { background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
+    .os-wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
+    .os-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--os-accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+    .os-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.7rem; margin: 0 0 6px; line-height: 1.2; }
+    .os-sub { color: #555; font-size: .95rem; margin-bottom: 26px; }
+    .os-sub a { color: var(--os-accent); }
+    .os-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 16px; padding: 30px 34px; box-shadow: 0 4px 20px rgba(0,0,0,.06); margin-bottom: 22px; }
+    .os-field { display: block; margin-bottom: 16px; }
+    .os-field > span, .os-label { display: block; font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 6px; letter-spacing: .02em; }
+    .os-field > span small, .os-label small { font-weight: 400; color: #888; }
+    .os-field input, .os-field textarea { width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #111; background: #fff; outline: none; transition: border-color .2s, box-shadow .2s; font-family: inherit; }
+    .os-field textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+    .os-field input:focus, .os-field textarea:focus { border-color: var(--os-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 18%, transparent); }
+    .os-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 0 16px; }
+    .os-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 6px; }
+    .btn-os { display: inline-flex; align-items: center; justify-content: center; min-width: 130px; border: none; border-radius: 999px; padding: 11px 26px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; transition: filter .15s, transform .1s; }
+    .btn-os:active { transform: scale(.97); }
+    .btn-os[disabled] { opacity: .55; cursor: default; }
+    .btn-os-primary { background: var(--os-accent); color: #fff; }
+    .btn-os-primary:hover { filter: brightness(1.1); }
+    .btn-os-ghost { background: #fff; color: var(--os-accent); border: 2px solid var(--os-accent); padding: 9px 24px; }
+    .btn-os-ghost:hover { background: color-mix(in srgb, var(--os-accent) 8%, #fff); }
+    .os-link { font-size: .9rem; color: #888; text-decoration: none; margin-left: auto; }
+    .os-link:hover { color: #444; text-decoration: underline; }
+    .os-error { display: block; width: 100%; font-size: .92rem; color: var(--os-danger); margin-top: 8px; }
+    .os-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: -8px 0 14px; min-height: 12px; }
+    .os-chip { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .82rem; border: 1px solid #ddd; background: #f0f0f0; color: #444; }
+    .os-chip.ok { border-color: color-mix(in srgb, var(--os-accent) 45%, #fff); background: color-mix(in srgb, var(--os-accent) 10%, #fff); color: #222; }
+    .os-chip.bad { border-color: #f0b4ae; background: #fdecea; color: var(--os-danger); text-decoration: line-through; }
+    /* opportunity toggles: one pill per sponsorship.yaml tier, grey until selected */
+    .os-opts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+    .os-opt { position: relative; display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 999px; border: 1px solid #d9d9d9; background: #f4f4f6; color: #444; font-size: .9rem; cursor: pointer; user-select: none; transition: background .15s, border-color .15s, color .15s; }
+    .os-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .os-opt .os-tick { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #bbb; background: #fff; flex: none; display: inline-flex; align-items: center; justify-content: center; }
+    .os-opt .os-tick::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: transparent; }
+    .os-opt:hover { border-color: color-mix(in srgb, var(--os-accent) 45%, #fff); }
+    .os-opt.on { background: color-mix(in srgb, var(--os-accent) 12%, #fff); border-color: color-mix(in srgb, var(--os-accent) 55%, #fff); color: #111; font-weight: 500; }
+    .os-opt.on .os-tick { border-color: var(--os-accent); }
+    .os-opt.on .os-tick::after { background: var(--os-accent); }
+    .os-opt input:focus-visible + .os-tick { box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 25%, transparent); }
+    .os-opts-note { font-size: .8rem; color: #888; margin: 4px 0 14px; }
+    .os-opts-note b { color: #333; }
+    .os-req { font-size: .78rem; color: #999; margin: 10px 0 4px; letter-spacing: .04em; text-transform: uppercase; }
+    details.os-facts { margin-top: 14px; font-size: .88rem; color: #555; }
+    details.os-facts summary { cursor: pointer; color: #666; }
+    details.os-facts pre { background: #f7f7f9; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; font-size: .8rem; overflow-x: auto; margin-top: 8px; max-height: 380px; }
+    .os-hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .os-preview-meta { font-size: .92rem; color: #333; margin-bottom: 10px; line-height: 1.6; word-break: break-word; }
+    .os-preview-meta b { font-family: 'Montserrat', sans-serif; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; color: #777; margin-right: 6px; }
+    .os-preview-frame { width: 100%; height: 720px; border: 1px solid #e6e6e6; border-radius: 10px; background: #fff; }
+    .os-done { font-size: 1.05rem; line-height: 1.6; }
+    .os-done strong { font-family: 'Montserrat', sans-serif; }
+    .os-done a { color: var(--os-accent); }
+    .os-muted { color: #888; font-size: .85rem; margin-top: 30px; }
+    @media (max-width: 575.98px) { .os-card { padding: 22px 18px; } .os-title { font-size: 1.4rem; } .os-grid { grid-template-columns: 1fr; } .os-preview-frame { height: 520px; } }
+  </style>
+</head>
+<body>
+<main class="os-wrap">
+  <div class="os-brand">LLMday · sponsors</div>
+  <h1 class="os-title">Onboard a sponsor to LLMday San Francisco 2026 Q4</h1>
+  <div class="os-sub">October 1, 2026 · The offices of Harness.io · <a href="https://www.llmday.com/2026-san-francisco-q4/" target="_blank" rel="noopener">event page</a> · <a href="https://www.llmday.com/2026-san-francisco-q4/sponsorship.html" target="_blank" rel="noopener">sponsorship</a></div>
+
+  
+  <form class="os-card" id="os-gate" novalidate>
+    <label class="os-field"><span>Passphrase</span><input type="password" name="pass" autocomplete="current-password" autofocus></label>
+    <div class="os-row">
+      <button type="submit" class="btn-os btn-os-primary" id="os-unlock">Unlock</button>
+      <div class="os-error" id="os-gate-error" hidden></div>
+    </div>
+  </form>
+
+  
+  <form class="os-card" id="os-form" hidden novalidate>
+    <div class="os-grid">
+      <label class="os-field"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="80"></label>
+      <label class="os-field"><span>Contact's first name <small>(optional, "Hey Anna")</small></span><input type="text" name="first_name" autocomplete="off" maxlength="40"></label>
+    </div>
+    <label class="os-field"><span>Sponsor team emails <small>(comma separated - everyone goes in To)</small></span><textarea name="emails" spellcheck="false" autocomplete="off"></textarea></label>
+    <div class="os-chips" id="os-chips"></div>
+
+    <div class="os-label">Opportunities they signed up for <small>(toggle - each one adds its own section to the email)</small></div>
+    <div class="os-opts" id="os-opts"></div>
+    <div class="os-req" id="os-req-label" hidden>On request</div>
+    <div class="os-opts" id="os-opts-req"></div>
+    <div class="os-opts-note" id="os-opts-note"></div>
+
+    <div class="os-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="os-row">
+      <button type="button" class="btn-os btn-os-ghost" id="os-preview">Preview</button>
+      <button type="submit" class="btn-os btn-os-primary" id="os-send" disabled>Send</button>
+      <a href="#" class="os-link" id="os-lock">lock</a>
+      <div class="os-error" id="os-error" hidden></div>
+    </div>
+    <details class="os-facts">
+      <summary>Event facts the email is filled with</summary>
+      <pre id="os-facts"></pre>
+      <div>Wrong? Fix <code>metadata.yml</code> / <code>venue.html</code> / <code>sponsorship.yaml</code>, or add a <code>sponsor_onboarding:</code> override block (sponsor_code, extra), and rebuild.</div>
+    </details>
+  </form>
+
+  <section class="os-card" id="os-preview-box" hidden>
+    <div class="os-preview-meta"><b>From</b> <span id="os-from"></span><br><b>To</b> <span id="os-to"></span><br><b>Subject</b> <span id="os-subject"></span></div>
+    <iframe class="os-preview-frame" id="os-html" sandbox="" title="Email preview"></iframe>
+  </section>
+
+  <div class="os-card os-done" id="os-done" hidden></div>
+
+  <div class="os-muted" id="os-locked-note">This is a tool for organizers. Nothing to see here for attendees, speakers and sponsors.</div>
+  <div class="os-muted" id="os-footer" hidden>Sent from the brand alias straight to the sponsor team (all in To). The thread is filed unread in the inbox under the "Sponsor onboarding" label; replies join it.</div>
+</main>
+
+<script>
+var OS_URL   = "";
+var OS_EVENT = {"attendees": 100, "brand": "llmday", "brand_name": "LLMday", "calendly_url": "https://calendly.com/sreday/30min", "city": "San Francisco", "date": "October 1, 2026", "event_name": "LLMday San Francisco 2026 Q4", "event_size": "medium", "event_url": "https://www.llmday.com/2026-san-francisco-q4/", "extra": "", "host_url": "https://www.llmday.com/host", "items": [{"benefits": ["Receive full attendee contact list"], "id": "leads", "name": "Conference Leads", "on_request": false}, {"benefits": ["30-minute morning slot", "100% audience \u2014 no parallel talks"], "id": "keynote", "name": "Keynote Session", "on_request": false}, {"benefits": ["60-minute slot", "Let attendees play with your tech"], "id": "workshop", "name": "Workshop", "on_request": false}, {"benefits": ["30-minute afternoon slot", "May run alongside parallel tracks"], "id": "talk", "name": "Regular Session Slot", "on_request": false}, {"benefits": ["Table (150 \u00d7 100cm), optional monitor", "Electricity, Wi-Fi, space for a rollup banner"], "id": "booth", "name": "Booth / Table", "on_request": false}, {"benefits": ["Logo on the website, on-stage mention", "Swag distributed to all attendees"], "id": "logo_swag", "name": "Logo Sponsor + Swag", "on_request": false}, {"benefits": ["Microphone time before the selected break", "Distribute your swag alongside food \u0026 drinks"], "id": "food", "name": "Coffee Break / Lunch / Happy Hour", "on_request": false}, {"benefits": ["Your logo on t-shirts, hoodies, socks, etc.", "Price per person depends on the item"], "id": "clothing", "name": "Branded Wearables", "on_request": false}, {"benefits": [], "id": "host", "name": "Host LLMday / SREday / PLATFORMday", "on_request": true}, {"benefits": [], "id": "co_located", "name": "Co-located Event", "on_request": true}, {"benefits": [], "id": "hackathon", "name": "Hackathon", "on_request": true}, {"benefits": [], "id": "meetup", "name": "Post-conference Meetup", "on_request": true}, {"benefits": [], "id": "speakers_dinner", "name": "Speaker\u0027s Dinner", "on_request": true}, {"benefits": [], "id": "email_blast", "name": "Attendee Email Blast", "on_request": true}], "month_day": "October 1", "slot_minutes": 30, "slug": "2026-san-francisco-q4", "sponsor_code": "", "sponsor_page_url": "https://www.llmday.com/2026-san-francisco-q4/sponsorship.html", "tickets_url": "https://www.llmday.com/2026-san-francisco-q4/#tickets", "venue_address": "55 Stockton St, San Francisco, CA 94108, United States", "venue_name": "The offices of Harness.io", "youtube_url": "https://www.youtube.com/@llmday"};
+var OS_KEY   = 'onboarding_pass_' + OS_EVENT.brand;   // shared with /onboarding/ and /invitation/: unlock once, use all
+var OS_MAX   = 10;   // recipients per send (server-side cap too)
+
+var $ = function(id) { return document.getElementById(id); };
+var gate = $('os-gate'), form = $('os-form'), previewBox = $('os-preview-box'), done = $('os-done');
+var companyInput = form.elements['company'], firstNameInput = form.elements['first_name'], textarea = form.elements['emails'];
+
+function storedPass() { try { return localStorage.getItem(OS_KEY) || ''; } catch (e) { return ''; } }
+function storePass(p) { try { if (p) localStorage.setItem(OS_KEY, p); else localStorage.removeItem(OS_KEY); } catch (e) {} }
+
+function showGate(msg) {
+  form.hidden = true; previewBox.hidden = true; done.hidden = true; gate.hidden = false; $('os-footer').hidden = true; $('os-locked-note').hidden = false;
+  var err = $('os-gate-error'); err.textContent = msg || ''; err.hidden = !msg;
+  gate.elements['pass'].value = '';
+  setTimeout(function() { gate.elements['pass'].focus(); }, 0);
+}
+function showForm() {
+  gate.hidden = true; form.hidden = false; done.hidden = true; $('os-footer').hidden = false; $('os-locked-note').hidden = true;
+  $('os-facts').textContent = JSON.stringify(OS_EVENT, null, 2);
+  validate();
+  setTimeout(function() { companyInput.focus(); }, 0);
+}
+
+// ---- opportunity pills (from sponsorship.yaml tiers) -------------------------
+(function buildOpts() {
+  var items = OS_EVENT.items || [], anyReq = false;
+  items.forEach(function(it) {
+    var lab = document.createElement('label');
+    lab.className = 'os-opt'; lab.title = (it.benefits || []).join(' · ');
+    var cb = document.createElement('input'); cb.type = 'checkbox'; cb.name = 'items'; cb.value = it.id;
+    var tick = document.createElement('span'); tick.className = 'os-tick';
+    lab.appendChild(cb); lab.appendChild(tick); lab.appendChild(document.createTextNode(it.name));
+    cb.addEventListener('change', function() { lab.classList.toggle('on', cb.checked); validate(); });
+    if (it.on_request) { anyReq = true; $('os-opts-req').appendChild(lab); } else { $('os-opts').appendChild(lab); }
+  });
+  $('os-req-label').hidden = !anyReq;
+})();
+function selectedItems() {
+  return Array.prototype.slice.call(form.querySelectorAll('input[name="items"]:checked')).map(function(cb) { return cb.value; });
+}
+
+// ---- validation ------------------------------------------------------------
+var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function parseEmails(text) {
+  var seen = {}, valid = [], invalid = [];
+  text.toLowerCase().split(/[\s,;<>()\[\]"']+/).forEach(function(tok) {
+    tok = tok.replace(/^mailto:/, '').replace(/^[.:]+|[.:]+$/g, '');
+    if (!tok || seen[tok]) return;
+    seen[tok] = true;
+    (EMAIL_RE.test(tok) ? valid : invalid).push(tok);
+  });
+  return { valid: valid, invalid: invalid };
+}
+function validate() {
+  var p = parseEmails(textarea.value), chips = $('os-chips'), items = selectedItems();
+  chips.innerHTML = '';
+  p.valid.concat(p.invalid).forEach(function(e) {
+    var s = document.createElement('span');
+    s.className = 'os-chip ' + (EMAIL_RE.test(e) ? 'ok' : 'bad'); s.textContent = e; chips.appendChild(s);
+  });
+  var note = $('os-opts-note');
+  note.innerHTML = items.length ? '<b>' + items.length + '</b> opportunit' + (items.length === 1 ? 'y' : 'ies') + ' selected'
+                                : 'Nothing selected yet: the email would only carry the general sponsor info (logo, tickets, timeline, contract).';
+  var ok = companyInput.value.trim().length > 0 && p.valid.length > 0 && !p.invalid.length && p.valid.length <= OS_MAX;
+  $('os-send').disabled = !ok;
+  return { ok: ok, company: companyInput.value.trim(), first_name: firstNameInput.value.trim(), emails: p.valid, invalid: p.invalid, items: items };
+}
+[companyInput, firstNameInput, textarea].forEach(function(el) { el.addEventListener('input', validate); });
+
+// ---- transport -------------------------------------------------------------
+function post(action, v) {
+  if (!OS_URL) return Promise.reject(new Error('sponsor_onboarding_form_url is not configured in home/metadata.yml'));
+  var body = { action: action, pass: storedPass(), brand: OS_EVENT.brand, company: v.company, first_name: v.first_name, emails: v.emails, items: v.items,
+               event: OS_EVENT, website: form.elements['website'].value || '', page: location.href };
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var timer = ctrl ? setTimeout(function() { ctrl.abort(); }, 25000) : null;
+  return fetch(OS_URL, { method: 'POST', body: JSON.stringify(body), signal: ctrl ? ctrl.signal : undefined })
+    .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
+    .then(function(res) {
+      if (timer) clearTimeout(timer);
+      if (!res || !res.ok) { var e = new Error((res && res.error) || 'rejected'); e.res = res || {}; throw e; }
+      return res;
+    }, function(err) { if (timer) clearTimeout(timer); throw err; });
+}
+function humanLock(res) {
+  var s = Number(res && res.retry_in) || 0, m = Math.ceil(s / 60);
+  return m >= 90 ? 'Locked for ' + Math.ceil(m / 60) + ' h after too many wrong passphrases.' : 'Locked for ' + Math.max(m, 1) + ' min after too many wrong passphrases.';
+}
+function showError(err) {
+  var el = $('os-error'), res = err.res || {}, msg;
+  switch (err.message) {
+    case 'unauthorized': storePass(''); showGate('Wrong passphrase.'); return;
+    case 'locked': storePass(''); showGate(humanLock(res)); return;
+    case 'invalid emails': msg = 'The server rejected: ' + (res.bad || []).join(', '); break;
+    case 'no company': msg = 'The company name is required.'; break;
+    case 'no recipients': msg = 'Add at least one sponsor email.'; break;
+    case 'too many': msg = 'Too many recipients, max ' + OS_MAX + ' per send.'; break;
+    case 'too many today': msg = 'Daily send limit reached, try again tomorrow.'; break;
+    default: msg = "Hmm, that didn't go through (" + (err.name === 'AbortError' ? 'timeout' : err.message) + '). Try again.';
+  }
+  el.textContent = msg; el.hidden = false;
+}
+function busy(btn, label) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = label; }
+function idle(btn) { btn.disabled = false; btn.textContent = btn.dataset.label || btn.textContent; }
+
+// ---- gate ------------------------------------------------------------------
+gate.addEventListener('submit', function(ev) {
+  ev.preventDefault();
+  var p = gate.elements['pass'].value.trim();
+  if (!p) return;
+  storePass(p);
+  var btn = $('os-unlock'); busy(btn, 'Checking...');
+  post('preview', { company: 'Preview', first_name: '', emails: [], items: [] }).then(function() { idle(btn); showForm(); })
+    .catch(function(err) { idle(btn); if (err.message === 'unauthorized' || err.message === 'locked') showError(err); else { showForm(); } });
+});
+$('os-lock').addEventListener('click', function(ev) { ev.preventDefault(); storePass(''); showGate(''); });
+
+// ---- preview & send --------------------------------------------------------
+$('os-preview').addEventListener('click', function() {
+  $('os-error').hidden = true;
+  var v = validate(), btn = $('os-preview');
+  if (!v.company) v.company = 'Acme';
+  busy(btn, 'Loading...');
+  post('preview', v).then(function(res) {
+    idle(btn);
+    $('os-from').textContent = res.from || '';
+    // no valid sponsor email yet: the preview still renders, but the To line says so in red (same rule as the other forms)
+    if (v.emails.length && !v.invalid.length) { $('os-to').textContent = v.emails.join(', '); }
+    else { $('os-to').innerHTML = '<span style="color:var(--os-danger)">(email required)</span>'; }
+    $('os-subject').textContent = res.subject || '';
+    $('os-html').srcdoc = res.html || '';
+    previewBox.hidden = false; previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }).catch(function(err) { idle(btn); showError(err); });
+});
+function finish(html) {
+  done.innerHTML = html + ' <a href="#" id="os-again">Onboard another sponsor</a>';
+  form.hidden = true; previewBox.hidden = true; done.hidden = false;
+  $('os-again').addEventListener('click', function(e) {
+    e.preventDefault(); companyInput.value = ''; firstNameInput.value = ''; textarea.value = '';
+    Array.prototype.slice.call(form.querySelectorAll('input[name="items"]')).forEach(function(cb) { cb.checked = false; cb.parentNode.classList.remove('on'); });
+    showForm();
+  });
+}
+form.addEventListener('submit', function(ev) {
+  ev.preventDefault();
+  $('os-error').hidden = true;
+  var v = validate();
+  if (!v.ok) return;
+  var what = v.items.length ? v.items.length + ' opportunit' + (v.items.length === 1 ? 'y' : 'ies') : 'no opportunities (general info only)';
+  if (!confirm('Send the sponsor onboarding email for ' + v.company + ' to ' + v.emails.join(', ') + ' with ' + what + '?')) return;
+  var btn = $('os-send'); busy(btn, 'Sending...');
+  post('send', v).then(function(res) {
+    idle(btn);
+    finish('<strong>Sent to ' + v.company + '</strong> (' + v.emails.join(', ') + '). ' +
+           'The email is filed unread under "Sponsor onboarding" in the inbox.');
+  }).catch(function(err) { idle(btn); showError(err); });
+});
+
+// ---- boot ------------------------------------------------------------------
+if (storedPass()) showForm(); else showGate('');
+</script>
+</body>
+</html>
