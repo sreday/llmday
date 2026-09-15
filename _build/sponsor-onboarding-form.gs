@@ -46,7 +46,10 @@ var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock 
 var MAX_DELAY_MINUTES = 24 * 60;   // 'schedule' can defer a send by at most a day
 var KNOWN_ITEMS = ['leads', 'booth', 'keynote', 'workshop', 'talk', 'logo_swag', 'break_coffee', 'break_lunch', 'break_happy', 'clothing'];   // = pill order on the page
 var ITEM_NAMES = { leads: 'Leads', booth: 'Booth', keynote: 'Keynote', workshop: 'Workshop', talk: 'Regular session', logo_swag: 'Logo + Swag',
-                   break_coffee: 'Coffee break', break_lunch: 'Lunch break', break_happy: 'Happy hour', clothing: 'Wearables' };   // fallback when the page sends no name
+                   break_coffee: 'Coffee break', break_lunch: 'Lunch break', break_happy: 'Happy Hour', clothing: 'Wearables' };   // section headings
+var LIST_NAMES = { leads: 'Conference leads', booth: 'Booth / Table', keynote: 'Keynote Session', workshop: 'Workshop', talk: 'Regular Session',
+                   logo_swag: 'Logo Sponsor + Swag Distribution', break_coffee: 'Sponsored coffee break', break_lunch: 'Sponsored lunch break',
+                   break_happy: 'Sponsored happy hour', clothing: 'Branded wearables' };   // "We signed the following opportunities" list
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -202,15 +205,17 @@ function testSchedule() {
 // line (HTML only). renderText()/renderHtml() turn the same lines into the plain-text and HTML bodies.
 // Wording mined from Mark's real sponsor emails (2024-2026) + the /sponsorship FAQ; v2 = Marek's edits 2026-09-15
 // (no paperwork block, no 'reply OK' line, FAQ link instead of the package upsell); v3 = sections in pill order with the
-// short names as headings; 2026-09-15 later: no in-person line, 2-line intro (greeting + venue), 'Your sponsorship'.
+// short names as headings; v4 (script v3 file, 2026-09-15 afternoon) = Mark's Gmail-edited draft (PDF on the Desktop):
+// 'We signed the following opportunities', 'Grab tickets for your team (and friends)', one block per session kind then
+// 'Please send us details of your ...', one block per break, no FAQ list, 'Let me know if we're all set!'.
 // Do not re-word without asking.
 
 function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   var has = function (id) { return items.indexOf(id) !== -1; };
-  var label = function (id) { return ev.items_by_id[id] ? ev.items_by_id[id].name : (ITEM_NAMES[id] || id); };
-  var talkMin = Math.max(ev.slot_minutes - 5, 5);
+  var label = function (id) { return ITEM_NAMES[id] || (ev.items_by_id[id] ? ev.items_by_id[id].name : id); };
   var code = ev.sponsor_code || brand.code;
   var sponsorsAnchor = ev.event_url + '#sponsors';
+  var SESSION_IDS = ['keynote', 'workshop', 'talk'];
 
   var lines = [
     firstName ? 'Hey ' + firstName + ',' : 'Hello!',
@@ -221,56 +226,87 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   ];
   if (ev.extra) { lines.push(ev.extra); lines.push(''); }
 
-  // -- what they signed up for (only when something is toggled)
+  // -- what they signed (only when something is toggled)
   if (items.length) {
-    lines.push('*Your sponsorship:*');
+    lines.push('*We signed the following opportunities:*');
     lines.push('');
-    items.forEach(function (id) {
-      var it = ev.items_by_id[id];
-      lines.push('- ' + label(id) + (it && it.benefits.length ? ' - ' + it.benefits.join(' / ') : ''));
-    });
+    items.forEach(function (id) { lines.push('- ' + (LIST_NAMES[id] || label(id))); });
     lines.push('');
   }
 
-  // -- basics, every sponsor
+  // -- every sponsor
   lines = lines.concat([
-    '*Next steps:*',
+    '*Grab tickets for your team (and friends):*',
     '',
-    '- Your logo is added here: [' + sponsorsAnchor + '](' + sponsorsAnchor + ") with your regular URL. Let us know if you'd like to change it, use an UTM, etc.",
-    '- Your team: register everyone here [' + ev.tickets_url + '](' + ev.tickets_url + ') with the free code *' + code + '*\n  (the "add coupon" is tricky to find, but it\'s there in the top right corner of the luma window)',
+    '- Your logo is added here: [' + sponsorsAnchor + '](' + sponsorsAnchor + ") with your regular URL. Let us know if you'd like to change anything.",
+    '- Your team can register here [' + ev.tickets_url + '](' + ev.tickets_url + ') pick a regular ticket with the free code *' + code + '*\n  Bulk booking is not supported, sorry about that. "Add coupon" button is in the top right corner of the luma window.',
     "- There's no limit on the code, but we recommend staffing with 2-3 people for this size of event.",
-    "- You can also invite your local clients and friends to attend at no charge, happy to accommodate as long as we're not maxed out.",
-    "- Kick-off: we introduce all sponsors as we open the day - we show all logos, say which sponsor does what, and you get a minute on the microphone to present what you're doing.",
+    '- You can also invite your local clients and friends to attend at no charge, happy to accommodate as long as we have space.',
     ''
   ]);
 
-  // -- per-opportunity sections, in the pill order (KNOWN_ITEMS): the three session kinds share one block
-  var SESSION_IDS = ['keynote', 'workshop', 'talk'];
-  var BREAK_IDS = ['break_coffee', 'break_lunch', 'break_happy'];
+  // -- per-opportunity sections, in the pill order (KNOWN_ITEMS); wording = Mark's Gmail-edited draft of 2026-09-15
+  var breakBlock = function (name) {
+    return [
+      "- Ship your swag to us or have a team member bring it on the day, we'll make sure it's all properly distributed.",
+      "- We'll ensure a proper mic time for your team before the " + name,
+      "- If there's no one from your team at the event, we'll make a proper announcement ourselves",
+      '- We can also distribute your swag during the break, whatever makes sense to your team - just need to know in advance so we can prepare.'
+    ];
+  };
   var sections = {
-    leads: function () {
-      return [
-        '- We share the pre-conference leads on the Monday before the conference, and then the final list on the next working day after the conference. Tell us which email address should receive them.',
-        "- All attendees have their LinkedIn QR codes on the badges, so your team can scan and connect on the spot. Attendees accept to be contacted by sponsors in our terms and conditions.",
-        "- After the event you can also pick up to 10 attendees or speakers you'd genuinely like to connect with, and we'll send a friendly intro email with your team in cc. More on that after the conference."
-      ];
-    },
-    booth: function () {
-      return [
-        '- The booth is a regular office table (around 150x100 cm), with space for your rollup banner, swag and a monitor you can plug in, along with some electricity sockets. Whatever you bring can go on top.',
-        "- The rollup banner is brought by the sponsor, we don't print those - a medium one (around 200x50 cm) fits best. I'd recommend keeping the setup simple, there won't be a massive space around each booth.",
-        '- Setup: your team can come as early as 7:30 in the morning, allowing 90 minutes before the kick-off.',
-        "- Shipping: if you'd like to ship materials ahead, let me know and I'll share the delivery address and contact at the venue.",
-        "- Tip for the day: our events are community-driven and practitioner-first, so the right approach is to go towards people rather than being passive at the booth. A conversation starting with \"I heard you use X to solve Y\" goes a long way compared to \"scan this QR code, here's your swag\". Just a recommendation, you do you!"
-      ];
-    },
-    sessions: function () {
-      var out = [];
-      if (has('keynote')) out.push('- Keynote: ' + talkMin + ' mins talk + 5 mins Q&A, in the morning with the full audience in the room, no parallel talks.');
-      if (has('workshop')) out.push("- Workshop: a full hour, hands-on. Unlike regular sessions, participants are encouraged to walk around, ask questions and engage. Tell us what attendees should bring or install in advance and we'll announce it with the schedule.");
-      if (has('talk')) out.push('- Regular session: ' + talkMin + ' mins talk + 5 mins Q&A, in the afternoon. It may run alongside parallel tracks.');
-      return out.concat([
-        "- The format and content are completely up to the speaker. Our audience is very open to hear about sponsored products, but might get pushed off by straight sales pitches - show how the product solves a real problem instead.",
+    leads: [
+      "- We share the pre-conference leads 3 days before the conference, and then the final list on the next working day after the conference. Tell us if there's a special email to send them to.",
+      "- There's no lead scanner available, but all attendees have their LinkedIn QR codes on the badges, so your team can scan and connect on the spot. Attendees accept to be contacted by sponsors in our terms and conditions.",
+      "- Warm intros: after the event you can also pick up to 10 attendees / speakers you'd genuinely like to connect with but your team missed on the day, and we'll send a friendly intro email with your team in cc."
+    ],
+    booth: [
+      '- The booth is a regular table (around 150x100 cm), with space for your rollup banner, swag, along with some electricity sockets.',
+      '- Cloth: I would bring a one-size-fits-all, as tables may differ in size depending on the venue.',
+      "- We'll do our best to arrange a monitor for your team to show demos, you can rent out a bigger screen by your own means.",
+      "- The rollup banner needs to be brought in by the sponsor. The space isn't massive, so a medium one (around 200x50 cm) fits best. I'd recommend keeping the setup simple, there won't be a massive space around each booth.",
+      '- Setup: we recommend that your team comes at least 1 hour before the first talk',
+      "- Shipping: if you'd like to ship materials ahead, let me know and I'll share the delivery address and contact at the venue.",
+      "- Tip to maximise the outcome: our events are community-driven and practitioner-first, so the right approach is to go towards people rather than being passive at the booth. A conversation starting with \"I heard you use X to solve Y\" goes a long way compared to \"scan this QR code, here's your swag\". Just a recommendation, you do you!"
+    ],
+    keynote: [
+      '- 25 mins talk + 5 mins Q&A',
+      '- Morning slot with the full audience in the room, no parallel talks.'
+    ],
+    workshop: [
+      '- Two regular slots - 30 + 30 minutes',
+      '- Hands-on, let the audience play with your tech. Unlike regular sessions, participants are encouraged to walk around, ask questions and engage.',
+      "- May run along another tracks, but we'll always do our best to fill up the room"
+    ],
+    talk: [
+      '- 25 mins talk + 5 mins Q&A',
+      '- Afternoon slot, may run along other tracks'
+    ],
+    logo_swag: [
+      '- Your logo is listed here: [' + sponsorsAnchor + '](' + sponsorsAnchor + ')',
+      "- Ship your swag to us or have a team member come to the conference with it, we'll make sure it's all properly distributed."
+    ],
+    break_coffee: breakBlock('coffee break'),
+    break_lunch: breakBlock('lunch break'),
+    break_happy: breakBlock('happy hour'),
+    clothing: [
+      "- Remind us of the wearable you'd like to go for",
+      '- Please share your logo in vector format (SVG / PDF).',
+      "- We'll confirm its look and quantity with you before ordering"
+    ]
+  };
+  var picked = SESSION_IDS.filter(has);
+  var lastSession = picked.length ? picked[picked.length - 1] : '';
+  KNOWN_ITEMS.forEach(function (id) {
+    if (!has(id) || !sections[id]) return;
+    lines.push('*' + label(id) + ':*'); lines.push('');
+    lines = lines.concat(sections[id], ['']);
+    if (id === lastSession) {                        // speaker details ask, once, right after the last session block
+      var names = picked.map(function (s) { return label(s).toLowerCase(); });
+      var which = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : names[0];
+      lines = lines.concat([
+        '*Please send us details of your ' + which + ':*',
+        '',
         '- Please share the speaker details at your earliest convenience, the quickest way is this form: [' + ev.fasttrack_url + '](' + ev.fasttrack_url + '), or just reply with:',
         '',
         "1. Speaker's LinkedIn URL",
@@ -278,83 +314,17 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
         '1. Talk abstract (3+ phrases, uncapped)',
         "1. Speaker's short bio",
         "1. Speaker's picture (only if the one on LinkedIn is poor quality)",
-        "1. Speaker's direct email for onboarding (we'll keep you in cc)",
-        '',
-        "As soon as we get those, we'll add the session to the website, start promoting it and share the promotional assets with you. Speakers present from their own laptop (HDMI / USB-C), and talks are recorded - we share the video 1-2 weeks after the conference."
+        "1. Speaker's direct email for onboarding",
+        ''
       ]);
-    },
-    logo_swag: function () {
-      return [
-        '- Your logo goes on the website and you get a shoutout on stage at the kick-off.',
-        "- Swag: your team can drop it off with us in the morning and we'll distribute it to all attendees during the breaks. Stickers, small items and printed material work best. Tell us what and how many you're bringing so we can prepare the space."
-      ];
-    },
-    break_coffee: function () {
-      return [
-        "- We make a proper announcement that the coffee break is sponsored by " + company + ", you can bombard the coffee tables with your swag (and keep it there during the whole day), and we give your team a microphone in the lobby to say a word."
-      ];
-    },
-    break_lunch: function () {
-      return [
-        "- We announce the lunch break in your name (something like \"Lunch by " + company + " - grab a pizza!\", the wording is up to you), distribute your swag during lunch, and give your team a microphone in the main lobby to say something before people head off - a short demo works too."
-      ];
-    },
-    break_happy: function () {
-      return [
-        "- We announce the happy hour as sponsored by " + company + ", put your stickers on the drinks and your rollup next to the bar. Happy hour is where people open up and the juiciest conversations happen, so please invite your team to stay over for it."
-      ];
-    },
-    clothing: function () {
-      return [
-        "- Please share your logo in vector format (SVG / PDF). We'll confirm the item, sizes and quantity with you before ordering, the price per person depends on the item."
-      ];
     }
-  };
-  var sessionsDone = false, breaksDone = false;
-  KNOWN_ITEMS.forEach(function (id) {
-    if (!has(id)) return;
-    if (SESSION_IDS.indexOf(id) !== -1) {
-      if (sessionsDone) return;
-      sessionsDone = true;
-      var picked = SESSION_IDS.filter(has).map(label);
-      lines.push('*' + picked.join(' + ') + ':*'); lines.push('');
-      lines = lines.concat(sections.sessions(), ['']);
-      return;
-    }
-    if (BREAK_IDS.indexOf(id) !== -1) {                 // the picked breaks share one block, one bullet each
-      if (breaksDone) return;
-      breaksDone = true;
-      var picked2 = BREAK_IDS.filter(has);
-      lines.push('*' + picked2.map(label).join(' + ') + ':*'); lines.push('');
-      picked2.forEach(function (b) { lines = lines.concat(sections[b]()); });
-      lines.push("- Just let us know what you're planning in advance so we can do the groundwork :-)");
-      lines.push('');
-      return;
-    }
-    if (!sections[id]) return;
-    lines.push('*' + label(id) + ':*'); lines.push('');
-    lines = lines.concat(sections[id](), ['']);
   });
 
-  // -- timeline + ask
   lines = lines.concat([
-    '*What happens now:*',
+    'More Sponsor FAQ can be found here: [' + ev.faq_url + '](' + ev.faq_url + ')',
     '',
-    "- As speakers confirm, we update the website and prepare social media graphics and promo posts for sharing.",
-    '- The schedule is published as soon as most speakers are confirmed, things might still move a bit until then.',
-    '- After the event: photos within a few days, talk videos 1-2 weeks later.',
-    '',
-    "I'm here for any questions,",
-    'Mark',
-    '',
-    '*FAQ:*',
-    '',
-    '1. Expected attendance - around ' + (ev.attendees || 100) + ' people, mid-senior level practitioners',
-    '1. Who attends: roughly 59% software, platform and DevOps engineers, 22% founders and engineering leaders, 14% business, consulting and product, 5% ML/AI/data. Having chatty, seasoned technical folks at the event is recommended.',
-    '1. There will be WiFi access in the venue',
-    '1. Previous ' + ev.brand_name + ' talks: ' + (ev.youtube_url ? '[' + ev.youtube_url + '](' + ev.youtube_url + ')' : 'on our YouTube channel'),
-    '1. Prefer a call? Grab a slot: [' + ev.calendly_url + '](' + ev.calendly_url + ')',
-    '1. More frequently asked questions: [' + ev.faq_url + '](' + ev.faq_url + ')'
+    "Let me know if we're all set!",
+    'Mark'
   ]);
   return {
     subject: "Sponsor's onboarding - " + company + ' at ' + ev.event_name,
