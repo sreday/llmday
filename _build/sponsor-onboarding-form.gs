@@ -11,6 +11,9 @@
  * logo_swag, food, clothing); the 'On request' tiers are deliberately not offered (too custom - Marek 2026-09-15).
  * On 'send' it emails From the brand alias To the sponsor team (everyone in To, they are one team), then moves
  * the thread to the Inbox as unread + important under the "Sponsor onboarding" label so replies land on it.
+ * 'schedule' (delay_minutes, e.g. 60) instead leaves a Gmail DRAFT and a time-based trigger sends it later
+ * (processQueue): Mark can still edit the draft, and deleting the draft cancels the send. New scope for that: run
+ * testSchedule() once from the editor to grant the triggers permission before redeploying.
  * 'preview' returns subject + html only.
  *
  * Abuse guards (the /exec URL is public): passphrase checked against the Script Property
@@ -38,13 +41,14 @@ var LEAD_LABEL = 'Sponsor onboarding';
 var MAX_RECIPIENTS = 10;
 var DAILY_MAX_SENDS = 30;
 var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock seconds
+var MAX_DELAY_MINUTES = 24 * 60;   // 'schedule' can defer a send by at most a day
 var KNOWN_ITEMS = ['leads', 'keynote', 'workshop', 'talk', 'booth', 'logo_swag', 'food', 'clothing'];
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('SPONSOR_ONBOARDING_LOCK');
   return respond({ ok: true, service: 'sponsor-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), version: 2 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('SPONSOR_ONBOARDING_QUEUE').items || []).length, version: 3 });
 }
 
 function doPost(e) {
@@ -83,12 +87,30 @@ function doPost(e) {
   }
   if (!company) return respond({ ok: false, error: 'no company' });
   if (!emails.ok.length) return respond({ ok: false, error: 'no recipients' });
+  var delay = parseInt(data.delay_minutes, 10);
+  delay = delay > 0 ? Math.min(delay, MAX_DELAY_MINUTES) : 0;
+  if (data.action === 'schedule' && !delay) return respond({ ok: false, error: 'bad delay' });
   if (!dailyBudget()) return respond({ ok: false, error: 'too many today' });
 
   var mail = composeSponsorOnboarding(ev, brand, company, firstName, items);
   var options = { name: SENDER_NAME, htmlBody: mail.html };
   if (from === brand.from) options.from = brand.from;
   var draft = GmailApp.createDraft(emails.ok.join(','), mail.subject, mail.text, options);
+
+  if (data.action === 'schedule') {
+    var due = Date.now() + delay * 60000;
+    try {
+      scheduleTrigger(delay * 60000 + 15000);
+    } catch (err) {                                   // triggers scope not granted yet (run testSchedule once)
+      try { draft.deleteDraft(); } catch (e2) {}
+      Logger.log('Cannot schedule, trigger permission missing: ' + err);
+      return respond({ ok: false, error: 'no trigger permission' });
+    }
+    enqueue({ id: draft.getId(), due: due, subject: mail.subject, recipients: emails.ok.length });
+    Logger.log('Sponsor onboarding scheduled: %s -> %s at %s (draft %s)', ev.event_name, company, new Date(due).toISOString(), draft.getId());
+    return respond({ ok: true, scheduled: emails.ok.length, at: new Date(due).toISOString(), delay_minutes: delay });
+  }
+
   var message = draft.send();
   fileThread(message);
   Logger.log('Sponsor onboarding sent: %s -> %s [%s] items: %s from %s', ev.event_name, company, emails.ok.join(', '), items.join(','), from);
@@ -108,6 +130,65 @@ function fileThread(message) {
   } catch (err) {
     Logger.log('Sent, but could not file the thread: ' + err);
   }
+}
+
+// ---- scheduled sends ----------------------------------------------------------
+// Queue of {id: draftId, due: epoch ms, subject, recipients} in the SPONSOR_ONBOARDING_QUEUE property; a one-off
+// time-based trigger runs processQueue(), which sends every due draft still present (a deleted draft = cancelled).
+
+function enqueue(item) {
+  var q = readJson('SPONSOR_ONBOARDING_QUEUE');
+  q.items = (q.items || []).concat([item]);
+  props().setProperty('SPONSOR_ONBOARDING_QUEUE', JSON.stringify(q));
+}
+
+function scheduleTrigger(ms) {
+  ScriptApp.newTrigger('processQueue').timeBased().after(Math.max(ms, 60000)).create();
+}
+
+function clearQueueTriggers() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() !== 'processQueue') return;
+    try { ScriptApp.deleteTrigger(t); } catch (err) { Logger.log('Could not delete trigger (Apps Script flake, harmless): ' + err); }
+  });
+}
+
+function processQueue() {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    var items = readJson('SPONSOR_ONBOARDING_QUEUE').items || [], now = Date.now(), keep = [];
+    items.forEach(function (it) {
+      if (it.due > now + 30000) { keep.push(it); return; }       // not due yet (triggers fire with ~1 min granularity)
+      var draft = null;
+      try { draft = GmailApp.getDraft(it.id); } catch (err) { draft = null; }
+      if (!draft) { Logger.log('Scheduled draft gone, treating as cancelled: ' + it.subject); return; }
+      try {
+        fileThread(draft.send());
+        Logger.log('Scheduled sponsor onboarding sent: %s (%s recipients)', it.subject, it.recipients);
+      } catch (err) {
+        Logger.log('Scheduled send FAILED for %s: %s', it.subject, err);
+      }
+    });
+    props().setProperty('SPONSOR_ONBOARDING_QUEUE', JSON.stringify({ items: keep }));
+    clearQueueTriggers();
+    if (keep.length) {
+      var next = Math.min.apply(null, keep.map(function (i) { return i.due; }));
+      scheduleTrigger(next - Date.now() + 15000);
+    }
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+// Run ONCE from the editor after pasting v3: creates + removes a trigger so Google asks for the new
+// "manage triggers" permission. Without this, 'schedule' calls from the website fail.
+function testSchedule() {
+  var t = ScriptApp.newTrigger('processQueue').timeBased().after(60 * 60 * 1000).create();
+  // deleteTrigger right after create() sometimes throws "Unexpected error ... deleteTrigger" - harmless:
+  // the leftover trigger just runs processQueue once in an hour and cleans itself up.
+  try { ScriptApp.deleteTrigger(t); } catch (err) { Logger.log('Trigger created (permission OK) but immediate delete failed: ' + err); }
+  Logger.log('Trigger permission OK. Queue: ' + JSON.stringify(readJson('SPONSOR_ONBOARDING_QUEUE')));
 }
 
 // ---- the email --------------------------------------------------------------
