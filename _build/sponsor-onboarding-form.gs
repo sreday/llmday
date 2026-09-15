@@ -208,6 +208,7 @@ function testSchedule() {
 // short names as headings; v4 (script v3 file, 2026-09-15 afternoon) = Mark's Gmail-edited draft (PDF on the Desktop):
 // 'We signed the following opportunities', 'Grab tickets for your team (and friends)', one block per session kind then
 // 'Please send us details of your ...', one block per break, no FAQ list, 'Let me know if we're all set!'.
+// 2026-09-15 evening: Marek accepted copy tweaks 1-17, 19-22 of my 22 proposals (plan wondrous-greeting-bunny).
 // Do not re-word without asking.
 
 function composeSponsorOnboarding(ev, brand, company, firstName, items) {
@@ -218,10 +219,11 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   var SESSION_IDS = ['keynote', 'workshop', 'talk'];
 
   var lines = [
-    firstName ? 'Hey ' + firstName + ',' : 'Hello!',
+    firstName ? 'Hey ' + firstName + ',' : 'Hi all,',
     '',
     'Great to have ' + company + ' on board for [' + ev.event_name + '](' + ev.event_url + ') on ' + ev.date + '!',
     'Venue: *' + ev.venue_name + '*' + (ev.venue_address && ev.venue_address !== ev.venue_name ? ', ' + ev.venue_address : ''),
+    'Your logo is added here: [' + sponsorsAnchor + '](' + sponsorsAnchor + ") with your regular URL. Let us know if you'd like to change anything.",
     ''
   ];
   if (ev.extra) { lines.push(ev.extra); lines.push(''); }
@@ -238,10 +240,9 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   lines = lines.concat([
     '*Grab tickets for your team (and friends):*',
     '',
-    '- Your logo is added here: [' + sponsorsAnchor + '](' + sponsorsAnchor + ") with your regular URL. Let us know if you'd like to change anything.",
-    '- Your team can register here [' + ev.tickets_url + '](' + ev.tickets_url + ') pick a regular ticket with the free code *' + code + '*\n  Bulk booking is not supported, sorry about that. "Add coupon" button is in the top right corner of the luma window.',
-    "- There's no limit on the code, but we recommend staffing with 2-3 people for this size of event.",
-    '- You can also invite your local clients and friends to attend at no charge, happy to accommodate as long as we have space.',
+    '- Your team can register here: [' + ev.tickets_url + '](' + ev.tickets_url + ') - pick a regular ticket and apply the free code *' + code + '*\n  Luma has no bulk booking, sorry about that, everyone registers individually. The "Add coupon" button is in the top right corner of the Luma window.',
+    "- There's no limit on the code, but 2-3 people is the sweet spot for an event this size.",
+    '- You can also invite local clients and friends with the same code, happy to accommodate as long as we have space.',
     ''
   ]);
 
@@ -249,38 +250,38 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   var breakBlock = function (name) {
     return [
       "- Ship your swag to us or have a team member bring it on the day, we'll make sure it's all properly distributed.",
-      "- We'll ensure a proper mic time for your team before the " + name,
-      "- If there's no one from your team at the event, we'll make a proper announcement ourselves",
-      '- We can also distribute your swag during the break, whatever makes sense to your team - just need to know in advance so we can prepare.'
+      '- Your team gets mic time right before the ' + name + '.',
+      "- If nobody from your team is there, we'll make the announcement ourselves.",
+      "- Tell us in advance what you're planning (swag, a short demo, a giveaway) so we can prepare."
     ];
   };
   var sections = {
     leads: [
-      "- We share the pre-conference leads 3 days before the conference, and then the final list on the next working day after the conference. Tell us if there's a special email to send them to.",
+      '- We share the pre-conference leads 3 days before the event and the final list on the next working day after it. Tell us if they should go to a specific email address.',
       "- We don't use lead scanners, but all attendees have their LinkedIn QR codes on the badges, so your team can connect on the spot.",
-      "- Warm intros: after the event you can also pick up to 10 attendees / speakers you'd genuinely like to connect with but your team missed on the day, and we'll send a friendly intro email with your team in cc."
+      "- Warm intros: after the event, pick up to 10 attendees or speakers your team missed on the day, and we'll send each of them a friendly intro email with your team in cc."
     ],
     booth: [
-      '- The booth is a regular table (around 150x100 cm), with space for your rollup banner, swag, along with some electricity sockets.',
-      '- Cloth: I would bring a one-size-fits-all, as tables may differ in size depending on the venue.',
-      "- We'll do our best to arrange a monitor for your team to show demos, you can rent out a bigger screen by your own means.",
-      "- The rollup banner needs to be brought in by the sponsor. The space isn't massive, so a medium one (around 200x50 cm) fits best. I'd recommend keeping the setup simple, there won't be a massive space around each booth.",
-      '- Setup: we recommend that your team comes at least 1 hour before the first talk',
+      '- The booth is a regular table (around 150x100 cm) with electricity sockets and space for your rollup banner and swag.',
+      '- Tablecloth: bring a one-size-fits-all, table sizes differ per venue.',
+      "- We'll do our best to arrange a monitor for demos. A bigger screen is fine if you rent it yourselves.",
+      '- Rollup banners are brought by the sponsor. Space is limited, so a medium one (around 200x50 cm) fits best, and a simple setup works better than a big one.',
+      '- Setup: come at least 1 hour before the first talk.',
       "- Shipping: if you'd like to ship materials ahead, let me know and I'll share the delivery address and contact at the venue.",
-      "- Tip to maximise the outcome: our events are community-driven and practitioner-first, so the right approach is to go towards people rather than being passive at the booth. A conversation starting with \"I heard you use X to solve Y\" goes a long way compared to \"scan this QR code, here's your swag\". Just a recommendation, you do you!"
+      "- Tip to maximise the outcome: our events are community-driven and practitioner-first, so go towards people rather than waiting at the booth. A conversation starting with \"I heard you use X to solve Y\" goes a long way compared to \"scan this QR code, here's your swag\". Just a recommendation, you do you!"
     ],
     keynote: [
       '- 25 mins talk + 5 mins Q&A',
       '- Morning slot with the full audience in the room, no parallel talks.'
     ],
     workshop: [
-      '- Two regular slots - 30 + 30 minutes',
+      '- Two back-to-back regular slots, 30 + 30 minutes',
       '- Hands-on, let the audience play with your tech. Unlike regular sessions, participants are encouraged to walk around, ask questions and engage.',
-      "- May run along another tracks, but we'll always do our best to fill up the room"
+      "- May run alongside other tracks, but we'll do our best to fill the room."
     ],
     talk: [
       '- 25 mins talk + 5 mins Q&A',
-      '- Afternoon slot, may run along other tracks'
+      '- Afternoon slot, may run alongside other tracks.'
     ],
     logo_swag: [
       '- Your logo is listed here: [' + sponsorsAnchor + '](' + sponsorsAnchor + ')',
@@ -290,9 +291,9 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
     break_lunch: breakBlock('lunch break'),
     break_happy: breakBlock('happy hour'),
     clothing: [
-      "- Remind us of the wearable you'd like to go for",
+      "- Tell us which wearable you'd like to go for (t-shirts, hoodies, socks, etc.)",
       '- Please share your logo in vector format (SVG / PDF).',
-      "- We'll confirm its look and quantity with you before ordering"
+      "- We'll confirm the design and quantity with you before ordering."
     ]
   };
   var picked = SESSION_IDS.filter(has);
@@ -307,7 +308,7 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
       lines = lines.concat([
         "*Please send us details of your team's " + which + ':*',
         '',
-        '- Please share the speaker details at your earliest convenience, the quickest way is this form: [' + ev.fasttrack_url + '](' + ev.fasttrack_url + '), or just reply with:',
+        '- The quickest way is this form: [' + ev.fasttrack_url + '](' + ev.fasttrack_url + '). Or just reply with:',
         '',
         "1. Speaker's LinkedIn URL",
         '1. Talk title (single phrase, shorter = better)',
@@ -321,13 +322,13 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   });
 
   lines = lines.concat([
-    'More Sponsor FAQ can be found here: [' + ev.faq_url + '](' + ev.faq_url + ')',
+    'More sponsor FAQ: [' + ev.faq_url + '](' + ev.faq_url + ')',
     '',
     "Let me know if we're all set!",
     'Mark'
   ]);
   return {
-    subject: "Sponsor's onboarding - " + company + ' at ' + ev.event_name,
+    subject: 'Sponsor onboarding - ' + company + ' at ' + ev.event_name,
     text: renderText(lines),
     html: renderHtml(lines)
   };
