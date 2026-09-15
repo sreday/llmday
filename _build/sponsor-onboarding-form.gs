@@ -9,7 +9,8 @@
  * The script owns the ONE "Info for sponsors" email (composeSponsorOnboarding below): a general part every
  * sponsor gets (logo, team tickets, kick-off intro, timeline) plus one section per toggled opportunity. The
  * opportunity ids are the purchasable sponsorship.yaml tier ids (leads, keynote, workshop, talk, booth,
- * logo_swag, food, clothing); the 'On request' tiers are deliberately not offered (too custom - Marek 2026-09-15).
+ * logo_swag, clothing, plus the food tier split into break_coffee / break_lunch / break_happy); the 'On request' tiers are
+ * deliberately not offered (too custom - Marek 2026-09-15).
  * On 'send' it emails From the brand alias To the sponsor team (everyone in To, they are one team), then moves
  * the thread to the Inbox as unread + important under the "Sponsor onboarding" label so replies land on it.
  * 'schedule' (delay_minutes, e.g. 60) instead leaves a Gmail DRAFT and a time-based trigger sends it later
@@ -43,7 +44,9 @@ var MAX_RECIPIENTS = 10;
 var DAILY_MAX_SENDS = 30;
 var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock seconds
 var MAX_DELAY_MINUTES = 24 * 60;   // 'schedule' can defer a send by at most a day
-var KNOWN_ITEMS = ['leads', 'booth', 'keynote', 'workshop', 'talk', 'logo_swag', 'food', 'clothing'];   // = pill order on the page
+var KNOWN_ITEMS = ['leads', 'booth', 'keynote', 'workshop', 'talk', 'logo_swag', 'break_coffee', 'break_lunch', 'break_happy', 'clothing'];   // = pill order on the page
+var ITEM_NAMES = { leads: 'Leads', booth: 'Booth', keynote: 'Keynote', workshop: 'Workshop', talk: 'Regular session', logo_swag: 'Logo + Swag',
+                   break_coffee: 'Coffee break', break_lunch: 'Lunch break', break_happy: 'Happy hour', clothing: 'Wearables' };   // fallback when the page sends no name
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -204,6 +207,7 @@ function testSchedule() {
 
 function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   var has = function (id) { return items.indexOf(id) !== -1; };
+  var label = function (id) { return ev.items_by_id[id] ? ev.items_by_id[id].name : (ITEM_NAMES[id] || id); };
   var talkMin = Math.max(ev.slot_minutes - 5, 5);
   var code = ev.sponsor_code || brand.code;
   var sponsorsAnchor = ev.event_url + '#sponsors';
@@ -223,7 +227,7 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
     lines.push('');
     items.forEach(function (id) {
       var it = ev.items_by_id[id];
-      if (it) lines.push('- ' + it.name + (it.benefits.length ? ' - ' + it.benefits.join(' / ') : ''));
+      lines.push('- ' + label(id) + (it && it.benefits.length ? ' - ' + it.benefits.join(' / ') : ''));
     });
     lines.push('');
   }
@@ -242,7 +246,7 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
 
   // -- per-opportunity sections, in the pill order (KNOWN_ITEMS): the three session kinds share one block
   var SESSION_IDS = ['keynote', 'workshop', 'talk'];
-  var label = function (id) { return ev.items_by_id[id] ? ev.items_by_id[id].name : id; };
+  var BREAK_IDS = ['break_coffee', 'break_lunch', 'break_happy'];
   var sections = {
     leads: function () {
       return [
@@ -285,11 +289,19 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
         "- Swag: your team can drop it off with us in the morning and we'll distribute it to all attendees during the breaks. Stickers, small items and printed material work best. Tell us what and how many you're bringing so we can prepare the space."
       ];
     },
-    food: function () {
+    break_coffee: function () {
       return [
-        "- Tell us which break you're taking (coffee break, lunch or happy hour). We make a proper announcement that the break is sponsored by " + company + ", you can put a rollup banner and your stickers around the tables (and keep them there during the whole day), and we give your team the microphone in the lobby to say a word before people head off.",
-        '- We can also distribute your swag during the break, run a short demo, whatever makes sense to your team - just need to know in advance so we can do the groundwork :-)',
-        "- Happy hour is where people open up and the juiciest conversations happen, so please invite your team to stay over for it."
+        "- We make a proper announcement that the coffee break is sponsored by " + company + ", you can bombard the coffee tables with your swag (and keep it there during the whole day), and we give your team a microphone in the lobby to say a word."
+      ];
+    },
+    break_lunch: function () {
+      return [
+        "- We announce the lunch break in your name (something like \"Lunch by " + company + " - grab a pizza!\", the wording is up to you), distribute your swag during lunch, and give your team a microphone in the main lobby to say something before people head off - a short demo works too."
+      ];
+    },
+    break_happy: function () {
+      return [
+        "- We announce the happy hour as sponsored by " + company + ", put your stickers on the drinks and your rollup next to the bar. Happy hour is where people open up and the juiciest conversations happen, so please invite your team to stay over for it."
       ];
     },
     clothing: function () {
@@ -298,7 +310,7 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
       ];
     }
   };
-  var sessionsDone = false;
+  var sessionsDone = false, breaksDone = false;
   KNOWN_ITEMS.forEach(function (id) {
     if (!has(id)) return;
     if (SESSION_IDS.indexOf(id) !== -1) {
@@ -307,6 +319,16 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
       var picked = SESSION_IDS.filter(has).map(label);
       lines.push('*' + picked.join(' + ') + ':*'); lines.push('');
       lines = lines.concat(sections.sessions(), ['']);
+      return;
+    }
+    if (BREAK_IDS.indexOf(id) !== -1) {                 // the picked breaks share one block, one bullet each
+      if (breaksDone) return;
+      breaksDone = true;
+      var picked2 = BREAK_IDS.filter(has);
+      lines.push('*' + picked2.map(label).join(' + ') + ':*'); lines.push('');
+      picked2.forEach(function (b) { lines = lines.concat(sections[b]()); });
+      lines.push("- Just let us know what you're planning in advance so we can do the groundwork :-)");
+      lines.push('');
       return;
     }
     if (!sections[id]) return;

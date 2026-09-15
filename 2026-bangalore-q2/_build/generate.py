@@ -1178,10 +1178,26 @@ print("Invitation: %s | %d/%d talks (%d%%, %s) | %d companies | %d topics | spon
 # (minus the discount row and the 'On request' ones - Marek 2026-09-15), so the pills match /sponsorship. Optional overrides live under
 # `sponsor_onboarding:` in metadata.yml (sponsor_code, extra).
 context.setdefault('sponsor_onboarding_form_url', '')
-# short pill labels + pill order (Marek 2026-09-15); sponsorship.yaml keeps the long public names and its own order
+# short pill labels + pill order (Marek 2026-09-15); sponsorship.yaml keeps the long public names and its own order.
+# The 'food' tier is split into three pills (coffee / lunch / happy hour) so the email can talk about the right break.
 _SO_SHORT = {'leads': 'Leads', 'booth': 'Booth', 'keynote': 'Keynote', 'workshop': 'Workshop', 'talk': 'Regular session',
-             'logo_swag': 'Logo + Swag', 'food': 'Break', 'clothing': 'Wearables'}
+             'logo_swag': 'Logo + Swag', 'break_coffee': 'Coffee break', 'break_lunch': 'Lunch break', 'break_happy': 'Happy hour',
+             'clothing': 'Wearables'}
+_SO_SPLIT = {'food': ['break_coffee', 'break_lunch', 'break_happy']}
 _SO_ORDER = list(_SO_SHORT)
+
+
+def _so_items(tiers):
+    out = []
+    for t in tiers:
+        tid = str(t.get('id') or '')
+        if not tid or tid == 'startup_discount':
+            continue
+        benefits = [str(x) for x in (t.get('benefits') or [])]
+        for pid in _SO_SPLIT.get(tid, [tid]):
+            out.append({'id': pid, 'name': _SO_SHORT.get(pid) or str(t.get('name') or tid), 'benefits': benefits})
+    return sorted(out, key=lambda it: _SO_ORDER.index(it['id']) if it['id'] in _SO_ORDER else 99)
+
 _so = dict(context.get('sponsor_onboarding') or {})
 _so_src = context['onboarding_event']
 context['sponsor_onboarding_event'] = {k: _so_src[k] for k in ('brand', 'brand_name', 'slug', 'event_name', 'city', 'date', 'month_day',
@@ -1191,10 +1207,7 @@ context['sponsor_onboarding_event'].update({
     'sponsor_page_url': _so_src['event_url'] + 'sponsorship.html',
     'host_url':         context.get('base_path', '') + 'host',
     'event_size':       _event_size,
-    'items':            [{'id': str(t.get('id')), 'name': _SO_SHORT.get(str(t.get('id'))) or str(t.get('name') or t.get('id')),
-                          'benefits': [str(x) for x in (t.get('benefits') or [])]}
-                         for t in sorted(_sponsorship_tiers, key=lambda t: _SO_ORDER.index(t.get('id')) if t.get('id') in _SO_ORDER else 99)
-                         if t.get('id') and t.get('id') != 'startup_discount'],
+    'items':            _so_items(_sponsorship_tiers),
     'sponsor_code':     str(_so.get('sponsor_code', '') or ''),
     'extra':            str(_so.get('extra', '') or ''),
 })
