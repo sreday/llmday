@@ -1151,7 +1151,7 @@ context['invitation_event'] = {k: _inv_src[k] for k in ('brand', 'brand_name', '
                                                         'venue_name', 'attendees', 'youtube_url', 'calendly_url', 'slot_minutes')}
 context['invitation_event'].update({
     'fasttrack_url':    _inv_src['event_url'] + 'fasttrack/',
-    'sponsor_page_url': _inv_src['event_url'] + 'sponsorship.html',
+    'sponsor_page_url': _inv_src['event_url'] + 'sponsorship',
     'tracks':           _inv_tracks,
     'confirmed':        len(_inv_rows),
     'talks_target':     _inv_target,
@@ -1204,7 +1204,7 @@ context['sponsor_onboarding_event'] = {k: _so_src[k] for k in ('brand', 'brand_n
                                                              'event_url', 'tickets_url', 'venue_name', 'venue_address', 'attendees',
                                                              'youtube_url', 'calendly_url', 'slot_minutes')}
 context['sponsor_onboarding_event'].update({
-    'sponsor_page_url': _so_src['event_url'] + 'sponsorship.html',
+    'sponsor_page_url': _so_src['event_url'] + 'sponsorship',
     'host_url':         context.get('base_path', '') + 'host',
     'event_size':       _event_size,
     'items':            _so_items(_sponsorship_tiers),
