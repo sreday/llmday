@@ -54,6 +54,7 @@ for event in 2025-* 2026-* 2027-*; do   # never the frozen 2022-2024 folders (sr
   cp _event_template/_templates/onboarding.html $event/_templates/onboarding.html
   cp _event_template/_templates/fasttrack.html $event/_templates/fasttrack.html
   cp _event_template/_templates/invitation.html $event/_templates/invitation.html
+  cp _event_template/_templates/onboardsponsor.html $event/_templates/onboardsponsor.html
 done
 ```
 
