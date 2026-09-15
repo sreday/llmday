@@ -49,6 +49,10 @@
     .os-opt input:checked + span { background: var(--os-accent); border-color: var(--os-accent); color: #fff; }
     .os-opt input:focus-visible + span { box-shadow: 0 0 0 3px color-mix(in srgb, var(--os-accent) 30%, transparent); }
     .os-opts-note { font-size: .8rem; color: #888; margin: 4px 0 14px; }
+    .os-check { display: flex; align-items: flex-start; gap: 10px; font-size: .92rem; color: #333; margin: 4px 0 18px; line-height: 1.45; }
+    .os-check input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--os-accent); flex: none; cursor: pointer; }
+    .os-check label { cursor: pointer; }
+    .os-check a { color: var(--os-accent); word-break: break-all; }
     .os-opts-note b { color: #333; }
     details.os-facts { margin-top: 14px; font-size: .88rem; color: #555; }
     details.os-facts summary { cursor: pointer; color: #666; }
@@ -91,6 +95,7 @@
     <div class="os-label">Opportunities they signed up for <small>(toggle - each one adds its own section to the email)</small></div>
     <div class="os-opts" id="os-opts"></div>
     <div class="os-opts-note" id="os-opts-note"></div>
+    <div class="os-check"><input type="checkbox" name="logo_added" id="os-logo"><span><label for="os-logo">I added their logo to the website:</label> <a href="https://www.llmday.com/2026-lisbon-q2/#sponsors" target="_blank" rel="noopener">https://www.llmday.com/2026-lisbon-q2/#sponsors</a></span></div>
 
     <div class="os-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
     <div class="os-row">
@@ -126,7 +131,7 @@ var OS_MAX   = 10;   // recipients per send (server-side cap too)
 
 var $ = function(id) { return document.getElementById(id); };
 var gate = $('os-gate'), form = $('os-form'), previewBox = $('os-preview-box'), done = $('os-done');
-var companyInput = form.elements['company'], firstNameInput = form.elements['first_name'], textarea = form.elements['emails'];
+var companyInput = form.elements['company'], firstNameInput = form.elements['first_name'], textarea = form.elements['emails'], logoCheck = form.elements['logo_added'];
 
 function storedPass() { try { return localStorage.getItem(OS_KEY) || ''; } catch (e) { return ''; } }
 function storePass(p) { try { if (p) localStorage.setItem(OS_KEY, p); else localStorage.removeItem(OS_KEY); } catch (e) {} }
@@ -182,16 +187,17 @@ function validate() {
   var note = $('os-opts-note');
   note.innerHTML = items.length ? 'They purchased <b>' + items.length + '</b> opportunit' + (items.length === 1 ? 'y' : 'ies')
                                 : 'Nothing selected yet: the email would only carry the general sponsor info (logo, tickets, timeline).';
-  var ok = companyInput.value.trim().length > 0 && p.valid.length > 0 && !p.invalid.length && p.valid.length <= OS_MAX;
+  var ok = companyInput.value.trim().length > 0 && p.valid.length > 0 && !p.invalid.length && p.valid.length <= OS_MAX && logoCheck.checked;
   $('os-send').disabled = !ok; $('os-schedule').disabled = !ok;
-  return { ok: ok, company: companyInput.value.trim(), first_name: firstNameInput.value.trim().split(/[ ]+/)[0] || '', emails: p.valid, invalid: p.invalid, items: items };
+  return { ok: ok, company: companyInput.value.trim(), first_name: firstNameInput.value.trim().split(/[ ]+/)[0] || '', emails: p.valid, invalid: p.invalid, items: items, logo_added: logoCheck.checked };
 }
 [companyInput, firstNameInput, textarea].forEach(function(el) { el.addEventListener('input', validate); });
+logoCheck.addEventListener('change', validate);
 
 // ---- transport -------------------------------------------------------------
 function post(action, v) {
   if (!OS_URL) return Promise.reject(new Error('sponsor_onboarding_form_url is not configured in home/metadata.yml'));
-  var body = { action: action, pass: storedPass(), brand: OS_EVENT.brand, company: v.company, first_name: v.first_name, emails: v.emails, items: v.items, delay_minutes: v.delay_minutes || 0,
+  var body = { action: action, pass: storedPass(), brand: OS_EVENT.brand, company: v.company, first_name: v.first_name, emails: v.emails, items: v.items, logo_added: !!v.logo_added, delay_minutes: v.delay_minutes || 0,
                event: OS_EVENT, website: form.elements['website'].value || '', page: location.href };
   var ctrl = ('AbortController' in window) ? new AbortController() : null;
   var timer = ctrl ? setTimeout(function() { ctrl.abort(); }, 25000) : null;
@@ -215,6 +221,7 @@ function showError(err) {
     case 'invalid emails': msg = 'The server rejected: ' + (res.bad || []).join(', '); break;
     case 'no company': msg = 'The company name is required.'; break;
     case 'no recipients': msg = 'Add at least one sponsor email.'; break;
+    case 'no logo': msg = 'Add their logo to the website first, then tick the box.'; break;
     case 'too many': msg = 'Too many recipients, max ' + OS_MAX + ' per send.'; break;
     case 'too many today': msg = 'Daily send limit reached, try again tomorrow.'; break;
     case 'bad delay': msg = 'The server did not accept the delay.'; break;
@@ -234,7 +241,7 @@ gate.addEventListener('submit', function(ev) {
   if (!p) return;
   storePass(p);
   var btn = $('os-unlock'); busy(btn, 'Checking...');
-  post('preview', { company: 'Preview', first_name: '', emails: [], items: [] }).then(function() { idle(btn); showForm(); })
+  post('preview', { company: 'Preview', first_name: '', emails: [], items: [], logo_added: false }).then(function() { idle(btn); showForm(); })
     .catch(function(err) { idle(btn); if (err.message === 'unauthorized' || err.message === 'locked') showError(err); else { showForm(); } });
 });
 $('os-lock').addEventListener('click', function(ev) { ev.preventDefault(); storePass(''); showGate(''); });
@@ -260,7 +267,7 @@ function finish(html) {
   done.innerHTML = html + ' <a href="#" id="os-again">Onboard another sponsor</a>';
   form.hidden = true; previewBox.hidden = true; done.hidden = false;
   $('os-again').addEventListener('click', function(e) {
-    e.preventDefault(); companyInput.value = ''; firstNameInput.value = ''; textarea.value = '';
+    e.preventDefault(); companyInput.value = ''; firstNameInput.value = ''; textarea.value = ''; logoCheck.checked = false;
     Array.prototype.slice.call(form.querySelectorAll('input[name="items"]')).forEach(function(cb) { cb.checked = false; });
     showForm();
   });
