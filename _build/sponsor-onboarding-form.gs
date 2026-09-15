@@ -3,7 +3,8 @@
  *
  * Serves the hidden /<event>/onboardsponsor/ pages (template: _event_template/_templates/onboardsponsor.html,
  * facts built by _event_template/_build/generate.py). The page posts:
- *   { action: 'preview' | 'send', pass, brand, company, first_name, emails: [...], items: ['booth', ...],
+ *   { action: 'preview' | 'send' | 'schedule', pass, brand, company, first_name, emails: [...], items: ['booth', ...],
+ *     logo_added: true (organizer confirmed the logo is on the website - required to send, the email says it is there),
  *     event: {...facts...}, website (honeypot), page }
  * The script owns the ONE "Info for sponsors" email (composeSponsorOnboarding below): a general part every
  * sponsor gets (logo, team tickets, kick-off intro, timeline) plus one section per toggled opportunity. The
@@ -87,6 +88,7 @@ function doPost(e) {
   }
   if (!company) return respond({ ok: false, error: 'no company' });
   if (!emails.ok.length) return respond({ ok: false, error: 'no recipients' });
+  if (data.logo_added !== true) return respond({ ok: false, error: 'no logo' });
   var delay = parseInt(data.delay_minutes, 10);
   delay = delay > 0 ? Math.min(delay, MAX_DELAY_MINUTES) : 0;
   if (data.action === 'schedule' && !delay) return respond({ ok: false, error: 'bad delay' });
