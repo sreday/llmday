@@ -6,9 +6,9 @@
  *   { action: 'preview' | 'send', pass, brand, company, first_name, emails: [...], items: ['booth', ...],
  *     event: {...facts...}, website (honeypot), page }
  * The script owns the ONE "Info for sponsors" email (composeSponsorOnboarding below): a general part every
- * sponsor gets (contract, logo, team tickets, timeline) plus one section per toggled opportunity. The
- * opportunity ids are the sponsorship.yaml tier ids (leads, keynote, workshop, talk, booth, logo_swag, food,
- * clothing, host, co_located, hackathon, meetup, speakers_dinner, email_blast); unknown ids are ignored.
+ * sponsor gets (logo, team tickets, kick-off intro, timeline) plus one section per toggled opportunity. The
+ * opportunity ids are the purchasable sponsorship.yaml tier ids (leads, keynote, workshop, talk, booth,
+ * logo_swag, food, clothing); the 'On request' tiers are deliberately not offered (too custom - Marek 2026-09-15).
  * On 'send' it emails From the brand alias To the sponsor team (everyone in To, they are one team), then moves
  * the thread to the Inbox as unread + important under the "Sponsor onboarding" label so replies land on it.
  * 'preview' returns subject + html only.
@@ -38,14 +38,13 @@ var LEAD_LABEL = 'Sponsor onboarding';
 var MAX_RECIPIENTS = 10;
 var DAILY_MAX_SENDS = 30;
 var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock seconds
-var KNOWN_ITEMS = ['leads', 'keynote', 'workshop', 'talk', 'booth', 'logo_swag', 'food', 'clothing',
-                   'host', 'co_located', 'hackathon', 'meetup', 'speakers_dinner', 'email_blast'];
+var KNOWN_ITEMS = ['leads', 'keynote', 'workshop', 'talk', 'booth', 'logo_swag', 'food', 'clothing'];
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('SPONSOR_ONBOARDING_LOCK');
   return respond({ ok: true, service: 'sponsor-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), version: 1 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), version: 2 });
 }
 
 function doPost(e) {
@@ -115,11 +114,11 @@ function fileThread(message) {
 // Same tiny markup as the speaker onboarding script: *bold*, [label](url), "- " bullets ("\n" inside a bullet =
 // continuation line), "1. " numbered items, "" = blank line, "[y] "/"[g] " prefix = yellow/green highlighted
 // line (HTML only). renderText()/renderHtml() turn the same lines into the plain-text and HTML bodies.
-// Wording mined from Mark's real sponsor emails (2024-2026) + the /sponsorship FAQ. Do not re-word without asking.
+// Wording mined from Mark's real sponsor emails (2024-2026) + the /sponsorship FAQ; v2 = Marek's edits 2026-09-15
+// (no paperwork block, no 'reply OK' line, FAQ link instead of the package upsell). Do not re-word without asking.
 
 function composeSponsorOnboarding(ev, brand, company, firstName, items) {
   var has = function (id) { return items.indexOf(id) !== -1; };
-  var name = function (id) { return ev.items_by_id[id] ? ev.items_by_id[id].name : id; };
   var talkMin = Math.max(ev.slot_minutes - 5, 5);
   var sessions = ['keynote', 'talk', 'workshop'].filter(has);
   var breaks = has('food');
@@ -132,7 +131,7 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
     'Great to have ' + company + ' on board for [' + ev.event_name + '](' + ev.event_url + ') on ' + ev.date + "! Here's everything your team needs to get ready, feel free to forward this to whoever handles logistics on your side.",
     '',
     'Venue: *' + ev.venue_name + '*' + (ev.venue_address && ev.venue_address !== ev.venue_name ? ', ' + ev.venue_address : ''),
-    'Schedule (WIP): [' + ev.event_url + '](' + ev.event_url + ')',
+    'Work-in-progress schedule: [' + ev.event_url + '](' + ev.event_url + ')',
     '',
     "[y] This conference is strictly in-person, there's no remote or hybrid participation.",
     ''
@@ -150,21 +149,14 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
     lines.push('');
   }
 
-  // -- paperwork + basics, every sponsor
+  // -- basics, every sponsor
   lines = lines.concat([
-    "*Let's get the paperwork out of the way.* I will need the following for the contract and invoice:",
+    '*Next steps:*',
     '',
-    '1. Full company name',
-    '1. Full company address',
-    "1. Signee's info: name, email, role in the company",
-    '',
-    "Then I'll send over the contract and invoice, happy to apply any corrections as needed. Invoices are in GBP; if your company is VAT-registered in the UK, 20% VAT applies on top.",
-    '',
-    '*And on a more relaxed timeline:*',
-    '',
-    "- Logo: we'll add your logo here [" + sponsorsAnchor + '](' + sponsorsAnchor + ") with a logo we found online and your regular URL. If you'd like another version (transparent background works best), a landing page or a UTM link, just reply here.",
-    '- Your team: register everyone here [' + ev.tickets_url + '](' + ev.tickets_url + ') with the free code *' + code + '*\n  (the "add coupon" is tricky to find, but it\'s there in the top right corner of the luma window). Please enter everyone\'s info carefully, badges are generated straight from the registrations.',
-    "- There's no limit on the code, but be mindful that a " + (ev.attendees || 100) + "-person event can easily be overstaffed :-) We recommend 2-3 people. You can also invite your local friends / clients at no charge, happy to accommodate as long as we're not maxed out.",
+    '- Your logo is added here: [' + sponsorsAnchor + '](' + sponsorsAnchor + ") with your regular URL. Let us know if you'd like to change it, use an UTM, etc.",
+    '- Your team: register everyone here [' + ev.tickets_url + '](' + ev.tickets_url + ') with the free code *' + code + '*\n  (the "add coupon" is tricky to find, but it\'s there in the top right corner of the luma window)',
+    "- There's no limit on the code, but we recommend staffing with 2-3 people for this size of event.",
+    "- You can also invite your local clients and friends to attend at no charge, happy to accommodate as long as we're not maxed out.",
     "- Kick-off: we introduce all sponsors as we open the day - we show all logos, say which sponsor does what, and you get a minute on the microphone to present what you're doing.",
     ''
   ]);
@@ -240,39 +232,6 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
       ''
     ]);
   }
-  if (has('email_blast')) {
-    lines = lines.concat([
-      '*Attendee email blast:*',
-      '',
-      "- Please share a draft (subject line, short text, one link) at least one week before your preferred sending date. We schedule it on our side and share the campaign report 2-3 days after it goes out.",
-      ''
-    ]);
-  }
-  if (has('speakers_dinner')) {
-    lines = lines.concat([
-      "*Speaker's dinner:*",
-      '',
-      "- This one we don't announce on the website - we grab all speakers and partners for dinner after the event wraps up, and we send a dedicated email to all speakers with your invitation. I'll confirm the place and time closer to the date.",
-      ''
-    ]);
-  }
-  if (has('host')) {
-    lines = lines.concat([
-      '*Hosting:*',
-      '',
-      "- As the host you get an \"open buffet\" of sponsorship opportunities at no cost - keynote, booth, leads, whatever works for you. We handle our own logistics, catering and video recording; the only expense on your end is operating the venue.",
-      "- Next steps: our team preps the website, tickets and CFP, then we set up monthly and later (bi)weekly chats to sync as the event approaches. Please share 3 pictures of your office for the website. More here: [" + ev.host_url + '](' + ev.host_url + ')',
-      ''
-    ]);
-  }
-  var planned = ['co_located', 'hackathon', 'meetup'].filter(has);
-  if (planned.length) {
-    lines.push('*' + planned.map(name).join(' / ') + ':*');
-    lines.push('');
-    lines.push("- These we plan together: let's grab a slot and go through format, timing and what you need from us: [" + ev.calendly_url + '](' + ev.calendly_url + ')');
-    lines.push('');
-  }
-
   // -- timeline + ask
   lines = lines.concat([
     '*What happens now:*',
@@ -280,8 +239,6 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
     "- As speakers confirm, we update the website and prepare social media graphics and promo posts for sharing.",
     '- The schedule is published as soon as most speakers are confirmed, things might still move a bit until then.',
     '- After the event: photos within a few days, talk videos 1-2 weeks later.',
-    '',
-    '[g] Please reply with a quick "OK" so we know everything landed, and add anyone else from your team who should be on this thread.',
     '',
     "I'm here for any questions,",
     'Mark',
@@ -292,11 +249,11 @@ function composeSponsorOnboarding(ev, brand, company, firstName, items) {
     '1. Who attends: roughly 59% software, platform and DevOps engineers, 22% founders and engineering leaders, 14% business, consulting and product, 5% ML/AI/data. Having chatty, seasoned technical folks at the event is recommended.',
     '1. There will be WiFi access in the venue',
     '1. Previous ' + ev.brand_name + ' talks: ' + (ev.youtube_url ? '[' + ev.youtube_url + '](' + ev.youtube_url + ')' : 'on our YouTube channel'),
-    '1. Want to add something to the package? All options are here: [' + ev.sponsor_page_url + '](' + ev.sponsor_page_url + ')',
-    '1. Prefer a call? Grab a slot: [' + ev.calendly_url + '](' + ev.calendly_url + ')'
+    '1. Prefer a call? Grab a slot: [' + ev.calendly_url + '](' + ev.calendly_url + ')',
+    '1. More frequently asked questions: [' + ev.faq_url + '](' + ev.faq_url + ')'
   ]);
   return {
-    subject: ev.event_name + ' - ' + ev.month_day + ' - Info for sponsors (' + company + ')',
+    subject: "Sponsor's onboarding - " + company + ' at ' + ev.event_name,
     text: renderText(lines),
     html: renderHtml(lines)
   };
@@ -360,6 +317,7 @@ function normalizeEvent(raw, brand) {
     tickets_url:      okUrl(raw.tickets_url, eventUrl + '#tickets'),
     sponsor_page_url: okUrl(raw.sponsor_page_url, eventUrl + 'sponsorship.html'),
     fasttrack_url:    eventUrl + 'fasttrack/',
+    faq_url:          eventUrl + 'sponsorship#faq',
     host_url:         okUrl(raw.host_url, site + 'host'),
     venue_name:       clean(raw.venue_name, 120) || 'the venue',
     venue_address:    clean(raw.venue_address, 200),

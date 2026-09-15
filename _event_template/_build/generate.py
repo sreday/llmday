@@ -1174,8 +1174,8 @@ print("Invitation: %s | %d/%d talks (%d%%, %s) | %d companies | %d topics | spon
 # ── SPONSOR ONBOARDING: facts for the hidden /onboardsponsor/ page ──────────
 # The page (onboardsponsor.html) posts this dict plus the toggled opportunities to the Apps Script
 # (llmday/_build/sponsor-onboarding-form.gs), which fills ONE "Info for sponsors" email whose
-# sections follow the selection. The opportunities ARE the sponsorship.yaml tiers (minus the
-# discount row), so the pills always match the /sponsorship page. Optional overrides live under
+# sections follow the selection. The opportunities ARE the purchasable sponsorship.yaml tiers
+# (minus the discount row and the 'On request' ones - Marek 2026-09-15), so the pills match /sponsorship. Optional overrides live under
 # `sponsor_onboarding:` in metadata.yml (sponsor_code, extra).
 context.setdefault('sponsor_onboarding_form_url', '')
 _so = dict(context.get('sponsor_onboarding') or {})
@@ -1188,9 +1188,8 @@ context['sponsor_onboarding_event'].update({
     'host_url':         context.get('base_path', '') + 'host',
     'event_size':       _event_size,
     'items':            [{'id': str(t.get('id')), 'name': str(t.get('name') or t.get('id')),
-                          'on_request': t.get('price_label') == 'On request',
                           'benefits': [str(x) for x in (t.get('benefits') or [])]}
-                         for t in _all_tiers if t.get('id') and t.get('id') != 'startup_discount'],
+                         for t in _sponsorship_tiers if t.get('id') and t.get('id') != 'startup_discount'],
     'sponsor_code':     str(_so.get('sponsor_code', '') or ''),
     'extra':            str(_so.get('extra', '') or ''),
 })
