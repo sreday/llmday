@@ -47,7 +47,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 7 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 8 });
 }
 
 function doPost(e) {
@@ -207,7 +207,7 @@ function composeOnboarding(ev, brand) {
     'What happens now:',
     '',
     '- Your participation is confirmed and your talk is added to the website',
-    '- Please redeem your free ticket with the code *SPEAKERFREE* here [' + ev.tickets_url + '](' + ev.tickets_url + ')\n  (on luma, select the general self funding / general admission, and then find "Add a coupon" in the top right corner)',
+    '- Please redeem your free ticket here: [' + ev.tickets_url + '](' + ev.tickets_url + '). If this is a paid event, please use the code *SPEAKERFREE*\n  (on luma, select the general self funding / general admission, and then find "Add a coupon" in the top right corner)',
     '- Speaking slots are ' + ev.slot_minutes + ' minutes (' + talk + ' min talk + 5 min Q&A)',
     '- You will present from your own laptop. Please share your slides with us in advance as a backup.',
     "- As speakers confirm, we'll update the website and prepare social media graphics and promo posts for sharing.",
