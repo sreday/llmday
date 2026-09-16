@@ -20,10 +20,12 @@
 var BRANDS = {
   llmday: { inbox: 'hello@llmday.com', from: 'mark@llmday.com', site: 'llmday.com' },
   sreday: { inbox: 'hello@sreday.com', from: 'mark@sreday.com', site: 'sreday.com' },
-  platformday: { inbox: 'hello@platformday.com', from: 'mark@platformday.com', site: 'platformday.com' }
+  platformday: { inbox: 'hello@platformday.com', from: 'mark@platformday.com', site: 'platformday.com' },
+  // PEC shares this deployment; no mark@promptengineering.rocks alias exists, so it sends from the LLMday alias
+  pec:         { inbox: 'hello@promptengineering.rocks', from: 'mark@llmday.com', site: 'promptengineering.rocks' }
 };
 var ALLOWED_INTERESTS = ['Sponsor', 'Host', 'Partner'];
-var ALLOWED_BRANDS = ['LLMday', 'SREday', 'PLATFORMday'];
+var ALLOWED_BRANDS = ['LLMday', 'SREday', 'PLATFORMday', 'Prompt Engineering Conference'];
 var ALLOWED_REGIONS = ['US', 'EU', 'ASIA', 'LATAM'];
 var ALLOWED_BUDGETS = ['No budget', '$1K-5K', '$5K-10K', '$10K+'];
 var INTEREST_WORDS = { Sponsor: 'Sponsoring', Host: 'Hosting', Partner: 'Partnering' };

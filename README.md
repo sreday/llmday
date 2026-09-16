@@ -79,6 +79,8 @@ The home page `#sponsor` section has an "Email us" expandable form under the Cal
 - Deploy / re-deploy steps are in the header comment of `_build/lead-form.gs` (Web app, Execute as: Me,
   Who has access: Anyone). Editing the script needs a new deployment *version*; the URL stays the same.
 - Same deployment can serve sreday/platformday: the form sends `brand`, the script maps it to inbox + alias.
+  PEC (promptengineering.rocks) shares all five deployments too (brand key `pec`, sends from `mark@llmday.com`
+  because it has no alias of its own; speaker code PEC20).
 - The email lists `Form sent from: <page URL>` (home page -> `https://llmday.com/`, event page -> its folder URL).
 - Event pages (event index + talk pages) use the same form as the "Become A Sponsor" pill via
   `_event_template/_templates/_lead_form.html` (propagated into every `20*/_templates/`); the event build

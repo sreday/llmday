@@ -25,7 +25,9 @@
 var BRANDS = {
   sreday:      { from: 'mark@sreday.com',      site: 'sreday.com',      color: '#713660' },
   llmday:      { from: 'mark@llmday.com',      site: 'llmday.com',      color: '#26986A' },
-  platformday: { from: 'mark@platformday.com', site: 'platformday.com', color: '#E2971D' }
+  platformday: { from: 'mark@platformday.com', site: 'platformday.com', color: '#E2971D' },
+  // PEC: no PEC mail aliases exist, so it sends from the LLMday alias and routes '{brand}' Cc to llmday.com
+  pec:         { from: 'mark@llmday.com', site: 'promptengineering.rocks', color: '#6b40d8', mail_domain: 'llmday.com' }
 };
 var SENDER_NAME = 'Mark Pawlikowski';
 var LEAD_LABEL = 'Fast track';
@@ -34,7 +36,7 @@ var MAX_IMAGE_BYTES = 10 * 1024 * 1024;   // the raw upload, same cap as the pag
 var LIMITS = { name: 80, company: 120, jobtitle: 120, email: 254, linkedin: 300, title: 160, abstract: 8000, bio: 4000, outreach: 80 };
 
 // Who did the speaker talk to? Aliases are matched after normalisation (lowercase, no diacritics,
-// letters only). route: '' = nobody extra in Cc; '{brand}' = the brand's domain.
+// letters only). route: '' = nobody extra in Cc; '{brand}' = the brand's mail domain (mail_domain, else site).
 var TEAM = [
   { name: 'Miko',       route: 'aleksandra@sreday.com', aliases: ['miko', 'mikolaj', 'mikko', 'micko', 'mico', 'meeko', 'miku', 'mikus', 'mikey', 'mikolay', 'mikolai', 'mikkolaj', 'mikolaj pawlikowski', 'miko pawlikowski', 'nick', 'nicholas', 'nicolas', 'nikolaj', 'nikolai', 'mikolaj p', 'miko p', 'mikola', 'micolaj', 'mickolaj', 'mikkolai', 'mykola', 'mykolaj', 'nikolas', 'niko', 'mikolaj pawlikowsky', 'miko from sreday'] },
   { name: 'Mark',       route: 'aleksandra@sreday.com', aliases: ['mark', 'marek', 'marc', 'marko', 'markus', 'marcus', 'mareczek', 'marecki', 'mareq', 'marek p', 'mark p', 'mark pawlikowski', 'marek pawlikowski', 'marek pawlikowsky', 'mark pawlikowsky', 'marik', 'marck', 'mrk', 'markp', 'marekp', 'marek pawl', 'mark pavlikowski', 'marek pavlikovski', 'marek pawlikowskii', 'mark from sreday', 'marek from sreday', 'mark from llmday'] },
@@ -49,7 +51,7 @@ var TEAM = [
 
 function doGet() {
   // Health + the alias table, so the page can show a live "sounds like Magdalena" hint from one source of truth.
-  return respond({ ok: true, service: 'fasttrack', version: 12,
+  return respond({ ok: true, service: 'fasttrack', version: 13,
                    team: TEAM.map(function (t) { return { name: t.name, aliases: t.aliases }; }) });
 }
 
@@ -77,7 +79,7 @@ function doPost(e) {
   var match = matchOutreach(s.outreach);
   var from = GmailApp.getAliases().indexOf(brand.from) !== -1 ? brand.from : Session.getEffectiveUser().getEmail();
   var cc = [];                                                     // organizer-facing: the speaker is NOT copied
-  if (match.person && match.person.route) cc.push(match.person.route.replace('{brand}', brand.site));
+  if (match.person && match.person.route) cc.push(match.person.route.replace('{brand}', brand.mail_domain || brand.site));
 
   var mail = composeSubmission(s, ev, match, brand);
   if (data.dry_run) {
@@ -253,7 +255,7 @@ function normalizeEvent(raw, brand) {
   var url = clean(raw.event_url, 300);
   var okUrl = /^https:\/\/(www\.)?/.test(url) && url.replace(/^https:\/\/(www\.)?/, '').indexOf(brand.site + '/') === 0;
   return {
-    brand_name: clean(raw.brand_name, 40) || brand.site.replace(/\.com$/, ''),
+    brand_name: clean(raw.brand_name, 40) || brand.site.replace(/\.[a-z]+$/, ''),
     event_name: clean(raw.event_name, 80) || (clean(raw.brand_name, 40) + ' ' + clean(raw.city, 60)).trim() || brand.site,
     event_url:  okUrl ? url.replace(/\/?$/, '/') : site + (slug ? slug + '/' : '')
   };
