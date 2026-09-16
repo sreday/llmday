@@ -62,7 +62,7 @@ function doPost(e) {
 
   // Everything is mandatory: the form enforces it, this is the backstop.
   if (!name || !company || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-      !interests.length || !brands.length || !regions.length || !budget || !consent) {
+      !interests.length || !brands.length || !budget || !consent) {   // regions optional: the PEC form has no region picker
     return respond({ ok: false, error: 'invalid fields' });
   }
 
@@ -81,7 +81,7 @@ function doPost(e) {
     'Thank you for submitting the form, here\'s what we\'re working with:' + '\n\n';
   var lines = [
     confLabel + ': ' + brands.join(', '),
-    'Regions: ' + regions.join(', '),
+    'Regions: ' + (regions.length ? regions.join(', ') : 'n/a'),
     'Budget: ' + budget,
     'Sender\'s email: ' + email,
     'Form sent from: ' + source
