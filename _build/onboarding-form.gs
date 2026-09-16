@@ -47,7 +47,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 8 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 9 });
 }
 
 function doPost(e) {
@@ -207,7 +207,9 @@ function composeOnboarding(ev, brand) {
     'What happens now:',
     '',
     '- Your participation is confirmed and your talk is added to the website',
-    '- Please redeem your free ticket here: [' + ev.tickets_url + '](' + ev.tickets_url + '). If this is a paid event, please use the code *SPEAKERFREE*\n  (on luma, select the general self funding / general admission, and then find "Add a coupon" in the top right corner)',
+    ev.is_free
+      ? '- Please register for your free ticket here: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
+      : '- Please redeem your free ticket with the code *SPEAKERFREE* here: [' + ev.tickets_url + '](' + ev.tickets_url + ')' + String.fromCharCode(10) + '  (on luma, select the general self funding / general admission, and then find "Add a coupon" in the top right corner)',
     '- Speaking slots are ' + ev.slot_minutes + ' minutes (' + talk + ' min talk + 5 min Q&A)',
     '- You will present from your own laptop. Please share your slides with us in advance as a backup.',
     "- As speakers confirm, we'll update the website and prepare social media graphics and promo posts for sharing.",
@@ -233,9 +235,13 @@ function composeOnboarding(ev, brand) {
     '1. Expected attendance - around ' + (ev.attendees || 100) + ' people',
     '1. There will be WiFi access in the venue',
     '1. Previous ' + ev.brand_name + ' talks: ' + (ev.youtube_url ? '[' + ev.youtube_url + '](' + ev.youtube_url + ')' : 'on our YouTube channel'),
+  ].concat(ev.is_free ? [
+    '1. The event is free to attend - feel free to invite your team and friends: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
+  ] : [
     '1. Bring a friend for free with the code *PLUSONE*',
     '1. 50% off for your team and colleagues - share code *DREAMTEAM*',
-    '1. 20% off code you can spread everywhere on social media: *' + brand.code + '*',
+    '1. 20% off code you can spread everywhere on social media: *' + brand.code + '*'
+  ]).concat([
     "1. Laptop connection to present: wired or wireless. If it's wireless then Google Meet / ZOOM. If wired, then we'll have HDMI and USB-C connectors",
     '1. Travel / accommodation / speaker compensation - unfortunately, those are not covered',
     "1. Your company wants to sponsor the event? Here's the form: [" + ev.event_url + '#sponsors](' + ev.event_url + '#sponsors)',
@@ -305,6 +311,7 @@ function normalizeEvent(raw, brand) {
     venue_name:    clean(raw.venue_name, 120) || 'the venue',
     venue_address: clean(raw.venue_address, 200),
     attendees:     parseInt(raw.attendees, 10) > 0 ? parseInt(raw.attendees, 10) : 0,
+    is_free:       raw.is_free === true,                     // luma_is_free from the site build: free events get no ticket codes
     youtube_url:   /^https:\/\/(www\.)?youtube\.com\//.test(String(raw.youtube_url || '')) ? clean(raw.youtube_url, 200) : '',
     calendly_url:  /^https:\/\/calendly\.com\//.test(String(raw.calendly_url || '')) ? clean(raw.calendly_url, 200) : 'https://calendly.com/sreday/30min',
     slot_minutes:  parseInt(raw.slot_minutes, 10) >= 10 && parseInt(raw.slot_minutes, 10) <= 90 ? parseInt(raw.slot_minutes, 10) : 30,
