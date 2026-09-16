@@ -260,7 +260,7 @@
         <p class="ac-blurb"><strong>LLMday</strong> is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
         
         <h5 class="ac-topics-heading">Companies presenting:</h5>
-        <p class="ac-companies">Altos Labs, Amazon, AWS, Buzz Solutions, DeepTempo, eBay, EchoStar Corporation, GeyserData inc., Kong, Meta, Miriel AI, Noodle Seed, OpenAI, Oracle, Prest0, Red Hat, Root Inc., Symosis Security, UC Berkeley, uc2c.ai, Verizon, Votal.ai, Workday</p>
+        <p class="ac-companies">Altos Labs, Amazon, AWS, Buzz Solutions, DeepTempo, eBay, EchoStar Corporation, Ever, GeyserData inc., Kong, Meta, Miriel AI, Noodle Seed, OpenAI, Oracle, Prest0, Root Inc., Symosis Security, UC Berkeley, uc2c.ai, Verizon, Votal.ai, Workday</p>
         
         
         <h5 class="ac-topics-heading">Topics so far:</h5>
@@ -282,8 +282,7 @@
             <li><a href="Leon_Lobo_Oracle_Designing_Hybrid_Intelligence_for_Enterprise_Finance_Balancing_Agentic_Reasoning_an.html#speakers-section">Designing Hybrid Intelligence for Enterprise Finance: Balancing Agentic Reasoning and Business Integrity</a></li>
             <li><a href="Gabriel_Nahum_GeyserData_inc_Agents_as_the_First_Line_of_Defense.html#speakers-section">Agents as the First Line of Defense</a></li>
             <li><a href="Ivo_Dujmovic_uc2cai_FailClosed_by_Design_Why_Auditable_AI_Isnt_Agentic.html#speakers-section">Fail-Closed by Design: Why Auditable AI Isn&#39;t Agentic</a></li>
-            <li><a href="Leeza_Nadeem_Red_Hat_Your_Agents_Got_the_Right_Answer_But_WhyCounterfactual_Evaluation_for_MultiAgen.html#speakers-section">Your Agents Got the Right Answer. But Why?
-Counterfactual Evaluation for Multi-Agent AI Systems</a></li>
+            <li><a href="Vi_Tran_Ever_Guardrails_and_Traces_for_Agents_That_Act_in_the_World.html#speakers-section">Guardrails and Traces for Agents That Act in the World</a></li>
             <li><a href="Andrew_Barkett_Miriel_AI_Your_Agent_Needs_a_Kernel__Not_a_Better_Prompt.html#speakers-section">Your Agent Needs a Kernel, Not a Better Prompt</a></li>
             <li><a href="Jyotirmoy_Sundi_Votalai_The_Insider_Threat_of_Agentic_AI.html#speakers-section">The Insider Threat of Agentic AI</a></li>
             <li><a href="Avneesh_Sharma_Amazon_Evidence_Grounded_Context_Layer_for_AI_Agents.html#speakers-section">Evidence Grounded Context Layer for AI Agents</a></li>
@@ -1289,23 +1288,17 @@ Expect production war stories, real benchmarks, and a concrete framework for cut
             <div class="meta">
               <h4 class="time mb-3">10:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img class="profile-image rounded-circle mb-2" src="../speakers/Leeza Nadeem.png" alt=""></a>
-                <div class="name">Leeza Nadeem</div>
+                <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img class="profile-image rounded-circle mb-2" src="../speakers/Vi Tran.png" alt=""></a>
+                <div class="name">Vi Tran</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Your Agents Got the Right Answer. But Why?
-Counterfactual Evaluation for Multi-Agent AI Systems</a>
+                <a class="theme-link" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Guardrails and Traces for Agents That Act in the World</a>
               </h3>
-              <div class="location mb-3">Red Hat</div>
-              <div class="desc schedule-abstract">Multi-agent AI systems are increasingly built as teams: one agent plans, another retrieves information, another critiques, and another acts. Yet most evaluations still focus on the final outcome. Did the system answer correctly? Did the task succeed?
-That leaves an important question unanswered: which agents actually caused the result?
-A system can produce the correct answer while containing redundant agents, hidden dependencies, correlated reasoning failures, or agents that simply follow the conclusions of others. Conversely, an agent that appears unsuccessful in isolation may be essential to the performance of the team.
-This talk introduces a counterfactual approach to evaluating multi-agent AI systems, drawing from research on causal reasoning and multi-agent causal attribution. Instead of evaluating only what happened, we ask what would have happened if an agent were removed, its information changed, its recommendation perturbed, its tools restricted, or its role replaced.
-We’ll explore how counterfactual interventions and causal graphs can reveal individual agent influence, interactions between agents, error propagation, redundancy, recovery behavior, and hidden points of failure. We’ll also examine how these methods can distinguish agents that merely participate in a workflow from agents that are causally responsible for its outcome.
-Through practical examples of LLM-based agent teams, attendees will learn how counterfactual evaluation can move us beyond end-to-end accuracy toward a deeper question for production AI systems: not just whether an agent team works, but why it works, when it fails, and which parts of the team we should actually trust.<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">... Read more</a></div>
+              <div class="location mb-3">Ever</div>
+              <div class="desc schedule-abstract">When an agent can take actions that cannot be undone, such as sending a message or changing a record, two layers matter most and only work as a pair: structural guardrails that decide what the system cannot do, enforced in code beneath the model, and trace and statistics analysis that shows what the agent actually did within those bounds. Drawing on shipping a customer-facing agent to production, I will walk through the loop that emerged, in which gates make observing live traffic safe, findings sort into either a new gate or a prompt change, and measurement confirms the fix, because the costliest mistakes happen inside the permitted tool set and monitoring fails quietly.<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">... Read more</a></div>
               
             </div>
           </div>
@@ -1814,9 +1807,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Your Agents Got the Right Answer. But Why?
-Counterfactual Evaluation for Multi-Agent AI Systems</a>
-              <div class="speaker-info">Leeza Nadeem <span class="affiliation">• Red Hat</span></div>
+              <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Guardrails and Traces for Agents That Act in the World</a>
+              <div class="speaker-info">Vi Tran <span class="affiliation">• Ever</span></div>
             </td>
 
 
@@ -2726,32 +2718,6 @@ Counterfactual Evaluation for Multi-Agent AI Systems</a>
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img src="../speakers/Leeza Nadeem.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Leeza Nadeem</h5>
-            <div class="card-text mb-3">
-              <div class="meta">Red Hat</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Leeza_Nadeem_Red_Hat_Your_Agents_Got_the_Right_Answer_But_WhyCounterfactual_Evaluation_for_MultiAgen#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/leeza-nadeem/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
           <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Leon Lobo.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Leon Lobo</h5>
@@ -3105,6 +3071,32 @@ Counterfactual Evaluation for Multi-Agent AI Systems</a>
             <ul class="social-list list-inline mb-0">
               
               <li class="list-inline-item"><a  href="https://www.linkedin.com/in/-vaibhav-mahajan/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              
+              
+            </ul><!--//social-list-->
+          </div>
+        </div><!--//card-->
+      </div><!--//col-->
+
+      
+
+      <div class="col mb-4">
+        <div class="card rounded">
+          <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img src="../speakers/Vi Tran.png" class="card-img-top rounded-0" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title mb-2">Vi Tran</h5>
+            <div class="card-text mb-3">
+              <div class="meta">Ever</div>
+            </div><!--//card-text-->
+            <div class="event-card-buttons">
+              <a href="./Vi_Tran_Ever_Guardrails_and_Traces_for_Agents_That_Act_in_the_World#speakers-section" class="event-read-more-btn">Read more</a>
+              
+            </div>
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+            <ul class="social-list list-inline mb-0">
+              
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vi-n-tran/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -4155,31 +4147,25 @@ Expect production war stories, real benchmarks, and a concrete framework for cut
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Leeza Nadeem.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Vi Tran.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Leeza Nadeem</h2>
-                          <div class="meta mb-2">Red Hat</div>
+                          <h2 class="name mb-2">Vi Tran</h2>
+                          <div class="meta mb-2">Ever</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/leeza-nadeem/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vi-n-tran/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Your Agents Got the Right Answer. But Why?
-Counterfactual Evaluation for Multi-Agent AI Systems</div>
+              <div class="talk-title-bar">Guardrails and Traces for Agents That Act in the World</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Multi-agent AI systems are increasingly built as teams: one agent plans, another retrieves information, another critiques, and another acts. Yet most evaluations still focus on the final outcome. Did the system answer correctly? Did the task succeed?
-That leaves an important question unanswered: which agents actually caused the result?
-A system can produce the correct answer while containing redundant agents, hidden dependencies, correlated reasoning failures, or agents that simply follow the conclusions of others. Conversely, an agent that appears unsuccessful in isolation may be essential to the performance of the team.
-This talk introduces a counterfactual approach to evaluating multi-agent AI systems, drawing from research on causal reasoning and multi-agent causal attribution. Instead of evaluating only what happened, we ask what would have happened if an agent were removed, its information changed, its recommendation perturbed, its tools restricted, or its role replaced.
-We’ll explore how counterfactual interventions and causal graphs can reveal individual agent influence, interactions between agents, error propagation, redundancy, recovery behavior, and hidden points of failure. We’ll also examine how these methods can distinguish agents that merely participate in a workflow from agents that are causally responsible for its outcome.
-Through practical examples of LLM-based agent teams, attendees will learn how counterfactual evaluation can move us beyond end-to-end accuracy toward a deeper question for production AI systems: not just whether an agent team works, but why it works, when it fails, and which parts of the team we should actually trust.</p></p>
+                <p><p>When an agent can take actions that cannot be undone, such as sending a message or changing a record, two layers matter most and only work as a pair: structural guardrails that decide what the system cannot do, enforced in code beneath the model, and trace and statistics analysis that shows what the agent actually did within those bounds. Drawing on shipping a customer-facing agent to production, I will walk through the loop that emerged, in which gates make observing live traffic safe, findings sort into either a new gate or a prompt change, and measurement confirms the fix, because the costliest mistakes happen inside the permitted tool set and monitoring fails quietly.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -4187,7 +4173,7 @@ Through practical examples of LLM-based agent teams, attendees will learn how co
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Leeza Nadeem is an AI researcher and technologist at Red Hat working across AI infrastructure, agentic systems, and next-generation telecommunications. Previously, she conducted research at Stanford University’s Causality in Cognition Lab on counterfactual reasoning, causal attribution, and multi-agent decision-making. Her experience also includes AI, product, and engineering work at NVIDIA and Apple. Her current work explores how counterfactual methods can help us understand coordination, influence, and failure within increasingly complex teams of AI agents.</p></p>
+                <p><p>Vi Tran is an engineer at Ever, an AI-native auto retail platform aiming to bring real automation to an industry that still runs on slow, manual operations and clunky data silos. Vi helps lead the development of the agent platform. Before Ever, Vi spent two years at AWS on Amazon Bedrock Knowledge Bases, leading retrieval and metadata work and contributing to the Agentic Retriever API. Vi writes about agent engineering and production AI on LinkedIn.</p></p>
               </div>
 
           </div><!--//modal-body-->

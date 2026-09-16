@@ -256,23 +256,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">Your Agents Got the Right Answer. But Why?
-Counterfactual Evaluation for Multi-Agent AI Systems</h1>
+    <h1 class="section-heading text-center mb-3">Guardrails and Traces for Agents That Act in the World</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
-          <img src="../speakers/Leeza Nadeem.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Vi Tran.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Leeza Nadeem</h5>
+            <h5 class="card-title mb-2">Vi Tran</h5>
             <div class="card-text mb-3">
-              <div class="meta">Red Hat</div>
+              <div class="meta">Ever</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/leeza-nadeem/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vi-n-tran/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -286,19 +285,14 @@ Counterfactual Evaluation for Multi-Agent AI Systems</h1>
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Multi-agent AI systems are increasingly built as teams: one agent plans, another retrieves information, another critiques, and another acts. Yet most evaluations still focus on the final outcome. Did the system answer correctly? Did the task succeed?
-That leaves an important question unanswered: which agents actually caused the result?
-A system can produce the correct answer while containing redundant agents, hidden dependencies, correlated reasoning failures, or agents that simply follow the conclusions of others. Conversely, an agent that appears unsuccessful in isolation may be essential to the performance of the team.
-This talk introduces a counterfactual approach to evaluating multi-agent AI systems, drawing from research on causal reasoning and multi-agent causal attribution. Instead of evaluating only what happened, we ask what would have happened if an agent were removed, its information changed, its recommendation perturbed, its tools restricted, or its role replaced.
-We’ll explore how counterfactual interventions and causal graphs can reveal individual agent influence, interactions between agents, error propagation, redundancy, recovery behavior, and hidden points of failure. We’ll also examine how these methods can distinguish agents that merely participate in a workflow from agents that are causally responsible for its outcome.
-Through practical examples of LLM-based agent teams, attendees will learn how counterfactual evaluation can move us beyond end-to-end accuracy toward a deeper question for production AI systems: not just whether an agent team works, but why it works, when it fails, and which parts of the team we should actually trust.</p></p>
+                <p><p>When an agent can take actions that cannot be undone, such as sending a message or changing a record, two layers matter most and only work as a pair: structural guardrails that decide what the system cannot do, enforced in code beneath the model, and trace and statistics analysis that shows what the agent actually did within those bounds. Drawing on shipping a customer-facing agent to production, I will walk through the loop that emerged, in which gates make observing live traffic safe, findings sort into either a new gate or a prompt change, and measurement confirms the fix, because the costliest mistakes happen inside the permitted tool set and monitoring fails quietly.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Leeza Nadeem is an AI researcher and technologist at Red Hat working across AI infrastructure, agentic systems, and next-generation telecommunications. Previously, she conducted research at Stanford University’s Causality in Cognition Lab on counterfactual reasoning, causal attribution, and multi-agent decision-making. Her experience also includes AI, product, and engineering work at NVIDIA and Apple. Her current work explores how counterfactual methods can help us understand coordination, influence, and failure within increasingly complex teams of AI agents.</p></p>
+                <p><p>Vi Tran is an engineer at Ever, an AI-native auto retail platform aiming to bring real automation to an industry that still runs on slow, manual operations and clunky data silos. Vi helps lead the development of the agent platform. Before Ever, Vi spent two years at AWS on Amazon Bedrock Knowledge Bases, leading retrieval and metadata work and contributing to the Agentic Retriever API. Vi writes about agent engineering and production AI on LinkedIn.</p></p>
               </div>
 
               
