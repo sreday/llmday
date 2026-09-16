@@ -294,6 +294,7 @@ context['onboarding_event'] = {
     'venue_name':    _ob.get('venue_name') or _ob_vname or context.get('location_string', ''),
     'venue_address': _ob.get('venue_address') or _ob_vaddr or context.get('location_string', ''),
     'attendees':     context.get('attendees') or 0,
+    'is_free':       bool(context.get('luma_is_free')),   # Luma says the ticket is free -> onboarding email skips the ticket codes
     'youtube_url':   context.get('youtube_url', ''),
     'calendly_url':  context.get('calendly_sponsor_url', ''),
     'slot_minutes':  int(_ob.get('slot_minutes', 30) or 30),
