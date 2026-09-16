@@ -38,7 +38,11 @@ var BRANDS = {
                  crowd: 'mostly AI and ML engineers, software engineers, engineering managers and CTOs' },
   platformday: { from: 'mark@platformday.com', site: 'platformday.com',
                  scope: 'platform engineering, developer experience, internal developer platforms, infrastructure and DevOps',
-                 crowd: 'mostly platform and DevOps engineers, SREs, engineering managers and CTOs' }
+                 crowd: 'mostly platform and DevOps engineers, SREs, engineering managers and CTOs' },
+  // PEC: no mark@promptengineering.rocks alias exists, so it sends from the LLMday alias
+  pec:         { from: 'mark@llmday.com', site: 'promptengineering.rocks',
+                 scope: 'prompt engineering, LLM applications, AI agents, evaluation and applied generative AI',
+                 crowd: 'mostly AI and ML engineers, software engineers, product people, engineering managers and founders' }
 };
 var SENDER_NAME = 'Mark Pawlikowski';
 var LEAD_LABEL = 'Speaker invitations';
@@ -48,7 +52,7 @@ var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock 
 var MAX_COMPANIES = 10;                              // "Speakers come from A, B, ... and others"
 var MAX_TOPICS = 4;                                  // "Most talks so far are about a, b, c, and d"
 var MAX_SPONSORS = 6;
-var VERSION = 8;   // v7: legibility pass, sponsorship page link, 'Invitation to speak' subject; v8: numbers line back to slashes, planned-only when thin
+var VERSION = 9;   // v7: legibility pass, sponsorship page link, 'Invitation to speak' subject; v8: numbers line back to slashes, planned-only when thin; v9: PEC brand
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
@@ -273,7 +277,7 @@ function normalizeEvent(raw, brand) {
   var tier = String(raw.tier || '').toLowerCase();
   var prev = raw.previous && typeof raw.previous === 'object' ? raw.previous : null;
   var ev = {
-    brand_name:       clean(raw.brand_name, 40) || brand.site.replace(/\.com$/, ''),
+    brand_name:       clean(raw.brand_name, 40) || brand.site.replace(/\.[a-z]+$/, ''),
     event_name:       clean(raw.event_name, 80),
     city:             clean(raw.city, 60) || 'town',
     date:             clean(raw.date, 60) || 'the conference day',
@@ -282,7 +286,7 @@ function normalizeEvent(raw, brand) {
     sponsor_page_url: okUrl(raw.sponsor_page_url, eventUrl + 'sponsorship'),
     venue_name:       clean(raw.venue_name, 120) || 'the venue',
     attendees:        parseInt(raw.attendees, 10) > 0 ? parseInt(raw.attendees, 10) : 100,
-    youtube_url:      /^https:\/\/(www\.)?youtube\.com\//.test(String(raw.youtube_url || '')) ? clean(raw.youtube_url, 200) : 'https://www.youtube.com/@' + brand.site.replace(/\.com$/, ''),
+    youtube_url:      /^https:\/\/(www\.)?youtube\.com\//.test(String(raw.youtube_url || '')) ? clean(raw.youtube_url, 200) : 'https://www.youtube.com/@' + brand.site.replace(/\.[a-z]+$/, ''),
     calendly_url:     /^https:\/\/calendly\.com\//.test(String(raw.calendly_url || '')) ? clean(raw.calendly_url, 200) : 'https://calendly.com/sreday/30min',
     slot_minutes:     parseInt(raw.slot_minutes, 10) >= 10 && parseInt(raw.slot_minutes, 10) <= 90 ? parseInt(raw.slot_minutes, 10) : 30,
     tracks:           parseInt(raw.tracks, 10) >= 1 && parseInt(raw.tracks, 10) <= 10 ? parseInt(raw.tracks, 10) : 1,

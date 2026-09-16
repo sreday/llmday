@@ -36,7 +36,9 @@
 var BRANDS = {
   sreday:      { inbox: 'hello@sreday.com',      from: 'mark@sreday.com',      site: 'sreday.com',      code: 'SPONSOR' },
   llmday:      { inbox: 'hello@llmday.com',      from: 'mark@llmday.com',      site: 'llmday.com',      code: 'SPONSOR' },
-  platformday: { inbox: 'hello@platformday.com', from: 'mark@platformday.com', site: 'platformday.com', code: 'SPONSOR' }
+  platformday: { inbox: 'hello@platformday.com', from: 'mark@platformday.com', site: 'platformday.com', code: 'SPONSOR' },
+  // PEC: no mark@promptengineering.rocks alias exists, so it sends from the LLMday alias
+  pec:         { inbox: 'hello@promptengineering.rocks', from: 'mark@llmday.com', site: 'promptengineering.rocks', code: 'SPONSOR' }
 };
 var SENDER_NAME = 'Mark Pawlikowski';
 var LEAD_LABEL = 'Sponsor onboarding';
@@ -55,7 +57,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('SPONSOR_ONBOARDING_LOCK');
   return respond({ ok: true, service: 'sponsor-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('SPONSOR_ONBOARDING_QUEUE').items || []).length, version: 3 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('SPONSOR_ONBOARDING_QUEUE').items || []).length, version: 4 });
 }
 
 function doPost(e) {
@@ -383,7 +385,7 @@ function normalizeEvent(raw, brand) {
   };
   var eventUrl = okUrl(raw.event_url, site + (slug ? slug + '/' : ''));
   var ev = {
-    brand_name:       clean(raw.brand_name, 40) || brand.site.replace(/\.com$/, ''),
+    brand_name:       clean(raw.brand_name, 40) || brand.site.replace(/\.[a-z]+$/, ''),
     event_name:       clean(raw.event_name, 80),
     city:             clean(raw.city, 60) || 'town',
     date:             clean(raw.date, 60) || 'the conference day',
