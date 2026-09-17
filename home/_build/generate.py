@@ -580,7 +580,8 @@ if os.environ.get("GITHUB_ACTIONS"):                # annotations for upcoming e
 # (git fetch --shallow-since, see .github/workflows/static-build.yml) before building. If a speaker appears,
 # disappears and appears again only the latest addition is kept. Anything missing (no git, shallow boundary, odd
 # CSV) degrades to a note on the page and a line in the build log, never fails the build.
-_ADDED_DAYS = 7
+_ADDED_DAYS = 7                      # shown by default
+_ADDED_DAYS_MAX = 30                 # built and rendered, revealed by the "Show last 30 days" toggle (Marek 2026-09-17)
 _ADDED_TZ = "Europe/London"          # commits are authored in London time; day buckets follow it
 _ADDED_SAME = 0.85                   # difflib ratio at/above which a "new" name is treated as a typo fix of an old one
 
@@ -628,11 +629,12 @@ def _status_added_log(rows):
     except Exception:                                        # no tzdata (Windows without the tzdata package): fall back
         tz, tz_name = datetime.timezone.utc, "UTC"
     now = datetime.datetime.now(tz)
-    first = now.date() - datetime.timedelta(days=_ADDED_DAYS - 1)
+    first = now.date() - datetime.timedelta(days=_ADDED_DAYS_MAX - 1)
     days = [{"iso": (first + datetime.timedelta(days=i)).isoformat(),
              "label": (first + datetime.timedelta(days=i)).strftime("%A").upper(),
              "date": (first + datetime.timedelta(days=i)).strftime("%d %b").lstrip("0"),
-             "today": i == _ADDED_DAYS - 1, "entries": []} for i in range(_ADDED_DAYS)]
+             "today": i == _ADDED_DAYS_MAX - 1, "recent": i >= _ADDED_DAYS_MAX - _ADDED_DAYS,
+             "entries": []} for i in range(_ADDED_DAYS_MAX)]
     window = "%s to %s, %s" % (first.strftime("%d %b").lstrip("0"), now.strftime("%d %b %Y").lstrip("0"), tz_name)
     root = (_status_git("rev-parse", "--show-toplevel") or "").strip()
     if not root:
@@ -643,7 +645,7 @@ def _status_added_log(rows):
         path = folder + "/_db/talks.csv"
         # --follow so a renamed event folder (Redwood City -> San Francisco, 2026-09-12) does not make its whole
         # lineup look new; each record = sha, date, then the file's path at that commit. Newest first from git.
-        log = _status_git("log", "--follow", "-n", "120", "--format=%x1e%H%x1f%cI", "--name-only", "--", path, cwd=root)
+        log = _status_git("log", "--follow", "-n", "400", "--format=%x1e%H%x1f%cI", "--name-only", "--", path, cwd=root)
         if log is None:
             warnings.append("%s: git log failed" % r["name"]); continue
         commits = []
@@ -684,7 +686,7 @@ def _status_added_log(rows):
 
 
 _added_days, _added_window, _added_error, _added_warnings = _status_added_log(_status_rows)
-print("SPEAKERS ADDED (last %d days, %s): %d" % (_ADDED_DAYS, _added_window, sum(len(d["entries"]) for d in _added_days)))
+print("SPEAKERS ADDED (last %d days, %s): %d" % (_ADDED_DAYS_MAX, _added_window, sum(len(d["entries"]) for d in _added_days)))
 for d in _added_days:
     for e in d["entries"]:
         print("  %s %s  %s -> %s" % (d["iso"], e["time"], e["name"], e["event"]))
@@ -944,7 +946,7 @@ os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
-        status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
+        status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
         status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes,
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
