@@ -122,7 +122,9 @@
     .reg-head small a { color: #888; }
     .reg-head .na { font-style: italic; }
     .reg-total { color: #555; font-size: .9rem; }
-    .reg .paid { --c: var(--accent); } .reg .free { --c: #9aa0a6; } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
+    .reg .paid { --c: var(--accent); } .reg .free { --c: var(--critical); } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
+    .reg-overall { font-size: .95rem; color: #555; margin: 0 0 12px; }
+    .reg-overall strong { color: #111; }
     .reg-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: #eceef1; margin: 10px 0 8px; }
     .reg-bar i { display: block; height: 100%; background: var(--c); }
     .reg-cats { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .84rem; color: #555; }
@@ -136,14 +138,13 @@
 <main class="wrap">
   <div class="brand">{{ brand_name }} · status</div>
   <h1>Upcoming conferences</h1>
-  <div class="sub">Confirmed talks against {{ status_slots }} talks per track</div>
+  <div class="sub">Confirmed talks, standardized {{ status_slots }} talks per track. Check start / end to see how many can we have in practice.</div>
   <div class="legend">
     <span style="--c: var(--critical)">Critical</span>
     <span style="--c: var(--bad)">Bad</span>
     <span style="--c: var(--neutral)">Neutral</span>
     <span style="--c: var(--good)">Good</span>
     <span style="--c: var(--nailed)">Full!</span>
-    <span class="legend-note">thresholds tighten as the date approaches, see the ladder below</span>
   </div>
 
   <div class="card">
@@ -208,17 +209,19 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="sub">Approved Luma registrations at build time. Speaker = name found in talks.csv, Sponsor = company or email domain of one of the event's sponsors, Paid = paid ticket, Freebie = everyone else on a free ticket.</div>
+    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="{{ status_generated_iso }}">{{ status_generated }}</span></div>
     {% if status_luma_note %}
     <div class="added-note">{{ status_luma_note }}</div>
     {% else %}
-    {% if status_luma_keys %}<div class="added-note">{% for k in status_luma_keys %}{{ k }}{% if not loop.last %} · {% endif %}{% endfor %}</div>{% endif %}
+    {% if status_luma_overall.expected %}
+    <div class="reg-overall"><strong>{{ status_luma_overall.registered }}</strong> registered / {{ status_luma_overall.expected }} expected across all upcoming events · <strong>{{ status_luma_overall.pct }}%</strong></div>
+    {% endif %}
     {% for r in status_rows %}
     <div class="reg">
       <div class="reg-head">
         <a href="{{ r.url }}">{{ r.name }}</a>
         {% if r.luma %}
-        <span class="reg-total"><strong>{{ r.luma.total }}</strong> registered{% if r.luma.capacity %} of {{ r.luma.capacity }}{% endif %}{% if r.luma.approved_api != r.luma.total %} <em class="na">(Luma counts {{ r.luma.approved_api }} approved)</em>{% endif %}</span>
+        <span class="reg-total"><strong>{{ r.luma.total }}</strong> registered{% if r.expected %} / {{ r.expected }} expected · <strong>{{ r.luma.expected_pct }}%</strong>{% endif %}{% if r.luma.capacity %} <em class="na">(Luma capacity {{ r.luma.capacity }})</em>{% endif %}{% if r.luma.approved_api != r.luma.total %} <em class="na">(Luma counts {{ r.luma.approved_api }} approved)</em>{% endif %}</span>
         <span class="spacer"></span>
         <small>+{{ r.luma.last7 }} in 7 days{% if r.luma.pending or r.luma.waitlist %} · {{ r.luma.pending }} pending{% if r.luma.waitlist %}, {{ r.luma.waitlist }} waitlisted{% endif %}{% endif %}{% if r.luma.checked_in %} · {{ r.luma.checked_in }} checked in{% endif %}{% if not r.luma.open %} · registration closed{% endif %}{% if r.luma.url %} · <a href="{{ r.luma.url }}">Luma</a>{% endif %}</small>
         {% else %}
@@ -235,8 +238,8 @@
   </section>
 
   <section class="added">
-    <h2>Speakers added to the website</h2>
-    <div class="sub">Who was added when, and to which conference, last <span class="added-n">{{ status_added_n }}</span> days</div>
+    <h2>Speakers on the website</h2>
+    <div class="sub">Who was added when, and to which conference.</div>
     {% if status_added_error %}
     <div class="added-note">{{ status_added_error }}</div>
     {% else %}
@@ -282,7 +285,7 @@
     {% endfor %}
     {% if status_past %}
     <details class="past">
-      <summary>Past events since 2025: {{ status_past_dirty | length }} of {{ status_past | length }} with issues{% if not status_past_dirty %}, all clear{% endif %}</summary>
+      <summary>Past events with problems{% if status_past_dirty %} ({{ status_past_dirty | length }}){% else %}: none{% endif %}</summary>
       {% for r in status_past_dirty %}
       <div class="check" id="check-{{ r.folder }}">
         <div class="check-head">
@@ -312,6 +315,12 @@
     var t = new Date(els[i].getAttribute('data-ts'));
     if (isNaN(t.getTime())) continue;
     els[i].textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  var full = document.querySelectorAll('[data-ts-full]');   // build stamp: date + time, viewer's timezone
+  for (var j = 0; j < full.length; j++) {
+    var f = new Date(full[j].getAttribute('data-ts-full'));
+    if (isNaN(f.getTime())) continue;
+    full[j].textContent = f.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 })();
 (function () {                                     // "Show last 30 days" toggle for the speakers log

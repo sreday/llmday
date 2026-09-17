@@ -502,6 +502,7 @@ for _ev in (context.get("events") or []):
         "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
         "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,   # for the Luma registrations block
+        "expected": int(re.sub(r"[^\d]", "", str(_em.get("attendees") or "0")) or 0),    # "N attendees" as the event page shows it
     })
     print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings")
 _me = str(context.get("brand_name") or "")
@@ -930,7 +931,15 @@ def _luma_registrations(rows):
 
 
 _luma_note = _luma_registrations(_status_rows)
-print("REGISTRATIONS (Luma, approved): %s" % (_luma_note or "%d keys" % len(_LUMA_KEYS)))
+# Global progress: registered vs the "attendees" figure every event page advertises (events with Luma data only)
+_luma_overall = {"registered": sum(r["luma"]["total"] for r in _status_rows if r["luma"]),
+                 "expected": sum(r["expected"] for r in _status_rows if r["luma"] and r["expected"])}
+_luma_overall["pct"] = round(100.0 * _luma_overall["registered"] / _luma_overall["expected"]) if _luma_overall["expected"] else 0
+for r in _status_rows:
+    if r["luma"]:
+        r["luma"]["expected_pct"] = round(100.0 * r["luma"]["total"] / r["expected"]) if r["expected"] else None
+print("REGISTRATIONS (Luma, approved): %s" % (_luma_note or "%d keys; overall %d registered / %d expected (%d%%)" % (
+    len(_LUMA_KEYS), _luma_overall["registered"], _luma_overall["expected"], _luma_overall["pct"])))
 for _kn in _luma_key_notes:
     print("  " + _kn)
 for r in _status_rows:
@@ -948,6 +957,7 @@ with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
         status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes,
+        status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
         status_generated=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
