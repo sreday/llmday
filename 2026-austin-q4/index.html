@@ -700,10 +700,1053 @@
 </style>
 
 
+<style>
+  /* Track navigation */
+  .track-nav {
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+  }
+  .track-nav-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .track-nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .track-nav-links a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--brand);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .track-nav-links a:hover {
+    background: var(--brand-light);
+    color: white;
+  }
+  .view-toggle-link {
+    color: var(--brand);
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--brand);
+    border-radius: 4px;
+    transition: all 0.2s;
+    min-width: 10rem;
+    text-align: center;
+  }
+  .view-toggle-link:hover {
+    background: var(--brand);
+    color: white;
+  }
+  .view-toggle-link.active {
+    background: var(--brand);
+    color: white;
+  }
+  /* Table view */
+  .schedule-table-view { display: none; }
+  .schedule-table-view.active { display: block; }
+  .schedule-timeline-view { display: block; }
+  .schedule-timeline-view.hidden { display: none; }
+  .schedule-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 1rem;
+    table-layout: fixed;
+  }
+  .schedule-grid-table th {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: white;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .schedule-grid-table th:first-child {
+    width: 60px;
+  }
+  .schedule-grid-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--brand-lightest);
+    vertical-align: top;
+  }
+  .schedule-grid-table td.merged-cell {
+    text-align: center;
+    font-weight: 500;
+    color: #555;
+    background: var(--brand-lightest);
+  }
+  .schedule-grid-table .time-cell {
+    color: var(--brand);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .schedule-grid-table .talk-cell a {
+    color: #222;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .schedule-grid-table .talk-cell a:hover {
+    color: var(--brand);
+  }
+  .schedule-grid-table .speaker-info {
+    color: #444;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+  .schedule-grid-table .speaker-info .affiliation {
+    color: #666;
+  }
+  .schedule-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  .schedule-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .schedule-meta-divider {
+    color: #ccc;
+    font-weight: 300;
+  }
+  /* Track section header */
+  .track-section-header {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0 0 0;
+    border-radius: 4px 4px 0 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .track-section-header:first-of-type {
+    margin-top: 0;
+  }
+
+  .schedule-section.theme-bg-light { background-color: #f0faf5 !important; }
+</style>
+
 <section id="schedule" class="schedule-section section theme-bg-light">
   <div class="container">
-    <h2 class="section-heading text-center mb-5">Schedule</h2>
-    <h4 class="section-heading text-center mb-5">Coming soon</h4>
+    <h2 class="section-heading text-center mb-4">Schedule</h2>
+
+    <!-- Schedule meta info -->
+    <div class="schedule-meta">
+      <span class="schedule-meta-item">October 14, 2026</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">single track</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">10AM - 7:30PM</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">Austin, in-person</span>
+    </div>
+
+
+    
+
+    <!-- Track navigation -->
+    <div class="track-nav">
+      <div class="track-nav-inner">
+
+        <span class="view-toggle-link" id="view-toggle-0" onclick="toggleView(0)">view as table</span>
+      </div>
+    </div>
+
+    <!-- Timeline View (default) -->
+    <div id="timeline-view-0" class="schedule-timeline-view">
+
+      <div class="track-section-header" id="track-0-1">main room &bull; Track 1</div>
+      <div class="schedule-tab-content">
+        <div class="tab-pane active">
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">10:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Coffee break</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">10:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img class="profile-image rounded-circle mb-2" src="../speakers/Rahul Azmeera.png" alt=""></a>
+                <div class="name">Rahul Azmeera</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Visual AI Testing Agent: Screenshot-First Mobile UI Test Automation for iOS Simulator</a>
+              </h3>
+              <div class="location mb-3">7-Eleven</div>
+              <div class="desc schedule-abstract">Our research introduces Visual AI Testing Agent, an agentic framework designed to revolutionize mobile UI automation for iOS Simulators by leveraging Vision Language Models (VLMs). Unlike traditional locator-based tools like Appium or XCUITest, which often fail due to unstable identifiers or dynamic UI changes, our VLM-driven approach treats the screen as the primary interface. The agent captures the screen, processes visible elements through vision-based providers, and executes actions with human-like visual understanding. This talk will demonstrate how this agentic architecture enables predictive test case generation and provides development teams with actionable, early-stage insights. By shifting to a vision-first paradigm, we enable more robust, resilient, and intelligent automated testing cycles.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">11:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Geoff Niehaus.png" alt=""></a>
+                <div class="name">Geoff Niehaus</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">One LLM Call Is the Wrong Default</a>
+              </h3>
+              <div class="location mb-3">Today Mechanic</div>
+              <div class="desc schedule-abstract">The typical default is one call to one model, and when that gets expensive, we cascade to something cheaper. Both accept the same premise: the input is one question. Usually, it isn't. A single photo, document or utterance carries several distinct questions, and one model answering all of them hands you its weakest answer in its most confident voice, at full price, every time. A cascade only changes the price. This talk makes the case for treating the input as a routing problem. Cheap classifiers decide which question you have, and each question goes to the model genuinely best at it, including the times the honest answer is that no model should answer. In our case we brought token spend under control, took a seventeen second wait down to under a second on the path that can prove its answer, and cut wrong answers from 25% to near zero.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">11:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img class="profile-image rounded-circle mb-2" src="../speakers/Rodney Richard Puplampu.png" alt=""></a>
+                <div class="name">Rodney Richard Puplampu</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Ogummaa Agent Portal. Architecture & Security Blueprint for Long-Horizon Agents</a>
+              </h3>
+              <div class="location mb-3">Puplampu Consulting</div>
+              <div class="desc schedule-abstract">The Ogummaa Agent Portal is a comprehensive, sovereign AI workspace designed for secure, long-horizon task automation and conversational knowledge retrieval. The platform utilizes a decoupled microservices architecture—comprising an Admin Portal, Central Gateway, and Ingestion Pipeline—to ensure elastic scalability and rigorous environmental isolation. Its core engine, a GraphRAG (Graph Retrieval-Augmented Generation) and VectorRAG system for analytical graph processing, geo-spacial-temporal correlation, enabling sophisticated retrieval across massive enterprise datasets. The portal enforces a robust security paradigm through per-user sandbox isolation, a four-layer guardrail system, and a "bring your own secrets" model, while supporting unattended execution for recurring routines. By blending autonomous self-improvement loops with immutable event-based telemetry, and provides an enterprise-ready infrastructure for organizations prioritizing data sovereignty, multi-agent orchestration, and resilient AI deployment.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">12:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/Maryam Astero.png" alt=""></a>
+                <div class="name">Maryam Astero</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">One Thing, Many Names: Building Reliable Entity Mapping</a>
+              </h3>
+              <div class="location mb-3">Genomenon</div>
+              <div class="desc schedule-abstract">LLM systems are getting very good at extracting entities from messy documents. But extracting a mention is only the beginning. The harder problem is deciding what that mention actually refers to.
+A single real-world entity can appear under different names, formats, abbreviations, and contexts across documents and databases. At the same time, different entities can look remarkably similar. A reliable system therefore needs more than entity extraction or similarity search. It needs a mapping step that decides which candidate, if any, represents the entity being described.
+This is where similarity becomes both useful and insufficient. Database search, lexical matching, and embeddings are powerful ways to generate and rank candidates. But a high similarity score does not make a candidate the correct mapping. The system still has to account for ambiguity, context, available evidence, and what happens when no candidate meets the evidence threshold. Sometimes the right decision is not to map at all.
+This talk looks at entity mapping as a distinct engineering problem in an LLM pipeline: using structured search and semantic similarity to find plausible candidates, understanding where those signals break down, and designing the decision layer that determines when a candidate is good enough to map, and when the system should abstain.
+The goal is not to replace similarity with something else. It is to understand where similarity fits, and where the identity decision begins.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">12:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Lunch & networking</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">13:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Leila Anderson.png" alt=""></a>
+                <div class="name">Leila Anderson</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Evaluation Without Ground Truth: Lessons from Expert Disagreement</a>
+              </h3>
+              <div class="location mb-3">Upheal</div>
+              <div class="desc schedule-abstract">Most LLM evaluation assumes a gold answer exists to score against. A large and growing share of production work, however, doesn't have one: contract review, clinical documentation, incident summaries, moderation calls, research synthesis — any task where correctness is a matter of expert judgment, and where two qualified experts given the same input produce different outputs that are both defensible. If you score that as if a single right answer existed, you collapse the errors that matter — a fabricated fact, a dropped material detail — into the same number as the ones that don't, like structure, emphasis, and phrasing.
+This talk is about building evaluation for those systems, where the ground truth isn't a fixed key but a distribution of expert opinion, and where disagreement is built into the problem rather than a symptom of bad labeling. It unpacks three moves that improve accuracy and trustworthiness: treating inter-rater reliability among your experts as the ceiling on any eval you can build, using expert corrections as a live quality signal instead of a static gold set, and separating "genuinely wrong" from "differently right" so the score tracks the failures you actually care about.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">14:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Felix Njeh.png" alt=""></a>
+                <div class="name">Felix Njeh</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Your AI Passed the Demo. But Did It Pass Validation?</a>
+              </h3>
+              <div class="location mb-3">Nelix</div>
+              <div class="desc schedule-abstract">AI systems can produce impressive demos and still fail when exposed to real-world complexity, edge cases, changing data, and unexpected user behavior. Semiconductor engineers have spent decades addressing a similar problem through rigorous verification, coverage analysis, corner-case testing, fault injection, regression, and disciplined sign-off. This talk explores how those principles can be adapted to the evaluation of LLMs and increasingly autonomous AI agents, where a successful prompt or benchmark score is not sufficient evidence of system reliability. Attendees will leave with a practical framework for moving from “the AI works” to “we have evidence that this AI system is ready to deploy.”<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">14:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Colby Mainard.png" alt=""></a>
+                <div class="name">Colby Mainard</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Invisible Data - The Largest Problem Facing AI</a>
+              </h3>
+              <div class="location mb-3">RiskScout</div>
+              <div class="desc schedule-abstract">No matter how well an AI pipeline is designed, it will always be limited by both quality and quantity of available data. However, real-world data rarely arrives nicely packaged and pre-normalized. In fact, it is probably safer to say that real-world data is the number one saboteur of existing machine learning applications. This talk will go over common data problems that have been seen in enterprise systems and the importance of curating data for pipelines of all varieties.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">15:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Networking & sponsor crawl</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">15:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Kunle Olutomilayo.png" alt=""></a>
+                <div class="name">Kunle Olutomilayo</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">30% More GPU Headroom, No Quantization</a>
+              </h3>
+              <div class="location mb-3">Isiro AI</div>
+              <div class="desc schedule-abstract">Self-management of AI model deployments on-prem and in private cloud infrastructures is becoming increasingly popular. The release of open-weight models with comparable performance to frontier models is accelerating the shift. However, deploying the models requires hardware accelerators (such as GPUs) with large memory, which is expensive. While individuals and regular deployments can afford to accept the accuracy penalties that result from quantizing or approximating the models for memory reduction, high-stakes industries such as finance, health care, defense, and enterprise AI would rather not take the chance. What if we can reduce GPU memory without sacrificing accuracy? This talk will discuss lossless model compression delivering 30% more GPU headroom without changing the model output. Model weights are bit-for-bit exact with cryptographic hash verification, and they remain compressed in the GPU while they run. The talk will include cases of up to 110% more memory for KV cache where the GPU was already memory-constrained. It will also provide insights into KV cache bit-exact optimization as the next lever for lossless inference efficiency.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Jessie Mongeon.png" alt=""></a>
+                <div class="name">Jessie Mongeon</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">AI Eval Pipelines for Documentation Quality and Competitor Analysis</a>
+              </h3>
+              <div class="location mb-3">Mysten Labs</div>
+              <div class="desc schedule-abstract">Developer docs are now read by agents as much as humans, but most teams still judge them by gut feel and page views. This talk shows how to treat documentation as a system under test: rubric-based LLM-as-judge scoring calibrated against human labels, sandboxed agents that attempt your quickstarts end-to-end and report exactly where they fail, and the same suite run against competitors' docs for an apples-to-apples benchmark. You'll leave with a pipeline architecture you can build in a week, rubric patterns that produce stable scores, and a way to turn "our docs vs. theirs" from an argument into data.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Yuri Streciwik.png" alt=""></a>
+                <div class="name">Yuri Streciwik</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">The Inference Tax: Why Your Token Costs Stop Making Sense at Scale</a>
+              </h3>
+              <div class="location mb-3">Dell Technologies</div>
+              <div class="desc schedule-abstract">Most teams building with LLMs meet a point where inference cost stops tracking with usage, and the reasons are invisible from the application layer. The constraints that actually set your cost per token are physical — memory bandwidth, power draw per rack, thermal headroom, and how badly your workload underutilizes the accelerator you're paying for. This talk walks through what happens underneath an inference request at the hardware level, why batching and context length hit economic cliffs rather than smooth curves, and which of those limits are architectural versus fixable in software. Attendees should leave able to read their own inference spend as a systems problem instead of a line item, and to tell which optimizations are worth engineering time.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">17:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/Matt Barge.png" alt=""></a>
+                <div class="name">Matt Barge</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Selling Commercial Real Estate with Grok Bot</a>
+              </h3>
+              <div class="location mb-3">Superbuilders</div>
+              <div class="desc schedule-abstract">This talk is a field report on using Grok Bot to sell commercial real estate. I’ll show the live stack I used on real deals: Grok Bot as the operating layer across buyer inbound and follow-up, Quo for the sales phone line and texts, a dedicated /buy sales website and deal room, Google Drive diligence packs, and offering memorandums, all powered by Grok Bot.
+We’ll cover what the agent actually does day to day (watching inbound, drafting first-touch that leads with income, logging buyer calls, keeping board copy and the OM in sync, chasing listing-agreement issues) and where humans still have to approve sends. Expect concrete CRE examples, the connectors and artifacts that made it work, and the failure modes that show up when an agent touches real buyers.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">17:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img class="profile-image rounded-circle mb-2" src="../speakers/Vashishtha Patil.png" alt=""></a>
+                <div class="name">Vashishtha Patil</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Auto-Research on a Budget: Small Models in the Loop, Frontier Models on Call</a>
+              </h3>
+              <div class="location mb-3">Amazon Lab126</div>
+              <div class="desc schedule-abstract">Autonomous research agents that propose, implement, and refine ML solutions have gotten remarkably good. They have also inherited an assumption that excludes most teams: a frontier model drives every step of the loop. That assumption matters because loop cost, not model quality, is becoming the limit on how much autonomy a team can afford to run. This talk explores inverting it. A small open-weight model runs the loop, and a frontier model is called in only as an advisor, on a metered budget. We'll cover what the literature establishes about small and large model collaboration, including step-level escalation, agent distillation, and budget allocation, and where it stops short for long-horizon loops, whose failure modes are not bad tool calls but dead branches, validation leaks, and unclear stopping points. We'll look at a framework for deciding when advice is worth buying, how much of a trajectory an advisor needs to see, and how to measure guidance rather than assume its value. We will walk through a recorded run showing the loop, the trigger, and the cost meter together. The session concludes with open problems, including asynchronous advisors, persistent guidance, and what cost-aware autonomy means for teams without frontier budgets.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">18:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12"><img class="profile-image rounded-circle mb-2" src="../speakers/James Woodard.png" alt=""></a>
+                <div class="name">James Woodard</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Operators, Agents, and the 60-Day Cliff: Deploying LLM Systems That Get Used</a>
+              </h3>
+              <div class="location mb-3">Apex Systems</div>
+              <div class="desc schedule-abstract">Most agentic AI systems work in the demo and fail in production. The failure is rarely the model.
+It is the cost curve that only appears at scale, the coordination breakdown when single agents become fleets, the governance gap that surfaces during an audit, and the operator trust that never gets earned. This talk is a practitioner's field guide to the last mile of agentic AI: the engineering and operational work that determines whether an LLM system delivers value or gets quietly shelved sixty days after launch.
+Drawing on real deployment patterns across industrial and enterprise environments, we will cover why token consumption scales with autonomous actions rather than users and how to model the production bill before you sign; what breaks when you move from one agent to a fleet and how to design the coordination layer; the audit and containment questions every production agent must answer; and why explainability at the moment of decision is the real driver of adoption. Attendees will leave with a concrete checklist for pressure-testing an agentic system before it reaches production, and a sharper sense of where the genuine engineering risk lives in the shift from pilots to scaled deployment.<a class="schedule-abstract-read-more" href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">18:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13"><img class="profile-image rounded-circle mb-2" src="../speakers/Nate Lemos.png" alt=""></a>
+                <div class="name">Nate Lemos</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">My wife is a vibe-coder. So, what now?</a>
+              </h3>
+              <div class="location mb-3">MakingFriends.app</div>
+              <div class="desc schedule-abstract">My wife, who doesn’t have any technical background, built a real app with AI, that she uses every day. So if someone with no previous experience can build working software now, what’s left for software engineers?
+During this presentation we'll explore what makes a software engineer relevant in the AI era. An engineer needs to know foundations, judgment, responsibility...
+Programming is easier. Software engineering isn’t.<a class="schedule-abstract-read-more" href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">19:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14"><img class="profile-image rounded-circle mb-2" src="../speakers/Nikita Pestrov.png" alt=""></a>
+                <div class="name">Nikita Pestrov</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Building a Software Factory: Your Tickets Are the Benchmarks</a>
+              </h3>
+              <div class="location mb-3">Zello</div>
+              <div class="desc schedule-abstract">Everyone has an AI cod ing anecdote: an agent nailed one ticket and lost the plot on another. But which tasks can your team reliably hand off, and what makes the resulting PR worth merging? At Zello, we started answering those questions with our own engineering history. We turned solved tickets into a benchmark and merged PRs into a landscape of task classes. Then we connected classification, runnable environments, coding agents and verification into a cloud workflow that produces PRs for human review. This talk follows the journey from benchmarking agents to building a software factory. I’ll show why environment setup matters as much as model choice, how we choose suitable work, and how engineer feedback closes two loops: improving the current PR and teaching the factory something useful for the next ticket.<a class="schedule-abstract-read-more" href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">19:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Wrap up</h3>
+              <div class="location mb-3" style="color:#098dcf;">Scan each other's QR codes & head to a nearby pub!</div>
+              
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Table View -->
+    <div id="table-view-0" class="schedule-table-view">
+      <table class="schedule-grid-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+
+            <th style="width: calc((100% - 60px) / 1)">main room</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">10:00</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Coffee break
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">10:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Visual AI Testing Agent: Screenshot-First Mobile UI Test Automation for iOS Simulator</a>
+              <div class="speaker-info">Rahul Azmeera <span class="affiliation">• 7-Eleven</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">11:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">One LLM Call Is the Wrong Default</a>
+              <div class="speaker-info">Geoff Niehaus <span class="affiliation">• Today Mechanic</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">11:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Ogummaa Agent Portal. Architecture & Security Blueprint for Long-Horizon Agents</a>
+              <div class="speaker-info">Rodney Richard Puplampu <span class="affiliation">• Puplampu Consulting</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">12:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">One Thing, Many Names: Building Reliable Entity Mapping</a>
+              <div class="speaker-info">Maryam Astero <span class="affiliation">• Genomenon</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">12:30</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Lunch & networking
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">13:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">Evaluation Without Ground Truth: Lessons from Expert Disagreement</a>
+              <div class="speaker-info">Leila Anderson <span class="affiliation">• Upheal</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">14:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Your AI Passed the Demo. But Did It Pass Validation?</a>
+              <div class="speaker-info">Felix Njeh <span class="affiliation">• Nelix</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">14:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">Invisible Data - The Largest Problem Facing AI</a>
+              <div class="speaker-info">Colby Mainard <span class="affiliation">• RiskScout</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">15:00</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Networking & sponsor crawl
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">15:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">30% More GPU Headroom, No Quantization</a>
+              <div class="speaker-info">Kunle Olutomilayo <span class="affiliation">• Isiro AI</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">16:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">AI Eval Pipelines for Documentation Quality and Competitor Analysis</a>
+              <div class="speaker-info">Jessie Mongeon <span class="affiliation">• Mysten Labs</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">16:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">The Inference Tax: Why Your Token Costs Stop Making Sense at Scale</a>
+              <div class="speaker-info">Yuri Streciwik <span class="affiliation">• Dell Technologies</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">17:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Selling Commercial Real Estate with Grok Bot</a>
+              <div class="speaker-info">Matt Barge <span class="affiliation">• Superbuilders</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">17:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">Auto-Research on a Budget: Small Models in the Loop, Frontier Models on Call</a>
+              <div class="speaker-info">Vashishtha Patil <span class="affiliation">• Amazon Lab126</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">18:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-12" data-bs-toggle="modal" data-bs-target="#modal-speaker-12">Operators, Agents, and the 60-Day Cliff: Deploying LLM Systems That Get Used</a>
+              <div class="speaker-info">James Woodard <span class="affiliation">• Apex Systems</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">18:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-13" data-bs-toggle="modal" data-bs-target="#modal-speaker-13">My wife is a vibe-coder. So, what now?</a>
+              <div class="speaker-info">Nate Lemos <span class="affiliation">• MakingFriends.app</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">19:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-14" data-bs-toggle="modal" data-bs-target="#modal-speaker-14">Building a Software Factory: Your Tickets Are the Benchmarks</a>
+              <div class="speaker-info">Nikita Pestrov <span class="affiliation">• Zello</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">19:30</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Wrap up
+
+            </td>
+          </tr>
+
+
+        </tbody>
+      </table>
+    </div>
+
+
+
+    <script>
+    function toggleView(day) {
+      const timelineView = document.getElementById('timeline-view-' + day);
+      const tableView = document.getElementById('table-view-' + day);
+      const toggleBtn = document.getElementById('view-toggle-' + day);
+      const trackLinks = document.getElementById('track-links-' + day);
+
+      if (tableView.classList.contains('active')) {
+        tableView.classList.remove('active');
+        timelineView.classList.remove('hidden');
+        toggleBtn.textContent = 'view as table';
+        toggleBtn.classList.remove('active');
+        if (trackLinks) trackLinks.style.display = 'flex';
+      } else {
+        tableView.classList.add('active');
+        timelineView.classList.add('hidden');
+        toggleBtn.textContent = 'view as timeline';
+        toggleBtn.classList.add('active');
+        if (trackLinks) trackLinks.style.display = 'none';
+      }
+    }
+    </script>
+
+    
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    
   </div>
 </section>
 
@@ -1106,16 +2149,6 @@
       </div><!--//col-->
 
       
-
-      
-
-      <div class="col mb-4">
-        <div class="card">
-          <div class="card-body">
-            <h4>More coming soon</h4>
-          </div><!--//card-->
-        </div><!--//card-->
-      </div><!--//col-->
 
       
 

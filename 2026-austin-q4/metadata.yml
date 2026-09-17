@@ -3,7 +3,7 @@ base_folder: "static"
 # before - no schedule
 # active - schedule
 # after  - hide tickets
-event_state: before
+event_state: active
 start_time: "2026-10-14T10:00:00-05:00"
 date_string: "October 14, 2026"
 location_string: "The Sunset Room, Austin, Texas, USA"
