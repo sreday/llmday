@@ -725,7 +725,12 @@ def _luma_get(path, params, key):
                 wait = e.headers.get("Retry-After") or ""
                 _time.sleep(min(60, int(wait)) if wait.isdigit() else 10)
                 continue
-            return None, "HTTP %d" % e.code
+            msg = ""
+            try:                                             # Luma's own explanation ("calendar not on Plus", ...); no key in it
+                msg = str((_json.loads(e.read().decode("utf-8", "replace")) or {}).get("message") or "")[:120]
+            except Exception:
+                pass
+            return None, "HTTP %d%s" % (e.code, (": " + msg) if msg else "")
         except Exception as e:                               # DNS, timeout, bad JSON: reason only, never the URL/key
             return None, type(e).__name__
     return None, "rate limited"
