@@ -727,7 +727,13 @@ def _luma_get(path, params, key):
                 continue
             msg = ""
             try:                                             # Luma's own explanation ("calendar not on Plus", ...); no key in it
-                msg = str((_json.loads(e.read().decode("utf-8", "replace")) or {}).get("message") or "")[:120]
+                raw = e.read().decode("utf-8", "replace")
+                try:
+                    j = _json.loads(raw)
+                    msg = str((j.get("message") or j.get("error") or j.get("detail") or raw) if isinstance(j, dict) else raw)
+                except ValueError:
+                    msg = raw
+                msg = " ".join(msg.split())[:160]
             except Exception:
                 pass
             return None, "HTTP %d%s" % (e.code, (": " + msg) if msg else "")
@@ -812,12 +818,53 @@ def _luma_classify(guest, speakers, domains, stems):
     return "free"
 
 
+def _luma_key_check(key, wanted):
+    """Diagnostic per key (no secrets in the result): is it valid, and which of this site's events does its
+    calendar list? Luma keys see one calendar only, so a valid key that lists none of our events is on the wrong
+    calendar. Returns a one-line summary."""
+    me, err = _luma_get("/v1/users/get-self", {}, key)
+    if me is None:
+        return "invalid (%s)" % err
+    ids, cursor, pages, shape = set(), None, 0, ""
+    after = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    while pages < 5:
+        params = {"after": after, "pagination_limit": 50}
+        if cursor:
+            params["pagination_cursor"] = cursor
+        data, err = _luma_get("/v1/calendars/events/list", params, key)
+        if data is None:
+            return "valid, but listing its calendar failed (%s)" % err
+        for e in data.get("entries") or []:
+            if not isinstance(e, dict):
+                continue
+            ev = e.get("event") if isinstance(e.get("event"), dict) else e
+            if not shape:                                    # field names only, to learn the (undocumented) shape
+                shape = "entry keys %s" % sorted(ev.keys())[:12]
+            for k in ("api_id", "id", "event_api_id"):
+                if ev.get(k):
+                    ids.add(str(ev[k]))
+                    break
+        pages += 1
+        cursor = data.get("next_cursor")
+        if not data.get("has_more") or not cursor:
+            break
+    hit = sorted(i for i in wanted if i in ids)
+    return "valid; its calendar lists %d upcoming events, %d of this site's %d%s%s" % (
+        len(ids), len(hit), len(wanted), (" (%s)" % ", ".join(hit)) if hit else "", ("; " + shape) if shape and not hit else "")
+
+
+_luma_key_notes = []
+
+
 def _luma_registrations(rows):
     """Attach r['luma'] (counts) or r['luma_note'] to every status row. Returns a page-level note or ''."""
     for r in rows:
         r["luma"], r["luma_note"] = None, ""
     if not _LUMA_KEYS:
         return "LUMA_API_KEYS is not set in this build, so Luma registrations are not shown."
+    wanted = {r["luma_evt"] for r in rows if r.get("luma_evt")}
+    for i, key in enumerate(_LUMA_KEYS):
+        _luma_key_notes.append("key %d: %s" % (i + 1, _luma_key_check(key, wanted)))
     now = datetime.datetime.now(datetime.timezone.utc)
     week_ago = now - datetime.timedelta(days=7)
     for r in rows:
@@ -878,6 +925,8 @@ def _luma_registrations(rows):
 
 _luma_note = _luma_registrations(_status_rows)
 print("REGISTRATIONS (Luma, approved): %s" % (_luma_note or "%d keys" % len(_LUMA_KEYS)))
+for _kn in _luma_key_notes:
+    print("  " + _kn)
 for r in _status_rows:
     if r["luma"]:
         print("  %-38s %4d total (%s)  +%d in 7d  %s" % (r["name"][:38], r["luma"]["total"],
@@ -890,7 +939,7 @@ with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_window=_added_window,
-        status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note,
+        status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes,
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
         status_generated=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
