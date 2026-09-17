@@ -124,6 +124,16 @@
     .reg-total { color: #555; font-size: .9rem; }
     .reg .paid { --c: var(--accent); } .reg .free { --c: var(--critical); } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
     .reg-overall { font-size: .95rem; color: #555; margin: 0 0 12px; }
+    /* Tabs: without JS all three sections stay visible; JS adds html.tabbed and shows one at a time */
+    .tabs { display: none; gap: 6px; margin-top: 34px; border-bottom: 1px solid #e0e0e0; }
+    .tabs button { font: inherit; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .92rem; color: #666; background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 14px 12px; margin-bottom: -1px; cursor: pointer; }
+    .tabs button:hover { color: #111; }
+    .tabs button.is-active { color: #111; border-bottom-color: var(--accent); }
+    .tab-count { display: inline-block; min-width: 20px; padding: 1px 7px; border-radius: 999px; background: #e0891a; color: #fff; font-size: .72rem; font-weight: 700; text-align: center; margin-left: 4px; vertical-align: 1px; }
+    html.tabbed .tabs { display: flex; flex-wrap: wrap; }
+    html.tabbed .regs, html.tabbed .added, html.tabbed .checks { display: none; margin-top: 22px; }
+    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .checks.is-active { display: block; }
+    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .checks h2 { display: none; }
     .reg-overall strong { color: #111; }
     .reg-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: #eceef1; margin: 10px 0 8px; }
     .reg-bar i { display: block; height: 100%; background: var(--c); }
@@ -206,6 +216,13 @@
   <div class="sisters">
     {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}
   </div>
+
+  {% set n_issues = (status_rows | sum(attribute='errors')) + (status_rows | sum(attribute='warnings')) %}
+  <nav class="tabs" aria-label="Status sections">
+    <button type="button" data-tab="regs" aria-selected="false">Registrations</button>
+    <button type="button" data-tab="added" aria-selected="false">Speakers</button>
+    <button type="button" data-tab="checks" aria-selected="false">Data checks{% if n_issues %} <span class="tab-count">{{ n_issues }}</span>{% endif %}</button>
+  </nav>
 
   <section class="regs">
     <h2>Registrations</h2>
@@ -309,6 +326,30 @@
   <div class="foot">Generated {{ status_generated }} at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
+(function () {                                     // Registrations / Speakers / Data checks as tabs (Marek 2026-09-17)
+  var tabs = document.querySelectorAll('.tabs button'); if (!tabs.length) return;
+  var secs = { regs: document.querySelector('section.regs'), added: document.querySelector('section.added'), checks: document.querySelector('section.checks') };
+  document.documentElement.classList.add('tabbed');
+  function show(k, remember) {
+    for (var key in secs) { if (secs[key]) secs[key].classList.toggle('is-active', key === k); }
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute('data-tab') === k;
+      tabs[i].classList.toggle('is-active', on);
+      tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
+    }
+    if (remember) {
+      try { localStorage.setItem('status-tab', k); } catch (e) {}
+      if (history.replaceState) history.replaceState(null, '', '#' + k);
+    }
+  }
+  var initial = (location.hash || '').replace('#', '');
+  if (!secs[initial]) { try { initial = localStorage.getItem('status-tab'); } catch (e) { initial = null; } }
+  if (!secs[initial]) initial = 'regs';
+  show(initial, false);
+  for (var j = 0; j < tabs.length; j++) {
+    tabs[j].addEventListener('click', function () { show(this.getAttribute('data-tab'), true); });
+  }
+})();
 (function () {                                     // addition times in the viewer's own timezone (team spans timezones)
   var els = document.querySelectorAll('.day li small[data-ts]');
   for (var i = 0; i < els.length; i++) {
