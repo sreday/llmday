@@ -918,7 +918,8 @@ def _luma_registrations(rows):
         _n = lambda k: int(((gc.get(k) or {}).get("guests")) or 0)
         _pct = lambda n: (round(100.0 * n / total) if total else 0)
         r["luma"] = {
-            "total": total, "checked_in": _n("checked_in"), "pending": _n("pending_approval"), "waitlist": _n("waitlist"),
+            "total": total, "approved_api": _n("approved"),   # Luma's own approved count; differs from total = pagination gap
+            "checked_in": _n("checked_in"), "pending": _n("pending_approval"), "waitlist": _n("waitlist"),
             "capacity": ev.get("max_capacity"), "spots_left": ev.get("spots_remaining"),
             "open": bool(ev.get("registration_open")), "url": str(ev.get("url") or ""), "last7": last7, "pages": pages,
             "cats": [{"key": k, "label": lbl, "n": counts[k], "pct": _pct(counts[k])} for k, lbl in _LUMA_CATS],
@@ -932,9 +933,11 @@ for _kn in _luma_key_notes:
     print("  " + _kn)
 for r in _status_rows:
     if r["luma"]:
-        print("  %-38s %4d total (%s)  +%d in 7d  %s" % (r["name"][:38], r["luma"]["total"],
+        print("  %-38s %4d total (%s)  +%d in 7d  %s  Luma says %d approved, %d pending, %d waitlist, %d checked in, %d page(s)" % (
+              r["name"][:38], r["luma"]["total"],
               ", ".join("%s %d (%d%%)" % (c["label"].lower(), c["n"], c["pct"]) for c in r["luma"]["cats"]),
-              r["luma"]["last7"], ("capacity %s" % r["luma"]["capacity"]) if r["luma"]["capacity"] else "no capacity limit"))
+              r["luma"]["last7"], ("capacity %s" % r["luma"]["capacity"]) if r["luma"]["capacity"] else "no capacity limit",
+              r["luma"]["approved_api"], r["luma"]["pending"], r["luma"]["waitlist"], r["luma"]["checked_in"], r["luma"]["pages"]))
     elif r["luma_note"]:
         print("  %-38s %s" % (r["name"][:38], r["luma_note"]))
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
