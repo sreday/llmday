@@ -262,7 +262,7 @@
         <p class="ac-blurb"><strong>LLMday</strong> is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
         
         <h5 class="ac-topics-heading">Companies presenting:</h5>
-        <p class="ac-companies">Altos Labs, Amazon, AWS, Buzz Solutions, DeepTempo, eBay, EchoStar Corporation, Ever, GeyserData inc., Kong, Meta, Miriel AI, Noodle Seed, OpenAI, Oracle, Prest0, Root Inc., Symosis Security, UC Berkeley, uc2c.ai, Verizon, Votal.ai, Workday</p>
+        <p class="ac-companies">Altos Labs, Amazon, AWS, Buzz Solutions, DeepTempo, eBay, EchoStar Corporation, Ever, GeyserData inc., Meta, Miriel AI, Noodle Seed, OpenAI, Oracle, Prest0, Root Inc., Symosis Security, UC Berkeley, uc2c.ai, Verizon, Votal.ai, Workday</p>
         
         
         <h5 class="ac-topics-heading">Topics so far:</h5>
@@ -280,12 +280,11 @@
         <div class="ac-topic-group">
           <div class="ac-topic-name">AI Agents</div>
           <ul class="ac-topic-talks">
-            <li><a href="Lior_Mechlovich_Kong_From_Tool_Calls_to_Revenue_Metering_and_Billing_AI_workfloads_at_Scale.html#speakers-section">From Tool Calls to Revenue: Metering and Billing AI workfloads at Scale</a></li>
+            <li><a href="Andrew_Barkett_Miriel_AI_Your_Agent_Needs_a_Kernel__Not_a_Better_Prompt.html#speakers-section">Your Agent Needs a Kernel, Not a Better Prompt</a></li>
             <li><a href="Leon_Lobo_Oracle_Designing_Hybrid_Intelligence_for_Enterprise_Finance_Balancing_Agentic_Reasoning_an.html#speakers-section">Designing Hybrid Intelligence for Enterprise Finance: Balancing Agentic Reasoning and Business Integrity</a></li>
             <li><a href="Gabriel_Nahum_GeyserData_inc_Agents_as_the_First_Line_of_Defense.html#speakers-section">Agents as the First Line of Defense</a></li>
             <li><a href="Ivo_Dujmovic_uc2cai_FailClosed_by_Design_Why_Auditable_AI_Isnt_Agentic.html#speakers-section">Fail-Closed by Design: Why Auditable AI Isn&#39;t Agentic</a></li>
             <li><a href="Vi_Tran_Ever_Guardrails_and_Traces_for_Agents_That_Act_in_the_World.html#speakers-section">Guardrails and Traces for Agents That Act in the World</a></li>
-            <li><a href="Andrew_Barkett_Miriel_AI_Your_Agent_Needs_a_Kernel__Not_a_Better_Prompt.html#speakers-section">Your Agent Needs a Kernel, Not a Better Prompt</a></li>
             <li><a href="Jyotirmoy_Sundi_Votalai_The_Insider_Threat_of_Agentic_AI.html#speakers-section">The Insider Threat of Agentic AI</a></li>
             <li><a href="Avneesh_Sharma_Amazon_Evidence_Grounded_Context_Layer_for_AI_Agents.html#speakers-section">Evidence Grounded Context Layer for AI Agents</a></li>
             <li><a href="Pranav_Saji_Symosis_Security_Your_Agents_Tools_Are_the_Attack_Surface.html#speakers-section">Your Agent&#39;s Tools Are the Attack Surface</a></li>
@@ -955,24 +954,17 @@ This talk walks through the fix for all three: keep large outputs out of the win
             <div class="meta">
               <h4 class="time mb-3">10:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Lior Mechlovich.png" alt=""></a>
-                <div class="name">Lior Mechlovich</div>
+                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Paari Krishnamurthy.png" alt=""></a>
+                <div class="name">Paari Krishnamurthy</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">From Tool Calls to Revenue: Metering and Billing AI workfloads at Scale</a>
+                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">No Evals, No Scale: An Operator’s Playbook for AI</a>
               </h3>
-              <div class="location mb-3">Kong</div>
-              <div class="desc schedule-abstract">Building an MCP server is getting easier. Monetizing one is not.
-At first, usage-based billing looks simple: count tool calls, aggregate them monthly, and send an invoice. But once AI workloads move into production agent workflows, the definition of “usage” becomes much harder. Was that one tool call or ten? Should you bill for tokens, API calls, records retrieved, compute time, successful outcomes, or prepaid credits consumed? What happens when an agent retries, chains tools, streams results, or calls the same resource through multiple clients?
-In this session, we’ll dive into the infrastructure behind trustworthy metering and pricing for MCP-native products. We’ll cover how to design a billing pipeline that can:
-- Count usage once and only once, even with retries, failures, and agent loops
-- Handle high-volume event streams from MCP tool calls
-- Give customers real-time visibility into current-period usage
-- Support pay-as-you-go, prepaid credits, drawdown models, and hybrid pricing
-- Preserve developer trust by making usage explainable and auditable<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
+              <div class="location mb-3">OpenAI</div>
+              <div class="desc schedule-abstract">Researchers already know evals are essential, but business and operations leaders often deploy AI without equivalent controls. Without clear evaluation, escalation, and accountability, organizations don’t scale AI, they scale risk. This talk reframes evals as the operational control layer that makes AI deployment reliable and gives leaders a practical framework for scaling with confidence.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
               
             </div>
           </div>
@@ -1097,17 +1089,18 @@ Finally, I’ll make the case for why the current AI cycle creates an unusual wi
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Leon Lobo.png" alt=""></a>
-                <div class="name">Leon Lobo</div>
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Andrew Barkett.png" alt=""></a>
+                <div class="name">Andrew Barkett</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Designing Hybrid Intelligence for Enterprise Finance: Balancing Agentic Reasoning and Business Integrity</a>
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Your Agent Needs a Kernel, Not a Better Prompt</a>
               </h3>
-              <div class="location mb-3">Oracle</div>
-              <div class="desc schedule-abstract">AI agents in Enterprise finance products improve user experiences and allow building flexible business workflows. However, finance processes also depend on strict business rules, sensitive data handling and clear user control over consequential actions. This session explores which parts of a business workflow should use agentic reasoning, which should remain deterministic and where human oversight is essential. Using practical examples for enterprise finance, we will examine the failures that emerge when this balance is skewed with either rigid systems that cannot handle changing customer requirements or overly agentic and autonomous systems that compromise business integrity. We'll discuss engineering and product design solutions to maintain this balance for an enterprise product and a framework to apply the right combination of AI reasoning, deterministic controls, autonomy and human oversight.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              <div class="location mb-3">Miriel AI</div>
+              <div class="desc schedule-abstract">The thesis is that once an agent must remain responsive while doing long-running work, it stops being a chatbot and starts resembling an operating system. I’d show an architecture we’ve built at Miriel that separates real-time dialogue from deliberative work, with durable goals, a shared blackboard, system-call-like tool boundaries, and a scheduler that distinguishes progress, blocking, and runaway loops.
+It would be a practical technical talk, grounded in working software and actual failure modes, but aimed at giving application developers a different mental model for how serious agents should be built.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
               
             </div>
           </div>
@@ -1132,17 +1125,17 @@ Finally, I’ll make the case for why the current AI cycle creates an unusual wi
             <div class="meta">
               <h4 class="time mb-3">15:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Gabriel Nahum.png" alt=""></a>
-                <div class="name">Gabriel Nahum</div>
+                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Leon Lobo.png" alt=""></a>
+                <div class="name">Leon Lobo</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Agents as the First Line of Defense</a>
+                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Designing Hybrid Intelligence for Enterprise Finance: Balancing Agentic Reasoning and Business Integrity</a>
               </h3>
-              <div class="location mb-3">GeyserData inc.</div>
-              <div class="desc schedule-abstract">What if agents were the first line of response for deployment problems—not just diagnosing issues, but actively fixing them? This talk explores how to leverage agents to automatically resolve build and test failures, identify runtime discrepancies, and execute runbooks, turning reactive deployment support into an intelligent, self-healing workflow.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
+              <div class="location mb-3">Oracle</div>
+              <div class="desc schedule-abstract">AI agents in Enterprise finance products improve user experiences and allow building flexible business workflows. However, finance processes also depend on strict business rules, sensitive data handling and clear user control over consequential actions. This session explores which parts of a business workflow should use agentic reasoning, which should remain deterministic and where human oversight is essential. Using practical examples for enterprise finance, we will examine the failures that emerge when this balance is skewed with either rigid systems that cannot handle changing customer requirements or overly agentic and autonomous systems that compromise business integrity. We'll discuss engineering and product design solutions to maintain this balance for an enterprise product and a framework to apply the right combination of AI reasoning, deterministic controls, autonomy and human oversight.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
               
             </div>
           </div>
@@ -1151,17 +1144,17 @@ Finally, I’ll make the case for why the current AI cycle creates an unusual wi
             <div class="meta">
               <h4 class="time mb-3">15:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Paari Krishnamurthy.png" alt=""></a>
-                <div class="name">Paari Krishnamurthy</div>
+                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/Gabriel Nahum.png" alt=""></a>
+                <div class="name">Gabriel Nahum</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">No Evals, No Scale: An Operator’s Playbook for AI</a>
+                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Agents as the First Line of Defense</a>
               </h3>
-              <div class="location mb-3">OpenAI</div>
-              <div class="desc schedule-abstract">Researchers already know evals are essential, but business and operations leaders often deploy AI without equivalent controls. Without clear evaluation, escalation, and accountability, organizations don’t scale AI, they scale risk. This talk reframes evals as the operational control layer that makes AI deployment reliable and gives leaders a practical framework for scaling with confidence.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
+              <div class="location mb-3">GeyserData inc.</div>
+              <div class="desc schedule-abstract">What if agents were the first line of response for deployment problems—not just diagnosing issues, but actively fixing them? This talk explores how to leverage agents to automatically resolve build and test failures, identify runtime discrepancies, and execute runbooks, turning reactive deployment support into an intelligent, self-healing workflow.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
               
             </div>
           </div>
@@ -1309,18 +1302,17 @@ Expect production war stories, real benchmarks, and a concrete framework for cut
             <div class="meta">
               <h4 class="time mb-3">10:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img class="profile-image rounded-circle mb-2" src="../speakers/Andrew Barkett.png" alt=""></a>
-                <div class="name">Andrew Barkett</div>
+                <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img class="profile-image rounded-circle mb-2" src="../speakers/Fahd Rafi.png" alt=""></a>
+                <div class="name">Fahd Rafi</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Your Agent Needs a Kernel, Not a Better Prompt</a>
+                <a class="theme-link" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">The Deploy Line: When Software Becomes Infinite</a>
               </h3>
-              <div class="location mb-3">Miriel AI</div>
-              <div class="desc schedule-abstract">The thesis is that once an agent must remain responsive while doing long-running work, it stops being a chatbot and starts resembling an operating system. I’d show an architecture we’ve built at Miriel that separates real-time dialogue from deliberative work, with durable goals, a shared blackboard, system-call-like tool boundaries, and a scheduler that distinguishes progress, blocking, and runaway loops.
-It would be a practical technical talk, grounded in working software and actual failure modes, but aimed at giving application developers a different mental model for how serious agents should be built.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">... Read more</a></div>
+              <div class="location mb-3">Noodle Seed</div>
+              <div class="desc schedule-abstract">AI can generate a working agent application before you finish reading this abstract. That is not the same as operating one. As code, tools, and interfaces become abundant, scarcity moves across "the deploy line". From generating software to proving identity, authority, credential boundaries, reliability, and evidence for every action. Through a high-consequence workflow, this talk reconstructs the architecture on the far side of deployment and derives three laws for systems built to survive changing models, protocols, and agent hosts. You leave with a practical way to decide which parts of your stack should become disposable, and which must remain durable. When software becomes infinite, responsibility becomes the product.<a class="schedule-abstract-read-more" href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">... Read more</a></div>
               
             </div>
           </div>
@@ -1329,17 +1321,20 @@ It would be a practical technical talk, grounded in working software and actual 
             <div class="meta">
               <h4 class="time mb-3">11:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img class="profile-image rounded-circle mb-2" src="../speakers/Fahd Rafi.png" alt=""></a>
-                <div class="name">Fahd Rafi</div>
+                <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img class="profile-image rounded-circle mb-2" src="../speakers/Qazybek Beken.png" alt=""></a>
+                <div class="name">Qazybek Beken</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">The Deploy Line: When Software Becomes Infinite</a>
+                <a class="theme-link" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">The LLM Is Not the System</a>
               </h3>
-              <div class="location mb-3">Noodle Seed</div>
-              <div class="desc schedule-abstract">AI can generate a working agent application before you finish reading this abstract. That is not the same as operating one. As code, tools, and interfaces become abundant, scarcity moves across "the deploy line". From generating software to proving identity, authority, credential boundaries, reliability, and evidence for every action. Through a high-consequence workflow, this talk reconstructs the architecture on the far side of deployment and derives three laws for systems built to survive changing models, protocols, and agent hosts. You leave with a practical way to decide which parts of your stack should become disposable, and which must remain durable. When software becomes infinite, responsibility becomes the product.<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">... Read more</a></div>
+              <div class="location mb-3">UC Berkeley</div>
+              <div class="desc schedule-abstract">Most agent demos are easy to judge right away: either the tool works or it doesn’t, and the answer is either grounded or not. Decision systems are trickier. They mix uncertain forecasts with strict rules, and you only see the results days later as noisy feedback that doesn’t show if the decision was good or just lucky.
+SmartPlayFPL is an agent-based system for making weekly Fantasy Premier League decisions within a set budget and strict squad rules. Specialist agents review different types of evidence on a shared blackboard. Their recommendations are combined by a weighted consensus engine, which applies rule-based vetoes, and then a constrained optimizer picks the final move. An orchestrator LLM manages the workflow and explains the result, but it does not handle forecasting, enforcing constraints, or optimization.
+I’ll explain why this separation is important, which failures are due to the model itself, and which happen when the model is given the wrong task. I’ll also discuss how to judge decisions when feedback is delayed, noisy, and only shows what actually happened, not what could have happened. I’ll compare the full system to simpler baselines, like a forecast-plus-optimizer pipeline without an LLM and a single agent with tools, since any extra complexity should be justified.
+The case study focuses on Fantasy Premier League, but this kind of problem also comes up in portfolio construction, capacity planning, and resource allocation. An LLM can play a key role in a decision system without being the whole system.<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">... Read more</a></div>
               
             </div>
           </div>
@@ -1364,20 +1359,17 @@ It would be a practical technical talk, grounded in working software and actual 
             <div class="meta">
               <h4 class="time mb-3">12:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img class="profile-image rounded-circle mb-2" src="../speakers/Qazybek Beken.png" alt=""></a>
-                <div class="name">Qazybek Beken</div>
+                <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img class="profile-image rounded-circle mb-2" src="../speakers/Jyotirmoy Sundi.png" alt=""></a>
+                <div class="name">Jyotirmoy Sundi</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">The LLM Is Not the System</a>
+                <a class="theme-link" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">The Insider Threat of Agentic AI</a>
               </h3>
-              <div class="location mb-3">UC Berkeley</div>
-              <div class="desc schedule-abstract">Most agent demos are easy to judge right away: either the tool works or it doesn’t, and the answer is either grounded or not. Decision systems are trickier. They mix uncertain forecasts with strict rules, and you only see the results days later as noisy feedback that doesn’t show if the decision was good or just lucky.
-SmartPlayFPL is an agent-based system for making weekly Fantasy Premier League decisions within a set budget and strict squad rules. Specialist agents review different types of evidence on a shared blackboard. Their recommendations are combined by a weighted consensus engine, which applies rule-based vetoes, and then a constrained optimizer picks the final move. An orchestrator LLM manages the workflow and explains the result, but it does not handle forecasting, enforcing constraints, or optimization.
-I’ll explain why this separation is important, which failures are due to the model itself, and which happen when the model is given the wrong task. I’ll also discuss how to judge decisions when feedback is delayed, noisy, and only shows what actually happened, not what could have happened. I’ll compare the full system to simpler baselines, like a forecast-plus-optimizer pipeline without an LLM and a single agent with tools, since any extra complexity should be justified.
-The case study focuses on Fantasy Premier League, but this kind of problem also comes up in portfolio construction, capacity planning, and resource allocation. An LLM can play a key role in a decision system without being the whole system.<a class="schedule-abstract-read-more" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">... Read more</a></div>
+              <div class="location mb-3">Votal.ai</div>
+              <div class="desc schedule-abstract">We spent thirty years building security around a simple assumption: code does what it was written to do, and people do what they're authorized to do. AI agents break both halves at once. They're software that improvises, running with a human's credentials, taking instructions from whatever text happens to land in their context — a retrieved document, an API response, a ticket a stranger filed. That's not a new kind of bug. It's an old one: the insider threat, except the insider is fast, tireless, and can be convinced by a paragraph of text hidden in documents. This talk teaches the framework and then makes it concrete. We'll walk through how a real attack unfolds: untrusted content in, privileged action out. We'll also cover why the industry's instinct to filter the prompt doesn't survive contact with production. Then the useful part: the four questions that separate agent deployments that fail safely from ones that fail expensively. Who is the agent acting as? What is it allowed to touch? What happens between the decision to act and the action landing? And how would you know afterward?<a class="schedule-abstract-read-more" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">... Read more</a></div>
               
             </div>
           </div>
@@ -1386,17 +1378,17 @@ The case study focuses on Fantasy Premier League, but this kind of problem also 
             <div class="meta">
               <h4 class="time mb-3">13:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18"><img class="profile-image rounded-circle mb-2" src="../speakers/Jyotirmoy Sundi.png" alt=""></a>
-                <div class="name">Jyotirmoy Sundi</div>
+                <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18"><img class="profile-image rounded-circle mb-2" src="../speakers/Avneesh Sharma.png" alt=""></a>
+                <div class="name">Avneesh Sharma</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">The Insider Threat of Agentic AI</a>
+                <a class="theme-link" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Evidence Grounded Context Layer for AI Agents</a>
               </h3>
-              <div class="location mb-3">Votal.ai</div>
-              <div class="desc schedule-abstract">We spent thirty years building security around a simple assumption: code does what it was written to do, and people do what they're authorized to do. AI agents break both halves at once. They're software that improvises, running with a human's credentials, taking instructions from whatever text happens to land in their context — a retrieved document, an API response, a ticket a stranger filed. That's not a new kind of bug. It's an old one: the insider threat, except the insider is fast, tireless, and can be convinced by a paragraph of text hidden in documents. This talk teaches the framework and then makes it concrete. We'll walk through how a real attack unfolds: untrusted content in, privileged action out. We'll also cover why the industry's instinct to filter the prompt doesn't survive contact with production. Then the useful part: the four questions that separate agent deployments that fail safely from ones that fail expensively. Who is the agent acting as? What is it allowed to touch? What happens between the decision to act and the action landing? And how would you know afterward?<a class="schedule-abstract-read-more" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">... Read more</a></div>
+              <div class="location mb-3">Amazon</div>
+              <div class="desc schedule-abstract">Intelligence is hardly a limiting factor these days. Most production agents fail to give the right response because of evidence failures. Because the agent's picture of the world is stale, conflicting, unattributed, and no amount of prompt engineering or model upgrades can fix that as retrieval can find the text, but not the truth. Worse, when the system recommends action and if evals do not find the problem with the action, the feedback might never come or comes via a customer-facing issue. The solution pattern we use: an ontology that defines what entities and claims mean, a graph that holds the evidence with its source, timestamp, and lineage, a vector index for finding candidate evidence, and an orchestrating agent on top that resolves conflicts, cites what it used, and refuses when the evidence isn't there.<a class="schedule-abstract-read-more" href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">... Read more</a></div>
               
             </div>
           </div>
@@ -1405,17 +1397,19 @@ The case study focuses on Fantasy Premier League, but this kind of problem also 
             <div class="meta">
               <h4 class="time mb-3">13:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19"><img class="profile-image rounded-circle mb-2" src="../speakers/Avneesh Sharma.png" alt=""></a>
-                <div class="name">Avneesh Sharma</div>
+                <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19"><img class="profile-image rounded-circle mb-2" src="../speakers/Pranav Saji.png" alt=""></a>
+                <div class="name">Pranav Saji</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Evidence Grounded Context Layer for AI Agents</a>
+                <a class="theme-link" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Your Agent's Tools Are the Attack Surface</a>
               </h3>
-              <div class="location mb-3">Amazon</div>
-              <div class="desc schedule-abstract">Intelligence is hardly a limiting factor these days. Most production agents fail to give the right response because of evidence failures. Because the agent's picture of the world is stale, conflicting, unattributed, and no amount of prompt engineering or model upgrades can fix that as retrieval can find the text, but not the truth. Worse, when the system recommends action and if evals do not find the problem with the action, the feedback might never come or comes via a customer-facing issue. The solution pattern we use: an ontology that defines what entities and claims mean, a graph that holds the evidence with its source, timestamp, and lineage, a vector index for finding candidate evidence, and an orchestrating agent on top that resolves conflicts, cites what it used, and refuses when the evidence isn't there.<a class="schedule-abstract-read-more" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">... Read more</a></div>
+              <div class="location mb-3">Symosis Security</div>
+              <div class="desc schedule-abstract">Every agent framework now ships tool calling, and MCP has made it trivial to plug a model into hundreds of third party servers. That convenience moved the security boundary somewhere most teams are not looking: not the model, not the prompt, but the tool layer underneath. A poisoned tool description, a mutated schema after install, or a server that quietly reads outside its declared scope will bypass every guardrail sitting in front of the model, because the model was never the thing that got compromised.
+This session walks through what actually breaks in production agent systems and the controls that hold. I will cover tool poisoning and rug pull attacks against MCP servers, indirect prompt injection arriving through retrieved content and tool output, and the combination of private data access, untrusted input, and external communication that turns a useful agent into an exfiltration path. Then the defensive half: auditing MCP servers before install and continuously after, pinning and diffing tool schemas, enforcing least privilege on non human identities that agents run as, and the architectural rule that has held up best across the systems I have shipped, which is that the model reasons but deterministic, unit tested code enforces every policy decision. That rule comes from arithmetic rather than preference: five chained steps at ninety percent accuracy each lands near fifty nine percent end to end, so anything you need to be right has to leave the probabilistic path.
+Attendees will leave with a concrete threat model for the agent tool layer, a checklist for evaluating any MCP server they are about to trust, and detection and enforcement patterns that can be dropped into an existing agent stack without rewriting it. Examples are drawn from open source tooling I maintain and from production AI security platforms deployed in enterprise environments.<a class="schedule-abstract-read-more" href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">... Read more</a></div>
               
             </div>
           </div>
@@ -1424,19 +1418,17 @@ The case study focuses on Fantasy Premier League, but this kind of problem also 
             <div class="meta">
               <h4 class="time mb-3">14:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20"><img class="profile-image rounded-circle mb-2" src="../speakers/Pranav Saji.png" alt=""></a>
-                <div class="name">Pranav Saji</div>
+                <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20"><img class="profile-image rounded-circle mb-2" src="../speakers/Sujoy Datta Choudhury.png" alt=""></a>
+                <div class="name">Sujoy Datta Choudhury</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Your Agent's Tools Are the Attack Surface</a>
+                <a class="theme-link" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Why Your Agent Fails: The Self-Correction Paradox</a>
               </h3>
-              <div class="location mb-3">Symosis Security</div>
-              <div class="desc schedule-abstract">Every agent framework now ships tool calling, and MCP has made it trivial to plug a model into hundreds of third party servers. That convenience moved the security boundary somewhere most teams are not looking: not the model, not the prompt, but the tool layer underneath. A poisoned tool description, a mutated schema after install, or a server that quietly reads outside its declared scope will bypass every guardrail sitting in front of the model, because the model was never the thing that got compromised.
-This session walks through what actually breaks in production agent systems and the controls that hold. I will cover tool poisoning and rug pull attacks against MCP servers, indirect prompt injection arriving through retrieved content and tool output, and the combination of private data access, untrusted input, and external communication that turns a useful agent into an exfiltration path. Then the defensive half: auditing MCP servers before install and continuously after, pinning and diffing tool schemas, enforcing least privilege on non human identities that agents run as, and the architectural rule that has held up best across the systems I have shipped, which is that the model reasons but deterministic, unit tested code enforces every policy decision. That rule comes from arithmetic rather than preference: five chained steps at ninety percent accuracy each lands near fifty nine percent end to end, so anything you need to be right has to leave the probabilistic path.
-Attendees will leave with a concrete threat model for the agent tool layer, a checklist for evaluating any MCP server they are about to trust, and detection and enforcement patterns that can be dropped into an existing agent stack without rewriting it. Examples are drawn from open source tooling I maintain and from production AI security platforms deployed in enterprise environments.<a class="schedule-abstract-read-more" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">... Read more</a></div>
+              <div class="location mb-3">Amazon</div>
+              <div class="desc schedule-abstract">An agent that solves a task four times out of five is impressive in a demo and unshippable in production: state-of-the-art agents scoring 80 to 95 percent on isolated steps drop to 20 to 40 percent on long-horizon tasks. This talk distills a survey of roughly 85 papers on agent reliability into a builder's toolkit: a two-axis taxonomy of where errors are born and how they spread, the self-correction paradox (the model checking the work is the model that made the mistake), and the inference-time "decode tax" that makes reflection-style fixes cost more than they return. You'll leave with a vocabulary for diagnosing your own agent failures, a map of which mitigations target which failure types, a public dataset of 50 annotated failure traces, and an honest account of what nobody has solved yet.<a class="schedule-abstract-read-more" href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">... Read more</a></div>
               
             </div>
           </div>
@@ -1461,17 +1453,18 @@ Attendees will leave with a concrete threat model for the agent tool layer, a ch
             <div class="meta">
               <h4 class="time mb-3">15:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21"><img class="profile-image rounded-circle mb-2" src="../speakers/Sujoy Datta Choudhury.png" alt=""></a>
-                <div class="name">Sujoy Datta Choudhury</div>
+                <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21"><img class="profile-image rounded-circle mb-2" src="../speakers/Saurabh Yergattikar.png" alt=""></a>
+                <div class="name">Saurabh Yergattikar</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">Why Your Agent Fails: The Self-Correction Paradox</a>
+                <a class="theme-link" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">ShieldMCP: MCP's Missing Firewall</a>
               </h3>
-              <div class="location mb-3">Amazon</div>
-              <div class="desc schedule-abstract">An agent that solves a task four times out of five is impressive in a demo and unshippable in production: state-of-the-art agents scoring 80 to 95 percent on isolated steps drop to 20 to 40 percent on long-horizon tasks. This talk distills a survey of roughly 85 papers on agent reliability into a builder's toolkit: a two-axis taxonomy of where errors are born and how they spread, the self-correction paradox (the model checking the work is the model that made the mistake), and the inference-time "decode tax" that makes reflection-style fixes cost more than they return. You'll leave with a vocabulary for diagnosing your own agent failures, a map of which mitigations target which failure types, a public dataset of 50 annotated failure traces, and an honest account of what nobody has solved yet.<a class="schedule-abstract-read-more" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">... Read more</a></div>
+              <div class="location mb-3">eBay</div>
+              <div class="desc schedule-abstract">Every MCP server you connect is a new attack surface, and most production agent stacks are shipping without a threat model. I'm a SIG member and contributor to SAFE MCP, Linux Foundation Project & the open security framework for the Model Context Protocol governed under the Linux Foundation and OpenSSF, which now catalogues 78+ adversarial attack vectors against MCP fully mapped to MITRE ATT&CK - tool poisoning, rug pulls, cross-server shadowing, and prompt injection chains that survive every guardrail teams currently trust. This talk walks the live attack classes we've documented, shows what each one actually looks like inside a running agent, and then covers the defense: ShieldMCP, a transparent security proxy implementing 3-stage validation that drops in front of existing agents and servers with zero code changes on either side.
+ShieldMCP is open source, and its architecture is the subject of my published sole-authored paper at ACL 2026 A* Conference (Industry Track); the SAFE MCP framework was the subject of OpenSSF's official Tech Talk on Securing Agentic AI in March. I'll ground all of it in what it takes to run this in regulated financial infrastructure - I am Technology Leader at eBay and architect softwares serving large number of sellers across the US, UK, and Germany Attendees leave with the threat catalogue, a working proxy they can deploy, and a concrete checklist for auditing their own MCP surface before someone else does it for them.<a class="schedule-abstract-read-more" href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">... Read more</a></div>
               
             </div>
           </div>
@@ -1480,18 +1473,19 @@ Attendees will leave with a concrete threat model for the agent tool layer, a ch
             <div class="meta">
               <h4 class="time mb-3">15:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22"><img class="profile-image rounded-circle mb-2" src="../speakers/Saurabh Yergattikar.png" alt=""></a>
-                <div class="name">Saurabh Yergattikar</div>
+                <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22"><img class="profile-image rounded-circle mb-2" src="../speakers/Mike Arbuzov.png" alt=""></a>
+                <div class="name">Mike Arbuzov</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">ShieldMCP: MCP's Missing Firewall</a>
+                <a class="theme-link" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Herding Context: Keeping 16 Engineers and Their Agents in Sync</a>
               </h3>
-              <div class="location mb-3">eBay</div>
-              <div class="desc schedule-abstract">Every MCP server you connect is a new attack surface, and most production agent stacks are shipping without a threat model. I'm a SIG member and contributor to SAFE MCP, Linux Foundation Project & the open security framework for the Model Context Protocol governed under the Linux Foundation and OpenSSF, which now catalogues 78+ adversarial attack vectors against MCP fully mapped to MITRE ATT&CK - tool poisoning, rug pulls, cross-server shadowing, and prompt injection chains that survive every guardrail teams currently trust. This talk walks the live attack classes we've documented, shows what each one actually looks like inside a running agent, and then covers the defense: ShieldMCP, a transparent security proxy implementing 3-stage validation that drops in front of existing agents and servers with zero code changes on either side.
-ShieldMCP is open source, and its architecture is the subject of my published sole-authored paper at ACL 2026 A* Conference (Industry Track); the SAFE MCP framework was the subject of OpenSSF's official Tech Talk on Securing Agentic AI in March. I'll ground all of it in what it takes to run this in regulated financial infrastructure - I am Technology Leader at eBay and architect softwares serving large number of sellers across the US, UK, and Germany Attendees leave with the threat catalogue, a working proxy they can deploy, and a concrete checklist for auditing their own MCP surface before someone else does it for them.<a class="schedule-abstract-read-more" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">... Read more</a></div>
+              <div class="location mb-3">EchoStar Corporation</div>
+              <div class="desc schedule-abstract">We're a distributed team of applied AI engineers, split across two locations, and every one of us leads a project while working on several more. Multi-threaded is our normal, not a bad week - and the ground moves hourly: repositories change, business facts change, and on a single repo two engineers will run experiments and close tasks before lunch.
+At that speed the hard part is no longer writing the qoek - AI does plenty of that. It's that context goes stale in hours. The moment a person, or more dangerously their AI agent, starts from an out-of-date picture of the world, it confidently builds something that duplicates or contradicts what a teammate just shipped. Speed stops compounding and starts colliding.
+So the real job became herding context: keeping every engineer and their mutiple agents aligned on the same facts and the same rules at any given moment. We had to make that alignment automatic. This talk is about why that quietly became our bottleneck and what we built to solve it.<a class="schedule-abstract-read-more" href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">... Read more</a></div>
               
             </div>
           </div>
@@ -1500,19 +1494,20 @@ ShieldMCP is open source, and its architecture is the subject of my published so
             <div class="meta">
               <h4 class="time mb-3">16:00</h4>
               <div class="profile">
-                <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23"><img class="profile-image rounded-circle mb-2" src="../speakers/Mike Arbuzov.png" alt=""></a>
-                <div class="name">Mike Arbuzov</div>
+                <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23"><img class="profile-image rounded-circle mb-2" src="../speakers/Vaibhav Mahajan.png" alt=""></a>
+                <div class="name">Vaibhav Mahajan</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Herding Context: Keeping 16 Engineers and Their Agents in Sync</a>
+                <a class="theme-link" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Retrieval as Classification: Hierarchical Categorization Without Training</a>
               </h3>
-              <div class="location mb-3">EchoStar Corporation</div>
-              <div class="desc schedule-abstract">We're a distributed team of applied AI engineers, split across two locations, and every one of us leads a project while working on several more. Multi-threaded is our normal, not a bad week - and the ground moves hourly: repositories change, business facts change, and on a single repo two engineers will run experiments and close tasks before lunch.
-At that speed the hard part is no longer writing the qoek - AI does plenty of that. It's that context goes stale in hours. The moment a person, or more dangerously their AI agent, starts from an out-of-date picture of the world, it confidently builds something that duplicates or contradicts what a teammate just shipped. Speed stops compounding and starts colliding.
-So the real job became herding context: keeping every engineer and their mutiple agents aligned on the same facts and the same rules at any given moment. We had to make that alignment automatic. This talk is about why that quietly became our bottleneck and what we built to solve it.<a class="schedule-abstract-read-more" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">... Read more</a></div>
+              <div class="location mb-3">Workday</div>
+              <div class="desc schedule-abstract">Support teams need incoming issues sorted into the right category so they reach the right people. But what happens when the categories aren't a flat list when they're three levels deep, and the valid options at each level depend on the choices above them?
+This talk walks through a real production problem: automatically classifying support cases into a three-tier hierarchy. The obvious answer, train a classification model but it turned out to be a poor fit. Hierarchical classification is genuinely hard for traditional models: early mistakes cascade down the tree, rare categories have too few examples to learn from, and off-the-shelf tools don't understand which options are valid under which parent.
+Instead of training a model, we reframed the problem as retrieval. By building a repository of common issues for each leaf category, embedding it, and using a hybrid RAG search to match new cases against it, we let semantic similarity do the classification work as a result no model training required.
+I'll cover why traditional approaches struggle with hierarchical problems, how the retrieval approach sidesteps those issues, the tradeoffs we accepted, and where this pattern does (and doesn't) make sense.<a class="schedule-abstract-read-more" href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">... Read more</a></div>
               
             </div>
           </div>
@@ -1521,20 +1516,17 @@ So the real job became herding context: keeping every engineer and their mutiple
             <div class="meta">
               <h4 class="time mb-3">16:30</h4>
               <div class="profile">
-                <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24"><img class="profile-image rounded-circle mb-2" src="../speakers/Vaibhav Mahajan.png" alt=""></a>
-                <div class="name">Vaibhav Mahajan</div>
+                <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24"><img class="profile-image rounded-circle mb-2" src="../speakers/Sirisha Ayyagari.png" alt=""></a>
+                <div class="name">Sirisha Ayyagari</div>
               </div>
             </div>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Retrieval as Classification: Hierarchical Categorization Without Training</a>
+                <a class="theme-link" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Agentic Pricing Intelligence: Embedding LLM-Driven Decisioning into Enterprise Order-to-Cash Systems</a>
               </h3>
-              <div class="location mb-3">Workday</div>
-              <div class="desc schedule-abstract">Support teams need incoming issues sorted into the right category so they reach the right people. But what happens when the categories aren't a flat list when they're three levels deep, and the valid options at each level depend on the choices above them?
-This talk walks through a real production problem: automatically classifying support cases into a three-tier hierarchy. The obvious answer, train a classification model but it turned out to be a poor fit. Hierarchical classification is genuinely hard for traditional models: early mistakes cascade down the tree, rare categories have too few examples to learn from, and off-the-shelf tools don't understand which options are valid under which parent.
-Instead of training a model, we reframed the problem as retrieval. By building a repository of common issues for each leaf category, embedding it, and using a hybrid RAG search to match new cases against it, we let semantic similarity do the classification work as a result no model training required.
-I'll cover why traditional approaches struggle with hierarchical problems, how the retrieval approach sidesteps those issues, the tradeoffs we accepted, and where this pattern does (and doesn't) make sense.<a class="schedule-abstract-read-more" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">... Read more</a></div>
+              <div class="location mb-3">Software Developer</div>
+              <div class="desc schedule-abstract">Most enterprise AI pilots stall the moment they leave the sandbox and meet a real transactional system. Pricing is one of the sharpest examples: it is high-frequency, financially binding, and threaded through every stage of the Order-to-Cash lifecycle, which makes it an unforgiving place to deploy autonomous decisioning. This session walks through a production architecture that embeds LLM and ML-driven pricing agents directly into a live enterprise system, and what it actually took to make that safe, fast, and auditable. The architecture is organized into four layers — Interaction, Application, Extension, and Integration — with a centralized pricing engine at the core that computes base pricing, discounts, surcharges, tax, and net value in real time. Sitting alongside it is a consistency layer that continuously validates agent-driven and rules-driven outputs against each other, closing the gap between automated decisions and financial truth at every handoff from order to invoice. I'll cover how real-time pricing APIs and ML-based models were integrated with the core system without destabilizing it, using clean core extensibility so agentic components could be upgraded independently of the underlying platform. I'll also share production outcomes: multi-million-dollar savings from replacing legacy pricing tools with model-driven decisioning, measurable gains in response time and scalability under high-volume load, and how dynamic, model-informed tax adjustments held up across multi-country regulatory frameworks. Attendees will leave with a concrete blueprint for introducing agentic and ML-based decisioning into financially sensitive, high-volume enterprise systems — including where autonomy earns its place, where validation layers are non-negotiable, and how to scale without breaking upgrade safety.<a class="schedule-abstract-read-more" href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">... Read more</a></div>
               
             </div>
           </div>
@@ -1542,25 +1534,6 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
           <div class="item item-talk">
             <div class="meta">
               <h4 class="time mb-3">17:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25"><img class="profile-image rounded-circle mb-2" src="../speakers/Sirisha Ayyagari.png" alt=""></a>
-                <div class="name">Sirisha Ayyagari</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">Agentic Pricing Intelligence: Embedding LLM-Driven Decisioning into Enterprise Order-to-Cash Systems</a>
-              </h3>
-              <div class="location mb-3">Software Developer</div>
-              <div class="desc schedule-abstract">Most enterprise AI pilots stall the moment they leave the sandbox and meet a real transactional system. Pricing is one of the sharpest examples: it is high-frequency, financially binding, and threaded through every stage of the Order-to-Cash lifecycle, which makes it an unforgiving place to deploy autonomous decisioning. This session walks through a production architecture that embeds LLM and ML-driven pricing agents directly into a live enterprise system, and what it actually took to make that safe, fast, and auditable. The architecture is organized into four layers — Interaction, Application, Extension, and Integration — with a centralized pricing engine at the core that computes base pricing, discounts, surcharges, tax, and net value in real time. Sitting alongside it is a consistency layer that continuously validates agent-driven and rules-driven outputs against each other, closing the gap between automated decisions and financial truth at every handoff from order to invoice. I'll cover how real-time pricing APIs and ML-based models were integrated with the core system without destabilizing it, using clean core extensibility so agentic components could be upgraded independently of the underlying platform. I'll also share production outcomes: multi-million-dollar savings from replacing legacy pricing tools with model-driven decisioning, measurable gains in response time and scalability under high-volume load, and how dynamic, model-informed tax adjustments held up across multi-country regulatory frameworks. Attendees will leave with a concrete blueprint for introducing agentic and ML-based decisioning into financially sensitive, high-volume enterprise systems — including where autonomy earns its place, where validation layers are non-negotiable, and how to scale without breaking upgrade safety.<a class="schedule-abstract-read-more" href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">17:30</h4>
               <div class="profile">
                 <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
                 <div class="name"></div>
@@ -1593,8 +1566,6 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
           </tr>
         </thead>
         <tbody>
-
-
 
 
 
@@ -1798,8 +1769,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">From Tool Calls to Revenue: Metering and Billing AI workfloads at Scale</a>
-              <div class="speaker-info">Lior Mechlovich <span class="affiliation">• Kong</span></div>
+              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">No Evals, No Scale: An Operator’s Playbook for AI</a>
+              <div class="speaker-info">Paari Krishnamurthy <span class="affiliation">• OpenAI</span></div>
             </td>
 
 
@@ -1854,8 +1825,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">Your Agent Needs a Kernel, Not a Better Prompt</a>
-              <div class="speaker-info">Andrew Barkett <span class="affiliation">• Miriel AI</span></div>
+              <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15">The Deploy Line: When Software Becomes Infinite</a>
+              <div class="speaker-info">Fahd Rafi <span class="affiliation">• Noodle Seed</span></div>
             </td>
 
 
@@ -1899,8 +1870,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">The Deploy Line: When Software Becomes Infinite</a>
-              <div class="speaker-info">Fahd Rafi <span class="affiliation">• Noodle Seed</span></div>
+              <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">The LLM Is Not the System</a>
+              <div class="speaker-info">Qazybek Beken <span class="affiliation">• UC Berkeley</span></div>
             </td>
 
 
@@ -1969,8 +1940,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">The LLM Is Not the System</a>
-              <div class="speaker-info">Qazybek Beken <span class="affiliation">• UC Berkeley</span></div>
+              <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">The Insider Threat of Agentic AI</a>
+              <div class="speaker-info">Jyotirmoy Sundi <span class="affiliation">• Votal.ai</span></div>
             </td>
 
 
@@ -2014,8 +1985,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">The Insider Threat of Agentic AI</a>
-              <div class="speaker-info">Jyotirmoy Sundi <span class="affiliation">• Votal.ai</span></div>
+              <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18">Evidence Grounded Context Layer for AI Agents</a>
+              <div class="speaker-info">Avneesh Sharma <span class="affiliation">• Amazon</span></div>
             </td>
 
 
@@ -2059,8 +2030,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Evidence Grounded Context Layer for AI Agents</a>
-              <div class="speaker-info">Avneesh Sharma <span class="affiliation">• Amazon</span></div>
+              <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19">Your Agent's Tools Are the Attack Surface</a>
+              <div class="speaker-info">Pranav Saji <span class="affiliation">• Symosis Security</span></div>
             </td>
 
 
@@ -2093,8 +2064,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Designing Hybrid Intelligence for Enterprise Finance: Balancing Agentic Reasoning and Business Integrity</a>
-              <div class="speaker-info">Leon Lobo <span class="affiliation">• Oracle</span></div>
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Your Agent Needs a Kernel, Not a Better Prompt</a>
+              <div class="speaker-info">Andrew Barkett <span class="affiliation">• Miriel AI</span></div>
             </td>
 
 
@@ -2104,8 +2075,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Your Agent's Tools Are the Attack Surface</a>
-              <div class="speaker-info">Pranav Saji <span class="affiliation">• Symosis Security</span></div>
+              <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20">Why Your Agent Fails: The Self-Correction Paradox</a>
+              <div class="speaker-info">Sujoy Datta Choudhury <span class="affiliation">• Amazon</span></div>
             </td>
 
 
@@ -2163,8 +2134,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Agents as the First Line of Defense</a>
-              <div class="speaker-info">Gabriel Nahum <span class="affiliation">• GeyserData inc.</span></div>
+              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Designing Hybrid Intelligence for Enterprise Finance: Balancing Agentic Reasoning and Business Integrity</a>
+              <div class="speaker-info">Leon Lobo <span class="affiliation">• Oracle</span></div>
             </td>
 
 
@@ -2174,8 +2145,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">Why Your Agent Fails: The Self-Correction Paradox</a>
-              <div class="speaker-info">Sujoy Datta Choudhury <span class="affiliation">• Amazon</span></div>
+              <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21">ShieldMCP: MCP's Missing Firewall</a>
+              <div class="speaker-info">Saurabh Yergattikar <span class="affiliation">• eBay</span></div>
             </td>
 
 
@@ -2208,8 +2179,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">No Evals, No Scale: An Operator’s Playbook for AI</a>
-              <div class="speaker-info">Paari Krishnamurthy <span class="affiliation">• OpenAI</span></div>
+              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Agents as the First Line of Defense</a>
+              <div class="speaker-info">Gabriel Nahum <span class="affiliation">• GeyserData inc.</span></div>
             </td>
 
 
@@ -2219,8 +2190,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">ShieldMCP: MCP's Missing Firewall</a>
-              <div class="speaker-info">Saurabh Yergattikar <span class="affiliation">• eBay</span></div>
+              <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22">Herding Context: Keeping 16 Engineers and Their Agents in Sync</a>
+              <div class="speaker-info">Mike Arbuzov <span class="affiliation">• EchoStar Corporation</span></div>
             </td>
 
 
@@ -2264,8 +2235,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Herding Context: Keeping 16 Engineers and Their Agents in Sync</a>
-              <div class="speaker-info">Mike Arbuzov <span class="affiliation">• EchoStar Corporation</span></div>
+              <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23">Retrieval as Classification: Hierarchical Categorization Without Training</a>
+              <div class="speaker-info">Vaibhav Mahajan <span class="affiliation">• Workday</span></div>
             </td>
 
 
@@ -2309,8 +2280,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
             <td class="talk-cell">
-              <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Retrieval as Classification: Hierarchical Categorization Without Training</a>
-              <div class="speaker-info">Vaibhav Mahajan <span class="affiliation">• Workday</span></div>
+              <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24">Agentic Pricing Intelligence: Embedding LLM-Driven Decisioning into Enterprise Order-to-Cash Systems</a>
+              <div class="speaker-info">Sirisha Ayyagari <span class="affiliation">• Software Developer</span></div>
             </td>
 
 
@@ -2353,10 +2324,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
 
-            <td class="talk-cell">
-              <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25">Agentic Pricing Intelligence: Embedding LLM-Driven Decisioning into Enterprise Order-to-Cash Systems</a>
-              <div class="speaker-info">Sirisha Ayyagari <span class="affiliation">• Software Developer</span></div>
-            </td>
+            <td class="talk-cell merged-cell">Wrap up</td>
 
 
           </tr>
@@ -2377,13 +2345,25 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
 
 
+
+
           <tr>
             <td class="time-cell merged-cell">17:30</td>
-            <td class="talk-cell merged-cell" colspan="2">
 
-              Wrap up
 
-            </td>
+
+
+
+
+            <td class="talk-cell merged-cell">Wrap up</td>
+
+
+
+
+
+            <td class="talk-cell merged-cell"></td>
+
+
           </tr>
 
 
@@ -2434,7 +2414,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img src="../speakers/Andrew Barkett.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Andrew Barkett.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Andrew Barkett</h5>
             <div class="card-text mb-3">
@@ -2460,7 +2440,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19"><img src="../speakers/Avneesh Sharma.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18"><img src="../speakers/Avneesh Sharma.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Avneesh Sharma</h5>
             <div class="card-text mb-3">
@@ -2538,7 +2518,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img src="../speakers/Fahd Rafi.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-15" data-bs-toggle="modal" data-bs-target="#modal-speaker-15"><img src="../speakers/Fahd Rafi.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Fahd Rafi</h5>
             <div class="card-text mb-3">
@@ -2590,7 +2570,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img src="../speakers/Gabriel Nahum.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img src="../speakers/Gabriel Nahum.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Gabriel Nahum</h5>
             <div class="card-text mb-3">
@@ -2694,7 +2674,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-18" data-bs-toggle="modal" data-bs-target="#modal-speaker-18"><img src="../speakers/Jyotirmoy Sundi.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img src="../speakers/Jyotirmoy Sundi.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Jyotirmoy Sundi</h5>
             <div class="card-text mb-3">
@@ -2720,7 +2700,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img src="../speakers/Leon Lobo.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img src="../speakers/Leon Lobo.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Leon Lobo</h5>
             <div class="card-text mb-3">
@@ -2746,33 +2726,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img src="../speakers/Lior Mechlovich.png" class="card-img-top rounded-0" alt=""></a>
-          <div class="card-body">
-            <h5 class="card-title mb-2">Lior Mechlovich</h5>
-            <div class="card-text mb-3">
-              <div class="meta">Kong</div>
-            </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Lior_Mechlovich_Kong_From_Tool_Calls_to_Revenue_Metering_and_Billing_AI_workfloads_at_Scale#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
-          </div><!--//card-->
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/lior-mechlovich/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-              
-              
-            </ul><!--//social-list-->
-          </div>
-        </div><!--//card-->
-      </div><!--//col-->
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23"><img src="../speakers/Mike Arbuzov.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22"><img src="../speakers/Mike Arbuzov.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Mike Arbuzov</h5>
             <div class="card-text mb-3">
@@ -2824,7 +2778,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img src="../speakers/Paari Krishnamurthy.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img src="../speakers/Paari Krishnamurthy.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Paari Krishnamurthy</h5>
             <div class="card-text mb-3">
@@ -2850,7 +2804,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20"><img src="../speakers/Pranav Saji.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-19" data-bs-toggle="modal" data-bs-target="#modal-speaker-19"><img src="../speakers/Pranav Saji.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Pranav Saji</h5>
             <div class="card-text mb-3">
@@ -2902,7 +2856,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img src="../speakers/Qazybek Beken.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img src="../speakers/Qazybek Beken.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Qazybek Beken</h5>
             <div class="card-text mb-3">
@@ -2928,7 +2882,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-22" data-bs-toggle="modal" data-bs-target="#modal-speaker-22"><img src="../speakers/Saurabh Yergattikar.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21"><img src="../speakers/Saurabh Yergattikar.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Saurabh Yergattikar</h5>
             <div class="card-text mb-3">
@@ -2980,7 +2934,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-25" data-bs-toggle="modal" data-bs-target="#modal-speaker-25"><img src="../speakers/Sirisha Ayyagari.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24"><img src="../speakers/Sirisha Ayyagari.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Sirisha Ayyagari</h5>
             <div class="card-text mb-3">
@@ -3032,7 +2986,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-21" data-bs-toggle="modal" data-bs-target="#modal-speaker-21"><img src="../speakers/Sujoy Datta Choudhury.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-20" data-bs-toggle="modal" data-bs-target="#modal-speaker-20"><img src="../speakers/Sujoy Datta Choudhury.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Sujoy Datta Choudhury</h5>
             <div class="card-text mb-3">
@@ -3058,7 +3012,7 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
 
       <div class="col mb-4">
         <div class="card rounded">
-          <a href="#modal-speaker-24" data-bs-toggle="modal" data-bs-target="#modal-speaker-24"><img src="../speakers/Vaibhav Mahajan.png" class="card-img-top rounded-0" alt=""></a>
+          <a href="#modal-speaker-23" data-bs-toggle="modal" data-bs-target="#modal-speaker-23"><img src="../speakers/Vaibhav Mahajan.png" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">Vaibhav Mahajan</h5>
             <div class="card-text mb-3">
@@ -3572,32 +3526,25 @@ This talk walks through the fix for all three: keep large outputs out of the win
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Lior Mechlovich.png" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Paari Krishnamurthy.png" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Lior Mechlovich</h2>
-                          <div class="meta mb-2">Kong</div>
+                          <h2 class="name mb-2">Paari Krishnamurthy</h2>
+                          <div class="meta mb-2">OpenAI</div>
                           <ul class="social-list list-inline mb-0">
                             
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/lior-mechlovich/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/paari-k-37b35a16/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                             
                             
                           </ul><!--//social-list-->
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">From Tool Calls to Revenue: Metering and Billing AI workfloads at Scale</div>
+              <div class="talk-title-bar">No Evals, No Scale: An Operator’s Playbook for AI</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Building an MCP server is getting easier. Monetizing one is not.
-At first, usage-based billing looks simple: count tool calls, aggregate them monthly, and send an invoice. But once AI workloads move into production agent workflows, the definition of “usage” becomes much harder. Was that one tool call or ten? Should you bill for tokens, API calls, records retrieved, compute time, successful outcomes, or prepaid credits consumed? What happens when an agent retries, chains tools, streams results, or calls the same resource through multiple clients?
-In this session, we’ll dive into the infrastructure behind trustworthy metering and pricing for MCP-native products. We’ll cover how to design a billing pipeline that can:
-- Count usage once and only once, even with retries, failures, and agent loops
-- Handle high-volume event streams from MCP tool calls
-- Give customers real-time visibility into current-period usage
-- Support pay-as-you-go, prepaid credits, drawdown models, and hybrid pricing
-- Preserve developer trust by making usage explainable and auditable</p></p>
+                <p><p>Researchers already know evals are essential, but business and operations leaders often deploy AI without equivalent controls. Without clear evaluation, escalation, and accountability, organizations don’t scale AI, they scale risk. This talk reframes evals as the operational control layer that makes AI deployment reliable and gives leaders a practical framework for scaling with confidence.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
@@ -3605,7 +3552,7 @@ In this session, we’ll dive into the infrastructure behind trustworthy meterin
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Lior Mechlovich a product leader at Kong. Before Kong, he was the CTO of co-founder of Salespeak.ai, Amberflo.io and led engineering teams at AWS and Informatica.</p></p>
+                <p><p>Paari Krishnamurthy is a senior leader specializing in building and scaling post-sales and business operations across high-growth AI and SaaS companies. With a track record spanning four leading technology organizations, he has spearheaded key zero-to-one initiatives, including establishing the post-sales organization for Affirm Canada, which scaled to $75M+ in annual revenue across 12,000 customers.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -3843,6 +3790,52 @@ Finally, I’ll make the case for why the current AI cycle creates an unusual wi
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Andrew Barkett.png" alt="" />
+                      </div>
+
+                      <div class="col text-center text-md-start mx-auto">
+                          <h2 class="name mb-2">Andrew Barkett</h2>
+                          <div class="meta mb-2">Miriel AI</div>
+                          <ul class="social-list list-inline mb-0">
+                            
+                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/andrew-barkett-9147473/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                            
+                            
+                          </ul><!--//social-list-->
+                      </div><!--//col-->
+                  </div><!--//row-->
+              </div>
+              <div class="talk-title-bar">Your Agent Needs a Kernel, Not a Better Prompt</div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>The thesis is that once an agent must remain responsive while doing long-running work, it stops being a chatbot and starts resembling an operating system. I’d show an architecture we’ve built at Miriel that separates real-time dialogue from deliberative work, with durable goals, a shared blackboard, system-call-like tool boundaries, and a scheduler that distinguishes progress, blocking, and runaway loops.
+It would be a practical technical talk, grounded in working software and actual failure modes, but aimed at giving application developers a different mental model for how serious agents should be built.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p><p>Andy Barkett is the Founder and CEO of Miriel, bringing over 20 years of engineering and technology leadership across AI, databases, robotics, and consumer tech.
+Previously, Andy worked on site reliability and search quality at Google and served as Director of Production Engineering at Facebook, where he led infrastructure, scalability, and performance for all major product lines. His executive background also includes serving as the first Chief Technology Officer for the Republican National Committee and leading technology strategy for Jeb Bush’s 2016 presidential campaign. In addition, he has served as CTO at Korbit, spearheading applied AI and big data implementations.
+Andy holds a B.A. in Political Economy from UC Berkeley and an MBA from UC Davis. He is an active angel investor, startup advisor, guest lecturer across computer science and business at UC Berkeley and UC Davis, and an advisor for UC Berkeley’s Political Economy program.</p></p>
+              </div>
+
+          </div><!--//modal-body-->
+      </div><!--//modal-content-->
+  </div><!--//modal-dialog-->
+</div><!--//modal-->
+
+<!-- Modal Speaker 8 -->
+<div class="modal modal-speaker modal-speaker-8" id="modal-speaker-8" tabindex="-1" role="dialog" aria-labelledby="speaker-8-ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+              <div class="theme-bg-light p-5">
+                  <div class="row">
+                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Leon Lobo.png" alt="" />
                       </div>
 
@@ -3877,8 +3870,8 @@ Finally, I’ll make the case for why the current AI cycle creates an unusual wi
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 8 -->
-<div class="modal modal-speaker modal-speaker-8" id="modal-speaker-8" tabindex="-1" role="dialog" aria-labelledby="speaker-8-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 9 -->
+<div class="modal modal-speaker modal-speaker-9" id="modal-speaker-9" tabindex="-1" role="dialog" aria-labelledby="speaker-9-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -3913,49 +3906,6 @@ Finally, I’ll make the case for why the current AI cycle creates an unusual wi
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
                 <p><p>Gabriel Nahum is an ai advisor at GeyserData inc specializing in machine learning, core infra and software engineering. Concurrently with Geyserdata he is a tl at meta and was a member of technical staff at xAI, where he contributed to the development of the Grok-4 and Grok-4.1 language models. Gabriel holds a B.S. in Electrical Engineering and Computer Science from the University of California, Berkeley, and brings extensive technical expertise across Python, mobile platforms, and large-scale AI systems.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 9 -->
-<div class="modal modal-speaker modal-speaker-9" id="modal-speaker-9" tabindex="-1" role="dialog" aria-labelledby="speaker-9-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Paari Krishnamurthy.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Paari Krishnamurthy</h2>
-                          <div class="meta mb-2">OpenAI</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/paari-k-37b35a16/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">No Evals, No Scale: An Operator’s Playbook for AI</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Researchers already know evals are essential, but business and operations leaders often deploy AI without equivalent controls. Without clear evaluation, escalation, and accountability, organizations don’t scale AI, they scale risk. This talk reframes evals as the operational control layer that makes AI deployment reliable and gives leaders a practical framework for scaling with confidence.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Paari Krishnamurthy is a senior leader specializing in building and scaling post-sales and business operations across high-growth AI and SaaS companies. With a track record spanning four leading technology organizations, he has spearheaded key zero-to-one initiatives, including establishing the post-sales organization for Affirm Canada, which scaled to $75M+ in annual revenue across 12,000 customers.</p></p>
               </div>
 
           </div><!--//modal-body-->
@@ -4192,52 +4142,6 @@ Expect production war stories, real benchmarks, and a concrete framework for cut
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Andrew Barkett.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Andrew Barkett</h2>
-                          <div class="meta mb-2">Miriel AI</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/andrew-barkett-9147473/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">Your Agent Needs a Kernel, Not a Better Prompt</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>The thesis is that once an agent must remain responsive while doing long-running work, it stops being a chatbot and starts resembling an operating system. I’d show an architecture we’ve built at Miriel that separates real-time dialogue from deliberative work, with durable goals, a shared blackboard, system-call-like tool boundaries, and a scheduler that distinguishes progress, blocking, and runaway loops.
-It would be a practical technical talk, grounded in working software and actual failure modes, but aimed at giving application developers a different mental model for how serious agents should be built.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Andy Barkett is the Founder and CEO of Miriel, bringing over 20 years of engineering and technology leadership across AI, databases, robotics, and consumer tech.
-Previously, Andy worked on site reliability and search quality at Google and served as Director of Production Engineering at Facebook, where he led infrastructure, scalability, and performance for all major product lines. His executive background also includes serving as the first Chief Technology Officer for the Republican National Committee and leading technology strategy for Jeb Bush’s 2016 presidential campaign. In addition, he has served as CTO at Korbit, spearheading applied AI and big data implementations.
-Andy holds a B.A. in Political Economy from UC Berkeley and an MBA from UC Davis. He is an active angel investor, startup advisor, guest lecturer across computer science and business at UC Berkeley and UC Davis, and an advisor for UC Berkeley’s Political Economy program.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 16 -->
-<div class="modal modal-speaker modal-speaker-16" id="modal-speaker-16" tabindex="-1" role="dialog" aria-labelledby="speaker-16-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
                           <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Fahd Rafi.png" alt="" />
                       </div>
 
@@ -4272,8 +4176,8 @@ Andy holds a B.A. in Political Economy from UC Berkeley and an MBA from UC Davis
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 17 -->
-<div class="modal modal-speaker modal-speaker-17" id="modal-speaker-17" tabindex="-1" role="dialog" aria-labelledby="speaker-17-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 16 -->
+<div class="modal modal-speaker modal-speaker-16" id="modal-speaker-16" tabindex="-1" role="dialog" aria-labelledby="speaker-16-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4318,8 +4222,8 @@ The case study focuses on Fantasy Premier League, but this kind of problem also 
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 18 -->
-<div class="modal modal-speaker modal-speaker-18" id="modal-speaker-18" tabindex="-1" role="dialog" aria-labelledby="speaker-18-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 17 -->
+<div class="modal modal-speaker modal-speaker-17" id="modal-speaker-17" tabindex="-1" role="dialog" aria-labelledby="speaker-17-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4361,8 +4265,8 @@ The case study focuses on Fantasy Premier League, but this kind of problem also 
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 19 -->
-<div class="modal modal-speaker modal-speaker-19" id="modal-speaker-19" tabindex="-1" role="dialog" aria-labelledby="speaker-19-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 18 -->
+<div class="modal modal-speaker modal-speaker-18" id="modal-speaker-18" tabindex="-1" role="dialog" aria-labelledby="speaker-18-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4405,8 +4309,8 @@ He writes about AI infrastructure and engineering judgment at Build Tech Career.
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 20 -->
-<div class="modal modal-speaker modal-speaker-20" id="modal-speaker-20" tabindex="-1" role="dialog" aria-labelledby="speaker-20-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 19 -->
+<div class="modal modal-speaker modal-speaker-19" id="modal-speaker-19" tabindex="-1" role="dialog" aria-labelledby="speaker-19-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4450,8 +4354,8 @@ Attendees will leave with a concrete threat model for the agent tool layer, a ch
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 21 -->
-<div class="modal modal-speaker modal-speaker-21" id="modal-speaker-21" tabindex="-1" role="dialog" aria-labelledby="speaker-21-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 20 -->
+<div class="modal modal-speaker modal-speaker-20" id="modal-speaker-20" tabindex="-1" role="dialog" aria-labelledby="speaker-20-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4493,8 +4397,8 @@ Attendees will leave with a concrete threat model for the agent tool layer, a ch
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 22 -->
-<div class="modal modal-speaker modal-speaker-22" id="modal-speaker-22" tabindex="-1" role="dialog" aria-labelledby="speaker-22-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 21 -->
+<div class="modal modal-speaker modal-speaker-21" id="modal-speaker-21" tabindex="-1" role="dialog" aria-labelledby="speaker-21-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4540,8 +4444,8 @@ Photo</p></p>
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 23 -->
-<div class="modal modal-speaker modal-speaker-23" id="modal-speaker-23" tabindex="-1" role="dialog" aria-labelledby="speaker-23-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 22 -->
+<div class="modal modal-speaker modal-speaker-22" id="modal-speaker-22" tabindex="-1" role="dialog" aria-labelledby="speaker-22-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4585,8 +4489,8 @@ So the real job became herding context: keeping every engineer and their mutiple
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 24 -->
-<div class="modal modal-speaker modal-speaker-24" id="modal-speaker-24" tabindex="-1" role="dialog" aria-labelledby="speaker-24-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 23 -->
+<div class="modal modal-speaker modal-speaker-23" id="modal-speaker-23" tabindex="-1" role="dialog" aria-labelledby="speaker-23-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
@@ -4631,8 +4535,8 @@ I'll cover why traditional approaches struggle with hierarchical problems, how t
   </div><!--//modal-dialog-->
 </div><!--//modal-->
 
-<!-- Modal Speaker 25 -->
-<div class="modal modal-speaker modal-speaker-25" id="modal-speaker-25" tabindex="-1" role="dialog" aria-labelledby="speaker-25-ModalLabel" aria-hidden="true">
+<!-- Modal Speaker 24 -->
+<div class="modal modal-speaker modal-speaker-24" id="modal-speaker-24" tabindex="-1" role="dialog" aria-labelledby="speaker-24-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
