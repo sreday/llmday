@@ -106,6 +106,25 @@
     .day li small { color: #aaa; font-size: .76rem; margin-left: 8px; font-variant-numeric: tabular-nums; }
     .day .none { color: #bbb; font-size: .88rem; padding-top: 5px; font-style: italic; }
     .added-note { color: #888; font-size: .82rem; margin-top: 10px; font-style: italic; }
+    .regs { margin-top: 34px; }
+    .regs h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
+    .regs .sub { margin-bottom: 14px; }
+    .reg { background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); padding: 12px 16px; margin-bottom: 10px; }
+    .reg-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .reg-head > a { color: #111; font-weight: 600; text-decoration: none; font-size: .95rem; }
+    .reg-head > a:hover { color: var(--accent); }
+    .reg-head .spacer { flex: 1; }
+    .reg-head small { color: #888; font-size: .8rem; }
+    .reg-head small a { color: #888; }
+    .reg-head .na { font-style: italic; }
+    .reg-total { color: #555; font-size: .9rem; }
+    .reg .paid { --c: var(--accent); } .reg .free { --c: #9aa0a6; } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
+    .reg-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: #eceef1; margin: 10px 0 8px; }
+    .reg-bar i { display: block; height: 100%; background: var(--c); }
+    .reg-cats { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .84rem; color: #555; }
+    .reg-cats b { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--c); margin-right: 6px; vertical-align: -1px; }
+    .reg-cats strong { color: #111; margin-left: 2px; }
+    .reg-cats em { font-style: normal; color: #999; margin-left: 5px; font-variant-numeric: tabular-nums; }
     @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } }
   </style>
 </head>
@@ -182,6 +201,33 @@
   <div class="sisters">
     {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}
   </div>
+
+  <section class="regs">
+    <h2>Registrations</h2>
+    <div class="sub">Approved Luma registrations at build time. Speaker = name found in talks.csv, Sponsor = company or email domain of one of the event's sponsors, Paid = paid ticket, Freebie = everyone else on a free ticket.</div>
+    {% if status_luma_note %}
+    <div class="added-note">{{ status_luma_note }}</div>
+    {% else %}
+    {% for r in status_rows %}
+    <div class="reg">
+      <div class="reg-head">
+        <a href="{{ r.url }}">{{ r.name }}</a>
+        {% if r.luma %}
+        <span class="reg-total"><strong>{{ r.luma.total }}</strong> registered{% if r.luma.capacity %} of {{ r.luma.capacity }}{% endif %}</span>
+        <span class="spacer"></span>
+        <small>+{{ r.luma.last7 }} in 7 days{% if r.luma.pending or r.luma.waitlist %} · {{ r.luma.pending }} pending{% if r.luma.waitlist %}, {{ r.luma.waitlist }} waitlisted{% endif %}{% endif %}{% if r.luma.checked_in %} · {{ r.luma.checked_in }} checked in{% endif %}{% if not r.luma.open %} · registration closed{% endif %}{% if r.luma.url %} · <a href="{{ r.luma.url }}">Luma</a>{% endif %}</small>
+        {% else %}
+        <span class="spacer"></span><small class="na">{{ r.luma_note }}</small>
+        {% endif %}
+      </div>
+      {% if r.luma %}
+      <div class="reg-bar">{% for c in r.luma.cats %}{% if c.n %}<i class="{{ c.key }}" style="width: {{ c.pct }}%" title="{{ c.label }}: {{ c.n }} ({{ c.pct }}%)"></i>{% endif %}{% endfor %}</div>
+      <div class="reg-cats">{% for c in r.luma.cats %}<span class="{{ c.key }}"><b></b>{{ c.label }} <strong>{{ c.n }}</strong><em>{{ c.pct }}%</em></span>{% endfor %}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+    {% endif %}
+  </section>
 
   <section class="added">
     <h2>Speakers added, last {{ status_added_n }} days</h2>
