@@ -104,6 +104,10 @@
     .day li small { color: #aaa; font-size: .76rem; margin-left: 8px; font-variant-numeric: tabular-nums; }
     .day .none { color: #bbb; font-size: .88rem; padding-top: 5px; font-style: italic; }
     .added-note { color: #888; font-size: .82rem; margin-top: 10px; font-style: italic; }
+    .added .day.older { display: none; }
+    .added.extended .day.older { display: grid; }
+    .added-more { display: inline-block; margin-top: 12px; border: 1px solid #d5d5d5; background: #fff; color: #444; border-radius: 999px; padding: 8px 18px; font: inherit; font-size: .85rem; cursor: pointer; }
+    .added-more:hover { border-color: var(--accent); color: var(--accent); }
     .regs { margin-top: 34px; }
     .regs h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
     .regs .sub { margin-bottom: 14px; }
@@ -356,7 +360,7 @@
 
   <section class="added">
     <h2>Speakers added to the website</h2>
-    <div class="sub">Who was added when, and to which conference, last 7 days</div>
+    <div class="sub">Who was added when, and to which conference, last <span class="added-n">7</span> days</div>
     
     <div class="days">
       
@@ -447,7 +451,213 @@
         
       </div>
       
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">THURSDAY</span><small>10 Sep</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">WEDNESDAY</span><small>9 Sep</small></div>
+        
+        <ul>
+          <li><a href="/2026-nyc-q4/David_Justus_Panasonic_Frontier_by_Default_Is_a_Design_Flaw.html">David Justus</a> added to <a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small data-ts="2026-09-09T04:23:39+01:00" title="04:23 Europe/London">04:23</small></li>
+          <li><a href="/2026-london-q4/Oliver_Gooding_IFF_Research_Evaluating_LLM_Outputs_When_Quality_is_Subjective.html">Oliver Gooding</a> added to <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small data-ts="2026-09-09T19:54:56+01:00" title="19:54 Europe/London">19:54</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">TUESDAY</span><small>8 Sep</small></div>
+        
+        <ul>
+          <li><a href="/2026-london-q4/Artemis_Leonardou_NOFire_AI_Three_Hours_Debugging_Code_I_Never_Wrote.html">Artemis Leonardou</a> added to <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small data-ts="2026-09-08T00:28:43+01:00" title="00:28 Europe/London">00:28</small></li>
+          <li><a href="/2026-austin-q4/Kunle_Olutomilayo_Isiro_AI_30_More_GPU_Headroom__No_Quantization.html">Kunle Olutomilayo</a> added to <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small data-ts="2026-09-08T01:56:54+01:00" title="01:56 Europe/London">01:56</small></li>
+          <li><a href="/2026-san-francisco-q4/Jack_Murphy_DeepTempo_From_the_Frontlines_of_Finetuning_What_Works_and_Why.html">Jack Murphy</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-09-08T02:44:50+01:00" title="02:44 Europe/London">02:44</small></li>
+          <li><a href="/2026-san-francisco-q4/Leeza_Nadeem_Red_Hat_Your_Agents_Got_the_Right_Answer_But_WhyCounterfactual_Evaluation_for_MultiAgen.html">Leeza Nadeem</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-09-08T02:44:50+01:00" title="02:44 Europe/London">02:44</small></li>
+          <li><a href="/2026-san-francisco-q4/Gully_Burns_Altos_Labs_Claude_Opus_as_a_Tabletop_Roleplaying_GamesMaster_for_the_Mythras_Imperative_.html">Gully Burns</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-09-08T04:24:08+01:00" title="04:24 Europe/London">04:24</small></li>
+          <li><a href="/2026-austin-q4/Rodney_Richard_Puplampu_Puplampu_Consulting_Ogummaa_Agent_Portal_Architecture__Security_Blueprint_fo.html">Rodney Richard Puplampu</a> added to <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small data-ts="2026-09-08T17:53:38+01:00" title="17:53 Europe/London">17:53</small></li>
+          <li><a href="/2026-san-francisco-q4/Sebastian_Gomez_Buzz_Solutions_Founding_Engineer_Risk__Equity__AI.html">Sebastian Gomez</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-09-08T18:50:15+01:00" title="18:50 Europe/London">18:50</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">MONDAY</span><small>7 Sep</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">SUNDAY</span><small>6 Sep</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">SATURDAY</span><small>5 Sep</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">FRIDAY</span><small>4 Sep</small></div>
+        
+        <ul>
+          <li><a href="/2026-london-q4/Martina_Wyss_BINT_GmbH_AI_Can_Read_the_Patient_But_Can_It_Understand_the_Human_Beyond_the_Chatbot_De.html">Martina Wyss</a> added to <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small data-ts="2026-09-04T17:33:55+01:00" title="17:33 Europe/London">17:33</small></li>
+          <li><a href="/2026-san-francisco-q4/Ivo_Dujmovic_uc2cai_FailClosed_by_Design_Why_Auditable_AI_Isnt_Agentic.html">Ivo Dujmovic</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-09-04T19:44:43+01:00" title="19:44 Europe/London">19:44</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">THURSDAY</span><small>3 Sep</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">WEDNESDAY</span><small>2 Sep</small></div>
+        
+        <ul>
+          <li><a href="/2026-austin-q4/Colby_Mainard_RiskScout_Invisible_Data__The_Largest_Problem_Facing_AI.html">Colby Mainard</a> added to <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small data-ts="2026-09-02T02:43:55+01:00" title="02:43 Europe/London">02:43</small></li>
+          <li><a href="/2026-austin-q4/Felix_Njeh_Nelix_Your_AI_Passed_the_Demo_But_Did_It_Pass_Validation.html">Felix Njeh</a> added to <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small data-ts="2026-09-02T21:48:20+01:00" title="21:48 Europe/London">21:48</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">TUESDAY</span><small>1 Sep</small></div>
+        
+        <ul>
+          <li><a href="/2026-london-q4/Maciej_Szymkowski_TLabs_and_Kozminski_University_Are_we_ready_to_trust_LLMs_and_AI_Agents.html">Maciej Szymkowski</a> added to <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small data-ts="2026-09-01T23:32:08+01:00" title="23:32 Europe/London">23:32</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">MONDAY</span><small>31 Aug</small></div>
+        
+        <ul>
+          <li><a href="/2026-san-francisco-q4/Vaibhav_Mahajan_Workday_Retrieval_as_Classification_Hierarchical_Categorization_Without_Training.html">Vaibhav Mahajan</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-08-31T17:56:26+01:00" title="17:56 Europe/London">17:56</small></li>
+          <li><a href="/2026-london-q4/Kayode_Adeniyi_LSE_Closing_the_satellite_observation_gap_for_flood_insurance_with_AI_Agents.html">Kayode Adeniyi</a> added to <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small data-ts="2026-08-31T19:26:06+01:00" title="19:26 Europe/London">19:26</small></li>
+          <li><a href="/2026-austin-q4/Geoff_Niehaus_Today_Mechanic_One_LLM_Call_Is_the_Wrong_Default.html">Geoff Niehaus</a> added to <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small data-ts="2026-08-31T19:53:06+01:00" title="19:53 Europe/London">19:53</small></li>
+          <li><a href="/2026-austin-q4/Leila_Anderson_Upheal_Evaluation_Without_Ground_Truth_Lessons_from_Expert_Disagreement.html">Leila Anderson</a> added to <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small data-ts="2026-08-31T19:53:06+01:00" title="19:53 Europe/London">19:53</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">SUNDAY</span><small>30 Aug</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">SATURDAY</span><small>29 Aug</small></div>
+        
+        <ul>
+          <li><a href="/2026-nyc-q4/Sevak_Avakians_USAA_Beyond_the_Next_Token_The_open_future_of_language_models.html">Sevak Avakians</a> added to <a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small data-ts="2026-08-29T03:42:43+01:00" title="03:42 Europe/London">03:42</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">FRIDAY</span><small>28 Aug</small></div>
+        
+        <ul>
+          <li><a href="/2026-montevideo-q4/Josefina_R_Casanova_IBM_From_PDFs_to_Production_RAG_Lessons_from_Building_Document_Pipelines_with_Do.html">Josefina R. Casanova</a> added to <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small data-ts="2026-08-28T19:08:33+01:00" title="19:08 Europe/London">19:08</small></li>
+          <li><a href="/2026-montevideo-q4/Ben_Sterne_Match_My_Email_Beyond_Vibe_Coding_How_AI_is_Changing_Development_Cycles.html">Ben Sterne</a> added to <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small data-ts="2026-08-28T19:08:33+01:00" title="19:08 Europe/London">19:08</small></li>
+          <li><a href="/2026-montevideo-q4/Martin_Brian_Marvik_The_Harness_Auction_What_Makes_an_AI_Agent_Actually_Work.html">Martin Brian</a> added to <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small data-ts="2026-08-28T19:08:33+01:00" title="19:08 Europe/London">19:08</small></li>
+          <li><a href="/2026-austin-q4/Rahul_Azmeera_7Eleven_Visual_AI_Testing_Agent_ScreenshotFirst_Mobile_UI_Test_Automation_for_iOS_Simu.html">Rahul Azmeera</a> added to <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small data-ts="2026-08-28T20:06:43+01:00" title="20:06 Europe/London">20:06</small></li>
+          <li><a href="/2026-san-francisco-q4/Paari_Krishnamurthy_OpenAI_No_Evals__No_Scale_An_Operators_Playbook_for_AI.html">Paari Krishnamurthy</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-08-28T20:47:50+01:00" title="20:47 Europe/London">20:47</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">THURSDAY</span><small>27 Aug</small></div>
+        
+        <ul>
+          <li><a href="/2026-london-q4/Alper_Nebi_Kanli_Optimizely_Interpretability_x_Retrieval_Inside_the_Models_That_Power_Search.html">Alper Nebi Kanli</a> added to <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small data-ts="2026-08-27T20:16:18+01:00" title="20:16 Europe/London">20:16</small></li>
+          <li><a href="/2026-london-q4/Kannupriya_Kalra__Rory_Graves_LLM4S_Foundation__The_Trade_Desk_LLM4S_10_From_Idea_to_Production_AI_i.html">Kannupriya Kalra & Rory Graves</a> added to <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small data-ts="2026-08-27T20:16:18+01:00" title="20:16 Europe/London">20:16</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">WEDNESDAY</span><small>26 Aug</small></div>
+        
+        <ul>
+          <li><a href="/2026-san-francisco-q4/Jyotirmoy_Sundi_Votalai_The_Insider_Threat_of_Agentic_AI.html">Jyotirmoy Sundi</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-08-26T18:20:32+01:00" title="18:20 Europe/London">18:20</small></li>
+          <li><a href="/2026-san-francisco-q4/Mike_Arbuzov_EchoStar_Corporation_Herding_Context_Keeping_16_Engineers_and_Their_Agents_in_Sync.html">Mike Arbuzov</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-08-26T18:20:32+01:00" title="18:20 Europe/London">18:20</small></li>
+          <li><a href="/2026-san-francisco-q4/Gabriel_Nahum_Meta_Agents_as_the_First_Line_of_Defense.html">Gabriel Nahum</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-08-26T18:20:32+01:00" title="18:20 Europe/London">18:20</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">TUESDAY</span><small>25 Aug</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">MONDAY</span><small>24 Aug</small></div>
+        
+        <ul>
+          <li><a href="/2026-nyc-q4/Paden_Gayle_Notion_Evals_Your_Customer_Will_Actually_Believe.html">Paden Gayle</a> added to <a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small data-ts="2026-08-24T20:00:20+01:00" title="20:00 Europe/London">20:00</small></li>
+          <li><a href="/2026-nyc-q4/Sai_Varma_Dantuluri_VotalAI_Agents_Arent_Users.html">Sai Varma Dantuluri</a> added to <a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small data-ts="2026-08-24T20:00:20+01:00" title="20:00 Europe/London">20:00</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">SUNDAY</span><small>23 Aug</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">SATURDAY</span><small>22 Aug</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">FRIDAY</span><small>21 Aug</small></div>
+        
+        <ul>
+          <li><a href="/2026-san-francisco-q4/Saurabh_Yergattikar_eBay_ShieldMCP_MCPs_Missing_Firewall.html">Saurabh Yergattikar</a> added to <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small data-ts="2026-08-21T17:30:01+01:00" title="17:30 Europe/London">17:30</small></li>
+          <li><a href="/2026-nyc-q4/Rajanikant_Vellaturi_Tredence_Inc_From_CSAT_to_AI_Insights.html">Rajanikant Vellaturi</a> added to <a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small data-ts="2026-08-21T20:08:53+01:00" title="20:08 Europe/London">20:08</small></li>
+          <li><a href="/2026-london-q4/Rafael_Pierre_Citi_Agents_Improving_Agents_Closing_the_Loop_with_Evals_and_Observability.html">Rafael Pierre</a> added to <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small data-ts="2026-08-21T20:31:11+01:00" title="20:31 Europe/London">20:31</small></li>
+          <li><a href="/2026-montevideo-q4/Joaquin_Bonifacino_Zyte_Long_Running_Agents_The_Harness_Is_the_Product.html">Joaquin Bonifacino</a> added to <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small data-ts="2026-08-21T21:13:40+01:00" title="21:13 Europe/London">21:13</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">THURSDAY</span><small>20 Aug</small></div>
+        
+        <ul>
+          <li><a href="/2026-montevideo-q4/Thalita_Regina_Terpilauskas_de_Sa_Riverstone_Insights__Iowa_AI_Isnt_MagicBut_It_Can_Deliver_Remarkab.html">Thalita Regina Terpilauskas de Sa</a> added to <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small data-ts="2026-08-20T18:50:03+01:00" title="18:50 Europe/London">18:50</small></li>
+          <li><a href="/2026-montevideo-q4/Marcelo_B_San_Martin_Total_Performance_Consulting_The_Great_AI_Role_Rewrite.html">Marcelo B San Martin</a> added to <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small data-ts="2026-08-20T18:50:03+01:00" title="18:50 Europe/London">18:50</small></li>
+          <li><a href="/2026-montevideo-q4/Leon_Achata_Apple_RAG_Is_Not_a_Search_Problem.html">Leon Achata</a> added to <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small data-ts="2026-08-20T18:50:03+01:00" title="18:50 Europe/London">18:50</small></li>
+          
+        </ul>
+        
+      </div>
+      
+      <div class="day older">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">WEDNESDAY</span><small>19 Aug</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
     </div>
+    <button type="button" class="added-more" data-n="7" data-max="30">Show last 30 days</button>
     
     
   </section>
@@ -574,7 +784,7 @@
   </section>
   
 
-  <div class="foot">Generated 2026-09-17 21:54 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-17 22:04 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // addition times in the viewer's own timezone (team spans timezones)
@@ -584,6 +794,15 @@
     if (isNaN(t.getTime())) continue;
     els[i].textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
+})();
+(function () {                                     // "Show last 30 days" toggle for the speakers log
+  var s = document.querySelector('section.added'), b = s && s.querySelector('.added-more'), n = s && s.querySelector('.added-n');
+  if (!s || !b) return;
+  b.addEventListener('click', function () {
+    var on = s.classList.toggle('extended');
+    b.textContent = 'Show last ' + (on ? b.getAttribute('data-n') : b.getAttribute('data-max')) + ' days';
+    if (n) n.textContent = on ? b.getAttribute('data-max') : b.getAttribute('data-n');
+  });
 })();
 (function () {
   var d = document.querySelector('details.ladder'); if (!d) return;
