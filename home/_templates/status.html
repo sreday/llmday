@@ -106,6 +106,10 @@
     .day li small { color: #aaa; font-size: .76rem; margin-left: 8px; font-variant-numeric: tabular-nums; }
     .day .none { color: #bbb; font-size: .88rem; padding-top: 5px; font-style: italic; }
     .added-note { color: #888; font-size: .82rem; margin-top: 10px; font-style: italic; }
+    .added .day.older { display: none; }
+    .added.extended .day.older { display: grid; }
+    .added-more { display: inline-block; margin-top: 12px; border: 1px solid #d5d5d5; background: #fff; color: #444; border-radius: 999px; padding: 8px 18px; font: inherit; font-size: .85rem; cursor: pointer; }
+    .added-more:hover { border-color: var(--accent); color: var(--accent); }
     .regs { margin-top: 34px; }
     .regs h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
     .regs .sub { margin-bottom: 14px; }
@@ -232,13 +236,13 @@
 
   <section class="added">
     <h2>Speakers added to the website</h2>
-    <div class="sub">Who was added when, and to which conference, last {{ status_added_n }} days</div>
+    <div class="sub">Who was added when, and to which conference, last <span class="added-n">{{ status_added_n }}</span> days</div>
     {% if status_added_error %}
     <div class="added-note">{{ status_added_error }}</div>
     {% else %}
     <div class="days">
       {% for d in status_added_days %}
-      <div class="day{% if d.today %} today{% endif %}">
+      <div class="day{% if d.today %} today{% endif %}{% if not d.recent %} older{% endif %}">
         <div class="day-head"><span class="pill" style="--c: {{ 'var(--accent)' if d.today else '#9aa0a6' }}">{{ d.label }}</span><small>{{ d.date }}{% if d.today %} · today{% endif %}</small></div>
         {% if d.entries %}
         <ul>
@@ -249,6 +253,7 @@
       </div>
       {% endfor %}
     </div>
+    <button type="button" class="added-more" data-n="{{ status_added_n }}" data-max="{{ status_added_max }}">Show last {{ status_added_max }} days</button>
     {% if status_added_warnings %}<div class="added-note">{% for w in status_added_warnings %}{{ w }}{% if not loop.last %} · {% endif %}{% endfor %}</div>{% endif %}
     {% endif %}
   </section>
@@ -308,6 +313,15 @@
     if (isNaN(t.getTime())) continue;
     els[i].textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
+})();
+(function () {                                     // "Show last 30 days" toggle for the speakers log
+  var s = document.querySelector('section.added'), b = s && s.querySelector('.added-more'), n = s && s.querySelector('.added-n');
+  if (!s || !b) return;
+  b.addEventListener('click', function () {
+    var on = s.classList.toggle('extended');
+    b.textContent = 'Show last ' + (on ? b.getAttribute('data-n') : b.getAttribute('data-max')) + ' days';
+    if (n) n.textContent = on ? b.getAttribute('data-max') : b.getAttribute('data-n');
+  });
 })();
 (function () {
   var d = document.querySelector('details.ladder'); if (!d) return;
