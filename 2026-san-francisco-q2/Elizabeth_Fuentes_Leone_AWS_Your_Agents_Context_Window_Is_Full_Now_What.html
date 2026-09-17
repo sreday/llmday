@@ -252,22 +252,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">From Dashboards to Agents: Building an AI ROI Strategist with MCP and n8n</h1>
+    <h1 class="section-heading text-center mb-3">Your Agent's Context Window Is Full. Now What?</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
-          <img src="../speakers/Franck Ardourel.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Elizabeth Fuentes Leone.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Franck Ardourel</h5>
+            <h5 class="card-title mb-2">Elizabeth Fuentes Leone</h5>
             <div class="card-text mb-3">
-              <div class="meta">MIDCAI</div>
+              <div class="meta">AWS</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/franckardourel/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://linkedin.com/in/lizfue"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -281,29 +281,17 @@
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Most organizations still make CX, marketing, and AI investment decisions using static dashboards and backward-looking metrics.
-In this session, I’ll show how we transformed a traditional ROI model into an agentic AI “ROI strategist” embedded directly into a startup’s MarTech stack. This system is capable of predicting revenue, net profit, CAC, churn, and customer lifetime value over a three-year horizon in real time.
-Starting from a Salesforce + CDP + data warehouse environment, we used n8n as the orchestration layer and Model Context Protocol (MCP) servers as the tool interface to build an LLM-powered agent that:
-- Ingests live data from CRM, CDP, and financial systems - Runs forward-looking simulations across best, expected, and worst-case scenarios - Benchmarks performance against industry standards and top competitors - Generates executive-ready financial outputs including ROI, margin, CLV, and churn - Pushes predictions back into the MarTech stack for activation I’ll walk through the actual architecture, including how MCP servers expose data and tools, how the agent loop is designed, and how we made the system reliable through guardrails, evaluation, and cost control.
-This is a practical, production-focused session for builders and product leaders who want to move beyond LLM demos and design agentic systems that drive real business outcomes.</p></p>
+                <p><p>A tool returns 214KB of logs. The window overflows, the agent's answers get worse, and nothing throws an error. Another agent retries the same call fourteen times. A third freezes seventeen seconds on a slow tool and times out. None of them crash. They just quietly cost you money and accuracy.
+This talk walks through the fix for all three: keep large outputs out of the window and pull them back by reference, give the agent a clear done signal so fourteen calls drop to two, and hand a slow tool a tracking id so a seventeen-second freeze becomes under two. You leave with working code, an open source repo, and a simple rule for which fix each failure needs.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Franck Ardourel is a Chief AI &amp; CX Officer, Enterprise Growth Architect, and Professor at Santa Clara University.
-He specializes in building AI-powered growth systems that connect CX, MarTech, and go-to-market strategy directly to revenue, margin, and enterprise value through his proprietary CX ROI Compass™.
-Franck has led large-scale transformations—from growing 24 Hour Fitness from $500M to $2.5B to building AI-driven revenue engines generating millions in measurable ROI. His work focuses on moving agentic AI from experimentation into real-world production systems.</p></p>
+                <p><p>Elizabeth Fuentes is a Developer Advocate and AI engineer specializing in agent harness architecture. Her work spans context engineering, agent memory, security guardrails, and taking agents to production. Through hands-on demos she breaks complex concepts into simple, understandable pieces of code, helping developers build more efficient agents and democratizing the adoption of advanced AI for everyone.</p></p>
               </div>
 
-              
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Video</h5>
-                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-                  <iframe src="https://www.youtube.com/embed/UJF2hq8f4gE" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-              </div>
               
 
           </div><!--//card-->

@@ -252,22 +252,22 @@
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">Semantic Condensation: Making High-Cardinality Time Series Usable for LLM-Driven Observability</h1>
+    <h1 class="section-heading text-center mb-3">Guardrails and Traces for Agents That Act in the World</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
         <div class="card rounded-0">
-          <img src="../speakers/Akila Balasubramanian.png" class="card-img-top rounded-0" alt="">
+          <img src="../speakers/Vi Tran.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
-            <h5 class="card-title mb-2">Akila Balasubramanian</h5>
+            <h5 class="card-title mb-2">Vi Tran</h5>
             <div class="card-text mb-3">
-              <div class="meta">Principal Software Engineer</div>
+              <div class="meta">Ever</div>
             </div><!--//card-text-->
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               
-              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/akilabalas/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+              <li class="list-inline-item"><a  href="https://www.linkedin.com/in/vi-n-tran/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
               
               
             </ul><!--//social-list-->
@@ -281,23 +281,16 @@
 
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Modern observability platforms produce massive volumes of high-cardinality time series data across thousands of entities, creating a poor fit for large language models. When raw telemetry is passed directly into an LLM, the result is often excessive token consumption, loss of critical signals through truncation, and inconsistent analytical outputs that reduce troubleshooting reliability. This session introduces Semantic Condensation, a token-aware transformation layer that converts large-scale telemetry into structured, semantically coherent summaries designed for LLM consumption. The approach combines vectorized statistical pre-analysis, multi-signal importance scoring, adaptive token-budget tiering, and behavior-aware trend classification to preserve anomalies, change points, and operational patterns while minimizing representation cost. Rather than relying on traditional downsampling or aggregation alone, Semantic Condensation is designed specifically for LLM interpretability and semantic consistency. It helps ensure that summaries remain internally coherent, scales to thousands of time series under strict latency constraints, reduces token footprint by orders of magnitude, and improves downstream troubleshooting accuracy by as much as 25 percentage points in evaluated scenarios. Attendees will leave with practical strategies for building LLM-aligned telemetry pipelines, reducing contradictory outputs, and enabling scalable, production-grade AI observability assistants. More broadly, this talk presents a new abstraction layer for observability: semantically consistent, token-efficient representations that make reliable LLM-driven troubleshooting possible.</p></p>
+                <p><p>When an agent can take actions that cannot be undone, such as sending a message or changing a record, two layers matter most and only work as a pair: structural guardrails that decide what the system cannot do, enforced in code beneath the model, and trace and statistics analysis that shows what the agent actually did within those bounds. Drawing on shipping a customer-facing agent to production, I will walk through the loop that emerged, in which gates make observing live traffic safe, findings sort into either a new gate or a prompt change, and measurement confirms the fix, because the costliest mistakes happen inside the permitted tool set and monitoring fails quietly.</p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <p></p>
               </div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Akila Balasubramanian is a Principal Software Engineer and technical leader specializing in AI-powered observability, agentic AI systems, intelligent troubleshooting, and digital experience monitoring. She has a strong track record of transforming complex, ambiguous problems into scalable platform capabilities that drive measurable business impact. At Splunk (a Cisco company), Akila leads AI-driven observability initiatives, including the development of agentic AI assistants for automated root cause analysis across distributed systems. Her work has significantly improved incident resolution efficiency, reducing resolution time by ~61% through evidence-based troubleshooting workflows. She has also driven innovation in Real User Monitoring (RUM), Session Replay, and telemetry analytics, enabling deep, actionable insights into system performance and user experience at scale. Her expertise spans distributed systems, telemetry pipelines, and applied AI, with hands-on experience in Python, JavaScript/TypeScript, Java, GraphQL, and AWS. She is recognized for leading cross-functional execution across engineering, product, and UX, delivering enterprise-grade, scalable, and high-reliability systems. Previously, at Edelman Financial Engines, she led development of unified client platforms, modernized frontend architectures, and built scalable API ecosystems. Her earlier work includes mobile application development, experimentation platforms, and collaborative SaaS systems across fintech and enterprise domains. Akila is an inventor with multiple patents in session data visualization, telemetry analytics, and AI-driven code generation. She holds a Master’s degree in Computer Science from the University of Illinois at Chicago and a Bachelor’s degree in Information Technology from PSG College of Technology, India.</p></p>
+                <p><p>Vi Tran is an engineer at Ever, an AI-native auto retail platform aiming to bring real automation to an industry that still runs on slow, manual operations and clunky data silos. Vi helps lead the development of the agent platform. Before Ever, Vi spent two years at AWS on Amazon Bedrock Knowledge Bases, leading retrieval and metadata work and contributing to the Agentic Retriever API. Vi writes about agent engineering and production AI on LinkedIn.</p></p>
               </div>
 
-              
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Video</h5>
-                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-                  <iframe src="https://www.youtube.com/embed/ezHbfAXOnJw" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-              </div>
               
 
           </div><!--//card-->
