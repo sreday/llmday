@@ -208,6 +208,7 @@
     {% if status_luma_note %}
     <div class="added-note">{{ status_luma_note }}</div>
     {% else %}
+    {% if status_luma_keys %}<div class="added-note">{% for k in status_luma_keys %}{{ k }}{% if not loop.last %} · {% endif %}{% endfor %}</div>{% endif %}
     {% for r in status_rows %}
     <div class="reg">
       <div class="reg-head">
