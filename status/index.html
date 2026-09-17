@@ -120,7 +120,9 @@
     .reg-head small a { color: #888; }
     .reg-head .na { font-style: italic; }
     .reg-total { color: #555; font-size: .9rem; }
-    .reg .paid { --c: var(--accent); } .reg .free { --c: #9aa0a6; } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
+    .reg .paid { --c: var(--accent); } .reg .free { --c: var(--critical); } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
+    .reg-overall { font-size: .95rem; color: #555; margin: 0 0 12px; }
+    .reg-overall strong { color: #111; }
     .reg-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: #eceef1; margin: 10px 0 8px; }
     .reg-bar i { display: block; height: 100%; background: var(--c); }
     .reg-cats { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .84rem; color: #555; }
@@ -134,14 +136,13 @@
 <main class="wrap">
   <div class="brand">LLMday · status</div>
   <h1>Upcoming conferences</h1>
-  <div class="sub">Confirmed talks against 12 talks per track</div>
+  <div class="sub">Confirmed talks, standardized 12 talks per track. Check start / end to see how many can we have in practice.</div>
   <div class="legend">
     <span style="--c: var(--critical)">Critical</span>
     <span style="--c: var(--bad)">Bad</span>
     <span style="--c: var(--neutral)">Neutral</span>
     <span style="--c: var(--good)">Good</span>
     <span style="--c: var(--nailed)">Full!</span>
-    <span class="legend-note">thresholds tighten as the date approaches, see the ladder below</span>
   </div>
 
   <div class="card">
@@ -276,15 +277,17 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="sub">Approved Luma registrations at build time. Speaker = name found in talks.csv, Sponsor = company or email domain of one of the event's sponsors, Paid = paid ticket, Freebie = everyone else on a free ticket.</div>
+    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-17T22:33:44+00:00">2026-09-17 22:33 UTC</span></div>
     
-    <div class="added-note">key 1: valid; its calendar lists 13 upcoming events, 5 of this site's 5 (evt-BkgBHKV6Cghvmk3, evt-SdoxdX4lCePHZws, evt-THcPEG50zx51MsC, evt-plTUz2bsyWurucv, evt-quhfgBGFMFWn9yN)</div>
+    
+    <div class="reg-overall"><strong>58</strong> registered / 550 expected across all upcoming events · <strong>11%</strong></div>
+    
     
     <div class="reg">
       <div class="reg-head">
         <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a>
         
-        <span class="reg-total"><strong>21</strong> registered</span>
+        <span class="reg-total"><strong>21</strong> registered / 100 expected · <strong>21%</strong></span>
         <span class="spacer"></span>
         <small>+7 in 7 days · <a href="https://luma.com/llmday-2026-san-francisco-q4">Luma</a></small>
         
@@ -299,7 +302,7 @@
       <div class="reg-head">
         <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a>
         
-        <span class="reg-total"><strong>9</strong> registered</span>
+        <span class="reg-total"><strong>9</strong> registered / 100 expected · <strong>9%</strong></span>
         <span class="spacer"></span>
         <small>+2 in 7 days · <a href="https://luma.com/llmday-2026-austin-q4">Luma</a></small>
         
@@ -314,7 +317,7 @@
       <div class="reg-head">
         <a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a>
         
-        <span class="reg-total"><strong>3</strong> registered</span>
+        <span class="reg-total"><strong>3</strong> registered / 100 expected · <strong>3%</strong></span>
         <span class="spacer"></span>
         <small>+1 in 7 days · 6 pending · <a href="https://luma.com/llmday-2026-nyc-q4">Luma</a></small>
         
@@ -329,7 +332,7 @@
       <div class="reg-head">
         <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a>
         
-        <span class="reg-total"><strong>6</strong> registered</span>
+        <span class="reg-total"><strong>6</strong> registered / 150 expected · <strong>4%</strong></span>
         <span class="spacer"></span>
         <small>+1 in 7 days · <a href="https://luma.com/llmday-pec-2026-london-q4">Luma</a></small>
         
@@ -344,7 +347,7 @@
       <div class="reg-head">
         <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a>
         
-        <span class="reg-total"><strong>19</strong> registered</span>
+        <span class="reg-total"><strong>19</strong> registered / 100 expected · <strong>19%</strong></span>
         <span class="spacer"></span>
         <small>+1 in 7 days · 1 pending · <a href="https://luma.com/llmday-2026-montevideo-q4">Luma</a></small>
         
@@ -359,8 +362,8 @@
   </section>
 
   <section class="added">
-    <h2>Speakers added to the website</h2>
-    <div class="sub">Who was added when, and to which conference, last <span class="added-n">7</span> days</div>
+    <h2>Speakers on the website</h2>
+    <div class="sub">Who was added when, and to which conference.</div>
     
     <div class="days">
       
@@ -719,7 +722,7 @@
     
     
     <details class="past">
-      <summary>Past events since 2025: 3 of 9 with issues</summary>
+      <summary>Past events with problems (3)</summary>
       
       <div class="check" id="check-2026-lisbon-q2">
         <div class="check-head">
@@ -779,6 +782,12 @@
     var t = new Date(els[i].getAttribute('data-ts'));
     if (isNaN(t.getTime())) continue;
     els[i].textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  var full = document.querySelectorAll('[data-ts-full]');   // build stamp: date + time, viewer's timezone
+  for (var j = 0; j < full.length; j++) {
+    var f = new Date(full[j].getAttribute('data-ts-full'));
+    if (isNaN(f.getTime())) continue;
+    full[j].textContent = f.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 })();
 (function () {                                     // "Show last 30 days" toggle for the speakers log
