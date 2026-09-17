@@ -712,7 +712,10 @@ def _luma_get(path, params, key):
     import json as _json, time as _time, urllib.request as _ur, urllib.parse as _up, urllib.error as _ue
     url = _LUMA_API + path + "?" + _up.urlencode(params)
     for attempt in (1, 2):
-        req = _ur.Request(url, headers={"x-luma-api-key": key, "accept": "application/json"})
+        # Luma's edge blocks Python's default User-Agent ("blocked access based on your browser's signature",
+        # seen 2026-09-17), so identify as a browser.
+        req = _ur.Request(url, headers={"x-luma-api-key": key, "accept": "application/json",
+                                        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36"})
         try:
             with _ur.urlopen(req, timeout=20) as resp:
                 remaining = resp.headers.get("X-RateLimit-Remaining") or ""
