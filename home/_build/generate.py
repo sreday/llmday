@@ -572,10 +572,131 @@ if os.environ.get("GITHUB_ACTIONS"):                # annotations for upcoming e
                     _sf.write("- **%s**: %d errors, %d warnings" % (r["name"], r["errors"], r["warnings"]) + _NL)
                 _sf.write(_NL)
             _sf.write("Full table: %sstatus/" % _site_root + _NL)
+# Speakers added in the last 7 days (Marek 2026-09-17): a small calendar on /status/, one pill per day, listing every
+# speaker that joined an upcoming event's lineup that day. The only record of *when* a row landed in _db/talks.csv
+# is git history, so the build snapshots the CSV before and after every commit in the window and diffs the confirmed
+# names (CSV-parsed, never line-diffed: abstracts contain newlines). CI checks out depth 1 and deepens by date
+# (git fetch --shallow-since, see .github/workflows/static-build.yml) before building. If a speaker appears,
+# disappears and appears again only the latest addition is kept. Anything missing (no git, shallow boundary, odd
+# CSV) degrades to a note on the page and a line in the build log, never fails the build.
+_ADDED_DAYS = 7
+_ADDED_TZ = "Europe/London"          # commits are authored in London time; day buckets follow it
+_ADDED_SAME = 0.85                   # difflib ratio at/above which a "new" name is treated as a typo fix of an old one
+
+
+def _status_git(*args, cwd=None):
+    """Run git, return stdout, or None on any failure (missing git, bad object, shallow boundary)."""
+    import subprocess
+    try:
+        r = subprocess.run(["git"] + list(args), cwd=cwd, capture_output=True, text=True,
+                           encoding="utf-8", errors="replace", timeout=120)
+    except Exception:
+        return None
+    return r.stdout if r.returncode == 0 else None
+
+
+def _status_talks_at(root, commit, path):
+    """Confirmed speakers (normalized name -> row) of <path> at <commit>; {} if the file is absent there, None if the
+    object cannot be read at all."""
+    import io
+    if _status_git("cat-file", "-e", commit, cwd=root) is None:
+        return None
+    text = _status_git("show", "%s:%s" % (commit, path), cwd=root)
+    if text is None:
+        return {}                                            # file did not exist in that commit
+    out = {}
+    try:
+        for row in csv.DictReader(io.StringIO(text)):
+            name = (row.get("name") or "").strip()
+            status = (row.get("status") or "").lower()
+            if not name or name.startswith("_") or not ("confirmed" in status or "keynote" in status):
+                continue
+            out[" ".join(name.casefold().split())] = row
+    except Exception:
+        return None
+    return out
+
+
+def _status_added_log(rows):
+    """7 day buckets (oldest -> today) of speakers added to the upcoming events in `rows`, plus an error string and
+    a list of warnings. Latest addition of a given speaker per event wins."""
+    import difflib
+    try:
+        from zoneinfo import ZoneInfo
+        tz, tz_name = ZoneInfo(_ADDED_TZ), _ADDED_TZ
+    except Exception:                                        # no tzdata (Windows without the tzdata package): fall back
+        tz, tz_name = datetime.timezone.utc, "UTC"
+    now = datetime.datetime.now(tz)
+    first = now.date() - datetime.timedelta(days=_ADDED_DAYS - 1)
+    days = [{"iso": (first + datetime.timedelta(days=i)).isoformat(),
+             "label": (first + datetime.timedelta(days=i)).strftime("%A").upper(),
+             "date": (first + datetime.timedelta(days=i)).strftime("%d %b").lstrip("0"),
+             "today": i == _ADDED_DAYS - 1, "entries": []} for i in range(_ADDED_DAYS)]
+    window = "%s to %s, %s" % (first.strftime("%d %b").lstrip("0"), now.strftime("%d %b %Y").lstrip("0"), tz_name)
+    root = (_status_git("rev-parse", "--show-toplevel") or "").strip()
+    if not root:
+        return days, window, "Git history was not available at build time, so nothing could be listed.", []
+    added, warnings = {}, []
+    for r in rows:
+        folder = r["folder"]
+        path = folder + "/_db/talks.csv"
+        # --follow so a renamed event folder (Redwood City -> San Francisco, 2026-09-12) does not make its whole
+        # lineup look new; each record = sha, date, then the file's path at that commit. Newest first from git.
+        log = _status_git("log", "--follow", "-n", "120", "--format=%x1e%H%x1f%cI", "--name-only", "--", path, cwd=root)
+        if log is None:
+            warnings.append("%s: git log failed" % r["name"]); continue
+        commits = []
+        for rec in log.split("\x1e"):
+            lines = [ln.strip() for ln in rec.strip().splitlines() if ln.strip()]
+            if len(lines) < 2 or "\x1f" not in lines[0]:
+                continue
+            sha, when = lines[0].split("\x1f", 1)
+            try:
+                when_local = datetime.datetime.fromisoformat(when).astimezone(tz)
+            except ValueError:
+                continue
+            commits.append((sha, when_local, lines[-1]))
+        commits.reverse()                                    # oldest first so a later addition overwrites an earlier one
+        for i, (sha, when_local, path_then) in enumerate(commits):
+            if when_local.date() < first:
+                continue
+            after = _status_talks_at(root, sha, path_then)
+            if i > 0:                                        # baseline = the previous commit that touched the file
+                before = _status_talks_at(root, commits[i - 1][0], commits[i - 1][2])
+            else:                                            # oldest known commit: parent (empty if the file was born here)
+                before = _status_talks_at(root, sha + "^", path_then)
+            if after is None or before is None:
+                warnings.append("%s: commit %s skipped, history too shallow or file unreadable" % (r["name"], sha[:7])); continue
+            for key, row in after.items():
+                if key in before or any(difflib.SequenceMatcher(None, key, k).ratio() >= _ADDED_SAME for k in before):
+                    continue
+                added[(folder, key)] = {"name": (row.get("name") or "").strip(), "talk_url": _lint_talk_url(folder, row),
+                                        "event": r["name"], "event_url": r["url"], "when": when_local,
+                                        "time": when_local.strftime("%H:%M")}
+    by_day = {d["iso"]: d for d in days}
+    for e in sorted(added.values(), key=lambda e: e["when"]):
+        d = by_day.get(e["when"].date().isoformat())
+        if d:
+            d["entries"].append(e)
+    days.reverse()                                           # today on top: it is a log, the freshest day matters most
+    return days, window, "", warnings
+
+
+_added_days, _added_window, _added_error, _added_warnings = _status_added_log(_status_rows)
+print("SPEAKERS ADDED (last %d days, %s): %d" % (_ADDED_DAYS, _added_window, sum(len(d["entries"]) for d in _added_days)))
+for d in _added_days:
+    for e in d["entries"]:
+        print("  %s %s  %s -> %s" % (d["iso"], e["time"], e["name"], e["event"]))
+if _added_error:
+    print("  " + _added_error)
+for w in _added_warnings:
+    print("  WARN " + w)
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
+        status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_window=_added_window,
+        status_added_error=_added_error, status_added_warnings=_added_warnings,
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
         status_generated=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),

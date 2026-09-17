@@ -90,6 +90,23 @@
     details.ladder.expanded tbody tr:nth-child(4) { transition-delay: .42s; }
     @media (prefers-reduced-motion: reduce) { details.ladder .ladder-body, details.ladder tbody tr { transition: none; } }
     @media (max-width: 720px) { .wrap { padding: 28px 12px 60px; } th, td { padding: 10px 8px; } .bar { min-width: 120px; } th.hide, td.hide { display: none; } }
+    .added { margin-top: 34px; }
+    .added h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
+    .added .sub { margin-bottom: 14px; }
+    .days { display: flex; flex-direction: column; gap: 8px; }
+    .day { display: grid; grid-template-columns: 150px 1fr; gap: 6px 18px; align-items: start; background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); padding: 12px 16px; }
+    .day.today { border-color: var(--accent); }
+    .day-head { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+    .day-head small { color: #888; font-size: .76rem; padding-left: 2px; }
+    .day ul { list-style: none; margin: 0; padding: 0; }
+    .day li { font-size: .88rem; line-height: 1.4; padding: 4px 0; border-top: 1px solid #f5f5f5; overflow-wrap: anywhere; }
+    .day li:first-child { border-top: none; padding-top: 2px; }
+    .day li a { color: #111; font-weight: 600; text-decoration: none; }
+    .day li a:hover { color: var(--accent); }
+    .day li small { color: #aaa; font-size: .76rem; margin-left: 8px; font-variant-numeric: tabular-nums; }
+    .day .none { color: #bbb; font-size: .88rem; padding-top: 5px; font-style: italic; }
+    .added-note { color: #888; font-size: .82rem; margin-top: 10px; font-style: italic; }
+    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } }
   </style>
 </head>
 <body>
@@ -165,6 +182,29 @@
   <div class="sisters">
     {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}
   </div>
+
+  <section class="added">
+    <h2>Speakers added, last {{ status_added_n }} days</h2>
+    <div class="sub">Every confirmed speaker that joined an upcoming lineup, on the day the change was pushed ({{ status_added_window }}). Rebuilt with every push; a speaker re-added after a removal shows on the latest day only.</div>
+    {% if status_added_error %}
+    <div class="added-note">{{ status_added_error }}</div>
+    {% else %}
+    <div class="days">
+      {% for d in status_added_days %}
+      <div class="day{% if d.today %} today{% endif %}">
+        <div class="day-head"><span class="pill" style="--c: {{ 'var(--accent)' if d.today else '#9aa0a6' }}">{{ d.label }}</span><small>{{ d.date }}{% if d.today %} · today{% endif %}</small></div>
+        {% if d.entries %}
+        <ul>
+          {% for e in d.entries %}<li><a href="{{ e.talk_url }}">{{ e.name }}</a> added to <a href="{{ e.event_url }}">{{ e.event }}</a><small>{{ e.time }}</small></li>
+          {% endfor %}
+        </ul>
+        {% else %}<div class="none">no speakers added</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% if status_added_warnings %}<div class="added-note">{% for w in status_added_warnings %}{{ w }}{% if not loop.last %} · {% endif %}{% endfor %}</div>{% endif %}
+    {% endif %}
+  </section>
   {% if status_rows %}
   <section class="checks">
     <h2>Data checks</h2>
