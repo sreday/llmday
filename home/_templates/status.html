@@ -214,7 +214,7 @@
       <div class="reg-head">
         <a href="{{ r.url }}">{{ r.name }}</a>
         {% if r.luma %}
-        <span class="reg-total"><strong>{{ r.luma.total }}</strong> registered{% if r.luma.capacity %} of {{ r.luma.capacity }}{% endif %}</span>
+        <span class="reg-total"><strong>{{ r.luma.total }}</strong> registered{% if r.luma.capacity %} of {{ r.luma.capacity }}{% endif %}{% if r.luma.approved_api != r.luma.total %} <em class="na">(Luma counts {{ r.luma.approved_api }} approved)</em>{% endif %}</span>
         <span class="spacer"></span>
         <small>+{{ r.luma.last7 }} in 7 days{% if r.luma.pending or r.luma.waitlist %} · {{ r.luma.pending }} pending{% if r.luma.waitlist %}, {{ r.luma.waitlist }} waitlisted{% endif %}{% endif %}{% if r.luma.checked_in %} · {{ r.luma.checked_in }} checked in{% endif %}{% if not r.luma.open %} · registration closed{% endif %}{% if r.luma.url %} · <a href="{{ r.luma.url }}">Luma</a>{% endif %}</small>
         {% else %}
