@@ -673,7 +673,7 @@ def _status_added_log(rows):
                     continue
                 added[(folder, key)] = {"name": (row.get("name") or "").strip(), "talk_url": _lint_talk_url(folder, row),
                                         "event": r["name"], "event_url": r["url"], "when": when_local,
-                                        "time": when_local.strftime("%H:%M")}
+                                        "time": when_local.strftime("%H:%M"), "iso": when_local.isoformat()}
     by_day = {d["iso"]: d for d in days}
     for e in sorted(added.values(), key=lambda e: e["when"]):
         d = by_day.get(e["when"].date().isoformat())
@@ -944,7 +944,7 @@ os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
-        status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_window=_added_window,
+        status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
         status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes,
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
