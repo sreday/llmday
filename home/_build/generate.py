@@ -501,6 +501,7 @@ for _ev in (context.get("events") or []):
         "date": str(_em.get("date_string") or ""), "state": str(_em.get("event_state") or ""),
         "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
+        "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,   # for the Luma registrations block
     })
     print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings")
 _me = str(context.get("brand_name") or "")
@@ -691,12 +692,200 @@ if _added_error:
     print("  " + _added_error)
 for w in _added_warnings:
     print("  WARN " + w)
+
+# Luma registrations (Marek 2026-09-17): approved registrations of every upcoming event, split into Paid attendee /
+# Freebie / Speaker / Sponsor (his categories). Speaker = registrant name found in the event's talks.csv, Sponsor =
+# email domain or "company" answer matching one of the event's sponsors (partners excluded, like the sponsor count),
+# Paid = a ticket with a positive net amount, Freebie = the rest. Keys come ONLY from LUMA_API_KEYS (comma-separated,
+# one per Luma calendar: a key sees just its own calendar, so every key is tried per event and the first with manage
+# access wins). Guests are classified in memory and dropped, only counts survive; a key is never printed. Missing
+# keys / access / network -> a note on the page and in the log, never a failed build.
+_LUMA_API = os.environ.get("LUMA_API_BASE") or "https://public-api.luma.com"   # override only for local mock testing
+_LUMA_KEYS = [k.strip() for k in os.environ.get("LUMA_API_KEYS", "").split(",") if k.strip()]
+_LUMA_PAGE = 100                     # the server caps the page size itself; we always follow next_cursor
+_LUMA_SAME = 0.85                    # difflib ratio at/above which a registrant name counts as a talks.csv speaker
+_LUMA_CATS = (("paid", "Paid attendees"), ("free", "Freebies"), ("speakers", "Speakers"), ("sponsors", "Sponsors"))
+
+
+def _luma_get(path, params, key):
+    """GET on the Luma public API -> (json, None) or (None, reason). One retry after a 429, honouring Retry-After."""
+    import json as _json, time as _time, urllib.request as _ur, urllib.parse as _up, urllib.error as _ue
+    url = _LUMA_API + path + "?" + _up.urlencode(params)
+    for attempt in (1, 2):
+        req = _ur.Request(url, headers={"x-luma-api-key": key, "accept": "application/json"})
+        try:
+            with _ur.urlopen(req, timeout=20) as resp:
+                remaining = resp.headers.get("X-RateLimit-Remaining") or ""
+                body = _json.loads(resp.read().decode("utf-8"))
+            if remaining.isdigit() and int(remaining) < 15:
+                _time.sleep(5)                               # stay under 200 req/min per calendar
+            return body, None
+        except _ue.HTTPError as e:
+            if e.code == 429 and attempt == 1:
+                wait = e.headers.get("Retry-After") or ""
+                _time.sleep(min(60, int(wait)) if wait.isdigit() else 10)
+                continue
+            return None, "HTTP %d" % e.code
+        except Exception as e:                               # DNS, timeout, bad JSON: reason only, never the URL/key
+            return None, type(e).__name__
+    return None, "rate limited"
+
+
+def _luma_norm(s):
+    return " ".join(str(s or "").casefold().split())
+
+
+def _luma_speaker_names(folder):
+    """Normalized confirmed speaker names of the event (panels split into their members)."""
+    names = set()
+    try:
+        with open("../" + folder + "/_db/talks.csv", encoding="utf-8", errors="replace", newline="") as f:
+            for row in csv.DictReader(f):
+                st = (row.get("status") or "").lower()
+                n = (row.get("name") or "").strip()
+                if not n or n.startswith("_") or not ("confirmed" in st or "keynote" in st):
+                    continue
+                for part in re.split(r"\s*(?:&|,|\band\b)\s*", n):
+                    if _luma_norm(part):
+                        names.add(_luma_norm(part))
+    except OSError:
+        pass
+    return names
+
+
+def _luma_sponsor_keys(sponsors):
+    """(email domains, company stems) of the event's sponsors: harness.io -> {'harness.io'}, {'harness'}."""
+    domains, stems = set(), set()
+    for s in sponsors or []:
+        host = re.sub(r"^https?://", "", str(s.get("url") or "")).split("/")[0].lower().strip()
+        host = host[4:] if host.startswith("www.") else host
+        if host:
+            domains.add(host)
+            stems.add(host.split(".")[0])
+        stem = os.path.splitext(str(s.get("logo") or ""))[0].lower().strip()
+        if stem:
+            stems.add(stem)
+    return domains, stems
+
+
+def _luma_answers(guest, pred):
+    """Answers of the registration questions whose label satisfies pred (shape is loosely specified: be lenient)."""
+    out = []
+    for a in guest.get("registration_answers") or []:
+        if not isinstance(a, dict):
+            continue
+        label = _luma_norm(a.get("label") or a.get("question") or a.get("question_text") or "")
+        if pred(label):
+            out.append(str(a.get("answer") or a.get("value") or ""))
+    return out
+
+
+def _luma_classify(guest, speakers, domains, stems):
+    """One of paid / free / speakers / sponsors, first match wins in the order speaker, sponsor, paid, free."""
+    import difflib
+    names = [_luma_norm(guest.get("user_name")),
+             _luma_norm("%s %s" % (guest.get("user_first_name") or "", guest.get("user_last_name") or ""))]
+    fn = _luma_answers(guest, lambda l: "first" in l and "name" in l)
+    ln = _luma_answers(guest, lambda l: "last" in l and "name" in l)
+    if fn or ln:
+        names.append(_luma_norm("%s %s" % (fn[0] if fn else "", ln[0] if ln else "")))
+    for n in [x for x in names if x]:
+        if n in speakers or any(difflib.SequenceMatcher(None, n, s).ratio() >= _LUMA_SAME for s in speakers):
+            return "speakers"
+    email = _luma_norm(guest.get("user_email"))
+    dom = email.rsplit("@", 1)[-1] if "@" in email else ""
+    if dom and any(dom == d or dom.endswith("." + d) for d in domains):
+        return "sponsors"
+    for c in _luma_answers(guest, lambda l: "company" in l or "organi" in l or "employer" in l):
+        c = _luma_norm(c)
+        if c and (c in stems or c.replace(" ", "") in stems):
+            return "sponsors"
+    for t in guest.get("event_tickets") or []:
+        amt = t.get("amount") or 0
+        if amt > 0 and amt - (t.get("amount_discount") or 0) > 0:
+            return "paid"
+    return "free"
+
+
+def _luma_registrations(rows):
+    """Attach r['luma'] (counts) or r['luma_note'] to every status row. Returns a page-level note or ''."""
+    for r in rows:
+        r["luma"], r["luma_note"] = None, ""
+    if not _LUMA_KEYS:
+        return "LUMA_API_KEYS is not set in this build, so Luma registrations are not shown."
+    now = datetime.datetime.now(datetime.timezone.utc)
+    week_ago = now - datetime.timedelta(days=7)
+    for r in rows:
+        evt = r.get("luma_evt")
+        if not evt:
+            r["luma_note"] = "no luma_evt in metadata.yml"
+            continue
+        ev, used, why = None, None, ""
+        for key in _LUMA_KEYS:
+            data, err = _luma_get("/v1/events/get", {"event_id": evt}, key)
+            if data and data.get("access") == "manage":
+                ev, used = data, key
+                break
+            why = err or ("access=%s" % (data or {}).get("access"))
+        if ev is None:
+            r["luma_note"] = "no key with manage access to this Luma event (%s)" % why
+            continue
+        speakers = _luma_speaker_names(r["folder"])
+        domains, stems = _luma_sponsor_keys(r.get("sponsor_list"))
+        counts = {k: 0 for k, _ in _LUMA_CATS}
+        total, last7, cursor, pages = 0, 0, None, 0
+        while True:
+            params = {"event_id": evt, "approval_status": "approved", "pagination_limit": _LUMA_PAGE}
+            if cursor:
+                params["pagination_cursor"] = cursor
+            data, err = _luma_get("/v1/events/guests/list", params, used)
+            if data is None:
+                r["luma_note"] = "guest list failed after %d page(s) (%s)" % (pages, err)
+                break
+            for g in data.get("entries") or []:
+                if not isinstance(g, dict):
+                    continue
+                total += 1
+                counts[_luma_classify(g, speakers, domains, stems)] += 1
+                ra = str(g.get("registered_at") or "")
+                try:
+                    if ra and datetime.datetime.fromisoformat(ra.replace("Z", "+00:00")) >= week_ago:
+                        last7 += 1
+                except ValueError:
+                    pass
+            pages += 1
+            cursor = data.get("next_cursor")
+            if not data.get("has_more") or not cursor or pages >= 200:
+                break
+        if r["luma_note"]:
+            continue
+        gc = ev.get("guest_counts") or {}
+        _n = lambda k: int(((gc.get(k) or {}).get("guests")) or 0)
+        _pct = lambda n: (round(100.0 * n / total) if total else 0)
+        r["luma"] = {
+            "total": total, "checked_in": _n("checked_in"), "pending": _n("pending_approval"), "waitlist": _n("waitlist"),
+            "capacity": ev.get("max_capacity"), "spots_left": ev.get("spots_remaining"),
+            "open": bool(ev.get("registration_open")), "url": str(ev.get("url") or ""), "last7": last7, "pages": pages,
+            "cats": [{"key": k, "label": lbl, "n": counts[k], "pct": _pct(counts[k])} for k, lbl in _LUMA_CATS],
+        }
+    return ""
+
+
+_luma_note = _luma_registrations(_status_rows)
+print("REGISTRATIONS (Luma, approved): %s" % (_luma_note or "%d keys" % len(_LUMA_KEYS)))
+for r in _status_rows:
+    if r["luma"]:
+        print("  %-38s %4d total (%s)  +%d in 7d  %s" % (r["name"][:38], r["luma"]["total"],
+              ", ".join("%s %d (%d%%)" % (c["label"].lower(), c["n"], c["pct"]) for c in r["luma"]["cats"]),
+              r["luma"]["last7"], ("capacity %s" % r["luma"]["capacity"]) if r["luma"]["capacity"] else "no capacity limit"))
+    elif r["luma_note"]:
+        print("  %-38s %s" % (r["name"][:38], r["luma_note"]))
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_window=_added_window,
-        status_added_error=_added_error, status_added_warnings=_added_warnings,
+        status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note,
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
         status_generated=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),

@@ -21,6 +21,8 @@ jobs:
           make deps
 
       - name: Build 🔧
+        env:
+          LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations
         run: |
           make clean
           make generate
