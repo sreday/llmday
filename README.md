@@ -88,6 +88,17 @@ The home page `#sponsor` section has an "Email us" expandable form under the Cal
   `home/_templates/index.html` (label, pill colour, card border and navbar hash differ) - when changing fields
   or copy, edit both, then propagate the partial to all event folders.
 
+## Hero pills: CFP or Register
+
+Every event page hero shows CFP/Register on the left, the social pill in the middle and Sponsor on the right
+(`_event_template/_templates/_base.html`, propagated to every `20*/_templates/`). The left pill is decided at build time:
+`cfp_is_open()` in `_event_template/_build/generate.py` asks `https://cfp.ninja/api/v0/e/<slug>` (slug taken from the
+event's `cfp_url`) and applies cfp.ninja's own rule - the CFP is open only while `cfp_status` is `open` AND `cfp_close_at`
+is in the future. Closed, reviewing or complete, or a passed close date, turns the pill into **Register** linking to
+`#tickets`. Anything uncertain (no cfp.ninja URL, network error, unknown slug, CFP not open yet) keeps **CFP**; past
+events are not probed. `SKIP_CFP_CHECK=1` skips the request for offline builds. Because it is build-time, a CFP that
+closes on cfp.ninja shows as Register after the next push to `main`.
+
 ## Speaker onboarding (hidden page)
 
 Every non-frozen event gets a hidden page at `/<event>/onboarding/` (e.g. `/2026-london-q3/onboarding/`) with

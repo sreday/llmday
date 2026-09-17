@@ -3,6 +3,7 @@
 import datetime
 import math
 import re
+import os
 import csv
 import textwrap
 import string
@@ -192,6 +193,49 @@ def luma_is_free(evt_id):
 context["luma_is_free"] = luma_is_free(context.get("luma_evt"))
 print("Luma event %s is_free=%s" % (context.get("luma_evt") or "(none)", context["luma_is_free"]))
 
+# ── CFP status from cfp.ninja (build time) ───────────────────────────────────
+# The hero pill reads "CFP" while the event's cfp.ninja CFP is open and "Register" (-> #tickets) once it is
+# closed. cfp.ninja's own rule: open only if cfp_status == "open" AND now < cfp_close_at; closed/reviewing/
+# complete -> closed. Anything uncertain (no cfp.ninja URL, network error, 404, not yet open) keeps "CFP".
+# SKIP_CFP_CHECK=1 skips the request (offline builds). Past events are never probed (the pill is not shown).
+def cfp_ninja_slug(url):
+    m = re.match(r'^https?://(www[.])?cfp[.]ninja/e/([^/?#]+)', str(url or '').strip())
+    return m.group(2) if m else None
+
+
+def cfp_is_open(url, event_state):
+    slug = cfp_ninja_slug(url)
+    if not slug or event_state == 'after':
+        return True
+    if os.environ.get('SKIP_CFP_CHECK'):
+        print("CFP %s: check skipped (SKIP_CFP_CHECK), keeping the CFP pill" % slug)
+        return True
+    try:
+        import json as _json
+        import urllib.request
+        req = urllib.request.Request("https://cfp.ninja/api/v0/e/%s" % slug, headers={"User-Agent": "Mozilla/5.0"})
+        data = _json.loads(urllib.request.urlopen(req, timeout=5).read().decode("utf-8", "ignore"))
+        ev = data.get('data', data) if isinstance(data, dict) else {}
+        status = str(ev.get('cfp_status') or '').lower()
+        close_at = str(ev.get('cfp_close_at') or '')
+        closed = status in ('closed', 'reviewing', 'complete')
+        if status == 'open' and close_at:
+            try:
+                close_dt = datetime.datetime.fromisoformat(close_at.replace('Z', '+00:00'))
+                if close_dt.tzinfo is None:
+                    close_dt = close_dt.replace(tzinfo=datetime.timezone.utc)
+                closed = datetime.datetime.now(datetime.timezone.utc) >= close_dt
+            except ValueError:
+                pass
+        print("CFP %s: %s (status=%s, closes %s)" % (slug, 'closed' if closed else 'open', status or '?', close_at or '?'))
+        return not closed
+    except Exception as e:
+        print("WARN: could not check cfp.ninja status for %s (%s); keeping the CFP pill" % (slug, e))
+        return True
+
+
+context["cfp_open"] = cfp_is_open(context.get("cfp_url"), context.get("event_state"))
+
 # og:image / twitter:image — use this event's card image from home/metadata.yml
 # (the single source of truth for the events list), falling back to the first
 # hero picture when the event has no card yet
@@ -309,6 +353,7 @@ context.setdefault('fasttrack_form_url', '')
 _ft_src = context['onboarding_event']
 context['fasttrack_event'] = {k: _ft_src[k] for k in ('brand', 'brand_name', 'slug', 'event_name', 'city', 'date', 'event_url')}
 context['fasttrack_event']['cfp_url'] = str(context.get('cfp_url', '') or '')
+context['fasttrack_event']['cfp_open'] = bool(context.get('cfp_open', True))   # closed CFP is not advertised on the fast-track page
 # ── END SPEAKER FAST TRACK ──────────────────────────────────────────────────
 
 # pick up the ids & photos
