@@ -389,7 +389,7 @@
     {% endfor %}
     {% if status_past %}
     <details class="past">
-      <summary>Past events with problems{% if status_past_dirty %} ({{ status_past_dirty | length }}){% else %}: none{% endif %}</summary>
+      <summary>Past events with issues{% if status_past_dirty %} ({{ status_past_dirty | length }}){% else %}: none{% endif %}</summary>
       {% for r in status_past_dirty %}
       <div class="check" id="check-{{ r.folder }}">
         <div class="check-head">
