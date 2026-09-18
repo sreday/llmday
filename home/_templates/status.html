@@ -242,7 +242,7 @@
         {% set fill = [r.pct, 100] | min %}
         {% set over = r.pct > 100 %}
         <tr>
-          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}{% if r.state %} · {{ r.state }}{% endif %}</small></td>
+          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}</small></td>
           <td class="num hide">{{ r.tracks }}</td>
           <td class="num"><strong>{{ r.confirmed }}</strong> / {{ r.available }}</td>
           <td>
@@ -253,7 +253,7 @@
             <div class="pct">{{ r.pct }}%{% if over %} · {{ r.confirmed - r.available }} over{% endif %}</div>
           </td>
           <td><span class="pill {{ r.health }}" style="--c: var(--{{ r.health }})">{{ r.health_label }}</span></td>
-          <td class="hours{% if r.hours == 'N/A' %} na{% endif %}">{{ r.hours }}</td>
+          <td class="hours{% if r.hours == 'N/A' %} na{% endif %}">{{ 'no schedule yet' if r.hours == 'N/A' else r.hours }}</td>
           <td class="num cfp{% if not r.cfp %} na{% endif %}">{% if r.cfp %}<a class="frog" href="{{ r.cfp }}" target="_blank" rel="noopener" title="{{ 'Manage talks on cfp.ninja' if r.cfp_direct else 'cfp.ninja page (event id not found at build time)' }}" aria-label="{{ r.name }}: manage talks on cfp.ninja">&#128056;</a>{% else %}N/A{% endif %}</td>
         </tr>
       {% endfor %}
