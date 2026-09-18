@@ -29,8 +29,8 @@
     h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(.75rem, 3.6vw, 2rem); line-height: 1.2; white-space: nowrap; color: var(--accent); margin: 0 0 18px; }   /* punchline always on ONE line (Marek): the size follows the viewport instead of wrapping */
     .hint { display: none; margin: 0 0 26px; color: #666; font-size: 1.08rem; line-height: 1.7; overflow-wrap: anywhere; }
     .hint.on { display: block; }
-    .hint a { color: var(--accent); font-weight: 700; text-decoration: none; border-bottom: 1px solid currentColor; }
-    .hint a:hover { opacity: .8; }
+    .hint a { color: var(--accent); font-weight: 700; text-decoration: none; transition: opacity .15s; }
+    .hint a:hover { opacity: .65; }
     .hint span { display: block; }
     .back { display: inline-block; margin-top: 8px; padding: 13px 30px; border-radius: 999px; background: var(--accent); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .15s, box-shadow .15s; }
     .back:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.24); }
