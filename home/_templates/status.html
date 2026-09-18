@@ -260,7 +260,7 @@
 
   <nav class="tabs" aria-label="Status sections">
     <button type="button" data-tab="regs" aria-selected="false">Registrations</button>
-    <button type="button" data-tab="added" aria-selected="false">Speakers</button>
+    <button type="button" data-tab="speakers" aria-selected="false">Speakers</button>
     <button type="button" data-tab="sponsors" aria-selected="false">Sponsors</button>
     <button type="button" data-tab="checks" aria-selected="false">Data checks</button>
   </nav>
@@ -332,7 +332,7 @@
   </section>
   <section class="spons">
     <h2>Sponsors</h2>
-    <div class="sub">Confirmed sponsors as they are built on each event page (partners not counted).{% if status_rows %} <strong>{{ status_rows | sum(attribute='sponsors') }}</strong> across {{ status_rows | length }} upcoming events.{% endif %}</div>
+    <div class="sub">Confirmed sponsors added to the website{% if status_rows %}: <strong>{{ status_rows | sum(attribute='sponsors') }}</strong> across {{ status_rows | length }} upcoming events{% endif %}.</div>
     {% for r in status_rows %}
     <div class="spon">
       <div class="spon-head">
@@ -400,7 +400,7 @@
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
   var tabs = document.querySelectorAll('.tabs button'); if (!tabs.length) return;
-  var secs = { regs: document.querySelector('section.regs'), added: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks') };
+  var secs = { regs: document.querySelector('section.regs'), speakers: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks') };
   document.documentElement.classList.add('tabbed');
   var nav = document.querySelector('.tabs'), pill = document.createElement('span');   // bouncing pill (Marek 2026-09-18)
   pill.className = 'tab-pill'; pill.setAttribute('aria-hidden', 'true');
@@ -442,7 +442,9 @@
     }
   }
   var initial = (location.hash || '').replace('#', '');
+  if (initial === 'added') initial = 'speakers';      // the tab was #added until 2026-09-18, keep old links working
   if (!secs[initial]) { try { initial = localStorage.getItem('status-tab'); } catch (e) { initial = null; } }
+  if (initial === 'added') initial = 'speakers';      // same for a remembered tab
   if (!secs[initial]) initial = 'regs';
   show(initial, false);
   for (var j = 0; j < tabs.length; j++) {
