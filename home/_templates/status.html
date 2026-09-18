@@ -32,7 +32,10 @@
     .ev small { display: block; color: #888; font-weight: 400; font-size: .8rem; margin-top: 2px; }
     .bar { position: relative; height: 14px; border-radius: 999px; background: #eceef1; min-width: 180px; overflow: hidden; }
     .bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--c); }
-    .bar > b { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,.25); }
+    /* Talks over the limit (Marek 2026-09-19): one white plus per extra talk, stacked from the right end of the full bar
+       towards the left (max 7 drawn, the text below still gives the real number). Replaces the old 100% tick. */
+    .bar > .plus { position: absolute; right: 5px; top: 0; bottom: 0; display: flex; flex-direction: row-reverse; align-items: center; gap: 4px; }
+    .bar > .plus s { display: block; width: 10px; height: 10px; text-decoration: none; background: linear-gradient(#fff, #fff) center / 100% 3px no-repeat, linear-gradient(#fff, #fff) center / 3px 100% no-repeat; filter: drop-shadow(0 0 1px rgba(0,0,0,.18)); }
     .pct { font-size: .82rem; color: #555; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
     td.hours { white-space: nowrap; font: inherit; }
@@ -250,7 +253,7 @@
           <td>
             <div class="bar" title="{{ r.pct }}%">
               <i style="--c: var(--{{ r.health }}); width: {{ 100 if over else r.pct }}%"></i>
-              {% if over %}<b style="left: {{ (10000 / r.pct) | round(1) }}%" title="100%"></b>{% endif %}
+              {% if over %}<span class="plus" title="{{ r.confirmed - r.available }} over">{% for _ in range([r.confirmed - r.available, 7] | min) %}<s></s>{% endfor %}</span>{% endif %}
             </div>
             <div class="pct">{{ r.pct }}%{% if over %} · {{ r.confirmed - r.available }} over{% endif %}</div>
           </td>
