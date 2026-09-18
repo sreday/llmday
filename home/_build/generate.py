@@ -206,6 +206,29 @@ with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("404.html").render(**{**context, "brand_color": "#26986A", "redirects": [
         {"from": str(r["from"]).strip("/"), "to": str(r["to"]).strip("/")} for r in _redirects]}))
 
+# /404-index.json (Marek 2026-09-18): what the 404 page may suggest ("Did you mean ...") or, for harmless slips,
+# redirect to. Event folders of home/metadata.yml (upcoming first, in list order) + the pages each one built
+# (../<folder>/static/*.html - the root Makefile builds events before home) + the public home pages. Hidden pages
+# (/status/, onboarding, fasttrack, invitation, onboardsponsor) live in sub-folders and are never listed.
+import json as _json404
+_idx_events, _idx_pages = [], {}
+for _upcoming, _key in ((True, "events"), (False, "events_past")):
+    for _ev in (context.get(_key) or []):
+        _u = str((_ev or {}).get("url") or "")
+        if not _u.startswith("./"):
+            continue                                         # external link, not a folder of this site
+        _f = _u.strip("./").strip("/")
+        if not _f or "/" in _f or any(e["folder"] == _f for e in _idx_events):
+            continue
+        _idx_events.append({"folder": _f, "path": "/" + _f + "/", "name": str(_ev.get("name") or _f),
+                            "upcoming": 1 if _upcoming else 0, "order": len(_idx_events)})
+        _idx_pages[_f] = sorted(os.path.basename(_p) for _p in glob.glob("../" + _f + "/static/*.html")
+                                if os.path.basename(_p).lower() != "index.html")
+with open(BASE_FOLDER + "/404-index.json", "w", encoding="utf-8") as f:
+    _json404.dump({"events": _idx_events, "pages": _idx_pages, "site": ["/", "/host/", "/ambassadorship/"]}, f,
+                  ensure_ascii=False, separators=(",", ":"))
+print("Writing out 404-index.json (%d event folders, %d pages)" % (len(_idx_events), sum(len(v) for v in _idx_pages.values())))
+
 # STATUS PAGE (hidden, /status/): lineup + sponsor progress of every upcoming event.
 # Talks: rows of ../<event>/_db/talks.csv whose status contains "confirmed" or "keynote", against 12 slots
 # per track (tracks from the event metadata). Sponsors: the event's sponsors list minus the partner

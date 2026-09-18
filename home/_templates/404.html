@@ -1,8 +1,10 @@
-{# ── GitHub Pages serves this for any missing path. First applies the folder renames from
-     home/metadata.yml -> redirects (so old talk links keep working; llmday only so far), otherwise the
-     lost-mascot page. Identical file in sreday, llmday and platformday: the mascot is each repo's own
-     home/assets/images/404.png, the colour comes in as brand_color. All URLs root-absolute, the page is
-     served at any depth. ── #}
+{# ── GitHub Pages serves this for any missing path. In order: (1) folder renames from home/metadata.yml ->
+     redirects (llmday only so far), (2) harmless slips (letter case, missing slash, .html, underscores) redirect
+     to the page that exists, (3) anything else shows the mascot page with "Did you mean" links picked from
+     /404-index.json (written by home/_build/generate.py: event folders + their pages, never the hidden pages).
+     Marek 2026-09-18: only trivial fixes redirect on their own, a different year / quarter is only suggested.
+     Identical file in sreday, llmday and platformday: the mascot is each repo's own home/assets/images/404.png,
+     the colour comes in as brand_color. All URLs root-absolute, the page is served at any depth. ── #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,22 +28,107 @@
     :root { --accent: {{ brand_color | default('#26986A') }}; }
     html, body { height: 100%; margin: 0; }
     body { display: flex; align-items: center; justify-content: center; background: #f4f4f6; color: #111; font-family: 'Roboto', Arial, sans-serif; }
-    main { width: 100%; max-width: 640px; padding: 40px 20px 60px; text-align: center; box-sizing: border-box; }
-    .mascot { display: block; width: min(320px, 70vw); height: auto; margin: 0 auto 8px; animation: lost 3.2s ease-in-out infinite; transform-origin: 50% 90%; }
+    main { width: 100%; max-width: 760px; padding: 40px 20px 60px; text-align: center; box-sizing: border-box; }
+    .mascot { display: block; width: min(320px, 70vw); height: auto; margin: 0 auto 10px; animation: lost 3.2s ease-in-out infinite; transform-origin: 50% 90%; }
     @keyframes lost { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) translateY(-6px); } }
     @media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
-    .code { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .9rem; letter-spacing: .12em; color: var(--accent); margin: 0 0 6px; }
-    h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(1.5rem, 5vw, 2.1rem); margin: 0 0 26px; }
-    .back { display: inline-block; padding: 13px 30px; border-radius: 999px; background: var(--accent); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .15s, box-shadow .15s; }
+    h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(1.7rem, 6vw, 3rem); line-height: 1.15; color: var(--accent); margin: 0 0 18px; }
+    .hint { display: none; margin: 0 0 26px; color: #666; font-size: 1.08rem; line-height: 1.7; overflow-wrap: anywhere; }
+    .hint.on { display: block; }
+    .hint a { color: var(--accent); font-weight: 700; text-decoration: none; border-bottom: 1px solid currentColor; }
+    .hint a:hover { opacity: .8; }
+    .hint span { display: block; }
+    .back { display: inline-block; margin-top: 8px; padding: 13px 30px; border-radius: 999px; background: var(--accent); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .15s, box-shadow .15s; }
     .back:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.24); }
   </style>
 </head>
 <body>
   <main>
     <img class="mascot" src="/assets/images/404.png" alt="" width="320">
-    <p class="code">404</p>
-    <h1>Oups, looks like you're lost</h1>
+    <h1>404 - this page doesn't exist</h1>
+    <p class="hint" id="hint"></p>
     <a class="back" href="/">Back to main page</a>
   </main>
+  <script>
+  (function () {
+    if (!window.fetch) return;
+    function lev(a, b) {                               // Levenshtein distance, two rows
+      if (a === b) return 0; if (!a.length) return b.length; if (!b.length) return a.length;
+      var prev = [], cur = [], i, j;
+      for (j = 0; j <= b.length; j++) prev[j] = j;
+      for (i = 1; i <= a.length; i++) {
+        cur = [i];
+        for (j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
+        prev = cur;
+      }
+      return prev[b.length];
+    }
+    function clean(s) { try { s = decodeURIComponent(s); } catch (e) {} return s.toLowerCase().replace(/[\s_]+/g, '-'); }
+
+    fetch('/404-index.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (idx) {
+      if (!idx) return;
+      var events = idx.events || [], pages = idx.pages || {}, site = idx.site || [];
+      var typed = location.pathname;
+      var segs = typed.split('/').filter(function (s) { return s; });
+      if (!segs.length) return;
+      var folderTyped = clean(segs[0]), restTyped = segs.slice(1).join('/');
+      var bare = folderTyped.replace(/\.html?$/, '');                       // "/2026-nyc-q4.html"
+      var restBare = restTyped.replace(/^index\.html?$/i, '');
+
+      // (2) harmless slips: same page once case / slashes / .html / underscores are tidied -> go there
+      var exact = null, k;
+      for (k = 0; k < events.length; k++) if (events[k].folder === bare) exact = events[k];
+      if (exact) {
+        var target = null;
+        if (!restBare) target = exact.path;
+        else {
+          var list = pages[exact.folder] || [], want = restBare.toLowerCase().replace(/\.html?$/, '');
+          for (k = 0; k < list.length; k++) if (list[k].toLowerCase().replace(/\.html?$/, '') === want) target = exact.path + list[k];
+        }
+        if (target && target !== typed) { location.replace(target + location.search + location.hash); return; }
+      }
+      for (k = 0; k < site.length; k++) {
+        if (site[k] !== '/' && site[k].replace(/\//g, '') === bare && !restBare && site[k] !== typed) { location.replace(site[k]); return; }
+      }
+
+      // (3) suggestions: closest event folders (edit distance or cut-off address), upcoming first, newest first
+      var cands = [];
+      for (k = 0; k < events.length; k++) {
+        var f = events[k].folder, d = lev(bare, f);
+        var prefix = bare.length >= 6 && (f.indexOf(bare) === 0 || bare.indexOf(f) === 0);
+        if (d <= 3 || prefix) cands.push({ ev: events[k], d: prefix ? Math.min(d, 2) : d });
+      }
+      cands.sort(function (a, b) { return a.d - b.d || (b.ev.upcoming - a.ev.upcoming) || (a.ev.order - b.ev.order); });
+      cands = (cands.length && cands[0].d === 0) ? [cands[0]] : cands.slice(0, 3);   // folder typed right: stay inside that event
+      var links = [];
+      for (k = 0; k < cands.length; k++) {
+        var ev = cands[k].ev, url = ev.path;
+        if (restBare) {                                                       // a talk page: closest page name in that event
+          var pl = pages[ev.folder] || [], w = restBare.toLowerCase().replace(/\.html?$/, ''), best = null, bd = 1e9;
+          for (var m = 0; m < pl.length; m++) {
+            var cand = pl[m].toLowerCase().replace(/\.html?$/, ''), dd = lev(w, cand);
+            if (dd < bd) { bd = dd; best = pl[m]; }
+          }
+          if (best && bd <= Math.max(3, Math.round(w.length * 0.15))) url = ev.path + best;
+        }
+        if (links.indexOf(url) === -1) links.push(url);
+      }
+      if (!links.length) {                                                    // site pages like /host/
+        for (k = 0; k < site.length; k++) {
+          var sp = site[k].replace(/\//g, '');
+          if (sp && lev(bare, sp) <= 2) links.push(site[k]);
+        }
+      }
+      if (!links.length) return;
+      var hint = document.getElementById('hint'), html = 'Did you mean: ';
+      for (k = 0; k < links.length; k++) {
+        var full = location.origin + links[k];
+        var a = '<a href="' + links[k].replace(/"/g, '%22') + '">' + full.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</a>';
+        html += links.length === 1 ? a + ' ?' : '<span>' + a + (k === links.length - 1 ? ' ?' : '') + '</span>';
+      }
+      hint.innerHTML = html; hint.className = 'hint on';
+    }).catch(function () {});
+  })();
+  </script>
 </body>
 </html>
