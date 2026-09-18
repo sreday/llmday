@@ -203,7 +203,7 @@ for _r in _redirects:
     print(f"  + {len(_pages)} page stubs under /{_from}/")
 with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
     print("Writing out 404.html (%d redirect rules)" % len(_redirects))
-    f.write(env.get_template("404.html").render(**{**context, "brand_color": "#26986A", "redirects": [
+    f.write(env.get_template("404.html").render(**{**context, "brand_color": "#26986A", "punchline": "This page wandered off to graze.", "redirects": [
         {"from": str(r["from"]).strip("/"), "to": str(r["to"]).strip("/")} for r in _redirects]}))
 
 # /404-index.json (Marek 2026-09-18): what the 404 page may suggest ("Did you mean ...") or, for harmless slips,
