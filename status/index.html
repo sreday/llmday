@@ -120,14 +120,13 @@
     .reg-head small a { color: #888; }
     .reg-head .na { font-style: italic; }
     .reg-total { color: #555; font-size: .9rem; }
-    .reg .paid { --c: var(--accent); } .reg .free { --c: var(--critical); } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
+    .reg .paid { --c: var(--good); } .reg .free { --c: var(--critical); } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
     .reg-overall { font-size: .95rem; color: #555; margin: 0 0 12px; }
     /* Tabs: without JS all three sections stay visible; JS adds html.tabbed and shows one at a time */
-    .tabs { display: none; gap: 6px; margin-top: 34px; border-bottom: 1px solid #e0e0e0; }
-    .tabs button { font: inherit; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .92rem; color: #666; background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 14px 12px; margin-bottom: -1px; cursor: pointer; }
-    .tabs button:hover { color: #111; }
-    .tabs button.is-active { color: #111; border-bottom-color: var(--accent); }
-    .tab-count { display: inline-block; min-width: 20px; padding: 1px 7px; border-radius: 999px; background: #e0891a; color: #fff; font-size: .72rem; font-weight: 700; text-align: center; margin-left: 4px; vertical-align: 1px; }
+    .tabs { display: none; gap: 6px; margin-top: 34px; padding: 6px; background: #fff; border: 1px solid #e0e0e0; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.06); }
+    .tabs button { flex: 1 1 0; font: inherit; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.02rem; color: #333; background: #f1f2f4; border: 0; border-radius: 10px; padding: 14px 18px; cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
+    .tabs button:hover { background: #e4e6ea; color: #111; }
+    .tabs button.is-active, .tabs button.is-active:hover { background: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
     html.tabbed .tabs { display: flex; flex-wrap: wrap; }
     html.tabbed .regs, html.tabbed .added, html.tabbed .checks { display: none; margin-top: 22px; }
     html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .checks.is-active { display: block; }
@@ -139,7 +138,7 @@
     .reg-cats b { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--c); margin-right: 6px; vertical-align: -1px; }
     .reg-cats strong { color: #111; margin-left: 2px; }
     .reg-cats em { font-style: normal; color: #999; margin-left: 5px; font-variant-numeric: tabular-nums; }
-    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } }
+    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button { font-size: .9rem; padding: 12px 10px; } }
   </style>
 </head>
 <body>
@@ -174,7 +173,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small>October 1, 2026 · in 14 days · active</small></td>
+          <td class="ev"><a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small>October 1, 2026 · in 13 days · active</small></td>
           <td class="num hide">2</td>
           <td class="num"><strong>25</strong> / 24</td>
           <td>
@@ -192,7 +191,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small>October 14, 2026 · in 27 days · active</small></td>
+          <td class="ev"><a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small>October 14, 2026 · in 26 days · active</small></td>
           <td class="num hide">1</td>
           <td class="num"><strong>15</strong> / 12</td>
           <td>
@@ -210,7 +209,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small>October 29, 2026 · in 42 days · before</small></td>
+          <td class="ev"><a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small>October 29, 2026 · in 41 days · before</small></td>
           <td class="num hide">1</td>
           <td class="num"><strong>12</strong> / 12</td>
           <td>
@@ -228,7 +227,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small>November 26, 2026 · in 70 days · before</small></td>
+          <td class="ev"><a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small>November 26, 2026 · in 69 days · before</small></td>
           <td class="num hide">3</td>
           <td class="num"><strong>13</strong> / 36</td>
           <td>
@@ -246,7 +245,7 @@
         
         
         <tr>
-          <td class="ev"><a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small>December 5, 2026 · in 79 days · before</small></td>
+          <td class="ev"><a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small>December 5, 2026 · in 78 days · before</small></td>
           <td class="num hide">2</td>
           <td class="num"><strong>10</strong> / 24</td>
           <td>
@@ -285,19 +284,18 @@
     <a href="https://sreday.com/status/" style="--c: #713660">SREday status</a><a href="https://platformday.com/status/" style="--c: #E2971D">PLATFORMday status</a>
   </div>
 
-  
   <nav class="tabs" aria-label="Status sections">
     <button type="button" data-tab="regs" aria-selected="false">Registrations</button>
     <button type="button" data-tab="added" aria-selected="false">Speakers</button>
-    <button type="button" data-tab="checks" aria-selected="false">Data checks <span class="tab-count">4</span></button>
+    <button type="button" data-tab="checks" aria-selected="false">Data checks</button>
   </nav>
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-17T22:50:48+00:00">2026-09-17 22:50 UTC</span></div>
+    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-18T14:17:53+00:00">2026-09-18 14:17 UTC</span></div>
     
     
-    <div class="reg-overall"><strong>58</strong> registered / 550 expected across all upcoming events · <strong>11%</strong></div>
+    <div class="reg-overall"><strong>59</strong> registered / 550 expected across all upcoming events · <strong>11%</strong></div>
     
     
     <div class="reg">
@@ -319,14 +317,14 @@
       <div class="reg-head">
         <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a>
         
-        <span class="reg-total"><strong>9</strong> registered / 100 expected · <strong>9%</strong></span>
+        <span class="reg-total"><strong>10</strong> registered / 100 expected · <strong>10%</strong></span>
         <span class="spacer"></span>
-        <small>+2 in 7 days · <a href="https://luma.com/llmday-2026-austin-q4">Luma</a></small>
+        <small>+3 in 7 days · <a href="https://luma.com/llmday-2026-austin-q4">Luma</a></small>
         
       </div>
       
-      <div class="reg-bar"><i class="free" style="width: 22%" title="Freebies: 2 (22%)"></i><i class="speakers" style="width: 78%" title="Speakers: 7 (78%)"></i></div>
-      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>2</strong><em>22%</em></span><span class="speakers"><b></b>Speakers <strong>7</strong><em>78%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span></div>
+      <div class="reg-bar"><i class="free" style="width: 20%" title="Freebies: 2 (20%)"></i><i class="speakers" style="width: 80%" title="Speakers: 8 (80%)"></i></div>
+      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>2</strong><em>20%</em></span><span class="speakers"><b></b>Speakers <strong>8</strong><em>80%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span></div>
       
     </div>
     
@@ -336,7 +334,7 @@
         
         <span class="reg-total"><strong>3</strong> registered / 100 expected · <strong>3%</strong></span>
         <span class="spacer"></span>
-        <small>+1 in 7 days · 6 pending · <a href="https://luma.com/llmday-2026-nyc-q4">Luma</a></small>
+        <small>+1 in 7 days · 7 pending · <a href="https://luma.com/llmday-2026-nyc-q4">Luma</a></small>
         
       </div>
       
@@ -385,7 +383,12 @@
     <div class="days">
       
       <div class="day today">
-        <div class="day-head"><span class="pill" style="--c: var(--accent)">THURSDAY</span><small>17 Sep · today</small></div>
+        <div class="day-head"><span class="pill" style="--c: var(--accent)">FRIDAY</span><small>18 Sep · today</small></div>
+        <div class="none">no speakers added</div>
+      </div>
+      
+      <div class="day">
+        <div class="day-head"><span class="pill" style="--c: #9aa0a6">THURSDAY</span><small>17 Sep</small></div>
         
         <ul>
           <li><a href="/2026-montevideo-q4/Lucia_Hernandez_Metodica_Digital_The_User_Is_Part_of_the_Harness_A_Year_Running_an_Agent_That_Adapts.html">Lucia Hernandez</a> added to <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small data-ts="2026-09-17T05:47:46+01:00" title="05:47 Europe/London">05:47</small></li>
@@ -455,7 +458,7 @@
         
       </div>
       
-      <div class="day">
+      <div class="day older">
         <div class="day-head"><span class="pill" style="--c: #9aa0a6">FRIDAY</span><small>11 Sep</small></div>
         
         <ul>
@@ -671,11 +674,6 @@
         
       </div>
       
-      <div class="day older">
-        <div class="day-head"><span class="pill" style="--c: #9aa0a6">WEDNESDAY</span><small>19 Aug</small></div>
-        <div class="none">no speakers added</div>
-      </div>
-      
     </div>
     <button type="button" class="added-more" data-n="7" data-max="30">Show last 30 days</button>
     
@@ -790,7 +788,7 @@
   </section>
   
 
-  <div class="foot">Generated 2026-09-17 22:50 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-18 14:17 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Data checks as tabs (Marek 2026-09-17)
