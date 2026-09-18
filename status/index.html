@@ -167,10 +167,9 @@
     .spon-head > a:hover { color: var(--accent); }
     .spon-head .spacer { flex: 1; }
     .spon-head small { color: #888; font-size: .8rem; }
-    .spon-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-    .spon-list a, .spon-list span.chip { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 130px; padding: 10px 16px 8px; border: 1px solid #e6e6e6; border-radius: 12px; background: #fafafb; color: #555; font-size: .78rem; text-decoration: none; }
-    .spon-list a:hover { border-color: var(--accent); color: var(--accent); }
-    .spon-list img { height: 52px; max-width: 150px; object-fit: contain; }
+    .spon-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .spon-list a, .spon-list span.chip { display: inline-block; padding: 6px 15px; border: 1px solid #dcdcdc; border-radius: 999px; background: #fff; color: #222; font-size: .86rem; font-weight: 600; text-decoration: none; white-space: nowrap; transition: background .15s, color .15s, border-color .15s; }
+    .spon-list a:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
     .spon-none { margin-top: 8px; color: #aaa; font-size: .88rem; font-style: italic; }
     .reg-overall strong { color: #111; }
     .reg-bar { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: #dfe3e8; box-shadow: inset 0 1px 2px rgba(0,0,0,.12); margin: 10px 0 8px; }   /* the grey rest = still missing to the goal */
@@ -336,7 +335,7 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-18T15:13:49+00:00">2026-09-18 15:13 UTC</span>. Ring colour = registered vs expected, same health logic as the talks above.</div>
+    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-18T15:20:03+00:00">2026-09-18 15:20 UTC</span>. Ring colour = registered vs expected, same health logic as the talks above.</div>
     
     
     <div class="reg-overall"><strong>59</strong> registered / 550 expected across all upcoming events · <strong>11%</strong></div>
@@ -786,7 +785,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
       </div>
       
       <div class="spon-list">
-        <a href="https://www.harness.io/" target="_blank" rel="noopener"><img src="/sponsors/harness.png" alt="" loading="lazy">harness</a>
+        <a href="https://www.harness.io/" target="_blank" rel="noopener">Harness</a>
         
       </div>
       
@@ -800,7 +799,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
       </div>
       
       <div class="spon-list">
-        <a href="https://www.harness.io/" target="_blank" rel="noopener"><img src="/sponsors/harness.png" alt="" loading="lazy">harness</a>
+        <a href="https://www.harness.io/" target="_blank" rel="noopener">Harness</a>
         
       </div>
       
@@ -814,8 +813,8 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
       </div>
       
       <div class="spon-list">
-        <a href="https://www.microsoft.com/" target="_blank" rel="noopener"><img src="/sponsors/microsoft.png" alt="" loading="lazy">microsoft</a>
-        <a href="https://www.harness.io/" target="_blank" rel="noopener"><img src="/sponsors/harness.png" alt="" loading="lazy">harness</a>
+        <a href="https://www.microsoft.com/" target="_blank" rel="noopener">Microsoft</a>
+        <a href="https://www.harness.io/" target="_blank" rel="noopener">Harness</a>
         
       </div>
       
@@ -829,7 +828,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
       </div>
       
       <div class="spon-list">
-        <a href="https://www.harness.io/" target="_blank" rel="noopener"><img src="/sponsors/harness.png" alt="" loading="lazy">harness</a>
+        <a href="https://www.harness.io/" target="_blank" rel="noopener">Harness</a>
         
       </div>
       
@@ -843,7 +842,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
       </div>
       
       <div class="spon-list">
-        <a href="https://www.owu.uy/" target="_blank" rel="noopener"><img src="/sponsors/owu.png" alt="" loading="lazy">owu</a>
+        <a href="https://www.owu.uy/" target="_blank" rel="noopener">OWU</a>
         
       </div>
       
@@ -959,7 +958,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
   </section>
   
 
-  <div class="foot">Generated 2026-09-18 15:13 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-18 15:20 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
