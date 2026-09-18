@@ -246,7 +246,7 @@ function composeOnboarding(ev, brand) {
     '1. Travel / accommodation / speaker compensation - unfortunately, those are not covered',
     "1. Your company wants to sponsor the event? Here's the form: [" + ev.event_url + '#sponsors](' + ev.event_url + '#sponsors)',
     '1. Visa support letter is available on request'
-  ]);
+  ]));
   return {
     subject: ev.event_name + ' - ' + ev.month_day + ' - Info for speakers',
     text: renderText(lines),
