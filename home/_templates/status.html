@@ -119,6 +119,12 @@
     .regs { margin-top: 34px; }
     .regs h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
     .regs .sub { margin-bottom: 14px; }
+    /* Freshness pill (Marek 2026-09-18): green ACCURATE while the last build is under 12 h old, red NOT ACCURATE after that (JS, viewer's clock) */
+    .fresh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+    .fresh-pill { --c: var(--neutral); text-transform: uppercase; letter-spacing: .04em; }
+    .fresh.ok .fresh-pill { --c: var(--good); }
+    .fresh.stale .fresh-pill { --c: var(--critical); }
+    .fresh-text { color: #888; font-size: .88rem; }
     .reg { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); padding: 12px 16px; margin-bottom: 10px; }
     .reg-body { min-width: 0; }
     /* Registered vs goal as a ring, coloured by the same time-sensitive health ladder as the talks table */
@@ -267,7 +273,9 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="{{ status_generated_iso }}">{{ status_generated }}</span>. Ring colour = registered vs expected, same health logic as the talks above.</div>
+    <div class="fresh" data-built="{{ status_generated_iso }}" title="Not live: the numbers refresh every time the website is built">
+      <span class="pill fresh-pill">Last build</span><span class="fresh-text">{{ status_generated }}</span>
+    </div>
     {% if status_luma_note %}
     <div class="added-note">{{ status_luma_note }}</div>
     {% else %}
@@ -457,6 +465,23 @@
     var t = new Date(els[i].getAttribute('data-ts'));
     if (isNaN(t.getTime())) continue;
     els[i].textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  var fresh = document.querySelector('.fresh[data-built]');  // ACCURATE / NOT ACCURATE pill, re-checked every minute
+  if (fresh) {
+    var built = new Date(fresh.getAttribute('data-built')), STALE_H = 12;
+    var paint = function () {
+      if (isNaN(built.getTime())) return;
+      var now = new Date(), stale = (now - built) > STALE_H * 3600 * 1000;
+      var day0 = function (d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(); };
+      var ago = Math.round((day0(now) - day0(built)) / 86400000);
+      var day = ago <= 0 ? 'Today' : ago < 7 ? built.toLocaleDateString([], { weekday: 'long' })
+              : built.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
+      var time = built.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      fresh.classList.toggle('ok', !stale); fresh.classList.toggle('stale', stale);
+      fresh.querySelector('.fresh-pill').textContent = stale ? 'Not accurate' : 'Accurate';
+      fresh.querySelector('.fresh-text').textContent = (stale ? 'Last build ' : 'Last updated ') + day + ', ' + time;
+    };
+    paint(); setInterval(paint, 60000);
   }
   var full = document.querySelectorAll('[data-ts-full]');   // build stamp: date + time, viewer's timezone
   for (var j = 0; j < full.length; j++) {
