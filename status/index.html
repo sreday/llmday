@@ -111,7 +111,20 @@
     .regs { margin-top: 34px; }
     .regs h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
     .regs .sub { margin-bottom: 14px; }
-    .reg { background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); padding: 12px 16px; margin-bottom: 10px; }
+    .reg { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); padding: 12px 16px; margin-bottom: 10px; }
+    .reg-body { min-width: 0; }
+    /* Registered vs goal as a ring, coloured by the same time-sensitive health ladder as the talks table */
+    .reg-ring { display: flex; align-items: center; gap: 10px; min-width: 150px; padding: 6px 16px 6px 6px; border-radius: 999px; background: #f4f4f6; border: 1px solid #e6e6e6; --c: var(--neutral); }
+    .reg-ring.critical { --c: var(--critical); } .reg-ring.bad { --c: var(--bad); } .reg-ring.neutral { --c: var(--neutral); } .reg-ring.good { --c: var(--good); } .reg-ring.nailed { --c: var(--nailed); }
+    .reg-ring svg { width: 58px; height: 58px; flex: none; transform: rotate(-90deg); }
+    .reg-ring circle { fill: none; stroke-width: 4; }
+    .reg-ring .track { stroke: #dfe3e8; }
+    .reg-ring .fill { stroke: var(--c); stroke-linecap: round; }
+    .reg-ring .ring { position: relative; flex: none; width: 58px; height: 58px; }
+    .reg-ring .ring span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .82rem; color: #111; font-variant-numeric: tabular-nums; }
+    .reg-ring .nums { line-height: 1.25; font-size: .78rem; color: #777; white-space: nowrap; }
+    .reg-ring .nums strong { display: block; font-size: 1rem; color: #111; font-variant-numeric: tabular-nums; }
+    .reg-ring .nums strong i { font-style: normal; font-weight: 400; color: #888; }
     .reg-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
     .reg-head > a { color: #111; font-weight: 600; text-decoration: none; font-size: .95rem; }
     .reg-head > a:hover { color: var(--accent); }
@@ -132,13 +145,15 @@
     html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .checks.is-active { display: block; }
     html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .checks h2 { display: none; }
     .reg-overall strong { color: #111; }
-    .reg-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: #eceef1; margin: 10px 0 8px; }
+    .reg-bar { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: #dfe3e8; box-shadow: inset 0 1px 2px rgba(0,0,0,.12); margin: 10px 0 8px; }   /* the grey rest = still missing to the goal */
     .reg-bar i { display: block; height: 100%; background: var(--c); }
     .reg-cats { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .84rem; color: #555; }
     .reg-cats b { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--c); margin-right: 6px; vertical-align: -1px; }
     .reg-cats strong { color: #111; margin-left: 2px; }
     .reg-cats em { font-style: normal; color: #999; margin-left: 5px; font-variant-numeric: tabular-nums; }
-    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button { font-size: .9rem; padding: 12px 10px; } }
+    .reg-cats .togo { margin-left: auto; color: #888; }
+    .reg-cats .togo b { background: #dfe3e8; box-shadow: inset 0 1px 1px rgba(0,0,0,.15); }
+    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button { font-size: .9rem; padding: 12px 10px; } .reg { grid-template-columns: 1fr; gap: 10px; } .reg-ring { justify-self: start; } .reg-cats .togo { margin-left: 0; } }
   </style>
 </head>
 <body>
@@ -292,85 +307,135 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-18T14:17:53+00:00">2026-09-18 14:17 UTC</span></div>
+    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-18T14:34:37+00:00">2026-09-18 14:34 UTC</span>. Ring colour = registered vs expected, same health logic as the talks above.</div>
     
     
     <div class="reg-overall"><strong>59</strong> registered / 550 expected across all upcoming events · <strong>11%</strong></div>
     
     
     <div class="reg">
+      
+      <div class="reg-ring critical" title="Critical: 21 registered of 100 expected, 13 days to go">
+        <div class="ring">
+          <svg viewBox="0 0 36 36" aria-hidden="true"><circle class="track" cx="18" cy="18" r="15.9155"/><circle class="fill" cx="18" cy="18" r="15.9155" stroke-dasharray="21 100"/></svg>
+          <span>21%</span>
+        </div>
+        <div class="nums"><strong>21 <i>/ 100</i></strong>registered / expected</div>
+      </div>
+      <div class="reg-body">
       <div class="reg-head">
         <a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a>
         
-        <span class="reg-total"><strong>21</strong> registered / 100 expected · <strong>21%</strong></span>
+        
         <span class="spacer"></span>
         <small>+7 in 7 days · <a href="https://luma.com/llmday-2026-san-francisco-q4">Luma</a></small>
         
       </div>
       
-      <div class="reg-bar"><i class="paid" style="width: 10%" title="Paid attendees: 2 (10%)"></i><i class="free" style="width: 52%" title="Freebies: 11 (52%)"></i><i class="speakers" style="width: 38%" title="Speakers: 8 (38%)"></i></div>
-      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>2</strong><em>10%</em></span><span class="free"><b></b>Freebies <strong>11</strong><em>52%</em></span><span class="speakers"><b></b>Speakers <strong>8</strong><em>38%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span></div>
+      <div class="reg-bar"><i class="paid" style="width: 2.0%" title="Paid attendees: 2 (10% of registered)"></i><i class="free" style="width: 11.0%" title="Freebies: 11 (52% of registered)"></i><i class="speakers" style="width: 8.0%" title="Speakers: 8 (38% of registered)"></i></div>
+      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>2</strong><em>10%</em></span><span class="free"><b></b>Freebies <strong>11</strong><em>52%</em></span><span class="speakers"><b></b>Speakers <strong>8</strong><em>38%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span><span class="togo"><b></b>To goal <strong>79</strong></span></div>
       
+      </div>
     </div>
     
     <div class="reg">
+      
+      <div class="reg-ring critical" title="Critical: 10 registered of 100 expected, 26 days to go">
+        <div class="ring">
+          <svg viewBox="0 0 36 36" aria-hidden="true"><circle class="track" cx="18" cy="18" r="15.9155"/><circle class="fill" cx="18" cy="18" r="15.9155" stroke-dasharray="10 100"/></svg>
+          <span>10%</span>
+        </div>
+        <div class="nums"><strong>10 <i>/ 100</i></strong>registered / expected</div>
+      </div>
+      <div class="reg-body">
       <div class="reg-head">
         <a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a>
         
-        <span class="reg-total"><strong>10</strong> registered / 100 expected · <strong>10%</strong></span>
+        
         <span class="spacer"></span>
         <small>+3 in 7 days · <a href="https://luma.com/llmday-2026-austin-q4">Luma</a></small>
         
       </div>
       
-      <div class="reg-bar"><i class="free" style="width: 20%" title="Freebies: 2 (20%)"></i><i class="speakers" style="width: 80%" title="Speakers: 8 (80%)"></i></div>
-      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>2</strong><em>20%</em></span><span class="speakers"><b></b>Speakers <strong>8</strong><em>80%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span></div>
+      <div class="reg-bar"><i class="free" style="width: 2.0%" title="Freebies: 2 (20% of registered)"></i><i class="speakers" style="width: 8.0%" title="Speakers: 8 (80% of registered)"></i></div>
+      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>2</strong><em>20%</em></span><span class="speakers"><b></b>Speakers <strong>8</strong><em>80%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span><span class="togo"><b></b>To goal <strong>90</strong></span></div>
       
+      </div>
     </div>
     
     <div class="reg">
+      
+      <div class="reg-ring bad" title="Bad: 3 registered of 100 expected, 41 days to go">
+        <div class="ring">
+          <svg viewBox="0 0 36 36" aria-hidden="true"><circle class="track" cx="18" cy="18" r="15.9155"/><circle class="fill" cx="18" cy="18" r="15.9155" stroke-dasharray="3 100"/></svg>
+          <span>3%</span>
+        </div>
+        <div class="nums"><strong>3 <i>/ 100</i></strong>registered / expected</div>
+      </div>
+      <div class="reg-body">
       <div class="reg-head">
         <a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a>
         
-        <span class="reg-total"><strong>3</strong> registered / 100 expected · <strong>3%</strong></span>
+        
         <span class="spacer"></span>
         <small>+1 in 7 days · 7 pending · <a href="https://luma.com/llmday-2026-nyc-q4">Luma</a></small>
         
       </div>
       
-      <div class="reg-bar"><i class="speakers" style="width: 100%" title="Speakers: 3 (100%)"></i></div>
-      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>0</strong><em>0%</em></span><span class="speakers"><b></b>Speakers <strong>3</strong><em>100%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span></div>
+      <div class="reg-bar"><i class="speakers" style="width: 3.0%" title="Speakers: 3 (100% of registered)"></i></div>
+      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>0</strong><em>0%</em></span><span class="speakers"><b></b>Speakers <strong>3</strong><em>100%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span><span class="togo"><b></b>To goal <strong>97</strong></span></div>
       
+      </div>
     </div>
     
     <div class="reg">
+      
+      <div class="reg-ring neutral" title="Neutral: 6 registered of 150 expected, 69 days to go">
+        <div class="ring">
+          <svg viewBox="0 0 36 36" aria-hidden="true"><circle class="track" cx="18" cy="18" r="15.9155"/><circle class="fill" cx="18" cy="18" r="15.9155" stroke-dasharray="4 100"/></svg>
+          <span>4%</span>
+        </div>
+        <div class="nums"><strong>6 <i>/ 150</i></strong>registered / expected</div>
+      </div>
+      <div class="reg-body">
       <div class="reg-head">
         <a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a>
         
-        <span class="reg-total"><strong>6</strong> registered / 150 expected · <strong>4%</strong></span>
+        
         <span class="spacer"></span>
         <small>+1 in 7 days · <a href="https://luma.com/llmday-pec-2026-london-q4">Luma</a></small>
         
       </div>
       
-      <div class="reg-bar"><i class="free" style="width: 17%" title="Freebies: 1 (17%)"></i><i class="speakers" style="width: 83%" title="Speakers: 5 (83%)"></i></div>
-      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>1</strong><em>17%</em></span><span class="speakers"><b></b>Speakers <strong>5</strong><em>83%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span></div>
+      <div class="reg-bar"><i class="free" style="width: 0.67%" title="Freebies: 1 (17% of registered)"></i><i class="speakers" style="width: 3.33%" title="Speakers: 5 (83% of registered)"></i></div>
+      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>1</strong><em>17%</em></span><span class="speakers"><b></b>Speakers <strong>5</strong><em>83%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span><span class="togo"><b></b>To goal <strong>144</strong></span></div>
       
+      </div>
     </div>
     
     <div class="reg">
+      
+      <div class="reg-ring neutral" title="Neutral: 19 registered of 100 expected, 78 days to go">
+        <div class="ring">
+          <svg viewBox="0 0 36 36" aria-hidden="true"><circle class="track" cx="18" cy="18" r="15.9155"/><circle class="fill" cx="18" cy="18" r="15.9155" stroke-dasharray="19 100"/></svg>
+          <span>19%</span>
+        </div>
+        <div class="nums"><strong>19 <i>/ 100</i></strong>registered / expected</div>
+      </div>
+      <div class="reg-body">
       <div class="reg-head">
         <a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a>
         
-        <span class="reg-total"><strong>19</strong> registered / 100 expected · <strong>19%</strong></span>
+        
         <span class="spacer"></span>
         <small>+1 in 7 days · 1 pending · <a href="https://luma.com/llmday-2026-montevideo-q4">Luma</a></small>
         
       </div>
       
-      <div class="reg-bar"><i class="free" style="width: 79%" title="Freebies: 15 (79%)"></i><i class="speakers" style="width: 21%" title="Speakers: 4 (21%)"></i></div>
-      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>15</strong><em>79%</em></span><span class="speakers"><b></b>Speakers <strong>4</strong><em>21%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span></div>
+      <div class="reg-bar"><i class="free" style="width: 15.0%" title="Freebies: 15 (79% of registered)"></i><i class="speakers" style="width: 4.0%" title="Speakers: 4 (21% of registered)"></i></div>
+      <div class="reg-cats"><span class="paid"><b></b>Paid attendees <strong>0</strong><em>0%</em></span><span class="free"><b></b>Freebies <strong>15</strong><em>79%</em></span><span class="speakers"><b></b>Speakers <strong>4</strong><em>21%</em></span><span class="sponsors"><b></b>Sponsors <strong>0</strong><em>0%</em></span><span class="togo"><b></b>To goal <strong>81</strong></span></div>
       
+      </div>
     </div>
     
     
@@ -788,7 +853,7 @@
   </section>
   
 
-  <div class="foot">Generated 2026-09-18 14:17 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-18 14:34 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Data checks as tabs (Marek 2026-09-17)
