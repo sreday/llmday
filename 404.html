@@ -22,11 +22,11 @@
     :root { --accent: #26986A; }
     html, body { height: 100%; margin: 0; }
     body { display: flex; align-items: center; justify-content: center; background: #f4f4f6; color: #111; font-family: 'Roboto', Arial, sans-serif; }
-    main { width: 100%; max-width: 760px; padding: 40px 20px 60px; text-align: center; box-sizing: border-box; }
+    main { width: 100%; max-width: 900px; padding: 40px 20px 60px; text-align: center; box-sizing: border-box; }
     .mascot { display: block; width: min(320px, 70vw); height: auto; margin: 0 auto 38px; animation: lost 3.2s ease-in-out infinite; transform-origin: 50% 90%; }
     @keyframes lost { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) translateY(-6px); } }
     @media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
-    h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(1.7rem, 6vw, 3rem); line-height: 1.15; color: var(--accent); margin: 0 0 18px; }
+    h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(.75rem, 3.6vw, 2rem); line-height: 1.2; white-space: nowrap; color: var(--accent); margin: 0 0 18px; }   /* punchline always on ONE line (Marek): the size follows the viewport instead of wrapping */
     .hint { display: none; margin: 0 0 26px; color: #666; font-size: 1.08rem; line-height: 1.7; overflow-wrap: anywhere; }
     .hint.on { display: block; }
     .hint a { color: var(--accent); font-weight: 700; text-decoration: none; border-bottom: 1px solid currentColor; }
