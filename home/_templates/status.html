@@ -106,6 +106,9 @@
     .day li:first-child { border-top: none; padding-top: 2px; }
     .day li a { color: #111; font-weight: 600; text-decoration: none; }
     .day li a:hover { color: var(--accent); }
+    .day li.removed { color: var(--critical); }                /* gone from the lineup: red, nothing to click, the talk page no longer exists */
+    .day li.removed strong { font-weight: 600; }
+    .day li.removed::before { content: "\2212"; display: inline-block; width: 14px; font-weight: 700; }
     .day li small { color: #aaa; font-size: .76rem; margin-left: 8px; font-variant-numeric: tabular-nums; }
     .day .none { color: #bbb; font-size: .88rem; padding-top: 5px; font-style: italic; }
     .added-note { color: #888; font-size: .82rem; margin-top: 10px; font-style: italic; }
@@ -307,7 +310,7 @@
 
   <section class="added">
     <h2>Speakers on the website</h2>
-    <div class="sub">Who was added when, and to which conference.</div>
+    <div class="sub">Who was added when, and to which conference. Red = a fully entered speaker who is no longer in the lineup (back within {{ status_flap_days }} days = ignored).</div>
     {% if status_added_error %}
     <div class="added-note">{{ status_added_error }}</div>
     {% else %}
@@ -317,10 +320,10 @@
         <div class="day-head"><span class="pill" style="--c: {{ 'var(--accent)' if d.today else '#9aa0a6' }}">{{ d.label }}</span><small>{{ d.date }}{% if d.today %} · today{% endif %}</small></div>
         {% if d.entries %}
         <ul>
-          {% for e in d.entries %}<li><a href="{{ e.talk_url }}">{{ e.name }}</a> added to <a href="{{ e.event_url }}">{{ e.event }}</a><small data-ts="{{ e.iso }}" title="{{ e.time }} {{ status_added_tz }}">{{ e.time }}</small></li>
+          {% for e in d.entries %}{% if e.kind == 'removed' %}<li class="removed" title="{{ e.title }}{% if e.organization %} · {{ e.organization }}{% endif %}"><strong>{{ e.name }}</strong> removed from {{ e.event }}<small{% else %}<li><a href="{{ e.talk_url }}">{{ e.name }}</a> {% if e.kind == 'moved' %}moved from {{ e.from_event }} to{% else %}added to{% endif %} <a href="{{ e.event_url }}">{{ e.event }}</a><small{% endif %} data-ts="{{ e.iso }}" title="{{ e.time }} {{ status_added_tz }}">{{ e.time }}</small></li>
           {% endfor %}
         </ul>
-        {% else %}<div class="none">no speakers added</div>{% endif %}
+        {% else %}<div class="none">no changes</div>{% endif %}
       </div>
       {% endfor %}
     </div>

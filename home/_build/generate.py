@@ -621,6 +621,12 @@ _ADDED_DAYS = 7                      # shown by default
 _ADDED_DAYS_MAX = 30                 # built and rendered, revealed by the "Show last 30 days" toggle (Marek 2026-09-17)
 _ADDED_TZ = "Europe/London"          # commits are authored in London time; day buckets follow it
 _ADDED_SAME = 0.85                   # difflib ratio at/above which a "new" name is treated as a typo fix of an old one
+# Removed speakers (Marek 2026-09-18): red, non-clickable entries. The log must stay perfectly readable, so a speaker who
+# leaves and is back (or is added and leaves) within _ADDED_FLAP_DAYS is ignored altogether, only the latest state per
+# speaker and event is shown, and only rows that carried FULL info count as a removal. talks.csv history is the only source.
+_ADDED_FLAP_DAYS = 2
+_REMOVED_FULL = ("name", "organization", "title", "abstract", "photo")   # all filled = a known, fully entered speaker
+_REMOVED_MASS = (5, 0.4)             # one commit dropping more than 5 speakers AND over 40% of a lineup = csv accident, not news
 
 
 def _status_git(*args, cwd=None):
@@ -658,7 +664,8 @@ def _status_talks_at(root, commit, path):
 
 def _status_added_log(rows):
     """7 day buckets (oldest -> today) of speakers added to the upcoming events in `rows`, plus an error string and
-    a list of warnings. Latest addition of a given speaker per event wins."""
+    a list of warnings. Entries are kind "added", "removed" (full-info speaker gone from the confirmed lineup) or
+    "moved" (left one event and joined another within the flap window). Latest state of a speaker per event wins."""
     import difflib
     try:
         from zoneinfo import ZoneInfo
@@ -667,6 +674,9 @@ def _status_added_log(rows):
         tz, tz_name = datetime.timezone.utc, "UTC"
     now = datetime.datetime.now(tz)
     first = now.date() - datetime.timedelta(days=_ADDED_DAYS_MAX - 1)
+    scan_from = first - datetime.timedelta(days=_ADDED_FLAP_DAYS)   # so a re-add on day 1 can still cancel its removal
+    flap = datetime.timedelta(days=_ADDED_FLAP_DAYS)
+    same = lambda a, b: a == b or difflib.SequenceMatcher(None, a, b).ratio() >= _ADDED_SAME
     days = [{"iso": (first + datetime.timedelta(days=i)).isoformat(),
              "label": (first + datetime.timedelta(days=i)).strftime("%A").upper(),
              "date": (first + datetime.timedelta(days=i)).strftime("%d %b").lstrip("0"),
@@ -676,7 +686,7 @@ def _status_added_log(rows):
     root = (_status_git("rev-parse", "--show-toplevel") or "").strip()
     if not root:
         return days, window, "Git history was not available at build time, so nothing could be listed.", []
-    added, warnings = {}, []
+    timelines, warnings = {}, []                             # (folder, speaker key) -> [event, ...] oldest first
     for r in rows:
         folder = r["folder"]
         path = folder + "/_db/talks.csv"
@@ -698,7 +708,7 @@ def _status_added_log(rows):
             commits.append((sha, when_local, lines[-1]))
         commits.reverse()                                    # oldest first so a later addition overwrites an earlier one
         for i, (sha, when_local, path_then) in enumerate(commits):
-            if when_local.date() < first:
+            if when_local.date() < scan_from:
                 continue
             after = _status_talks_at(root, sha, path_then)
             if i > 0:                                        # baseline = the previous commit that touched the file
@@ -707,14 +717,57 @@ def _status_added_log(rows):
                 before = _status_talks_at(root, sha + "^", path_then)
             if after is None or before is None:
                 warnings.append("%s: commit %s skipped, history too shallow or file unreadable" % (r["name"], sha[:7])); continue
+            def _entry(kind, key, row):
+                # one timeline per person and event, whatever the spelling of the day
+                tkey = next((k for (f, k) in timelines if f == folder and same(k, key)), key)
+                timelines.setdefault((folder, tkey), []).append({
+                    "kind": kind, "key": tkey, "folder": folder, "name": (row.get("name") or "").strip(),
+                    "talk_url": _lint_talk_url(folder, row), "title": (row.get("title") or "").strip(),
+                    "organization": (row.get("organization") or "").strip(),
+                    "event": r["name"], "event_url": r["url"], "when": when_local,
+                    "time": when_local.strftime("%H:%M"), "iso": when_local.isoformat()})
             for key, row in after.items():
-                if key in before or any(difflib.SequenceMatcher(None, key, k).ratio() >= _ADDED_SAME for k in before):
+                if key in before or any(same(key, k) for k in before):
                     continue
-                added[(folder, key)] = {"name": (row.get("name") or "").strip(), "talk_url": _lint_talk_url(folder, row),
-                                        "event": r["name"], "event_url": r["url"], "when": when_local,
-                                        "time": when_local.strftime("%H:%M"), "iso": when_local.isoformat()}
+                _entry("added", key, row)
+            after_titles = {" ".join((x.get("title") or "").casefold().split()) for x in after.values()}
+            gone = []
+            for key, row in before.items():
+                if key in after or any(same(key, k) for k in after):
+                    continue                                 # still there, or just respelled
+                if not all((row.get(f) or "").strip() for f in _REMOVED_FULL):
+                    continue                                 # never fully entered: a placeholder going away is not news
+                name = (row.get("name") or "")
+                if ("," in name or "&" in name) and " ".join((row.get("title") or "").casefold().split()) in after_titles:
+                    continue                                 # panel whose lineup changed, the session itself is still on
+                gone.append((key, row))
+            if len(gone) > _REMOVED_MASS[0] and len(gone) > _REMOVED_MASS[1] * max(len(before), 1):
+                warnings.append("%s: commit %s drops %d of %d speakers at once, treated as a csv accident, removals not listed"
+                                % (r["name"], sha[:7], len(gone), len(before)))
+                gone = []
+            for key, row in gone:
+                _entry("removed", key, row)
+    # Resolve each timeline: opposite events within the flap window cancel out (left and came back, or added and
+    # pulled, within 2 days = noise), then only the latest surviving state is shown.
+    final = []
+    for events in timelines.values():
+        kept = []
+        for ev in sorted(events, key=lambda e: e["when"]):
+            if kept and kept[-1]["kind"] != ev["kind"] and ev["when"] - kept[-1]["when"] <= flap:
+                kept.pop()
+            else:
+                kept.append(ev)
+        if kept:
+            final.append(kept[-1])
+    # Same person removed from one event and added to another within the window = one "moved" line, not red news
+    for rem in [e for e in final if e["kind"] == "removed"]:
+        hit = next((a for a in final if a["kind"] == "added" and a["folder"] != rem["folder"] and same(a["key"], rem["key"])
+                    and abs(a["when"] - rem["when"]) <= flap), None)
+        if hit:
+            hit["kind"], hit["from_event"] = "moved", rem["event"]
+            final.remove(rem)
     by_day = {d["iso"]: d for d in days}
-    for e in sorted(added.values(), key=lambda e: e["when"]):
+    for e in sorted(final, key=lambda e: e["when"]):
         d = by_day.get(e["when"].date().isoformat())
         if d:
             d["entries"].append(e)
@@ -723,10 +776,12 @@ def _status_added_log(rows):
 
 
 _added_days, _added_window, _added_error, _added_warnings = _status_added_log(_status_rows)
-print("SPEAKERS ADDED (last %d days, %s): %d" % (_ADDED_DAYS_MAX, _added_window, sum(len(d["entries"]) for d in _added_days)))
+print("SPEAKERS ADDED / REMOVED (last %d days, %s): %d added or moved, %d removed" % (
+    _ADDED_DAYS_MAX, _added_window, sum(1 for d in _added_days for e in d["entries"] if e["kind"] != "removed"),
+    sum(1 for d in _added_days for e in d["entries"] if e["kind"] == "removed")))
 for d in _added_days:
     for e in d["entries"]:
-        print("  %s %s  %s -> %s" % (d["iso"], e["time"], e["name"], e["event"]))
+        print("  %s %s  %-7s %s -> %s" % (d["iso"], e["time"], e["kind"].upper(), e["name"], e["event"]))
 if _added_error:
     print("  " + _added_error)
 for w in _added_warnings:
@@ -999,7 +1054,7 @@ os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
-        status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
+        status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_flap_days=_ADDED_FLAP_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
         status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes,
         status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
