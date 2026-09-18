@@ -1,4 +1,4 @@
-{# ── /status/ (hidden, organizer-facing). Lineup and sponsor progress of every upcoming event, built by
+{# ── /status/ (hidden, organizer-facing). Lineup, registrations and sponsors of every upcoming event, built by
      home/_build/generate.py (STATUS PAGE block) from each event's metadata.yml + _db/talks.csv. Identical file in
      sreday, llmday and platformday; the brand colour comes in as status_color. Never listed in the sitemap. ── #}
 <!DOCTYPE html>
@@ -140,23 +140,37 @@
     .reg-total { color: #555; font-size: .9rem; }
     .reg .paid { --c: var(--good); } .reg .free { --c: var(--critical); } .reg .speakers { --c: #2d9cdb; } .reg .sponsors { --c: #e6b400; }
     .reg-overall { font-size: .95rem; color: #555; margin: 0 0 12px; }
-    /* Tabs: without JS all three sections stay visible; JS adds html.tabbed and shows one at a time */
+    /* Tabs: without JS all four sections stay visible; JS adds html.tabbed and shows one at a time */
     .tabs { display: none; gap: 6px; margin-top: 34px; padding: 6px; background: #fff; border: 1px solid #e0e0e0; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.06); }
     .tabs button { flex: 1 1 0; font: inherit; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.02rem; color: #333; background: #f1f2f4; border: 0; border-radius: 10px; padding: 14px 18px; cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
     .tabs button:hover { background: #e4e6ea; color: #111; }
     .tabs button.is-active, .tabs button.is-active:hover { background: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
-    html.tabbed .tabs { display: flex; flex-wrap: wrap; position: relative; overflow: hidden; }
-    /* The accent pill is one element that slides between the tabs and overshoots a little before settling (the bounce) */
-    .tab-pill { position: absolute; left: 0; top: 0; z-index: 0; border-radius: 10px; background: var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,.18); pointer-events: none; }
-    .tab-pill.ready { transition: transform .6s cubic-bezier(.3, 1.55, .45, 1), width .6s cubic-bezier(.3, 1.55, .45, 1), height .3s ease; }
+    html.tabbed .tabs { display: flex; flex-wrap: wrap; position: relative; }
+    /* The accent pill is one element that HOVERS ABOVE the buttons (it carries the active label itself), slides between
+       the tabs and overshoots a fixed few px before settling (the bounce, JS keyframes). Clicks pass through it. */
+    .tab-pill { position: absolute; left: 0; top: 0; z-index: 5; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: var(--accent); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.02rem; white-space: nowrap; box-shadow: 0 10px 22px rgba(0,0,0,.28), 0 2px 5px rgba(0,0,0,.2); pointer-events: none; will-change: transform; }
     .tab-pill.squash { animation: tab-squash .6s ease-out; }
     @keyframes tab-squash { 0% { scale: 1 1; } 30% { scale: 1.06 .86; } 62% { scale: .97 1.06; } 82% { scale: 1.01 .98; } 100% { scale: 1 1; } }
-    .tabs.has-pill button { position: relative; z-index: 1; transition: background .15s, color .3s; }
-    .tabs.has-pill button.is-active, .tabs.has-pill button.is-active:hover { background: transparent; box-shadow: none; }
-    @media (prefers-reduced-motion: reduce) { .tab-pill.ready { transition: none; } .tab-pill.squash { animation: none; } }
-    html.tabbed .regs, html.tabbed .added, html.tabbed .checks { display: none; margin-top: 22px; }
-    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .checks.is-active { display: block; }
-    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .checks h2 { display: none; }
+    .tabs.has-pill button.is-active, .tabs.has-pill button.is-active:hover { background: #f1f2f4; color: #333; box-shadow: none; }
+    @media (prefers-reduced-motion: reduce) { .tab-pill.squash { animation: none; } }
+    html.tabbed .regs, html.tabbed .added, html.tabbed .spons, html.tabbed .checks { display: none; margin-top: 22px; }
+    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active { display: block; }
+    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .spons h2, html.tabbed .checks h2 { display: none; }
+    /* Sponsors tab: every upcoming event with its sponsors as built (partners excluded, same split as the event page) */
+    .spons { margin-top: 34px; }
+    .spons h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
+    .spons .sub { margin-bottom: 14px; }
+    .spon { background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); padding: 12px 16px; margin-bottom: 10px; }
+    .spon-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .spon-head > a { color: #111; font-weight: 600; text-decoration: none; font-size: .95rem; }
+    .spon-head > a:hover { color: var(--accent); }
+    .spon-head .spacer { flex: 1; }
+    .spon-head small { color: #888; font-size: .8rem; }
+    .spon-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .spon-list a, .spon-list span.chip { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 130px; padding: 10px 16px 8px; border: 1px solid #e6e6e6; border-radius: 12px; background: #fafafb; color: #555; font-size: .78rem; text-decoration: none; }
+    .spon-list a:hover { border-color: var(--accent); color: var(--accent); }
+    .spon-list img { height: 52px; max-width: 150px; object-fit: contain; }
+    .spon-none { margin-top: 8px; color: #aaa; font-size: .88rem; font-style: italic; }
     .reg-overall strong { color: #111; }
     .reg-bar { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: #dfe3e8; box-shadow: inset 0 1px 2px rgba(0,0,0,.12); margin: 10px 0 8px; }   /* the grey rest = still missing to the goal */
     .reg-bar i { display: block; height: 100%; background: var(--c); }
@@ -166,7 +180,7 @@
     .reg-cats em { font-style: normal; color: #999; margin-left: 5px; font-variant-numeric: tabular-nums; }
     .reg-cats .togo { margin-left: auto; color: #888; }
     .reg-cats .togo b { background: #dfe3e8; box-shadow: inset 0 1px 1px rgba(0,0,0,.15); }
-    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button { font-size: .9rem; padding: 12px 10px; } .reg { grid-template-columns: 1fr; gap: 10px; } .reg-ring { justify-self: start; } .reg-cats .togo { margin-left: 0; } }
+    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button, .tab-pill { font-size: .9rem; } .tabs button { padding: 12px 10px; } .reg { grid-template-columns: 1fr; gap: 10px; } .reg-ring { justify-self: start; } .reg-cats .togo { margin-left: 0; } }
   </style>
 </head>
 <body>
@@ -194,7 +208,6 @@
           <th>Health</th>
           <th class="hours">Start / end</th>
           <th class="num">CFP</th>
-          <th class="num">Sponsors</th>
         </tr>
       </thead>
       <tbody>
@@ -215,7 +228,6 @@
           <td><span class="pill {{ r.health }}" style="--c: var(--{{ r.health }})">{{ r.health_label }}</span></td>
           <td class="hours{% if r.hours == 'N/A' %} na{% endif %}">{{ r.hours }}</td>
           <td class="num cfp{% if not r.cfp %} na{% endif %}">{% if r.cfp %}<a class="frog" href="{{ r.cfp }}" target="_blank" rel="noopener" title="{{ 'Manage talks on cfp.ninja' if r.cfp_direct else 'cfp.ninja page (event id not found at build time)' }}" aria-label="{{ r.name }}: manage talks on cfp.ninja">&#128056;</a>{% else %}N/A{% endif %}</td>
-          <td class="num"><strong>{{ r.sponsors }}</strong></td>
         </tr>
       {% endfor %}
       </tbody>
@@ -247,6 +259,7 @@
   <nav class="tabs" aria-label="Status sections">
     <button type="button" data-tab="regs" aria-selected="false">Registrations</button>
     <button type="button" data-tab="added" aria-selected="false">Speakers</button>
+    <button type="button" data-tab="sponsors" aria-selected="false">Sponsors</button>
     <button type="button" data-tab="checks" aria-selected="false">Data checks</button>
   </nav>
 
@@ -315,6 +328,25 @@
     {% if status_added_warnings %}<div class="added-note">{% for w in status_added_warnings %}{{ w }}{% if not loop.last %} · {% endif %}{% endfor %}</div>{% endif %}
     {% endif %}
   </section>
+  <section class="spons">
+    <h2>Sponsors</h2>
+    <div class="sub">Confirmed sponsors as they are built on each event page (partners not counted).{% if status_rows %} <strong>{{ status_rows | sum(attribute='sponsors') }}</strong> across {{ status_rows | length }} upcoming events.{% endif %}</div>
+    {% for r in status_rows %}
+    <div class="spon">
+      <div class="spon-head">
+        <a href="{{ r.url }}#sponsors">{{ r.name }}</a>
+        <span class="spacer"></span>
+        <small>{{ r.date }} · <strong>{{ r.sponsors }}</strong> sponsor{{ '' if r.sponsors == 1 else 's' }}</small>
+      </div>
+      {% if r.sponsor_view %}
+      <div class="spon-list">
+        {% for s in r.sponsor_view %}{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener">{% else %}<span class="chip">{% endif %}{% if s.has_logo %}<img src="/sponsors/{{ s.logo | urlencode }}" alt="" loading="lazy">{% endif %}{{ s.name }}{% if s.url %}</a>{% else %}</span>{% endif %}
+        {% endfor %}
+      </div>
+      {% else %}<div class="spon-none">no sponsors yet</div>{% endif %}
+    </div>
+    {% endfor %}
+  </section>
   {% if status_rows %}
   <section class="checks">
     <h2>Data checks</h2>
@@ -364,20 +396,33 @@
   <div class="foot">Generated {{ status_generated }} at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
-(function () {                                     // Registrations / Speakers / Data checks as tabs (Marek 2026-09-17)
+(function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
   var tabs = document.querySelectorAll('.tabs button'); if (!tabs.length) return;
-  var secs = { regs: document.querySelector('section.regs'), added: document.querySelector('section.added'), checks: document.querySelector('section.checks') };
+  var secs = { regs: document.querySelector('section.regs'), added: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks') };
   document.documentElement.classList.add('tabbed');
   var nav = document.querySelector('.tabs'), pill = document.createElement('span');   // bouncing pill (Marek 2026-09-18)
   pill.className = 'tab-pill'; pill.setAttribute('aria-hidden', 'true');
   nav.insertBefore(pill, nav.firstChild); nav.classList.add('has-pill');
-  function place(animate) {
+  var GROW = 3, reduceTabs = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, run = null;
+  function place(animate) {                          // the pill floats above the buttons, 3px larger on every side
     var b = nav.querySelector('button.is-active'); if (!b) return;
-    if (!animate) pill.classList.remove('ready');
-    pill.style.width = b.offsetWidth + 'px'; pill.style.height = b.offsetHeight + 'px';
-    pill.style.transform = 'translate(' + b.offsetLeft + 'px,' + b.offsetTop + 'px)';
-    if (animate) { pill.classList.remove('squash'); void pill.offsetWidth; pill.classList.add('squash'); }
-    else { void pill.offsetWidth; pill.classList.add('ready'); }
+    var nr = nav.getBoundingClientRect(), pr = pill.getBoundingClientRect();
+    var fx = pr.left - nr.left - nav.clientLeft, fy = pr.top - nr.top - nav.clientTop;   // where it is right now (mid-flight too)
+    var tx = b.offsetLeft - GROW, ty = b.offsetTop - GROW;
+    if (run) { run.cancel(); run = null; }
+    pill.textContent = b.textContent;
+    pill.style.width = (b.offsetWidth + 2 * GROW) + 'px'; pill.style.height = (b.offsetHeight + 2 * GROW) + 'px';
+    pill.style.transform = 'translate(' + tx + 'px,' + ty + 'px)';
+    if (!animate || reduceTabs || !pill.animate) return;
+    var dx = tx - fx, dy = ty - fy, d = Math.sqrt(dx * dx + dy * dy); if (d < 1) return;
+    var ux = dx / d, uy = dy / d, T = function (x, y) { return 'translate(' + x + 'px,' + y + 'px)'; };
+    run = pill.animate([                             // fixed overshoot, whatever the distance: 14px past, 5px back, settle
+      { transform: T(fx, fy), easing: 'cubic-bezier(.3, 0, .3, 1)' },
+      { transform: T(tx + ux * 14, ty + uy * 14), offset: .55, easing: 'ease-in-out' },
+      { transform: T(tx - ux * 5, ty - uy * 5), offset: .78, easing: 'ease-in-out' },
+      { transform: T(tx, ty) }
+    ], { duration: 600 });
+    pill.classList.remove('squash'); void pill.offsetWidth; pill.classList.add('squash');
   }
   window.addEventListener('resize', function () { place(false); });
   window.addEventListener('load', function () { place(false); });

@@ -533,6 +533,11 @@ for _ev in (context.get("events") or []):
         "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
         "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,   # for the Luma registrations block
+        # Sponsors tab (Marek 2026-09-18): the event's sponsors as built (partners already filtered out above)
+        "sponsor_view": [{"name": os.path.splitext(str(s.get("logo")).strip())[0], "logo": str(s.get("logo")).strip(),
+                          "url": str(s.get("url") or "").strip(),
+                          "has_logo": os.path.exists(os.path.join("..", "sponsors", str(s.get("logo")).strip()))}
+                         for s in _sponsors],
         "expected": int(re.sub(r"[^\d]", "", str(_em.get("attendees") or "0")) or 0),    # "N attendees" as the event page shows it
     })
     print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings, cfp {_cfp or 'n/a'}")
