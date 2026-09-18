@@ -251,6 +251,35 @@ def _status_days_left(start_time):
         return 9999
 
 
+# CFP column (Marek 2026-09-18): a frog per event that opens its cfp.ninja "manage talks" page,
+# https://cfp.ninja/dashboard/events/<numeric id>/proposals. The id comes from the public event API by the slug in
+# the event's cfp_url; when it cannot be looked up the frog falls back to the public cfp.ninja page. Never fails the build.
+def _status_cfp_manage(cfp_url):
+    cfp_url = str(cfp_url or "").strip()
+    m = re.search(r"cfp\.ninja/e/([^/?#\s]+)", cfp_url)
+    if not m:
+        return ("", False)
+    if os.environ.get("SKIP_CFP_CHECK"):
+        return (cfp_url, False)
+    try:
+        import json as _json
+        import urllib.request
+        req = urllib.request.Request("https://cfp.ninja/api/v0/e/%s" % m.group(1), headers={"User-Agent": "Mozilla/5.0"})
+        data = _json.loads(urllib.request.urlopen(req, timeout=5).read().decode("utf-8", "ignore"))
+        ev = data.get("data", data) if isinstance(data, dict) else {}
+        ev = ev if isinstance(ev, dict) else {}
+        _id = int(ev.get("ID") or ev.get("id") or 0)
+        if _id > 0:
+            return ("https://cfp.ninja/dashboard/events/%d/proposals" % _id, True)
+        print("WARN: cfp.ninja returned no event id for %s; the status frog links to the public page" % m.group(1))
+    except Exception as e:
+        if getattr(e, "code", None) == 404:      # not on cfp.ninja (yet): the public page would 404 too, so show N/A
+            print("WARN: cfp.ninja does not know the event %s; no status frog until it is synced" % m.group(1))
+            return ("", False)
+        print("WARN: could not look up the cfp.ninja event id for %s (%s); the status frog links to the public page" % (m.group(1), e))
+    return (cfp_url, False)
+
+
 # Data checks (Marek 2026-09-13): flag repo problems per event under the table, so the team can fix
 # talks.csv / images without opening every page. Deliberately not picky: only things clearly off the
 # rails (wrong column, missing file, bad link, out-of-range number, a phrase where a name should be),
@@ -494,7 +523,9 @@ for _ev in (context.get("events") or []):
     _key, _label = _status_health(_pct, _days_left)
     _issues = _status_lint(_folder, _em, _tracks)
     _n_err = sum(1 for x in _issues if x["sev"] == "error")
+    _cfp, _cfp_direct = _status_cfp_manage(_em.get("cfp_url"))
     _status_rows.append({
+        "cfp": _cfp, "cfp_direct": _cfp_direct,
         "issues": _issues[:_LINT_MAX_PER_EVENT], "issues_more": max(0, len(_issues) - _LINT_MAX_PER_EVENT),
         "errors": _n_err, "warnings": len(_issues) - _n_err,
         "name": _ev.get("name") or _folder, "folder": _folder, "url": "/" + _folder + "/",
@@ -504,7 +535,7 @@ for _ev in (context.get("events") or []):
         "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,   # for the Luma registrations block
         "expected": int(re.sub(r"[^\d]", "", str(_em.get("attendees") or "0")) or 0),    # "N attendees" as the event page shows it
     })
-    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings")
+    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings, cfp {_cfp or 'n/a'}")
 _me = str(context.get("brand_name") or "")
 
 # Past events (Marek 2026-09-13: "can it analyse also past events? excluding 2022-2024 sreday of course"):
