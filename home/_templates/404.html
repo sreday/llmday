@@ -1,5 +1,8 @@
 {# ── GitHub Pages serves this for any missing path. First applies the folder renames from
-     home/metadata.yml -> redirects (so old talk links keep working), otherwise a plain not-found page. ── #}
+     home/metadata.yml -> redirects (so old talk links keep working; llmday only so far), otherwise the
+     lost-mascot page. Identical file in sreday, llmday and platformday: the mascot is each repo's own
+     home/assets/images/404.png, the colour comes in as brand_color. All URLs root-absolute, the page is
+     served at any depth. ── #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,13 +20,28 @@
       }
     })();
   </script>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:700|Roboto:400&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent: {{ brand_color | default('#26986A') }}; }
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; align-items: center; justify-content: center; background: #f4f4f6; color: #111; font-family: 'Roboto', Arial, sans-serif; }
+    main { width: 100%; max-width: 640px; padding: 40px 20px 60px; text-align: center; box-sizing: border-box; }
+    .mascot { display: block; width: min(320px, 70vw); height: auto; margin: 0 auto 8px; animation: lost 3.2s ease-in-out infinite; transform-origin: 50% 90%; }
+    @keyframes lost { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) translateY(-6px); } }
+    @media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
+    .code { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .9rem; letter-spacing: .12em; color: var(--accent); margin: 0 0 6px; }
+    h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(1.5rem, 5vw, 2.1rem); margin: 0 0 26px; }
+    .back { display: inline-block; padding: 13px 30px; border-radius: 999px; background: var(--accent); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .15s, box-shadow .15s; }
+    .back:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.24); }
+  </style>
 </head>
-<body style="margin:0;background:#f4f4f6;color:#111;font-family:'Roboto',Arial,sans-serif">
-  <main style="max-width:640px;margin:0 auto;padding:80px 20px;text-align:center">
-    <h1 style="font-family:'Montserrat',sans-serif;font-size:2rem;margin-bottom:10px">Page not found</h1>
-    <p style="color:#555">The page you are looking for does not exist or has moved.</p>
-    <p><a href="/" style="color:{{ brand_color | default('#26986A') }};font-weight:700">Back to {{ brand_name }}</a></p>
+<body>
+  <main>
+    <img class="mascot" src="/assets/images/404.png" alt="" width="320">
+    <p class="code">404</p>
+    <h1>Oups, looks like you're lost</h1>
+    <a class="back" href="/">Back to main page</a>
   </main>
 </body>
 </html>

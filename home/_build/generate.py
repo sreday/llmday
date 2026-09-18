@@ -203,7 +203,7 @@ for _r in _redirects:
     print(f"  + {len(_pages)} page stubs under /{_from}/")
 with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
     print("Writing out 404.html (%d redirect rules)" % len(_redirects))
-    f.write(env.get_template("404.html").render(**{**context, "redirects": [
+    f.write(env.get_template("404.html").render(**{**context, "brand_color": "#26986A", "redirects": [
         {"from": str(r["from"]).strip("/"), "to": str(r["to"]).strip("/")} for r in _redirects]}))
 
 # STATUS PAGE (hidden, /status/): lineup + sponsor progress of every upcoming event.
