@@ -1052,10 +1052,55 @@ for r in _status_rows:
         for _c in r["luma"]["cats"]:
             _c["bar"] = round(100.0 * _c["n"] / _scale, 2)
         r["luma"]["to_go"] = max(r["expected"] - r["luma"]["total"], 0) if r["expected"] else None
+
+
+# Registration alerts (Marek 2026-09-18): a yellow "!" dot on the corner of an event's registrations card. Several
+# conditions can hold at once; only the MOST important one is shown, in Marek's order:
+#   1 free      Luma registration is free                       -> "Free event - half of people won't come"
+#   2 freebies  50%+ of the registrants are Freebies            -> "Ton of freebies, half of them won't come!"
+#   3 speakers  under half of the confirmed speakers registered -> "Check if speakers are registered"
+#   4 empty     registration health is Bad or Critical          -> "Empty room..." + skull (added by the template)
+# No condition met = no dot. Free/paid comes from Luma's public embed page, the same probe the event build uses for
+# luma_is_free, so it needs no API key; any failure = "paid" (no alert).
+_ALERT_FREEBIE_SHARE = 0.5
+_ALERT_SPEAKERS_REGISTERED = 0.5     # of the confirmed talks; a share of all registrants would shrink as ticket sales grow
+_ALERT_SPEAKERS_MIN_TALKS = 4        # too few confirmed talks = the ratio is noise
+
+
+def _status_luma_free(evt_id):
+    if not evt_id or os.environ.get("SKIP_LUMA_FREE_CHECK"):
+        return False
+    try:
+        import urllib.request
+        req = urllib.request.Request("https://luma.com/embed/event/%s/simple" % evt_id, headers={"User-Agent": "Mozilla/5.0"})
+        return '"is_free":true' in urllib.request.urlopen(req, timeout=10).read().decode("utf-8", "ignore")
+    except Exception as e:
+        print("WARN: could not check Luma pricing for %s (%s); no free-event alert" % (evt_id, e))
+        return False
+
+
+for r in _status_rows:
+    _alerts = []
+    _forced = os.environ.get("STATUS_TEST_FREE_EVENTS", "").split(",")          # local testing only
+    if r["luma_evt"] and (r["luma_evt"] in _forced or _status_luma_free(r["luma_evt"])):
+        _alerts.append(("free", "Free event - half of people won't come"))
+    if r["luma"]:
+        _cat = {c["key"]: c["n"] for c in r["luma"]["cats"]}
+        if r["luma"]["total"] and _cat.get("free", 0) >= _ALERT_FREEBIE_SHARE * r["luma"]["total"]:
+            _alerts.append(("freebies", "Ton of freebies, half of them won't come!"))
+        if r["confirmed"] >= _ALERT_SPEAKERS_MIN_TALKS and _cat.get("speakers", 0) < _ALERT_SPEAKERS_REGISTERED * r["confirmed"]:
+            _alerts.append(("speakers", "Check if speakers are registered (%d of %d so far)" % (_cat.get("speakers", 0), r["confirmed"])))
+        if r["luma"]["health"] in ("bad", "critical"):
+            _alerts.append(("empty", "Empty room..."))
+    r["alert"] = {"key": _alerts[0][0], "text": _alerts[0][1]} if _alerts else None
+    r["alerts_all"] = [a[0] for a in _alerts]
 print("REGISTRATIONS (Luma, approved): %s" % (_luma_note or "%d keys; overall %d registered / %d expected (%d%%)" % (
     len(_LUMA_KEYS), _luma_overall["registered"], _luma_overall["expected"], _luma_overall["pct"])))
 for _kn in _luma_key_notes:
     print("  " + _kn)
+for r in _status_rows:
+    if r["alert"]:
+        print("  ALERT %-32s %s (all met: %s)" % (r["name"][:32], r["alert"]["text"], ", ".join(r["alerts_all"])))
 for r in _status_rows:
     if r["luma"]:
         print("  %-38s %4d total (%s)  +%d in 7d  %s  Luma says %d approved, %d pending, %d waitlist, %d checked in, %d page(s)" % (
