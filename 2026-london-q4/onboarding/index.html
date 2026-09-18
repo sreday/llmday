@@ -186,7 +186,7 @@ function showError(err) {
     case 'no recipients': msg = 'Add at least one email.'; break;
     case 'bad delay': msg = 'The server did not accept the delay.'; break;
     case 'no trigger permission': msg = 'Scheduling is not authorised yet: open the Apps Script editor, run testSchedule once and approve the permission.'; break;
-    case 'old script': msg = 'Scheduling needs version 5 of the Apps Script. Paste and redeploy it, then run testSchedule once.'; break;
+    case 'old script': msg = outdatedText(res.have); break;
     default: msg = "Hmm, that didn't go through (" + (err.name === 'AbortError' ? 'timeout' : err.message) + '). Try again.';
   }
   el.textContent = msg; el.hidden = false;
@@ -223,9 +223,22 @@ $('ob-preview').addEventListener('click', function() {
 // Older script versions send immediately whatever the action, so a scheduled send first checks the version.
 function requireScriptVersion(min) {
   return fetch(OB_URL).then(function(r) { return r.json(); }).then(function(h) {
-    if (!h || !(h.version >= min)) throw new Error('old script');
-  }, function() { throw new Error('old script'); });
+    if (!h || !(h.version >= min)) { var e = new Error('old script'); e.res = { have: h && h.version, need: min }; throw e; }
+  }, function() { var e = new Error('old script'); e.res = { need: min }; throw e; });
 }
+// The email wording lives in the Apps Script, not here. Version 9 is the first one that writes the FREE-event
+// wording (no SPEAKERFREE / PLUSONE / DREAMTEAM / 20% codes); an older deployment silently sends the paid text
+// (happened 2026-09-18: v9 sat in the repo, v7 was deployed). So nothing is sent through an older script, and
+// the page says so as soon as it loads.
+var OB_MIN_VERSION = 9;
+function outdatedText(have) {
+  return 'The deployed email script is version ' + (have || '?') + ', this page needs version ' + OB_MIN_VERSION + '. ' +
+         (OB_EVENT.is_free ? 'This is a FREE event: the old script would still mention the SPEAKERFREE, PLUSONE, DREAMTEAM and discount codes. ' : '') +
+         'Paste the current "Speaker onboarding" script into Apps Script and publish a new version (Deploy - Manage deployments - edit - New version).';
+}
+if (OB_URL) requireScriptVersion(OB_MIN_VERSION).catch(function(err) {
+  var el = $('ob-error'); el.textContent = outdatedText(err.res && err.res.have); el.hidden = false;
+});
 function finish(html) {
   done.innerHTML = html + ' <a href="#" id="ob-again">Send another batch</a>';
   form.hidden = true; previewBox.hidden = true; done.hidden = false;
@@ -240,9 +253,9 @@ function doSend(mode) {
   if (!confirm(scheduled ? 'Schedule the onboarding email to ' + who + ' for 1 hour from now?' : 'Send the onboarding email to ' + who + ' now?')) return;
   var btn = $(scheduled ? 'ob-schedule' : 'ob-send'), other = $(scheduled ? 'ob-send' : 'ob-schedule');
   busy(btn, scheduled ? 'Scheduling...' : 'Sending...'); other.disabled = true;
-  var go = scheduled
-    ? requireScriptVersion(5).then(function() { return post('schedule', p.valid, { delay_minutes: 60 }); })
-    : post('send', p.valid);
+  var go = requireScriptVersion(OB_MIN_VERSION).then(function() {
+    return scheduled ? post('schedule', p.valid, { delay_minutes: 60 }) : post('send', p.valid);
+  });
   go.then(function(res) {
     idle(btn); other.disabled = false;
     if (scheduled) {
