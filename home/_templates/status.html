@@ -295,7 +295,7 @@
     {% endif %}
     {% for r in status_rows %}
     <div class="reg">
-      {% if r.alert %}<div class="reg-alert alert-{{ r.alert.key }}" tabindex="0" role="note" aria-label="{{ r.alert.text }}"><span>{{ r.alert.text }}{% if r.alert.key == 'empty' %} &#128128;{% endif %}</span></div>{% endif %}
+      {% if r.alert %}<div class="reg-alert alert-{{ r.alert.key }}" tabindex="0" role="note" aria-label="{{ r.alert.text }}"><span>{{ r.alert.text }}</span></div>{% endif %}
       {% set ring_pct = (r.luma.expected_pct if r.luma and r.luma.expected_pct is not none else 0) %}
       <div class="reg-ring {{ r.luma.health if r.luma else 'neutral' }}" title="{% if r.luma %}{{ r.luma.health_label }}{% if r.expected %}: {{ r.luma.total }} registered of {{ r.expected }} expected, {{ r.days_left }} days to go{% endif %}{% else %}No Luma data{% endif %}">
         <div class="ring">
