@@ -35,6 +35,9 @@
     .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
     td.hours { white-space: nowrap; font: inherit; }
     td.hours.na { color: #aaa; }
+    .frog { display: inline-block; font-size: 1.3rem; line-height: 1; text-decoration: none; transition: transform .15s; }
+    .frog:hover { transform: scale(1.3) rotate(-8deg); }
+    td.cfp.na { color: #aaa; }
     .empty { padding: 30px; color: #777; text-align: center; }
     .sisters { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
     .sisters a { display: inline-flex; align-items: center; border-radius: 999px; padding: 11px 24px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .95rem; color: #fff; text-decoration: none; background: var(--c); transition: filter .15s; }
@@ -188,6 +191,7 @@
           <th>Progress</th>
           <th>Health</th>
           <th class="hours">Start / end</th>
+          <th class="num">CFP</th>
           <th class="num">Sponsors</th>
         </tr>
       </thead>
@@ -208,6 +212,7 @@
           </td>
           <td><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
           <td class="hours">9AM - 5:30PM</td>
+          <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/99/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday San Francisco 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -226,6 +231,7 @@
           </td>
           <td><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
           <td class="hours">10AM - 7:30PM</td>
+          <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/80/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday Austin 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -244,6 +250,7 @@
           </td>
           <td><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
           <td class="hours na">N/A</td>
+          <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/74/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday NYC 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
           <td class="num"><strong>2</strong></td>
         </tr>
       
@@ -262,6 +269,7 @@
           </td>
           <td><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
           <td class="hours na">N/A</td>
+          <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/78/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday + PEC London 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -280,6 +288,7 @@
           </td>
           <td><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
           <td class="hours na">N/A</td>
+          <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/72/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday Montevideo 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
           <td class="num"><strong>1</strong></td>
         </tr>
       
@@ -315,7 +324,7 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-18T14:39:27+00:00">2026-09-18 14:39 UTC</span>. Ring colour = registered vs expected, same health logic as the talks above.</div>
+    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="2026-09-18T14:45:17+00:00">2026-09-18 14:45 UTC</span>. Ring colour = registered vs expected, same health logic as the talks above.</div>
     
     
     <div class="reg-overall"><strong>59</strong> registered / 550 expected across all upcoming events · <strong>11%</strong></div>
@@ -861,7 +870,7 @@
   </section>
   
 
-  <div class="foot">Generated 2026-09-18 14:39 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-18 14:45 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Data checks as tabs (Marek 2026-09-17)
