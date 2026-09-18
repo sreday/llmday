@@ -113,7 +113,20 @@
     .regs { margin-top: 34px; }
     .regs h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
     .regs .sub { margin-bottom: 14px; }
-    .reg { background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); padding: 12px 16px; margin-bottom: 10px; }
+    .reg { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; box-shadow: 0 3px 14px rgba(0,0,0,.05); padding: 12px 16px; margin-bottom: 10px; }
+    .reg-body { min-width: 0; }
+    /* Registered vs goal as a ring, coloured by the same time-sensitive health ladder as the talks table */
+    .reg-ring { display: flex; align-items: center; gap: 10px; min-width: 150px; padding: 6px 16px 6px 6px; border-radius: 999px; background: #f4f4f6; border: 1px solid #e6e6e6; --c: var(--neutral); }
+    .reg-ring.critical { --c: var(--critical); } .reg-ring.bad { --c: var(--bad); } .reg-ring.neutral { --c: var(--neutral); } .reg-ring.good { --c: var(--good); } .reg-ring.nailed { --c: var(--nailed); }
+    .reg-ring svg { width: 58px; height: 58px; flex: none; transform: rotate(-90deg); }
+    .reg-ring circle { fill: none; stroke-width: 4; }
+    .reg-ring .track { stroke: #dfe3e8; }
+    .reg-ring .fill { stroke: var(--c); stroke-linecap: round; }
+    .reg-ring .ring { position: relative; flex: none; width: 58px; height: 58px; }
+    .reg-ring .ring span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .82rem; color: #111; font-variant-numeric: tabular-nums; }
+    .reg-ring .nums { line-height: 1.25; font-size: .78rem; color: #777; white-space: nowrap; }
+    .reg-ring .nums strong { display: block; font-size: 1rem; color: #111; font-variant-numeric: tabular-nums; }
+    .reg-ring .nums strong i { font-style: normal; font-weight: 400; color: #888; }
     .reg-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
     .reg-head > a { color: #111; font-weight: 600; text-decoration: none; font-size: .95rem; }
     .reg-head > a:hover { color: var(--accent); }
@@ -134,13 +147,15 @@
     html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .checks.is-active { display: block; }
     html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .checks h2 { display: none; }
     .reg-overall strong { color: #111; }
-    .reg-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: #eceef1; margin: 10px 0 8px; }
+    .reg-bar { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: #dfe3e8; box-shadow: inset 0 1px 2px rgba(0,0,0,.12); margin: 10px 0 8px; }   /* the grey rest = still missing to the goal */
     .reg-bar i { display: block; height: 100%; background: var(--c); }
     .reg-cats { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .84rem; color: #555; }
     .reg-cats b { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--c); margin-right: 6px; vertical-align: -1px; }
     .reg-cats strong { color: #111; margin-left: 2px; }
     .reg-cats em { font-style: normal; color: #999; margin-left: 5px; font-variant-numeric: tabular-nums; }
-    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button { font-size: .9rem; padding: 12px 10px; } }
+    .reg-cats .togo { margin-left: auto; color: #888; }
+    .reg-cats .togo b { background: #dfe3e8; box-shadow: inset 0 1px 1px rgba(0,0,0,.15); }
+    @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button { font-size: .9rem; padding: 12px 10px; } .reg { grid-template-columns: 1fr; gap: 10px; } .reg-ring { justify-self: start; } .reg-cats .togo { margin-left: 0; } }
   </style>
 </head>
 <body>
@@ -224,7 +239,7 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="{{ status_generated_iso }}">{{ status_generated }}</span></div>
+    <div class="sub">NOT LIVE, updates when the website is built. Last update: <span data-ts-full="{{ status_generated_iso }}">{{ status_generated }}</span>. Ring colour = registered vs expected, same health logic as the talks above.</div>
     {% if status_luma_note %}
     <div class="added-note">{{ status_luma_note }}</div>
     {% else %}
@@ -233,10 +248,19 @@
     {% endif %}
     {% for r in status_rows %}
     <div class="reg">
+      {% set ring_pct = (r.luma.expected_pct if r.luma and r.luma.expected_pct is not none else 0) %}
+      <div class="reg-ring {{ r.luma.health if r.luma else 'neutral' }}" title="{% if r.luma %}{{ r.luma.health_label }}{% if r.expected %}: {{ r.luma.total }} registered of {{ r.expected }} expected, {{ r.days_left }} days to go{% endif %}{% else %}No Luma data{% endif %}">
+        <div class="ring">
+          <svg viewBox="0 0 36 36" aria-hidden="true"><circle class="track" cx="18" cy="18" r="15.9155"/>{% if ring_pct %}<circle class="fill" cx="18" cy="18" r="15.9155" stroke-dasharray="{{ [ring_pct, 100] | min }} 100"/>{% endif %}</svg>
+          <span>{% if r.luma and r.expected %}{{ r.luma.expected_pct }}%{% else %}&ndash;{% endif %}</span>
+        </div>
+        <div class="nums"><strong>{{ r.luma.total if r.luma else '–' }}{% if r.expected %} <i>/ {{ r.expected }}</i>{% endif %}</strong>registered{% if r.expected %} / expected{% endif %}</div>
+      </div>
+      <div class="reg-body">
       <div class="reg-head">
         <a href="{{ r.url }}">{{ r.name }}</a>
         {% if r.luma %}
-        <span class="reg-total"><strong>{{ r.luma.total }}</strong> registered{% if r.expected %} / {{ r.expected }} expected · <strong>{{ r.luma.expected_pct }}%</strong>{% endif %}{% if r.luma.capacity %} <em class="na">(Luma capacity {{ r.luma.capacity }})</em>{% endif %}{% if r.luma.approved_api != r.luma.total %} <em class="na">(Luma counts {{ r.luma.approved_api }} approved)</em>{% endif %}</span>
+        {% if r.luma.capacity or r.luma.approved_api != r.luma.total %}<span class="reg-total">{% if r.luma.capacity %}<em class="na">(Luma capacity {{ r.luma.capacity }})</em>{% endif %}{% if r.luma.approved_api != r.luma.total %} <em class="na">(Luma counts {{ r.luma.approved_api }} approved)</em>{% endif %}</span>{% endif %}
         <span class="spacer"></span>
         <small>+{{ r.luma.last7 }} in 7 days{% if r.luma.pending or r.luma.waitlist %} · {{ r.luma.pending }} pending{% if r.luma.waitlist %}, {{ r.luma.waitlist }} waitlisted{% endif %}{% endif %}{% if r.luma.checked_in %} · {{ r.luma.checked_in }} checked in{% endif %}{% if not r.luma.open %} · registration closed{% endif %}{% if r.luma.url %} · <a href="{{ r.luma.url }}">Luma</a>{% endif %}</small>
         {% else %}
@@ -244,9 +268,12 @@
         {% endif %}
       </div>
       {% if r.luma %}
-      <div class="reg-bar">{% for c in r.luma.cats %}{% if c.n %}<i class="{{ c.key }}" style="width: {{ c.pct }}%" title="{{ c.label }}: {{ c.n }} ({{ c.pct }}%)"></i>{% endif %}{% endfor %}</div>
-      <div class="reg-cats">{% for c in r.luma.cats %}<span class="{{ c.key }}"><b></b>{{ c.label }} <strong>{{ c.n }}</strong><em>{{ c.pct }}%</em></span>{% endfor %}</div>
+      <div class="reg-bar">{% for c in r.luma.cats %}{% if c.n %}<i class="{{ c.key }}" style="width: {{ c.bar }}%" title="{{ c.label }}: {{ c.n }} ({{ c.pct }}% of registered)"></i>{% endif %}{% endfor %}</div>
+      <div class="reg-cats">{% for c in r.luma.cats %}<span class="{{ c.key }}"><b></b>{{ c.label }} <strong>{{ c.n }}</strong><em>{{ c.pct }}%</em></span>{% endfor %}{% if r.luma.to_go %}<span class="togo"><b></b>To goal <strong>{{ r.luma.to_go }}</strong></span>{% endif %}</div>
+      {% else %}
+      <div class="reg-bar"></div>
       {% endif %}
+      </div>
     </div>
     {% endfor %}
     {% endif %}

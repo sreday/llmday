@@ -938,6 +938,14 @@ _luma_overall["pct"] = round(100.0 * _luma_overall["registered"] / _luma_overall
 for r in _status_rows:
     if r["luma"]:
         r["luma"]["expected_pct"] = round(100.0 * r["luma"]["total"] / r["expected"]) if r["expected"] else None
+        # Registrations ring + goal-scaled bar (Marek 2026-09-18): same time-sensitive ladder as the talks above;
+        # the stacked bar is drawn against the goal, so the unfilled rest of the track = what is still missing.
+        r["luma"]["health"], r["luma"]["health_label"] = (_status_health(r["luma"]["expected_pct"], r["days_left"])
+                                                          if r["expected"] else ("neutral", "No goal set"))
+        _scale = max(r["expected"], r["luma"]["total"]) or 1
+        for _c in r["luma"]["cats"]:
+            _c["bar"] = round(100.0 * _c["n"] / _scale, 2)
+        r["luma"]["to_go"] = max(r["expected"] - r["luma"]["total"], 0) if r["expected"] else None
 print("REGISTRATIONS (Luma, approved): %s" % (_luma_note or "%d keys; overall %d registered / %d expected (%d%%)" % (
     len(_LUMA_KEYS), _luma_overall["registered"], _luma_overall["expected"], _luma_overall["pct"])))
 for _kn in _luma_key_notes:
