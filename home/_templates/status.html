@@ -317,7 +317,7 @@
 
   <section class="added">
     <h2>Speakers on the website</h2>
-    <div class="sub">Who was added when, and to which conference. Red = a fully entered speaker who is no longer in the lineup (back within {{ status_flap_days }} days = ignored).</div>
+    <div class="sub">Who was added, who was removed, and when - last {{ status_added_max }} days.</div>
     {% if status_added_error %}
     <div class="added-note">{{ status_added_error }}</div>
     {% else %}
