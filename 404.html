@@ -93,7 +93,7 @@
         if (d <= 3 || prefix) cands.push({ ev: events[k], d: prefix ? Math.min(d, 2) : d });
       }
       cands.sort(function (a, b) { return a.d - b.d || (b.ev.upcoming - a.ev.upcoming) || (a.ev.order - b.ev.order); });
-      cands = (cands.length && cands[0].d === 0) ? [cands[0]] : cands.slice(0, 3);   // folder typed right: stay inside that event
+      cands = cands.slice(0, 1);                       // one hint only, the closest (Marek 2026-09-18)
       var links = [];
       for (k = 0; k < cands.length; k++) {
         var ev = cands[k].ev, url = ev.path;
@@ -110,7 +110,7 @@
       if (!links.length) {                                                    // site pages like /host/
         for (k = 0; k < site.length; k++) {
           var sp = site[k].replace(/\//g, '');
-          if (sp && lev(bare, sp) <= 2) links.push(site[k]);
+          if (sp && lev(bare, sp) <= 2 && !links.length) links.push(site[k]);
         }
       }
       if (!links.length) return;
