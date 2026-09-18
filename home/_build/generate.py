@@ -241,6 +241,22 @@ def _status_health(pct, days_left):
     return ("neutral", "Neutral")
 
 
+# Logo stems the tidy-up below cannot guess (fused words, odd casing). Extend when a pill reads wrong.
+_STATUS_SPONSOR_NAMES = {"cockroachlabs": "Cockroach Labs", "hockeystick": "HockeyStick", "devit-usa": "DevIT",
+                         "aiproductivityhub": "AI Productivity Hub", "prompthub": "PromptHub", "prompt-hub": "PromptHub"}
+
+
+def _status_sponsor_name(logo):
+    """'harness.png' -> 'Harness', 'cockroach-labs.png' -> 'Cockroach Labs'; stems that already carry capitals stay as they are."""
+    stem = os.path.splitext(str(logo or "").strip())[0]
+    if stem.lower() in _STATUS_SPONSOR_NAMES:
+        return _STATUS_SPONSOR_NAMES[stem.lower()]
+    if stem == stem.lower():
+        stem = re.sub(r"[-_]+", " ", stem).strip()
+        stem = stem.upper() if len(stem) <= 3 else stem.title()      # ing -> ING, ibm -> IBM
+    return stem
+
+
 def _status_days_left(start_time):
     try:
         _dt = start_time if isinstance(start_time, datetime.datetime) else datetime.datetime.fromisoformat(str(start_time))
@@ -534,9 +550,8 @@ for _ev in (context.get("events") or []):
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
         "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,   # for the Luma registrations block
         # Sponsors tab (Marek 2026-09-18): the event's sponsors as built (partners already filtered out above)
-        "sponsor_view": [{"name": os.path.splitext(str(s.get("logo")).strip())[0], "logo": str(s.get("logo")).strip(),
-                          "url": str(s.get("url") or "").strip(),
-                          "has_logo": os.path.exists(os.path.join("..", "sponsors", str(s.get("logo")).strip()))}
+        # Text pills only (Marek: "pills with text is fine, no need to display logo"); name = logo file stem, tidied
+        "sponsor_view": [{"name": _status_sponsor_name(s.get("logo")), "url": str(s.get("url") or "").strip()}
                          for s in _sponsors],
         "expected": int(re.sub(r"[^\d]", "", str(_em.get("attendees") or "0")) or 0),    # "N attendees" as the event page shows it
     })
