@@ -683,10 +683,922 @@
 </style>
 
 
+<style>
+  /* Track navigation */
+  .track-nav {
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+  }
+  .track-nav-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .track-nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .track-nav-links a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--brand);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .track-nav-links a:hover {
+    background: var(--brand-light);
+    color: white;
+  }
+  .view-toggle-link {
+    color: var(--brand);
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--brand);
+    border-radius: 4px;
+    transition: all 0.2s;
+    min-width: 10rem;
+    text-align: center;
+  }
+  .view-toggle-link:hover {
+    background: var(--brand);
+    color: white;
+  }
+  .view-toggle-link.active {
+    background: var(--brand);
+    color: white;
+  }
+  /* Table view */
+  .schedule-table-view { display: none; }
+  .schedule-table-view.active { display: block; }
+  .schedule-timeline-view { display: block; }
+  .schedule-timeline-view.hidden { display: none; }
+  .schedule-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 1rem;
+    table-layout: fixed;
+  }
+  .schedule-grid-table th {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: white;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .schedule-grid-table th:first-child {
+    width: 60px;
+  }
+  .schedule-grid-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--brand-lightest);
+    vertical-align: top;
+  }
+  .schedule-grid-table td.merged-cell {
+    text-align: center;
+    font-weight: 500;
+    color: #555;
+    background: var(--brand-lightest);
+  }
+  .schedule-grid-table .time-cell {
+    color: var(--brand);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .schedule-grid-table .talk-cell a {
+    color: #222;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .schedule-grid-table .talk-cell a:hover {
+    color: var(--brand);
+  }
+  .schedule-grid-table .speaker-info {
+    color: #444;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+  .schedule-grid-table .speaker-info .affiliation {
+    color: #666;
+  }
+  .schedule-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  .schedule-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .schedule-meta-divider {
+    color: #ccc;
+    font-weight: 300;
+  }
+  /* Track section header */
+  .track-section-header {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0 0 0;
+    border-radius: 4px 4px 0 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .track-section-header:first-of-type {
+    margin-top: 0;
+  }
+
+  .schedule-section.theme-bg-light { background-color: #f0faf5 !important; }
+</style>
+
 <section id="schedule" class="schedule-section section theme-bg-light">
   <div class="container">
-    <h2 class="section-heading text-center mb-5">Schedule</h2>
-    <h4 class="section-heading text-center mb-5">Coming soon</h4>
+    <h2 class="section-heading text-center mb-4">Schedule</h2>
+
+    <!-- Schedule meta info -->
+    <div class="schedule-meta">
+      <span class="schedule-meta-item">October 29, 2026</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">single track</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">9AM - 4:30PM</span>
+      <span class="schedule-meta-divider">•</span>
+      <span class="schedule-meta-item">NYC, in-person</span>
+    </div>
+
+
+    
+
+    <!-- Track navigation -->
+    <div class="track-nav">
+      <div class="track-nav-inner">
+
+        <span class="view-toggle-link" id="view-toggle-0" onclick="toggleView(0)">view as table</span>
+      </div>
+    </div>
+
+    <!-- Timeline View (default) -->
+    <div id="timeline-view-0" class="schedule-timeline-view">
+
+      <div class="track-section-header" id="track-0-1">main room &bull; Track 1</div>
+      <div class="schedule-tab-content">
+        <div class="tab-pane active">
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">09:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Coffee break</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">09:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img class="profile-image rounded-circle mb-2" src="../speakers/Sam Currie.png" alt=""></a>
+                <div class="name">Sam Currie</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Isolation: Containers, VMs, Namespaces, Oh my!</a>
+              </h3>
+              <div class="location mb-3">heyo.computer</div>
+              <div class="desc schedule-abstract">Modern systems increasingly rely on isolation mechanisms—especially with the rise of AI agents and sandboxed execution—but there are many different approaches and they each have different strengths and tradeoffs. We'll cover: • Linux namespaces and cgroups • Node isolates and runtime isolation • Isolation methods commonly used in agent frameworks and harnesses • Containers and container runtimes • Virtual machines and KVM • Architecture-level isolation patterns • Practical tradeoffs and real-world use cases Sam has run production workloads at scale across Kubernetes, containers, VMs, lambdas, Node isolates, and sandboxing platforms like E2B, and will share lessons from deploying these systems in practice.<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">10:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><img class="profile-image rounded-circle mb-2" src="../speakers/Yiwen Zhang.png" alt=""></a>
+                <div class="name">Yiwen Zhang</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Token Economics for Custom Built Agents</a>
+              </h3>
+              <div class="location mb-3">AWS</div>
+              <div class="desc schedule-abstract">Tokens are the atomic units of data that large language and multimodal models read, write, and reason over to generate outputs. Token economics studies how AI consumption is metered, attributed, and connected back to business outcomes. Token consumption at large enterprises is climbing far faster than per-token prices are falling, and AI spend is increasingly becoming a CEO-level concern rather than an engineering line item.
+This talk examines token economics of custom-built agents, and the structural reasons behind their high costs. It surveys the emerging technologies and research to enhance token economics. Attendees will leave with a practical framework for locating and reducing their own token costs.<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">10:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2"><img class="profile-image rounded-circle mb-2" src="../speakers/Zachary Gruenberg.png" alt=""></a>
+                <div class="name">Zachary Gruenberg</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Post Mcp-Session-Id: Auth and Kill Switches for Stateless MCP Agents</a>
+              </h3>
+              <div class="location mb-3">Oasis Security</div>
+              <div class="desc schedule-abstract">The July 2026 MCP spec RC drops the initialize handshake and the Mcp-Session-Id header. If you built session auth, audit trails, or agent kill switches assuming a persistent session existed, that assumption just broke — and most people running MCP-connected agents in production haven’t dealt with it yet. I rebuilt my own agent runtime against this change and will share the details of the shift in architecture with you all.<a class="schedule-abstract-read-more" href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">11:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3"><img class="profile-image rounded-circle mb-2" src="../speakers/Josh Lee.png" alt=""></a>
+                <div class="name">Josh Lee</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Zen AI Cohabitation: How I learned to embrace the slop</a>
+              </h3>
+              <div class="location mb-3">Altinity</div>
+              <div class="desc schedule-abstract">Our tech lives are surrounded by AI. Everywhere we look: social media posts, videos, blog posts, and code. Companies expect employees to embrace AI, but at what cost? And what’s it doing to our mental health? While it’s satisfying to create with AI, it feels like we’re also losing a bit of our humanity and creativity along the way. In this talk Josh will look at how the world of technology has changed due to the AI boom, and how we can lean on our AI minions to produce meaningful, creative, non-slop work.<a class="schedule-abstract-read-more" href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">11:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4"><img class="profile-image rounded-circle mb-2" src="../speakers/Rajanikant Vellaturi.png" alt=""></a>
+                <div class="name">Rajanikant Vellaturi</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">From CSAT to AI Insights</a>
+              </h3>
+              <div class="location mb-3">Tredence Inc.</div>
+              <div class="desc schedule-abstract">Enterprises are collecting large volumes of customer feedback, support interactions, and operational signals, but most teams still rely on manual analysis to identify patterns, risks, and improvement opportunities. In this session, I will share a practical enterprise AI workflow inspired by a real-world CSAT analytics use case, where AI was used to transform thousands of customer feedback responses into structured insights, leadership dashboards, and actionable signals.
+The talk will cover how to design an end-to-end AI workflow using trusted enterprise data, LLM-based classification and summarization, metadata capture, validation, human review, and self-service analytics. I will also discuss the lessons learned while moving from manual reporting to an operational AI pipeline, including data quality, prompt design, evaluation, governance, and how to build trust with business stakeholders.
+The goal of this session is to help data leaders, AI practitioners, and engineering teams understand how to move beyond GenAI demos and build AI workflows that deliver measurable business value in production environments.<a class="schedule-abstract-read-more" href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">12:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Lunch & networking</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">12:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5"><img class="profile-image rounded-circle mb-2" src="../speakers/Paden Gayle.png" alt=""></a>
+                <div class="name">Paden Gayle</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Evals Your Customer Will Actually Believe</a>
+              </h3>
+              <div class="location mb-3">Notion</div>
+              <div class="desc schedule-abstract">Your agent passes your benchmarks. The customer still won't ship it. Inside an enterprise you don't own, an eval isn't a leaderboard score; it's the artifact that convinces a skeptical stakeholder to put an agent in front of their users and their data. This talk walks through building evaluations an enterprise customer will actually believe: sourcing test cases from the customer's own failure history instead of a generic benchmark, making each failure legible enough that a non-engineer can see what broke and why, and turning "looked good in the demo" into a documented sign-off. Drawn from Forward Deployed work at Notion and an eval background from Scale AI, this covers the tradeoffs and the cases where this still falls short.<a class="schedule-abstract-read-more" href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">13:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6"><img class="profile-image rounded-circle mb-2" src="../speakers/Maureese Williams.png" alt=""></a>
+                <div class="name">Maureese Williams</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">What Did Your Agent Actually Do?</a>
+              </h3>
+              <div class="location mb-3">Disney</div>
+              <div class="desc schedule-abstract">An agent runs forty steps against a real repository. It reports success. Something breaks in production an hour later. Which step did it? For most agent stacks the honest answer is that nobody knows. The trace is a pile of model outputs describing what the agent *believed* it was doing, the run isn't reproducible, and re-running it produces a different plan anyway. Three properties fix this, and none of them require a better model. **Reliability.** The agent's world state comes from deterministic sensors, never from the model's own claims. When the model asserts "tests passed" and the sensor disagrees, that's a logged incident, not a state transition. Across an integration suite spanning six system archetypes, 611 of 611 injected false claims were refused, with zero false refusals on honest ones. **Reproducibility.** No RNG anywhere, ties broken lexicographically, plans replayed bit-exact from a hash-chained journal. Same input, same plan, every time: 120 of 120 generated systems deterministic, 114 of 114 crash-and-resume runs converging to the same state. **Auditability.** Every step writes an append-only record containing the full decision table that produced it. Tamper with any of it and the chain breaks (3,894 of 3,894 mutations detected). You can ask the system *why* it chose an action and get the actual reason, not a rationalization generated after the fact. Long horizons are where this pays for itself. At three steps you can eyeball the trace. At forty, determinism is the only thing standing between you and archaeology. I'll show LEDGER running against a real repository, break it on purpose, and replay the failure bit-exact. Then I'll be specific about the cost: what you give up, where the model still genuinely earns its place, and what this approach cannot do.<a class="schedule-abstract-read-more" href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">13:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7"><img class="profile-image rounded-circle mb-2" src="../speakers/Sai Varma Dantuluri.png" alt=""></a>
+                <div class="name">Sai Varma Dantuluri</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Agents Aren't Users</a>
+              </h3>
+              <div class="location mb-3">VotalAI</div>
+              <div class="desc schedule-abstract">Most teams secure LLM applications the way they secure software: test before launch, add a guardrail, move on. That model breaks down here. Models get updated, prompts change, tools get added, and an agent that was safe last quarter has a different attack surface this quarter. This talk covers three gaps I keep running into in production AI systems, and what to do about each.
+First, why red teaming a model has to be continuous rather than a pre-launch gate, including what changed across iterations while testing NVIDIA's Nemotron content safety filter model with their AI engineering team.
+Second, guardrails. What content filters and safety classifiers actually catch, the failure modes teams assume are covered but aren't, and how to build an evaluation loop that tells you when a guardrail has quietly stopped working.
+Third, identity, the gap I think is most underestimated. Agents authenticate, hold credentials, call tools, and act on behalf of users, but the identity infrastructure we point at them was designed for humans making individual decisions. Sessions, MFA, least privilege, and audit trails don't map cleanly onto a non-deterministic system that spawns sub-agents and chains tool calls across systems. I'll walk through where that mismatch creates real exposure and what agent-native identity has to look like instead.
+Attendees will leave with a working model for continuously testing their own LLM and agent deployments, not a threat list.<a class="schedule-abstract-read-more" href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">14:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8"><img class="profile-image rounded-circle mb-2" src="../speakers/Sevak Avakians.png" alt=""></a>
+                <div class="name">Sevak Avakians</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Beyond the Next Token: The open future of language models</a>
+              </h3>
+              <div class="location mb-3">USAA</div>
+              <div class="desc schedule-abstract">Solving the black box explainability, traceability, determinism and real time learning problems.
+Demo of the next generation of language models.<a class="schedule-abstract-read-more" href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">14:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9"><img class="profile-image rounded-circle mb-2" src="../speakers/David Justus.png" alt=""></a>
+                <div class="name">David Justus</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Frontier by Default Is a Design Flaw</a>
+              </h3>
+              <div class="location mb-3">Panasonic</div>
+              <div class="desc schedule-abstract">Engineers default to the largest, best model. It gets the task done. But token consumption keeps climbing, agents retry, re-read, and loop, and the biggest model isn't always the right one. The usual tradeoff says pick two of speed, accuracy, and cost. This talk covers the holy grail: all three. I'll cover routing strategies between SLMs and frontier models, how to evaluate them, and real-world results from production systems.<a class="schedule-abstract-read-more" href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">15:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Play some Fallout !</h3>
+              <div class="location mb-3" style="color:#098dcf;">Main lobby</div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">15:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10"><img class="profile-image rounded-circle mb-2" src="../speakers/Marcelo Labre.png" alt=""></a>
+                <div class="name">Marcelo Labre</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Agentic Engineering: The Agent Writes the Code, Not the Process</a>
+              </h3>
+              <div class="location mb-3">Kidar</div>
+              <div class="desc schedule-abstract">While the industry chases agent reliability through smarter models, most agent failures trace to one design choice: letting the model decide what happens next. I built a software factory where the model only writes the code, while a deterministic controller drives Claude Code and Codex workers through the entire workflow, grounded by executable gates and engineering directives, with every transition, retry budget, and terminal owned by a versioned graph. I'll show the architecture, the failure classes it eliminates by construction, and what adversarial battle-testing taught me about where agent autonomy actually breaks.<a class="schedule-abstract-read-more" href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:00</h4>
+              <div class="profile">
+                <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11"><img class="profile-image rounded-circle mb-2" src="../speakers/Yossi Eliaz.png" alt=""></a>
+                <div class="name">Yossi Eliaz</div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3">
+                <a class="theme-link" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">The Sandbox Is the Agent Runtime: What Breaks When Execution Becomes Disposable</a>
+              </h3>
+              <div class="location mb-3">Incredibuild</div>
+              <div class="desc schedule-abstract">The talk is based on building secure execution infrastructure for autonomous agents at Incredibuild/islo and creating thousands of disposable environments in real workflows. It covers isolation, MCP/tool boundaries, short-lived credentials, snapshots/caching, traces, failure recovery, eval evidence, and why container-shaped assumptions become limiting once agents are long-running compute users.<a class="schedule-abstract-read-more" href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">... Read more</a></div>
+              
+            </div>
+          </div>
+
+          <div class="item item-talk">
+            <div class="meta">
+              <h4 class="time mb-3">16:30</h4>
+              <div class="profile">
+                <a href="#modal-speaker-" data-bs-toggle="modal" data-bs-target="#modal-speaker-"><img class="profile-image rounded-circle mb-2" src="" alt=""></a>
+                <div class="name"></div>
+              </div>
+            </div>
+            <div class="content">
+              
+              <h3 class="title mb-3" style="color:#098dcf;">Wrap up</h3>
+              <div class="location mb-3" style="color:#098dcf;">Scan each other's QR codes & head to a nearby pub!</div>
+              
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Table View -->
+    <div id="table-view-0" class="schedule-table-view">
+      <table class="schedule-grid-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+
+            <th style="width: calc((100% - 60px) / 1)">main room</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">09:00</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Coffee break
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">09:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Isolation: Containers, VMs, Namespaces, Oh my!</a>
+              <div class="speaker-info">Sam Currie <span class="affiliation">• heyo.computer</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">10:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Token Economics for Custom Built Agents</a>
+              <div class="speaker-info">Yiwen Zhang <span class="affiliation">• AWS</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">10:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-2" data-bs-toggle="modal" data-bs-target="#modal-speaker-2">Post Mcp-Session-Id: Auth and Kill Switches for Stateless MCP Agents</a>
+              <div class="speaker-info">Zachary Gruenberg <span class="affiliation">• Oasis Security</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">11:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-3" data-bs-toggle="modal" data-bs-target="#modal-speaker-3">Zen AI Cohabitation: How I learned to embrace the slop</a>
+              <div class="speaker-info">Josh Lee <span class="affiliation">• Altinity</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">11:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-4" data-bs-toggle="modal" data-bs-target="#modal-speaker-4">From CSAT to AI Insights</a>
+              <div class="speaker-info">Rajanikant Vellaturi <span class="affiliation">• Tredence Inc.</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">12:00</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Lunch & networking
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">12:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-5" data-bs-toggle="modal" data-bs-target="#modal-speaker-5">Evals Your Customer Will Actually Believe</a>
+              <div class="speaker-info">Paden Gayle <span class="affiliation">• Notion</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">13:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-6" data-bs-toggle="modal" data-bs-target="#modal-speaker-6">What Did Your Agent Actually Do?</a>
+              <div class="speaker-info">Maureese Williams <span class="affiliation">• Disney</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">13:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-7" data-bs-toggle="modal" data-bs-target="#modal-speaker-7">Agents Aren't Users</a>
+              <div class="speaker-info">Sai Varma Dantuluri <span class="affiliation">• VotalAI</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">14:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-8" data-bs-toggle="modal" data-bs-target="#modal-speaker-8">Beyond the Next Token: The open future of language models</a>
+              <div class="speaker-info">Sevak Avakians <span class="affiliation">• USAA</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">14:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-9" data-bs-toggle="modal" data-bs-target="#modal-speaker-9">Frontier by Default Is a Design Flaw</a>
+              <div class="speaker-info">David Justus <span class="affiliation">• Panasonic</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">15:00</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Play some Fallout !
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">15:30</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-10" data-bs-toggle="modal" data-bs-target="#modal-speaker-10">Agentic Engineering: The Agent Writes the Code, Not the Process</a>
+              <div class="speaker-info">Marcelo Labre <span class="affiliation">• Kidar</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell">16:00</td>
+            <td class="talk-cell" colspan="1">
+
+              <a href="#modal-speaker-11" data-bs-toggle="modal" data-bs-target="#modal-speaker-11">The Sandbox Is the Agent Runtime: What Breaks When Execution Becomes Disposable</a>
+              <div class="speaker-info">Yossi Eliaz <span class="affiliation">• Incredibuild</span></div>
+
+            </td>
+          </tr>
+
+
+
+
+
+
+
+
+
+
+
+          <tr>
+            <td class="time-cell merged-cell">16:30</td>
+            <td class="talk-cell merged-cell" colspan="1">
+
+              Wrap up
+
+            </td>
+          </tr>
+
+
+        </tbody>
+      </table>
+    </div>
+
+
+
+    <script>
+    function toggleView(day) {
+      const timelineView = document.getElementById('timeline-view-' + day);
+      const tableView = document.getElementById('table-view-' + day);
+      const toggleBtn = document.getElementById('view-toggle-' + day);
+      const trackLinks = document.getElementById('track-links-' + day);
+
+      if (tableView.classList.contains('active')) {
+        tableView.classList.remove('active');
+        timelineView.classList.remove('hidden');
+        toggleBtn.textContent = 'view as table';
+        toggleBtn.classList.remove('active');
+        if (trackLinks) trackLinks.style.display = 'flex';
+      } else {
+        tableView.classList.add('active');
+        timelineView.classList.add('hidden');
+        toggleBtn.textContent = 'view as timeline';
+        toggleBtn.classList.add('active');
+        if (trackLinks) trackLinks.style.display = 'none';
+      }
+    }
+    </script>
+
+    
+    <div class="schedule-cta text-center mx-auto mt-4"><a href="#tickets" class="btn btn-secondary btn-lg d-block d-md-inline-block">Buy Tickets</a></div>
+    
   </div>
 </section>
 
@@ -1011,16 +1923,6 @@
       </div><!--//col-->
 
       
-
-      
-
-      <div class="col mb-4">
-        <div class="card">
-          <div class="card-body">
-            <h4>More coming soon</h4>
-          </div><!--//card-->
-        </div><!--//card-->
-      </div><!--//col-->
 
       
 

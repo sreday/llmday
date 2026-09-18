@@ -3,7 +3,7 @@ start_time: "2026-10-29T09:00:00-04:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
-event_state: before
+event_state: active
 date_string: "October 29, 2026"
 location_string: "Microsoft Experience Center NYC, United States"
 # get this from the event url
