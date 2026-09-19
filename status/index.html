@@ -98,7 +98,7 @@
     details.ladder.expanded tbody tr:nth-child(3) { transition-delay: .32s; }
     details.ladder.expanded tbody tr:nth-child(4) { transition-delay: .42s; }
     @media (prefers-reduced-motion: reduce) { details.ladder .ladder-body, details.ladder tbody tr { transition: none; } }
-    @media (max-width: 720px) { .wrap { padding: 28px 12px 60px; } th, td { padding: 10px 8px; } .bar { min-width: 120px; } th.hide, td.hide { display: none; } }
+    @media (max-width: 720px) { .wrap { padding: 28px 12px 60px; } th, td { padding: 10px 8px; } .bar { min-width: 120px; } }
     .added { margin-top: 34px; }
     .added h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
     .added .sub { margin-bottom: 14px; }
@@ -215,6 +215,51 @@
     .reg-cats .togo { margin-left: auto; color: #888; }
     .reg-cats .togo b { background: #dfe3e8; box-shadow: inset 0 1px 1px rgba(0,0,0,.15); }
     @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button, .tab-pill { font-size: .9rem; } .tabs button { padding: 12px 10px; } .reg { grid-template-columns: 1fr; gap: 10px; } .reg-ring { justify-self: start; } .reg-cats .togo { margin-left: 0; } }
+    /* ── Phones (Marek 2026-09-19: "adapt status pages for mobile, it's broken now"). Desktop is untouched. ── */
+    /* Talks table -> one small card per event; the table needed 557px and was clipped by the card, so Health, Start / end
+       and the CFP frog could not be reached. The words after the numbers come from data-unit. */
+    @media (max-width: 820px) {
+      .card { overflow-x: auto; }
+      .card > table, .card > table tbody { display: block; }
+      .card > table thead { display: none; }
+      .card > table tr { display: grid; grid-template-columns: auto 1fr auto auto; grid-template-areas: "ev ev ev hl" "prog prog prog prog" "tlk trk hours cfp"; gap: 8px 10px; align-items: center; padding: 14px 14px 8px; border-bottom: 1px solid #f0f0f0; }
+      .card > table tr:last-child { border-bottom: none; }
+      .card > table td { display: block; padding: 0; border: 0; text-align: left; min-width: 0; }
+      .card > table td.ev { grid-area: ev; } .card > table td.hl { grid-area: hl; align-self: start; } .card > table td.prog { grid-area: prog; }
+      .card > table td.tlk { grid-area: tlk; } .card > table td.trk { grid-area: trk; } .card > table td.hours { grid-area: hours; justify-self: end; } .card > table td.cfp { grid-area: cfp; justify-self: end; }
+      .card > table .bar { max-width: none; min-width: 0; margin: 0; }
+      .card > table .pct { margin-top: 3px; }
+      .card > table td.tlk, .card > table td.trk, .card > table td.hours { font-size: .88rem; }
+      .card > table td.tlk::after, .card > table td.trk::after { content: " " attr(data-unit); color: #777; }
+      .card > table td.trk { color: #777; } .card > table td.trk::before { content: "· "; }
+      .card > table td.cfp .frog { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
+    }
+    @media (max-width: 720px) {
+      h1 { font-size: 1.5rem; }
+      .sisters { gap: 8px; } .sisters a { flex: 1 1 auto; justify-content: center; padding: 10px 14px; font-size: .85rem; white-space: nowrap; }
+      /* health logic: six short columns fit once the desktop padding is gone; sideways scroll as a last resort */
+      details.ladder .ladder-inner { overflow-x: auto; }
+      details.ladder table { font-size: .74rem; }
+      details.ladder th, details.ladder td { padding: 6px 4px; }
+      details.ladder th { font-size: .62rem; letter-spacing: 0; }
+      /* tabs: 2 x 2 instead of 3 + 1; the floating pill follows offsetLeft / offsetTop, so it bounces diagonally too */
+      html.tabbed .tabs { display: grid; grid-template-columns: 1fr 1fr; }
+      /* registrations card: small ring next to the name, numbers under it, bar + legend across the whole card */
+      .reg { grid-template-columns: auto 1fr; grid-template-areas: "ring head" "ring nums" "bar bar" "cats cats"; gap: 2px 12px; align-items: center; }
+      .reg-ring, .reg-body { display: contents; }
+      .reg-ring .ring { grid-area: ring; width: 46px; height: 46px; }
+      .reg-ring svg { width: 46px; height: 46px; }
+      .reg-ring .ring span { font-size: .7rem; }
+      .reg-ring .nums { grid-area: nums; white-space: normal; align-self: start; }
+      .reg-ring .nums strong { display: inline; margin-right: 5px; }
+      .reg-head { grid-area: head; gap: 2px 10px; align-self: end; }
+      .reg-head .spacer { display: none; }
+      .reg-bar { grid-area: bar; margin: 8px 0 6px; }
+      .reg-cats { grid-area: cats; display: grid; grid-template-columns: auto auto; justify-content: start; gap: 4px 20px; font-size: .82rem; }
+      .reg-cats > span { white-space: nowrap; }
+    }
+    /* very narrow phones (after the 720px block so it wins) */
+    @media (max-width: 380px) { .card > table td.trk { display: none; } .reg-cats { gap: 4px 10px; font-size: .77rem; } .reg-cats b { margin-right: 4px; } }
   </style>
 </head>
 <body>
@@ -236,7 +281,7 @@
       <thead>
         <tr>
           <th>Conference</th>
-          <th class="num hide">Tracks</th>
+          <th class="num">Tracks</th>
           <th class="num">Talks</th>
           <th>Progress</th>
           <th>Health</th>
@@ -250,16 +295,16 @@
         
         <tr>
           <td class="ev"><a href="/2026-san-francisco-q4/">LLMday San Francisco 2026 Q4</a><small>October 1, 2026 · in 12 days</small></td>
-          <td class="num hide">2</td>
-          <td class="num"><strong>25</strong> / 24</td>
-          <td>
+          <td class="num trk" data-unit="tracks">2</td>
+          <td class="num tlk" data-unit="talks"><strong>25</strong> / 24</td>
+          <td class="prog">
             <div class="bar" title="104%">
               <i style="--c: var(--nailed); width: 100%"></i>
               <span class="plus" title="1 over"><s></s></span>
             </div>
             <div class="pct">104% · 1 over</div>
           </td>
-          <td><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
+          <td class="hl"><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
           <td class="hours"><a href="/2026-san-francisco-q4/#schedule" title="Open the schedule on the event page">9AM - 5:30PM</a></td>
           <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/99/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday San Francisco 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
         </tr>
@@ -268,16 +313,16 @@
         
         <tr>
           <td class="ev"><a href="/2026-austin-q4/">LLMday Austin 2026 Q4</a><small>October 14, 2026 · in 25 days</small></td>
-          <td class="num hide">1</td>
-          <td class="num"><strong>15</strong> / 12</td>
-          <td>
+          <td class="num trk" data-unit="track">1</td>
+          <td class="num tlk" data-unit="talks"><strong>15</strong> / 12</td>
+          <td class="prog">
             <div class="bar" title="125%">
               <i style="--c: var(--nailed); width: 100%"></i>
               <span class="plus" title="3 over"><s></s><s></s><s></s></span>
             </div>
             <div class="pct">125% · 3 over</div>
           </td>
-          <td><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
+          <td class="hl"><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
           <td class="hours"><a href="/2026-austin-q4/#schedule" title="Open the schedule on the event page">10AM - 7:30PM</a></td>
           <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/80/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday Austin 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
         </tr>
@@ -286,16 +331,16 @@
         
         <tr>
           <td class="ev"><a href="/2026-nyc-q4/">LLMday NYC 2026 Q4</a><small>October 29, 2026 · in 40 days</small></td>
-          <td class="num hide">1</td>
-          <td class="num"><strong>12</strong> / 12</td>
-          <td>
+          <td class="num trk" data-unit="track">1</td>
+          <td class="num tlk" data-unit="talks"><strong>12</strong> / 12</td>
+          <td class="prog">
             <div class="bar" title="100%">
               <i style="--c: var(--nailed); width: 100%"></i>
               
             </div>
             <div class="pct">100%</div>
           </td>
-          <td><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
+          <td class="hl"><span class="pill nailed" style="--c: var(--nailed)">Full!</span></td>
           <td class="hours"><a href="/2026-nyc-q4/#schedule" title="Open the schedule on the event page">9AM - 4:30PM</a></td>
           <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/74/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday NYC 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
         </tr>
@@ -304,16 +349,16 @@
         
         <tr>
           <td class="ev"><a href="/2026-london-q4/">LLMday + PEC London 2026 Q4</a><small>November 26, 2026 · in 68 days</small></td>
-          <td class="num hide">3</td>
-          <td class="num"><strong>17</strong> / 36</td>
-          <td>
+          <td class="num trk" data-unit="tracks">3</td>
+          <td class="num tlk" data-unit="talks"><strong>17</strong> / 36</td>
+          <td class="prog">
             <div class="bar" title="47%">
               <i style="--c: var(--neutral); width: 47%"></i>
               
             </div>
             <div class="pct">47%</div>
           </td>
-          <td><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
+          <td class="hl"><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
           <td class="hours na">no schedule yet</td>
           <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/78/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday + PEC London 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
         </tr>
@@ -322,16 +367,16 @@
         
         <tr>
           <td class="ev"><a href="/2026-montevideo-q4/">LLMday Montevideo 2026 Q4</a><small>December 5, 2026 · in 77 days</small></td>
-          <td class="num hide">2</td>
-          <td class="num"><strong>10</strong> / 24</td>
-          <td>
+          <td class="num trk" data-unit="tracks">2</td>
+          <td class="num tlk" data-unit="talks"><strong>10</strong> / 24</td>
+          <td class="prog">
             <div class="bar" title="42%">
               <i style="--c: var(--neutral); width: 42%"></i>
               
             </div>
             <div class="pct">42%</div>
           </td>
-          <td><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
+          <td class="hl"><span class="pill neutral" style="--c: var(--neutral)">Neutral</span></td>
           <td class="hours na">no schedule yet</td>
           <td class="num cfp"><a class="frog" href="https://cfp.ninja/dashboard/events/72/proposals" target="_blank" rel="noopener" title="Manage talks on cfp.ninja" aria-label="LLMday Montevideo 2026 Q4: manage talks on cfp.ninja">&#128056;</a></td>
         </tr>
@@ -369,8 +414,8 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="fresh" data-built="2026-09-19T20:20:48+00:00" title="Not live: the numbers refresh every time the website is built">
-      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-19 20:20 UTC</span>
+    <div class="fresh" data-built="2026-09-19T21:01:25+00:00" title="Not live: the numbers refresh every time the website is built">
+      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-19 21:01 UTC</span>
     </div>
     
     
@@ -1021,7 +1066,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
   </section>
   
 
-  <div class="foot">Generated 2026-09-19 20:20 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-19 21:01 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
