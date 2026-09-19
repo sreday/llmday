@@ -38,6 +38,9 @@
     .bar > .plus s { display: block; width: 10px; height: 10px; text-decoration: none; background: linear-gradient(#fff, #fff) center / 100% 3px no-repeat, linear-gradient(#fff, #fff) center / 3px 100% no-repeat; filter: drop-shadow(0 0 1px rgba(0,0,0,.18)); }
     .pct { font-size: .82rem; color: #555; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
+    /* Free-to-attend events (Marek 2026-09-19): a small grey pill right after the event name */
+    .free-pill { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: var(--neutral); color: #fff; font-size: .66rem; font-weight: 700; letter-spacing: .06em; line-height: 1.5; vertical-align: 2px; white-space: nowrap; }
+    .reg-head .free-pill { margin-left: -4px; align-self: center; }   /* .reg-head already has a 12px flex gap */
     td.hours { white-space: nowrap; font: inherit; }
     td.hours.na { color: #aaa; }
     td.hours a { color: #111; font-weight: 600; text-decoration: none; border-bottom: 1px dashed #bbb; }   /* start / end links to the event page's #schedule */
@@ -247,7 +250,7 @@
         {% set fill = [r.pct, 100] | min %}
         {% set over = r.pct > 100 %}
         <tr>
-          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}</small></td>
+          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a>{% if r.is_free %}<span class="free-pill" title="Free to attend on Luma">FREE</span>{% endif %}<small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}</small></td>
           <td class="num hide">{{ r.tracks }}</td>
           <td class="num"><strong>{{ r.confirmed }}</strong> / {{ r.available }}</td>
           <td>
@@ -324,7 +327,7 @@
       </div>
       <div class="reg-body">
       <div class="reg-head">
-        <a href="{{ r.url }}">{{ r.name }}</a>
+        <a href="{{ r.url }}">{{ r.name }}</a>{% if r.is_free %}<span class="free-pill" title="Free to attend on Luma">FREE</span>{% endif %}
         {% if r.luma %}
         {% if r.luma.capacity or r.luma.approved_api != r.luma.total %}<span class="reg-total">{% if r.luma.capacity %}<em class="na">(Luma capacity {{ r.luma.capacity }})</em>{% endif %}{% if r.luma.approved_api != r.luma.total %} <em class="na">(Luma counts {{ r.luma.approved_api }} approved)</em>{% endif %}</span>{% endif %}
         <span class="spacer"></span>

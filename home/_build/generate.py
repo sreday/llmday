@@ -1106,8 +1106,19 @@ def _status_luma_free(evt_id):
 for r in _status_rows:
     _alerts = []
     _forced = os.environ.get("STATUS_TEST_FREE_EVENTS", "").split(",")          # local testing only
-    if r["luma_evt"] and (r["luma_evt"] in _forced or _status_luma_free(r["luma_evt"])):
+    r["is_free"] = bool(r["luma_evt"] and (r["luma_evt"] in _forced or _status_luma_free(r["luma_evt"])))
+    if r["is_free"]:
         _alerts.append(("free", "Free event - 50% show up rate"))
+        # Free to attend (Marek 2026-09-19): no "Paid attendees" category at all (a stray priced ticket counts as a
+        # freebie), and the template puts a grey FREE pill after the event name.
+        if r["luma"]:
+            _paid = next((c for c in r["luma"]["cats"] if c["key"] == "paid"), None)
+            _free = next((c for c in r["luma"]["cats"] if c["key"] == "free"), None)
+            if _paid and _free:
+                _free["n"] += _paid["n"]
+                _free["pct"] = round(100.0 * _free["n"] / r["luma"]["total"]) if r["luma"]["total"] else 0
+                _free["bar"] = round(_free["bar"] + _paid["bar"], 2)
+                r["luma"]["cats"].remove(_paid)
     if r["luma"]:
         _cat = {c["key"]: c["n"] for c in r["luma"]["cats"]}
         if r["luma"]["total"] and _cat.get("free", 0) >= _ALERT_FREEBIE_SHARE * r["luma"]["total"]:
