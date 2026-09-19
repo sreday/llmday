@@ -47,6 +47,14 @@ community_partners:
   - AIFRONTIERS.png
   - houseofai.png
   - rtfm.png            # AI Talks NYC meetup (luma.com/ai-talks-nyc)
+  # LLMday + PEC London (co-located with the Prompt Engineering Conference, same list as the PEC repo)
+  - pe-norway-full.png
+  - london-agentic-ai-meetup.png
+  - angular-london.png
+  - freecodecamp-london.png
+  - london-pytorch.png
+  - it-schulungen.png
+  - cubixai.png
 
 sister_conferences_job_boards:
   - IacConf.png
@@ -58,6 +66,10 @@ sister_conferences_job_boards:
   - dev_events.png
   - "dev@1x_logo.png"
   - oxfordknight.png    # tech recruitment agency
+  - pec.png             # PEC Asia
+  - techleadconf.png
+  - gitnation.png
+  - city-js.png
 
 # Non-tech or vague/unidentifiable entities - shown in the Partner
 # carousel, not the Sponsor one. Small TECH companies stay in sponsors.
@@ -70,6 +82,7 @@ minor_companies:
 
 # Extra logo files of companies already shown under another filename
 hidden_duplicates:
+  - gdg-london.jpg      # GDG London - shown as gdg_london.png (PEC repo filename)
   - kube_events.png     # duplicate of kube-events.png
   - AI FRONTIERS.png    # duplicate of AIFRONTIERS.png
   - devit.png           # DevITjobs - shown as DevIT-usa.png (latest logo)
