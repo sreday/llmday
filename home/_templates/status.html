@@ -213,6 +213,7 @@
     .reg-cats b { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--c); margin-right: 6px; vertical-align: -1px; }
     .reg-cats strong { color: #111; margin-left: 2px; }
     .reg-cats em { font-style: normal; color: #999; margin-left: 5px; font-variant-numeric: tabular-nums; }
+    .reg-cats u { text-decoration: none; color: #555; margin-left: 4px; font-variant-numeric: tabular-nums; cursor: help; }   /* (speakers the website lists) */
     .reg-cats .togo { margin-left: auto; color: #888; }
     .reg-cats .togo b { background: #dfe3e8; box-shadow: inset 0 1px 1px rgba(0,0,0,.15); }
     @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button, .tab-pill { font-size: .9rem; } .tabs button { padding: 12px 10px; } .reg { grid-template-columns: 1fr; gap: 10px; } .reg-ring { justify-self: start; } .reg-cats .togo { margin-left: 0; } }
@@ -338,7 +339,7 @@
       </div>
       {% if r.luma %}
       <div class="reg-bar">{% for c in r.luma.cats %}{% if c.n %}<i class="{{ c.key }}" style="width: {{ c.bar }}%" title="{{ c.label }}: {{ c.n }} ({{ c.pct }}% of registered)"></i>{% endif %}{% endfor %}</div>
-      <div class="reg-cats">{% for c in r.luma.cats %}<span class="{{ c.key }}"><b></b>{{ c.label }} <strong>{{ c.n }}</strong><em>{{ c.pct }}%</em></span>{% endfor %}{% if r.luma.to_go %}<span class="togo"><b></b>To goal <strong>{{ r.luma.to_go }}</strong></span>{% endif %}</div>
+      <div class="reg-cats">{% for c in r.luma.cats %}<span class="{{ c.key }}"><b></b>{{ c.label }} <strong>{{ c.n }}</strong>{% if c.key == 'speakers' %}<u title="{{ r.luma.speakers_expected }} speakers on the website, co-presenters counted individually">({{ r.luma.speakers_expected }})</u>{% endif %}<em>{{ c.pct }}%</em></span>{% endfor %}{% if r.luma.to_go %}<span class="togo"><b></b>To goal <strong>{{ r.luma.to_go }}</strong></span>{% endif %}</div>
       {% else %}
       <div class="reg-bar"></div>
       {% endif %}
