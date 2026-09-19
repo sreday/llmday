@@ -1056,6 +1056,9 @@ def _luma_registrations(rows):
             "capacity": ev.get("max_capacity"), "spots_left": ev.get("spots_remaining"),
             "open": bool(ev.get("registration_open")), "url": str(ev.get("url") or ""), "last7": last7, "pages": pages,
             "cats": [{"key": k, "label": lbl, "n": counts[k], "pct": _pct(counts[k])} for k, lbl in _LUMA_CATS],
+            # Speakers the website lists (Marek 2026-09-19): actual people, co-presented sessions and panels split into
+            # their members, somebody with two talks counted once. Shown in () after the registered Speakers count.
+            "speakers_expected": len(speakers),
         }
     return ""
 
@@ -1123,8 +1126,9 @@ for r in _status_rows:
         _cat = {c["key"]: c["n"] for c in r["luma"]["cats"]}
         if r["luma"]["total"] and _cat.get("free", 0) >= _ALERT_FREEBIE_SHARE * r["luma"]["total"]:
             _alerts.append(("freebies", "50%+ tickets are freebies"))
-        if r["confirmed"] >= _ALERT_SPEAKERS_MIN_TALKS and _cat.get("speakers", 0) < _ALERT_SPEAKERS_REGISTERED * r["confirmed"]:
-            _alerts.append(("speakers", "Finish registering speakers - currently %d of %d" % (_cat.get("speakers", 0), r["confirmed"])))
+        _spk = r["luma"].get("speakers_expected") or r["confirmed"]            # people, not talks
+        if r["confirmed"] >= _ALERT_SPEAKERS_MIN_TALKS and _cat.get("speakers", 0) < _ALERT_SPEAKERS_REGISTERED * _spk:
+            _alerts.append(("speakers", "Finish registering speakers - currently %d of %d" % (_cat.get("speakers", 0), _spk)))
         if r["luma"]["health"] in ("bad", "critical"):
             _alerts.append(("empty", "Empty room... time to cook!"))
     r["alert"] = {"key": _alerts[0][0], "text": _alerts[0][1]} if _alerts else None
