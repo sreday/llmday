@@ -38,8 +38,38 @@ breaks:
 sponsors:
   - logo: harness.png
     url: https://www.harness.io/
+  - logo: aiproductivityhub.png
+    url: https://www.skool.com/ai-productivity-hub/about
+  - logo: prompt-hub.png
+    url: https://www.prompthub.us/
+  - logo: packt.png
+    url: https://packtpub.com/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
+  - logo: pe-norway-full.png
+    url: https://www.meetup.com/promptengineering-community/
+  - logo: gdg-london.jpg
+    url: https://www.meetup.com/gdglondon/
+  - logo: london-agentic-ai-meetup.png
+    url: https://www.meetup.com/london-agentic-ai/
+  - logo: it-schulungen.png
+    url: https://www.it-schulungen.com/
+  - logo: pec.png
+    url: https://www.pec.asia/2025/conference
+  - logo: cubixai.png
+    url: https://cubixai.com/
+  - logo: angular-london.png
+    url: https://www.meetup.com/angular-london/
+  - logo: freecodecamp-london.png
+    url: https://www.meetup.com/freecodecamp-london/
+  - logo: london-pytorch.png
+    url: https://www.meetup.com/london-pytorch-meetup/
+  - logo: techleadconf.png
+    url: https://techleadconf.com/
+  - logo: gitnation.png
+    url: https://gitnation.com/
+  - logo: city-js.png
+    url: https://cityjsconf.org/
 
 # these get displayed at the top
 hero_pictures:
