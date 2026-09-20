@@ -30,3 +30,20 @@
 html #about, html #stats, html #faq, html #sisters, html .track-section-header[id], html [id^="track-"] { scroll-margin-top: 100px; }
 /* Footer mascot GIF (<img style="height:400px"> in home + event _base.html) must not overflow phones */
 @media (max-width: 767.98px){.footer img{max-width:100%;height:auto !important}}
+
+/* ── NAVBAR GLOW (2026-09-20) ───────────────────────────────────────────────
+   A blurry vertical flare "behind the glass" of the fixed navbar that follows the mouse while it is over the bar.
+   main.js / various.js injects <div class="nav-glow"><i></i></div> as the bar's first child and moves the <i> with a
+   transform (eased, so it trails the cursor a little); the ::before carries the light and breathes slowly.
+   Mouse + fine pointer only; reduced motion = no easing, no breathing. Tint = the brand colour. */
+.nav-glow { --nav-glow-rgb: 61, 176, 127; position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; pointer-events: none; z-index: 0; opacity: 0; transition: opacity .7s ease; }
+.nav-glow.on { opacity: 1; transition-duration: .35s; }
+.nav-glow i { position: absolute; top: 0; bottom: 0; left: -110px; width: 220px; will-change: transform; }
+.nav-glow i::before { content: ""; position: absolute; top: -70%; bottom: -70%; left: 0; right: 0; filter: blur(14px);
+  /* a brighter vertical core + the wide tinted halo; the blur melts them into one flare */
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 44%, rgba(255, 255, 255, .30) 50%, rgba(255, 255, 255, 0) 56%),
+              radial-gradient(ellipse 34% 50% at 50% 50%, rgba(255, 255, 255, .30) 0%, rgba(var(--nav-glow-rgb), .30) 38%, rgba(var(--nav-glow-rgb), 0) 72%);
+  animation: nav-glow-breathe 3.8s ease-in-out infinite; }
+@keyframes nav-glow-breathe { 0%, 100% { opacity: .72; transform: scaleX(.86); } 50% { opacity: 1; transform: scaleX(1.12); } }
+.header > .branding { position: relative; z-index: 1; }   /* the bar's content stays above the light */
+@media (prefers-reduced-motion: reduce) { .nav-glow i::before { animation: none; } }
