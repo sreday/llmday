@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+  schedule:
+    - cron: '10 4 * * *'   # daily ~5AM UK (04:10 UTC) so /status/ is fresh before work
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
