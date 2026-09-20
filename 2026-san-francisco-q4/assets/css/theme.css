@@ -38,11 +38,11 @@ html #about, html #stats, html #faq, html #sisters, html .track-section-header[i
    Mouse + fine pointer only; reduced motion = no easing, no breathing. Tint = the brand colour. */
 .nav-glow { --nav-glow-rgb: 61, 176, 127; position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; pointer-events: none; z-index: 0; opacity: 0; transition: opacity .7s ease; }
 .nav-glow.on { opacity: 1; transition-duration: .35s; }
-.nav-glow i { position: absolute; top: 0; bottom: 0; left: -220px; width: 440px; will-change: transform; }   /* 2x wider, 30% fainter than the first version (Marek 2026-09-20) */
+.nav-glow i { position: absolute; top: 0; bottom: 0; left: -220px; width: 440px; will-change: transform; }   /* 2x wider than the first version; strength .30 -> .21 -> .105 (Marek 2026-09-20) */
 .nav-glow i::before { content: ""; position: absolute; top: -70%; bottom: -70%; left: 0; right: 0; filter: blur(14px);
   /* a brighter vertical core + the wide tinted halo; the blur melts them into one flare */
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 44%, rgba(255, 255, 255, .21) 50%, rgba(255, 255, 255, 0) 56%),
-              radial-gradient(ellipse 34% 50% at 50% 50%, rgba(255, 255, 255, .21) 0%, rgba(var(--nav-glow-rgb), .21) 38%, rgba(var(--nav-glow-rgb), 0) 72%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 44%, rgba(255, 255, 255, .105) 50%, rgba(255, 255, 255, 0) 56%),
+              radial-gradient(ellipse 34% 50% at 50% 50%, rgba(255, 255, 255, .105) 0%, rgba(var(--nav-glow-rgb), .105) 38%, rgba(var(--nav-glow-rgb), 0) 72%);
   animation: nav-glow-breathe 3.8s ease-in-out infinite; }
 @keyframes nav-glow-breathe { 0%, 100% { opacity: .72; transform: scaleX(.86); } 50% { opacity: 1; transform: scaleX(1.12); } }
 .header > .branding { position: relative; z-index: 1; }   /* the bar's content stays above the light */
