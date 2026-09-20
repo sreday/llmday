@@ -1,0 +1,1299 @@
+#!/usr/bin/env python3
+
+import datetime
+import math
+import re
+import os
+import csv
+import textwrap
+import string
+import yaml
+from datetime import timedelta
+import markdown
+
+from jinja2 import Environment, FileSystemLoader
+from jinja_markdown import MarkdownExtension
+
+# ── "Companies presenting" hygiene ────────────────────────────────────────────
+# Speakers who prefer to stay stealth often put a JOB TITLE in the organization
+# column ("Principal Software Engineer", "Team Lead, SRE", "ex-Google SRE").
+# looks_like_job_title() decides, per "&"-separated part, whether a value is a
+# title rather than a company, so it never reaches the About panel or the
+# sponsorship stats. Company names that merely contain such words survive
+# ("Varnish Software", "Reliability Engineering Lab", "Pawel Bulowski AI Consulting").
+import re as _jt_re
+
+_JT_EXPLICIT = {
+    'stealth', 'stealth startup', 'stealth mode', 'sre author', 'independent', 'freelance',
+    'freelancer', 'self-employed', 'self employed', 'consultant', 'n/a', 'na', 'none', 'tbd', '-',
+    'various', 'multiple', 'private', 'personal', 'confidential', 'undisclosed', 'own company',
+}
+# a value ENDING in one of these words is a role, not a company
+_JT_ROLE_NOUNS = {
+    'engineer', 'engineers', 'developer', 'developers', 'architect', 'scientist', 'researcher',
+    'consultant', 'advisor', 'adviser', 'lead', 'manager', 'director', 'founder', 'co-founder',
+    'cofounder', 'cto', 'ceo', 'cio', 'coo', 'cpo', 'ciso', 'vp', 'head', 'sre', 'devops',
+    'evangelist', 'advocate', 'specialist', 'analyst', 'author', 'student', 'professor',
+    'contractor', 'principal', 'intern', 'owner', 'strategist', 'practitioner', 'expert', 'coach',
+    'trainer', 'programmer', 'administrator', 'technologist', 'executive', 'officer', 'president',
+    'speaker', 'blogger', 'investor', 'mentor', 'fellow', 'phd', 'entrepreneur', 'designer',
+    'writer', 'hacker', 'tester', 'freelancer',
+}
+# words that only ever appear in titles, never as the distinctive part of a company name
+_JT_VOCAB = {
+    'senior', 'sr', 'junior', 'jr', 'staff', 'principal', 'lead', 'chief', 'head', 'of', 'and',
+    'the', 'a', 'ai', 'ml', 'mlops', 'devops', 'devsecops', 'sre', 'data', 'cloud', 'platform',
+    'software', 'site', 'reliability', 'security', 'full', 'stack', 'fullstack', 'full-stack',
+    'backend', 'back-end', 'frontend', 'front-end', 'web', 'mobile', 'systems', 'system',
+    'infrastructure', 'infra', 'engineering', 'science', 'product', 'technical', 'tech', 'it',
+    'observability', 'kubernetes', 'network', 'solutions', 'team', 'engineer', 'developer',
+    'architect', 'scientist', 'researcher', 'consultant', 'advisor', 'manager', 'director',
+    'founder', 'analyst', 'specialist', 'evangelist', 'advocate', 'freelance', 'independent',
+    'contractor', 'author', 'expert', 'practitioner', 'strategist', 'programmer', 'ex',
+} | _JT_ROLE_NOUNS
+_JT_SENIORITY = _jt_re.compile(r'\b(senior|sr\.?|junior|jr\.?|staff|principal|chief|head of|vp of|director of|team lead)\b', _jt_re.I)
+# generic tech nouns: a short part made only of these next to a title part is a title fragment
+_JT_GENERIC = {'cloud', 'software', 'data', 'ai', 'ml', 'platform', 'security', 'systems', 'infrastructure', 'azure', 'aws', 'gcp'}
+
+
+def _jt_tokens(part):
+    return [t for t in _jt_re.split(r"[\s,/|]+", part.lower().strip()) if t]
+
+
+def _jt_part_is_title(part):
+    p = part.strip()
+    if not p:
+        return True
+    low = p.lower()
+    if low in _JT_EXPLICIT:
+        return True
+    toks = _jt_tokens(p)
+    if not toks:
+        return True
+    last = toks[-1].strip('.()')
+    if last in _JT_ROLE_NOUNS:
+        return True
+    if toks[0].startswith('ex-') or ' ex-' in low:
+        return True
+    if _JT_SENIORITY.search(p) and any(t.strip('.()') in _JT_ROLE_NOUNS for t in toks):
+        return True
+    if all(t.strip('.()') in _JT_VOCAB for t in toks):
+        return True
+    return False
+
+
+def looks_like_job_title(org):
+    """True when the whole organization value should be dropped (every part is a title)."""
+    return all(_jt_part_is_title(p) for p in org.split('&'))
+
+
+def company_parts(org):
+    """The parts of an organization value that are real companies (titles removed)."""
+    parts = [p.strip() for p in org.split('&')]
+    flags = [_jt_part_is_title(p) for p in parts]
+    if any(flags):
+        # sibling rule: "Azure Cloud & AI Architect and Advisor" -> "Azure Cloud" is a title fragment
+        for i, p in enumerate(parts):
+            toks = _jt_tokens(p)
+            if not flags[i] and 0 < len(toks) <= 2 and all(t in _JT_GENERIC for t in toks):
+                flags[i] = True
+    return [p for p, f in zip(parts, flags) if p and not f]
+# ─────────────────────────────────────────────────────────────────────────────
+
+DIVIDER = "#"*80
+DEFAULT_TALK_DURATION = 30
+SITEMAP_URLS = []
+
+def generate_short_url(url):
+    url = url.replace(" ", "-").replace("_", "-")
+    url = ''.join(filter(lambda x: x in string.printable, url))
+    url = re.sub('[^a-zA-Z0-9]', '-', url)
+    url = re.sub('[-]+', '-', url)
+    return url[:100]
+
+def generate_talk_url(talk):
+    url = "{name1}{name2}{company}{title}".format(
+        name1=talk.get("name", "").replace(" ", "_"),
+        name2=("_" + talk.get("co-speaker", "").replace(" ", "_")) if talk.get("co-speaker") else "",
+        company=("_" + talk.get("organization", "").replace(" ", "_")) if talk.get("organization") else "",
+        title=("_" + talk.get("title", "").replace(",", "_").replace(" ", "_")) if talk.get("title") else "",
+    )
+    url = ''.join(filter(lambda x: x in string.printable, url))
+    url = re.sub('[\\W]+', '', url)
+    return url[:100]
+
+def read_csv(path):
+    """ Read the pre-process the CSV """
+    items = []
+    with open(path, 'r', encoding='utf-8') as f:
+        # strip NUL bytes that some editors (e.g. Excel UTF-16 export) leave in
+        reader = csv.DictReader(line.replace('\0', '') for line in f)
+        for item in reader:
+            item = dict(item)
+            if "abstract" in item:
+                item["abstract_s"] = textwrap.shorten(item.get("abstract",""), 300, placeholder="...")
+                item["abstract_m"] = textwrap.shorten(item.get("abstract",""), 1000, placeholder="...")
+            items.append(item)
+    return items
+
+
+# Jinja init
+file_loader = FileSystemLoader("_templates")
+env = Environment(loader=file_loader)
+env.add_extension(MarkdownExtension)
+env.filters["short_url"] = generate_short_url
+def _markdown_no_headers(text):
+    lines = text.split('\n')
+    cleaned = []
+    for line in lines:
+        stripped = line.lstrip()
+        if stripped.startswith('#'):
+            # convert "#### Heading" → "**Heading**"
+            heading_text = stripped.lstrip('#').strip()
+            cleaned.append('**%s**' % heading_text)
+        else:
+            cleaned.append(line)
+    return markdown.markdown('\n'.join(cleaned))
+env.filters["markdown"] = _markdown_no_headers
+def dedupe(items):
+     present = set()
+     output = []
+     for item in items:
+         name = item.get("name")
+         if name not in present:
+             output.append(item)
+             present.add(name)
+     return output
+env.filters["dedupe"] = dedupe
+
+# load the context from the metadata file
+print(DIVIDER)
+print("Loading context")
+talks_raw = read_csv("./_db/talks.csv")
+with open('metadata.yml', encoding='utf-8') as f:
+    context = yaml.load(f, Loader=yaml.FullLoader)
+    BASE_FOLDER = "./" + context.get("base_folder")
+
+
+def luma_is_free(evt_id):
+    if not evt_id:
+        return False
+    try:
+        import urllib.request
+        req = urllib.request.Request(
+            "https://luma.com/embed/event/%s/simple" % evt_id,
+            headers={"User-Agent": "Mozilla/5.0"})
+        body = urllib.request.urlopen(req, timeout=10).read().decode("utf-8", "ignore")
+        return '"is_free":true' in body
+    except Exception as e:
+        print("WARN: could not check Luma pricing (%s); assuming paid" % e)
+        return False
+
+
+context["luma_is_free"] = luma_is_free(context.get("luma_evt"))
+print("Luma event %s is_free=%s" % (context.get("luma_evt") or "(none)", context["luma_is_free"]))
+
+# ── CFP status from cfp.ninja (build time) ───────────────────────────────────
+# The hero pill reads "CFP" while the event's cfp.ninja CFP is open and "Register" (-> #tickets) once it is
+# closed. cfp.ninja's own rule: open only if cfp_status == "open" AND now < cfp_close_at; closed/reviewing/
+# complete -> closed. Anything uncertain (no cfp.ninja URL, network error, 404, not yet open) keeps "CFP".
+# SKIP_CFP_CHECK=1 skips the request (offline builds). Past events are never probed (the pill is not shown).
+def cfp_ninja_slug(url):
+    m = re.match(r'^https?://(www[.])?cfp[.]ninja/e/([^/?#]+)', str(url or '').strip())
+    return m.group(2) if m else None
+
+
+def cfp_is_open(url, event_state):
+    slug = cfp_ninja_slug(url)
+    if not slug or event_state == 'after':
+        return True
+    if os.environ.get('SKIP_CFP_CHECK'):
+        print("CFP %s: check skipped (SKIP_CFP_CHECK), keeping the CFP pill" % slug)
+        return True
+    try:
+        import json as _json
+        import urllib.request
+        req = urllib.request.Request("https://cfp.ninja/api/v0/e/%s" % slug, headers={"User-Agent": "Mozilla/5.0"})
+        data = _json.loads(urllib.request.urlopen(req, timeout=5).read().decode("utf-8", "ignore"))
+        ev = data.get('data', data) if isinstance(data, dict) else {}
+        status = str(ev.get('cfp_status') or '').lower()
+        close_at = str(ev.get('cfp_close_at') or '')
+        closed = status in ('closed', 'reviewing', 'complete')
+        if status == 'open' and close_at:
+            try:
+                close_dt = datetime.datetime.fromisoformat(close_at.replace('Z', '+00:00'))
+                if close_dt.tzinfo is None:
+                    close_dt = close_dt.replace(tzinfo=datetime.timezone.utc)
+                closed = datetime.datetime.now(datetime.timezone.utc) >= close_dt
+            except ValueError:
+                pass
+        print("CFP %s: %s (status=%s, closes %s)" % (slug, 'closed' if closed else 'open', status or '?', close_at or '?'))
+        return not closed
+    except Exception as e:
+        print("WARN: could not check cfp.ninja status for %s (%s); keeping the CFP pill" % (slug, e))
+        return True
+
+
+context["cfp_open"] = cfp_is_open(context.get("cfp_url"), context.get("event_state"))
+
+# og:image / twitter:image — use this event's card image from home/metadata.yml
+# (the single source of truth for the events list), falling back to the first
+# hero picture when the event has no card yet
+import os as _os
+_og_photo = None
+_og_home_meta = {}
+_og_home_meta_path = '../home/metadata.yml'
+if _os.path.exists(_og_home_meta_path):
+    with open(_og_home_meta_path, encoding='utf-8') as _f:
+        _og_home_meta = yaml.load(_f, Loader=yaml.FullLoader)
+    # sponsor lead form endpoint: home/metadata.yml is the single source of truth (backend: _build/lead-form.gs)
+    context.setdefault('lead_form_url', (_og_home_meta or {}).get('lead_form_url', ''))
+    # speaker onboarding endpoint (hidden /onboarding/ page; backend: _build/onboarding-form.gs in llmday)
+    context.setdefault('onboarding_form_url', (_og_home_meta or {}).get('onboarding_form_url', ''))
+    # speaker fast-track endpoint (hidden /fasttrack/ page; backend: _build/fasttrack-form.gs in llmday)
+    context.setdefault('fasttrack_form_url', (_og_home_meta or {}).get('fasttrack_form_url', ''))
+    # speaker invitation letter endpoint (hidden /invitation/ page; backend: _build/invitation-form.gs in llmday)
+    context.setdefault('invitation_form_url', (_og_home_meta or {}).get('invitation_form_url', ''))
+    # sponsor onboarding endpoint (hidden /onboardsponsor/ page; backend: _build/sponsor-onboarding-form.gs in llmday)
+    context.setdefault('sponsor_onboarding_form_url', (_og_home_meta or {}).get('sponsor_onboarding_form_url', ''))
+    _og_current_folder = _os.path.basename(_os.getcwd())
+    for _he in (_og_home_meta.get('events') or []) + (_og_home_meta.get('events_past') or []):
+        if _he.get('url', '').strip('./').rstrip('/') == _og_current_folder and _he.get('photo_url'):
+            _og_candidate = _he['photo_url'].lstrip('./')
+            if _os.path.exists(_os.path.join('..', 'home', _og_candidate)):
+                _og_photo = _og_candidate
+            else:
+                print("WARNING: event thumbnail %s not uploaded yet" % _og_candidate)
+            break
+if _og_photo:
+    context['og_image_url'] = 'https://%s/%s' % (context['brand_domain'], _og_photo)
+else:
+    print("WARNING: no event thumbnail available -- og:image falls back to default hero photo")
+    context['og_image_url'] = 'https://%s/photos/%s' % (context['brand_domain'], context['hero_pictures'][0].split('/')[-1])
+print("og:image = %s" % context['og_image_url'])
+
+# ── SPEAKER ONBOARDING: facts for the hidden /onboarding/ page ──────────────
+# The page (onboarding.html) posts this dict to the Apps Script, which fills ONE
+# universal "Info for speakers" email with it. Optional per-event overrides live
+# under `onboarding:` in metadata.yml (event_name, venue_name, venue_address,
+# slot_minutes, dinner, extra). Venue name/address are scraped from venue.html.
+context.setdefault('onboarding_form_url', '')
+_ob_slug = _os.path.basename(_os.getcwd())
+
+
+def _ob_slug_parts(slug):
+    """'2026-san-francisco-q4' -> ('2026', 'San Francisco', 'Q4'); missing parts come back as ''."""
+    m = re.match(r'^(\d{4})-(.+?)(?:-q([1-4]))?$', slug)
+    if not m:
+        return '', '', ''
+    return m.group(1), m.group(2).replace('-', ' ').title(), ('Q' + m.group(3)) if m.group(3) else ''
+
+
+def _ob_event_name(slug, city_name, brand_name):
+    """'2026-san-francisco-q4' -> 'SREday San Francisco 2026 Q4' (city from metadata when present)."""
+    year, slug_city, quarter = _ob_slug_parts(slug)
+    return ' '.join(p for p in [brand_name, city_name or slug_city, year, quarter] if p)
+
+
+def _ob_venue(path='_templates/venue.html'):
+    """(venue_name, venue_address) from the hardcoded venue partial; ('', '') when absent.
+    Name = first <h4>; address = the <p> right after it, <br>-separated lines joined with ', ',
+    stopping at the first blank line (London-q3 lists 'Tube access' after a blank <br />)."""
+    try:
+        with open(path, encoding='utf-8') as _f:
+            html = _f.read()
+    except OSError:
+        return '', ''
+    h4 = re.search(r'<h4[^>]*>(.*?)</h4>', html, re.S | re.I)
+    if not h4:
+        return '', ''
+    name = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', h4.group(1))).strip()
+    p = re.search(r'</h4>\s*<p[^>]*>(.*?)</p>', html, re.S | re.I)
+    if not p:
+        return name, ''
+    lines = []
+    for seg in re.split(r'<br\s*/?>', p.group(1), flags=re.I):
+        seg = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', seg)).strip(' ,;')
+        if not seg:
+            if lines:
+                break
+            continue
+        lines.append(seg)
+    return name, ', '.join(lines)
+
+
+_ob = dict(context.get('onboarding') or {})
+_ob_vname, _ob_vaddr = _ob_venue()
+_ob_date = str(context.get('date_string', ''))
+context['onboarding_event'] = {
+    'brand':         str(context.get('brand_name', '')).lower(),
+    'brand_name':    context.get('brand_name', ''),
+    'slug':          _ob_slug,
+    'event_name':    _ob.get('event_name') or _ob_event_name(_ob_slug, context.get('city_name'), context.get('brand_name', '')),
+    'city':          context.get('city_name') or _ob_slug_parts(_ob_slug)[1],
+    'date':          _ob_date,
+    'month_day':     re.sub(r',\s*\d{4}\s*$', '', _ob_date),
+    'event_url':     context.get('base_path', '') + _ob_slug + '/',
+    'tickets_url':   context.get('base_path', '') + _ob_slug + '/#tickets',
+    'venue_name':    _ob.get('venue_name') or _ob_vname or context.get('location_string', ''),
+    'venue_address': _ob.get('venue_address') or _ob_vaddr or context.get('location_string', ''),
+    'attendees':     context.get('attendees') or 0,
+    'is_free':       bool(context.get('luma_is_free')),   # Luma says the ticket is free -> onboarding email skips the ticket codes
+    'youtube_url':   context.get('youtube_url', ''),
+    'calendly_url':  context.get('calendly_sponsor_url', ''),
+    'slot_minutes':  int(_ob.get('slot_minutes', 30) or 30),
+    'dinner':        str(_ob.get('dinner', 'TBC')),
+    'extra':         str(_ob.get('extra', '') or ''),
+}
+print("Onboarding: %s | %s | %s" % (context['onboarding_event']['event_name'], _ob_vname or '(no <h4> in venue.html)', _ob_vaddr or '-'))
+# ── END SPEAKER ONBOARDING ──────────────────────────────────────────────────
+
+# ── SPEAKER FAST TRACK: facts for the hidden /fasttrack/ page (speaker submits talk + headshot) ──
+context.setdefault('fasttrack_form_url', '')
+_ft_src = context['onboarding_event']
+context['fasttrack_event'] = {k: _ft_src[k] for k in ('brand', 'brand_name', 'slug', 'event_name', 'city', 'date', 'event_url')}
+context['fasttrack_event']['cfp_url'] = str(context.get('cfp_url', '') or '')
+context['fasttrack_event']['cfp_open'] = bool(context.get('cfp_open', True))   # closed CFP is not advertised on the fast-track page
+# ── END SPEAKER FAST TRACK ──────────────────────────────────────────────────
+
+# pick up the ids & photos
+for i, talk in enumerate(talks_raw):
+    talk["id"] = str(i)
+    photo = talk.get("photo")
+    if photo:
+        talk["photo_url"] = "../speakers/" + photo
+    else:
+        talk["photo_url"] = talk.get("avatar")
+    talk["short_url"] = generate_talk_url(talk)
+    yt = (talk.get("YouTube") or "").strip()
+    if yt:
+        m = re.search(r'(?:youtu\.be/|youtube\.com/watch\?v=|youtube\.com/embed/)([\w-]+)', yt)
+        talk["youtube_embed_url"] = "https://www.youtube.com/embed/" + m.group(1) if m else ""
+    else:
+        talk["youtube_embed_url"] = ""
+    # smart line-breaking for speaker names on cards
+    # split on ", " and " & " keeping separators, one name per line
+    name = (talk.get("name") or "").strip()
+    MAX_SINGLE = 20  # if any part exceeds this, skip formatting
+    # split into tokens: [name, separator, name, separator, name, ...]
+    tokens = re.split(r'(,\s+|\s+&\s+)', name)
+    names = [tokens[k] for k in range(0, len(tokens), 2)]
+    seps = [tokens[k] for k in range(1, len(tokens), 2)]
+    if len(names) > 1 and all(len(n.strip()) <= MAX_SINGLE for n in names):
+        result = names[0]
+        for k, sep in enumerate(seps):
+            sep = sep.strip()
+            if sep == '&':
+                result += "<br>&amp; " + names[k + 1]
+            else:
+                # comma: put comma on current line, next name on new line
+                result += ",<br>" + names[k + 1]
+        talk["display_name"] = result
+    else:
+        talk["display_name"] = name
+
+# sort into talks and keynotes
+talks = [
+    talk for talk in talks_raw
+    if "confirmed" in talk["status"].lower()
+]
+keynotes = [
+    talk for talk in talks_raw
+    if "keynote" in talk["status"].lower()
+]
+context["talks"] = talks
+context["keynotes"] = keynotes
+
+# ── ABOUT THE CONFERENCE (expandable blurb + "Topics so far") ────────────────
+# Brand blurb + topic categories live in the repo-root about.yaml (not synced);
+# talks are keyword-matched into categories at build time.
+import os as _os_about
+_about_config = {}
+if _os_about.path.exists('../about.yaml'):
+    with open('../about.yaml', encoding='utf-8') as _f:
+        _about_config = yaml.load(_f, Loader=yaml.FullLoader) or {}
+context["about_blurb"] = _about_config.get("blurb", "")
+
+def _about_kw_rx(kw):
+    # keywords of <=3 chars match whole words only (plus optional plural "s");
+    # longer keywords are prefix matches anchored at a word boundary
+    kw = kw.strip().lower()
+    if len(kw) <= 3:
+        return re.compile(r'\b' + re.escape(kw) + r's?\b')
+    return re.compile(r'\b' + re.escape(kw))
+
+_about_talks, _about_seen = [], set()
+for _t in talks + keynotes:
+    _about_title = (_t.get("title") or "").strip()
+    if _about_title and _about_title.lower() not in _about_seen:
+        _about_seen.add(_about_title.lower())
+        _about_talks.append(_t)
+
+_about_companies = []
+_about_dropped = []
+if len(_about_talks) >= 3:
+    _about_seen_orgs = set()
+    for _t in _about_talks:
+        _raw = (_t.get("organization") or "")
+        _kept = company_parts(_raw)
+        for _p in (p.strip() for p in _raw.split('&')):
+            if _p and _p not in _kept and _p not in _about_dropped:
+                _about_dropped.append(_p)
+        for _org in _kept:
+            _org_l = _org.lower()
+            if 'university' not in _org_l and _org_l not in _about_seen_orgs:
+                _about_seen_orgs.add(_org_l)
+                _about_companies.append(_org)
+    if _about_dropped:
+        print("About panel: dropped job-title organizations: " + "; ".join(_about_dropped))
+    _about_companies.sort(key=lambda s: s.lower())
+context["about_companies"] = _about_companies
+# "more talks soon" shows while confirmed talks are below 60% of the event's
+# intended speaker count (metadata `speakers`, e.g. "30+"); fallback cutoff 7
+_about_target = str(context.get("speakers", "")).replace("+", "").strip()
+try:
+    _about_target = int(_about_target)
+except ValueError:
+    _about_target = 0
+_about_more_cut = math.ceil(_about_target * 0.6) if _about_target > 0 else 7
+context["about_more_soon"] = len(_about_talks) < _about_more_cut
+
+_about_topics = []
+_about_cats = _about_config.get("categories") or []
+if len(_about_talks) >= 3 and _about_cats:
+    _about_buckets = [[] for _c in _about_cats]
+    _about_misc = []
+    for _t in _about_talks:
+        _hay_title = _t["title"].strip().lower()
+        _hay_abs = (_t.get("abstract") or "").lower()
+        _about_title_disp = _t["title"].strip()
+        if _about_title_disp.lower().startswith("keynote:"):
+            _about_title_disp = _about_title_disp[len("keynote:"):].strip()
+        _about_entry = {
+            "title": _about_title_disp,
+            "url": ((_t.get("short_url") or "").replace(".html", "") + ".html#speakers-section") if _t.get("short_url") else "",
+        }
+        _best_i, _best_score = None, 0
+        for _ci, _cat in enumerate(_about_cats):
+            _score = 0
+            for _kw in _cat.get("keywords") or []:
+                # title hit = 3 pts, abstract hit = 1 pt; phrases count double
+                _w = 2 if " " in str(_kw).strip() else 1
+                _rx = _about_kw_rx(str(_kw))
+                if _rx.search(_hay_title):
+                    _score += 3 * _w
+                elif _rx.search(_hay_abs):
+                    _score += _w
+            if _score > _best_score:
+                _best_i, _best_score = _ci, _score
+        if _best_i is None:
+            _about_misc.append(_about_entry)
+        else:
+            _about_buckets[_best_i].append(_about_entry)
+    _about_topics = [{"category": _c["name"], "talks": _about_buckets[_ci]}
+                     for _ci, _c in enumerate(_about_cats) if _about_buckets[_ci]]
+    if _about_misc:
+        _about_topics.append({"category": "...and more", "talks": _about_misc})
+context["about_topics"] = _about_topics
+# ── END ABOUT THE CONFERENCE ─────────────────────────────────────────────────
+
+# we order the tracks in how they appear in the CSV file
+tracks_ordered = []
+# all talks sorted in tracks
+tracks = dict()
+for talk in talks:
+    track = talk.get("track")
+    if track not in tracks:
+        tracks[track] = []
+        tracks_ordered.append(track)
+    tracks[track].append(talk)
+# metadata.yml may declare the planned track count ("tracks: N") - that wins
+# for display so pages show the plan before talks are announced
+_planned_tracks = context.get("tracks") if isinstance(context.get("tracks"), int) else None
+context["tracks"] = tracks_ordered
+context["tracks_display"] = _planned_tracks or max(len(tracks_ordered), 1)
+
+# insert breaks & wrap up into each track
+breaks = context.get("breaks")
+for track in tracks_ordered:
+    old_order = tracks[track]
+    new_order = []
+    offset = 0
+    for brk in context.get("breaks"):
+        for i in range(brk.get("talks_before")):
+            if offset < len(old_order):
+                new_order.append(old_order[offset])
+                offset += 1
+        # copy because we'll be modifying times on these
+        new_order.append(brk.copy())
+    while offset < len(old_order):
+        new_order.append(old_order[offset])
+        offset += 1
+    new_order.append(dict(
+        title="Wrap up",
+        comment="Scan each other's QR codes & head to a nearby pub!",
+        duration=0,
+    ))
+    tracks[track] = new_order
+
+# insert keynotes or placeholders
+for i, track in enumerate(tracks_ordered):
+    current_day = (i // len(context.get("rooms"))) + 1
+    prepend = []
+    for talk in keynotes:
+        if talk.get("day") == str(current_day):
+            if i % len(context.get("rooms")) == 0:
+                prepend.append(talk)
+            else:
+                prepend.append(dict(
+                    placeholder=True,
+                    duration=talk.get("duration"),
+                ))
+    tracks[track] = prepend + tracks[track]
+
+# insert times & durations
+for track in tracks:
+    current_time = datetime.datetime.fromisoformat(context.get("start_time"))
+    for talk in tracks[track]:
+        raw = talk.get("duration")
+        talk["duration"] = int(raw) if raw is not None and raw != "" else DEFAULT_TALK_DURATION
+        talk["start_time"] = current_time
+        talk["end_time"] = current_time + timedelta(minutes=talk["duration"])
+        current_time += timedelta(minutes=talk["duration"])
+
+# synchronize break times across tracks
+for brk in context.get("breaks"):
+    brk_title = brk["title"]
+    max_time = None
+    for track in tracks:
+        for talk in tracks[track]:
+            if talk.get("title") == brk_title and not talk.get("name"):
+                if max_time is None or talk["start_time"] > max_time:
+                    max_time = talk["start_time"]
+    if max_time is not None:
+        for track in tracks:
+            for i, talk in enumerate(tracks[track]):
+                if talk.get("title") == brk_title and not talk.get("name"):
+                    talk["start_time"] = max_time
+                    current = max_time + timedelta(minutes=talk["duration"])
+                    for j in range(i + 1, len(tracks[track])):
+                        tracks[track][j]["start_time"] = current
+                        current += timedelta(minutes=tracks[track][j]["duration"])
+                    break
+
+# compute schedule time bracket
+schedule_start = datetime.datetime.fromisoformat(context.get("start_time"))
+schedule_end = schedule_start
+for track in tracks:
+    for talk in tracks[track]:
+        end = talk["start_time"] + timedelta(minutes=talk["duration"])
+        if end > schedule_end:
+            schedule_end = end
+context["schedule_time_bracket"] = (
+    schedule_start.strftime('%-I:%M%p').replace(':00', '')
+    + " - "
+    + schedule_end.strftime('%-I:%M%p').replace(':00', '')
+)
+
+# remove placeholders
+for track in tracks:
+    tracks[track] = [t for t in tracks[track] if not t.get("placeholder")]
+
+context["talks_by_tracks"] = tracks
+print("Loaded %d confirmed talks in %d tracks: %s" % (len(context["talks"]), len(tracks), tracks.keys()))
+
+# template each talk page for the event
+for talk in talks_raw:
+    print("Generating talk subpage %s" % (talk.get("short_url")))
+    with open(BASE_FOLDER + "/" + talk.get("short_url").replace(".html","")  + ".html", "w", encoding="utf-8") as f:
+        template = env.get_template("talk.html")
+        f.write(template.render(talk=talk, **context))
+        SITEMAP_URLS.append((talk.get("short_url").replace(".html",""), 0.75))
+
+# ── SPONSORSHIP PAGE ─────────────────────────────────────────────────────────
+import os as _os
+import glob as _glob
+
+# Keep in sync with _build/analyze_attendees.py
+COMPANY_DISPLAY_NAMES = {
+    # Acronyms / all-caps
+    'aws': 'AWS', 'ibm': 'IBM', 'ing': 'ING', 'sap': 'SAP', 'hp': 'HP',
+    'hcltech': 'HCLTech', 'iacconf': 'IaCConf',
+    # Brand casing
+    'cast ai': 'CAST AI', 'pagerduty': 'PagerDuty', 'clickhouse': 'ClickHouse',
+    'datadog': 'Datadog', 'openobserve': 'OpenObserve', 'maibornwolff': 'MaibornWolff',
+    'stormforge': 'StormForge', 'env0': 'env0', 'posthog': 'PostHog',
+    'ilert': 'iLert', 'rootly': 'Rootly', 'spacelift': 'Spacelift',
+    'new relic': 'New Relic', 'monday.com': 'Monday.com', 'devit': 'DevIT',
+    'devitjobs': 'DevITjobs', 'victoriametrics': 'VictoriaMetrics',
+    'linearb': 'LinearB',
+}
+
+def _normalize_company_name(raw):
+    return COMPANY_DISPLAY_NAMES.get(raw.strip().lower(), raw.strip())
+
+print(DIVIDER)
+print("Generating sponsorship.html")
+
+_sponsorship_config = {}
+_sponsorship_yaml = '../sponsorship.yaml'
+if _os.path.exists(_sponsorship_yaml):
+    with open(_sponsorship_yaml, encoding='utf-8') as _f:
+        _sponsorship_config = yaml.load(_f, Loader=yaml.FullLoader)
+
+_current_folder = _os.path.basename(_os.getcwd())
+_parts = _current_folder.split('-')
+_city_parts = [p for p in _parts
+               if not re.match(r'^\d{4}$', p)
+               and not re.match(r'^q\d+$', p, re.IGNORECASE)]
+_city_slug = '-'.join(_city_parts)
+
+_all_siblings = sorted(_glob.glob('../20*/'))
+
+# ── Global stats: all events across all cities ──────────────────────────────
+_global_org_counts = {}
+_global_speaker_names = set()
+_global_sponsors_raw = []
+_total_attendees_raw = 0
+_total_events = 0
+
+for _gf in _all_siblings:
+    # speaker orgs
+    _gt_path = _os.path.join(_gf, '_db', 'talks.csv')
+    if _os.path.exists(_gt_path):
+        for _t in read_csv(_gt_path):
+            _status = _t.get('status', '').lower()
+            if 'confirmed' in _status or 'keynote' in _status:
+                _spk_name = (_t.get('name') or _t.get('Name') or '').strip()
+                if _spk_name:
+                    _global_speaker_names.add(_spk_name)
+                _org_raw = _t.get('organization', '').strip()
+                for _org in company_parts(_org_raw):
+                    if _org:
+                        _org_display = _normalize_company_name(_org)
+                        _global_org_counts[_org_display] = _global_org_counts.get(_org_display, 0) + 1
+    # sponsors & attendee counts
+    _gm_path = _os.path.join(_gf, 'metadata.yml')
+    if _os.path.exists(_gm_path):
+        with open(_gm_path, encoding='utf-8') as _gf2:
+            _gm = yaml.load(_gf2, Loader=yaml.FullLoader)
+        _global_sponsors_raw.extend(_gm.get('sponsors', []) or [])
+        _att_raw = str(_gm.get('attendees', 0)).replace('+', '').strip()
+        try:
+            _total_attendees_raw += int(_att_raw)
+        except ValueError:
+            pass
+        _total_events += 1
+
+# round speakers (same as home page banner: remainder ≤4 → down, ≥5 → up to next 10)
+_global_speaker_count = len(_global_speaker_names)
+_spk_rem = _global_speaker_count % 10
+_spk_rounded = (_global_speaker_count - _spk_rem) if _spk_rem <= 4 else (_global_speaker_count + (10 - _spk_rem))
+_spk_rounded = max(10, _spk_rounded)  # never show 0+ on a fresh brand
+
+# round attendees (same as home page banner: remainder ≥50 → up to next 100, <50 → down)
+_att_rem = _total_attendees_raw % 100
+_att_rounded = (_total_attendees_raw + (100 - _att_rem)) if _att_rem >= 50 else (_total_attendees_raw - _att_rem)
+_total_attendees = f"{_att_rounded}"
+
+# top speaker companies globally — slice after sponsor filtering below
+_global_top_companies = sorted(_global_org_counts.items(), key=lambda x: x[1], reverse=True)
+
+# global sponsors — deduplicated, filtering out small/niche logos
+_sp_exclude_logos = {
+    # Non-sponsor orgs
+    'hockeystick.png', 'arf.png', 'ksug.ai.png', 'filmforum.png', 'uhub.png',
+    'starterai.png',
+    # Community partners / meetup groups
+    'pe-norway-full.png', 'gdg-london.jpg', 'london-agentic-ai-meetup.png',
+    'angular-london.png', 'freecodecamp-london.png', 'london-pytorch.png',
+    'techleadconf.png', 'gitnation.png', 'city-js.png',
+    'it-schulungen.png', 'pec.png', 'cubixai.png', 'packt.png',
+    'jug-amsterdam.png', 'k8sug.png',
+    'kube-events.png', 'kube_events.png', 'kube_careers.png', 'kubespaces.png',
+    'gdg_london.png', 'NL_MEETUP.png',
+    'chennaisre.png', 'srecommunitycoimbatore.png', 'srehyderabadi.png',
+    'aigeeks.png', 'AIFRONTIERS.png', 'houseofai.png',
+    'cloud native lisbon.png', 'cloud native porto.png',
+    'devops braga.png', 'devops lisbon.png',
+    'kcd porto.png', 'leiria tech talks.png', 'viseu tech talks.png',
+    'lisbon genai community.png',
+    'aws porto.png',
+    'synvert xgeeks.png',
+    # Sister conferences / job boards
+    'IacConf.png', 'DevIT.png', 'DevIT_black.png', 'DevIT-usa.png',
+    'devit.png', 'devitjobs.png',
+}
+_sp_logo_counts = {}
+_sp_logo_meta = {}
+for _s in _global_sponsors_raw:
+    _logo = _s.get('logo', '').strip()
+    if _logo and _logo not in _sp_exclude_logos:
+        _sp_logo_counts[_logo] = _sp_logo_counts.get(_logo, 0) + 1
+        if _logo not in _sp_logo_meta:
+            _sp_logo_meta[_logo] = _s
+_global_sponsors = []
+for _logo, _count in sorted(_sp_logo_counts.items(), key=lambda x: -x[1])[:20]:
+    _s = _sp_logo_meta[_logo]
+    _sname = _normalize_company_name(re.sub(r'[-_]', ' ', _os.path.splitext(_logo)[0]).title())
+    _global_sponsors.append({'logo': _logo, 'url': _s.get('url', ''), 'name': _sname})
+
+# filter sponsors out of top companies, then take top 10
+_sponsor_names = {s['name'].strip().lower() for s in _global_sponsors if s.get('name')}
+_global_top_companies = [(co, cnt) for co, cnt in _global_top_companies if co.strip().lower() not in _sponsor_names][:10]
+
+# ── Timeline: all events from home/metadata.yml ──────────────────────────────
+_flag_map = {
+    'afghanistan': ('🇦🇫', 'AF', 'Afghanistan'),
+    'albania': ('🇦🇱', 'AL', 'Albania'),
+    'algeria': ('🇩🇿', 'DZ', 'Algeria'),
+    'argentina': ('🇦🇷', 'AR', 'Argentina'),
+    'armenia': ('🇦🇲', 'AM', 'Armenia'),
+    'australia': ('🇦🇺', 'AU', 'Australia'),
+    'austria': ('🇦🇹', 'AT', 'Austria'),
+    'azerbaijan': ('🇦🇿', 'AZ', 'Azerbaijan'),
+    'bahrain': ('🇧🇭', 'BH', 'Bahrain'),
+    'bangladesh': ('🇧🇩', 'BD', 'Bangladesh'),
+    'belarus': ('🇧🇾', 'BY', 'Belarus'),
+    'belgium': ('🇧🇪', 'BE', 'Belgium'),
+    'bolivia': ('🇧🇴', 'BO', 'Bolivia'),
+    'bosnia': ('🇧🇦', 'BA', 'Bosnia and Herzegovina'),
+    'brazil': ('🇧🇷', 'BR', 'Brazil'),
+    'bulgaria': ('🇧🇬', 'BG', 'Bulgaria'),
+    'cambodia': ('🇰🇭', 'KH', 'Cambodia'),
+    'canada': ('🇨🇦', 'CA', 'Canada'),
+    'chile': ('🇨🇱', 'CL', 'Chile'),
+    'china': ('🇨🇳', 'CN', 'China'),
+    'colombia': ('🇨🇴', 'CO', 'Colombia'),
+    'costa rica': ('🇨🇷', 'CR', 'Costa Rica'),
+    'croatia': ('🇭🇷', 'HR', 'Croatia'),
+    'cyprus': ('🇨🇾', 'CY', 'Cyprus'),
+    'czech': ('🇨🇿', 'CZ', 'Czech Republic'),
+    'denmark': ('🇩🇰', 'DK', 'Denmark'),
+    'ecuador': ('🇪🇨', 'EC', 'Ecuador'),
+    'egypt': ('🇪🇬', 'EG', 'Egypt'),
+    'estonia': ('🇪🇪', 'EE', 'Estonia'),
+    'ethiopia': ('🇪🇹', 'ET', 'Ethiopia'),
+    'finland': ('🇫🇮', 'FI', 'Finland'),
+    'france': ('🇫🇷', 'FR', 'France'),
+    'georgia': ('🇬🇪', 'GE', 'Georgia'),
+    'germany': ('🇩🇪', 'DE', 'Germany'),
+    'ghana': ('🇬🇭', 'GH', 'Ghana'),
+    'greece': ('🇬🇷', 'GR', 'Greece'),
+    'guatemala': ('🇬🇹', 'GT', 'Guatemala'),
+    'hong kong': ('🇭🇰', 'HK', 'Hong Kong'),
+    'hungary': ('🇭🇺', 'HU', 'Hungary'),
+    'iceland': ('🇮🇸', 'IS', 'Iceland'),
+    'india': ('🇮🇳', 'IN', 'India'),
+    'indonesia': ('🇮🇩', 'ID', 'Indonesia'),
+    'iran': ('🇮🇷', 'IR', 'Iran'),
+    'iraq': ('🇮🇶', 'IQ', 'Iraq'),
+    'ireland': ('🇮🇪', 'IE', 'Ireland'),
+    'israel': ('🇮🇱', 'IL', 'Israel'),
+    'italy': ('🇮🇹', 'IT', 'Italy'),
+    'japan': ('🇯🇵', 'JP', 'Japan'),
+    'jordan': ('🇯🇴', 'JO', 'Jordan'),
+    'kazakhstan': ('🇰🇿', 'KZ', 'Kazakhstan'),
+    'kenya': ('🇰🇪', 'KE', 'Kenya'),
+    'korea': ('🇰🇷', 'KR', 'South Korea'),
+    'kuwait': ('🇰🇼', 'KW', 'Kuwait'),
+    'latvia': ('🇱🇻', 'LV', 'Latvia'),
+    'lebanon': ('🇱🇧', 'LB', 'Lebanon'),
+    'lithuania': ('🇱🇹', 'LT', 'Lithuania'),
+    'luxembourg': ('🇱🇺', 'LU', 'Luxembourg'),
+    'malaysia': ('🇲🇾', 'MY', 'Malaysia'),
+    'malta': ('🇲🇹', 'MT', 'Malta'),
+    'mexico': ('🇲🇽', 'MX', 'Mexico'),
+    'moldova': ('🇲🇩', 'MD', 'Moldova'),
+    'mongolia': ('🇲🇳', 'MN', 'Mongolia'),
+    'montenegro': ('🇲🇪', 'ME', 'Montenegro'),
+    'morocco': ('🇲🇦', 'MA', 'Morocco'),
+    'nepal': ('🇳🇵', 'NP', 'Nepal'),
+    'netherlands': ('🇳🇱', 'NL', 'Netherlands'),
+    'new zealand': ('🇳🇿', 'NZ', 'New Zealand'),
+    'nigeria': ('🇳🇬', 'NG', 'Nigeria'),
+    'north macedonia': ('🇲🇰', 'MK', 'North Macedonia'),
+    'norway': ('🇳🇴', 'NO', 'Norway'),
+    'oman': ('🇴🇲', 'OM', 'Oman'),
+    'pakistan': ('🇵🇰', 'PK', 'Pakistan'),
+    'panama': ('🇵🇦', 'PA', 'Panama'),
+    'paraguay': ('🇵🇾', 'PY', 'Paraguay'),
+    'peru': ('🇵🇪', 'PE', 'Peru'),
+    'philippines': ('🇵🇭', 'PH', 'Philippines'),
+    'poland': ('🇵🇱', 'PL', 'Poland'),
+    'portugal': ('🇵🇹', 'PT', 'Portugal'),
+    'qatar': ('🇶🇦', 'QA', 'Qatar'),
+    'romania': ('🇷🇴', 'RO', 'Romania'),
+    'russia': ('🇷🇺', 'RU', 'Russia'),
+    'saudi arabia': ('🇸🇦', 'SA', 'Saudi Arabia'),
+    'senegal': ('🇸🇳', 'SN', 'Senegal'),
+    'serbia': ('🇷🇸', 'RS', 'Serbia'),
+    'singapore': ('🇸🇬', 'SG', 'Singapore'),
+    'slovakia': ('🇸🇰', 'SK', 'Slovakia'),
+    'slovenia': ('🇸🇮', 'SI', 'Slovenia'),
+    'south africa': ('🇿🇦', 'ZA', 'South Africa'),
+    'spain': ('🇪🇸', 'ES', 'Spain'),
+    'sri lanka': ('🇱🇰', 'LK', 'Sri Lanka'),
+    'sweden': ('🇸🇪', 'SE', 'Sweden'),
+    'switzerland': ('🇨🇭', 'CH', 'Switzerland'),
+    'taiwan': ('🇹🇼', 'TW', 'Taiwan'),
+    'tanzania': ('🇹🇿', 'TZ', 'Tanzania'),
+    'thailand': ('🇹🇭', 'TH', 'Thailand'),
+    'tunisia': ('🇹🇳', 'TN', 'Tunisia'),
+    'turkey': ('🇹🇷', 'TR', 'Turkey'),
+    'uae': ('🇦🇪', 'AE', 'United Arab Emirates'),
+    'united arab emirates': ('🇦🇪', 'AE', 'United Arab Emirates'),
+    'uganda': ('🇺🇬', 'UG', 'Uganda'),
+    'ukraine': ('🇺🇦', 'UA', 'Ukraine'),
+    'uk': ('🇬🇧', 'GB', 'United Kingdom'),
+    'united kingdom': ('🇬🇧', 'GB', 'United Kingdom'),
+    'united states': ('🇺🇸', 'US', 'United States'),
+    'uruguay': ('🇺🇾', 'UY', 'Uruguay'),
+    'uzbekistan': ('🇺🇿', 'UZ', 'Uzbekistan'),
+    'venezuela': ('🇻🇪', 'VE', 'Venezuela'),
+    'vietnam': ('🇻🇳', 'VN', 'Vietnam'),
+    # city aliases for timeline country detection
+    'amsterdam': ('🇳🇱', 'NL', 'Netherlands'),
+    'bangalore': ('🇮🇳', 'IN', 'India'),
+    'barcelona': ('🇪🇸', 'ES', 'Spain'),
+    'campinas': ('🇧🇷', 'BR', 'Brazil'),
+    'chennai': ('🇮🇳', 'IN', 'India'),
+    'cologne': ('🇩🇪', 'DE', 'Germany'),
+    'hyderabad': ('🇮🇳', 'IN', 'India'),
+    'lisbon': ('🇵🇹', 'PT', 'Portugal'),
+    'london': ('🇬🇧', 'GB', 'United Kingdom'),
+    'munich': ('🇩🇪', 'DE', 'Germany'),
+    'paris': ('🇫🇷', 'FR', 'France'),
+    'warsaw': ('🇵🇱', 'PL', 'Poland'),
+    'hamburg': ('🇩🇪', 'DE', 'Germany'),
+}
+
+_today_iso = datetime.date.today().isoformat()
+_timeline_events = []
+_countries_seen = set()
+_home_meta_path = '../home/metadata.yml'
+_home_meta = {}
+if _os.path.exists(_home_meta_path):
+    with open(_home_meta_path, encoding='utf-8') as _hf:
+        _home_meta = yaml.load(_hf, Loader=yaml.FullLoader)
+    _all_home_events = (_home_meta.get('events_past') or []) + (_home_meta.get('events') or [])
+    for _he in _all_home_events:
+        _he_folder = _he.get('url', '').strip('./').rstrip('/')
+        _he_meta_path = f'../{_he_folder}/metadata.yml'
+        if not _os.path.exists(_he_meta_path):
+            continue
+        with open(_he_meta_path, encoding='utf-8') as _hf2:
+            _hem = yaml.load(_hf2, Loader=yaml.FullLoader)
+        _loc = (_hem.get('location_string', '') + ' ' + _hem.get('city_name', '')).lower()
+        _flag = '🇺🇸'; _country_code = 'US'; _country = 'United States'
+        for _kw, (_kf, _kc, _cn) in _flag_map.items():
+            if _kw in _loc:
+                _flag = _kf; _country_code = _kc; _country = _cn
+                break
+        _countries_seen.add(_country_code)
+        _timeline_events.append({
+            'name':        _he.get('name', ''),
+            'city':        _hem.get('city_name', ''),
+            'country':     _country,
+            'date_string': _hem.get('date_string', ''),
+            'attendees':   (str(_hem.get('attendees', '')).rstrip('+') + '+') if _hem.get('attendees') else '',
+            'url':         f'../{_he_folder}/',
+            'state':       ('after' if _hem['start_time'] < _today_iso else 'before') if _hem.get('start_time') else _hem.get('event_state', 'before'),
+            'flag':        _flag,
+            'sort_key':    _hem.get('start_time', ''),
+        })
+_total_countries = len(_countries_seen) or 1
+_total_cities = len({ev['city'] for ev in _timeline_events if ev.get('city')})
+
+# exclude events before 2025 and cap timeline at 4 past + 4 upcoming
+_timeline_events = [e for e in _timeline_events if e.get('sort_key', '') >= '2025']
+_tl_past         = [e for e in _timeline_events if e['state'] in ('past', 'after')]
+_tl_upcoming     = [e for e in _timeline_events if e['state'] not in ('past', 'after')]
+_hidden_past     = max(0, len(_tl_past) - 4) if _timeline_events else 0
+_hidden_upcoming = max(0, len(_tl_upcoming) - 4) if _timeline_events else 0
+_tl_past     = sorted(_tl_past,     key=lambda e: e.get('sort_key', ''))
+_tl_upcoming = sorted(_tl_upcoming, key=lambda e: e.get('sort_key', ''))
+_timeline_events = _tl_past[-4:] + _tl_upcoming[:4]
+
+_amb_path = _os.path.join('..', 'home', '_db', 'ambassadors.csv')
+_total_ambassadors = len(read_csv(_amb_path)) if _os.path.exists(_amb_path) else 0
+
+# ── Per-city stats (kept for backward compat) ────────────────────────────────
+_same_city = [
+    f for f in _all_siblings
+    if _city_slug in _os.path.basename(_os.path.normpath(f))
+    and _os.path.basename(_os.path.normpath(f)) != _current_folder
+]
+_past_editions = len(_same_city)
+_talk_count = len(talks) + len(keynotes)
+
+# Read size from home/metadata.yml
+_event_size = context.get('event_size', 'small')
+for _he in (_home_meta.get('events') or []) + (_home_meta.get('events_past') or []):
+    _he_url = _he.get('url', '').strip('./').rstrip('/')
+    if _he_url == _current_folder:
+        _event_size = _he.get('size', _event_size)
+        if not context.get('youtube_playlist') and _he.get('youtube_playlist'):
+            context['youtube_playlist'] = _he['youtube_playlist']
+        break
+
+_all_tiers         = _sponsorship_config.get('tiers', [])
+_sponsorship_tiers = [t for t in _all_tiers if t.get('price_label') != 'On request']
+_on_request_tiers  = [t for t in _all_tiers if t.get('price_label') == 'On request']
+
+# ── Multi-currency pre-computation ──────────────────────────────────────────
+_exchange_rates = _sponsorship_config.get('exchange_rates', {})
+
+def _convert_price(gbp_value, rate):
+    """Convert GBP amount to target currency, round up to nearest 100."""
+    return int(math.ceil(gbp_value * rate / 100) * 100)
+
+def _convert_price_label(label_str, symbol, rate):
+    """Replace all £<number> in a price_label string with the target currency.
+    E.g. '£500 + £10pp' at rate 1.27 → '$600 + $15pp'.
+    Strings without £ (e.g. '20% off anything') pass through unchanged.
+    """
+    if '£' not in label_str:
+        return label_str
+    def _repl(m):
+        v = int(m.group(1)) * rate
+        rounded = int(math.ceil(v / 100) * 100) if v >= 100 else int(math.ceil(v / 5) * 5)
+        return symbol + str(rounded)
+    return re.sub(r'£(\d+)', _repl, label_str)
+
+for _tier in _sponsorship_tiers:
+    _tier['currencies'] = {}
+    for _cc, _ci in _exchange_rates.items():
+        _sym, _rate = _ci['symbol'], _ci['rate']
+        _cd = {'symbol': _sym, 'code': _cc}
+        if _tier.get('price'):
+            _cd['price'] = {sz: _convert_price(v, _rate) for sz, v in _tier['price'].items()}
+        if _tier.get('price_label'):
+            if isinstance(_tier['price_label'], dict):
+                _cd['price_label'] = {sz: _convert_price_label(lbl, _sym, _rate) for sz, lbl in _tier['price_label'].items()}
+            else:
+                _cd['price_label'] = _convert_price_label(_tier['price_label'], _sym, _rate)
+        _tier['currencies'][_cc] = _cd
+
+# ── 20% startup discount pre-computation ──────────────────────────────────
+def _apply_discount(amount, discount=0.80):
+    """Apply 20% discount to a converted currency amount."""
+    v = amount * discount
+    return int(round(v / 100) * 100) if v >= 100 else int(round(v))
+
+def _discount_price_label(label_str, symbol, discount=0.80):
+    """Apply 20% discount to currency amounts in a label string, skipping per-person (pp) amounts."""
+    escaped = re.escape(symbol)
+    def _repl(m):
+        if m.group(2):  # followed by "pp" — keep original
+            return m.group(0)
+        v = int(m.group(1)) * discount
+        return symbol + str(int(round(v / 100) * 100) if v >= 100 else int(round(v)))
+    return re.sub(escaped + r'(\d+)(pp)?', _repl, label_str)
+
+for _tier in _sponsorship_tiers:
+    for _cc, _cd in _tier['currencies'].items():
+        _sym = _cd['symbol']
+        if 'price' in _cd:
+            _cd['discounted_price'] = {
+                sz: _apply_discount(v) for sz, v in _cd['price'].items()
+            }
+        if 'price_label' in _cd:
+            if isinstance(_cd['price_label'], dict):
+                _cd['discounted_price_label'] = {
+                    sz: _discount_price_label(lbl, _sym)
+                    for sz, lbl in _cd['price_label'].items()
+                }
+            else:
+                _cd['discounted_price_label'] = _discount_price_label(
+                    _cd['price_label'], _sym
+                )
+# ── End multi-currency ──────────────────────────────────────────────────────
+
+print(f"  Total events: {_total_events}, attendees: {_total_attendees} (raw {_total_attendees_raw}), speakers: {_spk_rounded}+ (raw {_global_speaker_count}), cities: {_total_cities}, ambassadors: {_total_ambassadors}")
+print(f"  Global top companies: {len(_global_top_companies)}, global sponsors: {len(_global_sponsors)}")
+print(f"  Timeline events: {len(_timeline_events)}, countries: {_total_countries}")
+
+# filter out partners/community orgs from event sponsors for sponsorship page
+_confirmed_sponsors = [s for s in context.get('sponsors', []) or [] if s.get('logo', '').strip() not in _sp_exclude_logos]
+
+_sp_template = env.get_template('sponsorship.html')
+with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
+    _f.write(_sp_template.render(
+        page='sponsorship.html',
+        noindex=True,
+        # global dynamic data
+        global_top_companies=_global_top_companies,
+        global_sponsors=_global_sponsors,
+        timeline_events=_timeline_events,
+        hidden_past=_hidden_past,
+        hidden_upcoming=_hidden_upcoming,
+        total_attendees=_total_attendees,
+        total_speakers=f"{_spk_rounded}",
+        total_events=_total_events,
+        total_countries=_total_countries,
+        total_cities=_total_cities,
+        total_ambassadors=_total_ambassadors,
+        # sponsorship tiers
+        sponsorship_tiers=_sponsorship_tiers,
+        on_request_tiers=_on_request_tiers,
+        exchange_rates=_exchange_rates,
+        sister_brands=_sponsorship_config.get('sister_brands', []),
+        open_source_tools=_sponsorship_config.get('open_source_tools', []),
+        **{**context, 'event_size': _event_size, 'sponsors': _confirmed_sponsors}
+    ))
+print("Done: sponsorship.html")
+# ── END SPONSORSHIP PAGE ─────────────────────────────────────────────────────
+
+# MAIN PAGES (rendered after sponsorship so timeline_events is available)
+context["timeline_events"] = _timeline_events
+print(DIVIDER)
+pages = ["index.html"]
+print(f"Generating main pages: {pages}")
+for page in pages:
+    with open(BASE_FOLDER + "/" + page, "w", encoding="utf-8") as f:
+        print("Writing out", page)
+        template = env.get_template(page)
+        f.write(template.render(page=page, **context))
+        if page != "index.html":
+            SITEMAP_URLS.append((page.replace(".html",""), 0.75))
+
+# ── SPEAKER INVITATION: facts for the hidden /invitation/ page ──────────────
+# The page (invitation.html) posts this dict to the Apps Script (llmday/_build/invitation-form.gs),
+# which fills ONE "You're invited to speak" letter the speaker can forward to their marketing team.
+# The "About the event" paragraph adapts to how full the lineup is (tier), using the SAME data
+# as the About panel (about_companies, about_topics), the sponsorship page (_confirmed_sponsors)
+# and /status/ (confirmed talks vs 12 slots per track). Nothing here is opinion, only counts/names.
+context.setdefault('invitation_form_url', '')
+_INV_SLOTS_PER_TRACK = 12          # keep in sync with home/_build/generate.py _SLOTS_PER_TRACK
+import csv as _inv_csv
+from urllib.parse import urlparse as _inv_urlparse
+
+
+def _inv_confirmed(rows):
+    """talks.csv rows that count as confirmed on /status/ (status has 'confirmed' or 'keynote';
+    '_Registration & Networking'-style agenda rows skipped)."""
+    return [r for r in rows
+            if re.search(r'confirmed|keynote', str(r.get('status', '')), re.I)
+            and not str(r.get('name', '')).strip().startswith('_')]
+
+
+def _inv_companies(rows):
+    """About-panel rule: company_parts() drops job titles, universities skipped, deduped, alphabetical."""
+    out, seen = [], set()
+    for r in rows:
+        for org in company_parts(str(r.get('organization') or '')):
+            k = org.lower()
+            if 'university' in k or k in seen:
+                continue
+            seen.add(k)
+            out.append(org)
+    out.sort(key=lambda s: s.lower())
+    return out
+
+
+def _inv_host(url):
+    try:
+        return re.sub(r'^www\.', '', (_inv_urlparse(str(url or '')).netloc or '').lower())
+    except ValueError:
+        return ''
+
+
+def _inv_sponsor_names(sponsors):
+    """Display names for the event's confirmed sponsors: metadata `name:` when given, else the
+    home/_db/sponsors.csv row whose id equals the logo file stem, else the csv row with the same
+    website host (only when that host belongs to ONE row: harness.io is shared by Harness and Chaos
+    Carnival), else the logo file name title-cased."""
+    by_id, by_host, ambiguous = {}, {}, set()
+    _csv_path = '../home/_db/sponsors.csv'
+    if _os.path.exists(_csv_path):
+        with open(_csv_path, encoding='utf-8-sig', newline='') as _f:
+            for row in _inv_csv.DictReader(_f):
+                name = str(row.get('name') or '').strip()
+                if not name:
+                    continue
+                by_id.setdefault(str(row.get('id') or '').strip().lower(), name)
+                h = _inv_host(row.get('url'))
+                if h:
+                    ambiguous.add(h) if h in by_host else by_host.setdefault(h, name)
+    out, seen = [], set()
+    for s in sponsors:
+        stem = re.sub(r'\.[a-z0-9]+$', '', str(s.get('logo') or '').strip(), flags=re.I)
+        host = _inv_host(s.get('url'))
+        name = (str(s.get('name') or '').strip() or by_id.get(stem.lower())
+                or (by_host.get(host) if host not in ambiguous else None))
+        if not name:
+            name = re.sub(r'[-_]+', ' ', stem).strip()
+            name = name.upper() if len(name) <= 3 else name.title()    # ing.png -> ING, harness.png -> Harness
+        if name and name.lower() not in seen:
+            seen.add(name.lower())
+            out.append(name)
+    return out
+
+
+def _inv_previous_edition(home_meta, city):
+    """Facts about the most recent PAST event in the same city (fallback: the brand's most recent past
+    event anywhere). Only 2025+ folders are read (the sreday 2022-2024 archives stay untouched)."""
+    best_city, best_any = None, None
+    for he in (home_meta.get('events_past') or []):
+        folder = str(he.get('url', '')).strip('./').rstrip('/')
+        if not re.match(r'^20(2[5-9]|[3-9]\d)-', folder) or folder == _ob_slug:
+            continue
+        mpath = _os.path.join('..', folder, 'metadata.yml')
+        if not _os.path.exists(mpath):
+            continue
+        try:
+            with open(mpath, encoding='utf-8') as _f:
+                m = yaml.load(_f, Loader=yaml.FullLoader) or {}
+        except Exception as _e:                                   # noqa: BLE001 - a broken past folder must not break this build
+            print("Invitation: cannot read %s (%s)" % (mpath, _e))
+            continue
+        start = str(m.get('start_time') or '')
+        cand = {'folder': folder, 'start': start, 'meta': m}
+        if not best_any or start > best_any['start']:
+            best_any = cand
+        if str(m.get('city_name') or '').strip().lower() == str(city or '').strip().lower():
+            if not best_city or start > best_city['start']:
+                best_city = cand
+    pick = best_city or best_any
+    if not pick:
+        return None
+    rows = []
+    tpath = _os.path.join('..', pick['folder'], '_db', 'talks.csv')
+    if _os.path.exists(tpath):
+        try:
+            rows = _inv_confirmed(read_csv(tpath))
+        except Exception as _e:                                   # noqa: BLE001
+            print("Invitation: cannot read %s (%s)" % (tpath, _e))
+    m = pick['meta']
+    return {
+        'event_name': _ob_event_name(pick['folder'], m.get('city_name'), context.get('brand_name', '')),
+        'url':        context.get('base_path', '') + pick['folder'] + '/',
+        'date':       str(m.get('date_string') or ''),
+        'same_city':  pick is best_city,
+        'talks':      len(rows),
+        'companies':  _inv_companies(rows),
+    }
+
+
+def _inv_host_company(sponsors):
+    """The sponsor hosting the event, when the venue / location string names it ("Datadog, New York",
+    "ING Cedar, Amsterdam"). Override with `invitation: host: "..."` in metadata.yml; '' = no host."""
+    _override = (context.get('invitation') or {}).get('host')
+    if _override is not None:
+        return str(_override).strip()
+    hay = ' '.join([str(context['onboarding_event'].get('venue_name') or ''), str(context.get('location_string') or '')]).lower()
+    for s in sponsors:
+        stem = re.sub(r'\.[a-z0-9]+$', '', str(s.get('logo') or '').strip(), flags=re.I).lower()
+        for cand in _inv_sponsor_names([s]) + ([stem] if len(stem) >= 3 else []):
+            if re.search(r'(?<![a-z0-9])' + re.escape(cand.lower()) + r'(?![a-z0-9])', hay):
+                return _inv_sponsor_names([s])[0]
+    return ''
+
+
+_inv_rows = _inv_confirmed(talks_raw)
+_inv_tracks = int(context.get('tracks_display') or 1)
+_inv_target = _INV_SLOTS_PER_TRACK * _inv_tracks
+_inv_pct = int(round(100.0 * len(_inv_rows) / _inv_target)) if _inv_target else 0
+_inv_tier = 'strong' if _inv_pct >= 50 else ('building' if _inv_pct >= 25 else 'early')
+_inv_src = context['onboarding_event']
+context['invitation_event'] = {k: _inv_src[k] for k in ('brand', 'brand_name', 'slug', 'event_name', 'city', 'date', 'event_url',
+                                                        'venue_name', 'attendees', 'youtube_url', 'calendly_url', 'slot_minutes')}
+context['invitation_event'].update({
+    'fasttrack_url':    _inv_src['event_url'] + 'fasttrack/',
+    'sponsor_page_url': _inv_src['event_url'] + 'sponsorship',
+    'tracks':           _inv_tracks,
+    'confirmed':        len(_inv_rows),
+    'talks_target':     _inv_target,
+    'fill_pct':         _inv_pct,
+    'tier':             _inv_tier,
+    'companies':        list(context.get('about_companies') or []),
+    'topics':           [{'name': t['category'], 'count': len(t['talks'])}
+                         for t in (context.get('about_topics') or []) if t.get('category') != '...and more'],
+    'sponsors':         _inv_sponsor_names(_confirmed_sponsors),
+    'host_company':     _inv_host_company(_confirmed_sponsors),
+    'previous':         _inv_previous_edition(_og_home_meta or {}, context.get('city_name')),
+})
+print("Invitation: %s | %d/%d talks (%d%%, %s) | %d companies | %d topics | sponsors: %s | host: %s | previous: %s" % (
+    context['invitation_event']['event_name'], len(_inv_rows), _inv_target, _inv_pct, _inv_tier,
+    len(context['invitation_event']['companies']), len(context['invitation_event']['topics']),
+    ', '.join(context['invitation_event']['sponsors']) or '-', context['invitation_event']['host_company'] or '-',
+    (context['invitation_event']['previous'] or {}).get('event_name', '-')))
+# ── END SPEAKER INVITATION ──────────────────────────────────────────────────
+
+# ── SPONSOR ONBOARDING: facts for the hidden /onboardsponsor/ page ──────────
+# The page (onboardsponsor.html) posts this dict plus the toggled opportunities to the Apps Script
+# (llmday/_build/sponsor-onboarding-form.gs), which fills ONE "Info for sponsors" email whose
+# sections follow the selection. The opportunities ARE the purchasable sponsorship.yaml tiers
+# (minus the discount row and the 'On request' ones - Marek 2026-09-15), so the pills match /sponsorship. Optional overrides live under
+# `sponsor_onboarding:` in metadata.yml (sponsor_code, extra).
+context.setdefault('sponsor_onboarding_form_url', '')
+# short pill labels + pill order (Marek 2026-09-15); sponsorship.yaml keeps the long public names and its own order.
+# The 'food' tier is split into three pills (coffee / lunch / happy hour) so the email can talk about the right break.
+_SO_SHORT = {'leads': 'Leads', 'booth': 'Booth', 'keynote': 'Keynote', 'workshop': 'Workshop', 'talk': 'Regular session',
+             'logo_swag': 'Logo + Swag', 'break_coffee': 'Coffee break', 'break_lunch': 'Lunch break', 'break_happy': 'Happy hour',
+             'clothing': 'Wearables'}
+_SO_SPLIT = {'food': ['break_coffee', 'break_lunch', 'break_happy']}
+_SO_ORDER = list(_SO_SHORT)
+
+
+def _so_items(tiers):
+    out = []
+    for t in tiers:
+        tid = str(t.get('id') or '')
+        if not tid or tid == 'startup_discount':
+            continue
+        benefits = [str(x) for x in (t.get('benefits') or [])]
+        for pid in _SO_SPLIT.get(tid, [tid]):
+            out.append({'id': pid, 'name': _SO_SHORT.get(pid) or str(t.get('name') or tid), 'benefits': benefits})
+    return sorted(out, key=lambda it: _SO_ORDER.index(it['id']) if it['id'] in _SO_ORDER else 99)
+
+_so = dict(context.get('sponsor_onboarding') or {})
+_so_src = context['onboarding_event']
+context['sponsor_onboarding_event'] = {k: _so_src[k] for k in ('brand', 'brand_name', 'slug', 'event_name', 'city', 'date', 'month_day',
+                                                             'event_url', 'tickets_url', 'venue_name', 'venue_address', 'attendees',
+                                                             'youtube_url', 'calendly_url', 'slot_minutes')}
+context['sponsor_onboarding_event'].update({
+    'sponsor_page_url': _so_src['event_url'] + 'sponsorship',
+    'host_url':         context.get('base_path', '') + 'host',
+    'event_size':       _event_size,
+    'items':            _so_items(_sponsorship_tiers),
+    'sponsor_code':     str(_so.get('sponsor_code', '') or ''),
+    'extra':            str(_so.get('extra', '') or ''),
+})
+print("Sponsor onboarding: %s | %d opportunities | size %s" % (
+    context['sponsor_onboarding_event']['event_name'], len(context['sponsor_onboarding_event']['items']), _event_size))
+# ── END SPONSOR ONBOARDING ──────────────────────────────────────────────────
+
+# HIDDEN PAGE: /<event>/onboarding/ (speaker onboarding form). Standalone template,
+# noindex, deliberately NOT appended to SITEMAP_URLS.
+_os.makedirs(BASE_FOLDER + "/onboarding", exist_ok=True)
+with open(BASE_FOLDER + "/onboarding/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("onboarding.html").render(page="onboarding.html", **context))
+print("Writing out onboarding/index.html (hidden, not in sitemap)")
+
+# HIDDEN PAGE: /<event>/fasttrack/ (invite-only speaker submission form). Same rules as onboarding.
+_os.makedirs(BASE_FOLDER + "/fasttrack", exist_ok=True)
+with open(BASE_FOLDER + "/fasttrack/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("fasttrack.html").render(page="fasttrack.html", **context))
+print("Writing out fasttrack/index.html (hidden, not in sitemap)")
+
+# HIDDEN PAGE: /<event>/invitation/ (speaker invitation letter, "convince your boss"). Same rules as onboarding.
+_os.makedirs(BASE_FOLDER + "/invitation", exist_ok=True)
+with open(BASE_FOLDER + "/invitation/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("invitation.html").render(page="invitation.html", **context))
+print("Writing out invitation/index.html (hidden, not in sitemap)")
+
+# HIDDEN PAGE: /<event>/onboardsponsor/ (sponsor onboarding form). Same rules as onboarding.
+_os.makedirs(BASE_FOLDER + "/onboardsponsor", exist_ok=True)
+with open(BASE_FOLDER + "/onboardsponsor/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("onboardsponsor.html").render(page="onboardsponsor.html", **context))
+print("Writing out onboardsponsor/index.html (hidden, not in sitemap)")
+
+# SITEMAP
+print(DIVIDER)
+print("Generating sitemap.xml with %d items" % len(SITEMAP_URLS))
+now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=datetime.timezone.utc).isoformat()
+with open(BASE_FOLDER + "/sitemap.xml", "w", encoding="utf-8") as f:
+    template = env.get_template("sitemap.xml")
+    f.write(template.render(urls=SITEMAP_URLS, now=now, **context))
