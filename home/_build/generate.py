@@ -160,6 +160,59 @@ context["sponsor_logos"] = sponsor_logos
 context["partner_logos"] = partner_logos
 print(f"  Total: {len(sponsor_logos)} sponsor logos, {len(partner_logos)} partner logos")
 
+# CFP BUTTON ON THE EVENT CARDS (Marek 2026-09-20)
+# Every "Upcoming conferences" card gets a "CFP" button next to "Explore" that opens the event's cfp_url.
+# Same build-time rule as the event pages' CFP/Register pill (cfp_is_open in _event_template/_build/generate.py):
+# cfp.ninja calls a CFP open only while cfp_status == "open" AND now < cfp_close_at; closed/reviewing/complete
+# hide the button. Also hidden: no cfp_url, event_state "after", or cfp.ninja does not know the event yet (404,
+# the button would lead nowhere). Network errors and SKIP_CFP_CHECK=1 keep the button. Never fails the build.
+def _home_cfp_button(folder):
+    try:
+        with open("../" + folder + "/metadata.yml", encoding="utf-8") as _f:
+            _em = yaml.load(_f, Loader=yaml.FullLoader) or {}
+    except Exception:
+        return ""
+    url = str(_em.get("cfp_url") or "").strip()
+    if not url or str(_em.get("event_state") or "") == "after":
+        return ""
+    m = re.match(r"^https?://(www[.])?cfp[.]ninja/e/([^/?#]+)", url)
+    if not m or os.environ.get("SKIP_CFP_CHECK"):
+        return url
+    slug = m.group(2)
+    try:
+        import json as _json
+        import urllib.request
+        req = urllib.request.Request("https://cfp.ninja/api/v0/e/%s" % slug, headers={"User-Agent": "Mozilla/5.0"})
+        data = _json.loads(urllib.request.urlopen(req, timeout=5).read().decode("utf-8", "ignore"))
+        ev = data.get("data", data) if isinstance(data, dict) else {}
+        ev = ev if isinstance(ev, dict) else {}
+        status = str(ev.get("cfp_status") or "").lower()
+        close_at = str(ev.get("cfp_close_at") or "")
+        closed = status in ("closed", "reviewing", "complete")
+        if status == "open" and close_at:
+            try:
+                close_dt = datetime.datetime.fromisoformat(close_at.replace("Z", "+00:00"))
+                if close_dt.tzinfo is None:
+                    close_dt = close_dt.replace(tzinfo=datetime.timezone.utc)
+                closed = datetime.datetime.now(datetime.timezone.utc) >= close_dt
+            except ValueError:
+                pass
+        print("  CFP button %s: %s (status=%s, closes %s)" % (folder, "hidden, CFP closed" if closed else "shown", status or "?", close_at or "?"))
+        return "" if closed else url
+    except Exception as e:
+        if getattr(e, "code", None) == 404:
+            print("  CFP button %s: hidden, cfp.ninja does not know %s yet" % (folder, slug))
+            return ""
+        print("  WARN: could not check cfp.ninja for %s (%s); keeping the CFP button" % (slug, e))
+        return url
+
+
+print(DIVIDER)
+print("CFP buttons on the upcoming event cards")
+for _ev in (context.get("events") or []):
+    _cfp_folder = str(_ev.get("url") or "").strip("./").rstrip("/")
+    _ev["cfp_button_url"] = _home_cfp_button(_cfp_folder) if _cfp_folder and os.path.isdir("../" + _cfp_folder) else ""
+
 # MAIN PAGES
 print(DIVIDER)
 pages = ["index.html", "ambassadorship.html"]
