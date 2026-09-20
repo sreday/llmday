@@ -64,6 +64,13 @@ events:
     size: medium
     youtube_playlist:
 
+  - name: LLMday Hamburg 2026 Q4
+    location: House of AI, Hamburg, Germany
+    photo_url: ./assets/images/events/llmday-2026-hamburg-q4.png
+    url: ./2026-hamburg-q4/
+    size: small
+    youtube_playlist:
+
   - name: LLMday + PEC London 2026 Q4
     location: Everyman Canary Wharf, London, UK
     photo_url: ./assets/images/events/llmday-2026-london-q4.png
