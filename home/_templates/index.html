@@ -251,8 +251,8 @@ function toggleNote(id) {
 @media (max-width: 767.98px) { .yt-playlist-btn { margin-left: 0; margin-top: .5rem; } }
 .btn-past-more { text-decoration: none; }
 .btn-past-more:hover, .btn-past-more:focus { text-decoration: none; }
-#show-more-amb { background: #26986A; color: #fff; border-color: #26986A; text-decoration: none; }
-#show-more-amb:hover, #show-more-amb:focus { background: #3db07f; color: #fff; border-color: #3db07f; text-decoration: none; }
+#show-more-amb, #show-more-testimonials { background: #26986A; color: #fff; border-color: #26986A; text-decoration: none; }
+#show-more-amb:hover, #show-more-amb:focus, #show-more-testimonials:hover, #show-more-testimonials:focus { background: #3db07f; color: #fff; border-color: #3db07f; text-decoration: none; }
 .btn-past-more { color: #000; background: #fff; border: 2px solid #fff; }
 .btn-past-more:hover, .btn-past-more:focus { background: #f0f0f0; color: #000; border-color: #f0f0f0; }
 .yt-playlist-btn { display: inline-block; margin-left: 12px; padding: 10px 18px; min-height: 44px; line-height: 24px; background: #EC645E; color: #fff; border-radius: 6px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 700; transition: background 0.2s ease; }
@@ -336,8 +336,8 @@ window.addEventListener('resize', function () { clearTimeout(window.__showMoreT)
       {% endfor %}
     </div>
     {% if testimonials|length > 2 %}
-    <div class="text-center mt-3">
-      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-brand-primary show-more-btn{% if testimonials|length <= 10 %} d-md-none{% endif %}" data-total="{{ testimonials|length }}" data-desktop="10" data-mobile="2" onclick="showMoreTestimonials()">Show {{ testimonials|length - 10 }} more</a>
+    <div class="text-center mt-2 mb-4">
+      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-outline-secondary show-more-btn{% if testimonials|length <= 10 %} d-md-none{% endif %}" data-total="{{ testimonials|length }}" data-desktop="10" data-mobile="2" onclick="showMoreTestimonials()">Show {{ testimonials|length - 10 }} more</a>
     </div>
     {% endif %}
   </div>
@@ -345,8 +345,6 @@ window.addEventListener('resize', function () { clearTimeout(window.__showMoreT)
 <style>
 @media (min-width: 992px) { .testimonial-col { flex: 0 0 20%; max-width: 20%; } }
 .testimonial-extra { display: none; }
-.btn-brand-primary { background: #26986A; color: #fff; border: none; }
-.btn-brand-primary:hover, .btn-brand-primary:focus { background: #2dae7a; color: #fff; }
 .testimonial-body { line-height: 1.6em; }
 .testimonial-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 .testimonial-body.expanded .testimonial-text { display: block; -webkit-line-clamp: unset; overflow: visible; }
