@@ -47,6 +47,8 @@ community_partners:
   - AIFRONTIERS.png
   - houseofai.png
   - rtfm.png            # AI Talks NYC meetup (luma.com/ai-talks-nyc)
+  - owu.png             # OWU Uruguay - IT community (owu.uy), LLMday Montevideo
+  - seattlesystems.png  # Seattle Systems - distributed systems meetup community, SREday Seattle
   # LLMday + PEC London (co-located with the Prompt Engineering Conference, same list as the PEC repo)
   - pe-norway-full.png
   - london-agentic-ai-meetup.png
