@@ -281,7 +281,7 @@
   <div class="redflag-inner">
     {% for f in status_redflags %}
     <div class="redflag-line">
-      <strong>Did you just nuke {{ f.event_name }}?</strong>
+      <strong>Critical problem with {{ f.event_name }}</strong>
       <span>{{ f.short or f.headline }}.</span>
       <span class="redflag-meta">{% if f.kind in ("swap", "removal") %}{{ f.gone }} of {{ f.before_n }} speakers gone{% if f.added %}, {{ f.added }} new{% endif %} · {% endif %}{{ f.when }}{% if f.author %} · {{ f.author }}{% endif %}</span>
       <span class="redflag-links">{% if f.commit_url %}<a href="{{ f.commit_url }}">the upload</a>{% endif %}<a href="{{ f.file_url }}">file history</a><a href="{{ f.event_url }}">live page</a></span>
