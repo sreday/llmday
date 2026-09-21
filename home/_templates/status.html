@@ -262,9 +262,34 @@
     }
     /* very narrow phones (after the 720px block so it wins) */
     @media (max-width: 380px) { .card > table td.trk { display: none; } .reg-cats { gap: 4px 10px; font-size: .77rem; } .reg-cats b { margin-right: 4px; } }
+    /* Red flag bar (2026-09-21): a push swapped a whole lineup = wrong talks.csv in the wrong folder (_build/redflag.py).
+       Full width, above everything, sticky so it stays in sight on every tab until the lineup is fixed. */
+    .redflag-bar { position: sticky; top: 0; z-index: 60; background: var(--critical); color: #fff; box-shadow: 0 4px 18px rgba(214,48,49,.35); }
+    .redflag-inner { max-width: 1040px; margin: 0 auto; padding: 12px 20px; display: grid; gap: 8px; }
+    .redflag-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: .92rem; line-height: 1.35; }
+    .redflag-line strong { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; }
+    .redflag-meta { opacity: .85; font-size: .84rem; }
+    .redflag-links { margin-left: auto; display: flex; gap: 12px; font-size: .84rem; white-space: nowrap; }
+    .redflag-links a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+    .redflag-links a:hover { text-decoration-thickness: 2px; }
+    @media (max-width: 720px) { .redflag-bar { position: static; } .redflag-inner { padding: 10px 16px; } .redflag-line { font-size: .86rem; } .redflag-line strong { flex-basis: 100%; } .redflag-links { margin-left: 0; } }
   </style>
 </head>
 <body>
+{% if status_redflags %}
+<div class="redflag-bar" role="alert">
+  <div class="redflag-inner">
+    {% for f in status_redflags %}
+    <div class="redflag-line">
+      <strong>Did you just nuke {{ f.event_name }}?</strong>
+      <span>{{ f.short or f.headline }}.</span>
+      <span class="redflag-meta">{% if f.kind in ("swap", "removal") %}{{ f.gone }} of {{ f.before_n }} speakers gone{% if f.added %}, {{ f.added }} new{% endif %} · {% endif %}{{ f.when }}{% if f.author %} · {{ f.author }}{% endif %}</span>
+      <span class="redflag-links">{% if f.commit_url %}<a href="{{ f.commit_url }}">the upload</a>{% endif %}<a href="{{ f.file_url }}">file history</a><a href="{{ f.event_url }}">live page</a></span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
 <main class="wrap">
   <div class="brand">{{ brand_name }} · status</div>
   <h1>Upcoming conferences</h1>
