@@ -125,11 +125,11 @@
 		<div class="branding">
 			<div class="container-fluid">
 				<nav class="main-nav navbar navbar-expand-lg">
-					<div class="site-logo"><a href="/">
+					<div class="site-logo"><a href="index.html">
                         <!-- <img class="logo-icon" src="assets/images/logo-white.svg" alt="logo"></a> -->
                     </div>
 
-					<div class="navbar-btn order-lg-2"><a class="btn btn-primary" href="#tickets">Tickets</a></div>
+					<div class="navbar-btn order-lg-2"><a class="btn btn-primary" href="index.html#tickets">Tickets</a></div>
 
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
@@ -140,11 +140,11 @@
 						<ul class="nav navbar-nav">
 
 							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-							<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-							<li class="nav-item"><a class="nav-link" href="#schedule">Schedule</a></li>
-							<li class="nav-item"><a class="nav-link" href="#speakers">Speakers</a></li>
-							<li class="nav-item"><a class="nav-link" href="#venue">Venue</a></li>
-							<li class="nav-item"><a class="nav-link" href="#sponsors">Sponsors</a></li>
+							<li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+							<li class="nav-item"><a class="nav-link" href="index.html#schedule">Schedule</a></li>
+							<li class="nav-item"><a class="nav-link" href="index.html#speakers">Speakers</a></li>
+							<li class="nav-item"><a class="nav-link" href="index.html#venue">Venue</a></li>
+							<li class="nav-item"><a class="nav-link" href="index.html#sponsors">Sponsors</a></li>
 						</ul><!--//nav-->
 						
 					</div><!--//navabr-collapse-->
@@ -197,7 +197,7 @@
 						<li class="list-inline-item me-0"><a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/@llmday"><i class="fab fa-youtube fa-fw"></i></a></li>
 					</ul>
 					
-					<a class="btn btn-secondary btn-lg cta-right" href="#sponsors">Sponsor</a>
+					<a class="btn btn-secondary btn-lg cta-right" href="./#sponsors">Sponsor</a>
 					
 			    </div>
 				
@@ -242,366 +242,32 @@
 <!-- CONTENT -->
 
 
-<!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────────── -->
-
-<section id="about" class="section pt-5 pb-0">
-  <div class="container text-center">
-    <button class="btn-about-conf" type="button" aria-expanded="false"
-            aria-controls="about-conf-panel" onclick="acToggle(this)">
-      About the conference
-      <span class="ac-chevron" aria-hidden="true">
-        <svg width="17" height="10" viewBox="0 0 14 8" fill="none"
-             stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="1,1 7,7 13,1"/>
-        </svg>
-      </span>
-    </button>
-    <div id="about-conf-panel" class="ac-panel mx-auto text-start">
-      <div class="ac-panel-inner">
-        <p class="ac-blurb"><strong>LLMday</strong> is a worldwide series of community events for engineers building with large language models, AI agents and machine learning. Across cities around the world, we bring together practitioners working on AI-powered products and systems to share real-world experience, learn from each other and explore how software engineering is changing in the age of AI.</p>
-        
-        
-        
-        <p class="ac-more-soon">We'll announce more talks soon, stay tuned!</p>
-        
-        <button class="ac-close-row" type="button" onclick="acClose()" aria-label="Close About the conference">
-          <span class="ac-close-chip">Close
-            <svg width="12" height="7" viewBox="0 0 14 8" fill="none" aria-hidden="true"
-                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
-                 style="transform:rotate(180deg);">
-              <polyline points="1,1 7,7 13,1"/>
-            </svg>
-          </span>
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
 <style>
-  .kn-pill { display: inline-block; background: #111; color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .6em; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-right: 8px; vertical-align: middle; line-height: 1.4; }
-  .talk-cell .kn-pill { font-size: .7em; padding: 2px 8px; margin-right: 6px; }
-  .btn-about-conf {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--brand);
-    color: #fff;
-    border: none;
-    border-radius: 999px;
-    padding: 13px 34px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.14rem;
-    font-weight: 600;
-    letter-spacing: .01em;
-    cursor: pointer;
-    transition: background .2s, box-shadow .2s;
-  }
-  .btn-about-conf:hover { background: var(--brand-dark); box-shadow: 0 4px 18px rgba(0,0,0,.18); }
-  .btn-about-conf:hover, .btn-about-conf:focus, .btn-about-conf:active,
-  .btn-about-conf[aria-expanded="true"] { color: #fff; }
-  .btn-about-conf:active { transform: scale(.97); }
-  .ac-chevron { display: flex; align-items: center; transition: transform .3s ease; }
-  .btn-about-conf[aria-expanded="true"] .ac-chevron { transform: rotate(180deg); }
-  .ac-panel { max-width: 800px; overflow: hidden; max-height: 0; transition: max-height .585s cubic-bezier(.4,0,.2,1); }
-  .ac-panel-inner { padding: 18px 4px 6px; }
-  .ac-blurb { color: #555; }
-  .ac-more-soon { color: #888; font-style: italic; }
-  .ac-topics-heading { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand-dark); margin-top: 16px; }
-  .ac-companies { color: #555; font-size: .9rem; }
-  .ac-topic-group { margin-top: 10px; }
-  .ac-topic-name { font-weight: 700; color: var(--brand); }
-  .ac-topic-talks { margin: 4px 0 0; padding-left: 20px; color: #555; font-size: .9rem; }
-  .ac-topic-talks a { color: inherit; text-decoration: none; }
-  .ac-topic-talks a:hover { color: var(--brand); }
-  .ac-close-row {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-top: 24px;
-    padding: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  .ac-close-row::before, .ac-close-row::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: #e0e0e0;
-  }
-  .ac-close-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin: 0 10px;
-    padding: 3px 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 999px;
-    background: #fff;
-    color: #999;
-    font-size: .78rem;
-    font-weight: 600;
-    transition: color .2s, border-color .2s;
-  }
-  .ac-close-row:hover .ac-close-chip { color: #666; border-color: #bbb; }
-</style>
-<script>
-  function acToggle(btn) {
-    var panel = document.getElementById('about-conf-panel');
-    var open = btn.getAttribute('aria-expanded') !== 'true';
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
-  }
-  function acClose() {
-    acToggle(document.querySelector('#about .btn-about-conf'));
-    setTimeout(function() { document.getElementById('about').scrollIntoView({behavior: 'smooth'}); }, 10);
-  }
-  function acAutoExpand() {
-    var btn = document.querySelector('#about .btn-about-conf');
-    if (btn && btn.getAttribute('aria-expanded') !== 'true') acToggle(btn);
-  }
-  document.addEventListener('DOMContentLoaded', function() {
-    if (window.location.hash === '#about') acAutoExpand();
-    document.querySelectorAll('a[href$="#about"]').forEach(function(a) {
-      a.addEventListener('click', function() { setTimeout(acAutoExpand, 0); });
-    });
-  });
-  window.addEventListener('hashchange', function() {
-    if (window.location.hash === '#about') acAutoExpand();
-  });
-</script>
-
-<!-- ── END ABOUT THE CONFERENCE ────────────────────────────────────── -->
-
-<section id="countdown" class="about-section section">
-
-  <div class="container">
-    <div class="event-countdown text-center mb-3">
-    
-      <h4 class="countdown-intro mb-2 text-center mb-3">Event Starts In:</h4>
-      <div id="countdown-box" class="countdown-box"></div>
-    
-    </div>
-  </div>
-  <style>
-    /* ======= Countdown pill ========= */
-    .countdown-box {
-      display: inline-flex;
-      background: #2f2f2f;
-      border-radius: 999px;
-      padding: 10px 30px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.18);
-    }
-    .countdown-box .number { color: #fff; }
-    .countdown-box .unit { color: rgba(255,255,255,.7); }
-    @media (max-width: 575px) {
-      .countdown-box { padding: 8px 14px; }
-      .countdown-box span { min-width: 62px; padding: .5rem .25rem; }
-    }
-  </style>
-  <script>
-    /* ======= Countdown ========= */
-    // set the date we're counting down to
-    var target_date = new Date("2026-11-18T09:00:00+01:00").getTime();
-
-    // get tag element (absent on past events)
-    var countdown = document.getElementById("countdown-box");
-    if (countdown) {
-      var makeUnit = function (cls, label) {
-        var wrap = document.createElement("SPAN");
-        wrap.className = cls;
-        var num = document.createElement("SPAN");
-        num.className = "number";
-        num.textContent = "0";
-        var unit = document.createElement("SPAN");
-        unit.className = "unit";
-        unit.textContent = label;
-        wrap.appendChild(num);
-        wrap.appendChild(unit);
-        countdown.appendChild(wrap);
-        return num;
-      };
-      var days_el = makeUnit("days", "Days");
-      var hours_el = makeUnit("hours", "Hrs");
-      var minutes_el = makeUnit("minutes", "Mins");
-      var secs_el = makeUnit("secs", "Secs");
-
-      // roll a number to its new value (same countdown tween as the
-      // sponsorship page's currency switch)
-      var setNum = function (el, v) {
-        v = parseInt(v, 10);
-        var cur = parseInt(el.textContent, 10) || 0;
-        if (cur === v) return;
-        if (el._rollId) cancelAnimationFrame(el._rollId);
-        var start = performance.now();
-        var step = function (now) {
-          var t = Math.min((now - start) / 400, 1);
-          var ease = 1 - Math.pow(1 - t, 3);
-          el.textContent = String(Math.round(cur + (v - cur) * ease));
-          if (t < 1) el._rollId = requestAnimationFrame(step);
-          else el._rollId = null;
-        };
-        el._rollId = requestAnimationFrame(step);
-      };
-
-      var tick = function () {
-        var seconds_left = Math.max(0, (target_date - new Date().getTime()) / 1000);
-        setNum(days_el, parseInt(seconds_left / 86400));
-        seconds_left = seconds_left % 86400;
-        setNum(hours_el, parseInt(seconds_left / 3600));
-        seconds_left = seconds_left % 3600;
-        setNum(minutes_el, parseInt(seconds_left / 60));
-        setNum(secs_el, parseInt(seconds_left % 60));
-      };
-      tick();
-      setInterval(tick, 1000);
-    }
-    </script>
-</section>
-
-
-
-
-<section id="tickets" class="tickets-section section">
-  <div class="container">
-    <h3 class="section-heading text-center mb-3">Tickets</h3>
-
-    <div class="row pricing mb-5 mt-10">
-      <div class="col-12 text-center">
-        
-<div class="text-center py-5">
-  <p class="lead mb-0">Tickets will be available soon</p>
-</div>
-
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<style>
-  .speakers-section .card {
-    height: 100%;
-  }
-  .speakers-section .card-footer {
-    min-height: 3rem;
-  }
-  .speakers-section .card-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    font-size: 0.9rem;
-  }
-  .speakers-section .card-title {
-    font-size: 1.1rem;
-  }
-  .event-card-buttons {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 6px;
-    margin-top: auto;
-    width: 100%;
-  }
-  .speakers-section .event-card-buttons a {
-    flex: 0 1 50%;
-    text-align: center;
-    min-width: 0;
-    display: block;
-  }
-  .event-read-more-btn {
-    display: inline-block;
-    padding: 6px 12px;
-    background: var(--brand);
-    color: #fff;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    transition: background 0.2s ease;
-  }
-  .event-read-more-btn:hover,
-  .event-read-more-btn:focus {
-    background: var(--brand-light);
-    color: #fff;
-    text-decoration: none;
-  }
-  .event-watch-btn {
-    display: inline-block;
-    padding: 6px 12px;
-    background: #EC645E;
-    color: #fff;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    transition: background 0.2s ease;
-  }
-  .event-watch-btn:hover,
-  .event-watch-btn:focus {
-    background: #F28B87;
-    color: #fff;
-    text-decoration: none;
-  }
-  .event-watch-btn-sm {
-    padding: 4px 12px;
-    font-size: 0.85rem;
-    margin-left: 12px;
-  }
-  .schedule-abstract {
-    position: relative;
-    max-height: 3.2em;
-    line-height: 1.6;
-    overflow: hidden;
+  .talk-content .desc p,
+  .talk-content .desc li {
     text-align: justify;
+    line-height: 1.75;
+    color: #444;
+    font-size: 0.95rem;
   }
-  .schedule-abstract-read-more {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding-left: 3em;
-    background: linear-gradient(to right, transparent, #e8f8f0 30%);
-    font-weight: 700;
-    color: var(--brand);
-    text-decoration: underline;
-  }
-  .schedule-section .item {
-    margin-bottom: 4.5rem;
+  .talk-content .desc {
+    padding-bottom: 0.25rem;
   }
 </style>
 
-
-<section id="schedule" class="schedule-section section theme-bg-light">
+<section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h2 class="section-heading text-center mb-5">Schedule</h2>
-    <h4 class="section-heading text-center mb-5">Coming soon</h4>
-  </div>
-</section>
+    <h1 class="section-heading text-center mb-3">Keynote: The Evolution of Ops</h1>
+    <div class="row">
 
-
-
-
-<section id="speakers" class="speakers-section section">
-  <div class="container">
-    <h3 class="section-heading text-center mb-3">Speakers</h3>
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5">
-
-      
-
-      <div class="col mb-4">
-        <div class="card rounded">
-          <a href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><img src="../speakers/Miko Pawlikowski.png" class="card-img-top rounded-0" alt=""></a>
+      <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
+        <div class="card rounded-0">
+          <img src="../speakers/Miko Pawlikowski.png" class="card-img-top rounded-0" alt="">
           <div class="card-body">
             <h5 class="card-title mb-2">Miko Pawlikowski</h5>
             <div class="card-text mb-3">
               <div class="meta">SRE Author</div>
             </div><!--//card-text-->
-            <div class="event-card-buttons">
-              <a href="./Miko_Pawlikowski_SRE_Author_Keynote_The_Evolution_of_Ops#speakers-section" class="event-read-more-btn">Read more</a>
-              
-            </div>
           </div><!--//card-->
           <div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
@@ -614,58 +280,41 @@
         </div><!--//card-->
       </div><!--//col-->
 
-      
-
-      
-
-      <div class="col mb-4">
-        <div class="card">
+      <div class="col-6 col-lg-9 mb-4">
+        <div class="card rounded-0 talk-content">
           <div class="card-body">
-            <h4>More coming soon</h4>
-          </div><!--//card-->
-        </div><!--//card-->
-      </div><!--//col-->
 
-      
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
+                <p><p>Let's explore how the Ops landscape has evolved in recent years and examine key trends shaping its future.</p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <p></p>
+              </div>
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
+                <p></p>
+              </div>
+
+              
+
+          </div><!--//card-->
+          <div class="card-footer text-muted">
+          </div>
+        </div><!--//card-->
+      </div><!--//col--> 
 
     </div><!--//row-->
-    <div class="speakers-cta text-center py-3"><a class="btn btn-primary btn-lg" href="#tickets">Get Tickets</a></div>
+  <div class="text-center mt-4 mb-2">
+    <a class="btn btn-secondary btn-lg" href="./">Full lineup and tickets</a>
+  </div>
   </div><!--//container-->
 
 </section><!--//speakers-section-->
 
 
-<section id="venue" class="venue-section section  theme-bg-primary text-white">
-    <div class="container">
-      <h3 class="section-heading text-center mb-5 text-white">Venue</h3>
-      <div class="row gx-5 py-lg-5">
-        <div class="col-12 col-lg-7 h-100">
-          <div class="desc">
-            <h4 class="text-white mb-3">House of AI</h4>
-            <p>
-              Hongkongstraße 2 <br />
-              20457 Hamburg, Germany <br />
-            </p>
 
-            <div class="row pt-3">
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2369.5!2d10.0007517!3d53.5428714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b18efc49761015%3A0x4a9d0b4a925d10eb!2sHongkongstra%C3%9Fe%202%2C%2020457%20Hamburg!5e0!3m2!1sen!2sde!4v1713363600000!5m2!1sen!2sde" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div><!--//row-->
-          </div><!--//desc-->
-        </div><!--//col-->
-        <div class="col-12 col-xl-3 col-lg-4 offset-lg-1 position-relative h-100 mt-5 mt-lg-0">
-          <div class="figures-holder">
-            <div class="figure figure-1"><img class="shadow" src="assets/images/venue/venue-1.jpg" alt=""></div>
-            <div class="figure figure-2"><img class="shadow" src="assets/images/venue/venue-2.jpg" alt=""></div>
-            <div class="figure figure-3"><img class="shadow" src="assets/images/venue/venue-3.jpg" alt=""></div>
-          </div><!--//figures-holder-->
-        </div><!--//col-->
-      </div><!--//row-->
-    </div><!--//container-->
-  </section><!--//venue-section-->
-  
-
-
-<section id="sponsors" class="sponsors-section section">
+<section id="sponsors-section" class="sponsors-section section">
   <div class="container">
     <h3 class="section-heading text-center mb-3">Sponsors &amp; Partners</h3>
     <div class="section-intro text-center single-col-max mx-auto mb-5">Want to become a sponsor? Get in touch!</div>
@@ -990,92 +639,6 @@ document.getElementById('lead-form').addEventListener('submit', function(ev) {
 </script></div>
   </div><!--//container-->
 </section><!--//sponsors-section-->
-
-
-
-<style>
-  .modal-speaker .desc p,
-  .modal-speaker .desc li {
-    text-align: justify;
-    line-height: 1.75;
-    color: #444;
-    font-size: 0.95rem;
-  }
-  .modal-speaker .modal-close-btn {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    z-index: 1;
-    background: var(--brand);
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 2.1rem;
-    line-height: 1;
-    padding: 0.25rem 0.75rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  .modal-speaker .modal-close-btn:hover {
-    background: var(--brand-light);
-  }
-  .modal-speaker .modal-header {
-    display: none;
-  }
-  .modal-speaker .modal-body {
-    position: relative;
-  }
-  .modal-speaker .talk-title-bar {
-    background: var(--brand);
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.1rem;
-    padding: 0.75rem 1rem;
-    text-align: center;
-  }
-  .modal-speaker .desc {
-    padding-bottom: 0.125rem;
-  }
-</style>
-
-
-<!-- Modal Speaker 0 -->
-<div class="modal modal-speaker modal-speaker-0" id="modal-speaker-0" tabindex="-1" role="dialog" aria-labelledby="speaker-0-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Miko Pawlikowski.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Miko Pawlikowski</h2>
-                          <div class="meta mb-2">SRE Author</div>
-                          <ul class="social-list list-inline mb-0">
-                            <li class="list-inline-item"><a  href="https://twitter.com/@mikopawlikowski"><i class="fab fa-twitter fa-fw"></i></a></li>
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/mikolajpawlikowski/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar"><span class="kn-pill">Keynote</span>The Evolution of Ops</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>Let's explore how the Ops landscape has evolved in recent years and examine key trends shaping its future.</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
 
 
 
