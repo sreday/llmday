@@ -657,8 +657,7 @@ for _ev in (context.get("events_past") or []):
         "errors": _n_err, "warnings": len(_issues) - _n_err,
     })
 # Red flags (Marek 2026-09-21, "Did you just nuke SREday London?"): one push swapping a whole lineup means the wrong
-# talks.csv went into the wrong event folder. The rules live in ../_build/redflag.py, shared with the push-time
-# email (workflow step "Red flag check"); here every flag that is STILL true becomes a line of the red bar on top
+# talks.csv went into the wrong event folder. The rules live in ../_build/redflag.py, also used by hand as a CLI; here every flag that is STILL true becomes a line of the red bar on top
 # of /status/ plus the first error of that event's Data checks. Past 2025+ events are watched too: a file uploaded
 # into last year's folder is the accident nobody notices. Clears by itself once the lineup is fixed, or when the
 # commit id is listed under redflag_ack in home/metadata.yml. Never fails the build.
@@ -1227,6 +1226,12 @@ for r in _status_rows:
     elif r["luma_note"]:
         print("  %-38s %s" % (r["name"][:38], r["luma_note"]))
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
+# redflags.json: the same flags as the red bar. The "Red flag alert" Gmail script (llmday/_build/redflag-alert.gs)
+# reads it every 10 minutes and emails "Did you just nuke <event>?" once per flag. No secrets, no webhook.
+import json as _rf_json
+with open(BASE_FOLDER + "/status/redflags.json", "w", encoding="utf-8") as f:
+    _rf_json.dump({"built": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "flags": _redflags},
+                  f, ensure_ascii=False, indent=1)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
