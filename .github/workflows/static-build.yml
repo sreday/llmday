@@ -23,16 +23,6 @@ jobs:
           make --version
           make deps
 
-      - name: Red flag check
-        if: github.event_name == 'push'
-        continue-on-error: true
-        env:
-          REDFLAG_URL: ${{ secrets.REDFLAG_URL }}       # "Red flag alert" Apps Script (llmday/_build/redflag-alert.gs)
-          REDFLAG_TOKEN: ${{ secrets.REDFLAG_TOKEN }}
-          BEFORE: ${{ github.event.before }}
-          AFTER: ${{ github.sha }}
-        run: python _build/redflag.py                   # "Did you just nuke <event>?" email when a push swaps a whole lineup
-
       - name: Build 🔧
         env:
           LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations

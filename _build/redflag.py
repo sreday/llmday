@@ -5,15 +5,14 @@ Every talks.csv change is a GitHub web upload, one event per commit. When the wr
 event folder, the whole lineup of that event is swapped by a single push (2026-09-21: SREday London Q3 received
 the San Francisco Q4 file three days before the event). This module spots that shape and names the likely source.
 
-Byte-identical in sreday, llmday, platformday and PEC; stdlib only (yaml is optional, for event names). Two users:
-  * CLI, push builds only (.github/workflows/static-build.yml, step "Red flag check"): looks at the commits of the
-    push and posts every flag to the "Red flag alert" Apps Script (llmday/_build/redflag-alert.gs), which emails Mark.
-        python _build/redflag.py                      BEFORE / AFTER env = the pushed range (GitHub Actions)
-        python _build/redflag.py --range A..B         any range, e.g. 3a98fc0b5~1..3a98fc0b5
-        python _build/redflag.py --dry-run            never posts, prints what it would send
-        python _build/redflag.py --test               posts one clearly marked TEST flag (checks the email path)
-  * import, every home build (home/_build/generate.py, STATUS block): active_flags() feeds the red bar on top of
-    /status/ and an error on top of the event's Data checks, until the lineup is fixed.
+Byte-identical in sreday, llmday, platformday and PEC; stdlib only (yaml is optional, for event names).
+  * import, every home build (home/_build/generate.py, STATUS block): active_flags() = the flags that are still
+    true. They become the red bar on top of /status/, the first error of the event's Data checks, and
+    /status/redflags.json. The "Red flag alert" Gmail script (llmday/_build/redflag-alert.gs) reads that json every
+    10 minutes and emails "Did you just nuke <event>?" once per flag. No secrets, no webhook, no workflow step.
+  * CLI, by hand, prints only:
+        python _build/redflag.py                      flags that are true right now (all 2025+ folders)
+        python _build/redflag.py --range A..B         flags raised by those commits, e.g. 3a98fc0b5~1..3a98fc0b5
 It never fails a build: every problem degrades to a log line and exit code 0.
 
 Rules (CSV-parsed snapshots from git, never line diffs: abstracts contain newlines; confirmed/keynote rows only):
@@ -37,7 +36,6 @@ import os
 import re
 import subprocess
 import sys
-import urllib.request
 
 try:
     import yaml
@@ -56,7 +54,6 @@ ACTIVE_COMMITS = 8       # /status/ bar: how far back a still-unfixed swap is lo
 ACTIVE_DAYS = 45            # = the history window CI fetches for /status/
 EVENT_RE = re.compile(r"^20(2[5-9]|[3-9]\d)[\w.-]*$")       # never the frozen 2022-2024 folders
 TALKS_RE = re.compile(r"^([^/]+)/_db/talks\.csv$")
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
 
 
 # ---- git + snapshots ----------------------------------------------------------
@@ -376,7 +373,14 @@ def active_flags(root, folders):
             if wrong and overlap_fuzzy(now, wrong) >= RESTORE:    # the page still shows what that commit brought in
                 flags.append(flag)
             break                                                 # only the most recent swap matters
-    flagged = set(f["folder"] for f in flags)
+    for folder in folders:                                        # a talks.csv next to _db/ instead of inside it
+        stray = folder + "/talks.csv"
+        if os.path.isfile(os.path.join(root, stray)):
+            last = (git(root, "log", "-n", "1", "--format=%H%x1f%cI%x1f%an", "--", stray) or "").strip()
+            sha, iso, author = (last.split("\x1f") + ["", ""])[:3]
+            if sha[:7].lower() not in acked:
+                flags.append(_flag(root, folder, "path", sha, iso, author, path=stray))
+    flagged = set(f["folder"] for f in flags if f["kind"] != "path")
     snaps = dict((d, snapshot(root, None, d + "/_db/talks.csv")) for d in folders)
     for i, a in enumerate(folders):
         for b in folders[i + 1:]:
@@ -397,10 +401,10 @@ def active_flags(root, folders):
     return flags
 
 
-# ---- email (the Apps Script owns the wording; this only posts facts) ----------------
+# ---- CLI (prints only; the email is the Gmail script's job) -----------------------
 
 def preview(flag):
-    lines = ["Subject: Did you just nuke %s?" % flag["event_name"], "  " + flag["headline"]]
+    lines = ["Did you just nuke %s?" % flag["event_name"], "  " + flag["headline"]]
     if flag["kind"] in ("swap", "removal"):
         lines.append("  %d of %d speakers gone, %d of %d new, %s by %s" % (flag["gone"], flag["before_n"], flag["added"],
                                                                         flag["after_n"], flag["when"], flag["author"]))
@@ -410,53 +414,17 @@ def preview(flag):
     return "\n".join(lines)
 
 
-def post(flag, url, token, test=False):
-    payload = dict(flag, token=token, test=bool(test))
-    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"),
-                                 headers={"Content-Type": "application/json", "User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=40) as res:
-        body = res.read().decode("utf-8", errors="replace")
-    try:
-        return json.loads(body)
-    except ValueError:
-        return {"ok": False, "error": "not json: " + body[:160]}
-
-
 def main(argv):
     root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-    dry, test = "--dry-run" in argv, "--test" in argv
-    before, after = os.environ.get("BEFORE", ""), os.environ.get("AFTER", "")
     if "--range" in argv:
         before, _, after = argv[argv.index("--range") + 1].partition("..")
-    url, token = os.environ.get("REDFLAG_URL", "").strip(), os.environ.get("REDFLAG_TOKEN", "").strip()
-    if test:
-        folder = (event_folders(root) or ["test"])[-1]
-        flags = [_flag(root, folder, "swap", "test" + datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
-                       datetime.datetime.now(datetime.timezone.utc).isoformat(), "redflag.py --test",
-                       suspect_folder=folder, suspect_name="Some Other Event 2026", overlap_pct=97,
-                       gone=30, before_n=32, added=26, after_n=28, gone_names=["Ada Lovelace", "Alan Turing"],
-                       added_names=["Grace Hopper", "Linus Torvalds"])]
-    else:
         flags = flags_for_range(root, before, after)
+    else:
+        flags = active_flags(root, event_folders(root))
     print("RED FLAGS: %d" % len(flags))
     for flag in flags:
         print(preview(flag))
-        if os.environ.get("GITHUB_ACTIONS"):
-            print("::error file=%s,title=Red flag::%s" % (flag["path"], flag["headline"]))
-        if dry:
-            continue
-        if not (url and token):
-            print("  not sent: REDFLAG_URL / REDFLAG_TOKEN are not set")
-            continue
-        try:
-            print("  alert: %s" % json.dumps(post(flag, url, token, test=test)))
-        except Exception as err:                                  # never fail the build over an email
-            print("  alert failed: %s" % err)
 
 
 if __name__ == "__main__":
-    try:
-        main(sys.argv[1:])
-    except Exception as err:
-        print("red flag check crashed, ignored: %r" % (err,))
-    sys.exit(0)
+    main(sys.argv[1:])
