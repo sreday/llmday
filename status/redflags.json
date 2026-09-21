@@ -1,32 +1,4 @@
 {
- "built": "2026-09-21T11:40:08Z",
- "flags": [
-  {
-   "brand": "llmday",
-   "folder": "2026-austin-q4",
-   "event_name": "LLMday Austin 2026 Q4",
-   "kind": "path",
-   "suspect_folder": "",
-   "suspect_name": "",
-   "identical": false,
-   "overlap_pct": 0,
-   "gone": 0,
-   "before_n": 0,
-   "added": 0,
-   "after_n": 0,
-   "gone_names": [],
-   "added_names": [],
-   "sha": "404427d56c30bd95518cfea289aafbff50cc410b",
-   "when": "Tue 15 Sep, 0:05",
-   "iso": "2026-09-15T00:05:23+01:00",
-   "author": "Mark Pawlikowski",
-   "path": "2026-austin-q4/talks.csv",
-   "commit_url": "https://github.com/sreday/llmday/commit/404427d56c30bd95518cfea289aafbff50cc410b",
-   "file_url": "https://github.com/sreday/llmday/commits/main/2026-austin-q4/talks.csv",
-   "event_url": "https://www.llmday.com/2026-austin-q4/",
-   "status_url": "https://www.llmday.com/status/",
-   "headline": "LLMday Austin 2026 Q4: talks.csv was uploaded to 2026-austin-q4/talks.csv, outside _db/, so the site ignores it",
-   "short": "Talks.csv was uploaded to 2026-austin-q4/talks.csv, outside _db/, so the site ignores it"
-  }
- ]
+ "built": "2026-09-21T11:49:47Z",
+ "flags": []
 }
