@@ -35,6 +35,69 @@ function headerAnimation () {
 
 };
 
+/* ===== Sponsor links jump, never glide (Marek 2026-09-21) ===== */
+/* "Sponsor" buttons and nav links (#sponsor on home pages, #sponsors on event pages) used to start a smooth scroll
+   while the lead form's "Email us" panel was animating open and lazy images were still arriving above: the page
+   grew under the glide and it sometimes stopped half way. They now teleport: the panel opens without its
+   transition, the page jumps in the same tick, and the landing is re-checked once shortly after and once on load
+   unless the visitor has touched the page. Every other anchor keeps its smooth scroll. Never throws. */
+(function () {
+	try {
+		var target = document.getElementById('sponsor') || document.getElementById('sponsors');
+		if (!target) return;
+		var hash = '#' + target.id;
+		var touched = false;
+		['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach(function (t) {
+			window.addEventListener(t, function () { touched = true; }, { passive: true, capture: true });
+		});
+
+		function openLeadPanel() {
+			var panel = document.getElementById('lead-panel');
+			if (!panel || typeof window.leadOpen !== 'function') return;
+			var was = panel.style.transition;
+			panel.style.transition = 'none';
+			window.leadOpen();
+			void panel.offsetHeight;                                 // apply the open state before the transition returns
+			panel.style.transition = was;
+		}
+		function land() {
+			var margin = parseFloat(getComputedStyle(target).scrollMarginTop);
+			var offset = margin > 0 ? margin : 69;                   // 69 = header height, same as the .scrollto handler
+			var y = Math.max(0, Math.round(target.getBoundingClientRect().top + window.pageYOffset - offset));
+			if (Math.abs(window.pageYOffset - y) > 1) window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+		}
+		function sponsorJump() {
+			openLeadPanel();
+			land();
+			touched = false;
+			setTimeout(function () { if (!touched) land(); }, 300);
+		}
+		function closeMenu() {
+			if (typeof closeMobileNav === 'function') return closeMobileNav();
+			var nav = document.getElementById('navigation');
+			if (nav && nav.classList.contains('show')) nav.classList.remove('show');
+		}
+
+		document.querySelectorAll('a[href="' + hash + '"]').forEach(function (a) {
+			a.addEventListener('click', function (e) {
+				e.preventDefault();
+				e.stopImmediatePropagation();                        // not the smooth .scrollto handler, not the animated leadOpen
+				if (history.pushState) history.pushState(null, '', hash);
+				sponsorJump();
+				closeMenu();
+			}, true);
+		});
+
+		// arriving with the hash (talk page hero button -> ./#sponsors, navbar from a subpage, a shared link)
+		if (location.hash === hash) {
+			var arrive = function () { if (!touched) { openLeadPanel(); land(); } };
+			if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrive); else arrive();
+			window.addEventListener('load', arrive);
+		}
+	} catch (e) {}
+})();
+
+
 /* ===== Smooth scrolling ====== */
 /*  Note: You need to include smoothscroll.min.js (smooth scroll behavior polyfill) on the page to cover some browsers */
 /* Ref: https://github.com/iamdustan/smoothscroll */
