@@ -260,9 +260,34 @@
     }
     /* very narrow phones (after the 720px block so it wins) */
     @media (max-width: 380px) { .card > table td.trk { display: none; } .reg-cats { gap: 4px 10px; font-size: .77rem; } .reg-cats b { margin-right: 4px; } }
+    /* Red flag bar (2026-09-21): a push swapped a whole lineup = wrong talks.csv in the wrong folder (_build/redflag.py).
+       Full width, above everything, sticky so it stays in sight on every tab until the lineup is fixed. */
+    .redflag-bar { position: sticky; top: 0; z-index: 60; background: var(--critical); color: #fff; box-shadow: 0 4px 18px rgba(214,48,49,.35); }
+    .redflag-inner { max-width: 1040px; margin: 0 auto; padding: 12px 20px; display: grid; gap: 8px; }
+    .redflag-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: .92rem; line-height: 1.35; }
+    .redflag-line strong { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; }
+    .redflag-meta { opacity: .85; font-size: .84rem; }
+    .redflag-links { margin-left: auto; display: flex; gap: 12px; font-size: .84rem; white-space: nowrap; }
+    .redflag-links a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+    .redflag-links a:hover { text-decoration-thickness: 2px; }
+    @media (max-width: 720px) { .redflag-bar { position: static; } .redflag-inner { padding: 10px 16px; } .redflag-line { font-size: .86rem; } .redflag-line strong { flex-basis: 100%; } .redflag-links { margin-left: 0; } }
   </style>
 </head>
 <body>
+
+<div class="redflag-bar" role="alert">
+  <div class="redflag-inner">
+    
+    <div class="redflag-line">
+      <strong>Did you just nuke LLMday San Francisco 2026 Q2?</strong>
+      <span>Looks like it has the lineup of LLMday San Francisco 2026 Q4 (100% match).</span>
+      <span class="redflag-meta">26 of 28 speakers gone, 23 new · Thu 17 Sep, 23:32 · Mark Pawlikowski</span>
+      <span class="redflag-links"><a href="https://github.com/sreday/llmday/commit/53c0f0d6e783facb6ad33f0bb1b3bb50f36ac630">the upload</a><a href="https://github.com/sreday/llmday/commits/main/2026-san-francisco-q2/_db/talks.csv">file history</a><a href="https://www.llmday.com/2026-san-francisco-q2/">live page</a></span>
+    </div>
+    
+  </div>
+</div>
+
 <main class="wrap">
   <div class="brand">LLMday · status</div>
   <h1>Upcoming conferences</h1>
@@ -432,8 +457,8 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="fresh" data-built="2026-09-21T09:52:22+00:00" title="Not live: the numbers refresh every time the website is built">
-      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-21 09:52 UTC</span>
+    <div class="fresh" data-built="2026-09-21T11:23:25+00:00" title="Not live: the numbers refresh every time the website is built">
+      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-21 11:23 UTC</span>
     </div>
     
     
@@ -1059,7 +1084,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
     
     
     <details class="past">
-      <summary>Past events with issues (3)</summary>
+      <summary>Past events with issues (4)</summary>
       
       <div class="check" id="check-2026-lisbon-q2">
         <div class="check-head">
@@ -1105,12 +1130,26 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
         </ul>
       </div>
       
+      <div class="check" id="check-2026-san-francisco-q2">
+        <div class="check-head">
+          <a href="/2026-san-francisco-q2/">LLMday San Francisco 2026 Q2</a><small>April 16, 2026</small>
+          <span class="spacer"></span>
+          <span class="count err">1 error</span>
+          
+        </div>
+        <ul>
+          <li class="error"><i></i><a class="where" href="https://github.com/sreday/llmday/commit/53c0f0d6e783facb6ad33f0bb1b3bb50f36ac630">lineup</a><span>RED FLAG: LLMday San Francisco 2026 Q2 looks like it has the lineup of LLMday San Francisco 2026 Q4 (100% match) (upload 53c0f0d, Thu 17 Sep, 23:32)</span></li>
+          
+          
+        </ul>
+      </div>
+      
     </details>
     
   </section>
   
 
-  <div class="foot">Generated 2026-09-21 09:52 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-21 11:23 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
