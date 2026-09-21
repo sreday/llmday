@@ -822,6 +822,11 @@ def _status_added_log(rows):
                 continue
             commits.append((sha, when_local, lines[-1]))
         commits.reverse()                                    # oldest first so a later addition overwrites an earlier one
+        # Red flag swaps (Marek 2026-09-21: "hide the changes that were just fixing the website"): when a commit is a
+        # csv accident, neither the wrong lineup it brought in nor the upload that fixes it is news. `carry` keeps the
+        # lineup from BEFORE the accident and the following uploads are compared with that, so a wrong file + its fix
+        # show nothing at all, and a fix that also carries one genuinely new speaker shows exactly that one.
+        carry = None
         for i, (sha, when_local, path_then) in enumerate(commits):
             if when_local.date() < scan_from:
                 continue
@@ -832,6 +837,8 @@ def _status_added_log(rows):
                 before = _status_talks_at(root, sha + "^", path_then)
             if after is None or before is None:
                 warnings.append("%s: commit %s skipped, history too shallow or file unreadable" % (r["name"], sha[:7])); continue
+            if carry is not None:
+                before = carry
             def _entry(kind, key, row):
                 # one timeline per person and event, whatever the spelling of the day
                 tkey = next((k for (f, k) in timelines if f == folder and same(k, key)), key)
@@ -841,10 +848,8 @@ def _status_added_log(rows):
                     "organization": (row.get("organization") or "").strip(),
                     "event": r["name"], "event_url": r["url"], "when": when_local,
                     "time": when_local.strftime("%H:%M"), "iso": when_local.isoformat()})
-            for key, row in after.items():
-                if key in before or any(same(key, k) for k in before):
-                    continue
-                _entry("added", key, row)
+            added = [(key, row) for key, row in after.items()
+                     if not (key in before or any(same(key, k) for k in before))]
             after_titles = {" ".join((x.get("title") or "").casefold().split()) for x in after.values()}
             gone = []
             for key, row in before.items():
@@ -857,9 +862,13 @@ def _status_added_log(rows):
                     continue                                 # panel whose lineup changed, the session itself is still on
                 gone.append((key, row))
             if len(gone) > _REMOVED_MASS[0] and len(gone) > _REMOVED_MASS[1] * max(len(before), 1):
-                warnings.append("%s: commit %s drops %d of %d speakers at once, treated as a csv accident (see the red bar while it is unfixed), removals not listed"
+                warnings.append("%s: commit %s drops %d of %d speakers at once, treated as a csv accident (see the red bar while it is unfixed): its changes and the fix are not listed"
                                 % (r["name"], sha[:7], len(gone), len(before)))
-                gone = []
+                carry = before
+                continue
+            carry = None
+            for key, row in added:
+                _entry("added", key, row)
             for key, row in gone:
                 _entry("removed", key, row)
     # Resolve each timeline: opposite events within the flap window cancel out (left and came back, or added and
