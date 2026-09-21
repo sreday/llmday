@@ -656,6 +656,30 @@ for _ev in (context.get("events_past") or []):
         "issues": _issues[:_LINT_MAX_PER_EVENT], "issues_more": max(0, len(_issues) - _LINT_MAX_PER_EVENT),
         "errors": _n_err, "warnings": len(_issues) - _n_err,
     })
+# Red flags (Marek 2026-09-21, "Did you just nuke SREday London?"): one push swapping a whole lineup means the wrong
+# talks.csv went into the wrong event folder. The rules live in ../_build/redflag.py, shared with the push-time
+# email (workflow step "Red flag check"); here every flag that is STILL true becomes a line of the red bar on top
+# of /status/ plus the first error of that event's Data checks. Past 2025+ events are watched too: a file uploaded
+# into last year's folder is the accident nobody notices. Clears by itself once the lineup is fixed, or when the
+# commit id is listed under redflag_ack in home/metadata.yml. Never fails the build.
+_redflags = []
+try:
+    import sys as _sys
+    _sys.dont_write_bytecode = True                          # no _build/__pycache__ next to the shared scripts
+    _sys.path.insert(0, os.path.abspath("../_build"))
+    import redflag as _redflag
+    _redflags = _redflag.active_flags(os.path.abspath(".."), [r["folder"] for r in _status_rows + _status_past
+                                                              if os.path.isfile("../" + r["folder"] + "/_db/talks.csv")])
+except Exception as _e:
+    print("  red flags: check failed, skipped (%r)" % (_e,))
+print("RED FLAGS: %d" % len(_redflags))
+for _rf in _redflags:
+    print("  %s (upload %s, %s)" % (_rf["headline"], _rf["sha"][:7], _rf["when"]))
+    for r in _status_rows + _status_past:
+        if r["folder"] == _rf["folder"]:
+            r["issues"].insert(0, {"sev": "error", "where": "lineup", "url": _rf["commit_url"] or _rf["file_url"],
+                                   "msg": "RED FLAG: %s (upload %s, %s)" % (_rf["headline"], _rf["sha"][:7], _rf["when"])})
+            r["errors"] += 1
 _status_past_dirty = [r for r in _status_past if r["issues"]]
 
 # Data checks are part of every build (Marek 2026-09-13): a report in the build log, and on GitHub Actions
@@ -834,7 +858,7 @@ def _status_added_log(rows):
                     continue                                 # panel whose lineup changed, the session itself is still on
                 gone.append((key, row))
             if len(gone) > _REMOVED_MASS[0] and len(gone) > _REMOVED_MASS[1] * max(len(before), 1):
-                warnings.append("%s: commit %s drops %d of %d speakers at once, treated as a csv accident, removals not listed"
+                warnings.append("%s: commit %s drops %d of %d speakers at once, treated as a csv accident (see the red bar while it is unfixed), removals not listed"
                                 % (r["name"], sha[:7], len(gone), len(before)))
                 gone = []
             for key, row in gone:
@@ -1207,7 +1231,7 @@ with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_flap_days=_ADDED_FLAP_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
-        status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes,
+        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes,
         status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
