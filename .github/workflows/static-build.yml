@@ -26,6 +26,7 @@ jobs:
       - name: Build 🔧
         env:
           LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations
+          WAITLIST_FEED: ${{ secrets.WAITLIST_FEED }}   # "Speaker waitlist" script exec URL + ?list=1&token=...; /status/ Waitlist tab
         run: |
           make clean
           make generate

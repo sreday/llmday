@@ -262,7 +262,7 @@ with open(BASE_FOLDER + "/404.html", "w", encoding="utf-8") as f:
 # /404-index.json (Marek 2026-09-18): what the 404 page may suggest ("Did you mean ...") or, for harmless slips,
 # redirect to. Event folders of home/metadata.yml (upcoming first, in list order) + the pages each one built
 # (../<folder>/static/*.html - the root Makefile builds events before home) + the public home pages. Hidden pages
-# (/status/, onboarding, fasttrack, invitation, onboardsponsor) live in sub-folders and are never listed.
+# (/status/, onboarding, fasttrack, waitlist, invitation, onboardsponsor) live in sub-folders and are never listed.
 import json as _json404
 _idx_events, _idx_pages = [], {}
 for _upcoming, _key in ((True, "events"), (False, "events_past")):
@@ -1234,6 +1234,132 @@ for r in _status_rows:
               r["luma"]["approved_api"], r["luma"]["pending"], r["luma"]["waitlist"], r["luma"]["checked_in"], r["luma"]["pages"]))
     elif r["luma_note"]:
         print("  %-38s %s" % (r["name"][:38], r["luma_note"]))
+
+# ── WAITLIST (Marek 2026-09-22): speakers who applied after a lineup was full, through the hidden /<event>/waitlist/
+# pages -> the "Speaker waitlist" Apps Script -> a Google Sheet. WAITLIST_FEED = that script's exec URL with
+# ?list=1&token=... (Actions secret; a local file path also works, for testing). Only this brand's rows, newest
+# first. Someone whose LinkedIn slug or name appears in a talks.csv of THIS repo for an event that starts after they
+# joined the list counts as placed (hidden on the page by default). Nothing here ever writes to the sheet.
+import glob as _wl_glob, csv as _wl_csv, json as _wl_json, re as _wl_re, unicodedata as _wl_ud
+_wl_brand = {"sreday": "sreday", "llmday": "llmday", "platformday": "platformday"}.get(_me.lower(), "pec")
+
+
+def _wl_slug(u):
+    m = _wl_re.search(r"linkedin\.com/in/([^/?#]+)", str(u or "").lower())
+    return m.group(1).rstrip("/") if m else ""
+
+
+def _wl_norm(n):
+    t = _wl_ud.normalize("NFKD", str(n or "")).encode("ascii", "ignore").decode().lower()
+    return _wl_re.sub(r"[^a-z ]", "", t).strip()
+
+
+def _wl_parse_ts(v):
+    try:
+        d = datetime.datetime.fromisoformat(str(v or "").strip().replace("Z", "+00:00"))
+        return d if d.tzinfo else d.replace(tzinfo=datetime.timezone.utc)
+    except Exception:
+        return None
+
+
+def _wl_events():
+    """[(start, name, url, slugs, names)] for every event folder of this repo that has a talks.csv."""
+    names_by_folder = {}
+    for key in ("events", "events_past"):
+        for ev in (context.get(key) or []):
+            u = str((ev or {}).get("url") or "")
+            if u.startswith("./"):
+                names_by_folder[u[2:].rstrip("/")] = str(ev.get("name") or "")
+    out = []
+    for folder in sorted(_wl_glob.glob("../20*")):
+        fname = os.path.basename(folder)
+        meta_p, talks_p = os.path.join(folder, "metadata.yml"), os.path.join(folder, "_db", "talks.csv")
+        if not (os.path.exists(meta_p) and os.path.exists(talks_p)):
+            continue
+        try:
+            with open(meta_p, encoding="utf-8") as f:
+                start = _wl_parse_ts(yaml.load(f, Loader=yaml.FullLoader).get("start_time"))
+        except Exception:
+            start = None
+        if not start:
+            continue
+        slugs, names = set(), set()
+        try:
+            with open(talks_p, encoding="utf-8-sig", newline="") as f:
+                for r in _wl_csv.DictReader(f):
+                    for k in ("linkedin", "linkedin2"):
+                        s = _wl_slug(r.get(k))
+                        if s:
+                            slugs.add(s)
+                    for part in _wl_re.split(r"\s*&\s*|\s*,\s*|\s+and\s+", str(r.get("name") or "")):
+                        if _wl_norm(part):
+                            names.add(_wl_norm(part))
+        except Exception:
+            continue
+        out.append((start, names_by_folder.get(fname) or fname, _site_root + fname + "/", slugs, names))
+    return out
+
+
+def _wl_fetch(src):
+    if not src:
+        return None, "WAITLIST_FEED is not set in this build, so the waitlist is not shown."
+    try:
+        if _wl_re.match(r"^https?://", src):
+            import urllib.request as _wl_url
+            req = _wl_url.Request(src, headers={"User-Agent": "Mozilla/5.0 (status build)"})
+            data = _wl_json.loads(_wl_url.urlopen(req, timeout=20).read().decode("utf-8", "ignore"))
+        else:
+            with open(src, encoding="utf-8") as f:
+                data = _wl_json.load(f)
+    except Exception as e:
+        return None, "The waitlist feed could not be read in this build (%s)." % (str(e)[:80] or e.__class__.__name__)
+    rows = data.get("rows") if isinstance(data, dict) else data
+    if not isinstance(rows, list) or (isinstance(data, dict) and data.get("ok") is False):
+        return None, "The waitlist feed answered with something unexpected (%s)." % (str(data)[:80])
+    return rows, ""
+
+
+def _wl_rows_for_page():
+    raw, note = _wl_fetch(os.environ.get("WAITLIST_FEED", "").strip())
+    if raw is None:
+        return [], note, 0, 0
+    events = _wl_events()
+    out = []
+    for r in raw:
+        if not isinstance(r, dict) or str(r.get("brand") or "").lower() != _wl_brand:
+            continue
+        ts = _wl_parse_ts(r.get("ts"))
+        if not ts:
+            continue
+        people = [(_wl_slug(r.get("linkedin")), _wl_norm(r.get("name"))), (_wl_slug(r.get("linkedin2")), _wl_norm(r.get("name2")))]
+        placed, placed_url = "", ""
+        for start, ename, eurl, slugs, names in events:
+            if start <= ts:
+                continue
+            if any((s and s in slugs) or (n and n in names) for s, n in people):
+                placed, placed_url = ename, eurl
+                break
+        slug = _wl_re.sub(r"[^a-z0-9-]", "", str(r.get("slug") or "").lower())
+        row = {
+            "ts": ts, "when": ts.strftime("%-d %b %Y") if os.name != "nt" else ts.strftime("%d %b %Y").lstrip("0"),
+            "name": str(r.get("name") or "").strip(), "linkedin": str(r.get("linkedin") or "").strip(),
+            "name2": str(r.get("name2") or "").strip(), "linkedin2": str(r.get("linkedin2") or "").strip(),
+            "company": str(r.get("company") or "").strip(), "title": str(r.get("title") or "").strip(),
+            "event": str(r.get("event") or "").strip(), "event_url": _site_root + slug + "/" if slug else _site_root,
+            "city": str(r.get("city") or "").strip(), "event_date": str(r.get("date") or "").strip(),
+            "placed": placed, "placed_url": placed_url,
+        }
+        row["search"] = " ".join(v for v in (row["name"], row["name2"], row["company"], row["title"], row["event"], row["city"], placed) if v).lower()
+        out.append(row)
+    out.sort(key=lambda x: x["ts"], reverse=True)
+    waiting = sum(1 for x in out if not x["placed"])
+    return out, "", waiting, len(out) - waiting
+
+
+_wl_rows, _wl_note, _wl_waiting, _wl_placed = _wl_rows_for_page()
+print("Waitlist: %s" % (_wl_note or "%d waiting, %d placed" % (_wl_waiting, _wl_placed)))
+# ── END WAITLIST ─────────────────────────────────────────────────────────────
+
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 # redflags.json: the same flags as the red bar. The "Red flag alert" Gmail script (llmday/_build/redflag-alert.gs)
 # reads it every 10 minutes and emails "Did you just nuke <event>?" once per flag. No secrets, no webhook.
@@ -1245,7 +1371,7 @@ with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_flap_days=_ADDED_FLAP_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
-        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes,
+        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed,
         status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
