@@ -1307,7 +1307,15 @@ def _wl_fetch(src):
         if _wl_re.match(r"^https?://", src):
             import urllib.request as _wl_url
             req = _wl_url.Request(src, headers={"User-Agent": "Mozilla/5.0 (status build)"})
-            data = _wl_json.loads(_wl_url.urlopen(req, timeout=20).read().decode("utf-8", "ignore"))
+            data = None
+            for _wl_try in (1, 2, 3):                # Apps Script cold starts can take over 20 s; three tries, a minute each
+                try:
+                    data = _wl_json.loads(_wl_url.urlopen(req, timeout=60).read().decode("utf-8", "ignore"))
+                    break
+                except Exception as _wl_e:
+                    if _wl_try == 3:
+                        raise
+                    print("Waitlist feed: attempt %d failed (%s), retrying" % (_wl_try, str(_wl_e)[:60]))
         else:
             with open(src, encoding="utf-8") as f:
                 data = _wl_json.load(f)
