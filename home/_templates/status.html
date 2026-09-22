@@ -248,6 +248,7 @@
     .reg-cats em { font-style: normal; color: #999; margin-left: 5px; font-variant-numeric: tabular-nums; }
     .reg-cats u { text-decoration: none; color: #555; margin-left: 4px; font-variant-numeric: tabular-nums; cursor: help; }   /* (speakers the website lists) */
     .reg-cats .togo { margin-left: auto; color: #888; }
+    .reg-hint { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent); }   /* no luma_evt in metadata.yml yet (Marek 2026-09-22) */
     .reg-cats .togo b { background: #dfe3e8; box-shadow: inset 0 1px 1px rgba(0,0,0,.15); }
     @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button, .tab-pill { font-size: .9rem; } .tabs button { padding: 12px 10px; } .reg { grid-template-columns: 1fr; gap: 10px; } .reg-ring { justify-self: start; } .reg-cats .togo { margin-left: 0; } }
     /* ── Phones (Marek 2026-09-19: "adapt status pages for mobile, it's broken now"). Desktop is untouched. ── */
@@ -448,6 +449,7 @@
       <div class="reg-cats">{% for c in r.luma.cats %}<span class="{{ c.key }}"><b></b>{{ c.label }} <strong>{{ c.n }}</strong>{% if c.key == 'speakers' %}<u title="{{ r.luma.speakers_expected }} speakers on the website, co-presenters counted individually">({{ r.luma.speakers_expected }})</u>{% endif %}<em>{{ c.pct }}%</em></span>{% endfor %}{% if r.luma.to_go %}<span class="togo"><b></b>To goal <strong>{{ r.luma.to_go }}</strong></span>{% endif %}</div>
       {% else %}
       <div class="reg-bar"></div>
+      {% if 'no luma_evt' in r.luma_note %}<div class="reg-cats"><span class="reg-hint">Create the event on Luma!</span></div>{% endif %}
       {% endif %}
       </div>
     </div>
