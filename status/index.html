@@ -182,7 +182,8 @@
     html.tabbed .tabs { display: flex; flex-wrap: wrap; position: relative; }
     /* The accent pill is one element that HOVERS ABOVE the buttons (it carries the active label itself), slides between
        the tabs and overshoots a fixed few px before settling (the bounce, JS keyframes). Clicks pass through it. */
-    .tab-pill { position: absolute; left: 0; top: 0; z-index: 5; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: var(--accent); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.02rem; white-space: nowrap; box-shadow: 0 10px 22px rgba(0,0,0,.28), 0 2px 5px rgba(0,0,0,.2); pointer-events: none; will-change: transform; }
+    .tab-pill { position: absolute; left: 0; top: 0; z-index: 5; display: grid; place-items: center; overflow: hidden; border-radius: 12px; background: var(--accent); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.02rem; white-space: nowrap; box-shadow: 0 10px 22px rgba(0,0,0,.28), 0 2px 5px rgba(0,0,0,.2); pointer-events: none; will-change: transform; }
+    .tab-pill .lbl { grid-area: 1 / 1; white-space: nowrap; will-change: opacity, filter, transform; }   /* old + new label share the cell during the morph */
     .tab-pill.squash { animation: tab-squash .6s ease-out; }
     @keyframes tab-squash { 0% { scale: 1 1; } 30% { scale: 1.06 .86; } 62% { scale: .97 1.06; } 82% { scale: 1.01 .98; } 100% { scale: 1 1; } }
     .tabs.has-pill button.is-active, .tabs.has-pill button.is-active:hover { background: #f1f2f4; color: #333; box-shadow: none; }
@@ -444,8 +445,8 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="fresh" data-built="2026-09-22T09:16:01+00:00" title="Not live: the numbers refresh every time the website is built">
-      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-22 09:16 UTC</span>
+    <div class="fresh" data-built="2026-09-22T11:15:35+00:00" title="Not live: the numbers refresh every time the website is built">
+      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-22 11:15 UTC</span>
     </div>
     
     
@@ -1126,7 +1127,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
   </section>
   
 
-  <div class="foot">Generated 2026-09-22 09:16 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-22 11:15 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
@@ -1137,23 +1138,35 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
   pill.className = 'tab-pill'; pill.setAttribute('aria-hidden', 'true');
   nav.insertBefore(pill, nav.firstChild); nav.classList.add('has-pill');
   var GROW = 3, reduceTabs = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, run = null;
+  var lbl = document.createElement('span'); lbl.className = 'lbl'; pill.appendChild(lbl);
+  function morph(text) {                          // label morph (Marek 2026-09-22): old text blurs + shrinks away, new text blurs in
+    var olds = pill.querySelectorAll('.lbl.out'); for (var i = 0; i < olds.length; i++) olds[i].remove();
+    var old = lbl; old.className = 'lbl out';
+    lbl = document.createElement('span'); lbl.className = 'lbl'; lbl.textContent = text; pill.appendChild(lbl);
+    old.animate([{ opacity: 1, filter: 'blur(0)', transform: 'scale(1)' }, { opacity: 0, filter: 'blur(6px)', transform: 'scale(.78)' }],
+      { duration: 260, easing: 'ease-in', fill: 'forwards' }).onfinish = function () { old.remove(); };
+    lbl.animate([{ opacity: 0, filter: 'blur(6px)', transform: 'scale(1.18)' }, { opacity: 1, filter: 'blur(0)', transform: 'scale(1)' }],
+      { duration: 380, delay: 130, easing: 'cubic-bezier(.2, .7, .3, 1)', fill: 'backwards' });
+  }
   function place(animate) {                          // the pill floats above the buttons, 3px larger on every side
     var b = nav.querySelector('button.is-active'); if (!b) return;
     var nr = nav.getBoundingClientRect(), pr = pill.getBoundingClientRect();
     var fx = pr.left - nr.left - nav.clientLeft, fy = pr.top - nr.top - nav.clientTop;   // where it is right now (mid-flight too)
     var tx = b.offsetLeft - GROW, ty = b.offsetTop - GROW;
     if (run) { run.cancel(); run = null; }
-    pill.textContent = b.textContent;
-    pill.style.width = (b.offsetWidth + 2 * GROW) + 'px'; pill.style.height = (b.offsetHeight + 2 * GROW) + 'px';
+    var fw = pr.width, fh = pr.height, tw = b.offsetWidth + 2 * GROW, th = b.offsetHeight + 2 * GROW;   // size now -> size at the target tab
+    var moving = animate && !reduceTabs && !!pill.animate;
+    if (moving && lbl.textContent !== b.textContent) morph(b.textContent); else lbl.textContent = b.textContent;
+    pill.style.width = tw + 'px'; pill.style.height = th + 'px';
     pill.style.transform = 'translate(' + tx + 'px,' + ty + 'px)';
-    if (!animate || reduceTabs || !pill.animate) return;
+    if (!moving) return;
     var dx = tx - fx, dy = ty - fy, d = Math.sqrt(dx * dx + dy * dy); if (d < 1) return;
     var ux = dx / d, uy = dy / d, T = function (x, y) { return 'translate(' + x + 'px,' + y + 'px)'; };
     run = pill.animate([                             // fixed overshoot, whatever the distance: 14px past, 5px back, settle
-      { transform: T(fx, fy), easing: 'cubic-bezier(.3, 0, .3, 1)' },
+      { transform: T(fx, fy), width: fw + 'px', height: fh + 'px', easing: 'cubic-bezier(.3, 0, .3, 1)' },
       { transform: T(tx + ux * 14, ty + uy * 14), offset: .55, easing: 'ease-in-out' },
       { transform: T(tx - ux * 5, ty - uy * 5), offset: .78, easing: 'ease-in-out' },
-      { transform: T(tx, ty) }
+      { transform: T(tx, ty), width: tw + 'px', height: th + 'px' }
     ], { duration: 600 });
     pill.classList.remove('squash'); void pill.offsetWidth; pill.classList.add('squash');
   }
