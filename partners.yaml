@@ -87,7 +87,6 @@ minor_companies:
 hidden_duplicates:
   - gdg-london.jpg      # GDG London - shown as gdg_london.png (PEC repo filename)
   - kube_events.png     # duplicate of kube-events.png
-  - AI FRONTIERS.png    # duplicate of AIFRONTIERS.png
   - devit.png           # DevITjobs - shown as DevIT-usa.png (latest logo)
   - devitjobs.png       # DevITjobs - shown as DevIT-usa.png (latest logo)
   - DevIT_black.png     # DevITjobs - shown as DevIT-usa.png (latest logo)
