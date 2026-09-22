@@ -203,6 +203,9 @@
     html.tabbed .regs, html.tabbed .added, html.tabbed .spons, html.tabbed .checks, html.tabbed .waitlist { display: none; margin-top: 22px; }
     html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active { display: block; }
     html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .spons h2, html.tabbed .checks h2, html.tabbed .waitlist h2 { display: none; }
+    /* A short tab (an empty waitlist, two sponsors) must not shrink the page and yank the scroll position back up (Marek
+       2026-09-22): every panel keeps at least the height of a well-filled Speakers list */
+    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active { min-height: 640px; }
     /* Waitlist tab (Marek 2026-09-22): speakers who applied after a lineup was full; search + a show-placed toggle */
     .wl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 12px; }
     .wl-search { flex: 1 1 260px; max-width: 420px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 999px; font: inherit; font-size: .95rem; outline: none; background: #fff; }
