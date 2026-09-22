@@ -49,6 +49,8 @@
 .map-dot-green  { background: #279D70; }
 .map-dot-purple { background: #646083; }
 .map-dot-dual   { background: linear-gradient(135deg, #279D70 50%, #646083 50%); }
+.map-dot-orange { background: #E2971D; }
+.map-dot-triple { background: conic-gradient(#279D70 0 120deg, #646083 120deg 240deg, #E2971D 240deg 360deg); }
 .map-legend {
   display: flex;
   justify-content: center;
@@ -66,17 +68,18 @@
   vertical-align: middle;
 }
 </style>
-    {#- (name, country, lat, lon, brand, dlon, url) — one dot per city; 'dual' = LLMday + SREday split dot; dlon nudges near-neighbor cities apart; country must match the SVG path <title>; map spans lat 85..-60, lon -180..180; url = the city's event with the max start_time across both brands (furthest in the future, else closest in the past) -#}
+    {#- (name, country, lat, lon, brand, dlon, url) — one dot per city; 'dual' = LLMday + SREday split dot, 'triple' = + PLATFORMday, 'orange' = PLATFORMday only; dlon nudges near-neighbor cities apart; country must match the SVG path <title>; map spans lat 85..-60, lon -180..180; url = the city's event with the max start_time across both brands (furthest in the future, else closest in the past) -#}
     {% set map_cities = [
       ('London', 'United Kingdom', 51.51, -0.13, 'dual', 0, 'https://llmday.com/2026-london-q4/'),
       ('NYC', 'United States of America', 40.71, -74.01, 'dual', 0, 'https://sreday.com/2026-nyc-q4/'),
-      ('San Francisco', 'United States of America', 37.77, -122.42, 'dual', -1, 'https://sreday.com/2026-san-francisco-q4/'),
-      ('Austin', 'United States of America', 30.27, -97.74, 'dual', 0, 'https://llmday.com/2026-austin-q4/'),
+      ('San Francisco', 'United States of America', 37.77, -122.42, 'triple', -1, 'https://platformday.com/2026-san-francisco-q4/'),
+      ('Austin', 'United States of America', 30.27, -97.74, 'triple', 0, 'https://platformday.com/2026-austin-q4/'),
       ('Warsaw', 'Poland', 52.23, 21.01, 'dual', 0, 'https://sreday.com/2026-warsaw-q4/'),
       ('Lisbon', 'Portugal', 38.72, -9.14, 'dual', 0, 'https://sreday.com/2026-lisbon-q2/'),
       ('Bangalore', 'India', 12.97, 77.59, 'dual', 0, 'https://sreday.com/2026-bangalore-q2/'),
       ('Hamburg', 'Germany', 53.55, 9.99, 'green', 0, 'https://llmday.com/2026-hamburg-q4/'),
       ('Montevideo', 'Uruguay', -34.90, -56.19, 'green', 0, 'https://llmday.com/2026-montevideo-q4/'),
+      ('Tel Aviv', 'Israel', 32.07, 34.78, 'green', 0, 'https://llmday.com/2026-tel-aviv-q4/'),
       ('Amsterdam', 'Netherlands', 52.37, 4.90, 'purple', 0, 'https://sreday.com/2026-amsterdam-q4/'),
       ('Cologne', 'Germany', 50.94, 6.96, 'purple', 0, 'https://sreday.com/2026-cologne-q2/'),
       ('Paris', 'France', 48.86, 2.35, 'purple', 0, 'https://sreday.com/2026-paris-q2/'),
