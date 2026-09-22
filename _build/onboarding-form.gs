@@ -10,8 +10,9 @@
  * leaves a Gmail DRAFT and a time-based trigger sends it later (processQueue): Mark can still edit the draft,
  * and deleting the draft cancels the send. New scope for that: run testSchedule() once from the editor to
  * grant the triggers permission before redeploying.
- * The thread is then moved to the Inbox as unread + important under the "Speaker onboarding" label, so it
- * shows up like a sponsor lead and speaker "OK" replies land on it. 'preview' returns subject + html only.
+ * The thread is labelled "Speaker onboarding" and ARCHIVED (v11, Marek 2026-09-22: "it goes in Sent with the
+ * speaker in Bcc, bumped up to the inbox if they reply"): the self-addressed copy stays out of the Inbox, and a
+ * reply from a speaker brings the thread back into the Inbox by itself. 'preview' returns subject + html only.
  *
  * Abuse guards (the /exec URL is public): passphrase checked against the Script Property
  * ONBOARDING_PASSPHRASE; 3 wrong attempts -> locked 15 min, 10 -> locked 24 h (a correct passphrase resets
@@ -27,6 +28,7 @@
  *   5. Put that URL into home/metadata.yml -> onboarding_form_url in sreday, llmday AND platformday, rebuild.
  *   Re-deploy after editing: Deploy -> Manage deployments -> edit -> new version (the URL stays the same).
  *   v10 (2026-09-22): version bump only, so the /onboarding/ pages can tell a fresh deployment from the stale v9 one.
+ *   v11 (2026-09-22): the sent thread is archived (labelled, read) instead of pulled into the Inbox.
  */
 
 var BRANDS = {
@@ -48,7 +50,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 10 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 11 });   // v11: sent mail stays out of the inbox
 }
 
 function doPost(e) {
@@ -112,14 +114,13 @@ function doPost(e) {
   return respond({ ok: true, sent: emails.ok.length });
 }
 
-// Pull the sent message's thread into the Inbox (unread, important, labelled) - a mail sent from this very
-// account would otherwise sit read in "Sent" only.
+// Label the sent message's thread and keep it OUT of the Inbox (it lives in Sent). A mail sent To this very
+// account lands in the Inbox as a received copy, so archive it; Gmail un-archives the thread when a speaker replies.
 function fileThread(message) {
   try {
     var thread = message.getThread();
-    thread.moveToInbox();
-    thread.markUnread();
-    thread.markImportant();
+    thread.moveToArchive();
+    thread.markRead();
     var label = GmailApp.getUserLabelByName(LEAD_LABEL) || GmailApp.createLabel(LEAD_LABEL);
     thread.addLabel(label);
   } catch (err) {
