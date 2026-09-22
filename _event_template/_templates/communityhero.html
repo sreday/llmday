@@ -113,8 +113,8 @@
       <div class="ch-grid">
         <label class="ch-field" data-field="name"><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
         <label class="ch-field" data-field="email"><span>Email <small>(the one you registered with)</small></span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
+        <label class="ch-field" data-field="role"><span>Job title</span><input type="text" name="role" autocomplete="organization-title" maxlength="120"></label>
         <label class="ch-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
-        <label class="ch-field" data-field="role"><span>Role</span><input type="text" name="role" autocomplete="organization-title" maxlength="120"></label>
         <label class="ch-field ch-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
       </div>
       <div class="ch-row"><button type="button" class="btn-ch" id="ch-next">Next steps</button><span class="ch-hint" id="ch-next-hint">Check your details, then continue. You can still edit them later.</span></div>
@@ -173,7 +173,8 @@
   </form>
 
   <div class="ch-card ch-done" id="ch-done" hidden></div>
-  <div class="ch-muted">Questions? Reply to the email you got from us, or write to <a href="{{ mailto }}">{{ mailto | replace('mailto:', '') }}</a>.</div>
+  {% set ch_contact = 'anna@llmday.com' if hero_event.brand == 'pec' else 'anna@' + (mailto | replace('mailto:', '')).split('@')[-1] %}
+  <div class="ch-muted">Questions? Reply to the email you got from us, or write to <a href="mailto:{{ ch_contact }}">{{ ch_contact }}</a>.</div>
 </main>
 
 <script>
@@ -372,18 +373,18 @@ shotsInput.addEventListener('change', function () { if (this.files) addShots(thi
 
 function showError(m) { var el = $('ch-error'); el.textContent = m; el.hidden = false; }
 form.addEventListener('input', function (ev) { var f = ev.target.closest('[data-field]'); if (f) f.classList.remove('is-invalid'); $('ch-consent-wrap').classList.remove('is-invalid'); });
-function checkDetails() {                       // step 1: name, email, company, role and LinkedIn are all required
+function checkDetails() {                       // step 1: name, email, job title, company and LinkedIn are all required
   var bad = [];
   if (!val('name')) bad.push('name');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email'))) bad.push('email');
-  if (!val('company')) bad.push('company');
   if (!val('role')) bad.push('role');
+  if (!val('company')) bad.push('company');
   if (!/^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin'))) bad.push('linkedin');
   bad.forEach(function (k) { form.querySelector('[data-field="' + k + '"]').classList.add('is-invalid'); });
   return bad;
 }
 function detailsMessage(bad) {
-  return bad.length === 1 && bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in the highlighted fields: name, email, company, role and LinkedIn are all needed.';
+  return bad.length === 1 && bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in the highlighted fields: name, email, job title, company and LinkedIn are all needed.';
 }
 $('ch-next').addEventListener('click', function () {   // unfold the rest of the page once the details are complete
   var bad = checkDetails(), hint = $('ch-next-hint');
