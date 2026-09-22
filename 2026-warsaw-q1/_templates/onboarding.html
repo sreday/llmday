@@ -235,7 +235,7 @@ function requireScriptVersion(min) {
 // wording (no SPEAKERFREE / PLUSONE / DREAMTEAM / 20% codes); an older deployment silently sends the paid text
 // (happened 2026-09-18: v9 sat in the repo, v7 was deployed). So nothing is sent through an older script, and
 // the page says so as soon as it loads.
-var OB_MIN_VERSION = 9;
+var OB_MIN_VERSION = 10;
 function outdatedText(have) {
   return 'The deployed email script is version ' + (have || '?') + ', this page needs version ' + OB_MIN_VERSION + '. ' +
          (OB_EVENT.is_free ? 'This is a FREE event: the old script would still mention the SPEAKERFREE, PLUSONE, DREAMTEAM and discount codes. ' : '') +

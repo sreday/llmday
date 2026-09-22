@@ -26,6 +26,7 @@
  *   4. Authorise the Gmail scope when prompted, copy the .../exec URL.
  *   5. Put that URL into home/metadata.yml -> onboarding_form_url in sreday, llmday AND platformday, rebuild.
  *   Re-deploy after editing: Deploy -> Manage deployments -> edit -> new version (the URL stays the same).
+ *   v10 (2026-09-22): version bump only, so the /onboarding/ pages can tell a fresh deployment from the stale v9 one.
  */
 
 var BRANDS = {
@@ -47,7 +48,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 9 });
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 10 });
 }
 
 function doPost(e) {
