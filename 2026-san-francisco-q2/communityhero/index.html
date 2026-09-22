@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Community Hero: LLMday San Francisco 2026 Q2</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800|Roboto:300,400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <style>
+    :root { --ch-accent: #26986A; --ch-danger: #c0392b; }
+    html, body { background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
+    .ch-wrap { max-width: 820px; margin: 0 auto; padding: 48px 20px 80px; }
+    .ch-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--ch-accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+    .ch-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.9rem; margin: 0 0 6px; line-height: 1.2; }
+    .ch-sub { color: #555; font-size: .95rem; margin-bottom: 14px; }
+    .ch-sub a { color: var(--ch-accent); }
+    .ch-intro { color: #333; font-size: 1rem; line-height: 1.6; margin-bottom: 26px; }
+    .ch-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 16px; padding: 28px 32px; box-shadow: 0 4px 20px rgba(0,0,0,.06); margin-bottom: 22px; border-left: 4px solid var(--ch-accent); }
+    .ch-step { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; }
+    .ch-step i { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ch-accent); color: #fff; font-style: normal; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .95rem; flex-shrink: 0; }
+    .ch-step h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem; margin: 0; color: #222; }
+    .ch-step small { color: #888; font-size: .85rem; font-weight: 400; margin-left: auto; }
+    .ch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
+    .ch-wide { grid-column: 1 / -1; }
+    .ch-field { display: block; margin: 0; }
+    .ch-field > span { display: block; font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 6px; letter-spacing: .02em; }
+    .ch-field > span small { font-weight: 400; color: #888; }
+    .ch-field input[type=text], .ch-field input[type=email], .ch-field input[type=url], .ch-field input[type=number], .ch-field textarea {
+      width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #111; background: #fff; outline: none; transition: border-color .2s, box-shadow .2s; font-family: inherit;
+    }
+    .ch-field textarea { resize: vertical; line-height: 1.5; }
+    .ch-field input:focus, .ch-field textarea:focus { border-color: var(--ch-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ch-accent) 18%, transparent); }
+    .ch-field.is-invalid input, .ch-field.is-invalid textarea { border-color: var(--ch-danger) !important; }
+    .ch-hint { font-size: .8rem; color: #888; margin-top: 6px; }
+    /* the card */
+    .ch-canvas-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #e6e6e6; background: #eee; }
+    .ch-canvas-wrap canvas { width: 100%; height: auto; display: block; }
+    .ch-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 16px; }
+    .btn-ch { display: inline-flex; align-items: center; justify-content: center; min-width: 150px; border: none; border-radius: 999px; padding: 12px 26px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; background: var(--ch-accent); color: #fff; transition: filter .15s, transform .1s; text-decoration: none; }
+    .btn-ch:hover { filter: brightness(1.1); color: #fff; text-decoration: none; }
+    .btn-ch:active { transform: scale(.97); }
+    .btn-ch[disabled] { opacity: .55; cursor: default; }
+    .btn-ch.ghost { background: color-mix(in srgb, var(--ch-accent) 12%, #fff); color: var(--ch-accent); border: 1px solid color-mix(in srgb, var(--ch-accent) 45%, #fff); }
+    /* variant tabs */
+    .ch-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .ch-tabs button { border: 1px solid #ddd; background: #fff; border-radius: 999px; padding: 7px 16px; font: inherit; font-size: .9rem; font-weight: 600; color: #444; cursor: pointer; }
+    .ch-tabs button.on { background: var(--ch-accent); border-color: var(--ch-accent); color: #fff; }
+    .ch-text { width: 100%; min-height: 200px; border: 1px solid #ddd; border-radius: 12px; padding: 14px 16px; font: inherit; font-size: .97rem; line-height: 1.55; color: #111; background: #fafafa; resize: vertical; }
+    .ch-copied { font-size: .85rem; color: #2e7d32; }
+    /* report */
+    .ch-actions { display: grid; gap: 12px; }
+    .ch-action { display: grid; grid-template-columns: 24px 1fr; gap: 10px 12px; align-items: start; padding: 12px 14px; border: 1px solid #e6e6e6; border-radius: 12px; background: #fafafa; }
+    .ch-action input[type=checkbox] { appearance: none; -webkit-appearance: none; width: 20px; height: 20px; margin-top: 2px; border: 2px solid #bbb; border-radius: 5px; background: #fff; cursor: pointer; }
+    .ch-action input[type=checkbox]:checked { background: var(--ch-accent) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; border-color: var(--ch-accent); }
+    .ch-action label.main { font-weight: 600; color: #222; cursor: pointer; }
+    .ch-action .detail { grid-column: 2; display: none; }
+    .ch-action.on .detail { display: block; }
+    .ch-action .detail input { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 8px 12px; font: inherit; font-size: .93rem; }
+    .ch-drop { border: 2px dashed #ccc; border-radius: 12px; padding: 16px; cursor: pointer; background: #fafafa; transition: border-color .2s, background .2s; }
+    .ch-drop:hover, .ch-drop.over { border-color: var(--ch-accent); background: color-mix(in srgb, var(--ch-accent) 5%, #fff); }
+    .ch-drop input { display: none; }
+    .ch-drop-text { font-size: .92rem; color: #444; line-height: 1.5; }
+    .ch-drop-text b { color: var(--ch-accent); }
+    .ch-thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .ch-thumbs img { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+    .ch-consent { display: flex; align-items: flex-start; gap: 10px; margin: 18px 0 0; cursor: pointer; font-size: .92rem; color: #333; }
+    .ch-consent input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid #bbb; border-radius: 4px; background: #fff; cursor: pointer; }
+    .ch-consent input:checked { background: var(--ch-accent) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; border-color: var(--ch-accent); }
+    .ch-consent.is-invalid { color: var(--ch-danger); }
+    .ch-error { display: block; width: 100%; font-size: .92rem; color: var(--ch-danger); margin-top: 8px; }
+    .ch-hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .ch-done { font-size: 1.05rem; line-height: 1.6; }
+    .ch-done strong { font-family: 'Montserrat', sans-serif; }
+    .ch-muted { color: #888; font-size: .85rem; margin-top: 30px; }
+    .ch-muted a { color: #666; }
+    @media (max-width: 575.98px) { .ch-card { padding: 20px 16px; } .ch-title { font-size: 1.5rem; } .ch-grid { grid-template-columns: 1fr; } .ch-step small { display: none; } }
+  </style>
+</head>
+<body>
+<main class="ch-wrap">
+  <div class="ch-brand">LLMday · community heroes</div>
+  <h1 class="ch-title">Community Hero at LLMday San Francisco 2026 Q2</h1>
+  <div class="ch-sub">April 16, 2026 · San Francisco · <a href="https://www.llmday.com/2026-san-francisco-q2/" target="_blank" rel="noopener">event page</a></div>
+  <p class="ch-intro">You applied for a Community Hero ticket to LLMday San Francisco 2026 Q2: a free seat in exchange for telling your friends about it. Everything you need is on this page. Fill in your name, grab your card, pick a post and a message, spread the word, then tell us what you did at the bottom. Anna reads it and confirms your ticket by email.</p>
+
+  <form id="ch-form" novalidate>
+    <div class="ch-card">
+      <div class="ch-step"><i>1</i><h2>About you</h2><small>feeds the card, the posts and the messages</small></div>
+      <div class="ch-grid">
+        <label class="ch-field" data-field="name"><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
+        <label class="ch-field" data-field="email"><span>Email <small>(the one you registered with)</small></span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
+        <label class="ch-field" data-field="company"><span>Company <small>(optional)</small></span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
+        <label class="ch-field" data-field="role"><span>Role <small>(optional)</small></span><input type="text" name="role" autocomplete="organization-title" maxlength="120"></label>
+        <label class="ch-field ch-wide" data-field="linkedin"><span>LinkedIn profile URL <small>(optional)</small></span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
+        <label class="ch-field ch-wide" data-field="why"><span>In one sentence, why are you coming? <small>(optional, makes your posts yours)</small></span><input type="text" name="why" maxlength="200" placeholder="eg. I want to see how other teams run agents in production."></label>
+      </div>
+    </div>
+
+    <div class="ch-card">
+      <div class="ch-step"><i>2</i><h2>Your card</h2><small>post it with your update</small></div>
+      <div class="ch-canvas-wrap"><canvas id="ch-canvas" width="1200" height="700"></canvas></div>
+      <div class="ch-row"><button type="button" class="btn-ch" id="ch-download">Download the card</button><span class="ch-hint" id="ch-card-hint">Your name goes on it as you type.</span></div>
+    </div>
+
+    <div class="ch-card">
+      <div class="ch-step"><i>3</i><h2>Your post</h2><small>LinkedIn, X, Bluesky, wherever your people are</small></div>
+      <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button><button type="button" data-v="story">Personal</button></div>
+      <textarea class="ch-text" id="ch-post" spellcheck="false"></textarea>
+      <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-post">Copy the post</button><span class="ch-copied" id="ch-post-copied"></span></div>
+      <div class="ch-hint">Edit anything you like before posting. The three versions restart from your details in step 1.</div>
+    </div>
+
+    <div class="ch-card">
+      <div class="ch-step"><i>4</i><h2>Your message</h2><small>email, Slack, WhatsApp, a DM</small></div>
+      <div class="ch-tabs" data-set="msg"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button><button type="button" data-v="short">Short</button></div>
+      <textarea class="ch-text" id="ch-msg" spellcheck="false"></textarea>
+      <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-msg">Copy the message</button><span class="ch-copied" id="ch-msg-copied"></span></div>
+      <div class="ch-hint">Replace [Name] with your friend's name, or delete it for a group.</div>
+    </div>
+
+    <div class="ch-card">
+      <div class="ch-step"><i>5</i><h2>Tell us what you did</h2><small>then Anna confirms your ticket</small></div>
+      <div class="ch-actions" id="ch-actions">
+        <div class="ch-action" data-key="linkedin"><input type="checkbox" id="act-linkedin"><label class="main" for="act-linkedin">I posted about the event on LinkedIn</label><div class="detail"><input type="url" name="linkedin_post" placeholder="Link to the post"></div></div>
+        <div class="ch-action" data-key="social"><input type="checkbox" id="act-social"><label class="main" for="act-social">I posted on X, Bluesky, Mastodon or Threads</label><div class="detail"><input type="url" name="social_post" placeholder="Link to the post"></div></div>
+        <div class="ch-action" data-key="community"><input type="checkbox" id="act-community"><label class="main" for="act-community">I shared it in a community (Slack, Discord, WhatsApp, Meetup)</label><div class="detail"><input type="text" name="community_where" placeholder="Which community, roughly how many people" maxlength="160"></div></div>
+        <div class="ch-action" data-key="invites"><input type="checkbox" id="act-invites"><label class="main" for="act-invites">I messaged friends or colleagues directly</label><div class="detail"><input type="number" name="invites_count" min="1" max="999" placeholder="How many people"></div></div>
+      </div>
+      <div class="ch-grid" style="margin-top: 16px;">
+        <label class="ch-field ch-wide" data-field="other"><span>Anything else you did <small>(optional)</small></span><input type="text" name="other" maxlength="300"></label>
+        <label class="ch-field ch-wide" data-field="proof"><span>Proof links <small>(one per line: posts, threads, anything public)</small></span><textarea name="proof" rows="3" maxlength="2000"></textarea></label>
+        <div class="ch-field ch-wide" data-field="shots">
+          <span>Screenshots <small>(optional, up to 5, 10 MB each: Slack threads, DMs, group chats)</small></span>
+          <label class="ch-drop" id="ch-drop"><input type="file" name="shots" accept="image/*" multiple><div class="ch-drop-text" id="ch-drop-text"><b>Choose screenshots</b> or drop them here.</div></label>
+          <div class="ch-thumbs" id="ch-thumbs"></div>
+          <div class="ch-hint" id="ch-shots-hint"></div>
+        </div>
+      </div>
+      <label class="ch-consent" id="ch-consent-wrap"><input type="checkbox" name="consent" value="yes"><span>Everything above is true and I'm happy for the organizers to check it.</span></label>
+      <div class="ch-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Send my report</button><div class="ch-error" id="ch-error" hidden></div></div>
+    </div>
+  </form>
+
+  <div class="ch-card ch-done" id="ch-done" hidden></div>
+  <div class="ch-muted">Questions? Reply to the email you got from us, or write to <a href="mailto:hello@llmday.com">hello@llmday.com</a>.</div>
+</main>
+
+<script>
+var CH_URL = "";
+var E = {"attendees": 100, "banner": "/assets/images/events/llmday-2026-san-francisco-q2.png", "blurb_short": "LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning.", "brand": "llmday", "brand_color": "#26986A", "brand_name": "LLMday", "city": "San Francisco", "companies": ["Adobe", "Aimoji Healthcare", "Apify", "AWS", "Brevian", "Civic"], "date": "April 16, 2026", "event_name": "LLMday San Francisco 2026 Q2", "event_url": "https://www.llmday.com/2026-san-francisco-q2/", "keynotes": ["Sunil Gattupalle"], "month_day": "April 16", "slug": "2026-san-francisco-q2", "speakers_n": 28, "tickets_url": "https://www.llmday.com/2026-san-francisco-q2/#tickets", "topics": ["Large Language Models", "AI Agents", "RAG \u0026 Knowledge Systems", "LLMOps \u0026 AI Infrastructure", "AI Applications \u0026 Products"], "venue_name": "The offices of Harness.io"};
+var $ = function (id) { return document.getElementById(id); };
+var form = $('ch-form');
+function val(k) { return (form.elements[k].value || '').trim(); }
+function first(n) { return (n || '').trim().split(/\s+/)[0]; }
+function list(arr, max) { arr = (arr || []).slice(0, max || 3); if (!arr.length) return ''; if (arr.length === 1) return arr[0]; return arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1]; }
+function lower(s) { return (s || '').charAt(0).toLowerCase() + (s || '').slice(1); }
+
+// ---- facts that make the wording specific -------------------------------------------------
+var topics = list(E.topics, 3), topics2 = list(E.topics, 2), companies = list(E.companies, 3), keynotes = list(E.keynotes, 2);
+var speakersLine = E.speakers_n >= 5 ? E.speakers_n + '+ speakers' : 'a lineup of practitioners';
+var attendeesLine = E.attendees ? E.attendees + '+ people' : 'a full room';
+var where = E.venue_name ? E.venue_name + ' in ' + E.city : E.city;
+
+// ---- posts ---------------------------------------------------------------------------------
+function post(v) {
+  var name = val('name') || 'I', why = val('why').replace(/\s*[.!]+$/, '');
+  var tags = '\n\n#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
+  if (v === 'pro') {
+    return "I'll be at " + E.event_name + ' on ' + E.date + ' in ' + E.city + ' as a Community Hero.\n\n' +
+      E.blurb_short + (E.blurb_short ? ' ' : '') + 'This edition brings ' + speakersLine + (companies ? ' from ' + companies + ' and more' : '') + (topics ? ', with sessions on ' + topics : '') + '.\n\n' +
+      (why ? why + '. ' : '') + 'If you work on ' + (topics2 ? topics2 : 'this') + ', come and say hi.\n\nDetails and tickets: ' + E.event_url + tags;
+  }
+  if (v === 'friendly') {
+    return 'Friends in ' + E.city + ': ' + E.event_name + ' is on ' + E.date + ' at ' + where + ", and I'm going.\n\n" +
+      (why ? why + '. ' : "It's the kind of day you leave with more ideas than you came with. ") + speakersLine + ', ' + attendeesLine + (topics ? ', talks on ' + topics : '') + '.\n\nJoin me: ' + E.event_url + tags;
+  }
+  return (why ? why + '. ' : 'Some conferences you attend, some you go home from with a to-do list. ') + "That's why I'm heading to " + E.event_name + ' on ' + E.date + '.\n\n' +
+    (keynotes ? 'Keynotes from ' + keynotes + ', ' : '') + (topics ? 'sessions on ' + topics + ', ' : '') + 'and a room full of people' + (companies ? ' from ' + companies : '') + " who build this stuff for a living.\n\nIf you're around " + E.city + ', grab a ticket: ' + E.event_url + tags;
+}
+// ---- messages ------------------------------------------------------------------------------
+function msg(v) {
+  var name = val('name') || '', why = val('why').replace(/\s*[.!]+$/, '');
+  if (v === 'pro') {
+    return 'Hi [Name],\n\n' + "I'm attending " + E.event_name + ' on ' + E.date + ' in ' + E.city + ' and thought of you. ' +
+      "It's a one-day conference: " + speakersLine + (companies ? ' from ' + companies : '') + (topics ? ' on ' + topics : '') + '. ' + E.blurb_short + '\n\n' +
+      (why ? why + '.\n\n' : '') + 'Details and tickets: ' + E.event_url + '\n\nHappy to meet there.\n\n' + name;
+  }
+  if (v === 'friendly') {
+    return 'Hey [Name]!\n\nAre you around ' + E.city + ' on ' + E.date + "? I'm going to " + E.event_name + ' at ' + where + ', ' + speakersLine + (topics ? ' on ' + topics : '') + ', and it would be more fun with you there.' +
+      (why ? ' ' + why + '.' : '') + '\n\nTickets: ' + E.event_url + '\n\nLet me know and we can go together.\n\n' + name;
+  }
+  return '[Name], ' + E.event_name + ', ' + E.date + ', ' + E.city + '. ' + speakersLine + (topics2 ? ', ' + topics2 : '') + ". I'm going, want to come? " + E.event_url;
+}
+var variant = { post: 'pro', msg: 'pro' }, edited = { post: false, msg: false };
+function render(set) {
+  var box = $(set === 'post' ? 'ch-post' : 'ch-msg');
+  box.value = set === 'post' ? post(variant.post) : msg(variant.msg);
+  edited[set] = false;
+}
+document.querySelectorAll('.ch-tabs').forEach(function (tabs) {
+  var set = tabs.getAttribute('data-set');
+  tabs.querySelectorAll('button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      tabs.querySelectorAll('button').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on'); variant[set] = b.getAttribute('data-v'); render(set);
+    });
+  });
+});
+$('ch-post').addEventListener('input', function () { edited.post = true; });
+$('ch-msg').addEventListener('input', function () { edited.msg = true; });
+['name', 'why'].forEach(function (k) { form.elements[k].addEventListener('input', function () { if (!edited.post) render('post'); if (!edited.msg) render('msg'); drawCard(); }); });
+render('post'); render('msg');
+document.querySelectorAll('[data-copy]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var box = $(b.getAttribute('data-copy')), out = $(b.getAttribute('data-copy') + '-copied');
+    var done = function () { out.textContent = 'Copied.'; setTimeout(function () { out.textContent = ''; }, 2500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(box.value).then(done, function () { box.select(); document.execCommand('copy'); done(); });
+    else { box.select(); document.execCommand('copy'); done(); }
+  });
+});
+
+// ---- the card: the event's home banner + a brand ribbon with the hero's name -----------------
+var canvas = $('ch-canvas'), ctx = canvas.getContext('2d'), banner = new Image(), bannerOk = false;
+banner.onload = function () { bannerOk = true; drawCard(); };
+banner.onerror = function () { bannerOk = false; drawCard(); };
+if (E.banner) banner.src = E.banner; else setTimeout(drawCard, 0);
+function fitText(text, maxW, size, weight) {
+  do { ctx.font = weight + ' ' + size + 'px Montserrat, Arial, sans-serif'; if (ctx.measureText(text).width <= maxW || size <= 22) break; size -= 2; } while (true);
+  return size;
+}
+function drawCard() {
+  var W = canvas.width, H = canvas.height, ribbon = 100;
+  ctx.clearRect(0, 0, W, H);
+  if (bannerOk) { ctx.drawImage(banner, 0, 0, W, H - ribbon); }
+  else {
+    ctx.fillStyle = E.brand_color; ctx.fillRect(0, 0, W, H - ribbon);
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    var s1 = fitText(E.event_name, W - 120, 72, '800'); ctx.fillText(E.event_name, W / 2, (H - ribbon) / 2 - 30);
+    ctx.font = '600 34px Montserrat, Arial, sans-serif'; ctx.fillText(E.date + ' · ' + E.city, W / 2, (H - ribbon) / 2 + 40);
+  }
+  ctx.fillStyle = E.brand_color; ctx.fillRect(0, H - ribbon, W, ribbon);
+  ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  var name = val('name') || 'Your name here';
+  var line1 = "I'm a Community Hero at " + E.event_name;
+  var sz = fitText(line1, W - 80, 34, '800'); ctx.fillText(line1, 40, H - ribbon + 34);
+  ctx.font = '600 26px Montserrat, Arial, sans-serif'; ctx.globalAlpha = .92; ctx.fillText(name + ' · ' + E.date + ' · ' + E.city, 40, H - ribbon + 72); ctx.globalAlpha = 1;
+}
+if (document.fonts && document.fonts.load) { Promise.all([document.fonts.load('800 34px Montserrat'), document.fonts.load('600 26px Montserrat')]).then(drawCard, drawCard); }
+$('ch-download').addEventListener('click', function () {
+  var a = document.createElement('a'), safe = (val('name') || 'community hero').replace(/[^\w\- ]+/g, '').trim();
+  canvas.toBlob(function (blob) { a.href = URL.createObjectURL(blob); a.download = 'Community Hero - ' + E.event_name + ' - ' + safe + '.png'; document.body.appendChild(a); a.click(); a.remove(); }, 'image/png');
+});
+
+// ---- report: actions, screenshots, submit ------------------------------------------------------
+document.querySelectorAll('.ch-action').forEach(function (row) {
+  var cb = row.querySelector('input[type=checkbox]');
+  cb.addEventListener('change', function () { row.classList.toggle('on', cb.checked); });
+});
+var MAX_FILE = 10 * 1024 * 1024, MAX_SHOTS = 5, shots = [];
+var drop = $('ch-drop'), shotsInput = form.elements['shots'], thumbs = $('ch-thumbs'), shotsHint = $('ch-shots-hint');
+function addShots(files) {
+  Array.prototype.slice.call(files).forEach(function (file) {
+    if (shots.length >= MAX_SHOTS) { shotsHint.textContent = 'Five screenshots is the limit.'; return; }
+    if (file.size > MAX_FILE) { shotsHint.textContent = file.name + ' is over 10 MB, please pick a smaller one.'; return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      shots.push({ b64: String(reader.result).split(',')[1] || '', type: file.type || '', name: file.name || '' });
+      var img = document.createElement('img'); img.src = reader.result; img.title = file.name; thumbs.appendChild(img);
+      shotsHint.textContent = shots.length + ' screenshot' + (shots.length === 1 ? '' : 's') + ' attached.';
+    };
+    reader.readAsDataURL(file);
+  });
+}
+['dragenter', 'dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
+['dragleave', 'drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
+drop.addEventListener('drop', function (e) { if (e.dataTransfer.files) addShots(e.dataTransfer.files); });
+shotsInput.addEventListener('change', function () { if (this.files) addShots(this.files); this.value = ''; });
+
+function showError(m) { var el = $('ch-error'); el.textContent = m; el.hidden = false; }
+form.addEventListener('input', function (ev) { var f = ev.target.closest('[data-field]'); if (f) f.classList.remove('is-invalid'); $('ch-consent-wrap').classList.remove('is-invalid'); });
+form.addEventListener('submit', function (ev) {
+  ev.preventDefault(); $('ch-error').hidden = true;
+  var bad = [];
+  if (!val('name')) bad.push('name');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email'))) bad.push('email');
+  if (val('linkedin') && !/^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin'))) bad.push('linkedin');
+  bad.forEach(function (k) { form.querySelector('[data-field="' + k + '"]').classList.add('is-invalid'); });
+  var acts = {};
+  document.querySelectorAll('.ch-action').forEach(function (row) {
+    var cb = row.querySelector('input[type=checkbox]'), d = row.querySelector('.detail input');
+    acts[row.getAttribute('data-key')] = { done: cb.checked, detail: cb.checked && d ? (d.value || '').trim() : '' };
+  });
+  var anyAction = Object.keys(acts).some(function (k) { return acts[k].done; }) || !!val('other');
+  if (!anyAction) { showError('Tick at least one thing you did (or write it under "Anything else").'); return; }
+  if (!form.elements['consent'].checked) { $('ch-consent-wrap').classList.add('is-invalid'); showError('Please confirm the report is true.'); return; }
+  if (bad.length) { showError(bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in your name and email.'); return; }
+  if (!CH_URL) { showError('This page is not connected yet (communityhero_form_url is empty). Please email us instead.'); return; }
+  var body = {
+    brand: E.brand, event: E, name: val('name'), email: val('email'), company: val('company'), role: val('role'), linkedin: val('linkedin'), why: val('why'),
+    actions: acts, other: val('other'), proof: form.elements['proof'].value.trim(), shots: shots, consent: true,
+    website: form.elements['website'].value || '', page: location.href
+  };
+  var btn = $('ch-send'); btn.disabled = true; btn.textContent = 'Sending...';
+  var ctrl = ('AbortController' in window) ? new AbortController() : null, timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 60000) : null;
+  fetch(CH_URL, { method: 'POST', body: JSON.stringify(body), signal: ctrl ? ctrl.signal : undefined })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
+    .then(function (res) {
+      if (timer) clearTimeout(timer);
+      if (!res || !res.ok) { var e = new Error((res && res.error) || 'rejected'); e.res = res || {}; throw e; }
+      $('ch-done').innerHTML = '<strong>Thanks ' + first(val('name')).replace(/[<>&"]/g, '') + ', you are a hero.</strong> Your report is with Anna, and you are in copy of the email. She will confirm your ticket by replying to it.';
+      form.hidden = true; $('ch-done').hidden = false; $('ch-done').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })
+    .catch(function (err) {
+      if (timer) clearTimeout(timer);
+      btn.disabled = false; btn.textContent = 'Send my report';
+      var res = err.res || {}, m;
+      switch (err.message) {
+        case 'invalid': m = 'The server did not accept: ' + (res.fields || []).join(', ') + '.'; break;
+        case 'image too large': m = 'A screenshot is too large, please pick a smaller one.'; break;
+        case 'too many today': m = "We've hit today's limit, please try again tomorrow or email us."; break;
+        default: m = "Hmm, that didn't go through (" + (err.name === 'AbortError' ? 'timeout' : err.message) + '). Please try again or email us.';
+      }
+      showError(m);
+    });
+});
+</script>
+</body>
+</html>
