@@ -35,6 +35,9 @@
     .ch-field input:focus, .ch-field textarea:focus { border-color: var(--ch-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ch-accent) 18%, transparent); }
     .ch-field.is-invalid input, .ch-field.is-invalid textarea { border-color: var(--ch-danger) !important; }
     .ch-hint { font-size: .8rem; color: #888; margin-top: 6px; }
+    .ch-rest { animation: ch-unfold .55s ease-out; }
+    @keyframes ch-unfold { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    .ch-hint.warn { color: #b26a00; }
     /* the card */
     .ch-canvas-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #e6e6e6; background: #eee; }
     .ch-canvas-wrap canvas { width: 100%; height: auto; display: block; }
@@ -91,7 +94,7 @@
   <div class="ch-brand">LLMday · community heroes</div>
   <h1 class="ch-title">Community Hero at LLMday Hamburg 2026 Q4</h1>
   <div class="ch-sub">November 18, 2026 · Hamburg · <a href="https://www.llmday.com/2026-hamburg-q4/" target="_blank" rel="noopener">event page</a></div>
-  <p class="ch-intro">You applied for a Community Hero ticket to LLMday Hamburg 2026 Q4: a free seat in exchange for telling your friends about it. Everything you need is on this page. Fill in your name, grab your card, pick a post and a message, spread the word, then tell us what you did at the bottom. Anna reads it and confirms your ticket by email.</p>
+  <p class="ch-intro">You applied for a Community Hero ticket to LLMday Hamburg 2026 Q4: a free seat in exchange for telling your friends about it. Everything you need is on this page. Fill in your details, grab your card, pick a post and a message, spread the word, then tell us what you did at the bottom. We&#39;ll reach out shortly after.</p>
 
   <form id="ch-form" novalidate>
     <div class="ch-card">
@@ -99,13 +102,14 @@
       <div class="ch-grid">
         <label class="ch-field" data-field="name"><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="80"></label>
         <label class="ch-field" data-field="email"><span>Email <small>(the one you registered with)</small></span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
-        <label class="ch-field" data-field="company"><span>Company <small>(optional)</small></span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
-        <label class="ch-field" data-field="role"><span>Role <small>(optional)</small></span><input type="text" name="role" autocomplete="organization-title" maxlength="120"></label>
-        <label class="ch-field ch-wide" data-field="linkedin"><span>LinkedIn profile URL <small>(optional)</small></span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
-        <label class="ch-field ch-wide" data-field="why"><span>In one sentence, why are you coming? <small>(optional, makes your posts yours)</small></span><input type="text" name="why" maxlength="200" placeholder="eg. I want to see how other teams run agents in production."></label>
+        <label class="ch-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
+        <label class="ch-field" data-field="role"><span>Role</span><input type="text" name="role" autocomplete="organization-title" maxlength="120"></label>
+        <label class="ch-field ch-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
       </div>
+      <div class="ch-row"><button type="button" class="btn-ch" id="ch-next">Next steps</button><span class="ch-hint" id="ch-next-hint">Check your details, then continue. You can still edit them later.</span></div>
     </div>
 
+    <div id="ch-rest" class="ch-rest" hidden>
     <div class="ch-card">
       <div class="ch-step"><i>2</i><h2>Your card</h2><small>post it with your update</small></div>
       <div class="ch-canvas-wrap"><canvas id="ch-canvas" width="1200" height="700"></canvas></div>
@@ -154,6 +158,7 @@
       <div class="ch-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Hero</button><div class="ch-error" id="ch-error" hidden></div></div>
     </div>
+    </div><!-- /#ch-rest -->
   </form>
 
   <div class="ch-card ch-done" id="ch-done" hidden></div>
@@ -189,7 +194,7 @@ var TALKS = [];                                    // [{speaker, company, title,
 (E.topic_talks || []).forEach(function (t) { (t.talks || []).forEach(function (x) { if (x.company && x.title) TALKS.push({ speaker: x.speaker, company: x.company, title: x.title, topic: t.category }); }); });
 var companies = list(E.companies, 3), where = E.venue_name ? (E.venue_name.toLowerCase().indexOf(E.city.toLowerCase()) === -1 ? E.venue_name + ', ' + E.city : E.venue_name) : E.city, topic1 = (E.topics || [])[0] || E.event_name;
 function pickTalks(n) {                            // talks close to the hero's "why" first, then one per topic, one per company
-  var words = val('why').toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length >= 4; });
+  var words = [];                                // no free-text hint any more: one talk per topic, in About order
   function score(t) { var h = (t.title + ' ' + t.topic).toLowerCase(), s = 0; words.forEach(function (w) { if (h.indexOf(w) !== -1) s++; }); return s; }
   var pool = TALKS.slice().sort(function (a, b) { return score(b) - score(a); }), out = [], topics = {}, seen = {};
   pool.forEach(function (t) { if (out.length < n && !seen[t.company] && (score(t) > 0 || !topics[t.topic])) { out.push(t); topics[t.topic] = 1; seen[t.company] = 1; } });
@@ -210,7 +215,6 @@ function sessionsProse(n) {
 
 // ---- posts ---------------------------------------------------------------------------------
 function post(v) {
-  var why = val('why').replace(/\s*[.!]+$/, '');
   if (v === 'pro') {                               // the company pages' question post
     return bold('Why is everyone in ' + E.city + ' talking about ' + topic1 + '?') + ' 🤔\n\n' +
       E.event_name + ' is coming on ' + E.date + (E.venue_name ? ' at ' + E.venue_name : '') + ". What's coming up?\n\n" + sessionLines(3) + '\n\n' +
@@ -218,7 +222,7 @@ function post(v) {
   }
   if (v === 'friendly') {                          // Mark's countdown post
     return bold(E.event_name + ' · ' + E.date + (E.venue_name ? ' · ' + E.venue_name : '')) + '\n\n' +
-      (why ? why + '.' : 'Some conferences you attend, some you go home from with a to-do list.') + ' Here is who I want to hear:\n\n' + sessionLines(3) + '\n\n' +
+      'Some conferences you attend, some you go home from with a to-do list. Here is who I want to hear:\n\n' + sessionLines(3) + '\n\n' +
       E.event_url + '\n\n#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
   }
   return 'WHAT? ' + bold(E.event_name) + '\nWHERE? 📍 ' + bold(where) + '\nWHEN? 🗓️ ' + bold(E.date) + '\nWHY? 🧐 Because ' + sessionsProse(3) + ', and because the hallway track is where the real incidents get discussed.\n\n' +
@@ -261,7 +265,7 @@ document.querySelectorAll('.ch-tabs').forEach(function (tabs) {
 });
 $('ch-post').addEventListener('input', function () { edited.post = true; });
 $('ch-msg').addEventListener('input', function () { edited.msg = true; });
-['name', 'why'].forEach(function (k) { form.elements[k].addEventListener('input', function () { if (!edited.post) render('post'); if (!edited.msg) render('msg'); drawCard(); }); });
+['name'].forEach(function (k) { form.elements[k].addEventListener('input', function () { if (!edited.post) render('post'); if (!edited.msg) render('msg'); drawCard(); }); });
 render('post'); render('msg');
 document.querySelectorAll('[data-copy]').forEach(function (b) {
   b.addEventListener('click', function () {
@@ -339,13 +343,30 @@ shotsInput.addEventListener('change', function () { if (this.files) addShots(thi
 
 function showError(m) { var el = $('ch-error'); el.textContent = m; el.hidden = false; }
 form.addEventListener('input', function (ev) { var f = ev.target.closest('[data-field]'); if (f) f.classList.remove('is-invalid'); $('ch-consent-wrap').classList.remove('is-invalid'); });
-form.addEventListener('submit', function (ev) {
-  ev.preventDefault(); $('ch-error').hidden = true;
+function checkDetails() {                       // step 1: name, email, company, role and LinkedIn are all required
   var bad = [];
   if (!val('name')) bad.push('name');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email'))) bad.push('email');
-  if (val('linkedin') && !/^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin'))) bad.push('linkedin');
+  if (!val('company')) bad.push('company');
+  if (!val('role')) bad.push('role');
+  if (!/^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin'))) bad.push('linkedin');
   bad.forEach(function (k) { form.querySelector('[data-field="' + k + '"]').classList.add('is-invalid'); });
+  return bad;
+}
+function detailsMessage(bad) {
+  return bad.length === 1 && bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in the highlighted fields: name, email, company, role and LinkedIn are all needed.';
+}
+$('ch-next').addEventListener('click', function () {   // unfold the rest of the page once the details are complete
+  var bad = checkDetails(), hint = $('ch-next-hint');
+  if (bad.length) { hint.className = 'ch-hint warn'; hint.textContent = detailsMessage(bad); form.querySelector('[data-field="' + bad[0] + '"] input').focus(); return; }
+  hint.className = 'ch-hint'; hint.textContent = 'All set. Your card and posts are below.';
+  var rest = $('ch-rest');
+  if (rest.hidden) { rest.hidden = false; drawCard(); render('post'); render('msg'); }
+  rest.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+form.addEventListener('submit', function (ev) {
+  ev.preventDefault(); $('ch-error').hidden = true;
+  var bad = checkDetails();
   var acts = {};
   document.querySelectorAll('.ch-action').forEach(function (row) {
     var cb = row.querySelector('input[type=checkbox]');
@@ -354,10 +375,10 @@ form.addEventListener('submit', function (ev) {
   var anyAction = Object.keys(acts).some(function (k) { return acts[k].done; }) || !!val('other');
   if (!anyAction) { showError('Tick at least one thing you did (or write it under "Anything else").'); return; }
   if (!form.elements['consent'].checked) { $('ch-consent-wrap').classList.add('is-invalid'); showError('Please tick the sharing consent so we can read your report.'); return; }
-  if (bad.length) { showError(bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in your name and email.'); return; }
+  if (bad.length) { showError(detailsMessage(bad)); return; }
   if (!CH_URL) { showError('This page is not connected yet (communityhero_form_url is empty). Please email us instead.'); return; }
   var body = {
-    brand: E.brand, event: E, name: val('name'), email: val('email'), company: val('company'), role: val('role'), linkedin: val('linkedin'), why: val('why'),
+    brand: E.brand, event: E, name: val('name'), email: val('email'), company: val('company'), role: val('role'), linkedin: val('linkedin'), why: '',
     actions: acts, other: val('other'), proof: proofLinks().join('\n'), shots: shots, consent: true,
     website: form.elements['website'].value || '', page: location.href
   };
