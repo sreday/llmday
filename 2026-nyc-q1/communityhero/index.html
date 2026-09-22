@@ -59,6 +59,13 @@
     .ch-action .detail { grid-column: 2; display: none; }
     .ch-action.on .detail { display: block; }
     .ch-action .detail input { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 8px 12px; font: inherit; font-size: .93rem; }
+    .ch-links { display: grid; gap: 8px; margin-bottom: 10px; }
+    .ch-links input { width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 10px 14px; font: inherit; font-size: .97rem; color: #111; background: #fff; outline: none; }
+    .ch-links input:focus { border-color: var(--ch-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ch-accent) 18%, transparent); }
+    .ch-linkbtn { background: none; border: none; padding: 0; color: var(--ch-accent); font: inherit; font-weight: 600; cursor: pointer; }
+    .ch-linkbtn.pill { border: 1px solid color-mix(in srgb, var(--ch-accent) 55%, #fff); background: color-mix(in srgb, var(--ch-accent) 16%, #fff); border-radius: 999px; padding: 7px 16px; }
+    .ch-linkbtn.pill:hover { background: color-mix(in srgb, var(--ch-accent) 24%, #fff); }
+    .ch-linkbtn[disabled] { opacity: .45; cursor: default; }
     .ch-drop { border: 2px dashed #ccc; border-radius: 12px; padding: 16px; cursor: pointer; background: #fafafa; transition: border-color .2s, background .2s; }
     .ch-drop:hover, .ch-drop.over { border-color: var(--ch-accent); background: color-mix(in srgb, var(--ch-accent) 5%, #fff); }
     .ch-drop input { display: none; }
@@ -124,24 +131,28 @@
     <div class="ch-card">
       <div class="ch-step"><i>5</i><h2>Tell us what you did</h2><small>then Anna confirms your ticket</small></div>
       <div class="ch-actions" id="ch-actions">
-        <div class="ch-action" data-key="linkedin"><input type="checkbox" id="act-linkedin"><label class="main" for="act-linkedin">I posted about the event on LinkedIn</label><div class="detail"><input type="url" name="linkedin_post" placeholder="Link to the post"></div></div>
-        <div class="ch-action" data-key="social"><input type="checkbox" id="act-social"><label class="main" for="act-social">I posted on X, Bluesky, Mastodon or Threads</label><div class="detail"><input type="url" name="social_post" placeholder="Link to the post"></div></div>
-        <div class="ch-action" data-key="community"><input type="checkbox" id="act-community"><label class="main" for="act-community">I shared it in a community (Slack, Discord, WhatsApp, Meetup)</label><div class="detail"><input type="text" name="community_where" placeholder="Which community, roughly how many people" maxlength="160"></div></div>
-        <div class="ch-action" data-key="invites"><input type="checkbox" id="act-invites"><label class="main" for="act-invites">I messaged friends or colleagues directly</label><div class="detail"><input type="number" name="invites_count" min="1" max="999" placeholder="How many people"></div></div>
+        <div class="ch-action" data-key="linkedin"><input type="checkbox" id="act-linkedin"><label class="main" for="act-linkedin">Posted on LinkedIn</label></div>
+        <div class="ch-action" data-key="social"><input type="checkbox" id="act-social"><label class="main" for="act-social">Posted on X, Bluesky, Mastodon, Threads, etc.</label></div>
+        <div class="ch-action" data-key="community"><input type="checkbox" id="act-community"><label class="main" for="act-community">Shared in a community - Slack, Discord, WhatsApp, Meetup, etc.</label></div>
+        <div class="ch-action" data-key="invites"><input type="checkbox" id="act-invites"><label class="main" for="act-invites">Messaged my friends or colleagues</label></div>
       </div>
       <div class="ch-grid" style="margin-top: 16px;">
         <label class="ch-field ch-wide" data-field="other"><span>Anything else you did <small>(optional)</small></span><input type="text" name="other" maxlength="300"></label>
-        <label class="ch-field ch-wide" data-field="proof"><span>Proof links <small>(one per line: posts, threads, anything public)</small></span><textarea name="proof" rows="3" maxlength="2000"></textarea></label>
+        <div class="ch-field ch-wide" data-field="proof">
+          <span>Proof links <small>(one link per line, up to 10: posts, threads, anything public; we match them to what you ticked above)</small></span>
+          <div class="ch-links" id="ch-links"><input type="url" class="ch-link" placeholder="https://..." maxlength="300"></div>
+          <button type="button" class="ch-linkbtn pill" id="ch-add-link">+ Add another link</button>
+        </div>
         <div class="ch-field ch-wide" data-field="shots">
-          <span>Screenshots <small>(optional, up to 5, 10 MB each: Slack threads, DMs, group chats)</small></span>
+          <span>Screenshots <small>(optional, up to 10, 10 MB each: Slack threads, DMs, group chats. Please cover any sensitive data before uploading.)</small></span>
           <label class="ch-drop" id="ch-drop"><input type="file" name="shots" accept="image/*" multiple><div class="ch-drop-text" id="ch-drop-text"><b>Choose screenshots</b> or drop them here.</div></label>
           <div class="ch-thumbs" id="ch-thumbs"></div>
           <div class="ch-hint" id="ch-shots-hint"></div>
         </div>
       </div>
-      <label class="ch-consent" id="ch-consent-wrap"><input type="checkbox" name="consent" value="yes"><span>Everything above is true and I'm happy for the organizers to check it.</span></label>
+      <label class="ch-consent" id="ch-consent-wrap"><input type="checkbox" name="consent" value="yes"><span>I'm happy to share all the above with the organizers of LLMday NYC 2026 Q1.</span></label>
       <div class="ch-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-      <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Send my report</button><div class="ch-error" id="ch-error" hidden></div></div>
+      <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Hero</button><div class="ch-error" id="ch-error" hidden></div></div>
     </div>
   </form>
 
@@ -298,11 +309,19 @@ document.querySelectorAll('.ch-action').forEach(function (row) {
   var cb = row.querySelector('input[type=checkbox]');
   cb.addEventListener('change', function () { row.classList.toggle('on', cb.checked); });
 });
-var MAX_FILE = 10 * 1024 * 1024, MAX_SHOTS = 5, shots = [];
+var MAX_LINKS = 10, linksBox = $('ch-links'), addLink = $('ch-add-link');   // proof links, one input per link
+function linkInputs() { return Array.prototype.slice.call(linksBox.querySelectorAll('input')); }
+addLink.addEventListener('click', function () {
+  if (linkInputs().length >= MAX_LINKS) return;
+  var i = document.createElement('input'); i.type = 'url'; i.className = 'ch-link'; i.placeholder = 'https://...'; i.maxLength = 300; linksBox.appendChild(i); i.focus();
+  if (linkInputs().length >= MAX_LINKS) { addLink.disabled = true; addLink.textContent = 'Ten links is the limit'; }
+});
+function proofLinks() { return linkInputs().map(function (i) { return (i.value || '').trim(); }).filter(Boolean); }
+var MAX_FILE = 10 * 1024 * 1024, MAX_SHOTS = 10, shots = [];
 var drop = $('ch-drop'), shotsInput = form.elements['shots'], thumbs = $('ch-thumbs'), shotsHint = $('ch-shots-hint');
 function addShots(files) {
   Array.prototype.slice.call(files).forEach(function (file) {
-    if (shots.length >= MAX_SHOTS) { shotsHint.textContent = 'Five screenshots is the limit.'; return; }
+    if (shots.length >= MAX_SHOTS) { shotsHint.textContent = 'Ten screenshots is the limit.'; return; }
     if (file.size > MAX_FILE) { shotsHint.textContent = file.name + ' is over 10 MB, please pick a smaller one.'; return; }
     var reader = new FileReader();
     reader.onload = function () {
@@ -329,17 +348,17 @@ form.addEventListener('submit', function (ev) {
   bad.forEach(function (k) { form.querySelector('[data-field="' + k + '"]').classList.add('is-invalid'); });
   var acts = {};
   document.querySelectorAll('.ch-action').forEach(function (row) {
-    var cb = row.querySelector('input[type=checkbox]'), d = row.querySelector('.detail input');
-    acts[row.getAttribute('data-key')] = { done: cb.checked, detail: cb.checked && d ? (d.value || '').trim() : '' };
+    var cb = row.querySelector('input[type=checkbox]');
+    acts[row.getAttribute('data-key')] = { done: cb.checked, detail: '' };   // links are matched to actions by the script
   });
   var anyAction = Object.keys(acts).some(function (k) { return acts[k].done; }) || !!val('other');
   if (!anyAction) { showError('Tick at least one thing you did (or write it under "Anything else").'); return; }
-  if (!form.elements['consent'].checked) { $('ch-consent-wrap').classList.add('is-invalid'); showError('Please confirm the report is true.'); return; }
+  if (!form.elements['consent'].checked) { $('ch-consent-wrap').classList.add('is-invalid'); showError('Please tick the sharing consent so we can read your report.'); return; }
   if (bad.length) { showError(bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in your name and email.'); return; }
   if (!CH_URL) { showError('This page is not connected yet (communityhero_form_url is empty). Please email us instead.'); return; }
   var body = {
     brand: E.brand, event: E, name: val('name'), email: val('email'), company: val('company'), role: val('role'), linkedin: val('linkedin'), why: val('why'),
-    actions: acts, other: val('other'), proof: form.elements['proof'].value.trim(), shots: shots, consent: true,
+    actions: acts, other: val('other'), proof: proofLinks().join('\n'), shots: shots, consent: true,
     website: form.elements['website'].value || '', page: location.href
   };
   var btn = $('ch-send'); btn.disabled = true; btn.textContent = 'Sending...';
@@ -354,7 +373,7 @@ form.addEventListener('submit', function (ev) {
     })
     .catch(function (err) {
       if (timer) clearTimeout(timer);
-      btn.disabled = false; btn.textContent = 'Send my report';
+      btn.disabled = false; btn.textContent = 'Become a Hero';
       var res = err.res || {}, m;
       switch (err.message) {
         case 'invalid': m = 'The server did not accept: ' + (res.fields || []).join(', ') + '.'; break;
