@@ -203,7 +203,7 @@ function post(v) {
   if (v === 'pro') {                               // the company pages' question post
     return bold('Why is everyone in ' + E.city + ' talking about ' + topic1 + '?') + ' 🤔\n\n' +
       E.event_name + ' is coming on ' + E.date + (E.venue_name ? ' at ' + E.venue_name : '') + ". What's coming up?\n\n" + sessionLines(3) + '\n\n' +
-      "I'm going as a Community Hero. Come and say hi. 🎟️ " + E.event_url;
+      "I'm going as a Community Hero. Secure your spot and register here: " + E.event_url + '\n\nI hope to meet you at @' + E.brand_name + '!';
   }
   if (v === 'friendly') {                          // Mark's countdown post
     return bold(E.event_name + ' · ' + E.date + (E.venue_name ? ' · ' + E.venue_name : '')) + '\n\n' +
@@ -214,21 +214,24 @@ function post(v) {
     "I'll be there as a Community Hero, come find me. " + E.event_url;
 }
 // ---- messages ------------------------------------------------------------------------------
+// Voice = Mark's own invitation emails (read 2026-09-23): "Hey Name !", short plain lines, "Time flies", the lineup
+// as the reason, "Secure your spot and register here:" + the link, one no-pressure line, first name to sign.
 function msg(v) {
   var name = val('name') || '', p = pickTalks(2), A = p[0], B = p[1], rich = p.length >= 2;
+  var lineup = rich ? A.company + ' is presenting on ' + A.title + ', and ' + B.company + ' on ' + B.title + '.' + (E.speakers_n >= 3 ? ' ' + E.speakers_n + '+ talks, one day' + (E.venue_name ? ', ' + E.venue_name : '') + '.' : '')
+                    : (E.speakers_n >= 3 ? E.speakers_n + '+ talks in one day' + (companies ? ', with ' + companies + ' presenting' : '') + '.' : 'The lineup is being announced and the first speakers are already up on the event page.');
   if (v === 'pro') {
-    var because = rich
-      ? 'thought of you because of ' + A.topic + ': ' + A.speaker + ' from ' + A.company + ' is presenting on ' + A.title + ', and ' + B.speaker + ' from ' + B.company + ' on ' + B.title + '. ' + (E.speakers_n >= 3 ? E.speakers_n + '+ talks in total, one day.' : 'More speakers are being announced.')
-      : 'thought of you. ' + E.blurb_short + ' The lineup is being announced on the event page and the first speakers are up.';
-    return 'Hi [Name],\n\n' + "I'm going to " + E.event_name + ' on ' + E.date + ' in ' + E.city + ' and ' + because + '\n\nFull lineup and tickets: ' + E.event_url + '\n\nIf you come, we can compare notes afterwards.\n\n' + name;
+    return 'Hi [Name],\n\n' + "I'm going to " + E.event_name + ' on ' + E.date + ' in ' + E.city + ' and thought of you.\n\n' + lineup + '\n\n' +
+      'Secure your spot and register here: ' + E.event_url + '\n\n' + 'No pressure at all, but it would be great to compare notes afterwards.\n\n' + name;
   }
   if (v === 'friendly') {
-    var hook = rich ? A.company + ' is talking about ' + A.title + ' and ' + B.company + ' about ' + B.title + ', which is exactly your kind of thing.' : 'The first speakers are up on the event page and it is exactly your kind of thing.';
-    return 'Hey [Name]!\n\n' + E.event_name + ', ' + E.date + ', ' + where + '. ' + hook + " I'm going, come with me?\n\n" + E.event_url + '\n\n' + name;
+    return 'Hey [Name] !\n\n' + 'Time flies, ' + E.event_name + ' is on ' + E.date + " already. I'm going.\n\n" +
+      (rich ? 'The lineup is the reason: ' + A.company + ' on ' + A.title + ', ' + B.company + ' on ' + B.title + '. Exactly your kind of thing.' : lineup) + '\n\n' +
+      'Grab your spot here: ' + E.event_url + '\n\n' + "Come with me? No hard feelings if it's not for you :-)\n\n" + name;
   }
   return rich
-    ? '[Name], ' + E.date + ' in ' + E.city + ': ' + A.company + ' on ' + A.title + ', ' + B.company + ' on ' + B.title + (E.speakers_n >= 3 ? ', ' + E.speakers_n + '+ talks' : '') + ". I'm going. Coming? " + E.event_url
-    : '[Name], ' + E.event_name + ', ' + E.date + ', ' + E.city + ". I'm going, want to come? " + E.event_url;
+    ? '[Name], ' + E.event_name + ', ' + E.date + ', ' + E.city + '. ' + A.company + ' on ' + A.title + ', ' + B.company + ' on ' + B.title + ". I'm going, come with me? " + E.event_url
+    : '[Name], ' + E.event_name + ', ' + E.date + ', ' + E.city + ". I'm going, come with me? " + E.event_url;
 }
 var variant = { post: 'pro', msg: 'pro' }, edited = { post: false, msg: false };
 function render(set) {
