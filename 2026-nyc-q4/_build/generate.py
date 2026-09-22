@@ -1309,6 +1309,29 @@ for _ev in (_ch_home.get('events') or []) + (_ch_home.get('events_past') or []):
         break
 _ch_blurb = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', str(context.get('about_blurb') or ''))).strip()
 _ch_first = re.split(r'(?<=[.!?])\s+', _ch_blurb)[0] if _ch_blurb else ''
+# talks per About category (speaker, company, title) so the hero's posts and messages can say who presents on what
+_ch_by_title = {str(_t.get('title') or '').strip().lower(): _t for _t in _about_talks}
+_ch_topic_talks = []
+for _tp in (context.get('about_topics') or []):
+    if _tp.get('category') == '...and more':
+        continue
+    _lst = []
+    for _e in (_tp.get('talks') or []):
+        _t = _ch_by_title.get(str(_e.get('title') or '').strip().lower())
+        if not _t:
+            continue
+        _org = str(_t.get('organization') or '').strip()
+        try:
+            if _org and looks_like_job_title(_org):
+                _org = ''
+        except Exception:
+            pass
+        _sp = re.split(r'\s*&\s*|\s*,\s*|\s+and\s+', str(_t.get('name') or ''))[0].strip()
+        _lst.append({'speaker': _sp, 'company': _org, 'title': re.sub(r'^\s*Keynote:\s*', '', str(_t.get('title') or '').strip())})
+        if len(_lst) == 3:
+            break
+    if _lst:
+        _ch_topic_talks.append({'category': _tp['category'], 'talks': _lst})
 context['hero_event'] = {
     'brand': _ch['brand'], 'brand_name': _ch['brand_name'], 'brand_color': str(context.get('brand_color') or '#333'), 'slug': _ch['slug'],
     'event_name': _ch['event_name'], 'city': _ch['city'], 'date': _ch['date'], 'month_day': _ch['month_day'],
@@ -1318,6 +1341,7 @@ context['hero_event'] = {
     'topics': [t['category'] for t in (context.get('about_topics') or []) if t.get('category') != '...and more'][:5],
     'companies': list(context.get('about_companies') or [])[:6],
     'keynotes': [k.get('name', '') for k in keynotes if k.get('name')][:3],
+    'topic_talks': _ch_topic_talks,
 }
 _os.makedirs(BASE_FOLDER + "/communityhero", exist_ok=True)
 with open(BASE_FOLDER + "/communityhero/index.html", "w", encoding="utf-8") as f:
