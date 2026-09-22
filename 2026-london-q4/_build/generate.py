@@ -362,6 +362,8 @@ context['fasttrack_event']['cfp_open'] = bool(context.get('cfp_open', True))   #
 # reached out to after the lineup filled up (dark page, same fields; backend "Speaker waitlist" script) ──
 context.setdefault('waitlist_form_url', '')
 context['waitlist_event'] = dict(context['fasttrack_event'])
+_wl_luma = str(context.get('luma_evt') or '').strip()
+context['waitlist_event']['rsvp_url'] = ('https://lu.ma/event/' + _wl_luma) if _wl_luma else (context['waitlist_event']['event_url'] + '#tickets')
 # ── END SPEAKER WAITLIST ────────────────────────────────────────────────────
 
 # pick up the ids & photos
