@@ -32,10 +32,10 @@
     .ev small { display: block; color: #888; font-weight: 400; font-size: .8rem; margin-top: 2px; }
     .bar { position: relative; height: 14px; border-radius: 999px; background: #eceef1; min-width: 180px; overflow: hidden; }
     .bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--c); }
-    /* Talks over the limit (Marek 2026-09-19): one white plus per extra talk, stacked from the right end of the full bar
+    /* Talks over the limit (Marek 2026-09-19): one white dot per extra talk, stacked from the right end of the full bar
        towards the left (max 7 drawn, the text below still gives the real number). Replaces the old 100% tick. */
     .bar > .plus { position: absolute; right: 5px; top: 0; bottom: 0; display: flex; flex-direction: row-reverse; align-items: center; gap: 4px; }
-    .bar > .plus s { display: block; width: 10px; height: 10px; text-decoration: none; background: linear-gradient(#fff, #fff) center / 100% 3px no-repeat, linear-gradient(#fff, #fff) center / 3px 100% no-repeat; filter: drop-shadow(0 0 1px rgba(0,0,0,.18)); }
+    .bar > .plus s { display: block; width: 8px; height: 8px; border-radius: 50%; text-decoration: none; background: #fff; filter: drop-shadow(0 0 1px rgba(0,0,0,.18)); }
     .pct { font-size: .82rem; color: #555; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
     /* Free-to-attend events (Marek 2026-09-19): a small grey pill right after the event name */
