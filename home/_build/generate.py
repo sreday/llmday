@@ -1368,6 +1368,48 @@ _wl_rows, _wl_note, _wl_waiting, _wl_placed = _wl_rows_for_page()
 print("Waitlist: %s" % (_wl_note or "%d waiting, %d placed" % (_wl_waiting, _wl_placed)))
 # ── END WAITLIST ─────────────────────────────────────────────────────────────
 
+
+# ── COMMUNITY HEROES (Marek 2026-09-22): people who sent their Community Hero report through the hidden
+# /<event>/communityhero/ pages -> the "Community hero" Apps Script -> a Google Sheet. COMMUNITYHERO_FEED = that
+# script's exec URL with ?list=1&token=... (Actions secret; local file path for testing). Same fetch as the waitlist;
+# only this brand's rows, newest first, with the completion marks and Anna's "approved" tick from the sheet.
+def _hero_rows_for_page():
+    raw, note = _wl_fetch(os.environ.get("COMMUNITYHERO_FEED", "").strip())
+    if raw is None:
+        return [], note.replace("WAITLIST_FEED", "COMMUNITYHERO_FEED").replace("waitlist", "heroes list")
+    out = []
+    for r in raw:
+        if not isinstance(r, dict) or str(r.get("brand") or "").lower() != _wl_brand:
+            continue
+        ts = _wl_parse_ts(r.get("ts"))
+        if not ts:
+            continue
+        slug = _wl_re.sub(r"[^a-z0-9-]", "", str(r.get("slug") or "").lower())
+        links = [l.strip() for l in str(r.get("proof") or "").split("|") if l.strip()]
+        marks = []
+        for key, label, title in (("linkedin_post", "LinkedIn", "posted on LinkedIn"), ("social_post", "Social", "posted on X / Bluesky / Mastodon / Threads"),
+                                  ("community", "Community", "shared in a community"), ("invites", "Invites", "messaged people directly"), ("other", "Other", "something else")):
+            v = str(r.get(key) or "").strip()
+            marks.append({"label": label, "done": bool(v), "title": (title + ": " + v) if v and v.lower() != "yes" else title,
+                          "url": v if v.lower().startswith("http") else ""})
+        row = {
+            "ts": ts, "when": ts.strftime("%d %b %Y").lstrip("0"),
+            "name": str(r.get("name") or "").strip(), "linkedin": str(r.get("linkedin") or "").strip(), "company": str(r.get("company") or "").strip(),
+            "event": str(r.get("event") or "").strip(), "event_url": _site_root + slug + "/" if slug else _site_root,
+            "city": str(r.get("city") or "").strip(), "event_date": str(r.get("date") or "").strip(),
+            "marks": marks, "done_n": sum(1 for m in marks if m["done"]), "links": links, "screenshots": int(r.get("screenshots") or 0),
+            "approved": bool(r.get("approved")),
+        }
+        row["search"] = " ".join(v for v in (row["name"], row["company"], row["event"], row["city"], "approved" if row["approved"] else "pending") if v).lower()
+        out.append(row)
+    out.sort(key=lambda x: x["ts"], reverse=True)
+    return out, ""
+
+
+_hero_rows, _hero_note = _hero_rows_for_page()
+print("Community heroes: %s" % (_hero_note or "%d reports, %d approved" % (len(_hero_rows), sum(1 for x in _hero_rows if x["approved"]))))
+# ── END COMMUNITY HEROES ─────────────────────────────────────────────────────
+
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
 # redflags.json: the same flags as the red bar. The "Red flag alert" Gmail script (llmday/_build/redflag-alert.gs)
 # reads it every 10 minutes and emails "Did you just nuke <event>?" once per flag. No secrets, no webhook.
@@ -1379,7 +1421,7 @@ with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_flap_days=_ADDED_FLAP_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
-        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed,
+        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed, status_heroes=_hero_rows, status_heroes_note=_hero_note,
         status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
