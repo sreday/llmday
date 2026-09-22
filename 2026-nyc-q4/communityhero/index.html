@@ -63,6 +63,10 @@
     .ch-action.on .detail { display: block; }
     .ch-action .detail input { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 8px 12px; font: inherit; font-size: .93rem; }
     .ch-links { display: grid; gap: 8px; margin-bottom: 10px; }
+    .ch-links .ch-linkrow { display: flex; gap: 8px; align-items: center; }
+    .ch-linkrm { flex-shrink: 0; width: 38px; height: 38px; border: 1px solid #ddd; border-radius: 50%; background: #fff; color: #777; font-size: 1.15rem; line-height: 1; cursor: pointer; }
+    .ch-linkrm:hover { border-color: var(--ch-danger); color: var(--ch-danger); }
+    .ch-linkrm:disabled { opacity: .35; cursor: default; border-color: #ddd; color: #777; }
     .ch-links input { width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 10px 14px; font: inherit; font-size: .97rem; color: #111; background: #fff; outline: none; }
     .ch-links input:focus { border-color: var(--ch-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ch-accent) 18%, transparent); }
     .ch-linkbtn { background: none; border: none; padding: 0; color: var(--ch-accent); font: inherit; font-weight: 600; cursor: pointer; }
@@ -144,11 +148,11 @@
         <label class="ch-field ch-wide" data-field="other"><span>Anything else you did <small>(optional)</small></span><input type="text" name="other" maxlength="300"></label>
         <div class="ch-field ch-wide" data-field="proof">
           <span>Public social media post links <small>(one per line, up to 10)</small></span>
-          <div class="ch-links" id="ch-links"><input type="url" class="ch-link" placeholder="https://..." maxlength="300"></div>
+          <div class="ch-links" id="ch-links"><div class="ch-linkrow"><input type="url" class="ch-link" placeholder="https://..." maxlength="300"><button type="button" class="ch-linkrm" title="Remove this link" aria-label="Remove this link" disabled>&times;</button></div></div>
           <button type="button" class="ch-linkbtn pill" id="ch-add-link">+ Add another link</button>
         </div>
         <div class="ch-field ch-wide" data-field="shots">
-          <span>Screenshots <small>(optional, up to 10, 10 MB each: Slack threads, DMs, group chats. Please cover any sensitive data before uploading.)</small></span>
+          <span>Screenshots <small>(optional, up to 10 and 20 MB in total: Slack threads, DMs, group chats. Please cover any sensitive data before uploading.)</small></span>
           <label class="ch-drop" id="ch-drop"><input type="file" name="shots" accept="image/*" multiple><div class="ch-drop-text" id="ch-drop-text"><b>Choose screenshots</b> or drop them here.</div></label>
           <div class="ch-thumbs" id="ch-thumbs"></div>
           <div class="ch-hint" id="ch-shots-hint"></div>
@@ -315,23 +319,41 @@ document.querySelectorAll('.ch-action').forEach(function (row) {
 });
 var MAX_LINKS = 10, linksBox = $('ch-links'), addLink = $('ch-add-link');   // proof links, one input per link
 function linkInputs() { return Array.prototype.slice.call(linksBox.querySelectorAll('input')); }
+function linkRows() { return Array.prototype.slice.call(linksBox.querySelectorAll('.ch-linkrow')); }
+function syncLinkButtons() {                    // the last remaining row cannot be removed; "add" stops at ten
+  var rows = linkRows();
+  rows.forEach(function (r) { r.querySelector('.ch-linkrm').disabled = rows.length <= 1; });
+  addLink.disabled = rows.length >= MAX_LINKS; addLink.textContent = rows.length >= MAX_LINKS ? 'Ten links is the limit' : '+ Add another link';
+}
 addLink.addEventListener('click', function () {
-  if (linkInputs().length >= MAX_LINKS) return;
-  var i = document.createElement('input'); i.type = 'url'; i.className = 'ch-link'; i.placeholder = 'https://...'; i.maxLength = 300; linksBox.appendChild(i); i.focus();
-  if (linkInputs().length >= MAX_LINKS) { addLink.disabled = true; addLink.textContent = 'Ten links is the limit'; }
+  if (linkRows().length >= MAX_LINKS) return;
+  var row = linkRows()[0].cloneNode(true), i = row.querySelector('input'); i.value = ''; linksBox.appendChild(row); syncLinkButtons(); i.focus();
+});
+linksBox.addEventListener('click', function (e) {
+  var btn = e.target.closest('.ch-linkrm'); if (!btn || btn.disabled) return;
+  var row = btn.closest('.ch-linkrow'), rows = linkRows(), idx = rows.indexOf(row);
+  row.remove(); syncLinkButtons(); var left = linkRows(); (left[Math.min(idx, left.length - 1)] || left[0]).querySelector('input').focus();
 });
 function proofLinks() { return linkInputs().map(function (i) { return (i.value || '').trim(); }).filter(Boolean); }
-var MAX_FILE = 10 * 1024 * 1024, MAX_SHOTS = 10, shots = [];
+var MAX_FILE = 10 * 1024 * 1024, MAX_TOTAL = 20 * 1024 * 1024, MAX_SHOTS = 10, shots = [];   // Gmail takes 25 MB per message, so 20 MB in total
+function shotsTotal() { return shots.reduce(function (n, s) { return n + s.size; }, 0); }
+function mb(n) { return (n / 1048576).toFixed(1).replace(/\.0$/, '') + ' MB'; }
 var drop = $('ch-drop'), shotsInput = form.elements['shots'], thumbs = $('ch-thumbs'), shotsHint = $('ch-shots-hint');
+var shotsWarn = '';                                 // the last refusal, kept next to the count so a batch pick does not hide it
+function shotsStatus() { return (shots.length ? shots.length + ' screenshot' + (shots.length === 1 ? '' : 's') + ' attached, ' + mb(shotsTotal()) + ' of 20 MB.' : '') + (shotsWarn ? ' ' + shotsWarn : ''); }
 function addShots(files) {
+  shotsWarn = '';
   Array.prototype.slice.call(files).forEach(function (file) {
-    if (shots.length >= MAX_SHOTS) { shotsHint.textContent = 'Ten screenshots is the limit.'; return; }
-    if (file.size > MAX_FILE) { shotsHint.textContent = file.name + ' is over 10 MB, please pick a smaller one.'; return; }
+    if (shots.length >= MAX_SHOTS) { shotsWarn = 'Ten screenshots is the limit.'; shotsHint.textContent = shotsStatus(); return; }
+    if (file.size > MAX_FILE) { shotsWarn = file.name + ' is over 10 MB, please pick a smaller one.'; shotsHint.textContent = shotsStatus(); return; }
+    if (shotsTotal() + file.size > MAX_TOTAL) { shotsWarn = file.name + ' would take the total over 20 MB, please pick a smaller one.'; shotsHint.textContent = shotsStatus(); return; }
+    shots.push(null); var slot = shots.length - 1;   // reserve the slot now so several files picked at once count against the caps together
+    shots[slot] = { b64: '', type: file.type || '', name: file.name || '', size: file.size };
     var reader = new FileReader();
     reader.onload = function () {
-      shots.push({ b64: String(reader.result).split(',')[1] || '', type: file.type || '', name: file.name || '' });
+      shots[slot].b64 = String(reader.result).split(',')[1] || '';
       var img = document.createElement('img'); img.src = reader.result; img.title = file.name; thumbs.appendChild(img);
-      shotsHint.textContent = shots.length + ' screenshot' + (shots.length === 1 ? '' : 's') + ' attached.';
+      shotsHint.textContent = shotsStatus();
     };
     reader.readAsDataURL(file);
   });
@@ -379,7 +401,7 @@ form.addEventListener('submit', function (ev) {
   if (!CH_URL) { showError('This page is not connected yet (communityhero_form_url is empty). Please email us instead.'); return; }
   var body = {
     brand: E.brand, event: E, name: val('name'), email: val('email'), company: val('company'), role: val('role'), linkedin: val('linkedin'), why: '',
-    actions: acts, other: val('other'), proof: proofLinks().join('\n'), shots: shots, consent: true,
+    actions: acts, other: val('other'), proof: proofLinks().join('\n'), shots: shots.map(function (s) { return { b64: s.b64, type: s.type, name: s.name }; }), consent: true,
     website: form.elements['website'].value || '', page: location.href
   };
   var btn = $('ch-send'); btn.disabled = true; btn.textContent = 'Sending...';
@@ -399,6 +421,7 @@ form.addEventListener('submit', function (ev) {
       switch (err.message) {
         case 'invalid': m = 'The server did not accept: ' + (res.fields || []).join(', ') + '.'; break;
         case 'image too large': m = 'A screenshot is too large, please pick a smaller one.'; break;
+        case 'images too large': m = 'The screenshots add up to more than 20 MB, please remove or shrink some.'; break;
         case 'too many today': m = "We've hit today's limit, please try again tomorrow or email us."; break;
         default: m = "Hmm, that didn't go through (" + (err.name === 'AbortError' ? 'timeout' : err.message) + '). Please try again or email us.';
       }
