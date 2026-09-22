@@ -19,7 +19,14 @@
  *   2. Run testCommunityHero once from the editor (authorises Gmail), check the log.
  *   3. Deploy -> New deployment -> type "Web app" -> Execute as: Me -> Who has access: Anyone. Copy the .../exec URL.
  *   4. Put that URL into home/metadata.yml -> communityhero_form_url in all four repos, rebuild.
+ *   5. Project settings -> Script properties -> COMMUNITYHERO_TOKEN = a long random string; GitHub -> each repo ->
+ *      Settings -> Secrets -> Actions -> COMMUNITYHERO_FEED = "<exec URL>?list=1&token=<COMMUNITYHERO_TOKEN>".
  *   Re-deploy after editing: Deploy -> Manage deployments -> edit -> new version (the URL stays the same).
+ *
+ * v2 (2026-09-22): every report is also appended to a Google Sheet ("Community heroes", created on first use,
+ * id in COMMUNITYHERO_SHEET_ID) that feeds the /status/ Heroes tab: ?list=1&token=<COMMUNITYHERO_TOKEN> returns
+ * the rows as JSON without the email column. Rows are never deleted by code. Type "yes" into the "approved"
+ * column once the ticket is confirmed and the status page shows a tick.
  */
 
 var BRANDS = {
@@ -43,8 +50,14 @@ var ACTIONS = [                             // key on the page -> sentence in th
   { key: 'invites',   text: 'messaged friends or colleagues directly',                     detail: 'count' }
 ];
 
-function doGet() {
-  return respond({ ok: true, service: 'communityhero', version: 1 });
+function doGet(e) {
+  var p = (e && e.parameter) || {};
+  if (p.list) {                                    // the status build: ?list=1&token=<COMMUNITYHERO_TOKEN> -> rows as JSON
+    var token = props().getProperty('COMMUNITYHERO_TOKEN') || '';
+    if (!token || String(p.token || '') !== token) return respond({ ok: false, error: 'forbidden' });
+    return respond({ ok: true, rows: listHeroes() });
+  }
+  return respond({ ok: true, service: 'communityhero', version: 2 });
 }
 
 function doPost(e) {
@@ -85,6 +98,7 @@ function doPost(e) {
   if (from === brand.from) options.from = brand.from;
   var message = GmailApp.createDraft(to, mail.subject, mail.text, options).send();
   fileThread(message);
+  recordHero(s, ev, brandKey, data.event || {}, attachments.length);
   Logger.log('Community hero: %s (%s) for %s -> %s, %d screenshots', s.name, s.email, ev.event_name, to, attachments.length);
   return respond({ ok: true });
 }
@@ -214,6 +228,52 @@ function decodeImage(b64, mime, filename) {
   }
 }
 
+// ---- the heroes sheet -----------------------------------------------------------------
+// One spreadsheet, created on first use and remembered in COMMUNITYHERO_SHEET_ID. Never cleared by code.
+// "approved" is for Anna: type yes once the ticket is confirmed, the status page shows a tick.
+
+var HERO_COLUMNS = ['timestamp', 'brand', 'event_slug', 'event_name', 'city', 'event_date', 'name', 'email', 'company', 'linkedin',
+                    'linkedin_post', 'social_post', 'community', 'invites', 'other', 'proof_links', 'screenshots', 'approved'];
+
+function heroSheet() {
+  var id = props().getProperty('COMMUNITYHERO_SHEET_ID'), ss = null;
+  if (id) { try { ss = SpreadsheetApp.openById(id); } catch (err) { ss = null; } }
+  if (!ss) {
+    ss = SpreadsheetApp.create('Community heroes');
+    ss.getSheets()[0].appendRow(HERO_COLUMNS);
+    props().setProperty('COMMUNITYHERO_SHEET_ID', ss.getId());
+    Logger.log('Created the heroes sheet: ' + ss.getUrl());
+  }
+  return ss.getSheets()[0];
+}
+
+function recordHero(s, ev, brandKey, rawEvent, nShots) {
+  try {
+    var a = s.actions;
+    var mark = function (k) { return a[k] && a[k].done ? (a[k].detail || 'yes') : ''; };
+    var links = s.proof ? s.proof.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean).join(' | ') : '';
+    heroSheet().appendRow([new Date().toISOString(), brandKey, clean(rawEvent.slug, 60), ev.event_name, clean(rawEvent.city, 60), clean(rawEvent.date, 40),
+                           s.name, s.email, s.company, s.linkedin, mark('linkedin'), mark('social'), mark('community'), mark('invites'), s.other, links, nShots, '']);
+  } catch (err) {
+    Logger.log('Sent, but could not record the hero row: ' + err);
+  }
+}
+
+// Rows for the status build, without the email column. Dates come back as ISO strings.
+function listHeroes() {
+  var values = heroSheet().getDataRange().getValues(), rows = [];
+  for (var i = 1; i < values.length; i++) {
+    var v = values[i];
+    if (!v[0] || !v[6]) continue;
+    rows.push({ ts: v[0] instanceof Date ? v[0].toISOString() : String(v[0]), brand: String(v[1]), slug: String(v[2]), event: String(v[3]),
+                city: String(v[4]), date: v[5] instanceof Date ? Utilities.formatDate(v[5], 'UTC', 'MMMM d, yyyy') : String(v[5]),
+                name: String(v[6]), company: String(v[8]), linkedin: String(v[9]),
+                linkedin_post: String(v[10]), social_post: String(v[11]), community: String(v[12]), invites: String(v[13]), other: String(v[14]),
+                proof: String(v[15]), screenshots: Number(v[16]) || 0, approved: /^\s*(yes|y|true|ok|1)\s*$/i.test(String(v[17])) });
+  }
+  return rows;
+}
+
 // ---- filing, budget, helpers (same conventions as the other form scripts) ------------
 
 function fileThread(message) {
@@ -272,4 +332,5 @@ function testCommunityHero() {
     event: { brand: 'sreday', brand_name: 'SREday', slug: '2026-london-q3', event_name: 'SREday London 2026 Q3', city: 'London', date: 'September 24, 2026', event_url: 'https://www.sreday.com/2026-london-q3/' }
   }) } };
   Logger.log(doPost(e).getContent());
+  Logger.log('Sheet: ' + heroSheet().getParent().getUrl() + ' (' + listHeroes().length + ' rows)');
 }

@@ -200,12 +200,21 @@
     @keyframes tab-squash { 0% { scale: 1 1; } 30% { scale: 1.06 .86; } 62% { scale: .97 1.06; } 82% { scale: 1.01 .98; } 100% { scale: 1 1; } }
     .tabs.has-pill button.is-active, .tabs.has-pill button.is-active:hover { background: #f1f2f4; color: #333; box-shadow: none; }
     @media (prefers-reduced-motion: reduce) { .tab-pill.squash { animation: none; } }
-    html.tabbed .regs, html.tabbed .added, html.tabbed .spons, html.tabbed .checks, html.tabbed .waitlist { display: none; margin-top: 22px; }
-    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active { display: block; }
-    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .spons h2, html.tabbed .checks h2, html.tabbed .waitlist h2 { display: none; }
+    html.tabbed .regs, html.tabbed .added, html.tabbed .spons, html.tabbed .checks, html.tabbed .waitlist, html.tabbed .heroes { display: none; margin-top: 22px; }
+    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active, html.tabbed .heroes.is-active { display: block; }
+    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .spons h2, html.tabbed .checks h2, html.tabbed .waitlist h2, html.tabbed .heroes h2 { display: none; }
+    /* Heroes tab (Marek 2026-09-22): Community Hero reports with completion marks; shares the .wl table look */
+    .hr-marks { display: flex; flex-wrap: wrap; gap: 4px; }
+    .hr-marks span { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700; letter-spacing: .02em; background: #eef0f3; color: #aab0b8; }
+    .hr-marks span.on { background: var(--good); color: #fff; }
+    .hr-marks a { color: inherit; text-decoration: none; }
+    .hr-approved { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; background: var(--good); color: #fff; }
+    .hr-pending { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; background: #eef0f3; color: #888; }
+    .wl .hr-proof { white-space: nowrap; color: #666; font-size: .85rem; }
+    .wl .hr-proof a { color: var(--accent); }
     /* A short tab (an empty waitlist, two sponsors) must not shrink the page and yank the scroll position back up (Marek
        2026-09-22): every panel keeps at least the height of a well-filled Speakers list */
-    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active { min-height: 640px; }
+    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active, html.tabbed .heroes.is-active { min-height: 640px; }
     /* Waitlist tab (Marek 2026-09-22): speakers who applied after a lineup was full; search + a show-placed toggle */
     .wl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 12px; }
     .wl-search { flex: 1 1 260px; max-width: 420px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 999px; font: inherit; font-size: .95rem; outline: none; background: #fff; }
@@ -280,7 +289,6 @@
       details.ladder th { font-size: .62rem; letter-spacing: 0; }
       /* tabs: 2 x 2 instead of 3 + 1; the floating pill follows offsetLeft / offsetTop, so it bounces diagonally too */
       html.tabbed .tabs { display: grid; grid-template-columns: 1fr 1fr; }
-      html.tabbed .tabs button:last-child { grid-column: 1 / -1; }   /* five tabs: the odd one takes a full row */
       /* registrations card: small ring next to the name, numbers under it, bar + legend across the whole card */
       .reg { grid-template-columns: auto 1fr; grid-template-areas: "ring head" "ring nums" "bar bar" "cats cats"; gap: 2px 12px; align-items: center; }
       .reg-ring, .reg-body { display: contents; }
@@ -402,6 +410,7 @@
     <button type="button" data-tab="regs" aria-selected="false">Registrations</button>
     <button type="button" data-tab="speakers" aria-selected="false">Builds</button>
     <button type="button" data-tab="waitlist" aria-selected="false">Waitlist</button>
+    <button type="button" data-tab="heroes" aria-selected="false">Heroes</button>
     <button type="button" data-tab="sponsors" aria-selected="false">Sponsors</button>
     <button type="button" data-tab="checks" aria-selected="false">Data checks</button>
   </nav>
@@ -508,6 +517,35 @@
     </div>
     {% elif not status_waitlist_note %}<div class="allclear"><span class="count ok">Nobody is waiting &#128077;</span></div>{% endif %}
   </section>
+  <section class="heroes">
+    <h2>Heroes</h2>
+    <div class="sub">Community Heroes who sent their report, newest first{% if status_heroes %}: <strong>{{ status_heroes | length }}</strong>{% set appr = status_heroes | selectattr('approved') | list | length %}{% if appr %}, {{ appr }} approved{% endif %}{% endif %}. Green marks are the things they did; "approved" comes from the sheet once Anna confirms the ticket.</div>
+    {% if status_heroes_note %}<div class="added-note">{{ status_heroes_note }}</div>{% endif %}
+    {% if status_heroes %}
+    <div class="wl-tools">
+      <input type="search" class="wl-search" id="hr-search" placeholder="Search name, company, city, conference, approved / pending" autocomplete="off">
+      <span class="wl-count" id="hr-count"></span>
+    </div>
+    <div class="wl" id="hr">
+      <table>
+        <thead><tr><th>When</th><th>Hero</th><th>Event</th><th>Did</th><th>Proof</th><th>Ticket</th></tr></thead>
+        <tbody>
+        {% for h in status_heroes %}
+        <tr class="wl-row" data-s="{{ h.search }}">
+          <td class="wl-when">{{ h.when }}</td>
+          <td class="wl-who">{% if h.linkedin %}<a href="{{ h.linkedin }}" target="_blank" rel="noopener">{{ h.name }}</a>{% else %}{{ h.name }}{% endif %}{% if h.company %}<small>{{ h.company }}</small>{% endif %}</td>
+          <td class="wl-for"><a href="{{ h.event_url }}">{{ h.event }}</a><small>{{ h.city }}{% if h.event_date %} · {{ h.event_date }}{% endif %}</small></td>
+          <td><div class="hr-marks">{% for m in h.marks %}<span class="{{ 'on' if m.done }}" title="{{ m.title }}">{% if m.url %}<a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.label }}</a>{% else %}{{ m.label }}{% endif %}</span>{% endfor %}</div></td>
+          <td class="hr-proof">{% for l in h.links %}<a href="{{ l }}" target="_blank" rel="noopener" title="{{ l }}">link {{ loop.index }}</a>{% if not loop.last %} · {% endif %}{% endfor %}{% if h.screenshots %}{% if h.links %} · {% endif %}{{ h.screenshots }} shot{{ '' if h.screenshots == 1 else 's' }}{% endif %}{% if not h.links and not h.screenshots %}<span style="color:#bbb">none</span>{% endif %}</td>
+          <td>{% if h.approved %}<span class="hr-approved">approved</span>{% else %}<span class="hr-pending">pending</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <div class="wl-empty" id="hr-empty" hidden>Nobody matches that.</div>
+    </div>
+    {% elif not status_heroes_note %}<div class="allclear"><span class="count ok">No reports yet &#128077;</span></div>{% endif %}
+  </section>
   <section class="spons">
     <h2>Sponsors</h2>
     <div class="sub">Confirmed sponsors added to the website{% if status_rows %}: <strong>{{ status_rows | sum(attribute='sponsors') }}</strong> across {{ status_rows | length }} upcoming events{% endif %}.</div>
@@ -578,7 +616,7 @@
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
   var tabs = document.querySelectorAll('.tabs button'); if (!tabs.length) return;
-  var secs = { regs: document.querySelector('section.regs'), speakers: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks'), waitlist: document.querySelector('section.waitlist') };
+  var secs = { regs: document.querySelector('section.regs'), speakers: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks'), waitlist: document.querySelector('section.waitlist'), heroes: document.querySelector('section.heroes') };
   document.documentElement.classList.add('tabbed');
   var nav = document.querySelector('.tabs'), pill = document.createElement('span');   // bouncing pill (Marek 2026-09-18)
   pill.className = 'tab-pill'; pill.setAttribute('aria-hidden', 'true');
@@ -757,10 +795,10 @@
 })();
 </script>
 <script>
-(function () {                                     // Waitlist search + show-placed (Marek 2026-09-22)
-  var box = document.getElementById('wl-search'); if (!box) return;
-  var wrap = document.getElementById('wl'), rows = wrap.querySelectorAll('tr.wl-row'), count = document.getElementById('wl-count'),
-      empty = document.getElementById('wl-empty'), toggle = document.getElementById('wl-show-placed');
+function tableSearch(boxId, wrapId, countId, emptyId, toggleId) {   // Waitlist + Heroes search (Marek 2026-09-22)
+  var box = document.getElementById(boxId); if (!box) return;
+  var wrap = document.getElementById(wrapId), rows = wrap.querySelectorAll('tr.wl-row'), count = document.getElementById(countId),
+      empty = document.getElementById(emptyId), toggle = toggleId ? document.getElementById(toggleId) : null;
   function apply() {
     var words = box.value.toLowerCase().split(/\s+/).filter(Boolean), shown = 0;
     for (var i = 0; i < rows.length; i++) {
@@ -775,7 +813,9 @@
   box.addEventListener('input', apply);
   if (toggle) toggle.addEventListener('change', function () { wrap.classList.toggle('show-placed', toggle.checked); apply(); });
   apply();
-})();
+}
+tableSearch('wl-search', 'wl', 'wl-count', 'wl-empty', 'wl-show-placed');
+tableSearch('hr-search', 'hr', 'hr-count', 'hr-empty', null);
 </script>
 </body>
 </html>
