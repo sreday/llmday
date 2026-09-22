@@ -13,7 +13,10 @@
   <style>
     :root { --accent: {{ status_color }}; --critical: #d63031; --bad: #f4a58a; --neutral: #9aa0a6; --good: #2ecc40; --nailed: #e6b400; }
     html, body { margin: 0; background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
-    .wrap { max-width: 1040px; margin: 0 auto; padding: 44px 20px 80px; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 44px 20px 80px; position: relative; }
+    /* The brand's 404 mascot keeps an eye on the numbers from the top-right corner (Marek 2026-09-22); hidden on phones */
+    .mascot { position: absolute; top: 34px; right: 28px; height: 150px; width: auto; pointer-events: none; user-select: none; }
+    @media (max-width: 720px) { .mascot { display: none; } }
     .brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
     h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.8rem; margin: 0 0 6px; }
     .sub { color: #666; font-size: .92rem; margin-bottom: 24px; }
@@ -299,6 +302,7 @@
 </div>
 {% endif %}
 <main class="wrap">
+  <img class="mascot" src="/assets/images/404.png" alt="" aria-hidden="true">
   <div class="brand">{{ brand_name }} · status</div>
   <h1>Upcoming conferences</h1>
   <div class="sub">Confirmed talks, standardized {{ status_slots }} talks per track. Check start/end time to decide if we should accept more.</div>
