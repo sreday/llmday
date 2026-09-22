@@ -88,7 +88,9 @@
   <div class="ft-brand">{{ brand_name }} · speakers · waitlist</div>
   <h1 class="ft-title">Waitlist for {{ waitlist_event.event_name }}</h1>
   <div class="ft-sub">{{ waitlist_event.date }} · {{ waitlist_event.city }} · <a href="{{ waitlist_event.event_url }}" target="_blank" rel="noopener">event page</a></div>
-  <p class="ft-intro"><strong>We reached out to you about speaking at {{ waitlist_event.event_name }}, but the speaking slots filled up in the meantime.</strong> Please drop us your talk information below and we will email you as soon as a new {{ brand_name }} conference opens up. Your proposal stays on our waitlist and goes in front of the next lineup.</p>
+  <p class="ft-intro"><strong>We reached out to you about speaking at {{ waitlist_event.event_name }}, but the speaking slots filled up in the meantime.</strong></p>
+  <p class="ft-intro">Please share talk information below and we'll email you as soon as a new {{ brand_name }} conference is announced in your area. Your proposal stays on our waitlist and goes in front of the next lineup.</p>
+  <p class="ft-intro">If you'd like to attend the conference you're waitlisted for, you can do so with the code <strong>LUCKYFREE</strong> here: <a href="{{ waitlist_event.rsvp_url }}" target="_blank" rel="noopener">RSVP link</a></p>
 
   <form id="ft-form" novalidate>
     <div class="ft-card ft-invite">

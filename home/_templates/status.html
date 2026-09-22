@@ -480,7 +480,7 @@
   </section>
   <section class="waitlist">
     <h2>Waitlist</h2>
-    <div class="sub">Speakers who applied after a lineup was full, newest first{% if status_waitlist %}: <strong>{{ status_waitlist_waiting }}</strong> waiting{% if status_waitlist_placed %}, {{ status_waitlist_placed }} since placed{% endif %}{% endif %}. As of the last build; someone disappears once they are in a later {{ brand_name }} lineup.</div>
+    <div class="sub">Speakers who applied after a lineup was full, newest first{% if status_waitlist %}: <strong>{{ status_waitlist_waiting }}</strong> waiting{% if status_waitlist_placed %}, {{ status_waitlist_placed }} since placed{% endif %}{% endif %}. They are removed as they make it to a lineup.</div>
     {% if status_waitlist_note %}<div class="added-note">{{ status_waitlist_note }}</div>{% endif %}
     {% if status_waitlist %}
     <div class="wl-tools">
