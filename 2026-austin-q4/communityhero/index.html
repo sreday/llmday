@@ -107,7 +107,7 @@
 
     <div class="ch-card">
       <div class="ch-step"><i>3</i><h2>Your post</h2><small>LinkedIn, X, Bluesky, wherever your people are</small></div>
-      <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button><button type="button" data-v="story">Personal</button></div>
+      <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="pro">Question</button><button type="button" data-v="friendly">Countdown</button><button type="button" data-v="story">What, where, when, why</button></div>
       <textarea class="ch-text" id="ch-post" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-post">Copy the post</button><span class="ch-copied" id="ch-post-copied"></span></div>
       <div class="ch-hint">Edit anything you like before posting. The three versions restart from your details in step 1.</div>
@@ -151,7 +151,7 @@
 
 <script>
 var CH_URL = "https://script.google.com/macros/s/AKfycbyeW8C7ZfEjrELd0-GHy4p-fiBYTyBGsPkJ-M7uNkoD69Xk8UyhIUBfl7u67eQIfmPG/exec";
-var E = {"attendees": 100, "banner": "/assets/images/events/llmday-2026-austin-q4.png", "blurb_short": "LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning.", "brand": "llmday", "brand_color": "#26986A", "brand_name": "LLMday", "city": "Austin", "companies": ["7-Eleven", "Amazon Lab126", "Apex Systems", "Dell Technologies", "Genomenon", "Isiro AI"], "date": "October 14, 2026", "event_name": "LLMday Austin 2026 Q4", "event_url": "https://www.llmday.com/2026-austin-q4/", "keynotes": [], "month_day": "October 14", "slug": "2026-austin-q4", "speakers_n": 15, "tickets_url": "https://www.llmday.com/2026-austin-q4/#tickets", "topics": ["Large Language Models", "AI Agents", "Machine Learning", "AI Engineering", "LLMOps \u0026 AI Infrastructure"], "venue_name": "The Sunset Room"};
+var E = {"attendees": 100, "banner": "/assets/images/events/llmday-2026-austin-q4.png", "blurb_short": "LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning.", "brand": "llmday", "brand_color": "#26986A", "brand_name": "LLMday", "city": "Austin", "companies": ["7-Eleven", "Amazon Lab126", "Apex Systems", "Dell Technologies", "Genomenon", "Isiro AI"], "date": "October 14, 2026", "event_name": "LLMday Austin 2026 Q4", "event_url": "https://www.llmday.com/2026-austin-q4/", "keynotes": [], "month_day": "October 14", "slug": "2026-austin-q4", "speakers_n": 15, "tickets_url": "https://www.llmday.com/2026-austin-q4/#tickets", "topic_talks": [{"category": "Large Language Models", "talks": [{"company": "Today Mechanic", "speaker": "Geoff Niehaus", "title": "One LLM Call Is the Wrong Default"}, {"company": "Genomenon", "speaker": "Maryam Astero", "title": "One Thing, Many Names: Building Reliable Entity Mapping"}]}, {"category": "AI Agents", "talks": [{"company": "7-Eleven", "speaker": "Rahul Azmeera", "title": "Visual AI Testing Agent: Screenshot-First Mobile UI Test Automation for iOS Simulator"}, {"company": "Puplampu Consulting", "speaker": "Rodney Richard Puplampu", "title": "Ogummaa Agent Portal. Architecture \u0026 Security Blueprint for Long-Horizon Agents"}, {"company": "Superbuilders", "speaker": "Matt Barge", "title": "Selling Commercial Real Estate with Grok Bot"}]}, {"category": "Machine Learning", "talks": [{"company": "RiskScout", "speaker": "Colby Mainard", "title": "Invisible Data - The Largest Problem Facing AI"}]}, {"category": "AI Engineering", "talks": [{"company": "Dell Technologies", "speaker": "Yuri Streciwik", "title": "The Inference Tax: Why Your Token Costs Stop Making Sense at Scale"}]}, {"category": "LLMOps \u0026 AI Infrastructure", "talks": [{"company": "Isiro AI", "speaker": "Kunle Olutomilayo", "title": "30% More GPU Headroom, No Quantization"}]}, {"category": "Evaluation \u0026 Testing", "talks": [{"company": "Upheal", "speaker": "Leila Anderson", "title": "Evaluation Without Ground Truth: Lessons from Expert Disagreement"}, {"company": "Nelix", "speaker": "Felix Njeh", "title": "Your AI Passed the Demo. But Did It Pass Validation?"}, {"company": "Mysten Labs", "speaker": "Jessie Mongeon", "title": "AI Eval Pipelines for Documentation Quality and Competitor Analysis"}]}], "topics": ["Large Language Models", "AI Agents", "Machine Learning", "AI Engineering", "LLMOps \u0026 AI Infrastructure"], "venue_name": "The Sunset Room"};
 var $ = function (id) { return document.getElementById(id); };
 var form = $('ch-form');
 function val(k) { return (form.elements[k].value || '').trim(); }
@@ -160,40 +160,75 @@ function list(arr, max) { arr = (arr || []).slice(0, max || 3); if (!arr.length)
 function lower(s) { return (s || '').charAt(0).toLowerCase() + (s || '').slice(1); }
 
 // ---- facts that make the wording specific -------------------------------------------------
-var topics = list(E.topics, 3), topics2 = list(E.topics, 2), companies = list(E.companies, 3), keynotes = list(E.keynotes, 2);
-var speakersLine = E.speakers_n >= 5 ? E.speakers_n + '+ speakers' : 'a lineup of practitioners';
-var attendeesLine = E.attendees ? E.attendees + '+ people' : 'a full room';
-var where = E.venue_name ? E.venue_name + ' in ' + E.city : E.city;
+// Posts follow the team's own LinkedIn formats (read 2026-09-22): the company pages' bold question headline +
+// "What's coming up?" + one 🎙️ line per speaker, Mark's countdown post, Aleksandra's WHAT / WHERE / WHEN / WHY.
+// Messages sell the event on who presents on what, taken from the About panel (E.topic_talks), never on "it's cool".
+function bold(s) {                                 // the Unicode bold sans-serif the team uses for headlines
+  var out = '';
+  for (var i = 0; i < s.length; i++) {
+    var c = s.charCodeAt(i);
+    if (c >= 65 && c <= 90) out += String.fromCodePoint(0x1D5D4 + c - 65);
+    else if (c >= 97 && c <= 122) out += String.fromCodePoint(0x1D5EE + c - 97);
+    else if (c >= 48 && c <= 57) out += String.fromCodePoint(0x1D7EC + c - 48);
+    else out += s[i];
+  }
+  return out;
+}
+var TALKS = [];                                    // [{speaker, company, title, topic}] in About order, company required
+(E.topic_talks || []).forEach(function (t) { (t.talks || []).forEach(function (x) { if (x.company && x.title) TALKS.push({ speaker: x.speaker, company: x.company, title: x.title, topic: t.category }); }); });
+var companies = list(E.companies, 3), where = E.venue_name ? (E.venue_name.toLowerCase().indexOf(E.city.toLowerCase()) === -1 ? E.venue_name + ', ' + E.city : E.venue_name) : E.city, topic1 = (E.topics || [])[0] || E.event_name;
+function pickTalks(n) {                            // talks close to the hero's "why" first, then one per topic, one per company
+  var words = val('why').toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length >= 4; });
+  function score(t) { var h = (t.title + ' ' + t.topic).toLowerCase(), s = 0; words.forEach(function (w) { if (h.indexOf(w) !== -1) s++; }); return s; }
+  var pool = TALKS.slice().sort(function (a, b) { return score(b) - score(a); }), out = [], topics = {}, seen = {};
+  pool.forEach(function (t) { if (out.length < n && !seen[t.company] && (score(t) > 0 || !topics[t.topic])) { out.push(t); topics[t.topic] = 1; seen[t.company] = 1; } });
+  pool.forEach(function (t) { if (out.length < n && out.indexOf(t) === -1 && !seen[t.company]) { out.push(t); seen[t.company] = 1; } });
+  return out;
+}
+function sessionLines(n) {
+  var p = pickTalks(n);
+  if (p.length >= 2) return p.map(function (t) { return '🎙️ ' + t.speaker + ' from ' + t.company + ' on ' + t.title; }).join('\n');
+  if (E.speakers_n >= 3) return '🎙️ ' + E.speakers_n + '+ speakers' + (companies ? ' from ' + companies + ' and more' : '');
+  return '🎙️ The lineup is being announced, the first speakers are on the event page';
+}
+function sessionsProse(n) {
+  var p = pickTalks(n);
+  if (p.length < 2) return E.speakers_n >= 3 ? E.speakers_n + '+ speakers' + (companies ? ' from ' + companies : '') + ' are presenting' : 'the lineup is being announced and the first speakers are already up';
+  return p.map(function (t, i) { return (i === 0 ? t.company + ' is presenting on ' : t.company + ' on ') + t.title; }).reduce(function (acc, s, i, arr) { return acc + (i === 0 ? '' : (i === arr.length - 1 ? ', and ' : ', ')) + s; }, '');
+}
 
 // ---- posts ---------------------------------------------------------------------------------
 function post(v) {
-  var name = val('name') || 'I', why = val('why').replace(/\s*[.!]+$/, '');
-  var tags = '\n\n#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
-  if (v === 'pro') {
-    return "I'll be at " + E.event_name + ' on ' + E.date + ' in ' + E.city + ' as a Community Hero.\n\n' +
-      E.blurb_short + (E.blurb_short ? ' ' : '') + 'This edition brings ' + speakersLine + (companies ? ' from ' + companies + ' and more' : '') + (topics ? ', with sessions on ' + topics : '') + '.\n\n' +
-      (why ? why + '. ' : '') + 'If you work on ' + (topics2 ? topics2 : 'this') + ', come and say hi.\n\nDetails and tickets: ' + E.event_url + tags;
+  var why = val('why').replace(/\s*[.!]+$/, '');
+  if (v === 'pro') {                               // the company pages' question post
+    return bold('Why is everyone in ' + E.city + ' talking about ' + topic1 + '?') + ' 🤔\n\n' +
+      E.event_name + ' is coming on ' + E.date + (E.venue_name ? ' at ' + E.venue_name : '') + ". What's coming up?\n\n" + sessionLines(3) + '\n\n' +
+      "I'm going as a Community Hero. Come and say hi. 🎟️ " + E.event_url;
   }
-  if (v === 'friendly') {
-    return 'Friends in ' + E.city + ': ' + E.event_name + ' is on ' + E.date + ' at ' + where + ", and I'm going.\n\n" +
-      (why ? why + '. ' : "It's the kind of day you leave with more ideas than you came with. ") + speakersLine + ', ' + attendeesLine + (topics ? ', talks on ' + topics : '') + '.\n\nJoin me: ' + E.event_url + tags;
+  if (v === 'friendly') {                          // Mark's countdown post
+    return bold(E.event_name + ' · ' + E.date + (E.venue_name ? ' · ' + E.venue_name : '')) + '\n\n' +
+      (why ? why + '.' : 'Some conferences you attend, some you go home from with a to-do list.') + ' Here is who I want to hear:\n\n' + sessionLines(3) + '\n\n' +
+      E.event_url + '\n\n#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
   }
-  return (why ? why + '. ' : 'Some conferences you attend, some you go home from with a to-do list. ') + "That's why I'm heading to " + E.event_name + ' on ' + E.date + '.\n\n' +
-    (keynotes ? 'Keynotes from ' + keynotes + ', ' : '') + (topics ? 'sessions on ' + topics + ', ' : '') + 'and a room full of people' + (companies ? ' from ' + companies : '') + " who build this stuff for a living.\n\nIf you're around " + E.city + ', grab a ticket: ' + E.event_url + tags;
+  return 'WHAT? ' + bold(E.event_name) + '\nWHERE? 📍 ' + bold(where) + '\nWHEN? 🗓️ ' + bold(E.date) + '\nWHY? 🧐 Because ' + sessionsProse(3) + ', and because the hallway track is where the real incidents get discussed.\n\n' +
+    "I'll be there as a Community Hero, come find me. " + E.event_url;
 }
 // ---- messages ------------------------------------------------------------------------------
 function msg(v) {
-  var name = val('name') || '', why = val('why').replace(/\s*[.!]+$/, '');
+  var name = val('name') || '', p = pickTalks(2), A = p[0], B = p[1], rich = p.length >= 2;
   if (v === 'pro') {
-    return 'Hi [Name],\n\n' + "I'm attending " + E.event_name + ' on ' + E.date + ' in ' + E.city + ' and thought of you. ' +
-      "It's a one-day conference: " + speakersLine + (companies ? ' from ' + companies : '') + (topics ? ' on ' + topics : '') + '. ' + E.blurb_short + '\n\n' +
-      (why ? why + '.\n\n' : '') + 'Details and tickets: ' + E.event_url + '\n\nHappy to meet there.\n\n' + name;
+    var because = rich
+      ? 'thought of you because of ' + A.topic + ': ' + A.speaker + ' from ' + A.company + ' is presenting on ' + A.title + ', and ' + B.speaker + ' from ' + B.company + ' on ' + B.title + '. ' + (E.speakers_n >= 3 ? E.speakers_n + '+ talks in total, one day.' : 'More speakers are being announced.')
+      : 'thought of you. ' + E.blurb_short + ' The lineup is being announced on the event page and the first speakers are up.';
+    return 'Hi [Name],\n\n' + "I'm going to " + E.event_name + ' on ' + E.date + ' in ' + E.city + ' and ' + because + '\n\nFull lineup and tickets: ' + E.event_url + '\n\nIf you come, we can compare notes afterwards.\n\n' + name;
   }
   if (v === 'friendly') {
-    return 'Hey [Name]!\n\nAre you around ' + E.city + ' on ' + E.date + "? I'm going to " + E.event_name + ' at ' + where + ', ' + speakersLine + (topics ? ' on ' + topics : '') + ', and it would be more fun with you there.' +
-      (why ? ' ' + why + '.' : '') + '\n\nTickets: ' + E.event_url + '\n\nLet me know and we can go together.\n\n' + name;
+    var hook = rich ? A.company + ' is talking about ' + A.title + ' and ' + B.company + ' about ' + B.title + ', which is exactly your kind of thing.' : 'The first speakers are up on the event page and it is exactly your kind of thing.';
+    return 'Hey [Name]!\n\n' + E.event_name + ', ' + E.date + ', ' + where + '. ' + hook + " I'm going, come with me?\n\n" + E.event_url + '\n\n' + name;
   }
-  return '[Name], ' + E.event_name + ', ' + E.date + ', ' + E.city + '. ' + speakersLine + (topics2 ? ', ' + topics2 : '') + ". I'm going, want to come? " + E.event_url;
+  return rich
+    ? '[Name], ' + E.date + ' in ' + E.city + ': ' + A.company + ' on ' + A.title + ', ' + B.company + ' on ' + B.title + (E.speakers_n >= 3 ? ', ' + E.speakers_n + '+ talks' : '') + ". I'm going. Coming? " + E.event_url
+    : '[Name], ' + E.event_name + ', ' + E.date + ', ' + E.city + ". I'm going, want to come? " + E.event_url;
 }
 var variant = { post: 'pro', msg: 'pro' }, edited = { post: false, msg: false };
 function render(set) {
