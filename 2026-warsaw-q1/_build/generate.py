@@ -252,6 +252,8 @@ if _os.path.exists(_og_home_meta_path):
     context.setdefault('onboarding_form_url', (_og_home_meta or {}).get('onboarding_form_url', ''))
     # speaker fast-track endpoint (hidden /fasttrack/ page; backend: _build/fasttrack-form.gs in llmday)
     context.setdefault('fasttrack_form_url', (_og_home_meta or {}).get('fasttrack_form_url', ''))
+    # speaker waitlist endpoint (hidden /waitlist/ page; backend: _build/waitlist-form.gs in llmday)
+    context.setdefault('waitlist_form_url', (_og_home_meta or {}).get('waitlist_form_url', ''))
     # speaker invitation letter endpoint (hidden /invitation/ page; backend: _build/invitation-form.gs in llmday)
     context.setdefault('invitation_form_url', (_og_home_meta or {}).get('invitation_form_url', ''))
     # sponsor onboarding endpoint (hidden /onboardsponsor/ page; backend: _build/sponsor-onboarding-form.gs in llmday)
@@ -355,6 +357,12 @@ context['fasttrack_event'] = {k: _ft_src[k] for k in ('brand', 'brand_name', 'sl
 context['fasttrack_event']['cfp_url'] = str(context.get('cfp_url', '') or '')
 context['fasttrack_event']['cfp_open'] = bool(context.get('cfp_open', True))   # closed CFP is not advertised on the fast-track page
 # ── END SPEAKER FAST TRACK ──────────────────────────────────────────────────
+
+# ── SPEAKER WAITLIST (Marek 2026-09-22): facts for the hidden /waitlist/ page - the fast track form for people we
+# reached out to after the lineup filled up (dark page, same fields; backend "Speaker waitlist" script) ──
+context.setdefault('waitlist_form_url', '')
+context['waitlist_event'] = dict(context['fasttrack_event'])
+# ── END SPEAKER WAITLIST ────────────────────────────────────────────────────
 
 # pick up the ids & photos
 for i, talk in enumerate(talks_raw):
@@ -1277,6 +1285,12 @@ _os.makedirs(BASE_FOLDER + "/fasttrack", exist_ok=True)
 with open(BASE_FOLDER + "/fasttrack/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("fasttrack.html").render(page="fasttrack.html", **context))
 print("Writing out fasttrack/index.html (hidden, not in sitemap)")
+
+# HIDDEN PAGE: /<event>/waitlist/ (lineup full: same form as the fast track, dark). Same rules as onboarding.
+_os.makedirs(BASE_FOLDER + "/waitlist", exist_ok=True)
+with open(BASE_FOLDER + "/waitlist/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("waitlist.html").render(page="waitlist.html", **context))
+print("Writing out waitlist/index.html (hidden, not in sitemap)")
 
 # HIDDEN PAGE: /<event>/invitation/ (speaker invitation letter, "convince your boss"). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/invitation", exist_ok=True)
