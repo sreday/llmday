@@ -12,7 +12,8 @@
  * ticket - nothing is automated on that side on purpose.
  *
  * Abuse guards (no passphrase - heroes use this): honeypot, daily cap (COMMUNITYHERO_DAILY property), size
- * and length caps, at most 5 screenshots of 10 MB, LinkedIn host check, event URL pinned to the brand domain.
+ * and length caps, at most 10 screenshots of 10 MB each and 20 MB in total (Gmail takes 25 MB per message),
+ * LinkedIn host check, event URL pinned to the brand domain.
  *
  * Deploy (one-time, from the Google account that sends as mark@sreday.com / mark@llmday.com / mark@platformday.com):
  *   1. https://script.google.com -> New project -> paste this file -> save as "Community hero".
@@ -42,6 +43,7 @@ var LEAD_LABEL = 'Community hero';
 var DAILY_MAX = 40;                         // reports per day
 var MAX_IMAGE_BYTES = 10 * 1024 * 1024;     // per screenshot, same cap as the page
 var MAX_SHOTS = 10;
+var MAX_TOTAL_BYTES = 20 * 1024 * 1024;    // all screenshots together; Gmail refuses messages over 25 MB
 var LIMITS = { name: 80, email: 254, company: 120, role: 120, linkedin: 300, why: 200, other: 300, proof: 2000, detail: 300 };
 var ACTIONS = [                             // key on the page -> sentence in the email; proof links are sorted under these by host
   { key: 'linkedin',  text: 'posted on LinkedIn',                                                hosts: ['linkedin.com', 'lnkd.in'] },
@@ -70,7 +72,7 @@ function doGet(e) {
     if (!token || String(p.token || '') !== token) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, rows: listHeroes() });
   }
-  return respond({ ok: true, service: 'communityhero', version: 3 });   // v3: links sorted under the actions, 10 screenshots
+  return respond({ ok: true, service: 'communityhero', version: 4 });   // v4: screenshots capped at 20 MB in total (Gmail limit)
 }
 
 function doPost(e) {
@@ -96,6 +98,8 @@ function doPost(e) {
     if (blob === 'too large') return respond({ ok: false, error: 'image too large' });
     if (blob) attachments.push(blob);
   }
+  var totalBytes = attachments.reduce(function (n, b) { return n + b.getBytes().length; }, 0);
+  if (totalBytes > MAX_TOTAL_BYTES) return respond({ ok: false, error: 'images too large' });
 
   var from = GmailApp.getAliases().indexOf(brand.from) !== -1 ? brand.from : Session.getEffectiveUser().getEmail();
   var to = TO_USER + '@' + (brand.mail_domain || brand.site);
