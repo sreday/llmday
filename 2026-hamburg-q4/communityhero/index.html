@@ -129,7 +129,7 @@
     </div>
 
     <div class="ch-card">
-      <div class="ch-step"><i>5</i><h2>Tell us what you did</h2><small>then Anna confirms your ticket</small></div>
+      <div class="ch-step"><i>5</i><h2>Tell us what you did</h2></div>
       <div class="ch-actions" id="ch-actions">
         <div class="ch-action" data-key="linkedin"><input type="checkbox" id="act-linkedin"><label class="main" for="act-linkedin">Posted on LinkedIn</label></div>
         <div class="ch-action" data-key="social"><input type="checkbox" id="act-social"><label class="main" for="act-social">Posted on X, Bluesky, Mastodon, Threads, etc.</label></div>
@@ -368,7 +368,7 @@ form.addEventListener('submit', function (ev) {
     .then(function (res) {
       if (timer) clearTimeout(timer);
       if (!res || !res.ok) { var e = new Error((res && res.error) || 'rejected'); e.res = res || {}; throw e; }
-      $('ch-done').innerHTML = '<strong>Thanks ' + first(val('name')).replace(/[<>&"]/g, '') + ', you are a hero.</strong> Your report is with Anna, and you are in copy of the email. She will confirm your ticket by replying to it.';
+      $('ch-done').innerHTML = '<strong>Thanks ' + first(val('name')).replace(/[<>&"]/g, '') + ', you are a hero.</strong> We got your report and you are in copy of the email. We&#39;ll reach out shortly.';
       form.hidden = true; $('ch-done').hidden = false; $('ch-done').scrollIntoView({ behavior: 'smooth', block: 'start' });
     })
     .catch(function (err) {
