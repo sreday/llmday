@@ -10,22 +10,25 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/theme.css">
   <style>
-    :root { --ft-accent: #26986A; --ft-danger: #ff7b6b; color-scheme: dark; }
-    html, body { background: #111318; color: #e8e8ec; font-family: 'Roboto', sans-serif; }
+    :root { --ft-accent: #26986A; --ft-danger: #ff7b6b; color-scheme: dark;
+            /* a very dark shade of the brand colour instead of plain black (Marek 2026-09-22: nobody is being blacklisted) */
+            --wl-bg: color-mix(in srgb, var(--ft-accent) 16%, #0a0b0e); --wl-card: color-mix(in srgb, var(--ft-accent) 22%, #13151a);
+            --wl-input: color-mix(in srgb, var(--ft-accent) 10%, #0a0b0e); --wl-border: color-mix(in srgb, var(--ft-accent) 40%, #2a2e39); }
+    html, body { background: var(--wl-bg); color: #e8e8ec; font-family: 'Roboto', sans-serif; }
     .ft-wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
     .ft-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--ft-accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
     .ft-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.8rem; margin: 0 0 6px; line-height: 1.2; color: #fff; }
     .ft-sub { color: #9aa0a6; font-size: .95rem; margin-bottom: 14px; }
     .ft-sub a { color: var(--ft-accent); }
     .ft-intro { color: #c9ccd3; font-size: 1rem; line-height: 1.6; margin-bottom: 26px; }
-    .ft-card { background: #1b1e26; border: 1px solid #2a2e39; border-radius: 16px; padding: 30px 34px; box-shadow: 0 4px 24px rgba(0,0,0,.45); margin-bottom: 22px; }
+    .ft-card { background: var(--wl-card); border: 1px solid var(--wl-border); border-radius: 16px; padding: 30px 34px; box-shadow: 0 4px 24px rgba(0,0,0,.45); margin-bottom: 22px; }
     .ft-section { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.05rem; margin: 30px 0 14px; color: #e8e8ec; }
     .ft-section:first-child { margin-top: 0; }
     .ft-consent { margin-top: 0; }
     .ft-submit { padding: 4px 34px 0; }
     @media (max-width: 575.98px) { .ft-submit { padding: 4px 18px 0; } }
     .ft-consent-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; cursor: pointer; font-size: .92rem; color: #c9ccd3; }
-    .ft-consent-label input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid #4a4f5c; border-radius: 4px; background: #0f1116; cursor: pointer; }
+    .ft-consent-label input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid var(--wl-border); border-radius: 4px; background: var(--wl-input); cursor: pointer; }
     .ft-consent-label input:checked { background: var(--ft-accent) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; border-color: var(--ft-accent); }
     .ft-consent-label input:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--ft-accent) 30%, transparent); }
     .ft-consent.is-invalid .ft-consent-label { color: var(--ft-danger); }
@@ -33,11 +36,11 @@
     .ft-invite { border-left: 4px solid var(--ft-accent); }
     .ft-invite .ft-field > span { font-size: .95rem; }
     .ft-co-toggle { margin-top: 14px; }
-    .ft-co-panel { margin-top: 16px; padding: 22px 24px; border-radius: 18px; background: color-mix(in srgb, var(--ft-accent) 14%, #1b1e26); border: 1px solid color-mix(in srgb, var(--ft-accent) 40%, #1b1e26); }
+    .ft-co-panel { margin-top: 16px; padding: 22px 24px; border-radius: 18px; background: color-mix(in srgb, var(--ft-accent) 14%, var(--wl-card)); border: 1px solid color-mix(in srgb, var(--ft-accent) 40%, var(--wl-card)); }
     .ft-co-panel .ft-section { margin-top: 0; color: #fff; }
-    .ft-co-panel .ft-drop { background: #0f1116; }
-    .ft-linkbtn.pill { border: 1px solid color-mix(in srgb, var(--ft-accent) 60%, #1b1e26); background: color-mix(in srgb, var(--ft-accent) 28%, #1b1e26); border-radius: 999px; padding: 7px 16px; color: #fff; }
-    .ft-linkbtn.pill:hover { background: color-mix(in srgb, var(--ft-accent) 40%, #1b1e26); text-decoration: none; }
+    .ft-co-panel .ft-drop { background: var(--wl-input); }
+    .ft-linkbtn.pill { border: 1px solid color-mix(in srgb, var(--ft-accent) 60%, var(--wl-card)); background: color-mix(in srgb, var(--ft-accent) 28%, var(--wl-card)); border-radius: 999px; padding: 7px 16px; color: #fff; }
+    .ft-linkbtn.pill:hover { background: color-mix(in srgb, var(--ft-accent) 40%, var(--wl-card)); text-decoration: none; }
     .ft-co-note { display: inline-block; margin-left: 12px; font-size: .82rem; color: #8a8f9c; vertical-align: middle; }
     .ft-linkbtn { background: none; border: none; padding: 0; color: var(--ft-accent); font: inherit; font-weight: 600; cursor: pointer; }
     .ft-linkbtn:hover { filter: brightness(.96); }
@@ -47,7 +50,7 @@
     .ft-field > span { display: block; font-size: .8rem; font-weight: 600; color: #d4d7de; margin-bottom: 6px; letter-spacing: .02em; }
     .ft-field > span small { font-weight: 400; color: #8a8f9c; }
     .ft-field input[type=text], .ft-field input[type=email], .ft-field input[type=url], .ft-field textarea {
-      width: 100%; border: 1px solid #2a2e39; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #e8e8ec; background: #0f1116; outline: none; transition: border-color .2s, box-shadow .2s; font-family: inherit;
+      width: 100%; border: 1px solid var(--wl-border); border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #e8e8ec; background: var(--wl-input); outline: none; transition: border-color .2s, box-shadow .2s; font-family: inherit;
     }
     .ft-field textarea { resize: vertical; line-height: 1.5; }
     .ft-field input:focus, .ft-field textarea:focus { border-color: var(--ft-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ft-accent) 18%, transparent); }
@@ -55,11 +58,11 @@
     .ft-hint { font-size: .8rem; color: #8a8f9c; margin-top: 6px; min-height: 1em; }
     .ft-hint.warn { color: #f0b455; }
     .ft-hint.ok { color: #5ad47a; }
-    .ft-chip { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .8rem; border: 1px solid color-mix(in srgb, var(--ft-accent) 50%, #1b1e26); background: color-mix(in srgb, var(--ft-accent) 18%, #1b1e26); color: #e8e8ec; margin-top: 6px; }
-    .ft-drop { border: 2px dashed #3a3f4c; border-radius: 12px; padding: 18px; display: flex; gap: 18px; align-items: center; cursor: pointer; transition: border-color .2s, background .2s; background: #15181f; }
-    .ft-drop:hover, .ft-drop.over { border-color: var(--ft-accent); background: color-mix(in srgb, var(--ft-accent) 12%, #15181f); }
+    .ft-chip { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .8rem; border: 1px solid color-mix(in srgb, var(--ft-accent) 50%, var(--wl-card)); background: color-mix(in srgb, var(--ft-accent) 18%, var(--wl-card)); color: #e8e8ec; margin-top: 6px; }
+    .ft-drop { border: 2px dashed var(--wl-border); border-radius: 12px; padding: 18px; display: flex; gap: 18px; align-items: center; cursor: pointer; transition: border-color .2s, background .2s; background: var(--wl-input); }
+    .ft-drop:hover, .ft-drop.over { border-color: var(--ft-accent); background: color-mix(in srgb, var(--ft-accent) 12%, var(--wl-input)); }
     .ft-drop input { display: none; }
-    .ft-thumb { width: 96px; height: 96px; border-radius: 12px; object-fit: contain; background: #0f1116; flex-shrink: 0; border: 1px solid #2a2e39; }
+    .ft-thumb { width: 96px; height: 96px; border-radius: 12px; object-fit: contain; background: var(--wl-input); flex-shrink: 0; border: 1px solid var(--wl-border); }
     .ft-drop-text { font-size: .92rem; color: #c9ccd3; line-height: 1.5; }
     .ft-drop-text b { color: var(--ft-accent); }
     .ft-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 22px; }
