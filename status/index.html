@@ -246,6 +246,7 @@
     .reg-cats em { font-style: normal; color: #999; margin-left: 5px; font-variant-numeric: tabular-nums; }
     .reg-cats u { text-decoration: none; color: #555; margin-left: 4px; font-variant-numeric: tabular-nums; cursor: help; }   /* (speakers the website lists) */
     .reg-cats .togo { margin-left: auto; color: #888; }
+    .reg-hint { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent); }   /* no luma_evt in metadata.yml yet (Marek 2026-09-22) */
     .reg-cats .togo b { background: #dfe3e8; box-shadow: inset 0 1px 1px rgba(0,0,0,.15); }
     @media (max-width: 720px) { .day { grid-template-columns: 1fr; padding: 10px 12px; } .day-head { flex-direction: row; align-items: center; gap: 10px; } .tabs button, .tab-pill { font-size: .9rem; } .tabs button { padding: 12px 10px; } .reg { grid-template-columns: 1fr; gap: 10px; } .reg-ring { justify-self: start; } .reg-cats .togo { margin-left: 0; } }
     /* ── Phones (Marek 2026-09-19: "adapt status pages for mobile, it's broken now"). Desktop is untouched. ── */
@@ -498,8 +499,8 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="fresh" data-built="2026-09-22T17:28:41+00:00" title="Not live: the numbers refresh every time the website is built">
-      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-22 17:28 UTC</span>
+    <div class="fresh" data-built="2026-09-22T17:30:28+00:00" title="Not live: the numbers refresh every time the website is built">
+      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-22 17:30 UTC</span>
     </div>
     
     
@@ -608,6 +609,7 @@
       </div>
       
       <div class="reg-bar"></div>
+      <div class="reg-cats"><span class="reg-hint">Create the event on Luma!</span></div>
       
       </div>
     </div>
@@ -631,6 +633,7 @@
       </div>
       
       <div class="reg-bar"></div>
+      <div class="reg-cats"><span class="reg-hint">Create the event on Luma!</span></div>
       
       </div>
     </div>
@@ -1225,7 +1228,7 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
   </section>
   
 
-  <div class="foot">Generated 2026-09-22 17:28 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-22 17:30 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
