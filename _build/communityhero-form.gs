@@ -41,14 +41,27 @@ var TO_USER = 'anna';                       // anna@<brand mail domain> reads th
 var LEAD_LABEL = 'Community hero';
 var DAILY_MAX = 40;                         // reports per day
 var MAX_IMAGE_BYTES = 10 * 1024 * 1024;     // per screenshot, same cap as the page
-var MAX_SHOTS = 5;
+var MAX_SHOTS = 10;
 var LIMITS = { name: 80, email: 254, company: 120, role: 120, linkedin: 300, why: 200, other: 300, proof: 2000, detail: 300 };
-var ACTIONS = [                             // key on the page -> sentence in the email
-  { key: 'linkedin',  text: 'posted about the event on LinkedIn',                          detail: 'post' },
-  { key: 'social',    text: 'posted on X, Bluesky, Mastodon or Threads',                   detail: 'post' },
-  { key: 'community', text: 'shared it in a community (Slack, Discord, WhatsApp, Meetup)', detail: 'where' },
-  { key: 'invites',   text: 'messaged friends or colleagues directly',                     detail: 'count' }
+var ACTIONS = [                             // key on the page -> sentence in the email; proof links are sorted under these by host
+  { key: 'linkedin',  text: 'posted on LinkedIn',                                                hosts: ['linkedin.com', 'lnkd.in'] },
+  { key: 'social',    text: 'posted on X, Bluesky, Mastodon, Threads, etc.',                    hosts: ['x.com', 'twitter.com', 'bsky.app', 'threads.net', 'threads.com', 'mastodon', 'mstdn', 'fosstodon', 'hachyderm', 'infosec.exchange'] },
+  { key: 'community', text: 'shared it in a community (Slack, Discord, WhatsApp, Meetup, etc.)', hosts: ['slack.com', 'discord.com', 'discord.gg', 'whatsapp.com', 'meetup.com', 't.me', 'telegram', 'reddit.com', 'facebook.com', 'lu.ma', 'luma.com'] },
+  { key: 'invites',   text: 'messaged friends or colleagues',                                    hosts: [] }
 ];
+
+// Sorts the proof links under the actions by host name; anything unrecognised ends up under "other".
+function classifyLinks(links) {
+  var out = { linkedin: [], social: [], community: [], invites: [], other: [] };
+  links.forEach(function (l) {
+    var host = '';
+    try { host = String(l).replace(/^https?:\/\//i, '').split(/[\/?#]/)[0].toLowerCase().replace(/^www\./, ''); } catch (err) { host = ''; }
+    var hit = null;
+    ACTIONS.forEach(function (a) { if (!hit && a.hosts.some(function (h) { return host === h || host.indexOf(h) !== -1; })) hit = a.key; });
+    out[hit || 'other'].push(l);
+  });
+  return out;
+}
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
@@ -57,7 +70,7 @@ function doGet(e) {
     if (!token || String(p.token || '') !== token) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, rows: listHeroes() });
   }
-  return respond({ ok: true, service: 'communityhero', version: 2 });
+  return respond({ ok: true, service: 'communityhero', version: 3 });   // v3: links sorted under the actions, 10 screenshots
 }
 
 function doPost(e) {
@@ -107,20 +120,14 @@ function doPost(e) {
 
 function composeReport(s, ev, brand, nShots) {
   var subject = s.name + ' - Community Hero - ' + ev.event_name;
-  var did = [];
+  var links = s.proof ? s.proof.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean) : [];
+  var sorted = classifyLinks(links), did = [], unmatched = sorted.other.slice();
   ACTIONS.forEach(function (a) {
     var act = s.actions[a.key];
-    if (!act || !act.done) return;
-    var line = a.text;
-    if (act.detail) {
-      if (a.detail === 'post') line += ': ' + act.detail;
-      else if (a.detail === 'count') line += ' (' + act.detail + ' people)';
-      else line += ' (' + act.detail + ')';
-    }
-    did.push(line);
+    if (!act || !act.done) { unmatched = unmatched.concat(sorted[a.key]); return; }   // links for an unticked action still get listed
+    did.push({ text: a.text, links: sorted[a.key] });
   });
-  if (s.other) did.push(s.other);
-  var links = s.proof ? s.proof.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean) : [];
+  if (s.other) did.push({ text: s.other, links: [] });
 
   var details = [['Name', s.name], ['Email', s.email], ['Company', s.company], ['Role', s.role], ['LinkedIn', s.linkedin], ['Why they come', s.why]]
     .filter(function (r) { return r[1]; });
@@ -128,8 +135,8 @@ function composeReport(s, ev, brand, nShots) {
   var text =
     'Community Hero - ' + ev.event_name + '\n\n' +
     s.name + ' says they have done this for ' + ev.event_name + ':\n' +
-    did.map(function (d) { return '- ' + d; }).join('\n') + '\n\n' +
-    (links.length ? 'Proof links:\n' + links.map(function (l) { return '- ' + l; }).join('\n') + '\n\n' : '') +
+    did.map(function (d) { return '- ' + d.text + d.links.map(function (l) { return '\n    ' + l; }).join(''); }).join('\n') + '\n\n' +
+    (unmatched.length ? 'Other links:\n' + unmatched.map(function (l) { return '- ' + l; }).join('\n') + '\n\n' : '') +
     (nShots ? nShots + ' screenshot' + (nShots === 1 ? '' : 's') + ' attached.\n\n' : '') +
     details.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n') + '\n\n' +
     'Reply to this email to confirm the ticket (the hero is in Cc).\n';
@@ -139,9 +146,11 @@ function composeReport(s, ev, brand, nShots) {
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#222">' +
     '<h2 style="display:inline-block;background:' + accent + ';color:#fff;font-size:20px;margin:0 0 18px;padding:6px 12px;border-radius:4px">Community Hero - ' + esc(ev.event_name) + '</h2>' +
     '<p style="margin:0 0 10px"><b>' + esc(s.name) + '</b> says they have done this for <a href="' + esc(ev.event_url) + '">' + esc(ev.event_name) + '</a>:</p>' +
-    '<ul style="margin:0 0 18px;padding-left:20px">' + did.map(function (d) { return '<li style="margin:3px 0">' + linkify(esc(d)) + '</li>'; }).join('') + '</ul>' +
-    (links.length ? '<p style="margin:0 0 6px;color:' + accent + ';font-weight:bold">Proof links</p><ul style="margin:0 0 18px;padding-left:20px">' +
-      links.map(function (l) { return '<li style="margin:3px 0">' + linkify(esc(l)) + '</li>'; }).join('') + '</ul>' : '') +
+    '<ul style="margin:0 0 18px;padding-left:20px">' + did.map(function (d) {
+      return '<li style="margin:3px 0">' + esc(d.text) + (d.links.length ? '<ul style="margin:2px 0 4px;padding-left:18px">' + d.links.map(function (l) { return '<li style="margin:2px 0">' + linkify(esc(l)) + '</li>'; }).join('') + '</ul>' : '') + '</li>';
+    }).join('') + '</ul>' +
+    (unmatched.length ? '<p style="margin:0 0 6px;color:' + accent + ';font-weight:bold">Other links</p><ul style="margin:0 0 18px;padding-left:20px">' +
+      unmatched.map(function (l) { return '<li style="margin:3px 0">' + linkify(esc(l)) + '</li>'; }).join('') + '</ul>' : '') +
     (nShots ? '<p style="margin:0 0 18px">' + nShots + ' screenshot' + (nShots === 1 ? '' : 's') + ' attached.</p>' : '') +
     '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:640px">' +
     details.map(function (r) {
@@ -249,9 +258,9 @@ function heroSheet() {
 
 function recordHero(s, ev, brandKey, rawEvent, nShots) {
   try {
-    var a = s.actions;
-    var mark = function (k) { return a[k] && a[k].done ? (a[k].detail || 'yes') : ''; };
-    var links = s.proof ? s.proof.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean).join(' | ') : '';
+    var a = s.actions, all = s.proof ? s.proof.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean) : [], sorted = classifyLinks(all);
+    var mark = function (k) { return a[k] && a[k].done ? (sorted[k][0] || 'yes') : ''; };   // first matching link, else yes
+    var links = all.join(' | ');
     heroSheet().appendRow([new Date().toISOString(), brandKey, clean(rawEvent.slug, 60), ev.event_name, clean(rawEvent.city, 60), clean(rawEvent.date, 40),
                            s.name, s.email, s.company, s.linkedin, mark('linkedin'), mark('social'), mark('community'), mark('invites'), s.other, links, nShots, '']);
   } catch (err) {
@@ -325,9 +334,8 @@ function testCommunityHero() {
     dry_run: true, brand: 'sreday', consent: true,
     name: 'Leon Lobo', email: 'hello@sreday.com', company: 'Oracle', role: 'Software Engineering Director',
     linkedin: 'https://www.linkedin.com/in/leonlobo27/', why: 'I want to see how other teams run agents in production',
-    actions: { linkedin: { done: true, detail: 'https://www.linkedin.com/posts/leonlobo27_sreday' }, social: { done: false, detail: '' },
-               community: { done: true, detail: 'London SRE Slack, about 400 people' }, invites: { done: true, detail: '6' } },
-    other: 'Mentioned it in our team standup', proof: 'https://www.linkedin.com/posts/leonlobo27_sreday\nhttps://example.com/thread',
+    actions: { linkedin: { done: true, detail: '' }, social: { done: false, detail: '' }, community: { done: true, detail: '' }, invites: { done: true, detail: '' } },
+    other: 'Mentioned it in our team standup', proof: 'https://www.linkedin.com/posts/leonlobo27_sreday\nhttps://bsky.app/profile/leon/post/1\nhttps://example.com/thread',
     shots: [{ b64: tiny, type: 'image/png', name: 'slack.png' }],
     event: { brand: 'sreday', brand_name: 'SREday', slug: '2026-london-q3', event_name: 'SREday London 2026 Q3', city: 'London', date: 'September 24, 2026', event_url: 'https://www.sreday.com/2026-london-q3/' }
   }) } };
