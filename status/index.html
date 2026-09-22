@@ -198,9 +198,28 @@
     @keyframes tab-squash { 0% { scale: 1 1; } 30% { scale: 1.06 .86; } 62% { scale: .97 1.06; } 82% { scale: 1.01 .98; } 100% { scale: 1 1; } }
     .tabs.has-pill button.is-active, .tabs.has-pill button.is-active:hover { background: #f1f2f4; color: #333; box-shadow: none; }
     @media (prefers-reduced-motion: reduce) { .tab-pill.squash { animation: none; } }
-    html.tabbed .regs, html.tabbed .added, html.tabbed .spons, html.tabbed .checks { display: none; margin-top: 22px; }
-    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active { display: block; }
-    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .spons h2, html.tabbed .checks h2 { display: none; }
+    html.tabbed .regs, html.tabbed .added, html.tabbed .spons, html.tabbed .checks, html.tabbed .waitlist { display: none; margin-top: 22px; }
+    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active { display: block; }
+    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .spons h2, html.tabbed .checks h2, html.tabbed .waitlist h2 { display: none; }
+    /* Waitlist tab (Marek 2026-09-22): speakers who applied after a lineup was full; search + a show-placed toggle */
+    .wl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 12px; }
+    .wl-search { flex: 1 1 260px; max-width: 420px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 999px; font: inherit; font-size: .95rem; outline: none; background: #fff; }
+    .wl-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+    .wl-count { color: #777; font-size: .85rem; }
+    .wl-placed-toggle { display: inline-flex; align-items: center; gap: 6px; color: #777; font-size: .85rem; cursor: pointer; }
+    .wl { background: #fff; border: 1px solid #e6e6e6; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,.06); overflow: hidden; }
+    .wl td small { display: block; color: #888; font-size: .8rem; margin-top: 2px; }
+    .wl .wl-when { white-space: nowrap; color: #666; font-size: .88rem; }
+    .wl .wl-who a, .wl .wl-for a { color: #222; font-weight: 600; text-decoration: none; }
+    .wl .wl-who a:hover, .wl .wl-for a:hover { color: var(--accent); }
+    .wl .wl-talk { color: #444; }
+    .wl tr.placed { display: none; }
+    .wl.show-placed tr.placed { display: table-row; opacity: .55; }
+    .wl tr.hidden { display: none !important; }
+    .wl-placed { display: block; margin-top: 4px; font-size: .78rem; color: var(--good); }
+    .wl-placed a { color: inherit; }
+    .wl-empty { padding: 18px 16px; color: #888; }
+    @media (max-width: 720px) { .wl table, .wl tbody, .wl tr, .wl td { display: block; } .wl thead { display: none; } .wl tr { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; } .wl td { padding: 2px 0; border: 0; } .wl.show-placed tr.placed { display: block; } }
     /* Sponsors tab: every upcoming event with its sponsors as built (partners excluded, same split as the event page) */
     .spons { margin-top: 34px; }
     .spons h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin: 0 0 4px; }
@@ -255,6 +274,7 @@
       details.ladder th { font-size: .62rem; letter-spacing: 0; }
       /* tabs: 2 x 2 instead of 3 + 1; the floating pill follows offsetLeft / offsetTop, so it bounces diagonally too */
       html.tabbed .tabs { display: grid; grid-template-columns: 1fr 1fr; }
+      html.tabbed .tabs button:last-child { grid-column: 1 / -1; }   /* five tabs: the odd one takes a full row */
       /* registrations card: small ring next to the name, numbers under it, bar + legend across the whole card */
       .reg { grid-template-columns: auto 1fr; grid-template-areas: "ring head" "ring nums" "bar bar" "cats cats"; gap: 2px 12px; align-items: center; }
       .reg-ring, .reg-body { display: contents; }
@@ -470,12 +490,13 @@
     <button type="button" data-tab="speakers" aria-selected="false">Speakers</button>
     <button type="button" data-tab="sponsors" aria-selected="false">Sponsors</button>
     <button type="button" data-tab="checks" aria-selected="false">Data checks</button>
+    <button type="button" data-tab="waitlist" aria-selected="false">Waitlist</button>
   </nav>
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="fresh" data-built="2026-09-22T16:32:11+00:00" title="Not live: the numbers refresh every time the website is built">
-      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-22 16:32 UTC</span>
+    <div class="fresh" data-built="2026-09-22T16:59:07+00:00" title="Not live: the numbers refresh every time the website is built">
+      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-09-22 16:59 UTC</span>
     </div>
     
     
@@ -1072,6 +1093,12 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
     </div>
     
   </section>
+  <section class="waitlist">
+    <h2>Waitlist</h2>
+    <div class="sub">Speakers who applied after a lineup was full, newest first. As of the last build; someone disappears once they are in a later LLMday lineup.</div>
+    <div class="added-note">WAITLIST_FEED is not set in this build, so the waitlist is not shown.</div>
+    
+  </section>
   
   <section class="checks">
     <h2>Data checks</h2>
@@ -1195,12 +1222,12 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
   </section>
   
 
-  <div class="foot">Generated 2026-09-22 16:32 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-09-22 16:59 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
   var tabs = document.querySelectorAll('.tabs button'); if (!tabs.length) return;
-  var secs = { regs: document.querySelector('section.regs'), speakers: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks') };
+  var secs = { regs: document.querySelector('section.regs'), speakers: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks'), waitlist: document.querySelector('section.waitlist') };
   document.documentElement.classList.add('tabbed');
   var nav = document.querySelector('.tabs'), pill = document.createElement('span');   // bouncing pill (Marek 2026-09-18)
   pill.className = 'tab-pill'; pill.setAttribute('aria-hidden', 'true');
@@ -1376,6 +1403,27 @@ Counterfactual Evaluation for Multi-Agent AI Systems · Red Hat"><strong>Leeza N
     if (busy) { e.preventDefault(); return; }
     if (d.open) { e.preventDefault(); if (reduce) { d.classList.remove('expanded'); d.open = false; } else { windUp(); } }
   });
+})();
+</script>
+<script>
+(function () {                                     // Waitlist search + show-placed (Marek 2026-09-22)
+  var box = document.getElementById('wl-search'); if (!box) return;
+  var wrap = document.getElementById('wl'), rows = wrap.querySelectorAll('tr.wl-row'), count = document.getElementById('wl-count'),
+      empty = document.getElementById('wl-empty'), toggle = document.getElementById('wl-show-placed');
+  function apply() {
+    var words = box.value.toLowerCase().split(/\s+/).filter(Boolean), shown = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var s = rows[i].getAttribute('data-s') || '', ok = true;
+      for (var j = 0; j < words.length; j++) { if (s.indexOf(words[j]) === -1) { ok = false; break; } }
+      rows[i].classList.toggle('hidden', !ok);
+      if (ok && (!rows[i].classList.contains('placed') || (toggle && toggle.checked))) shown++;
+    }
+    count.textContent = words.length ? shown + ' match' + (shown === 1 ? '' : 'es') : '';
+    empty.hidden = shown > 0;
+  }
+  box.addEventListener('input', apply);
+  if (toggle) toggle.addEventListener('change', function () { wrap.classList.toggle('show-placed', toggle.checked); apply(); });
+  apply();
 })();
 </script>
 </body>
