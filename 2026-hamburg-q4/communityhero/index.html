@@ -98,7 +98,7 @@
   <div class="ch-brand">LLMday · community heroes</div>
   <h1 class="ch-title">Community Hero at LLMday Hamburg 2026 Q4</h1>
   <div class="ch-sub">November 18, 2026 · Hamburg · <a href="https://www.llmday.com/2026-hamburg-q4/" target="_blank" rel="noopener">event page</a></div>
-  <p class="ch-intro">You applied for a Community Hero ticket to LLMday Hamburg 2026 Q4: a free seat in exchange for telling your friends about it. Everything you need is on this page. Fill in your details, grab your card, pick a post and a message, spread the word, then tell us what you did at the bottom. We&#39;ll reach out shortly after.</p>
+  <p class="ch-intro">You applied for a Community Hero ticket: free admission in exchange for helping us promote the event. Everything you need is on this page. Fill in your details, generate and grab your card, pick a post and a message to spread, then tell us what you did. We&#39;ll review your activities and confirm your free ticket!</p>
 
   <form id="ch-form" novalidate>
     <div class="ch-card">
@@ -160,7 +160,7 @@
       </div>
       <label class="ch-consent" id="ch-consent-wrap"><input type="checkbox" name="consent" value="yes"><span>I'm happy to share all the above with the organizers of LLMday Hamburg 2026 Q4.</span></label>
       <div class="ch-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-      <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Hero</button><div class="ch-error" id="ch-error" hidden></div></div>
+      <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Community Hero</button><div class="ch-error" id="ch-error" hidden></div></div>
     </div>
     </div><!-- /#ch-rest -->
   </form>
@@ -416,7 +416,7 @@ form.addEventListener('submit', function (ev) {
     })
     .catch(function (err) {
       if (timer) clearTimeout(timer);
-      btn.disabled = false; btn.textContent = 'Become a Hero';
+      btn.disabled = false; btn.textContent = 'Become a Community Hero';
       var res = err.res || {}, m;
       switch (err.message) {
         case 'invalid': m = 'The server did not accept: ' + (res.fields || []).join(', ') + '.'; break;
