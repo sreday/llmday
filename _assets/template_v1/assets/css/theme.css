@@ -47,3 +47,5 @@ html #about, html #stats, html #faq, html #sisters, html .track-section-header[i
 @keyframes nav-glow-breathe { 0%, 100% { opacity: .72; transform: scaleX(.86); } 50% { opacity: 1; transform: scaleX(1.12); } }
 .header > .branding { position: relative; z-index: 1; }   /* the bar's content stays above the light */
 @media (prefers-reduced-motion: reduce) { .nav-glow i::before { animation: none; } }
+/* Schedule timeline: talk titles without the underline, the blue stays on hover (Marek 2026-09-22) */
+.schedule-tab-content .item .content .title a.theme-link, .schedule-tab-content .item .content .title a.theme-link:hover { text-decoration: none; }
