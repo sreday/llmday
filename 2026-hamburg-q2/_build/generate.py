@@ -254,6 +254,8 @@ if _os.path.exists(_og_home_meta_path):
     context.setdefault('fasttrack_form_url', (_og_home_meta or {}).get('fasttrack_form_url', ''))
     # speaker waitlist endpoint (hidden /waitlist/ page; backend: _build/waitlist-form.gs in llmday)
     context.setdefault('waitlist_form_url', (_og_home_meta or {}).get('waitlist_form_url', ''))
+    # community hero endpoint (hidden /communityhero/ page; backend: _build/communityhero-form.gs in llmday)
+    context.setdefault('communityhero_form_url', (_og_home_meta or {}).get('communityhero_form_url', ''))
     # speaker invitation letter endpoint (hidden /invitation/ page; backend: _build/invitation-form.gs in llmday)
     context.setdefault('invitation_form_url', (_og_home_meta or {}).get('invitation_form_url', ''))
     # sponsor onboarding endpoint (hidden /onboardsponsor/ page; backend: _build/sponsor-onboarding-form.gs in llmday)
@@ -1293,6 +1295,35 @@ _os.makedirs(BASE_FOLDER + "/waitlist", exist_ok=True)
 with open(BASE_FOLDER + "/waitlist/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("waitlist.html").render(page="waitlist.html", **context))
 print("Writing out waitlist/index.html (hidden, not in sitemap)")
+
+# ── COMMUNITY HERO (Marek 2026-09-22): facts for the hidden /communityhero/ page - a free ticket in exchange for
+# telling friends: a shareable card drawn from the home banner, three post wordings and three message drafts fed by
+# the About panel, then a report that the "Community hero" script emails to Anna. Same rules as onboarding.
+context.setdefault('communityhero_form_url', '')
+_ch = dict(context['onboarding_event'])
+_ch_home = globals().get('_og_home_meta') or {}
+_ch_banner = ''
+for _ev in (_ch_home.get('events') or []) + (_ch_home.get('events_past') or []):
+    if str((_ev or {}).get('url') or '').strip('./').rstrip('/') == _ob_slug and str(_ev.get('photo_url') or '').startswith('./'):
+        _ch_banner = '/' + str(_ev['photo_url'])[2:]          # root-absolute: home assets are copied to the site root
+        break
+_ch_blurb = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', str(context.get('about_blurb') or ''))).strip()
+_ch_first = re.split(r'(?<=[.!?])\s+', _ch_blurb)[0] if _ch_blurb else ''
+context['hero_event'] = {
+    'brand': _ch['brand'], 'brand_name': _ch['brand_name'], 'brand_color': str(context.get('brand_color') or '#333'), 'slug': _ch['slug'],
+    'event_name': _ch['event_name'], 'city': _ch['city'], 'date': _ch['date'], 'month_day': _ch['month_day'],
+    'event_url': _ch['event_url'], 'tickets_url': _ch['tickets_url'], 'venue_name': _ch['venue_name'], 'attendees': _ch['attendees'],
+    'banner': _ch_banner, 'blurb_short': _ch_first,
+    'speakers_n': len(_about_talks),
+    'topics': [t['category'] for t in (context.get('about_topics') or []) if t.get('category') != '...and more'][:5],
+    'companies': list(context.get('about_companies') or [])[:6],
+    'keynotes': [k.get('name', '') for k in keynotes if k.get('name')][:3],
+}
+_os.makedirs(BASE_FOLDER + "/communityhero", exist_ok=True)
+with open(BASE_FOLDER + "/communityhero/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("communityhero.html").render(page="communityhero.html", **context))
+print("Writing out communityhero/index.html (hidden, not in sitemap)")
+# ── END COMMUNITY HERO ──────────────────────────────────────────────────────
 
 # HIDDEN PAGE: /<event>/invitation/ (speaker invitation letter, "convince your boss"). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/invitation", exist_ok=True)
