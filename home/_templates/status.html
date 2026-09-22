@@ -397,9 +397,9 @@
   <nav class="tabs" aria-label="Status sections">
     <button type="button" data-tab="regs" aria-selected="false">Registrations</button>
     <button type="button" data-tab="speakers" aria-selected="false">Speakers</button>
+    <button type="button" data-tab="waitlist" aria-selected="false">Waitlist</button>
     <button type="button" data-tab="sponsors" aria-selected="false">Sponsors</button>
     <button type="button" data-tab="checks" aria-selected="false">Data checks</button>
-    <button type="button" data-tab="waitlist" aria-selected="false">Waitlist</button>
   </nav>
 
   <section class="regs">
@@ -475,25 +475,6 @@
     {% if status_added_warnings %}<div class="added-note">{% for w in status_added_warnings %}{{ w }}{% if not loop.last %} · {% endif %}{% endfor %}</div>{% endif %}
     {% endif %}
   </section>
-  <section class="spons">
-    <h2>Sponsors</h2>
-    <div class="sub">Confirmed sponsors added to the website{% if status_rows %}: <strong>{{ status_rows | sum(attribute='sponsors') }}</strong> across {{ status_rows | length }} upcoming events{% endif %}.</div>
-    {% for r in status_rows %}
-    <div class="spon">
-      <div class="spon-head">
-        <a href="{{ r.url }}#sponsors">{{ r.name }}</a>
-        <span class="spacer"></span>
-        <small>{{ r.date }} · <strong>{{ r.sponsors }}</strong> sponsor{{ '' if r.sponsors == 1 else 's' }}</small>
-      </div>
-      {% if r.sponsor_view %}
-      <div class="spon-list">
-        {% for s in r.sponsor_view %}{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener">{% else %}<span class="chip">{% endif %}{{ s.name }}{% if s.url %}</a>{% else %}</span>{% endif %}
-        {% endfor %}
-      </div>
-      {% else %}<div class="spon-none">no sponsors yet</div>{% endif %}
-    </div>
-    {% endfor %}
-  </section>
   <section class="waitlist">
     <h2>Waitlist</h2>
     <div class="sub">Speakers who applied after a lineup was full, newest first{% if status_waitlist %}: <strong>{{ status_waitlist_waiting }}</strong> waiting{% if status_waitlist_placed %}, {{ status_waitlist_placed }} since placed{% endif %}{% endif %}. As of the last build; someone disappears once they are in a later {{ brand_name }} lineup.</div>
@@ -521,6 +502,25 @@
       <div class="wl-empty" id="wl-empty" hidden>Nobody matches that.</div>
     </div>
     {% elif not status_waitlist_note %}<div class="allclear"><span class="count ok">Nobody is waiting &#128077;</span></div>{% endif %}
+  </section>
+  <section class="spons">
+    <h2>Sponsors</h2>
+    <div class="sub">Confirmed sponsors added to the website{% if status_rows %}: <strong>{{ status_rows | sum(attribute='sponsors') }}</strong> across {{ status_rows | length }} upcoming events{% endif %}.</div>
+    {% for r in status_rows %}
+    <div class="spon">
+      <div class="spon-head">
+        <a href="{{ r.url }}#sponsors">{{ r.name }}</a>
+        <span class="spacer"></span>
+        <small>{{ r.date }} · <strong>{{ r.sponsors }}</strong> sponsor{{ '' if r.sponsors == 1 else 's' }}</small>
+      </div>
+      {% if r.sponsor_view %}
+      <div class="spon-list">
+        {% for s in r.sponsor_view %}{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener">{% else %}<span class="chip">{% endif %}{{ s.name }}{% if s.url %}</a>{% else %}</span>{% endif %}
+        {% endfor %}
+      </div>
+      {% else %}<div class="spon-none">no sponsors yet</div>{% endif %}
+    </div>
+    {% endfor %}
   </section>
   {% if status_rows %}
   <section class="checks">
