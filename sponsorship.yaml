@@ -153,6 +153,9 @@ sister_brands:
     logo: "/assets/images/conf42_sticker.png"
 
 open_source_tools:
+  - name: "Reliaburger"
+    url: "https://reliaburger.com/"
+    logo: "/assets/images/reliaburger sticker.png"
   - name: "CFP Ninja"
     url: "https://cfp.ninja/"
     logo: "/assets/images/cfpninja sticker.png"
