@@ -1012,6 +1012,16 @@ def _luma_answers(guest, pred):
     return out
 
 
+def _luma_nickname(a, b):
+    """Same surname and one first name is a prefix of the other (olu / oluwafemi, mike / michael): a shortened first
+    name scores below _LUMA_SAME on the whole string but is the same person (Marek 2026-09-23, London Q3 count)."""
+    pa, pb = a.split(), b.split()
+    if len(pa) < 2 or len(pb) < 2 or pa[-1] != pb[-1]:
+        return False
+    fa, fb = pa[0], pb[0]
+    return len(fa) >= 3 and len(fb) >= 3 and (fa.startswith(fb) or fb.startswith(fa))
+
+
 def _luma_classify(guest, speakers, domains, stems):
     """One of paid / free / speakers / sponsors, first match wins in the order speaker, sponsor, paid, free."""
     import difflib
@@ -1023,6 +1033,8 @@ def _luma_classify(guest, speakers, domains, stems):
         names.append(_luma_norm("%s %s" % (fn[0] if fn else "", ln[0] if ln else "")))
     for n in [x for x in names if x]:
         if n in speakers or any(difflib.SequenceMatcher(None, n, s).ratio() >= _LUMA_SAME for s in speakers):
+            return "speakers"
+        if any(_luma_nickname(n, s) for s in speakers):    # "Olu Oshati" registered, "Oluwafemi Oshati" on the site
             return "speakers"
     email = _luma_norm(guest.get("user_email"))
     dom = email.rsplit("@", 1)[-1] if "@" in email else ""
