@@ -115,7 +115,7 @@
             <div class="tz-talk{% if t.title|length > 70 %} tz-xlong{% elif t.title|length > 44 %} tz-long{% endif %}">{{ t.title }}</div>
             <div class="tz-by">
               <div class="tz-rule"></div>
-              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-label">{{ "Keynote by:" if t.keynote else "Session by:" }}</div>
               <div class="tz-by-name">{{ t.name }}</div>
               {% if t.organization %}<div class="tz-by-org">{{ t.organization }}</div>{% endif %}
             </div>
