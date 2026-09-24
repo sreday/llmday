@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Teasers: LLMday Bangalore 2026 Q2</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand: #26986A;
+      --accent: color-mix(in srgb, var(--brand) 45%, #9d7cff);          /* vivid line / icon purple */
+      --accent-soft: color-mix(in srgb, var(--brand) 25%, #e6d6ff);     /* light text purple */
+      --ink: #0e0d1f;
+    }
+    html, body { margin: 0; background: #f3f2f6; color: #111; font-family: 'Roboto', sans-serif; }
+    .tz-page { max-width: 1320px; margin: 0 auto; padding: 36px 20px 80px; }
+    .tz-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; margin-bottom: 22px; }
+    .tz-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; }
+    .tz-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.7rem; margin: 4px 0 0; line-height: 1.2; }
+    .tz-sub { color: #555; font-size: .95rem; margin-top: 4px; }
+    .tz-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .tz-controls label { font-size: .8rem; color: #555; display: flex; flex-direction: column; gap: 3px; }
+    .tz-controls input { font: 500 .95rem 'Roboto', sans-serif; padding: 7px 10px; border: 1px solid #cfcfd6; border-radius: 8px; width: 130px; }
+    .tz-btn { font: 600 .9rem 'Montserrat', sans-serif; padding: 10px 18px; border-radius: 999px; border: 0; background: var(--brand); color: #fff; cursor: pointer; }
+    .tz-btn:disabled { opacity: .5; cursor: default; }
+    .tz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 26px; }
+    .tz-slot { display: flex; flex-direction: column; gap: 10px; }
+    /* the preview shows the 1200px card scaled to the column width; the export renders the unscaled card */
+    .tz-frame { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.14); background: var(--ink); }
+    .tz-frame .tz-card { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+    .tz-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: .85rem; color: #555; }
+    .tz-meta b { color: #222; font-weight: 600; }
+    .tz-dl { font: 600 .8rem 'Montserrat', sans-serif; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--brand); background: #fff; color: var(--brand); cursor: pointer; white-space: nowrap; }
+    .tz-dl:hover { background: var(--brand); color: #fff; }
+
+    /* ── the card, 1200 x 1200 ────────────────────────────────────────────── */
+    .tz-card { width: 1200px; height: 1200px; position: relative; overflow: hidden; color: #fff; font-family: 'Montserrat', sans-serif;
+      background:
+        radial-gradient(60% 55% at 92% 70%, color-mix(in srgb, #c62a4a 70%, transparent) 0%, transparent 70%),
+        radial-gradient(55% 55% at 70% 20%, color-mix(in srgb, var(--brand) 85%, #6b2fd6) 0%, transparent 65%),
+        linear-gradient(160deg, #0a0c2a 0%, #171633 45%, #2a1440 100%); }
+    .tz-card::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(70% 60% at 30% 75%, rgba(10,10,30,.55), transparent 70%); }
+    .tz-card > * { position: relative; z-index: 1; }
+    .tz-logo { position: absolute; top: 60px; left: 90px; width: 820px; }
+    .tz-wordmark { font-weight: 800; font-size: 150px; line-height: 1; letter-spacing: .02em; color: transparent; -webkit-text-stroke: 4px #fff; text-transform: uppercase; white-space: nowrap; }
+    .tz-wordmark.tz-wm-long { font-size: 104px; }
+    .tz-wordmark.tz-wm-xlong { font-size: 60px; white-space: normal; line-height: 1.05; -webkit-text-stroke-width: 2.5px; letter-spacing: .04em; }
+    .tz-rule { width: 500px; height: 6px; background: var(--accent); margin: 26px 0 26px; border-radius: 3px; }
+    .tz-tagline { font-weight: 600; font-size: 36px; letter-spacing: .04em; text-transform: uppercase; color: #f1eaff; line-height: 1.15; }
+    .tz-kind { font-weight: 600; font-size: 34px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-soft); margin-top: 6px; }
+    .tz-badge { position: absolute; top: -70px; right: -70px; width: 320px; height: 320px; border-radius: 50%; background: color-mix(in srgb, var(--brand) 55%, #5b2bd6);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 70px 40px 0; box-sizing: border-box; font-weight: 800; font-size: 44px; line-height: 1.15; }
+    .tz-badge[hidden] { display: none; }
+    .tz-badge small { display: block; font-size: 40px; font-weight: 700; }
+    .tz-talk { position: absolute; top: 445px; left: 90px; right: 90px; text-align: center; font-weight: 800; font-size: 66px; line-height: 1.12; color: #e9dcff;
+      text-shadow: 0 0 28px color-mix(in srgb, var(--accent) 65%, transparent), 0 2px 6px rgba(0,0,0,.35); }
+    .tz-talk.tz-long { font-size: 54px; }
+    .tz-talk.tz-xlong { font-size: 46px; }
+    .tz-by { position: absolute; right: 420px; top: 665px; width: 520px; text-align: right; }
+    .tz-by .tz-rule { width: 280px; margin: 0 0 24px auto; }
+    .tz-by-label { font-weight: 500; font-size: 36px; color: #e6d6ff; }
+    .tz-by-name { font-weight: 800; font-size: 46px; line-height: 1.15; margin-top: 8px; }
+    .tz-by-org { font-weight: 500; font-size: 36px; color: #f1eaff; margin-top: 2px; }
+    .tz-photo { position: absolute; right: 100px; top: 590px; width: 300px; height: 300px; border-radius: 50%; overflow: hidden; background: #2b2b3c; box-shadow: 0 0 0 6px rgba(255,255,255,.08), 0 20px 50px rgba(0,0,0,.45); }
+    .tz-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; filter: grayscale(1); display: block; }
+    .tz-foot { position: absolute; left: 60px; right: 60px; bottom: 60px; height: 210px; border: 3px solid var(--accent); border-radius: 44px; background: rgba(40,20,80,.35);
+      display: flex; align-items: center; padding: 0 44px; box-sizing: border-box; gap: 28px; }
+    .tz-foot-item { display: flex; align-items: center; gap: 22px; flex: 0 0 auto; }
+    .tz-foot-item.tz-foot-place { flex: 1 1 0; min-width: 0; }
+    .tz-foot-item svg { width: 92px; height: 92px; flex: 0 0 auto; stroke: var(--accent); fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    .tz-foot-date { font-weight: 700; font-size: 34px; white-space: nowrap; }
+    .tz-foot-sep { width: 3px; height: 130px; background: var(--accent); border-radius: 2px; flex: 0 0 auto; }
+    .tz-foot-venue { font-weight: 500; font-size: 28px; line-height: 1.2; min-width: 0; flex: 1 1 auto; }
+    .tz-foot-venue .tz-foot-street { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .tz-foot-venue b { font-weight: 800; }
+    @media (max-width: 575.98px) { .tz-grid { grid-template-columns: 1fr; } .tz-controls input { width: 110px; } }
+  </style>
+</head>
+<body>
+  <div class="tz-page">
+    <div class="tz-head">
+      <div>
+        <div class="tz-brand">LLMday · teasers</div>
+        <h1 class="tz-title">LLMday Bangalore 2026 Q2</h1>
+        <div class="tz-sub">June 19, 2026 · Harness.io R&D Labs · one card per session, exported as 1500 x 1500 px PNG. Rebuilt from talks.csv on every site build. Hidden page for the team.</div>
+      </div>
+      <div class="tz-controls">
+        <label>Badge line 1<input id="tz-discount" value="" placeholder="20% OFF"></label>
+        <label>Badge line 2<input id="tz-code" value="" placeholder="SRE20"></label>
+        <button class="tz-btn" id="tz-all" type="button">Download all PNGs</button>
+      </div>
+    </div>
+
+    <div class="tz-grid">
+      
+      <div class="tz-slot">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-1" data-file="llmday-2026-bangalore-q2-shubham-jindal.png">
+            <div class="tz-logo">
+              <div class="tz-wordmark">LLM DAY</div>
+              <div class="tz-rule"></div>
+              <div class="tz-tagline">Large Language Models, Agents & AI Systems</div>
+              <div class="tz-kind">In-person conference</div>
+            </div>
+            <div class="tz-badge" data-badge hidden><span data-badge-1></span><small data-badge-2></small></div>
+            <div class="tz-talk">AI Demos Are Easy. Enterprise AI Is Not</div>
+            <div class="tz-by">
+              <div class="tz-rule"></div>
+              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-name">Shubham Jindal</div>
+              <div class="tz-by-org">Harness</div>
+            </div>
+            <div class="tz-photo"><img src="../../speakers/Shubham Jindal.png" alt="" crossorigin="anonymous"></div>
+            <div class="tz-foot">
+              <div class="tz-foot-item">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="42" rx="6"/><path d="M8 26h48M20 8v12M44 8v12"/><path d="M20 38h6M29 38h6M38 38h6M20 47h6M29 47h6M38 47h6" stroke-width="5"/></svg>
+                <div class="tz-foot-date">June 19, 2026</div>
+              </div>
+              <div class="tz-foot-sep"></div>
+              <div class="tz-foot-item tz-foot-place">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-20-17-20-32a20 20 0 0 1 40 0c0 15-20 32-20 32z"/><circle cx="32" cy="26" r="8"/></svg>
+                <div class="tz-foot-venue"><div>Harness.io R&D Labs</div><div class="tz-foot-street">Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India</div><b>BANGALORE</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>Shubham Jindal</b> · Harness · keynote</span><button class="tz-dl" type="button" data-download="1">Download PNG</button></div>
+      </div>
+      
+      <div class="tz-slot">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-2" data-file="llmday-2026-bangalore-q2-vanshika-gupta.png">
+            <div class="tz-logo">
+              <div class="tz-wordmark">LLM DAY</div>
+              <div class="tz-rule"></div>
+              <div class="tz-tagline">Large Language Models, Agents & AI Systems</div>
+              <div class="tz-kind">In-person conference</div>
+            </div>
+            <div class="tz-badge" data-badge hidden><span data-badge-1></span><small data-badge-2></small></div>
+            <div class="tz-talk">Attention Is the New Moat</div>
+            <div class="tz-by">
+              <div class="tz-rule"></div>
+              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-name">Vanshika Gupta</div>
+              <div class="tz-by-org">ViralCircle</div>
+            </div>
+            <div class="tz-photo"><img src="../../speakers/Vanshika Gupta.png" alt="" crossorigin="anonymous"></div>
+            <div class="tz-foot">
+              <div class="tz-foot-item">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="42" rx="6"/><path d="M8 26h48M20 8v12M44 8v12"/><path d="M20 38h6M29 38h6M38 38h6M20 47h6M29 47h6M38 47h6" stroke-width="5"/></svg>
+                <div class="tz-foot-date">June 19, 2026</div>
+              </div>
+              <div class="tz-foot-sep"></div>
+              <div class="tz-foot-item tz-foot-place">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-20-17-20-32a20 20 0 0 1 40 0c0 15-20 32-20 32z"/><circle cx="32" cy="26" r="8"/></svg>
+                <div class="tz-foot-venue"><div>Harness.io R&D Labs</div><div class="tz-foot-street">Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India</div><b>BANGALORE</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>Vanshika Gupta</b> · ViralCircle</span><button class="tz-dl" type="button" data-download="2">Download PNG</button></div>
+      </div>
+      
+      <div class="tz-slot">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-3" data-file="llmday-2026-bangalore-q2-kaustubha-shravan.png">
+            <div class="tz-logo">
+              <div class="tz-wordmark">LLM DAY</div>
+              <div class="tz-rule"></div>
+              <div class="tz-tagline">Large Language Models, Agents & AI Systems</div>
+              <div class="tz-kind">In-person conference</div>
+            </div>
+            <div class="tz-badge" data-badge hidden><span data-badge-1></span><small data-badge-2></small></div>
+            <div class="tz-talk">When Infrastructure Starts Making Decisions</div>
+            <div class="tz-by">
+              <div class="tz-rule"></div>
+              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-name">Kaustubha Shravan</div>
+              <div class="tz-by-org">Microsoft</div>
+            </div>
+            <div class="tz-photo"><img src="../../speakers/Kaustubha Shravan.png" alt="" crossorigin="anonymous"></div>
+            <div class="tz-foot">
+              <div class="tz-foot-item">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="42" rx="6"/><path d="M8 26h48M20 8v12M44 8v12"/><path d="M20 38h6M29 38h6M38 38h6M20 47h6M29 47h6M38 47h6" stroke-width="5"/></svg>
+                <div class="tz-foot-date">June 19, 2026</div>
+              </div>
+              <div class="tz-foot-sep"></div>
+              <div class="tz-foot-item tz-foot-place">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-20-17-20-32a20 20 0 0 1 40 0c0 15-20 32-20 32z"/><circle cx="32" cy="26" r="8"/></svg>
+                <div class="tz-foot-venue"><div>Harness.io R&D Labs</div><div class="tz-foot-street">Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India</div><b>BANGALORE</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>Kaustubha Shravan</b> · Microsoft</span><button class="tz-dl" type="button" data-download="3">Download PNG</button></div>
+      </div>
+      
+      <div class="tz-slot">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-4" data-file="llmday-2026-bangalore-q2-juhi-singh.png">
+            <div class="tz-logo">
+              <div class="tz-wordmark">LLM DAY</div>
+              <div class="tz-rule"></div>
+              <div class="tz-tagline">Large Language Models, Agents & AI Systems</div>
+              <div class="tz-kind">In-person conference</div>
+            </div>
+            <div class="tz-badge" data-badge hidden><span data-badge-1></span><small data-badge-2></small></div>
+            <div class="tz-talk tz-xlong">The Production Gap: Why Governing Agent Traffic Is the Key to Shipping Multi-Agent Systems</div>
+            <div class="tz-by">
+              <div class="tz-rule"></div>
+              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-name">Juhi Singh</div>
+              <div class="tz-by-org">Kong</div>
+            </div>
+            <div class="tz-photo"><img src="../../speakers/Juhi Singh.png" alt="" crossorigin="anonymous"></div>
+            <div class="tz-foot">
+              <div class="tz-foot-item">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="42" rx="6"/><path d="M8 26h48M20 8v12M44 8v12"/><path d="M20 38h6M29 38h6M38 38h6M20 47h6M29 47h6M38 47h6" stroke-width="5"/></svg>
+                <div class="tz-foot-date">June 19, 2026</div>
+              </div>
+              <div class="tz-foot-sep"></div>
+              <div class="tz-foot-item tz-foot-place">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-20-17-20-32a20 20 0 0 1 40 0c0 15-20 32-20 32z"/><circle cx="32" cy="26" r="8"/></svg>
+                <div class="tz-foot-venue"><div>Harness.io R&D Labs</div><div class="tz-foot-street">Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India</div><b>BANGALORE</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>Juhi Singh</b> · Kong</span><button class="tz-dl" type="button" data-download="4">Download PNG</button></div>
+      </div>
+      
+      <div class="tz-slot">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-5" data-file="llmday-2026-bangalore-q2-sooraj-sanker.png">
+            <div class="tz-logo">
+              <div class="tz-wordmark">LLM DAY</div>
+              <div class="tz-rule"></div>
+              <div class="tz-tagline">Large Language Models, Agents & AI Systems</div>
+              <div class="tz-kind">In-person conference</div>
+            </div>
+            <div class="tz-badge" data-badge hidden><span data-badge-1></span><small data-badge-2></small></div>
+            <div class="tz-talk tz-long">Stop Rebuilding Context: Memory Tools for LLM Agents</div>
+            <div class="tz-by">
+              <div class="tz-rule"></div>
+              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-name">Sooraj Sanker</div>
+              <div class="tz-by-org">MemexAI.Space</div>
+            </div>
+            <div class="tz-photo"><img src="../../speakers/Sooraj Sanker.png" alt="" crossorigin="anonymous"></div>
+            <div class="tz-foot">
+              <div class="tz-foot-item">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="42" rx="6"/><path d="M8 26h48M20 8v12M44 8v12"/><path d="M20 38h6M29 38h6M38 38h6M20 47h6M29 47h6M38 47h6" stroke-width="5"/></svg>
+                <div class="tz-foot-date">June 19, 2026</div>
+              </div>
+              <div class="tz-foot-sep"></div>
+              <div class="tz-foot-item tz-foot-place">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-20-17-20-32a20 20 0 0 1 40 0c0 15-20 32-20 32z"/><circle cx="32" cy="26" r="8"/></svg>
+                <div class="tz-foot-venue"><div>Harness.io R&D Labs</div><div class="tz-foot-street">Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India</div><b>BANGALORE</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>Sooraj Sanker</b> · MemexAI.Space</span><button class="tz-dl" type="button" data-download="5">Download PNG</button></div>
+      </div>
+      
+      <div class="tz-slot">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-6" data-file="llmday-2026-bangalore-q2-jones-zachariah-noel-n.png">
+            <div class="tz-logo">
+              <div class="tz-wordmark">LLM DAY</div>
+              <div class="tz-rule"></div>
+              <div class="tz-tagline">Large Language Models, Agents & AI Systems</div>
+              <div class="tz-kind">In-person conference</div>
+            </div>
+            <div class="tz-badge" data-badge hidden><span data-badge-1></span><small data-badge-2></small></div>
+            <div class="tz-talk tz-xlong">Monitoring the Agentic Loop: OTel-Driven Observability for AWS Strands on Lambda</div>
+            <div class="tz-by">
+              <div class="tz-rule"></div>
+              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-name">Jones Zachariah Noel N</div>
+              <div class="tz-by-org">New Relic</div>
+            </div>
+            <div class="tz-photo"><img src="../../speakers/Jones Zachariah Noel N.png" alt="" crossorigin="anonymous"></div>
+            <div class="tz-foot">
+              <div class="tz-foot-item">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="42" rx="6"/><path d="M8 26h48M20 8v12M44 8v12"/><path d="M20 38h6M29 38h6M38 38h6M20 47h6M29 47h6M38 47h6" stroke-width="5"/></svg>
+                <div class="tz-foot-date">June 19, 2026</div>
+              </div>
+              <div class="tz-foot-sep"></div>
+              <div class="tz-foot-item tz-foot-place">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-20-17-20-32a20 20 0 0 1 40 0c0 15-20 32-20 32z"/><circle cx="32" cy="26" r="8"/></svg>
+                <div class="tz-foot-venue"><div>Harness.io R&D Labs</div><div class="tz-foot-street">Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India</div><b>BANGALORE</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>Jones Zachariah Noel N</b> · New Relic</span><button class="tz-dl" type="button" data-download="6">Download PNG</button></div>
+      </div>
+      
+      <div class="tz-slot">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-7" data-file="llmday-2026-bangalore-q2-vishal-alhat.png">
+            <div class="tz-logo">
+              <div class="tz-wordmark">LLM DAY</div>
+              <div class="tz-rule"></div>
+              <div class="tz-tagline">Large Language Models, Agents & AI Systems</div>
+              <div class="tz-kind">In-person conference</div>
+            </div>
+            <div class="tz-badge" data-badge hidden><span data-badge-1></span><small data-badge-2></small></div>
+            <div class="tz-talk tz-xlong">Stop Building Agent Frameworks: Lessons from 12 Strands Deployments in Production</div>
+            <div class="tz-by">
+              <div class="tz-rule"></div>
+              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-name">Vishal Alhat</div>
+              <div class="tz-by-org">AWS</div>
+            </div>
+            <div class="tz-photo"><img src="../../speakers/Vishal Alhat.png" alt="" crossorigin="anonymous"></div>
+            <div class="tz-foot">
+              <div class="tz-foot-item">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="42" rx="6"/><path d="M8 26h48M20 8v12M44 8v12"/><path d="M20 38h6M29 38h6M38 38h6M20 47h6M29 47h6M38 47h6" stroke-width="5"/></svg>
+                <div class="tz-foot-date">June 19, 2026</div>
+              </div>
+              <div class="tz-foot-sep"></div>
+              <div class="tz-foot-item tz-foot-place">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-20-17-20-32a20 20 0 0 1 40 0c0 15-20 32-20 32z"/><circle cx="32" cy="26" r="8"/></svg>
+                <div class="tz-foot-venue"><div>Harness.io R&D Labs</div><div class="tz-foot-street">Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India</div><b>BANGALORE</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>Vishal Alhat</b> · AWS</span><button class="tz-dl" type="button" data-download="7">Download PNG</button></div>
+      </div>
+      
+      <div class="tz-slot">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-8" data-file="llmday-2026-bangalore-q2-roshan-piyush.png">
+            <div class="tz-logo">
+              <div class="tz-wordmark">LLM DAY</div>
+              <div class="tz-rule"></div>
+              <div class="tz-tagline">Large Language Models, Agents & AI Systems</div>
+              <div class="tz-kind">In-person conference</div>
+            </div>
+            <div class="tz-badge" data-badge hidden><span data-badge-1></span><small data-badge-2></small></div>
+            <div class="tz-talk tz-long">Rethinking Supply Chain Security in the Age of Agentic AI</div>
+            <div class="tz-by">
+              <div class="tz-rule"></div>
+              <div class="tz-by-label">Session by:</div>
+              <div class="tz-by-name">Roshan Piyush</div>
+              <div class="tz-by-org">Harness</div>
+            </div>
+            <div class="tz-photo"><img src="../../speakers/Roshan Piyush.png" alt="" crossorigin="anonymous"></div>
+            <div class="tz-foot">
+              <div class="tz-foot-item">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="42" rx="6"/><path d="M8 26h48M20 8v12M44 8v12"/><path d="M20 38h6M29 38h6M38 38h6M20 47h6M29 47h6M38 47h6" stroke-width="5"/></svg>
+                <div class="tz-foot-date">June 19, 2026</div>
+              </div>
+              <div class="tz-foot-sep"></div>
+              <div class="tz-foot-item tz-foot-place">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-20-17-20-32a20 20 0 0 1 40 0c0 15-20 32-20 32z"/><circle cx="32" cy="26" r="8"/></svg>
+                <div class="tz-foot-venue"><div>Harness.io R&D Labs</div><div class="tz-foot-street">Urban Vault, Garden Layout, Sector 2, HSR Layout, Bengaluru, Karnataka 560102, India</div><b>BANGALORE</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>Roshan Piyush</b> · Harness</span><button class="tz-dl" type="button" data-download="8">Download PNG</button></div>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    (function () {
+      // scale every 1200px card into its preview frame
+      function fit() {
+        document.querySelectorAll('.tz-frame').forEach(function (f) {
+          var w = f.clientWidth; if (!w) return;
+          f.querySelector('.tz-card').style.transform = 'scale(' + (w / 1200) + ')';
+        });
+      }
+      fit(); window.addEventListener('resize', fit); window.addEventListener('load', fit);
+      if (window.ResizeObserver) { var ro = new ResizeObserver(fit); document.querySelectorAll('.tz-frame').forEach(function (f) { ro.observe(f); }); }
+
+      // badge: both lines typed at the top, applied to every card; empty = no badge
+      var d = document.getElementById('tz-discount'), c = document.getElementById('tz-code');
+      function badge() {
+        var a = d.value.trim(), b = c.value.trim();
+        document.querySelectorAll('[data-badge]').forEach(function (el) {
+          el.hidden = !(a || b);
+          el.querySelector('[data-badge-1]').textContent = a;
+          el.querySelector('[data-badge-2]').textContent = b;
+        });
+      }
+      d.addEventListener('input', badge); c.addEventListener('input', badge); badge();
+
+      // export: render the unscaled card off-screen at its true size
+      function download(i) {
+        var card = document.getElementById('tz-card-' + i);
+        var clone = card.cloneNode(true);
+        clone.style.transform = 'none'; clone.style.position = 'fixed'; clone.style.left = '-2400px'; clone.style.top = '0';
+        document.body.appendChild(clone);
+        // scale 1.25: the 1200 px card comes out as a 1500 x 1500 PNG
+        return html2canvas(clone, { width: 1200, height: 1200, scale: 1.25, backgroundColor: null, useCORS: true }).then(function (canvas) {
+          var a = document.createElement('a'); a.download = card.getAttribute('data-file'); a.href = canvas.toDataURL('image/png'); a.click();
+        }).finally(function () { clone.remove(); });
+      }
+      document.querySelectorAll('[data-download]').forEach(function (b) {
+        b.addEventListener('click', function () { b.disabled = true; download(b.getAttribute('data-download')).finally(function () { b.disabled = false; }); });
+      });
+      var all = document.getElementById('tz-all');
+      all.addEventListener('click', function () {
+        all.disabled = true; var ids = [].map.call(document.querySelectorAll('.tz-card'), function (el) { return el.id.replace('tz-card-', ''); });
+        ids.reduce(function (p, i) { return p.then(function () { return download(i); }); }, Promise.resolve()).finally(function () { all.disabled = false; });
+      });
+    })();
+  </script>
+</body>
+</html>
