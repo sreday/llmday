@@ -35,6 +35,9 @@ jobs:
       - name: Optimize Images
         run: python _build/optimize_images.py
 
+      - name: Render teaser PNGs
+        run: python _build/render_teasers.py   # headless Chrome (preinstalled on the runner); never fails the build
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.4.0
         with:
