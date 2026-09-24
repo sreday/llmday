@@ -1290,6 +1290,57 @@ with open(BASE_FOLDER + "/fasttrack/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("fasttrack.html").render(page="fasttrack.html", **context))
 print("Writing out fasttrack/index.html (hidden, not in sitemap)")
 
+# HIDDEN PAGE: /<event>/teasers/ (one 1200x1200 social card per confirmed session, v1 2026-09-24).
+# Facts: keynotes first, then confirmed talks; title without the "Keynote:" prefix; headshot from the
+# repo (photo_url is relative to the event page, one level up from /teasers/); venue name + address
+# from the onboarding scrape; optional metadata `teaser_discount` / `teaser_code` prefill the badge.
+def _tz_slug(s):
+    return re.sub(r'[^a-z0-9]+', '-', str(s or '').lower()).strip('-')
+_tz_venue_name = str(context['onboarding_event'].get('venue_name') or '')
+_tz_venue_addr = str(context['onboarding_event'].get('venue_address') or '')
+_tz_city = str(context.get('city_name') or '')
+_tz_addr_parts = [p.strip() for p in _tz_venue_addr.split(',') if p.strip()]
+# footer = three lines: venue name / street + area + postcode (+ anything after the country, e.g. "Level -2") /
+# CITY, COUNTRY in bold. The city part is the one naming city_name; the country is the part right after it
+# when it is short (UK, USA, Germany...).
+_tz_city_idx = next((i for i, p in enumerate(_tz_addr_parts) if _tz_city and _tz_city.lower() in p.lower()), None)
+if _tz_city_idx is not None:
+    _tz_before = _tz_addr_parts[:_tz_city_idx]
+    _tz_after = _tz_addr_parts[_tz_city_idx + 1:]
+    _tz_country = _tz_after[0] if _tz_after and len(_tz_after[0].split()) <= 2 and not any(ch.isdigit() for ch in _tz_after[0]) else ''
+    _tz_rest = _tz_after[1:] if _tz_country else _tz_after
+    _tz_city_line = (_tz_addr_parts[_tz_city_idx] + (', ' + _tz_country if _tz_country else '')).upper()
+    _tz_street = ', '.join(_tz_before + _tz_rest)
+else:
+    _tz_city_line = _tz_city.upper()
+    _tz_street = ', '.join(_tz_addr_parts)
+if _tz_venue_name and _tz_street.lower().startswith(_tz_venue_name.lower()):
+    _tz_street = _tz_street[len(_tz_venue_name):].strip(' ,')
+_tz_lines = [l for l in (_tz_venue_name, _tz_street) if l]
+context['teaser_talks'] = []
+for _t in keynotes + [x for x in talks if x not in keynotes]:
+    _name = (_t.get('name') or '').strip()
+    _title = (_t.get('title') or '').strip()
+    if not _name or _name.startswith('_') or not _title:
+        continue
+    if _title.lower().startswith('keynote:'):
+        _title = _title[len('keynote:'):].strip()
+    context['teaser_talks'].append({
+        'title': _title, 'name': _name, 'organization': (_t.get('organization') or '').strip(),
+        'photo': ('../' + _t['photo_url']) if _t.get('photo_url') and str(_t['photo_url']).startswith('../') else (_t.get('photo_url') or ''),
+        'keynote': _t in keynotes, 'venue_lines': _tz_lines, 'city_line': _tz_city_line,
+        'file': '%s-%s-%s.png' % (str(context.get('brand_name', '')).lower(), _tz_slug(_ob_slug), _tz_slug(_name)),
+    })
+context.setdefault('teaser_discount', '')
+context.setdefault('teaser_code', '')
+# wordmark: the brand name split at the camel-case seam and upper-cased (SREday -> SRE DAY), drawn as outlined text like the logo
+_tz_brand = str(context.get('brand_name', ''))
+context['teaser_wordmark'] = (_tz_brand if ' ' in _tz_brand else re.sub(r'(?<=[A-Z])(?=[a-z])', ' ', _tz_brand)).upper()
+_os.makedirs(BASE_FOLDER + "/teasers", exist_ok=True)
+with open(BASE_FOLDER + "/teasers/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("teasers.html").render(page="teasers.html", **context))
+print("Writing out teasers/index.html (hidden, not in sitemap): %d cards" % len(context['teaser_talks']))
+
 # HIDDEN PAGE: /<event>/waitlist/ (lineup full: same form as the fast track, dark). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/waitlist", exist_ok=True)
 with open(BASE_FOLDER + "/waitlist/index.html", "w", encoding="utf-8") as f:
