@@ -26,6 +26,8 @@
     .tz-controls input { font: 500 .95rem 'Roboto', sans-serif; padding: 7px 10px; border: 1px solid #cfcfd6; border-radius: 8px; width: 130px; }
     .tz-btn { font: 600 .9rem 'Montserrat', sans-serif; padding: 10px 18px; border-radius: 999px; border: 0; background: var(--brand); color: #fff; cursor: pointer; }
     .tz-btn:disabled { opacity: .5; cursor: default; }
+    .tz-hint { flex-basis: 100%; font-size: .78rem; color: #777; }
+    .tz-hint code { font-size: .78rem; }
     .tz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 26px; }
     .tz-slot { display: flex; flex-direction: column; gap: 10px; }
     /* the preview shows the 1200px card scaled to the column width; the export renders the unscaled card */
@@ -33,7 +35,7 @@
     .tz-frame .tz-card { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
     .tz-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: .85rem; color: #555; }
     .tz-meta b { color: #222; font-weight: 600; }
-    .tz-dl { font: 600 .8rem 'Montserrat', sans-serif; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--brand); background: #fff; color: var(--brand); cursor: pointer; white-space: nowrap; }
+    .tz-dl { text-decoration: none; font: 600 .8rem 'Montserrat', sans-serif; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--brand); background: #fff; color: var(--brand); cursor: pointer; white-space: nowrap; }
     .tz-dl:hover { background: var(--brand); color: #fff; }
 
     /* ── the card, 1200 x 1200 ────────────────────────────────────────────── */
@@ -78,6 +80,14 @@
     .tz-foot-venue .tz-foot-street { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .tz-foot-venue b { font-weight: 800; }
     @media (max-width: 575.98px) { .tz-grid { grid-template-columns: 1fr; } .tz-controls input { width: 110px; } }
+    /* sheet mode (#sheet-<start>-<count>): what the build-time renderer screenshots - the chosen cards stacked at 1200 px, nothing else */
+    body.tz-sheet { background: #000; }
+    .tz-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
+    .tz-sheet .tz-head, .tz-sheet .tz-meta, .tz-sheet .tz-slot.tz-off, .tz-sheet .tz-empty { display: none; }
+    .tz-sheet .tz-grid { display: block; }
+    .tz-sheet .tz-slot { gap: 0; }
+    .tz-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+    .tz-sheet .tz-frame .tz-card { transform: none !important; }
   </style>
 </head>
 <body>
@@ -86,12 +96,13 @@
       <div>
         <div class="tz-brand">LLMday · teasers</div>
         <h1 class="tz-title">LLMday San Francisco 2026 Q2</h1>
-        <div class="tz-sub">April 16, 2026 · The offices of Harness.io · one card per session, exported as 1500 x 1500 px PNG. Rebuilt from talks.csv on every site build. Hidden page for the team.</div>
+        <div class="tz-sub">April 16, 2026 · The offices of Harness.io · one card per session, a 1500 x 1500 px PNG each, rendered on every site build from talks.csv. Hidden page for the team.</div>
       </div>
       <div class="tz-controls">
-        <label>Badge line 1<input id="tz-discount" value="" placeholder="20% OFF"></label>
-        <label>Badge line 2<input id="tz-code" value="" placeholder="SRE20"></label>
+        <label>Badge line 1 (preview)<input id="tz-discount" value="" placeholder="20% OFF"></label>
+        <label>Badge line 2 (preview)<input id="tz-code" value="" placeholder="SRE20"></label>
         <button class="tz-btn" id="tz-all" type="button">Download all PNGs</button>
+        <div class="tz-hint">The PNGs carry the badge from metadata.yml (<code>teaser_discount</code> / <code>teaser_code</code>); the inputs only preview it here.</div>
       </div>
     </div>
 
@@ -128,7 +139,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Sunil Gattupalle</b> · Harness · keynote</span><button class="tz-dl" type="button" data-download="1">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Sunil Gattupalle</b> · Harness · keynote</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-sunil-gattupalle.png" download="llmday-2026-san-francisco-q2-sunil-gattupalle.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -162,7 +173,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Lior Schejter</b></span><button class="tz-dl" type="button" data-download="2">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Lior Schejter</b></span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-lior-schejter.png" download="llmday-2026-san-francisco-q2-lior-schejter.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -196,7 +207,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Marta Gajowa</b> · Stealth Startup</span><button class="tz-dl" type="button" data-download="3">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Marta Gajowa</b> · Stealth Startup</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-marta-gajowa.png" download="llmday-2026-san-francisco-q2-marta-gajowa.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -230,7 +241,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>James Duffy</b> · Lantern</span><button class="tz-dl" type="button" data-download="4">Download PNG</button></div>
+        <div class="tz-meta"><span><b>James Duffy</b> · Lantern</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-james-duffy.png" download="llmday-2026-san-francisco-q2-james-duffy.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -264,7 +275,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Aoi Minamoto</b> · Aimoji Healthcare</span><button class="tz-dl" type="button" data-download="5">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Aoi Minamoto</b> · Aimoji Healthcare</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-aoi-minamoto.png" download="llmday-2026-san-francisco-q2-aoi-minamoto.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -298,7 +309,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Radhika Gundavelli</b> · Rescale</span><button class="tz-dl" type="button" data-download="6">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Radhika Gundavelli</b> · Rescale</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-radhika-gundavelli.png" download="llmday-2026-san-francisco-q2-radhika-gundavelli.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -332,7 +343,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Franck Ardourel</b> · MIDCAI</span><button class="tz-dl" type="button" data-download="7">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Franck Ardourel</b> · MIDCAI</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-franck-ardourel.png" download="llmday-2026-san-francisco-q2-franck-ardourel.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -366,7 +377,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Mamta Krishnia</b> · Walmart</span><button class="tz-dl" type="button" data-download="8">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Mamta Krishnia</b> · Walmart</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-mamta-krishnia.png" download="llmday-2026-san-francisco-q2-mamta-krishnia.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -400,7 +411,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Sandhya Subramani</b> · AWS</span><button class="tz-dl" type="button" data-download="9">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Sandhya Subramani</b> · AWS</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-sandhya-subramani.png" download="llmday-2026-san-francisco-q2-sandhya-subramani.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -434,7 +445,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Elizabeth Fuentes Leone</b> · AWS</span><button class="tz-dl" type="button" data-download="10">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Elizabeth Fuentes Leone</b> · AWS</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-elizabeth-fuentes-leone.png" download="llmday-2026-san-francisco-q2-elizabeth-fuentes-leone.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -468,7 +479,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Harshada Jivane</b> · Laurel</span><button class="tz-dl" type="button" data-download="11">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Harshada Jivane</b> · Laurel</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-harshada-jivane.png" download="llmday-2026-san-francisco-q2-harshada-jivane.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -502,7 +513,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Titus Capilnean</b> · Civic</span><button class="tz-dl" type="button" data-download="12">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Titus Capilnean</b> · Civic</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-titus-capilnean.png" download="llmday-2026-san-francisco-q2-titus-capilnean.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -536,7 +547,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Sanghamitra Deb</b> · Adobe</span><button class="tz-dl" type="button" data-download="13">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Sanghamitra Deb</b> · Adobe</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-sanghamitra-deb.png" download="llmday-2026-san-francisco-q2-sanghamitra-deb.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -570,7 +581,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Dreema Patel</b> · Adobe</span><button class="tz-dl" type="button" data-download="14">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Dreema Patel</b> · Adobe</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-dreema-patel.png" download="llmday-2026-san-francisco-q2-dreema-patel.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -604,7 +615,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Sonali Priya</b> · Local Backhaul Networks</span><button class="tz-dl" type="button" data-download="15">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Sonali Priya</b> · Local Backhaul Networks</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-sonali-priya.png" download="llmday-2026-san-francisco-q2-sonali-priya.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -638,7 +649,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Leon Adato</b> · Cribl</span><button class="tz-dl" type="button" data-download="16">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Leon Adato</b> · Cribl</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-leon-adato.png" download="llmday-2026-san-francisco-q2-leon-adato.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -672,7 +683,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Akila Balasubramanian</b> · Principal Software Engineer</span><button class="tz-dl" type="button" data-download="17">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Akila Balasubramanian</b> · Principal Software Engineer</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-akila-balasubramanian.png" download="llmday-2026-san-francisco-q2-akila-balasubramanian.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -706,7 +717,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Sebastian Gomez</b> · MLOps Lead</span><button class="tz-dl" type="button" data-download="18">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Sebastian Gomez</b> · MLOps Lead</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-sebastian-gomez.png" download="llmday-2026-san-francisco-q2-sebastian-gomez.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -740,7 +751,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Mansi More</b> · Qualitest</span><button class="tz-dl" type="button" data-download="19">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Mansi More</b> · Qualitest</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-mansi-more.png" download="llmday-2026-san-francisco-q2-mansi-more.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -774,7 +785,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Stepan Skopek</b> · Apify</span><button class="tz-dl" type="button" data-download="20">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Stepan Skopek</b> · Apify</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-stepan-skopek.png" download="llmday-2026-san-francisco-q2-stepan-skopek.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -808,7 +819,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Sujitha Vummaneni</b> · Ripple</span><button class="tz-dl" type="button" data-download="21">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Sujitha Vummaneni</b> · Ripple</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-sujitha-vummaneni.png" download="llmday-2026-san-francisco-q2-sujitha-vummaneni.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -842,7 +853,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Aswini Atibudhi</b> · Walmart</span><button class="tz-dl" type="button" data-download="22">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Aswini Atibudhi</b> · Walmart</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-aswini-atibudhi.png" download="llmday-2026-san-francisco-q2-aswini-atibudhi.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -876,7 +887,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Dwijen Kirtania</b> · Senior Staff Engineer</span><button class="tz-dl" type="button" data-download="23">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Dwijen Kirtania</b> · Senior Staff Engineer</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-dwijen-kirtania.png" download="llmday-2026-san-francisco-q2-dwijen-kirtania.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -910,7 +921,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Shiva Sankeerth Reddy Yarradla</b> · Brevian</span><button class="tz-dl" type="button" data-download="24">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Shiva Sankeerth Reddy Yarradla</b> · Brevian</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-shiva-sankeerth-reddy-yarradla.png" download="llmday-2026-san-francisco-q2-shiva-sankeerth-reddy-yarradla.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -944,7 +955,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Joe Xing</b> · AI and Data Science Advisor</span><button class="tz-dl" type="button" data-download="25">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Joe Xing</b> · AI and Data Science Advisor</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-joe-xing.png" download="llmday-2026-san-francisco-q2-joe-xing.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -978,7 +989,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Emilio Andere</b> · Wafer</span><button class="tz-dl" type="button" data-download="26">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Emilio Andere</b> · Wafer</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-emilio-andere.png" download="llmday-2026-san-francisco-q2-emilio-andere.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -1012,7 +1023,7 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>George Job</b> · Walmart Global Tech</span><button class="tz-dl" type="button" data-download="27">Download PNG</button></div>
+        <div class="tz-meta"><span><b>George Job</b> · Walmart Global Tech</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-george-job.png" download="llmday-2026-san-francisco-q2-george-job.png">Download PNG</a></div>
       </div>
       
       <div class="tz-slot">
@@ -1046,14 +1057,13 @@
             </div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>Sujithra Periasamy</b> · Google</span><button class="tz-dl" type="button" data-download="28">Download PNG</button></div>
+        <div class="tz-meta"><span><b>Sujithra Periasamy</b> · Google</span><a class="tz-dl" href="./llmday-2026-san-francisco-q2-sujithra-periasamy.png" download="llmday-2026-san-francisco-q2-sujithra-periasamy.png">Download PNG</a></div>
       </div>
       
     </div>
     
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     (function () {
       // scale every 1200px card into its preview frame
@@ -1078,24 +1088,22 @@
       }
       d.addEventListener('input', badge); c.addEventListener('input', badge); badge();
 
-      // export: render the unscaled card off-screen at its true size
-      function download(i) {
-        var card = document.getElementById('tz-card-' + i);
-        var clone = card.cloneNode(true);
-        clone.style.transform = 'none'; clone.style.position = 'fixed'; clone.style.left = '-2400px'; clone.style.top = '0';
-        document.body.appendChild(clone);
-        // scale 1.25: the 1200 px card comes out as a 1500 x 1500 PNG
-        return html2canvas(clone, { width: 1200, height: 1200, scale: 1.25, backgroundColor: null, useCORS: true }).then(function (canvas) {
-          var a = document.createElement('a'); a.download = card.getAttribute('data-file'); a.href = canvas.toDataURL('image/png'); a.click();
-        }).finally(function () { clone.remove(); });
+      // sheet mode for the build-time renderer: #sheet-<start>-<count> keeps only those cards, unscaled
+      var m = /^#sheet-(\d+)-(\d+)$/.exec(location.hash);
+      if (m) {
+        var from = +m[1], to = from + +m[2];
+        document.body.classList.add('tz-sheet');
+        document.querySelectorAll('.tz-slot').forEach(function (s, i) { if (i < from || i >= to) s.classList.add('tz-off'); });
+        document.querySelectorAll('.tz-frame .tz-card').forEach(function (c) { c.style.transform = 'none'; });
       }
-      document.querySelectorAll('[data-download]').forEach(function (b) {
-        b.addEventListener('click', function () { b.disabled = true; download(b.getAttribute('data-download')).finally(function () { b.disabled = false; }); });
-      });
+
+      // "Download all": click every card's link in turn (the browser asks once to allow multiple downloads)
       var all = document.getElementById('tz-all');
       all.addEventListener('click', function () {
-        all.disabled = true; var ids = [].map.call(document.querySelectorAll('.tz-card'), function (el) { return el.id.replace('tz-card-', ''); });
-        ids.reduce(function (p, i) { return p.then(function () { return download(i); }); }, Promise.resolve()).finally(function () { all.disabled = false; });
+        all.disabled = true;
+        var links = [].slice.call(document.querySelectorAll('a.tz-dl'));
+        links.forEach(function (a, i) { setTimeout(function () { a.click(); if (i === links.length - 1) all.disabled = false; }, i * 400); });
+        if (!links.length) all.disabled = false;
       });
     })();
   </script>
