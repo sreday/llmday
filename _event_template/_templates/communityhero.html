@@ -1,7 +1,7 @@
 {# ── Community Hero (hidden page, /<event>/communityhero/). Standalone: does NOT extend _base.html.
      One-stop shop for people who applied for a Community Hero ticket (a free seat in exchange for telling
      their friends): 1. their details incl. a photo, 2. a 1500x1500 share card drawn in the browser (brand wordmark + their photo),
-     3. three ready-made post wordings and 4. three message drafts (all fed by the event facts + the About
+     3. two ready-made post wordings and 4. two message drafts (all fed by the event facts + the About
      panel), 5. a report of what they did with links and screenshots, posted as base64 JSON to
      communityhero_form_url (home/metadata.yml; backend llmday/_build/communityhero-form.gs = "Community hero"),
      which emails Anna From the brand alias with the hero in Cc: "<Name> - Community Hero - <Event>".
@@ -142,15 +142,15 @@
 
     <div class="ch-card">
       <div class="ch-step"><i>3</i><h2>Your post</h2><small>LinkedIn, X, Bluesky, wherever your people are</small></div>
-      <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="pro">Question</button><button type="button" data-v="friendly">Countdown</button><button type="button" data-v="story">What, where, when, why</button></div>
+      <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button></div>
       <textarea class="ch-text" id="ch-post" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-post">Copy the post</button><span class="ch-copied" id="ch-post-copied"></span></div>
-      <div class="ch-hint">Edit anything you like before posting. The three versions restart from your details in step 1.</div>
+      <div class="ch-hint">Edit anything you like before posting. Both versions restart from your details in step 1.</div>
     </div>
 
     <div class="ch-card">
       <div class="ch-step"><i>4</i><h2>Your message</h2><small>email, Slack, WhatsApp, a DM</small></div>
-      <div class="ch-tabs" data-set="msg"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button><button type="button" data-v="short">Short</button></div>
+      <div class="ch-tabs" data-set="msg"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button></div>
       <textarea class="ch-text" id="ch-msg" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-msg">Copy the message</button><span class="ch-copied" id="ch-msg-copied"></span></div>
       <div class="ch-hint">Replace [Name] with your friend's name, or delete it for a group.</div>
@@ -251,8 +251,7 @@ function post(v) {
       'Some conferences you attend, some you go home from with a to-do list. Here is who I want to hear:\n\n' + sessionLines(3) + '\n\n' +
       E.event_url + '\n\n#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
   }
-  return 'WHAT? ' + bold(E.event_name) + '\nWHERE? 📍 ' + bold(where) + '\nWHEN? 🗓️ ' + bold(E.date) + '\nWHY? 🧐 Because ' + sessionsProse(3) + ', and because the hallway track is where the real incidents get discussed.\n\n' +
-    "I'll be there as a Community Hero, come find me. " + E.event_url;
+  return '';
 }
 // ---- messages ------------------------------------------------------------------------------
 // Voice = Mark's own invitation emails (read 2026-09-23): "Hey Name !", short plain lines, "Time flies", the lineup
@@ -270,9 +269,7 @@ function msg(v) {
       (rich ? 'The lineup is the reason: ' + A.company + ' on ' + A.title + ', ' + B.company + ' on ' + B.title + '. Exactly your kind of thing.' : lineup) + '\n\n' +
       'Grab your spot here: ' + E.event_url + '\n\n' + "Come with me? No hard feelings if it's not for you :-)\n\n" + name;
   }
-  return rich
-    ? '[Name], ' + E.event_name + ', ' + E.date + ', ' + E.city + '. ' + A.company + ' on ' + A.title + ', ' + B.company + ' on ' + B.title + ". I'm going, come with me? " + E.event_url
-    : '[Name], ' + E.event_name + ', ' + E.date + ', ' + E.city + ". I'm going, come with me? " + E.event_url;
+  return '';
 }
 var variant = { post: 'pro', msg: 'pro' }, edited = { post: false, msg: false };
 function render(set) {
@@ -369,42 +366,43 @@ function drawCard() {
   // navy background with a faint diagonal light
   var bg = ctx.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#08203a'); bg.addColorStop(.45, '#040d1c'); bg.addColorStop(1, '#0a1235');
   ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-  // vivid sweeps like the draft: a wide band down the right side, a wide band up the left side, thin rings that stay clear of the text
-  sweep(650, 720, 700, 150, -Math.PI * 0.35, Math.PI * 0.28, [PAL[1], PAL[0]], .6, 90);
-  sweep(560, 1100, 640, 130, Math.PI * 0.62, Math.PI * 1.25, [PAL[0], PAL[2]], .55, 80);
-  sweep(1350, 620, 470, 6, Math.PI * 0.55, Math.PI * 1.9, [PAL[1], PAL[2]], .9, 22);
-  sweep(180, 1250, 380, 4, Math.PI * 1.15, Math.PI * 2.45, [PAL[0], PAL[1]], .7, 16);
+  // two soft wide bands (right side, left side) and one thin arc in the top-right corner; all of them stay off the text
+  sweep(700, 740, 720, 150, -Math.PI * 0.18, Math.PI * 0.2, [PAL[1], PAL[0]], .5, 90);
+  sweep(560, 1120, 640, 130, Math.PI * 0.62, Math.PI * 1.22, [PAL[0], PAL[2]], .42, 80);
+  sweep(1500, 300, 330, 6, -Math.PI * 0.95, -Math.PI * 0.3, [PAL[1], PAL[2]], .8, 20);
   // vignette so the centre stays clean
-  var vg = ctx.createRadialGradient(W / 2, H * .46, 320, W / 2, H / 2, 1150); vg.addColorStop(0, 'rgba(3,8,20,0)'); vg.addColorStop(1, 'rgba(3,7,18,.6)');
+  var vg = ctx.createRadialGradient(W / 2, H * .46, 320, W / 2, H / 2, 1150); vg.addColorStop(0, 'rgba(3,8,20,0)'); vg.addColorStop(1, 'rgba(3,7,18,.55)');
   ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
   // wordmark (the brand sticker from the site) and the event line
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  if (wmOk) { ctx.save(); ctx.globalCompositeOperation = PAL[3] || 'source-over'; drawContain(wm, W / 2, 160, 700, 240); ctx.restore(); }
-  else { ctx.fillStyle = PAL[0]; ctx.font = '900 ' + fitText(E.brand_name.toUpperCase(), 900, 120, '900') + 'px Montserrat, Arial, sans-serif'; ctx.fillText(E.brand_name.toUpperCase(), W / 2, 158); }
-  ctx.fillStyle = '#eaf2ff'; var sub = (E.subtitle || E.city || '').toUpperCase();
-  ctx.font = '600 ' + fitText(sub, 1100, 40, '600') + 'px Montserrat, Arial, sans-serif'; spaced(sub, W / 2, 322, 10);
-  // the photo in a glowing gradient ring
-  var cx = W / 2, cy = 700, r = 390;
-  ctx.save(); ctx.shadowColor = PAL[1]; ctx.shadowBlur = 80; ctx.strokeStyle = ringGradient(cx, cy, r + 10); ctx.lineWidth = 14;
-  ctx.beginPath(); ctx.arc(cx, cy, r + 10, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  if (wmOk) { ctx.save(); ctx.globalCompositeOperation = PAL[3] || 'source-over'; drawContain(wm, W / 2, 150, 560, 190); ctx.restore(); }
+  else { ctx.fillStyle = PAL[0]; ctx.font = '900 ' + fitText(E.brand_name.toUpperCase(), 900, 110, '900') + 'px Montserrat, Arial, sans-serif'; ctx.fillText(E.brand_name.toUpperCase(), W / 2, 150); }
+  var sub = (E.subtitle || E.city || '').toUpperCase(), gap = 9;
+  ctx.font = '700 ' + fitText(sub, 1000 - gap * sub.length, 48, '700') + 'px Montserrat, Arial, sans-serif';
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 14; ctx.fillStyle = '#f2f6ff'; spaced(sub, W / 2, 330, gap); ctx.restore();
+  // the photo, then the gradient ring drawn over its edge so there is no gap between the two
+  var cx = W / 2, cy = 715, r = 360;
   ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
   if (photo) { var s = Math.max(2 * r / photo.width, 2 * r / photo.height), pw = photo.width * s, ph = photo.height * s; ctx.drawImage(photo, cx - pw / 2, cy - ph / 2, pw, ph); }
   else { ctx.fillStyle = '#12213a'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r); ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.font = '600 40px Montserrat, Arial, sans-serif'; ctx.fillText('Your photo goes here', cx, cy); }
   ctx.restore();
-  // the name: first name(s) in white, last name in the brand gradient
+  ctx.save(); ctx.shadowColor = PAL[1]; ctx.shadowBlur = 70; ctx.strokeStyle = ringGradient(cx, cy, r); ctx.lineWidth = 18;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  // the name: first name(s) in white, last name in the brand gradient, both lines at ONE size that fits the longer one
   var name = (val('name') || 'Your Name').toUpperCase().replace(/\s+/g, ' ').trim(), parts = name.split(' ');
   var lastName = parts.length > 1 ? parts.pop() : '', firstName = parts.join(' ');
-  var y1 = lastName ? 1170 : 1225, y2 = 1280;
-  ctx.fillStyle = '#ffffff'; ctx.font = '900 ' + fitText(firstName, 1320, 150, '900') + 'px Montserrat, Arial, sans-serif'; ctx.fillText(firstName, W / 2, y1);
+  var size = Math.min(fitText(firstName, 1180, 140, '900'), lastName ? fitText(lastName, 1180, 140, '900') : 140);
+  ctx.font = '900 ' + size + 'px Montserrat, Arial, sans-serif';
+  var mid = 1205, y1 = lastName ? mid - size * 0.44 : mid, y2 = mid + size * 0.44;
+  ctx.fillStyle = '#ffffff'; ctx.fillText(firstName, W / 2, y1);
   if (lastName) {
-    ctx.font = '900 ' + fitText(lastName, 1320, 150, '900') + 'px Montserrat, Arial, sans-serif';
     var tw = ctx.measureText(lastName).width, tg = ctx.createLinearGradient(W / 2 - tw / 2, 0, W / 2 + tw / 2, 0);
     tg.addColorStop(0, PAL[1]); tg.addColorStop(.5, PAL[0]); tg.addColorStop(1, PAL[2]); ctx.fillStyle = tg; ctx.fillText(lastName, W / 2, y2);
   }
   // the pill
-  var label = 'Community Hero'; ctx.font = '600 50px Montserrat, Arial, sans-serif';
-  var lw = ctx.measureText(label).width, pw2 = lw + 150, ph2 = 100, px = W / 2 - pw2 / 2, py = 1360;
-  ctx.save(); ctx.shadowColor = PAL[2]; ctx.shadowBlur = 40; ctx.fillStyle = 'rgba(255,255,255,.07)';
+  var label = 'Community Hero'; ctx.font = '600 48px Montserrat, Arial, sans-serif';
+  var lw = ctx.measureText(label).width, pw2 = lw + 140, ph2 = 96, px = W / 2 - pw2 / 2, py = 1362;
+  ctx.save(); ctx.shadowColor = PAL[2]; ctx.shadowBlur = 36; ctx.fillStyle = 'rgba(255,255,255,.07)';
   ctx.beginPath(); ctx.roundRect(px, py, pw2, ph2, ph2 / 2); ctx.fill();
   ctx.strokeStyle = ringGradient(W / 2, py + ph2 / 2, pw2 / 2); ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
   ctx.fillStyle = '#ffffff'; ctx.fillText(label, W / 2, py + ph2 / 2 + 2);
