@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Community Hero: LLMday London 2026 Q2</title>
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800|Roboto:300,400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800,900|Roboto:300,400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/theme.css">
   <style>
     :root { --ch-accent: #26986A; --ch-danger: #c0392b; }
@@ -38,8 +38,16 @@
     .ch-rest { animation: ch-unfold .55s ease-out; }
     @keyframes ch-unfold { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
     .ch-hint.warn { color: #b26a00; }
+    /* the photo field */
+    .ch-photo-box { display: flex; align-items: center; gap: 16px; border: 2px dashed #ccc; border-radius: 12px; padding: 12px 16px; background: #fafafa; cursor: pointer; transition: border-color .2s, background .2s; }
+    .ch-photo-box:hover, .ch-photo-box.over { border-color: var(--ch-accent); background: color-mix(in srgb, var(--ch-accent) 5%, #fff); }
+    .ch-photo-box img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid var(--ch-accent); flex-shrink: 0; }
+    .ch-photo-box input { display: none; }
+    .ch-photo-text { font-size: .92rem; color: #444; line-height: 1.5; }
+    .ch-photo-text b { color: var(--ch-accent); }
+    .ch-field.is-invalid .ch-photo-box { border-color: var(--ch-danger); }
     /* the card */
-    .ch-canvas-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #e6e6e6; background: #eee; }
+    .ch-canvas-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #e6e6e6; background: #eee; max-width: 560px; margin: 0 auto; }
     .ch-canvas-wrap canvas { width: 100%; height: auto; display: block; }
     .ch-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 16px; }
     .btn-ch { display: inline-flex; align-items: center; justify-content: center; min-width: 150px; border: none; border-radius: 999px; padding: 12px 26px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; background: var(--ch-accent); color: #fff; transition: filter .15s, transform .1s; text-decoration: none; }
@@ -81,6 +89,8 @@
     .ch-thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .ch-thumbs img { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
     .ch-consent { display: flex; align-items: flex-start; gap: 10px; margin: 18px 0 0; cursor: pointer; font-size: .92rem; color: #333; }
+    .ch-consent + .ch-consent { margin-top: 10px; }
+    .ch-consent a { color: var(--ch-accent); font-weight: 600; }
     .ch-consent input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; border: 2px solid #bbb; border-radius: 4px; background: #fff; cursor: pointer; }
     .ch-consent input:checked { background: var(--ch-accent) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; border-color: var(--ch-accent); }
     .ch-consent.is-invalid { color: var(--ch-danger); }
@@ -109,6 +119,9 @@
         <label class="ch-field" data-field="role"><span>Job title</span><input type="text" name="role" autocomplete="organization-title" maxlength="120"></label>
         <label class="ch-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
         <label class="ch-field ch-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
+        <label class="ch-field ch-wide" data-field="photo"><span>Your photo <small>(a clear headshot, it goes on your card)</small></span>
+          <div class="ch-photo-box" id="ch-photo-box"><img id="ch-photo-prev" alt="" hidden><div class="ch-photo-text" id="ch-photo-text"><b>Choose a photo</b> or drop it here. JPG or PNG, a square headshot works best, up to 10 MB.</div><input type="file" name="photo" id="ch-photo" accept="image/*"></div>
+        </label>
       </div>
       <div class="ch-row"><button type="button" class="btn-ch" id="ch-next">Next steps</button><span class="ch-hint" id="ch-next-hint">Check your details, then continue. You can still edit them later.</span></div>
     </div>
@@ -116,8 +129,8 @@
     <div id="ch-rest" class="ch-rest" hidden>
     <div class="ch-card">
       <div class="ch-step"><i>2</i><h2>Your card</h2><small>post it with your update</small></div>
-      <div class="ch-canvas-wrap"><canvas id="ch-canvas" width="1200" height="700"></canvas></div>
-      <div class="ch-row"><button type="button" class="btn-ch" id="ch-download">Download the card</button><span class="ch-hint" id="ch-card-hint">Your name goes on it as you type.</span></div>
+      <div class="ch-canvas-wrap"><canvas id="ch-canvas" width="1500" height="1500"></canvas></div>
+      <div class="ch-row"><button type="button" class="btn-ch" id="ch-download">Download the card</button><span class="ch-hint" id="ch-card-hint">Your photo and name go on it as you type. 1500 x 1500 px, ready for LinkedIn, Instagram or X.</span></div>
     </div>
 
     <div class="ch-card">
@@ -152,13 +165,14 @@
           <button type="button" class="ch-linkbtn pill" id="ch-add-link">+ Add another link</button>
         </div>
         <div class="ch-field ch-wide" data-field="shots">
-          <span>Screenshots <small>(optional, up to 10 and 20 MB in total: Slack threads, DMs, group chats. Please cover any sensitive data before uploading.)</small></span>
+          <span>Screenshots of posts and messages. Please obscure any sensitive data. <small>(optional, up to 10 and 20 MB in total)</small></span>
           <label class="ch-drop" id="ch-drop"><input type="file" name="shots" accept="image/*" multiple><div class="ch-drop-text" id="ch-drop-text"><b>Choose screenshots</b> or drop them here.</div></label>
           <div class="ch-thumbs" id="ch-thumbs"></div>
           <div class="ch-hint" id="ch-shots-hint"></div>
         </div>
       </div>
       <label class="ch-consent" id="ch-consent-wrap"><input type="checkbox" name="consent" value="yes"><span>I'm happy to share all the above with the organizers of LLMday London 2026 Q2.</span></label>
+      <label class="ch-consent" id="ch-applied-wrap"><input type="checkbox" name="applied" value="yes"><span>I already applied for the free ticket <a href="https://lu.ma/event/evt-Al1eAFlKKsJZbGO" target="_blank" rel="noopener">here</a>, I'm sending this form to prove my contribution as a Community Hero.</span></label>
       <div class="ch-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Community Hero</button><div class="ch-error" id="ch-error" hidden></div></div>
     </div>
@@ -172,7 +186,7 @@
 
 <script>
 var CH_URL = "https://script.google.com/macros/s/AKfycbyeW8C7ZfEjrELd0-GHy4p-fiBYTyBGsPkJ-M7uNkoD69Xk8UyhIUBfl7u67eQIfmPG/exec";
-var E = {"attendees": 150, "banner": "/assets/images/events/llmday-2026-london-q2.png", "blurb_short": "LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning.", "brand": "llmday", "brand_color": "#26986A", "brand_name": "LLMday", "city": "London", "companies": ["Altinity", "AWS", "Bead AI", "Bolt EU", "Chattermill", "ClearBank"], "date": "May 28, 2026", "event_name": "LLMday London 2026 Q2", "event_url": "https://www.llmday.com/2026-london-q2/", "keynotes": ["Josh Lee", "Judith Schunke"], "month_day": "May 28", "slug": "2026-london-q2", "speakers_n": 32, "tickets_url": "https://www.llmday.com/2026-london-q2/#tickets", "topic_talks": [{"category": "Large Language Models", "talks": [{"company": "Great Wave AI", "speaker": "Harrison Kirby", "title": "Operating LLMs Where Failure Isn\u2019t an Option"}, {"company": "Chattermill", "speaker": "Maciej Rzasa", "title": "Growing AI Projects: Where Science Meets Engineering"}, {"company": "", "speaker": "Andy Burgin", "title": "Llama Watching - Visualising a LLM in Action"}]}, {"category": "AI Agents", "talks": [{"company": "", "speaker": "Adefisayo Adejumo", "title": "I Locked My Laptop. My Agent Never Did"}, {"company": "Bolt EU", "speaker": "Sergey Konstantinov", "title": "The Long Road to Self-Evolving Agents"}, {"company": "Witan Labs", "speaker": "Nuno Campos", "title": "Teaching Coding Agents to Master Spreadsheets"}]}, {"category": "Machine Learning", "talks": [{"company": "Skipton Building Society", "speaker": "Chukwunonso Ikemba", "title": "Telepathy Is Just Pattern Recognition: Why Brain Signals Are Just Another Language AI Can Learn"}]}, {"category": "RAG \u0026 Knowledge Systems", "talks": [{"company": "Provio", "speaker": "Emily Phuong Nghiem", "title": "Teaching RAG to read: making charts, tables and equations reliable on individual learners\u0027 budget"}, {"company": "IBM", "speaker": "Mingxuan Zhao", "title": "Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling"}, {"company": "Typeform", "speaker": "Susanna Wong", "title": "When Software Stops Being Deterministic: Rethinking Architecture for RAG and LLM Systems"}]}, {"category": "AI Engineering", "talks": [{"company": "ClearBank", "speaker": "Russell Miles", "title": "Does AI Deliver Waterfall? An exploration of the metaphors we still live by and how they are changing with AI"}, {"company": "TheAiExpert.ai", "speaker": "Erik Schwartz", "title": "From Context To Impact: How To Ship An AI App In A Day"}, {"company": "Redis", "speaker": "Vishal Bala", "title": "Context Matters"}]}, {"category": "Evaluation \u0026 Testing", "talks": [{"company": "OctaTech", "speaker": "Richard Dosumu", "title": "LLM Evals in Production: How to Know When Your Model Is Lying to You"}, {"company": "Future Processing", "speaker": "Maciej Szymkowski", "title": "Battle of VLMs and Traditional Pipelines in Automatic Vehicle Type Classification and License Plate Recognition"}, {"company": "Pegasystems", "speaker": "Wojciech Tomasiewicz", "title": "What\u2019s Wrong With Them? How Misunderstandings (and AI) Can Become Intercultural Insight"}]}, {"category": "AI Applications \u0026 Products", "talks": [{"company": "Infonetica", "speaker": "Kate Tertiienko", "title": "When Engineers Stop Thinking: How to Make AI Serve Us, Not Replace Us"}, {"company": "The Mental Health Foundation", "speaker": "Dr David Crepaz-Keay", "title": "Building a Safe and Effective Mental Health Support Bot: The Mental Health Foundation Approach"}, {"company": "Social Discovery Group", "speaker": "Andrei Shcherbinin", "title": "Hybrid Rule+MLLLM Moderation at Scale"}]}], "topics": ["Large Language Models", "AI Agents", "Machine Learning", "RAG \u0026 Knowledge Systems", "AI Engineering"], "venue_name": "Everyman Canary Wharf"};
+var E = {"attendees": 150, "banner": "/assets/images/events/llmday-2026-london-q2.png", "blurb_short": "LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning.", "brand": "llmday", "brand_color": "#26986A", "brand_name": "LLMday", "city": "London", "companies": ["Altinity", "AWS", "Bead AI", "Bolt EU", "Chattermill", "ClearBank"], "date": "May 28, 2026", "event_name": "LLMday London 2026 Q2", "event_url": "https://www.llmday.com/2026-london-q2/", "keynotes": ["Josh Lee", "Judith Schunke"], "luma_url": "https://lu.ma/event/evt-Al1eAFlKKsJZbGO", "month_day": "May 28", "slug": "2026-london-q2", "speakers_n": 32, "subtitle": "London 2026 Q2", "tickets_url": "https://www.llmday.com/2026-london-q2/#tickets", "topic_talks": [{"category": "Large Language Models", "talks": [{"company": "Great Wave AI", "speaker": "Harrison Kirby", "title": "Operating LLMs Where Failure Isn\u2019t an Option"}, {"company": "Chattermill", "speaker": "Maciej Rzasa", "title": "Growing AI Projects: Where Science Meets Engineering"}, {"company": "", "speaker": "Andy Burgin", "title": "Llama Watching - Visualising a LLM in Action"}]}, {"category": "AI Agents", "talks": [{"company": "", "speaker": "Adefisayo Adejumo", "title": "I Locked My Laptop. My Agent Never Did"}, {"company": "Bolt EU", "speaker": "Sergey Konstantinov", "title": "The Long Road to Self-Evolving Agents"}, {"company": "Witan Labs", "speaker": "Nuno Campos", "title": "Teaching Coding Agents to Master Spreadsheets"}]}, {"category": "Machine Learning", "talks": [{"company": "Skipton Building Society", "speaker": "Chukwunonso Ikemba", "title": "Telepathy Is Just Pattern Recognition: Why Brain Signals Are Just Another Language AI Can Learn"}]}, {"category": "RAG \u0026 Knowledge Systems", "talks": [{"company": "Provio", "speaker": "Emily Phuong Nghiem", "title": "Teaching RAG to read: making charts, tables and equations reliable on individual learners\u0027 budget"}, {"company": "IBM", "speaker": "Mingxuan Zhao", "title": "Your RAG Pipeline Is Only as Good as Your Parser: Document Processing with Docling"}, {"company": "Typeform", "speaker": "Susanna Wong", "title": "When Software Stops Being Deterministic: Rethinking Architecture for RAG and LLM Systems"}]}, {"category": "AI Engineering", "talks": [{"company": "ClearBank", "speaker": "Russell Miles", "title": "Does AI Deliver Waterfall? An exploration of the metaphors we still live by and how they are changing with AI"}, {"company": "TheAiExpert.ai", "speaker": "Erik Schwartz", "title": "From Context To Impact: How To Ship An AI App In A Day"}, {"company": "Redis", "speaker": "Vishal Bala", "title": "Context Matters"}]}, {"category": "Evaluation \u0026 Testing", "talks": [{"company": "OctaTech", "speaker": "Richard Dosumu", "title": "LLM Evals in Production: How to Know When Your Model Is Lying to You"}, {"company": "Future Processing", "speaker": "Maciej Szymkowski", "title": "Battle of VLMs and Traditional Pipelines in Automatic Vehicle Type Classification and License Plate Recognition"}, {"company": "Pegasystems", "speaker": "Wojciech Tomasiewicz", "title": "What\u2019s Wrong With Them? How Misunderstandings (and AI) Can Become Intercultural Insight"}]}, {"category": "AI Applications \u0026 Products", "talks": [{"company": "Infonetica", "speaker": "Kate Tertiienko", "title": "When Engineers Stop Thinking: How to Make AI Serve Us, Not Replace Us"}, {"company": "The Mental Health Foundation", "speaker": "Dr David Crepaz-Keay", "title": "Building a Safe and Effective Mental Health Support Bot: The Mental Health Foundation Approach"}, {"company": "Social Discovery Group", "speaker": "Andrei Shcherbinin", "title": "Hybrid Rule+MLLLM Moderation at Scale"}]}], "topics": ["Large Language Models", "AI Agents", "Machine Learning", "RAG \u0026 Knowledge Systems", "AI Engineering"], "venue_name": "Everyman Canary Wharf", "wordmark": "/assets/LLMday Sticker.png"};
 var $ = function (id) { return document.getElementById(id); };
 var form = $('ch-form');
 function val(k) { return (form.elements[k].value || '').trim(); }
@@ -281,33 +295,114 @@ document.querySelectorAll('[data-copy]').forEach(function (b) {
   });
 });
 
-// ---- the card: the event's home banner + a brand ribbon with the hero's name -----------------
-var canvas = $('ch-canvas'), ctx = canvas.getContext('2d'), banner = new Image(), bannerOk = false;
-banner.onload = function () { bannerOk = true; drawCard(); };
-banner.onerror = function () { bannerOk = false; drawCard(); };
-if (E.banner) banner.src = E.banner; else setTimeout(drawCard, 0);
+// ---- the card: a 1500 x 1500 share image = the brand wordmark, the event line, the hero's own photo in a
+//      gradient ring, their name (last name in gradient) and a "Community Hero" pill on a dark canvas with
+//      glowing brand-coloured sweeps. Drawn again on every keystroke of the name and when the photo changes.
+var canvas = $('ch-canvas'), ctx = canvas.getContext('2d');
+var PALETTES = {                                   // [main, glow, accent, wordmark blend] per brand, all vivid on navy;
+  'llmday': ['#2ee6a6', '#22d3ee', '#a855f7', 'screen'],            // 'screen' drops the black die-cut backing of a sticker
+  'sreday': ['#c084fc', '#f472b6', '#38bdf8', 'source-over'],
+  'platformday': ['#fbbf24', '#f97316', '#ef4444', 'screen'],
+  'pec': ['#f59e0b', '#ef4444', '#8b5cf6', 'source-over'], 'prompt engineering conference': ['#f59e0b', '#ef4444', '#8b5cf6', 'source-over']
+};
+var PAL = PALETTES[E.brand] || [E.brand_color, '#22d3ee', '#a855f7', 'source-over'];
+var wm = new Image(), wmOk = false;
+wm.onload = function () { wmOk = true; drawCard(); };
+wm.onerror = function () { wmOk = false; drawCard(); };
+if (E.wordmark) wm.src = E.wordmark; else setTimeout(drawCard, 0);
+
+// the photo (required): kept as an Image, previewed as a round thumbnail in step 1
+var photo = null, photoBox = $('ch-photo-box'), photoInput = $('ch-photo'), photoPrev = $('ch-photo-prev'), photoText = $('ch-photo-text');
+function setPhoto(file) {
+  if (!file) return;
+  if (!/^image\//.test(file.type)) { photoText.textContent = 'That is not an image file. JPG or PNG, please.'; return; }
+  if (file.size > 10 * 1048576) { photoText.textContent = 'That photo is over 10 MB, please pick a smaller one.'; return; }
+  var url = URL.createObjectURL(file), img = new Image();
+  img.onload = function () {
+    photo = img; photoPrev.src = url; photoPrev.hidden = false;
+    photoText.innerHTML = '<b></b> · click to change'; photoText.querySelector('b').textContent = file.name;
+    form.querySelector('[data-field="photo"]').classList.remove('is-invalid'); drawCard();
+  };
+  img.onerror = function () { photoText.textContent = 'Hmm, that image could not be read. Try a JPG or PNG.'; };
+  img.src = url;
+}
+photoInput.addEventListener('change', function () { if (this.files && this.files[0]) setPhoto(this.files[0]); });
+['dragenter', 'dragover'].forEach(function (ev) { photoBox.addEventListener(ev, function (e) { e.preventDefault(); photoBox.classList.add('over'); }); });
+['dragleave', 'drop'].forEach(function (ev) { photoBox.addEventListener(ev, function (e) { e.preventDefault(); photoBox.classList.remove('over'); }); });
+photoBox.addEventListener('drop', function (e) { if (e.dataTransfer.files && e.dataTransfer.files[0]) setPhoto(e.dataTransfer.files[0]); });
+
 function fitText(text, maxW, size, weight) {
   do { ctx.font = weight + ' ' + size + 'px Montserrat, Arial, sans-serif'; if (ctx.measureText(text).width <= maxW || size <= 22) break; size -= 2; } while (true);
   return size;
 }
-function drawCard() {
-  var W = canvas.width, H = canvas.height, ribbon = 100;
-  ctx.clearRect(0, 0, W, H);
-  if (bannerOk) { ctx.drawImage(banner, 0, 0, W, H - ribbon); }
-  else {
-    ctx.fillStyle = E.brand_color; ctx.fillRect(0, 0, W, H - ribbon);
-    ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    var s1 = fitText(E.event_name, W - 120, 72, '800'); ctx.fillText(E.event_name, W / 2, (H - ribbon) / 2 - 30);
-    ctx.font = '600 34px Montserrat, Arial, sans-serif'; ctx.fillText(E.date + ' · ' + E.city, W / 2, (H - ribbon) / 2 + 40);
-  }
-  ctx.fillStyle = E.brand_color; ctx.fillRect(0, H - ribbon, W, ribbon);
-  ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  var name = val('name') || 'Your name here';
-  var line1 = "I'm a Community Hero at " + E.event_name;
-  var sz = fitText(line1, W - 80, 34, '800'); ctx.fillText(line1, 40, H - ribbon + 34);
-  ctx.font = '600 26px Montserrat, Arial, sans-serif'; ctx.globalAlpha = .92; ctx.fillText(name + ' · ' + E.date + ' · ' + E.city, 40, H - ribbon + 72); ctx.globalAlpha = 1;
+function spaced(text, cx, y, gap) {              // centred text with manual letter spacing (canvas letterSpacing is not everywhere yet)
+  var w = 0, i; for (i = 0; i < text.length; i++) w += ctx.measureText(text[i]).width; w += gap * (text.length - 1);
+  var x = cx - w / 2; ctx.textAlign = 'left';
+  for (i = 0; i < text.length; i++) { ctx.fillText(text[i], x, y); x += ctx.measureText(text[i]).width + gap; }
+  ctx.textAlign = 'center';
 }
-if (document.fonts && document.fonts.load) { Promise.all([document.fonts.load('800 34px Montserrat'), document.fonts.load('600 26px Montserrat')]).then(drawCard, drawCard); }
+function sweep(cx, cy, r, width, from, to, cols, alpha, blur) {   // a glowing arc that fades out along its length
+  var g = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+  g.addColorStop(0, cols[0]); g.addColorStop(.55, cols[1]); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = g; ctx.lineWidth = width; ctx.lineCap = 'round';
+  ctx.shadowColor = cols[1]; ctx.shadowBlur = blur;
+  ctx.beginPath(); ctx.arc(cx, cy, r, from, to); ctx.stroke(); ctx.restore();
+}
+function ringGradient(cx, cy, r) {
+  var g = ctx.createLinearGradient(cx - r, cy + r, cx + r, cy - r);
+  g.addColorStop(0, PAL[1]); g.addColorStop(.5, PAL[0]); g.addColorStop(1, PAL[2]); return g;
+}
+function drawContain(img, cx, cy, boxW, boxH) {
+  var s = Math.min(boxW / img.width, boxH / img.height), w = img.width * s, h = img.height * s;
+  ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
+}
+function drawCard() {
+  var W = canvas.width, H = canvas.height;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.shadowBlur = 0; ctx.clearRect(0, 0, W, H);
+  // navy background with a faint diagonal light
+  var bg = ctx.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#08203a'); bg.addColorStop(.45, '#040d1c'); bg.addColorStop(1, '#0a1235');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  // vivid sweeps like the draft: a wide band down the right side, a wide band up the left side, thin rings that stay clear of the text
+  sweep(650, 720, 700, 150, -Math.PI * 0.35, Math.PI * 0.28, [PAL[1], PAL[0]], .6, 90);
+  sweep(560, 1100, 640, 130, Math.PI * 0.62, Math.PI * 1.25, [PAL[0], PAL[2]], .55, 80);
+  sweep(1350, 620, 470, 6, Math.PI * 0.55, Math.PI * 1.9, [PAL[1], PAL[2]], .9, 22);
+  sweep(180, 1250, 380, 4, Math.PI * 1.15, Math.PI * 2.45, [PAL[0], PAL[1]], .7, 16);
+  // vignette so the centre stays clean
+  var vg = ctx.createRadialGradient(W / 2, H * .46, 320, W / 2, H / 2, 1150); vg.addColorStop(0, 'rgba(3,8,20,0)'); vg.addColorStop(1, 'rgba(3,7,18,.6)');
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  // wordmark (the brand sticker from the site) and the event line
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  if (wmOk) { ctx.save(); ctx.globalCompositeOperation = PAL[3] || 'source-over'; drawContain(wm, W / 2, 160, 700, 240); ctx.restore(); }
+  else { ctx.fillStyle = PAL[0]; ctx.font = '900 ' + fitText(E.brand_name.toUpperCase(), 900, 120, '900') + 'px Montserrat, Arial, sans-serif'; ctx.fillText(E.brand_name.toUpperCase(), W / 2, 158); }
+  ctx.fillStyle = '#eaf2ff'; var sub = (E.subtitle || E.city || '').toUpperCase();
+  ctx.font = '600 ' + fitText(sub, 1100, 40, '600') + 'px Montserrat, Arial, sans-serif'; spaced(sub, W / 2, 322, 10);
+  // the photo in a glowing gradient ring
+  var cx = W / 2, cy = 700, r = 390;
+  ctx.save(); ctx.shadowColor = PAL[1]; ctx.shadowBlur = 80; ctx.strokeStyle = ringGradient(cx, cy, r + 10); ctx.lineWidth = 14;
+  ctx.beginPath(); ctx.arc(cx, cy, r + 10, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+  if (photo) { var s = Math.max(2 * r / photo.width, 2 * r / photo.height), pw = photo.width * s, ph = photo.height * s; ctx.drawImage(photo, cx - pw / 2, cy - ph / 2, pw, ph); }
+  else { ctx.fillStyle = '#12213a'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r); ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.font = '600 40px Montserrat, Arial, sans-serif'; ctx.fillText('Your photo goes here', cx, cy); }
+  ctx.restore();
+  // the name: first name(s) in white, last name in the brand gradient
+  var name = (val('name') || 'Your Name').toUpperCase().replace(/\s+/g, ' ').trim(), parts = name.split(' ');
+  var lastName = parts.length > 1 ? parts.pop() : '', firstName = parts.join(' ');
+  var y1 = lastName ? 1170 : 1225, y2 = 1280;
+  ctx.fillStyle = '#ffffff'; ctx.font = '900 ' + fitText(firstName, 1320, 150, '900') + 'px Montserrat, Arial, sans-serif'; ctx.fillText(firstName, W / 2, y1);
+  if (lastName) {
+    ctx.font = '900 ' + fitText(lastName, 1320, 150, '900') + 'px Montserrat, Arial, sans-serif';
+    var tw = ctx.measureText(lastName).width, tg = ctx.createLinearGradient(W / 2 - tw / 2, 0, W / 2 + tw / 2, 0);
+    tg.addColorStop(0, PAL[1]); tg.addColorStop(.5, PAL[0]); tg.addColorStop(1, PAL[2]); ctx.fillStyle = tg; ctx.fillText(lastName, W / 2, y2);
+  }
+  // the pill
+  var label = 'Community Hero'; ctx.font = '600 50px Montserrat, Arial, sans-serif';
+  var lw = ctx.measureText(label).width, pw2 = lw + 150, ph2 = 100, px = W / 2 - pw2 / 2, py = 1360;
+  ctx.save(); ctx.shadowColor = PAL[2]; ctx.shadowBlur = 40; ctx.fillStyle = 'rgba(255,255,255,.07)';
+  ctx.beginPath(); ctx.roundRect(px, py, pw2, ph2, ph2 / 2); ctx.fill();
+  ctx.strokeStyle = ringGradient(W / 2, py + ph2 / 2, pw2 / 2); ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
+  ctx.fillStyle = '#ffffff'; ctx.fillText(label, W / 2, py + ph2 / 2 + 2);
+}
+if (document.fonts && document.fonts.load) { Promise.all([document.fonts.load('900 150px Montserrat'), document.fonts.load('600 50px Montserrat')]).then(drawCard, drawCard); }
 $('ch-download').addEventListener('click', function () {
   var a = document.createElement('a'), safe = (val('name') || 'community hero').replace(/[^\w\- ]+/g, '').trim();
   canvas.toBlob(function (blob) { a.href = URL.createObjectURL(blob); a.download = 'Community Hero - ' + E.event_name + ' - ' + safe + '.png'; document.body.appendChild(a); a.click(); a.remove(); }, 'image/png');
@@ -365,23 +460,26 @@ drop.addEventListener('drop', function (e) { if (e.dataTransfer.files) addShots(
 shotsInput.addEventListener('change', function () { if (this.files) addShots(this.files); this.value = ''; });
 
 function showError(m) { var el = $('ch-error'); el.textContent = m; el.hidden = false; }
-form.addEventListener('input', function (ev) { var f = ev.target.closest('[data-field]'); if (f) f.classList.remove('is-invalid'); $('ch-consent-wrap').classList.remove('is-invalid'); });
-function checkDetails() {                       // step 1: name, email, job title, company and LinkedIn are all required
+form.addEventListener('input', function (ev) { var f = ev.target.closest('[data-field]'); if (f) f.classList.remove('is-invalid'); $('ch-consent-wrap').classList.remove('is-invalid'); $('ch-applied-wrap').classList.remove('is-invalid'); });
+function checkDetails() {                       // step 1: name, email, job title, company, LinkedIn and the photo are all required
   var bad = [];
   if (!val('name')) bad.push('name');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email'))) bad.push('email');
   if (!val('role')) bad.push('role');
   if (!val('company')) bad.push('company');
   if (!/^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(val('linkedin'))) bad.push('linkedin');
+  if (!photo) bad.push('photo');
   bad.forEach(function (k) { form.querySelector('[data-field="' + k + '"]').classList.add('is-invalid'); });
   return bad;
 }
 function detailsMessage(bad) {
-  return bad.length === 1 && bad[0] === 'linkedin' ? 'The LinkedIn link should start with https://www.linkedin.com/' : 'Please fill in the highlighted fields: name, email, job title, company and LinkedIn are all needed.';
+  if (bad.length === 1 && bad[0] === 'linkedin') return 'The LinkedIn link should start with https://www.linkedin.com/';
+  if (bad.length === 1 && bad[0] === 'photo') return 'Please add your photo, it goes on your card.';
+  return 'Please fill in the highlighted fields: name, email, job title, company, LinkedIn and your photo are all needed.';
 }
 $('ch-next').addEventListener('click', function () {   // unfold the rest of the page once the details are complete
   var bad = checkDetails(), hint = $('ch-next-hint');
-  if (bad.length) { hint.className = 'ch-hint warn'; hint.textContent = detailsMessage(bad); form.querySelector('[data-field="' + bad[0] + '"] input').focus(); return; }
+  if (bad.length) { hint.className = 'ch-hint warn'; hint.textContent = detailsMessage(bad); var el = form.querySelector('[data-field="' + bad[0] + '"] input'); if (el.type === 'file') el.parentNode.scrollIntoView({ behavior: 'smooth', block: 'center' }); else el.focus(); return; }
   hint.className = 'ch-hint'; hint.textContent = 'All set. Your card and posts are below.';
   var rest = $('ch-rest');
   if (rest.hidden) { rest.hidden = false; drawCard(); render('post'); render('msg'); }
@@ -398,12 +496,13 @@ form.addEventListener('submit', function (ev) {
   var anyAction = Object.keys(acts).some(function (k) { return acts[k].done; }) || !!val('other');
   if (!anyAction) { showError('Tick at least one thing you did (or write it under "Anything else").'); return; }
   if (!form.elements['consent'].checked) { $('ch-consent-wrap').classList.add('is-invalid'); showError('Please tick the sharing consent so we can read your report.'); return; }
+  if (!form.elements['applied'].checked) { $('ch-applied-wrap').classList.add('is-invalid'); showError('Please confirm that you already applied for the Community Hero ticket on Luma (the link is in the checkbox line).'); return; }
   if (bad.length) { showError(detailsMessage(bad)); return; }
   if (!CH_URL) { showError('This page is not connected yet (communityhero_form_url is empty). Please email us instead.'); return; }
   var body = {
     brand: E.brand, event: E, name: val('name'), email: val('email'), company: val('company'), role: val('role'), linkedin: val('linkedin'), why: '',
     actions: acts, other: val('other'), proof: proofLinks().join('\n'), shots: shots.map(function (s) { return { b64: s.b64, type: s.type, name: s.name }; }), consent: true,
-    website: form.elements['website'].value || '', page: location.href
+    applied: true, website: form.elements['website'].value || '', page: location.href
   };
   var btn = $('ch-send'); btn.disabled = true; btn.textContent = 'Sending...';
   var ctrl = ('AbortController' in window) ? new AbortController() : null, timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 60000) : null;
