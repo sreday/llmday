@@ -1348,7 +1348,7 @@ with open(BASE_FOLDER + "/waitlist/index.html", "w", encoding="utf-8") as f:
 print("Writing out waitlist/index.html (hidden, not in sitemap)")
 
 # ── COMMUNITY HERO (Marek 2026-09-22): facts for the hidden /communityhero/ page - a free ticket in exchange for
-# telling friends: a shareable card drawn from the home banner, three post wordings and three message drafts fed by
+# telling friends: a 1500x1500 share card (brand wordmark + their photo), three post wordings and three message drafts fed by
 # the About panel, then a report that the "Community hero" script emails to Anna. Same rules as onboarding.
 context.setdefault('communityhero_form_url', '')
 _ch = dict(context['onboarding_event'])
@@ -1393,6 +1393,13 @@ context['hero_event'] = {
     'companies': list(context.get('about_companies') or [])[:6],
     'keynotes': [k.get('name', '') for k in keynotes if k.get('name')][:3],
     'topic_talks': _ch_topic_talks,
+    # the share card (1500x1500, drawn in the browser): the brand wordmark the hero of the event page uses, root-absolute
+    # because home assets are copied to the site root, and the event line = the event name without the brand
+    'wordmark': {'llmday': '/assets/LLMday Sticker.png', 'sreday': '/assets/images/sreday_sticker.png',
+                 'platformday': '/assets/images/platformday_sticker.png',
+                 'pec': '/assets/images/logo-white.png', 'prompt engineering conference': '/assets/images/logo-white.png'}.get(_ch['brand'], ''),
+    'subtitle': re.sub(r'^\s*' + re.escape(str(_ch['brand_name'])) + r'\s*', '', str(_ch['event_name']), flags=re.I).strip() or str(_ch['city']),
+    'luma_url': context['waitlist_event']['rsvp_url'],   # the Luma page the hero applied on (falls back to the event's #tickets)
 }
 _os.makedirs(BASE_FOLDER + "/communityhero", exist_ok=True)
 with open(BASE_FOLDER + "/communityhero/index.html", "w", encoding="utf-8") as f:
