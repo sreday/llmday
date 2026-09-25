@@ -1348,7 +1348,7 @@ with open(BASE_FOLDER + "/waitlist/index.html", "w", encoding="utf-8") as f:
 print("Writing out waitlist/index.html (hidden, not in sitemap)")
 
 # ── COMMUNITY HERO (Marek 2026-09-22): facts for the hidden /communityhero/ page - a free ticket in exchange for
-# telling friends: a 1500x1500 share card (brand wordmark + their photo), three post wordings and three message drafts fed by
+# telling friends: a 1500x1500 share card (brand wordmark + their photo), two post wordings and two message drafts fed by
 # the About panel, then a report that the "Community hero" script emails to Anna. Same rules as onboarding.
 context.setdefault('communityhero_form_url', '')
 _ch = dict(context['onboarding_event'])
