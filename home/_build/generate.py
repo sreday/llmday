@@ -292,6 +292,9 @@ _STATUS_BRANDS = [("SREday", "https://sreday.com/status/", "#713660"),
                   ("LLMday", "https://llmday.com/status/", "#26986A"),
                   ("PLATFORMday", "https://platformday.com/status/", "#E2971D")]
 _SLOTS_PER_TRACK = 12
+# Start / end column (Marek 2026-09-27): an event still in the "before" state this close to its date has no
+# published schedule, which stops being normal and becomes a to-do; the cell says so in red instead of "no schedule yet".
+_ANNOUNCE_DAYS = 30
 
 
 # Time-sensitive health: the bar to clear rises as the date approaches (Marek 2026-09-13: more than two
@@ -1431,7 +1434,7 @@ with open(BASE_FOLDER + "/status/redflags.json", "w", encoding="utf-8") as f:
                   f, ensure_ascii=False, indent=1)
 with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
-        status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_past=_status_past, status_past_dirty=_status_past_dirty,
+        status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_announce_days=_ANNOUNCE_DAYS, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_flap_days=_ADDED_FLAP_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
         status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed, status_heroes=_hero_rows, status_heroes_note=_hero_note,
         status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
