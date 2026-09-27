@@ -780,10 +780,19 @@ def _status_talks_at(root, commit, path):
     return out
 
 
+_CO_SPLIT = re.compile(r"\s*&\s*|\s*,\s*")
+
+
+def _co_people(name):
+    """The individual people in a talks.csv name cell: "John X & Andrea X" -> ["John X", "Andrea X"]."""
+    return [p for p in (x.strip() for x in _CO_SPLIT.split(str(name or ""))) if p]
+
+
 def _status_added_log(rows):
     """7 day buckets (oldest -> today) of speakers added to the upcoming events in `rows`, plus an error string and
-    a list of warnings. Entries are kind "added", "removed" (full-info speaker gone from the confirmed lineup) or
-    "moved" (left one event and joined another within the flap window). Latest state of a speaker per event wins."""
+    a list of warnings. Entries are kind "added", "removed" (full-info speaker gone from the confirmed lineup),
+    "moved" (left one event and joined another within the flap window) or "cospeaker" (someone joined an existing
+    talk, see below). Latest state of a speaker per event wins."""
     import difflib
     try:
         from zoneinfo import ZoneInfo
@@ -845,12 +854,14 @@ def _status_added_log(rows):
             def _entry(kind, key, row):
                 # one timeline per person and event, whatever the spelling of the day
                 tkey = next((k for (f, k) in timelines if f == folder and same(k, key)), key)
-                timelines.setdefault((folder, tkey), []).append({
+                e = {
                     "kind": kind, "key": tkey, "folder": folder, "name": (row.get("name") or "").strip(),
                     "talk_url": _lint_talk_url(folder, row), "title": (row.get("title") or "").strip(),
                     "organization": (row.get("organization") or "").strip(),
                     "event": r["name"], "event_url": r["url"], "when": when_local,
-                    "time": when_local.strftime("%H:%M"), "iso": when_local.isoformat()})
+                    "time": when_local.strftime("%H:%M"), "iso": when_local.isoformat()}
+                timelines.setdefault((folder, tkey), []).append(e)
+                return e
             added = [(key, row) for key, row in after.items()
                      if not (key in before or any(same(key, k) for k in before))]
             after_titles = {" ".join((x.get("title") or "").casefold().split()) for x in after.values()}
@@ -864,6 +875,31 @@ def _status_added_log(rows):
                 if ("," in name or "&" in name) and " ".join((row.get("title") or "").casefold().split()) in after_titles:
                     continue                                 # panel whose lineup changed, the session itself is still on
                 gone.append((key, row))
+            # Co-speakers (Marek 2026-09-27): one name cell gaining a person ("John X" -> "John X & Andrea X") is a
+            # co-speaker joining an existing talk, not John leaving and a new pair arriving. Where a key that vanished
+            # and a key that appeared in the SAME commit hold the same people plus extras, and the talk title still
+            # matches, the pair collapses into one "cospeaker" line reading "John X + Andrea X". Matched against
+            # `before` rather than `gone`, so it also covers a base row too incomplete to count as a removal.
+            _co_title = lambda _row: " ".join((_row.get("title") or "").casefold().split())
+            _co_pairs, _co_taken = [], set()
+            for _bkey, _brow in before.items():
+                if _bkey in after or any(same(_bkey, _k) for _k in after):
+                    continue                                 # still there, or just respelled
+                _bset = {p.casefold() for p in _co_people(_brow.get("name"))}
+                if not _bset:
+                    continue
+                for _akey, _arow in added:
+                    if _akey in _co_taken:
+                        continue
+                    _aset = {p.casefold() for p in _co_people(_arow.get("name"))}
+                    if _bset < _aset and same(_co_title(_brow), _co_title(_arow)):
+                        _co_taken.add(_akey)
+                        _co_pairs.append((_bkey, _brow, _akey, _arow,
+                                          [p for p in _co_people(_arow.get("name")) if p.casefold() not in _bset]))
+                        break
+            _co_bases = {p[0] for p in _co_pairs}
+            added = [(_k, _v) for _k, _v in added if _k not in _co_taken]
+            gone = [(_k, _v) for _k, _v in gone if _k not in _co_bases]
             if len(gone) > _REMOVED_MASS[0] and len(gone) > _REMOVED_MASS[1] * max(len(before), 1):
                 warnings.append("%s: commit %s drops %d of %d speakers at once, treated as a csv accident (see the red bar while it is unfixed): its changes and the fix are not listed"
                                 % (r["name"], sha[:7], len(gone), len(before)))
@@ -874,6 +910,10 @@ def _status_added_log(rows):
                 _entry("added", key, row)
             for key, row in gone:
                 _entry("removed", key, row)
+            for _bkey, _brow, _akey, _arow, _newcomers in _co_pairs:
+                _e = _entry("cospeaker", _akey, _arow)
+                _e["name"] = "%s + %s" % ((_brow.get("name") or "").strip(), " + ".join(_newcomers))
+                _e["cospeakers"] = _newcomers
     # Resolve each timeline: opposite events within the flap window cancel out (left and came back, or added and
     # pulled, within 2 days = noise), then only the latest surviving state is shown.
     final = []
