@@ -1420,6 +1420,9 @@ def _ch_venue_display(heading, city, sponsors):
     m = re.match(r'^(?:the\s+)?offices?\s+of\s+(.+)$', name, flags=re.I)
     if m:
         name, office = m.group(1).strip(), True
+    m = re.match(r'^(.+?)\s+(?:HQ|headquarters)$', name, flags=re.I)   # "Harness.io HQ" (venue headings since 2026-09-28)
+    if m:
+        name, office = m.group(1).strip(), True
     m = re.match(r'^(.+?)\s+offices?$', name, flags=re.I)
     if m:
         name, office = m.group(1).strip(), True
