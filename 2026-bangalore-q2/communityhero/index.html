@@ -726,6 +726,9 @@ $('ch-next').addEventListener('click', function () {   // unfold the rest of the
   if (rest.hidden) { rest.hidden = false; drawCard(); render('post'); render('msg'); }
   rest.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
+function cardPayload() {                        // the card as drawn, attached to the email to Anna (script v5)
+  try { drawCard(); return { b64: canvas.toDataURL('image/jpeg', 0.9), type: 'image/jpeg' }; } catch (e) { return null; }
+}
 form.addEventListener('submit', function (ev) {
   ev.preventDefault(); $('ch-error').hidden = true;
   var bad = checkDetails();
@@ -742,7 +745,7 @@ form.addEventListener('submit', function (ev) {
   if (!CH_URL) { showError('This page is not connected yet (communityhero_form_url is empty). Please email us instead.'); return; }
   var body = {
     brand: E.brand, event: E, name: val('name'), email: val('email'), company: val('company'), role: val('role'), linkedin: val('linkedin'), why: '',
-    actions: acts, other: val('other'), proof: proofLinks().join('\n'), shots: shots.map(function (s) { return { b64: s.b64, type: s.type, name: s.name }; }), consent: true,
+    actions: acts, other: val('other'), proof: proofLinks().join('\n'), shots: shots.map(function (s) { return { b64: s.b64, type: s.type, name: s.name }; }), card: cardPayload(), consent: true,
     applied: true, website: form.elements['website'].value || '', page: location.href
   };
   var btn = $('ch-send'); btn.disabled = true; btn.textContent = 'Sending...';
