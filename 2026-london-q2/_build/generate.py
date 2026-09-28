@@ -1060,13 +1060,29 @@ print("Done: sponsorship.html")
 # MAIN PAGES (rendered after sponsorship so timeline_events is available)
 context["timeline_events"] = _timeline_events
 print(DIVIDER)
+# Venue refresh (2026-09-28): the Google Maps embed opens VENUE_MAP_ZOOM_OUT levels further out, so it shows where
+# the venue sits in the city instead of just its street; the section gets the venue-v2 class (bento photos + rounded
+# map, styled in the shared theme.css tail). Only index.html has the venue section.
+VENUE_MAP_ZOOM_OUT = 4
+def venue_refresh(html):
+    def _src(m):
+        src = m.group(0)
+        if "maps/embed?pb=" in src:   # !1d<metres> = the visible span; every zoom level doubles it
+            return re.sub(r"!1d([0-9.]+)", lambda d: "!1d%.1f" % (float(d.group(1)) * 2 ** VENUE_MAP_ZOOM_OUT), src, count=1)
+        if "output=embed" in src and "&z=" not in src:   # ?q= embeds open at about z16
+            return src.replace("output=embed", "output=embed&z=%d" % (16 - VENUE_MAP_ZOOM_OUT))
+        return src
+    html = re.sub(r'src="https://www\.google\.com/maps[^"]*"', _src, html)
+    return html.replace('class="venue-section ', 'class="venue-section venue-v2 ', 1)
+
 pages = ["index.html"]
 print(f"Generating main pages: {pages}")
 for page in pages:
     with open(BASE_FOLDER + "/" + page, "w", encoding="utf-8") as f:
         print("Writing out", page)
         template = env.get_template(page)
-        f.write(template.render(page=page, **context))
+        html = template.render(page=page, **context)
+        f.write(venue_refresh(html) if page == "index.html" else html)
         if page != "index.html":
             SITEMAP_URLS.append((page.replace(".html",""), 0.75))
 
