@@ -328,40 +328,52 @@ function proPost() {
   var N = sessionsText(), L = talksBullets(), P = topicsText(), B = tagged(E.brand_name), EV = E.event_name;
   var where = E.city + ' on ' + E.month_day;
   var tail = function (ask, thanks) { return (ask ? ask + '\n' : '') + 'RSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
-  var listOr = function (intro, fallback) { var s = L ? intro + '\n' + L : fallback; return s ? s + '\n\n' : ''; };
+  // the hero's own job title and company from step 1 (company taggable); each version phrases it its own way
+  var role = val('role'), comp = val('company') ? tagged(val('company')) : '', aRole = role ? (/^[aeiou]/i.test(role) ? 'an ' : 'a ') + role : '';
+  var who = function (both, onlyRole, onlyComp) { return role && comp ? both : role ? onlyRole : comp ? onlyComp : ''; };
+  // the speakers block led by the hero's role; without speakers (under 3 talks) the role still gets its own line
+  var block = function (W, withTalks, noTalks, plainIntro) {
+    if (L) return (W ? W + withTalks : plainIntro) + '\n' + L + '\n\n';
+    return W ? W + noTalks + '\n\n' : '';
+  };
   var V = [
     function () {
+      var W = who('Working myself as ' + aRole + ' at ' + comp, 'Working myself as ' + aRole, 'Working myself at ' + comp);
       return ("I'm supporting " + EV + ' as a Community Hero') + '\n\n' +
-        listOr((N ? "It's a full day with " + N + ' sessions' : "It's a full day of sessions") + ', and a few of them are already on my list:',
-               (N ? "It's a full day with " + N + ' sessions.' : "It's a full day of sessions.")) +
+        (N ? "It's a full day with " + N + ' sessions.' : "It's a full day of sessions.") + '\n\n' +
+        block(W, ", I'm particularly interested in these talks:", ", this is exactly the kind of day I make time for.", 'A few of them are already on my list:') +
         (P ? "I'm looking forward to good conversations on " + P + '.\n\n' : '') +
         tail("If you'd like to join me, it's in " + where, 'Thank you to the ' + B + " team for the invitation, I'm looking forward to it!");
     },
     function () {
+      var W = who('As ' + aRole + ' at ' + comp, 'As ' + aRole, 'Working at ' + comp);
       return ("I'll be at " + EV + ' as a Community Hero') + '\n\n' +
         (N ? 'One day, ' + N + ' sessions' : 'One day of sessions') + (P ? ', and a room full of people working on ' + P + '.' : ', and a room full of people who care about this field.') + '\n\n' +
-        listOr("The talks I'm planning to catch:", '') +
+        block(W, ", the talks I'm planning to catch are:", ", I'm really looking forward to the conversations.", "The talks I'm planning to catch:") +
         "If these topics are part of your work, I think it's well worth the day.\n\n" +
         tail('Join me in ' + where, 'Many thanks to the ' + B + ' team for having me, see you there!');
     },
     function () {
+      var W = who('From my perspective as ' + aRole + ' at ' + comp, 'From my perspective as ' + aRole, 'From where I sit at ' + comp);
       return ('Community Hero at ' + EV) + '\n\n' +
-        listOr((N ? N + ' sessions in one day, and plenty to learn.' : 'A full day with plenty to learn.') + " The talks I'd recommend:",
-               N ? N + ' sessions in one day, and plenty to learn.' : 'A full day with plenty to learn.') +
+        (N ? N + ' sessions in one day, and plenty to learn.' : 'A full day with plenty to learn.') + '\n\n' +
+        block(W, ", these are the talks I'd recommend:", ', I expect to come back with lots of new ideas.', "The talks I'd recommend:") +
         (P ? 'The day covers ' + P + ', and the conversations between sessions are often just as valuable.\n\n' : '') +
         tail('Join me in ' + where, 'Thank you to ' + B + ' for the invitation, hope to see you there.');
     },
     function () {
+      var W = who('In my role as ' + role + ' at ' + comp, 'In my role as ' + role, 'In my work at ' + comp);
       return ('Happy to support ' + EV + ' as a Community Hero') + '\n\n' +
-        listOr((N ? 'There are ' + N + ' sessions on the agenda.' : 'The agenda is shaping up nicely.') + " The ones I've marked for myself:",
-               N ? 'There are ' + N + ' sessions on the agenda.' : 'The agenda is shaping up nicely.') +
-        (P ? 'If ' + P + " matter in your role, this is a day well spent. It's also great to see this community keep growing." : "It's great to see this community keep growing.") + '\n\n' +
+        (N ? 'There are ' + N + ' sessions on the agenda.' : 'The agenda is shaping up nicely.') + '\n\n' +
+        block(W, ", I've marked these sessions for myself:", ", this agenda is right on point, and the day is already in my calendar.", "The ones I've marked for myself:") +
+        (P ? 'If ' + P + " matter in your work too, this is a day well spent. It's also great to see this community keep growing." : "It's great to see this community keep growing.") + '\n\n' +
         tail('See you in ' + where + '?', 'Thanks to the ' + B + ' team for the invitation!');
     },
     function () {
+      var W = who('Given my work as ' + aRole + ' at ' + comp, 'Given my work as ' + aRole, 'Given my work at ' + comp);
       return ('Community Hero for ' + EV) + '\n\n' +
         "A quick overview if you're considering it:\n" + (N ? '• ' + N + ' sessions in one day\n' : '') + (P ? '• ' + P + '\n' : '') + '• ' + E.city + ', ' + E.month_day + '\n\n' +
-        listOr("I've done my homework, and these are the speakers I'm looking forward to:", '') +
+        block(W, ", these are the speakers I'm looking forward to:", ', this agenda speaks directly to what I do every day.', "I've done my homework, and these are the speakers I'm looking forward to:") +
         tail('', 'Thanks to the ' + B + ' team for the invitation, I hope to see you there!');
     }
   ];
@@ -424,7 +436,7 @@ document.querySelectorAll('.ch-tabs').forEach(function (tabs) {
 $('ch-post').addEventListener('input', function () { edited.post = true; fitBox(this); });
 $('ch-tags').addEventListener('change', function () { $('ch-tags-hint').hidden = !this.checked; render('post'); });
 $('ch-msg').addEventListener('input', function () { edited.msg = true; fitBox(this); });
-['name'].forEach(function (k) { form.elements[k].addEventListener('input', function () { if (!edited.post) render('post'); if (!edited.msg) render('msg'); drawCard(); }); });
+['name', 'role', 'company'].forEach(function (k) { form.elements[k].addEventListener('input', function () { if (!edited.post) render('post'); if (!edited.msg) render('msg'); drawCard(); }); });
 render('post'); render('msg');
 // the discount code step: the same code as on the card (HERO30, HERO50 inside 14 days of the event)
 (function () {
