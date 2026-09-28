@@ -114,7 +114,9 @@
   <div class="ch-brand">LLMday · community heroes</div>
   <h1 class="ch-title">Community Hero at LLMday NYC 2026 Q1</h1>
   <div class="ch-sub">March 6, 2026 · NYC · <a href="https://www.llmday.com/2026-nyc-q1/" target="_blank" rel="noopener">event page</a></div>
+  
   <p class="ch-intro">You applied for a Community Hero ticket: free admission in exchange for helping us promote the event. Everything you need is on this page. Fill in your details, generate and grab your card, pick a post and a message to spread, then tell us what you did. We&#39;ll review your activities and confirm your free ticket!</p>
+  
 
   <form id="ch-form" novalidate>
     <div class="ch-card">
@@ -125,7 +127,7 @@
         <label class="ch-field" data-field="role"><span>Job title</span><input type="text" name="role" autocomplete="organization-title" maxlength="120"></label>
         <label class="ch-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
         <label class="ch-field ch-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
-        <label class="ch-field ch-wide" data-field="photo"><span>Your photo <small>(a clear headshot, it goes on your card)</small></span>
+        <label class="ch-field ch-wide" data-field="photo"><span>Your photo <small>(headshot picture or avatar, it goes on your card)</small></span>
           <div class="ch-photo-box" id="ch-photo-box"><img id="ch-photo-prev" alt="" hidden><div class="ch-photo-text" id="ch-photo-text"><b>Choose a photo</b> or drop it here. JPG or PNG, a square headshot works best, up to 10 MB.</div><input type="file" name="photo" id="ch-photo" accept="image/*"></div>
         </label>
       </div>
@@ -148,12 +150,14 @@
     </div>
     
 
+    
     <div class="ch-card" id="ch-code-card">
       <div class="ch-step"><i>4</i><h2>Your discount code</h2></div>
       <div class="ch-code-row"><div class="ch-code" id="ch-code">HERO30</div><div class="ch-code-off" id="ch-code-off">30% off</div></div>
       <div class="ch-row"><button type="button" class="btn-ch ghost" id="ch-code-copy">Copy code</button><span class="ch-copied" id="ch-code-copied"></span></div>
       <div class="ch-hint">You may use this code publicly.</div>
     </div>
+    
 
     <div class="ch-card">
       <div class="ch-step"><i>5</i><h2>Your post</h2><small>LinkedIn, X, etc. - where your community is active</small></div>
@@ -208,7 +212,7 @@
 
 <script>
 var CH_URL = "https://script.google.com/macros/s/AKfycbyeW8C7ZfEjrELd0-GHy4p-fiBYTyBGsPkJ-M7uNkoD69Xk8UyhIUBfl7u67eQIfmPG/exec";
-var E = {"attendees": 100, "banner": "/assets/images/events/llmday-2026-nyc-q1.png", "blurb_short": "LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning.", "brand": "llmday", "brand_color": "#26986A", "brand_name": "LLMday", "city": "NYC", "companies": ["Amazon", "Anthropic", "AWS", "Fearless", "groundcover", "LLMday"], "date": "March 6, 2026", "day": "6", "event_name": "LLMday NYC 2026 Q1", "event_url": "https://www.llmday.com/2026-nyc-q1/", "keynotes": ["LLMday Team", "Karen Zhou"], "luma_url": "https://lu.ma/event/evt-Rq2eouqzffNp2PW", "month": "March", "month_day": "March 6", "pick_talks": [{"company": "MetalBear", "keynote": false, "speaker": "Adna Zujo Lakisic"}, {"company": "solo.io", "keynote": false, "speaker": "Michael Levan"}, {"company": "Snowflake", "keynote": false, "speaker": "Tim Spann"}, {"company": "groundcover", "keynote": false, "speaker": "Noam Levy"}, {"company": "Veritas Automata", "keynote": false, "speaker": "Ben Savage"}, {"company": "AWS", "keynote": false, "speaker": "Ahsan Ali"}, {"company": "Fearless", "keynote": false, "speaker": "Jeremy Curcio"}, {"company": "Redis", "keynote": false, "speaker": "Nitin Kanukolanu"}, {"company": "AWS", "keynote": false, "speaker": "Harish Mandhadi"}, {"company": "New Jersey Institute of Technology", "keynote": false, "speaker": "Pranav Kowadkar"}, {"company": "Amazon", "keynote": false, "speaker": "Suvendu Mohanty"}, {"company": "LLMday", "keynote": true, "speaker": "LLMday Team"}, {"company": "Anthropic", "keynote": true, "speaker": "Karen Zhou"}], "promo_code": "HERO30", "promo_code_near": "HERO50", "promo_label": "30% off", "promo_label_near": "50% off", "slug": "2026-nyc-q1", "speakers_n": 14, "start_date": "2026-03-06", "subtitle": "NYC 2026 Q1", "tickets_url": "https://www.llmday.com/2026-nyc-q1/#tickets", "topic_talks": [{"category": "Large Language Models", "talks": [{"company": "groundcover", "speaker": "Noam Levy", "title": "Don\u0027t Panic: It\u0027s Not Just You - LLM Trace Sampling Doesn\u0027t Work"}, {"company": "", "speaker": "Alisson Sol", "title": "The way to Edge AI"}, {"company": "AWS", "speaker": "Harish Mandhadi", "title": "Reimagined AI-DLC Manifesto: Moving Beyond the Productivity Paradox to Engineering Predictability"}]}, {"category": "AI Agents", "talks": [{"company": "solo.io", "speaker": "Michael Levan", "title": "Securing \u0026 Building Agentic OSS Environments"}, {"company": "Snowflake", "speaker": "Tim Spann", "title": "From TrafficAI to GhostBreakers: Building Stateful AI Agents with Cortex, OpenFlow, and Snowflake Postgres"}, {"company": "AWS", "speaker": "Ahsan Ali", "title": "10 Lessons from building High-Stakes Agents"}]}, {"category": "Machine Learning", "talks": [{"company": "Veritas Automata", "speaker": "Ben Savage", "title": "Exploring the Convergence of Machine Learning, AI, and Cloud-Native Technologies in Automation"}]}, {"category": "AI Engineering", "talks": [{"company": "Fearless", "speaker": "Jeremy Curcio", "title": "Engineering Better Prompts for AI Assisted Development"}, {"company": "Redis", "speaker": "Nitin Kanukolanu", "title": "Context Matters"}]}, {"category": "AI Applications \u0026 Products", "talks": [{"company": "MetalBear", "speaker": "Adna Zujo Lakisic", "title": "The Limits of Vibe Coding: What Happens When AI-Generated Code Lands in Your Cluster"}]}], "topics": ["Large Language Models", "AI Agents", "Machine Learning", "AI Engineering", "AI Applications \u0026 Products"], "venue_line": "1900 Broadway, 6th Floor", "venue_name": "VIAM HQ", "venue_short": "VIAM HQ", "weekday": "Friday", "wordmark": "/assets/LLMday Sticker.png"};
+var E = {"attendees": 100, "banner": "/assets/images/events/llmday-2026-nyc-q1.png", "blurb_short": "LLMday is a worldwide series of community events for engineers building with large language models, AI agents and machine learning.", "brand": "llmday", "brand_color": "#26986A", "brand_name": "LLMday", "city": "NYC", "companies": ["Amazon", "Anthropic", "AWS", "Fearless", "groundcover", "LLMday"], "date": "March 6, 2026", "day": "6", "event_name": "LLMday NYC 2026 Q1", "event_url": "https://www.llmday.com/2026-nyc-q1/", "is_free": false, "keynotes": ["LLMday Team", "Karen Zhou"], "luma_url": "https://lu.ma/event/evt-Rq2eouqzffNp2PW", "month": "March", "month_day": "March 6", "pick_talks": [{"company": "MetalBear", "keynote": false, "speaker": "Adna Zujo Lakisic"}, {"company": "solo.io", "keynote": false, "speaker": "Michael Levan"}, {"company": "Snowflake", "keynote": false, "speaker": "Tim Spann"}, {"company": "groundcover", "keynote": false, "speaker": "Noam Levy"}, {"company": "Veritas Automata", "keynote": false, "speaker": "Ben Savage"}, {"company": "AWS", "keynote": false, "speaker": "Ahsan Ali"}, {"company": "Fearless", "keynote": false, "speaker": "Jeremy Curcio"}, {"company": "Redis", "keynote": false, "speaker": "Nitin Kanukolanu"}, {"company": "AWS", "keynote": false, "speaker": "Harish Mandhadi"}, {"company": "New Jersey Institute of Technology", "keynote": false, "speaker": "Pranav Kowadkar"}, {"company": "Amazon", "keynote": false, "speaker": "Suvendu Mohanty"}, {"company": "LLMday", "keynote": true, "speaker": "LLMday Team"}, {"company": "Anthropic", "keynote": true, "speaker": "Karen Zhou"}], "promo_code": "HERO30", "promo_code_near": "HERO50", "promo_label": "30% off", "promo_label_near": "50% off", "slug": "2026-nyc-q1", "speakers_n": 14, "start_date": "2026-03-06", "subtitle": "NYC 2026 Q1", "tickets_url": "https://www.llmday.com/2026-nyc-q1/#tickets", "topic_talks": [{"category": "Large Language Models", "talks": [{"company": "groundcover", "speaker": "Noam Levy", "title": "Don\u0027t Panic: It\u0027s Not Just You - LLM Trace Sampling Doesn\u0027t Work"}, {"company": "", "speaker": "Alisson Sol", "title": "The way to Edge AI"}, {"company": "AWS", "speaker": "Harish Mandhadi", "title": "Reimagined AI-DLC Manifesto: Moving Beyond the Productivity Paradox to Engineering Predictability"}]}, {"category": "AI Agents", "talks": [{"company": "solo.io", "speaker": "Michael Levan", "title": "Securing \u0026 Building Agentic OSS Environments"}, {"company": "Snowflake", "speaker": "Tim Spann", "title": "From TrafficAI to GhostBreakers: Building Stateful AI Agents with Cortex, OpenFlow, and Snowflake Postgres"}, {"company": "AWS", "speaker": "Ahsan Ali", "title": "10 Lessons from building High-Stakes Agents"}]}, {"category": "Machine Learning", "talks": [{"company": "Veritas Automata", "speaker": "Ben Savage", "title": "Exploring the Convergence of Machine Learning, AI, and Cloud-Native Technologies in Automation"}]}, {"category": "AI Engineering", "talks": [{"company": "Fearless", "speaker": "Jeremy Curcio", "title": "Engineering Better Prompts for AI Assisted Development"}, {"company": "Redis", "speaker": "Nitin Kanukolanu", "title": "Context Matters"}]}, {"category": "AI Applications \u0026 Products", "talks": [{"company": "MetalBear", "speaker": "Adna Zujo Lakisic", "title": "The Limits of Vibe Coding: What Happens When AI-Generated Code Lands in Your Cluster"}]}], "topics": ["Large Language Models", "AI Agents", "Machine Learning", "AI Engineering", "AI Applications \u0026 Products"], "venue_line": "1900 Broadway, 6th Floor", "venue_name": "VIAM HQ", "venue_short": "VIAM HQ", "weekday": "Friday", "wordmark": "/assets/LLMday Sticker.png"};
 var $ = function (id) { return document.getElementById(id); };
 var form = $('ch-form');
 function val(k) { return (form.elements[k].value || '').trim(); }
@@ -245,7 +249,10 @@ function sessionsProse(n) {
 
 // ---- the hero code (same rule as the card: HERO30 while the event is 14+ days away, HERO50 inside that) -----
 // The code always sits alone on its own line: people copy it.
-function codeBlock(lead) { var hc = heroCode(); return hc[0] ? lead.replace('{off}', hc[1]) + '\n' + hc[0] + '\n\n' : ''; }
+function codeBlock(lead) {
+  if (E.is_free) return "It's free to attend, you just need to register.\n\n";
+  var hc = heroCode(); return hc[0] ? lead.replace('{off}', hc[1]) + '\n' + hc[0] + '\n\n' : '';
+}
 var when = E.date + (E.venue_name ? ' · ' + E.venue_name : ''), tag = '#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
 
 // ---- the Personal post (Marek 2026-09-28): five wordings of one structure, one picked at random per page load,
@@ -268,10 +275,13 @@ function talksText() {
 }
 function topicsText() { return list(E.topics, 3); }
 function codeInline() { var hc = heroCode(); return hc[0] ? hc[1] + ' with the code ' + hc[0] + '\n' : ''; }
+function rsvpLines() {                          // free event: "Register for FREE", no code; paid: RSVP + the code
+  return E.is_free ? 'Register for FREE: ' + E.event_url + '\n' : 'RSVP: ' + E.event_url + '\n' + codeInline();
+}
 function personalPost() {
   var N = sessionsText(), T = talksText(), P = topicsText(), B = tagged(E.brand_name);
   var join = function (lead) { return lead + ' ' + E.city + ' on ' + E.month_day; };
-  var tail = function (ask, thanks) { return ask + '\nRSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
+  var tail = function (ask, thanks) { return ask + '\n' + rsvpLines() + '\n' + thanks; };
   var V = [                                      // excited and warm, emojis welcome - the Professional post stays composed
     function () {
       return "I'm a Community Hero at " + E.event_name + '! 🎉\n\n' +
@@ -320,7 +330,7 @@ function talksBullets() {
 function proPost() {
   var N = sessionsText(), L = talksBullets(), P = topicsText(), B = tagged(E.brand_name), EV = E.event_name;
   var where = E.city + ' on ' + E.month_day;
-  var tail = function (ask, thanks) { return (ask ? ask + '\n' : '') + 'RSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
+  var tail = function (ask, thanks) { return (ask ? ask + '\n' : '') + rsvpLines() + '\n' + thanks; };
   // the hero's own job title and company from step 1 (company taggable); each version phrases it its own way
   var role = val('role'), comp = val('company') ? tagged(val('company')) : '', aRole = role ? (/^[aeiou]/i.test(role) ? 'an ' : 'a ') + role : '';
   var who = function (both, onlyRole, onlyComp) { return role && comp ? both : role ? onlyRole : comp ? onlyComp : ''; };
@@ -434,6 +444,7 @@ render('post'); render('msg');
 // the discount code step: the same code as on the card (HERO30, HERO50 inside 14 days of the event)
 (function () {
   var hc = heroCode();
+  if (!$('ch-code-card')) return;                 // free event: no code step
   if (!hc[0]) { $('ch-code-card').hidden = true; return; }
   $('ch-code').textContent = hc[0]; $('ch-code-off').textContent = hc[1];
   $('ch-code-copy').addEventListener('click', function () {
@@ -605,7 +616,7 @@ function drawCard() {
   ctx.save(); ctx.shadowColor = K.glow; ctx.shadowBlur = 60; ctx.strokeStyle = ringGradient(cx, cy, r); ctx.lineWidth = 14;
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
   // venue bar: pin, venue + street on the left, the hero ticket code (own line) and what it gives on the right
-  var y = 1210, h = 190, hc = heroCode(), code = hc[0], codeW = 0;
+  var y = 1210, h = 190, hc = E.is_free ? ['FREE', 'Register now'] : heroCode(), code = hc[0], codeW = 0;
   glass(90, y, 1320, h, 40, 'rgba(255,255,255,.18)');
   if (code) { ctx.font = '900 60px Montserrat, Arial, sans-serif'; codeW = ctx.measureText(code).width; }
   var textMax = 1360 - 260 - (code ? codeW + 50 : 0);
