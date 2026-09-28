@@ -1422,6 +1422,23 @@ def _ch_venue_display(heading, city, sponsors):
     return name
 
 
+def _ch_pick_pool():
+    _out, _seen = [], set()
+    for _t in _about_talks:
+        _org = str(_t.get('organization') or '').strip()
+        try:
+            if _org and looks_like_job_title(_org):
+                _org = ''
+        except Exception:
+            pass
+        _sp = re.split(r'\s*&\s*|\s*,\s*|\s+and\s+', str(_t.get('name') or ''))[0].strip()
+        if not _org or not _sp or _sp.lower() in _seen:
+            continue
+        _seen.add(_sp.lower())
+        _out.append({'speaker': _sp, 'company': _org, 'keynote': _t in keynotes})
+    return _out
+
+
 def _ch_card_facts():
     _d = None
     try:
@@ -1447,6 +1464,8 @@ def _ch_card_facts():
         'start_date': _d.date().isoformat() if _d else '',
         'promo_code_near': str(context.get('communityhero_code_near', 'HERO50') or ''),
         'promo_label_near': str(context.get('communityhero_code_near_label', '50% off') or ''),
+        # every talk with a company (keynotes flagged) - the posts pick 3-5 of them at random, a keynote always in
+        'pick_talks': _ch_pick_pool(),
     }
 
 
