@@ -209,7 +209,7 @@
         </div>
       </div>
       <label class="ch-consent" id="ch-consent-wrap"><input type="checkbox" name="consent" value="yes"><span>I'm happy to share all the above with the organizers of {{ hero_event.event_name }}.</span></label>
-      <label class="ch-consent" id="ch-applied-wrap"><input type="checkbox" name="applied" value="yes"><span>{% if hero_event.is_free %}I already registered <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>{% else %}I already applied for the free ticket <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>{% endif %}, sharing this form to prove my contribution as a Community Hero.</span></label>
+      <label class="ch-consent" id="ch-applied-wrap"><input type="checkbox" name="applied" value="yes"><span>{% if hero_event.is_free %}I already registered <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>{% else %}I already applied for the free ticket <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>{% endif %}, sharing this form to show my Heroic actions!</span></label>
       <div class="ch-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Community Hero</button><span class="ch-hint">Our team will review this and get back to you ASAP!</span><div class="ch-error" id="ch-error" hidden></div></div>
     </div>
