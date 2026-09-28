@@ -183,7 +183,7 @@
       <div class="ch-tabs" data-set="msg"><button type="button" class="on" data-v="coworker">Coworker</button><button type="button" data-v="friend">Friend</button><button type="button" data-v="group">Group</button></div>
       <textarea class="ch-text" id="ch-msg" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-msg">Copy the message</button><span class="ch-copied" id="ch-msg-copied"></span></div>
-      <div class="ch-hint">Replace [Name] with their first name. Every version restarts from your details in step 1.</div>
+      <div class="ch-hint">Edit as you please before sending. Those messages are based on your input in step 1.</div>
     </div>
 
     <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
@@ -227,42 +227,10 @@ var form = $('ch-form');
 function val(k) { return (form.elements[k].value || '').trim(); }
 function first(n) { return (n || '').trim().split(/\s+/)[0]; }
 function list(arr, max) { arr = (arr || []).slice(0, max || 3); if (!arr.length) return ''; if (arr.length === 1) return arr[0]; return arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1]; }
-function lower(s) { return (s || '').charAt(0).toLowerCase() + (s || '').slice(1); }
 
-// ---- facts that make the wording specific -------------------------------------------------
-// Posts follow the team's own LinkedIn formats (read 2026-09-22): the company pages' bold question headline +
-// "What's coming up?" + one 🎙️ line per speaker, Mark's countdown post, Aleksandra's WHAT / WHERE / WHEN / WHY.
-// Messages sell the event on who presents on what, taken from the About panel (E.topic_talks), never on "it's cool".
+// ---- talks per About category (speaker, company, title, topic): the fallback pool for the speaker picks ----
 var TALKS = [];                                    // [{speaker, company, title, topic}] in About order, company required
 (E.topic_talks || []).forEach(function (t) { (t.talks || []).forEach(function (x) { if (x.company && x.title) TALKS.push({ speaker: x.speaker, company: x.company, title: x.title, topic: t.category }); }); });
-var companies = list(E.companies, 3), where = E.venue_name ? (E.venue_name.toLowerCase().indexOf(E.city.toLowerCase()) === -1 ? E.venue_name + ', ' + E.city : E.venue_name) : E.city, topic1 = (E.topics || [])[0] || E.event_name;
-function pickTalks(n) {                            // talks close to the hero's "why" first, then one per topic, one per company
-  var words = [];                                // no free-text hint any more: one talk per topic, in About order
-  function score(t) { var h = (t.title + ' ' + t.topic).toLowerCase(), s = 0; words.forEach(function (w) { if (h.indexOf(w) !== -1) s++; }); return s; }
-  var pool = TALKS.slice().sort(function (a, b) { return score(b) - score(a); }), out = [], topics = {}, seen = {};
-  pool.forEach(function (t) { if (out.length < n && !seen[t.company] && (score(t) > 0 || !topics[t.topic])) { out.push(t); topics[t.topic] = 1; seen[t.company] = 1; } });
-  pool.forEach(function (t) { if (out.length < n && out.indexOf(t) === -1 && !seen[t.company]) { out.push(t); seen[t.company] = 1; } });
-  return out;
-}
-function sessionLines(n) {
-  var p = pickTalks(n);
-  if (p.length >= 2) return p.map(function (t) { return '🎙️ ' + t.speaker + ' from ' + t.company + ' on ' + t.title; }).join('\n');
-  if (E.speakers_n >= 3) return '🎙️ ' + E.speakers_n + '+ speakers' + (companies ? ' from ' + companies + ' and more' : '');
-  return '🎙️ The lineup is being announced, the first speakers are on the event page';
-}
-function sessionsProse(n) {
-  var p = pickTalks(n);
-  if (p.length < 2) return E.speakers_n >= 3 ? E.speakers_n + '+ speakers' + (companies ? ' from ' + companies : '') + ' are presenting' : 'the lineup is being announced and the first speakers are already up';
-  return p.map(function (t, i) { return (i === 0 ? t.company + ' is presenting on ' : t.company + ' on ') + t.title; }).reduce(function (acc, s, i, arr) { return acc + (i === 0 ? '' : (i === arr.length - 1 ? ', and ' : ', ')) + s; }, '');
-}
-
-// ---- the hero code (same rule as the card: HERO30 while the event is 14+ days away, HERO50 inside that) -----
-// The code always sits alone on its own line: people copy it.
-function codeBlock(lead) {
-  if (E.is_free) return "It's free to attend, you just need to register.\n\n";
-  var hc = heroCode(); return hc[0] ? lead.replace('{off}', hc[1]) + '\n' + hc[0] + '\n\n' : '';
-}
-var when = E.date + (E.venue_name ? ' · ' + E.venue_name : ''), tag = '#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
 
 // ---- the Personal post (Marek 2026-09-28): five wordings of one structure, one picked at random per page load,
 // 2-4 random speakers, "@" tags only when "Add LinkedIn tags" is ticked, the code inline at the end of its line.
@@ -399,32 +367,86 @@ function post(v) {
   return '';
 }
 // ---- messages ------------------------------------------------------------------------------
-// Voice = Mark's own invitation emails (read 2026-09-23): short plain lines, the lineup as the reason, the link,
-// one no-pressure line, first name to sign. Coworker = the work case, Friend = come with me, Group = one post for a
-// Slack / WhatsApp / Discord channel.
+// Marek's drafts (2026-09-28): Coworker = casual but professional and focused, Friend = a nice day out together,
+// Group = a short, warm announcement for a whole channel. Three wordings each, one picked at random per page load
+// (MSG_PICK), same core: the event + date, the talk count, 5 random companies from the lineup (left out under 5),
+// the Community Hero code inline (free events: free to attend), the link, the hero's first name.
+var MSG_PICK = (function () {
+  var seen = {}, cos = [];
+  ((E.pick_talks && E.pick_talks.length) ? E.pick_talks : TALKS).forEach(function (t) { var k = (t.company || '').toLowerCase(); if (k && !seen[k]) { seen[k] = 1; cos.push(t.company); } });
+  for (var i = cos.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = cos[i]; cos[i] = cos[j]; cos[j] = x; }
+  var r = function () { return Math.floor(Math.random() * 3); };
+  return { coworker: r(), friend: r(), group: r(), companies: cos.length >= 5 ? cos.slice(0, 5) : [] };
+})();
 function msg(v) {
-  var name = first(val('name')) || '', p = pickTalks(2), A = p[0], B = p[1], rich = p.length >= 2;
-  var lineup = rich ? A.company + ' is presenting on ' + A.title + ', and ' + B.company + ' on ' + B.title + '.' + (E.speakers_n >= 3 ? ' ' + E.speakers_n + '+ talks in one day.' : '')
-                    : (E.speakers_n >= 3 ? E.speakers_n + '+ talks in one day' + (companies ? ', with ' + companies + ' presenting' : '') + '.' : 'The lineup is being announced and the first speakers are already up on the event page.');
-  if (v === 'coworker') {
-    return 'Hi [Name],\n\n' + 'Are you free on ' + E.date + '? ' + E.event_name + ' is on' + (E.venue_name ? ' at ' + E.venue_name : '') + ' in ' + E.city + " and I think it's worth us both going.\n\n" +
-      lineup + " It lines up well with what we're working on, and we'd come back with ideas for the team.\n\n" +
-      codeBlock('{off} the ticket with the code:') +
-      'Register here: ' + E.event_url + '\n\n' + 'Shall we go together?\n\n' + name;
-  }
-  if (v === 'friend') {
-    return 'Hey [Name]!\n\n' + "I'm going to " + E.event_name + ' on ' + E.date + " and it would be way more fun with you there.\n\n" +
-      (rich ? A.company + ' is talking about ' + A.title + ', and ' + B.company + ' about ' + B.title + '. Exactly your kind of thing.' : lineup) + '\n\n' +
-      codeBlock('I got you {off} the ticket with this code:') +
-      'Grab your spot here: ' + E.event_url + '\n\n' + "Come with me? No hard feelings if it's not for you :-)\n\n" + name;
-  }
-  if (v === 'group') {
-    return 'Hi everyone 👋\n\n' + 'Heads up for anyone around ' + E.city + ': ' + E.event_name + ' is on ' + E.date + (E.venue_name ? ' at ' + E.venue_name : '') + '.\n\n' +
-      lineup + '\n\n' +
-      codeBlock("I'm going as a Community Hero, so I can share {off} with the code:") +
-      'Register here: ' + E.event_url + '\n\n' + "Reply here if you're going, it would be great to meet up there!\n\n" + name;
-  }
-  return '';
+  var me = first(val('name')), comp = val('company'), N = sessionsText(), C = list(MSG_PICK.companies, 5);
+  var ev = E.event_name.replace(/\s+\d{4}\s+Q\d\s*$/i, ''), md = E.month_day, url = E.event_url, hc = heroCode();
+  var talks = function (word) { return (N ? N + ' ' + word : 'a full day of ' + word) + (C ? ', including ' + C : ''); };
+  var sign = function (bye) { return '\n\n' + bye + (me ? '\n' + me : ''); };
+  var off = hc[1], code = hc[0], paid = !E.is_free && code;
+  var V = {
+    coworker: [
+      function () {
+        return 'Hey,\n\nI just discovered ' + ev + ', a pretty neat tech conference on ' + md + '.\n\n' +
+          'They promise ' + talks('technical talks') + ". I feel like we'd come back with ideas for our team" + (comp ? ' at ' + comp : '') + '.\n\n' +
+          (paid ? "I'm a Community Hero for the event, and they got me unlimited " + off + ' with the code ' + code : "I'm a Community Hero for the event, and the conference is free to attend!") + '\n\n' +
+          'Would you like to go with me? ' + url + sign('Best,');
+      },
+      function () {
+        return 'Hi,\n\nHave you heard about ' + ev + "? It's a tech conference on " + md + ', and it looks really relevant for us.\n\n' +
+          'The agenda has ' + talks('technical talks') + ". Worth a day out of the office, and we'd bring back some good ideas for the team" + (comp ? ' at ' + comp : '') + '.\n\n' +
+          (paid ? "I'm a Community Hero for it, so we get " + off + ' with the code ' + code : "I'm a Community Hero for it, and it's free to attend!") + '\n\n' +
+          'Shall we go together? ' + url + sign('Cheers,');
+      },
+      function () {
+        return 'Hey,\n\nQuick one: ' + ev + ' is happening on ' + md + " and I think it's worth us going.\n\n" +
+          'Expect ' + talks('technical talks') + ', and plenty that maps to what we do' + (comp ? ' at ' + comp : '') + '.\n\n' +
+          (paid ? "I'm a Community Hero for the event, which gets us " + off + ' with the code ' + code : "I'm a Community Hero for the event, and it's free to attend anyway!") + '\n\n' +
+          'Up for it? ' + url + sign('Best,');
+      }
+    ],
+    friend: [
+      function () {
+        return "What's up?\n\nI just discovered " + ev + ', a pretty neat tech conference on ' + md + '.\n\n' +
+          'They promise ' + talks('sessions') + ', looks like tons of fun and networking together!\n\n' +
+          (paid ? "As a Community Hero for the event, I've got you covered with unlimited " + off + ' - code ' + code : "As a Community Hero for the event, I can tell you the best part: it's free to attend!") + '\n\n' +
+          'Wanna go with me? ' + url + sign('Best,');
+      },
+      function () {
+        return 'Hey you!\n\nFancy a fun day out? ' + ev + ' is on ' + md + '.\n\n' +
+          (N || C ? talks('sessions').charAt(0).toUpperCase() + talks('sessions').slice(1) : 'A full day of sessions') + ', plus lots of good people to meet. It would be so much better together!\n\n' +
+          (paid ? "I'm a Community Hero for it, so I can get you " + off + ' with the code ' + code : "I'm a Community Hero for it, and it's free to attend!") + '\n\n' +
+          'Coming with me? ' + url + sign('See you there, I hope!');
+      },
+      function () {
+        return 'Hey!\n\nGuess what I found: ' + ev + ', a tech conference on ' + md + ' that looks like a great day out.\n\n' +
+          'Think ' + talks('sessions') + ', good coffee and lots of new people. Way more fun together!\n\n' +
+          (paid ? "Being a Community Hero, I've got a code for you, " + off + ' with ' + code : "No ticket to buy either, it's free to attend!") + '\n\n' +
+          "In? " + url + sign('Best,');
+      }
+    ],
+    group: [
+      function () {
+        return 'Hey folks!\n\nI just discovered ' + ev + ' on ' + md + '.\n\n' +
+          'They promise ' + talks('sessions') + ', looks like tons of fun and networking together!\n\n' +
+          (paid ? "I'm a Community Hero for the event, so anyone here who wants to join gets a hefty " + off + ' with the code ' + code : "It's free to attend, so anyone here is welcome to join!") + '\n\n' +
+          "Who's going with me? " + url + sign('Best,');
+      },
+      function () {
+        return 'Hi everyone 👋\n\nHeads up: ' + ev + ' is happening on ' + md + '.\n\n' +
+          (N || C ? talks('sessions').charAt(0).toUpperCase() + talks('sessions').slice(1) : 'A full day of sessions') + ', and a great chance to meet people from the community.\n\n' +
+          (paid ? "As a Community Hero, I can share " + off + ' for all of you with the code ' + code : "It's free to attend, you just need to register!") + '\n\n' +
+          "Who's joining? " + url + sign('Best,');
+      },
+      function () {
+        return 'Hello all!\n\nA quick tip for anyone around ' + E.city + ': ' + ev + ' is on ' + md + '.\n\n' +
+          'On the agenda: ' + talks('sessions') + '.\n\n' +
+          (paid ? "I'm a Community Hero for it, which means everyone here gets " + off + ' with the code ' + code : 'Entry is free, just register!') + '\n\n' +
+          'Details and registration: ' + url + "\n\nLet me know if you're going, happy to meet up there!" + sign('Best,');
+      }
+    ]
+  };
+  return V[v] ? V[v][MSG_PICK[v]]() : '';
 }
 var variant = { post: 'personal', msg: 'coworker' }, edited = { post: false, msg: false };
 function render(set) {
