@@ -295,13 +295,23 @@ document.querySelectorAll('[data-copy]').forEach(function (b) {
 // ---- the card: a 1500 x 1500 share image (the poster layout, see drawCard) on a dark canvas with glowing
 //      brand-coloured sweeps. Drawn again on every keystroke of the name and when the photo changes.
 var canvas = $('ch-canvas'), ctx = canvas.getContext('2d');
-var PALETTES = {                                   // [main, glow, accent, wordmark blend] per brand, all vivid on navy;
-  'llmday': ['#2ee6a6', '#22d3ee', '#a855f7', 'screen'],            // 'screen' drops the black die-cut backing of a sticker
-  'sreday': ['#c084fc', '#f472b6', '#38bdf8', 'source-over'],
-  'platformday': ['#fbbf24', '#f97316', '#ef4444', 'screen'],
-  'pec': ['#f59e0b', '#ef4444', '#8b5cf6', 'source-over'], 'prompt engineering conference': ['#f59e0b', '#ef4444', '#8b5cf6', 'source-over']
+// one fixed colour scheme per brand (Marek 2026-09-28): bg = three background stops, ramp = the gradient on HERO, the
+// photo ring, the code and the date-box outline, accent = month label / pin / the bar under HERO, glow = shadows,
+// sweeps = the two glowing bands (rainbow: the bands carry the whole ramp), blend = how the wordmark is drawn
+// ('screen' drops the black die-cut backing of a sticker)
+var SCHEMES = {
+  'llmday': { bg: ['#07261d', '#03120d', '#062019'], ramp: ['#a7f3d0', '#3db07f', '#26986a'], accent: '#6ee7b7', glow: '#3db07f',
+              sweeps: [['#3db07f', '#6ee7b7'], ['#26986a', '#3db07f']], blend: 'screen' },
+  'sreday': { bg: ['#2a0f33', '#12061c', '#1d0b35'], ramp: ['#f472b6', '#c084fc', '#818cf8'], accent: '#d8b4fe', glow: '#c084fc',
+              sweeps: [['#e879f9', '#a855f7'], ['#7c3aed', '#f472b6']], blend: 'source-over' },
+  'platformday': { bg: ['#2b1606', '#120903', '#1f0c05'], ramp: ['#fde047', '#fb923c', '#ef4444'], accent: '#fbbf24', glow: '#f97316',
+              sweeps: [['#f97316', '#fbbf24'], ['#ef4444', '#f97316']], blend: 'screen' },
+  'pec': { bg: ['#141031', '#07061a', '#0d1430'], ramp: ['#ef4444', '#f59e0b', '#facc15', '#22c55e', '#06b6d4', '#3b82f6', '#a855f7'],
+              accent: '#facc15', glow: '#a855f7', rainbow: true, blend: 'source-over' }
 };
-var PAL = PALETTES[E.brand] || [E.brand_color, '#22d3ee', '#a855f7', 'source-over'];
+SCHEMES['prompt engineering conference'] = SCHEMES.pec;
+var K = SCHEMES[E.brand] || { bg: ['#08203a', '#040d1c', '#0a1235'], ramp: [E.brand_color, '#22d3ee', '#a855f7'], accent: E.brand_color,
+                               glow: '#22d3ee', sweeps: [['#22d3ee', E.brand_color], ['#a855f7', '#22d3ee']], blend: 'source-over' };
 var wm = new Image(), wmOk = false;
 wm.onload = function () { wmOk = true; drawCard(); };
 wm.onerror = function () { wmOk = false; drawCard(); };
@@ -344,20 +354,21 @@ function sweep(cx, cy, r, width, from, to, cols, alpha, blur) {   // a glowing a
   ctx.shadowColor = cols[1]; ctx.shadowBlur = blur;
   ctx.beginPath(); ctx.arc(cx, cy, r, from, to); ctx.stroke(); ctx.restore();
 }
-function ringGradient(cx, cy, r) {
-  var g = ctx.createLinearGradient(cx - r, cy + r, cx + r, cy - r);
-  g.addColorStop(0, PAL[1]); g.addColorStop(.5, PAL[0]); g.addColorStop(1, PAL[2]); return g;
+function ramp(x0, y0, x1, y1) {                 // the brand's gradient along a line
+  var g = ctx.createLinearGradient(x0, y0, x1, y1);
+  K.ramp.forEach(function (col, i) { g.addColorStop(i / (K.ramp.length - 1), col); }); return g;
 }
+function ringGradient(cx, cy, r) { return ramp(cx - r, cy + r, cx + r, cy - r); }
 function gradText(t, x, y, align) {              // text filled with the brand gradient across its own width
   var w = ctx.measureText(t).width, x0 = align === 'right' ? x - w : align === 'left' ? x : x - w / 2;
-  var g = ctx.createLinearGradient(x0, 0, x0 + w, 0); g.addColorStop(0, PAL[1]); g.addColorStop(.5, PAL[0]); g.addColorStop(1, PAL[2]);
-  ctx.fillStyle = g; ctx.fillText(t, x, y);
+  ctx.fillStyle = ramp(x0, 0, x0 + w, 0); ctx.fillText(t, x, y);
 }
 function spacedWidth(t, gap) { var w = 0; for (var i = 0; i < t.length; i++) w += ctx.measureText(t[i]).width; return w + gap * (t.length - 1); }
 function spacedLeft(t, x, y, gap) { ctx.save(); ctx.textAlign = 'left'; for (var i = 0; i < t.length; i++) { ctx.fillText(t[i], x, y); x += ctx.measureText(t[i]).width + gap; } ctx.restore(); }
 function glass(x, y, w, h, r, stroke, glow) {    // dark translucent panel with a thin outline
   ctx.save(); if (glow) { ctx.shadowColor = glow; ctx.shadowBlur = 40; }
-  ctx.fillStyle = 'rgba(12,28,52,.78)'; ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); ctx.restore();
+  ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill();
+  ctx.fillStyle = 'rgba(8,8,20,.55)'; ctx.fill(); ctx.restore();
   ctx.save(); ctx.strokeStyle = stroke; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.stroke(); ctx.restore();
 }
 function pinIcon(x, y, s, col) {                 // map pin centred on (x, y), s = height
@@ -371,32 +382,39 @@ function drawCard() {
   // (scales with its length), the photo on the right, and a bar with the venue + its street and the hero ticket code
   var W = canvas.width, H = canvas.height;
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.shadowBlur = 0; ctx.clearRect(0, 0, W, H);
-  var bg = ctx.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#08203a'); bg.addColorStop(.45, '#040d1c'); bg.addColorStop(1, '#0a1235');
+  var bg = ctx.createLinearGradient(0, 0, W, H); bg.addColorStop(0, K.bg[0]); bg.addColorStop(.45, K.bg[1]); bg.addColorStop(1, K.bg[2]);
   ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-  sweep(1250, 700, 520, 140, -Math.PI * .6, Math.PI * .1, [PAL[1], PAL[0]], .4, 100);
-  sweep(200, 1400, 600, 120, -Math.PI * .5, 0, [PAL[2], PAL[1]], .3, 80);
-  var vg = ctx.createRadialGradient(W / 2, H * .46, 320, W / 2, H / 2, 1150); vg.addColorStop(0, 'rgba(3,8,20,0)'); vg.addColorStop(1, 'rgba(3,7,18,.55)');
+  if (K.rainbow) {                                // PEC: both bands carry the full spectrum
+    [[1250, 700, 520, 140, -Math.PI * .6, Math.PI * .1, .55, 70], [200, 1400, 600, 120, -Math.PI * .5, 0, .45, 60]].forEach(function (b) {
+      ctx.save(); ctx.globalAlpha = b[6]; ctx.strokeStyle = ramp(b[0] - b[2], b[1] - b[2], b[0] + b[2], b[1] + b[2]); ctx.lineWidth = b[3]; ctx.lineCap = 'round';
+      ctx.shadowColor = K.glow; ctx.shadowBlur = b[7]; ctx.beginPath(); ctx.arc(b[0], b[1], b[2], b[4], b[5]); ctx.stroke(); ctx.restore();
+    });
+  } else {
+    sweep(1250, 700, 520, 140, -Math.PI * .6, Math.PI * .1, K.sweeps[0], .4, 100);
+    sweep(200, 1400, 600, 120, -Math.PI * .5, 0, K.sweeps[1], .3, 80);
+  }
+  var vg = ctx.createRadialGradient(W / 2, H * .46, 320, W / 2, H / 2, 1150); vg.addColorStop(0, 'rgba(3,3,12,0)'); vg.addColorStop(1, 'rgba(3,3,12,.55)');
   ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
   ctx.textBaseline = 'middle';
   // wordmark, top left
-  if (wmOk) { var ws = Math.min(420 / wm.width, 250 / wm.height); ctx.save(); ctx.globalCompositeOperation = PAL[3] || 'source-over'; ctx.drawImage(wm, 88, 62, wm.width * ws, wm.height * ws); ctx.restore(); }
-  else { ctx.textAlign = 'left'; ctx.fillStyle = PAL[0]; fitText(E.brand_name.toUpperCase(), 520, 110, '900'); ctx.fillText(E.brand_name.toUpperCase(), 92, 180); }
+  if (wmOk) { var ws = Math.min(420 / wm.width, 250 / wm.height); ctx.save(); ctx.globalCompositeOperation = K.blend || 'source-over'; ctx.drawImage(wm, 88, 62, wm.width * ws, wm.height * ws); ctx.restore(); }
+  else { ctx.textAlign = 'left'; ctx.fillStyle = K.accent; fitText(E.brand_name.toUpperCase(), 520, 110, '900'); ctx.fillText(E.brand_name.toUpperCase(), 92, 180); }
   // date box, top right, drawn at 80% around its right edge
   if (E.day) {
     ctx.save(); ctx.translate(1410, 180); ctx.scale(.8, .8); ctx.translate(-1410, -180);
     var dw = 520, dh = 200, dx = 1410 - dw, dy = 80, month = (E.month || '').toUpperCase();
-    glass(dx, dy, dw, dh, 30, PAL[0] + '99', PAL[1]);
+    glass(dx, dy, dw, dh, 30, ramp(dx, dy + dh, dx + dw, dy), K.glow);
     var ds = 150; do { ctx.font = '900 ' + ds + 'px Montserrat, Arial, sans-serif'; } while (ctx.measureText(E.day).width > 150 && (ds -= 4) > 90);   // two-digit days stay clear of the box edge and the divider
     ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText(E.day, dx + 105, dy + dh / 2 + 6);
     ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(dx + 200, dy + 40); ctx.lineTo(dx + 200, dy + dh - 40); ctx.stroke();
     var ms = 46; while (ms > 24) { ctx.font = '800 ' + ms + 'px Montserrat, Arial, sans-serif'; if (spacedWidth(month, ms * .12) <= dw - 270) break; ms--; }
-    ctx.fillStyle = PAL[0]; spacedLeft(month, dx + 232, dy + 78, ms * .12);
+    ctx.fillStyle = K.accent; spacedLeft(month, dx + 232, dy + 78, ms * .12);
     ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = '600 36px Montserrat, Arial, sans-serif'; ctx.fillText(E.weekday || '', dx + 232, dy + 136);
     ctx.restore();
   }
   // COMMUNITY / HERO, the name (one size for both lines)
   ctx.textAlign = 'left'; ctx.font = '900 150px Montserrat, Arial, sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText('COMMUNITY', 90, 440); gradText('HERO', 90, 590, 'left');
-  ctx.fillStyle = PAL[0]; ctx.fillRect(96, 690, 110, 8);
+  ctx.fillStyle = K.rainbow ? ramp(96, 0, 206, 0) : K.accent; ctx.fillRect(96, 690, 110, 8);
   var name = (val('name') || 'Your Name').toUpperCase().replace(/\s+/g, ' ').trim(), parts = name.split(' ');
   var lastName = parts.length > 1 ? parts.pop() : '', firstName = parts.join(' ');
   var size = Math.min(fitText(firstName, 600, 80, '800'), lastName ? fitText(lastName, 600, 80, '800') : 80);
@@ -420,14 +438,14 @@ function drawCard() {
   if (photo) { var s = Math.max(2 * r / photo.width, 2 * r / photo.height), pw = photo.width * s, ph = photo.height * s; ctx.drawImage(photo, cx - pw / 2, cy - ph / 2, pw, ph); }
   else { ctx.fillStyle = '#12213a'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r); ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.textAlign = 'center'; ctx.font = '600 34px Montserrat, Arial, sans-serif'; ctx.fillText('Your photo goes here', cx, cy); }
   ctx.restore();
-  ctx.save(); ctx.shadowColor = PAL[1]; ctx.shadowBlur = 60; ctx.strokeStyle = ringGradient(cx, cy, r); ctx.lineWidth = 14;
+  ctx.save(); ctx.shadowColor = K.glow; ctx.shadowBlur = 60; ctx.strokeStyle = ringGradient(cx, cy, r); ctx.lineWidth = 14;
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
   // venue bar: pin, venue + street on the left, the hero ticket code (own line) and what it gives on the right
   var y = 1210, h = 190, code = E.promo_code || '', codeW = 0;
   glass(90, y, 1320, h, 40, 'rgba(255,255,255,.18)');
   if (code) { ctx.font = '900 60px Montserrat, Arial, sans-serif'; codeW = ctx.measureText(code).width; }
   var textMax = 1360 - 260 - (code ? codeW + 50 : 0);
-  pinIcon(190, y + h / 2, 84, PAL[0]); ctx.textAlign = 'left';
+  pinIcon(190, y + h / 2, 84, K.accent); ctx.textAlign = 'left';
   ctx.fillStyle = '#fff'; fitText(E.venue_short || E.city || '', textMax, 56, '800'); ctx.fillText(E.venue_short || E.city || '', 260, y + h / 2 - 26);
   ctx.fillStyle = 'rgba(255,255,255,.7)'; fitText(E.venue_line || '', textMax, 36, '500'); ctx.fillText(E.venue_line || '', 260, y + h / 2 + 34);
   if (code) {
