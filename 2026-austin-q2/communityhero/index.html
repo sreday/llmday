@@ -272,40 +272,40 @@ function personalPost() {
   var N = sessionsText(), T = talksText(), P = topicsText(), B = tagged(E.brand_name);
   var join = function (lead) { return lead + ' ' + E.city + ' on ' + E.month_day; };
   var tail = function (ask, thanks) { return ask + '\nRSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
-  var V = [
+  var V = [                                      // excited and warm, emojis welcome - the Professional post stays composed
     function () {
-      return ("I'm a Community Hero at " + E.event_name + '!') + '\n\n' +
-        (N ? 'It will be a great day with ' + N + ' amazing sessions!' : 'It will be a great day of amazing sessions!') + '\n\n' +
-        (T ? "I'm personally looking forward to the talks by " + T + '.\n\n' : '') +
-        (P ? 'This will be a day full of discussions on all things ' + P + '!\n\n' : '') +
-        tail(join('Sounds like fun? Join me in'), 'Shout-out to the ' + B + ' team for the invitation, see you there!');
+      return "I'm a Community Hero at " + E.event_name + '! 🎉\n\n' +
+        (N ? "It's going to be a great day with " + N + " amazing sessions, and I honestly can't wait!" : "It's going to be a great day of amazing sessions, and I honestly can't wait!") + '\n\n' +
+        (T ? "I'm especially looking forward to hearing from " + T + '. 🙌\n\n' : '') +
+        (P ? 'A whole day of discussions on all things ' + P + ', surrounded by people who love this stuff as much as I do!\n\n' : '') +
+        tail(join('Sounds like fun? Join me in') + '!', 'Huge shout-out to the ' + B + ' team for the invitation, see you there! 🚀');
     },
     function () {
-      return ("I'm a Community Hero at " + E.event_name + '!') + ' 🎉\n\n' +
-        (N ? N + ' sessions, one day, and a room full of people who care about this stuff as much as I do.' : 'One day and a room full of people who care about this stuff as much as I do.') + '\n\n' +
-        (T ? "The talks I'm most excited about: " + T + '.\n\n' : '') +
-        (P ? 'Expect a full day of conversations on ' + P + '.\n\n' : '') +
-        tail(join('Want to learn with me? Come to'), 'Thanks to the ' + B + " team for having me, can't wait!");
+      return "Guess who's going to " + E.event_name + ' as a Community Hero? This one! 🙋\n\n' +
+        (N ? N + " sessions, one day, and a room full of people who care about this stuff as much as I do. I'm so in!" : "One day and a room full of people who care about this stuff as much as I do. I'm so in!") + '\n\n' +
+        (T ? "The talks I'm most excited about: " + T + '. Already making room in my notebook for these! 📝\n\n' : '') +
+        (P ? 'Expect a full day of great conversations on ' + P + '. This community keeps getting better!\n\n' : '') +
+        tail(join('Want to learn with me? Come to') + '!', 'Big thanks to the ' + B + " team for having me, can't wait! 🎉");
     },
     function () {
-      return ("I'm a Community Hero at " + E.event_name + '!') + '\n\n' +
-        (N ? "I can't wait for this one: " + N + ' sessions and a lot to learn.' : "I can't wait for this one, there is a lot to learn.") + '\n\n' +
-        (T ? 'On my must-see list: ' + T + '.\n\n' : '') +
-        (P ? 'A whole day about ' + P + ', and the hallway chats are half the fun.\n\n' : '') +
-        tail(join('Join me in') + '?', 'Thank you ' + B + ' for the invitation, see you there!');
+      return "I'm a Community Hero at " + E.event_name + " and I'm genuinely excited! ✨\n\n" +
+        (N ? "I can't wait for this one: " + N + ' sessions and so much to learn.' : "I can't wait for this one, there's so much to learn.") + '\n\n' +
+        (T ? 'On my must-see list: ' + T + '. 👀\n\n' : '') +
+        (P ? 'A whole day about ' + P + ', and the hallway chats are half the fun!\n\n' : '') +
+        tail("Who's joining me in " + E.city + ' on ' + E.month_day + '?', 'Thank you ' + B + ' for the invitation, see you there! 🙌');
     },
     function () {
-      return ('Excited to be a Community Hero at ' + E.event_name + '!') + '\n\n' +
-        (T ? (N ? N + ' sessions are lined up' : 'The sessions are lined up') + ", and I already know which ones I'm not missing: " + T + '.\n\n' : (N ? N + ' sessions are lined up.\n\n' : '')) +
-        (P ? "If you're into " + P + ", this is your day. It's great to see this community growing!" : "It's great to see this community growing!") + '\n\n' +
-        tail(join('See you in') + '?', 'Big thanks to the ' + B + ' team for the invitation!');
+      return 'So excited to be a Community Hero at ' + E.event_name + '! 🤩\n\n' +
+        (T ? (N ? N + ' sessions are lined up' : 'The sessions are lined up') + ", and I already know which ones I'm not missing: " + T + '.\n\n' : (N ? N + ' sessions are lined up!\n\n' : '')) +
+        (P ? "If you're into " + P + ", this is your day. It's so great to see this community growing! 🌱" : "It's so great to see this community growing! 🌱") + '\n\n' +
+        tail(join('See you in') + '? 😊', 'Big thanks to the ' + B + ' team for the invitation!');
     },
     function () {
-      return ('Community Hero reporting for ' + E.event_name + '!') + ' 🙌\n\n' +
-        (N ? N + ' amazing sessions in one day' : 'A day of amazing sessions') + (T ? ", and I've done my homework." : ", and I've already cleared my calendar.") + '\n\n' +
-        (T ? 'Top of my list: ' + T + '.\n\n' : '') +
-        (P ? 'A full day of learning and discussions on ' + P + ', with a community that keeps getting stronger.\n\n' : '') +
-        tail(join('Fancy joining me in') + '?', 'Shout-out to the ' + B + ' team for the invitation, see you there!');
+      return 'Community Hero reporting for ' + E.event_name + '! 🙌\n\n' +
+        (N ? N + ' amazing sessions in one day' : 'A day of amazing sessions') + (T ? ", and I've done my homework. 📚" : ", and I've already cleared my calendar. 🗓️") + '\n\n' +
+        (T ? 'Top of my list: ' + T + ". Can't wait!\n\n" : '') +
+        (P ? 'A full day of learning and discussions on ' + P + ', with a community that keeps getting stronger. 💪\n\n' : '') +
+        tail(join('Fancy joining me in') + '?', 'Shout-out to the ' + B + ' team for the invitation, see you there! 🎉');
     }
   ];
   return V[HERO_PICK.v]();
