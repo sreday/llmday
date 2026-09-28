@@ -274,39 +274,39 @@ function talksText() {
 function topicsText() { return list(E.topics, 3); }
 function codeInline() { var hc = heroCode(); return hc[0] ? hc[1] + ' with the code ' + hc[0] + '\n' : ''; }
 function personalPost() {
-  var N = sessionsText(), T = talksText(), P = topicsText(), B = tagged(E.brand_name), ev = bold(E.event_name);
+  var N = sessionsText(), T = talksText(), P = topicsText(), B = tagged(E.brand_name);
   var join = function (lead) { return lead + ' ' + E.city + ' on ' + E.month_day; };
   var tail = function (ask, thanks) { return ask + '\nRSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
   var V = [
     function () {
-      return bold("I'm") + ' the Community Hero at ' + ev + '!\n\n' +
+      return bold("I'm the Community Hero at " + E.event_name + '!') + '\n\n' +
         (N ? 'It will be a great day with ' + N + ' amazing sessions!' : 'It will be a great day of amazing sessions!') + '\n\n' +
         (T ? "I'm personally looking forward to the talks by " + T + '.' : "I'm personally looking forward to the full lineup.") + '\n\n' +
         (P ? 'This will be a day full of discussions on all things ' + P + '!\n\n' : '') +
         tail(join('Sounds like fun? Join me in'), 'Shout-out to the ' + B + ' team for the invitation, see you there!');
     },
     function () {
-      return bold("I'm") + ' a Community Hero at ' + ev + '! 🎉\n\n' +
+      return bold("I'm a Community Hero at " + E.event_name + '!') + ' 🎉\n\n' +
         (N ? N + ' sessions, one day, and a room full of people who care about this stuff as much as I do.' : 'One day and a room full of people who care about this stuff as much as I do.') + '\n\n' +
         (T ? "The talks I'm most excited about: " + T + '.' : "I can't wait to see the full lineup.") + '\n\n' +
         (P ? 'Expect a full day of conversations on ' + P + '.\n\n' : '') +
         tail(join('Want to learn with me? Come to'), 'Thanks to the ' + B + " team for having me, can't wait!");
     },
     function () {
-      return bold("I'm") + ' the Community Hero at ' + ev + '!\n\n' +
+      return bold("I'm the Community Hero at " + E.event_name + '!') + '\n\n' +
         (N ? "I can't wait for this one: " + N + ' sessions and a lot to learn.' : "I can't wait for this one, there is a lot to learn.") + '\n\n' +
         (T ? 'On my must-see list: ' + T + '.' : 'My must-see list is getting longer by the day.') + '\n\n' +
         (P ? 'A whole day about ' + P + ', and the hallway chats are half the fun.\n\n' : '') +
         tail(join('Join me in') + '?', 'Thank you ' + B + ' for the invitation, see you there!');
     },
     function () {
-      return 'Excited to be a Community Hero at ' + ev + '!\n\n' +
+      return bold('Excited to be a Community Hero at ' + E.event_name + '!') + '\n\n' +
         (T ? (N ? N + ' sessions are lined up' : 'The sessions are lined up') + ", and I already know which ones I'm not missing: " + T + '.' : (N ? N + ' sessions are lined up, and I am already picking my favourites.' : 'The lineup is shaping up, and I am already picking my favourites.')) + '\n\n' +
         (P ? "If you're into " + P + ", this is your day. It's great to see this community growing!" : "It's great to see this community growing!") + '\n\n' +
         tail(join('See you in') + '?', 'Big thanks to the ' + B + ' team for the invitation!');
     },
     function () {
-      return bold('Community Hero') + ' reporting for ' + ev + '! 🙌\n\n' +
+      return bold('Community Hero reporting for ' + E.event_name + '!') + ' 🙌\n\n' +
         (N ? N + " amazing sessions in one day, and I've done my homework." : "A day of amazing sessions, and I've done my homework.") + '\n\n' +
         (T ? 'Top of my list: ' + T + '.' : 'Top of my list: the full lineup.') + '\n\n' +
         (P ? 'A full day of learning and discussions on ' + P + ', with a community that keeps getting stronger.\n\n' : '') +
