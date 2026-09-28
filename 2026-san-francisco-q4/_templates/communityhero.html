@@ -284,7 +284,7 @@ function personalPost() {
   var tail = function (ask, thanks) { return ask + '\nRSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
   var V = [
     function () {
-      return bold("I'm the Community Hero at " + E.event_name + '!') + '\n\n' +
+      return bold("I'm a Community Hero at " + E.event_name + '!') + '\n\n' +
         (N ? 'It will be a great day with ' + N + ' amazing sessions!' : 'It will be a great day of amazing sessions!') + '\n\n' +
         (T ? "I'm personally looking forward to the talks by " + T + '.' : "I'm personally looking forward to the full lineup.") + '\n\n' +
         (P ? 'This will be a day full of discussions on all things ' + P + '!\n\n' : '') +
@@ -298,7 +298,7 @@ function personalPost() {
         tail(join('Want to learn with me? Come to'), 'Thanks to the ' + B + " team for having me, can't wait!");
     },
     function () {
-      return bold("I'm the Community Hero at " + E.event_name + '!') + '\n\n' +
+      return bold("I'm a Community Hero at " + E.event_name + '!') + '\n\n' +
         (N ? "I can't wait for this one: " + N + ' sessions and a lot to learn.' : "I can't wait for this one, there is a lot to learn.") + '\n\n' +
         (T ? 'On my must-see list: ' + T + '.' : 'My must-see list is getting longer by the day.') + '\n\n' +
         (P ? 'A whole day about ' + P + ', and the hallway chats are half the fun.\n\n' : '') +
