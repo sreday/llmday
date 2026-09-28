@@ -24,6 +24,9 @@
  *      Settings -> Secrets -> Actions -> COMMUNITYHERO_FEED = "<exec URL>?list=1&token=<COMMUNITYHERO_TOKEN>".
  *   Re-deploy after editing: Deploy -> Manage deployments -> edit -> new version (the URL stays the same).
  *
+ * v6 (2026-09-28): the list also carries email_sha (SHA-256 of the lowercased email) so the status build can match
+ * each hero to the event's Luma guest list and show "approved / pending / declined on Luma".
+ *
  * v2 (2026-09-22): every report is also appended to a Google Sheet ("Community heroes", created on first use,
  * id in COMMUNITYHERO_SHEET_ID) that feeds the /status/ Heroes tab: ?list=1&token=<COMMUNITYHERO_TOKEN> returns
  * the rows as JSON without the email column. Rows are never deleted by code. Type "yes" into the "approved"
@@ -72,7 +75,7 @@ function doGet(e) {
     if (!token || String(p.token || '') !== token) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, rows: listHeroes() });
   }
-  return respond({ ok: true, service: 'communityhero', version: 5 });   // v5: letter to Anna + the hero's card attached
+  return respond({ ok: true, service: 'communityhero', version: 6 });   // v6: email_sha in the list (Luma ticket match)
 }
 
 function doPost(e) {
@@ -301,11 +304,20 @@ function listHeroes() {
     if (!v[0] || !v[6]) continue;
     rows.push({ ts: v[0] instanceof Date ? v[0].toISOString() : String(v[0]), brand: String(v[1]), slug: String(v[2]), event: String(v[3]),
                 city: String(v[4]), date: v[5] instanceof Date ? Utilities.formatDate(v[5], 'UTC', 'MMMM d, yyyy') : String(v[5]),
-                name: String(v[6]), company: String(v[8]), linkedin: String(v[9]),
+                name: String(v[6]), email_sha: sha256hex(v[7]), company: String(v[8]), linkedin: String(v[9]),
                 linkedin_post: String(v[10]), social_post: String(v[11]), community: String(v[12]), invites: String(v[13]), other: String(v[14]),
                 proof: String(v[15]), screenshots: Number(v[16]) || 0, approved: /^\s*(yes|y|true|ok|1)\s*$/i.test(String(v[17])) });
   }
   return rows;
+}
+
+// SHA-256 of the lowercased email (v6, 2026-09-28): the status build hashes each Luma guest's email the same way to
+// read the hero's ticket status from Luma. The email itself never leaves the sheet.
+function sha256hex(email) {
+  var e = String(email == null ? '' : email).trim().toLowerCase();
+  if (!e) return '';
+  var bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, e, Utilities.Charset.UTF_8);
+  return bytes.map(function (b) { var h = ((b + 256) % 256).toString(16); return h.length < 2 ? '0' + h : h; }).join('');
 }
 
 // ---- filing, budget, helpers (same conventions as the other form scripts) ------------
