@@ -72,7 +72,7 @@ function doGet(e) {
     if (!token || String(p.token || '') !== token) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, rows: listHeroes() });
   }
-  return respond({ ok: true, service: 'communityhero', version: 4 });   // v4: screenshots capped at 20 MB in total (Gmail limit)
+  return respond({ ok: true, service: 'communityhero', version: 5 });   // v5: letter to Anna + the hero's card attached
 }
 
 function doPost(e) {
@@ -100,10 +100,14 @@ function doPost(e) {
   }
   var totalBytes = attachments.reduce(function (n, b) { return n + b.getBytes().length; }, 0);
   if (totalBytes > MAX_TOTAL_BYTES) return respond({ ok: false, error: 'images too large' });
+  var nShots = attachments.length;
+  // the hero's card as drawn on the page (v5): attached first; left out rather than failing when it does not fit
+  var card = data.card ? decodeImage(data.card.b64, photoMime(data.card.type, 'card.jpg'), s.name + ' - Community Hero card' + photoExt(data.card.type, 'card.jpg')) : null;
+  if (card && card !== 'too large' && totalBytes + card.getBytes().length <= MAX_TOTAL_BYTES) attachments.unshift(card); else card = null;
 
   var from = GmailApp.getAliases().indexOf(brand.from) !== -1 ? brand.from : Session.getEffectiveUser().getEmail();
   var to = TO_USER + '@' + (brand.mail_domain || brand.site);
-  var mail = composeReport(s, ev, brand, attachments.length);
+  var mail = composeReport(s, ev, brand, nShots, !!card);
   if (data.dry_run) {
     return respond({ ok: true, dry_run: true, subject: mail.subject, from: from, to: to, cc: s.email, text: mail.text, html: mail.html,
                      attachments: attachments.map(function (b) { return b.getName(); }) });
@@ -115,15 +119,18 @@ function doPost(e) {
   if (from === brand.from) options.from = brand.from;
   var message = GmailApp.createDraft(to, mail.subject, mail.text, options).send();
   fileThread(message);
-  recordHero(s, ev, brandKey, data.event || {}, attachments.length);
-  Logger.log('Community hero: %s (%s) for %s -> %s, %d screenshots', s.name, s.email, ev.event_name, to, attachments.length);
+  recordHero(s, ev, brandKey, data.event || {}, nShots);
+  Logger.log('Community hero: %s (%s) for %s -> %s, %d screenshots%s', s.name, s.email, ev.event_name, to, nShots, card ? ' + card' : '');
   return respond({ ok: true });
 }
 
 // ---- the email --------------------------------------------------------------------
 
-function composeReport(s, ev, brand, nShots) {
+// v5 (2026-09-28): Marek's letter to Anna - "Dear Anna", the hero's details first, then the heroic actions, what is
+// attached (their card + screenshots), the ask (paid: confirm the ticket; free event: thank them), signed Mark.
+function composeReport(s, ev, brand, nShots, hasCard) {
   var subject = s.name + ' - Community Hero - ' + ev.event_name;
+  var firstName = s.name.split(/\s+/)[0];
   var links = s.proof ? s.proof.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean) : [];
   var sorted = classifyLinks(links), did = [], unmatched = sorted.other.slice();
   ACTIONS.forEach(function (a) {
@@ -133,36 +140,49 @@ function composeReport(s, ev, brand, nShots) {
   });
   if (s.other) did.push({ text: s.other, links: [] });
 
-  var details = [['Name', s.name], ['Email', s.email], ['Company', s.company], ['Role', s.role], ['LinkedIn', s.linkedin], ['Why they come', s.why]]
+  var details = [['Name', s.name], ['Email', s.email], ['Job Title', s.role], ['Company', s.company], ['LinkedIn', s.linkedin]]
     .filter(function (r) { return r[1]; });
+  var shotsText = nShots + ' activity screenshot' + (nShots === 1 ? '' : 's');
+  var attached = hasCard && nShots ? firstName + "'s Community Hero card and " + shotsText + ' are attached.'
+               : hasCard ? firstName + "'s Community Hero card is attached."
+               : nShots ? shotsText + (nShots === 1 ? ' is' : ' are') + ' attached.' : '';
+  var ask = ev.is_free ? 'Anna, please take a look and send ' + firstName + ' a thank you for the support.'
+                       : "Anna, please confirm if it's all good and " + s.name + "'s ticket is accepted.";
+  var intro = firstName + ' has gone through the steps of becoming a Community Hero at ' + ev.event_name + '.';
+  var lead = s.name + ' has done the following heroic actions to support ' + ev.event_name + ':';
 
   var text =
-    'Community Hero - ' + ev.event_name + '\n\n' +
-    s.name + ' says they have done this for ' + ev.event_name + ':\n' +
+    subject + '\n\n' +
+    'Dear Anna,\n\n' + intro + '\n\n' +
+    details.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n') + '\n\n' +
+    lead + '\n' +
     did.map(function (d) { return '- ' + d.text + d.links.map(function (l) { return '\n    ' + l; }).join(''); }).join('\n') + '\n\n' +
     (unmatched.length ? 'Other links:\n' + unmatched.map(function (l) { return '- ' + l; }).join('\n') + '\n\n' : '') +
-    (nShots ? nShots + ' screenshot' + (nShots === 1 ? '' : 's') + ' attached.\n\n' : '') +
-    details.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n') + '\n\n' +
-    'Reply to this email to confirm the ticket (the hero is in Cc).\n';
+    (attached ? attached + '\n\n' : '') +
+    ask + '\n\n' +
+    'With my warm regards,\nMark\n';
 
   var accent = brand.color || '#333';
   var html =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#222">' +
-    '<h2 style="display:inline-block;background:' + accent + ';color:#fff;font-size:20px;margin:0 0 18px;padding:6px 12px;border-radius:4px">Community Hero - ' + esc(ev.event_name) + '</h2>' +
-    '<p style="margin:0 0 10px"><b>' + esc(s.name) + '</b> says they have done this for <a href="' + esc(ev.event_url) + '">' + esc(ev.event_name) + '</a>:</p>' +
-    '<ul style="margin:0 0 18px;padding-left:20px">' + did.map(function (d) {
-      return '<li style="margin:3px 0">' + esc(d.text) + (d.links.length ? '<ul style="margin:2px 0 4px;padding-left:18px">' + d.links.map(function (l) { return '<li style="margin:2px 0">' + linkify(esc(l)) + '</li>'; }).join('') + '</ul>' : '') + '</li>';
-    }).join('') + '</ul>' +
-    (unmatched.length ? '<p style="margin:0 0 6px;color:' + accent + ';font-weight:bold">Other links</p><ul style="margin:0 0 18px;padding-left:20px">' +
-      unmatched.map(function (l) { return '<li style="margin:3px 0">' + linkify(esc(l)) + '</li>'; }).join('') + '</ul>' : '') +
-    (nShots ? '<p style="margin:0 0 18px">' + nShots + ' screenshot' + (nShots === 1 ? '' : 's') + ' attached.</p>' : '') +
-    '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:640px">' +
+    '<h2 style="display:inline-block;background:' + accent + ';color:#fff;font-size:20px;margin:0 0 18px;padding:6px 12px;border-radius:4px">' + esc(subject) + '</h2>' +
+    '<p style="margin:0 0 10px">Dear Anna,</p>' +
+    '<p style="margin:0 0 14px">' + esc(firstName) + ' has gone through the steps of becoming a Community Hero at <a href="' + esc(ev.event_url) + '">' + esc(ev.event_name) + '</a>.</p>' +
+    '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:640px;margin:0 0 16px">' +
     details.map(function (r) {
       var v = /Email$/.test(r[0]) ? '<a href="mailto:' + esc(r[1]) + '">' + esc(r[1]) + '</a>' : /LinkedIn$/.test(r[0]) ? '<a href="' + esc(r[1]) + '">' + esc(r[1]) + '</a>' : esc(r[1]);
       return '<tr><td style="color:' + accent + ';font-weight:bold;padding:4px 18px 4px 0;vertical-align:top;white-space:nowrap">' + r[0] + '</td><td style="padding:4px 0;vertical-align:top">' + v + '</td></tr>';
     }).join('') +
     '</table>' +
-    '<p style="margin:18px 0 0;color:#666">Reply to this email to confirm the ticket (the hero is in Cc).</p></div>';
+    '<p style="margin:0 0 10px"><b>' + esc(s.name) + '</b> has done the following heroic actions to support ' + esc(ev.event_name) + ':</p>' +
+    '<ul style="margin:0 0 18px;padding-left:20px">' + did.map(function (d) {
+      return '<li style="margin:3px 0">' + esc(d.text) + (d.links.length ? '<ul style="margin:2px 0 4px;padding-left:18px">' + d.links.map(function (l) { return '<li style="margin:2px 0">' + linkify(esc(l)) + '</li>'; }).join('') + '</ul>' : '') + '</li>';
+    }).join('') + '</ul>' +
+    (unmatched.length ? '<p style="margin:0 0 6px;color:' + accent + ';font-weight:bold">Other links</p><ul style="margin:0 0 18px;padding-left:20px">' +
+      unmatched.map(function (l) { return '<li style="margin:3px 0">' + linkify(esc(l)) + '</li>'; }).join('') + '</ul>' : '') +
+    (attached ? '<p style="margin:0 0 14px">' + esc(attached) + '</p>' : '') +
+    '<p style="margin:0 0 14px">' + esc(ask) + '</p>' +
+    '<p style="margin:0">With my warm regards,<br>Mark</p></div>';
   return { subject: subject, text: text, html: html };
 }
 
@@ -209,7 +229,8 @@ function normalizeEvent(raw, brand) {
   return {
     brand_name: clean(raw.brand_name, 40) || brand.site.replace(/\.[a-z]+$/, ''),
     event_name: clean(raw.event_name, 80) || (clean(raw.brand_name, 40) + ' ' + clean(raw.city, 60)).trim() || brand.site,
-    event_url:  okUrl ? url.replace(/\/?$/, '/') : site + (slug ? slug + '/' : '')
+    event_url:  okUrl ? url.replace(/\/?$/, '/') : site + (slug ? slug + '/' : ''),
+    is_free:    raw.is_free === true                  // free event: the email asks Anna to thank the hero, not confirm a ticket
   };
 }
 
@@ -340,7 +361,7 @@ function testCommunityHero() {
     linkedin: 'https://www.linkedin.com/in/leonlobo27/', why: 'I want to see how other teams run agents in production',
     actions: { linkedin: { done: true, detail: '' }, social: { done: false, detail: '' }, community: { done: true, detail: '' }, invites: { done: true, detail: '' } },
     other: 'Mentioned it in our team standup', proof: 'https://www.linkedin.com/posts/leonlobo27_sreday\nhttps://bsky.app/profile/leon/post/1\nhttps://example.com/thread',
-    shots: [{ b64: tiny, type: 'image/png', name: 'slack.png' }],
+    shots: [{ b64: tiny, type: 'image/png', name: 'slack.png' }], card: { b64: tiny, type: 'image/png' },
     event: { brand: 'sreday', brand_name: 'SREday', slug: '2026-london-q3', event_name: 'SREday London 2026 Q3', city: 'London', date: 'September 24, 2026', event_url: 'https://www.sreday.com/2026-london-q3/' }
   }) } };
   Logger.log(doPost(e).getContent());
