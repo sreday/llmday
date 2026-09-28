@@ -1397,7 +1397,8 @@ def _ch_card_facts():
     return {
         'day': str(_d.day) if _d else '', 'month': _d.strftime('%B') if _d else '', 'weekday': _d.strftime('%A') if _d else '',
         'venue_short': str(context.get('venue_name') or _ch['venue_name'] or _ch['city']),
-        'venue_line': ', '.join(_addr[:2]),
+        # the street part only: the event line already names the city, so later parts that mention it are dropped
+        'venue_line': ', '.join([_p for _i, _p in enumerate(_addr[:2]) if _i == 0 or str(_ch['city']).lower() not in _p.lower()]),
         'promo_code': str(context.get('communityhero_code', 'HERO30') or ''),
         'promo_label': str(context.get('communityhero_code_label', '30% off') or ''),
     }
@@ -1417,7 +1418,7 @@ context['hero_event'] = {
     # because home assets are copied to the site root, and the event line = the event name without the brand
     'wordmark': {'llmday': '/assets/LLMday Sticker.png', 'sreday': '/assets/images/sreday_sticker.png',
                  'platformday': '/assets/images/platformday_sticker.png',
-                 'pec': '/assets/images/logo-white.png', 'prompt engineering conference': '/assets/images/logo-white.png'}.get(_ch['brand'], ''),
+                 'pec': '/assets/images/logo-token.png', 'prompt engineering conference': '/assets/images/logo-token.png'}.get(_ch['brand'], ''),
     'subtitle': re.sub(r'^\s*' + re.escape(str(_ch['brand_name'])) + r'\s*', '', str(_ch['event_name']), flags=re.I).strip() or str(_ch['city']),
     'luma_url': context['waitlist_event']['rsvp_url'],   # the Luma page the hero applied on (falls back to the event's #tickets)
     # the card's date box (day without a leading zero, full month, weekday - no year) and venue bar: the short venue name
