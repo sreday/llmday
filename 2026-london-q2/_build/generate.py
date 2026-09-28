@@ -1401,6 +1401,10 @@ def _ch_card_facts():
         'venue_line': ', '.join([_p for _i, _p in enumerate(_addr[:2]) if _i == 0 or str(_ch['city']).lower() not in _p.lower()]),
         'promo_code': str(context.get('communityhero_code', 'HERO30') or ''),
         'promo_label': str(context.get('communityhero_code_label', '30% off') or ''),
+        # inside 14 days of the event the card shows the bigger discount (the page decides, on the day the card is drawn)
+        'start_date': _d.date().isoformat() if _d else '',
+        'promo_code_near': str(context.get('communityhero_code_near', 'HERO50') or ''),
+        'promo_label_near': str(context.get('communityhero_code_near_label', '50% off') or ''),
     }
 
 

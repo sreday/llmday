@@ -56,6 +56,7 @@
     /* the card */
     .ch-canvas-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #e6e6e6; background: #eee; max-width: 560px; margin: 0 auto; }
     .ch-canvas-wrap canvas { width: 100%; height: auto; display: block; }
+    .ch-canvas-wrap img { width: 100%; height: auto; display: block; }
     .ch-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 16px; }
     .btn-ch { display: inline-flex; align-items: center; justify-content: center; min-width: 150px; border: none; border-radius: 999px; padding: 12px 26px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; background: var(--ch-accent); color: #fff; transition: filter .15s, transform .1s; text-decoration: none; }
     .btn-ch:hover { filter: brightness(1.1); color: #fff; text-decoration: none; }
@@ -135,33 +136,42 @@
 
     <div id="ch-rest" class="ch-rest" hidden>
     <div class="ch-card">
-      <div class="ch-step"><i>2</i><h2>Your card</h2><small>post it with your update</small></div>
+      <div class="ch-step"><i>2</i><h2>Your card</h2><small>this is a card we propose for your posting, you may use your own design!</small></div>
       <div class="ch-canvas-wrap"><canvas id="ch-canvas" width="1500" height="1500"></canvas></div>
-      <div class="ch-row"><button type="button" class="btn-ch" id="ch-download">Download the card</button><span class="ch-hint" id="ch-card-hint">Your photo and name go on it as you type. 1500 x 1500 px, ready for LinkedIn, Instagram or X.</span></div>
+      <div class="ch-row"><button type="button" class="btn-ch" id="ch-download">Download the card</button><span class="ch-hint" id="ch-card-hint">Something wrong with your image? Review your info in step one to correct.</span></div>
     </div>
 
+    {% set ch_n = namespace(i=2) %}
+    {% if hero_event.banner %}{% set ch_n.i = ch_n.i + 1 %}
     <div class="ch-card">
-      <div class="ch-step"><i>3</i><h2>Your post</h2><small>LinkedIn, X, Bluesky, wherever your people are</small></div>
+      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Event splash art</h2><small>the same artwork as on our home page</small></div>
+      <div class="ch-canvas-wrap"><img src="{{ hero_event.banner }}" alt="{{ hero_event.event_name }}"></div>
+      <div class="ch-row"><a class="btn-ch" href="{{ hero_event.banner }}" download="{{ hero_event.event_name }}.{{ hero_event.banner.split('.')[-1] }}">Download the artwork</a><span class="ch-hint">Use it next to your card, or on its own.</span></div>
+    </div>
+    {% endif %}
+
+    <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
+      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your post</h2><small>LinkedIn, X, Bluesky, wherever your people are</small></div>
       <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button></div>
       <textarea class="ch-text" id="ch-post" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-post">Copy the post</button><span class="ch-copied" id="ch-post-copied"></span></div>
       <div class="ch-hint">Edit anything you like before posting. Both versions restart from your details in step 1.</div>
     </div>
 
-    <div class="ch-card">
-      <div class="ch-step"><i>4</i><h2>Your message</h2><small>email, Slack, WhatsApp, a DM</small></div>
+    <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
+      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your message</h2><small>email, Slack, WhatsApp, a DM</small></div>
       <div class="ch-tabs" data-set="msg"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button></div>
       <textarea class="ch-text" id="ch-msg" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-msg">Copy the message</button><span class="ch-copied" id="ch-msg-copied"></span></div>
       <div class="ch-hint">Replace [Name] with your friend's name, or delete it for a group.</div>
     </div>
 
-    <div class="ch-card">
-      <div class="ch-step"><i>5</i><h2>Tell us what you did</h2></div>
+    <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
+      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your Heroic actions</h2></div>
       <div class="ch-actions" id="ch-actions">
         <div class="ch-action" data-key="linkedin"><input type="checkbox" id="act-linkedin"><label class="main" for="act-linkedin">Posted on LinkedIn</label></div>
         <div class="ch-action" data-key="social"><input type="checkbox" id="act-social"><label class="main" for="act-social">Posted on X, Bluesky, Mastodon, Threads, etc.</label></div>
-        <div class="ch-action" data-key="community"><input type="checkbox" id="act-community"><label class="main" for="act-community">Shared in a community - Slack, Discord, WhatsApp, Meetup, etc.</label></div>
+        <div class="ch-action" data-key="community"><input type="checkbox" id="act-community"><label class="main" for="act-community">Shared in a Community - Slack, Discord, WhatsApp, Meetup, etc.</label></div>
         <div class="ch-action" data-key="invites"><input type="checkbox" id="act-invites"><label class="main" for="act-invites">Messaged my friends or colleagues</label></div>
       </div>
       <div class="ch-grid" style="margin-top: 16px;">
@@ -179,16 +189,14 @@
         </div>
       </div>
       <label class="ch-consent" id="ch-consent-wrap"><input type="checkbox" name="consent" value="yes"><span>I'm happy to share all the above with the organizers of {{ hero_event.event_name }}.</span></label>
-      <label class="ch-consent" id="ch-applied-wrap"><input type="checkbox" name="applied" value="yes"><span>I already applied for the free ticket <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>, I'm sending this form to prove my contribution as a Community Hero.</span></label>
+      <label class="ch-consent" id="ch-applied-wrap"><input type="checkbox" name="applied" value="yes"><span>I already applied for the free ticket <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>, sharing this form to prove my contribution as a Community Hero.</span></label>
       <div class="ch-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-      <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Community Hero</button><div class="ch-error" id="ch-error" hidden></div></div>
+      <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Community Hero</button><span class="ch-hint">Our team will review this and get back to you ASAP!</span><div class="ch-error" id="ch-error" hidden></div></div>
     </div>
     </div><!-- /#ch-rest -->
   </form>
 
   <div class="ch-card ch-done" id="ch-done" hidden></div>
-  {% set ch_contact = 'anna@llmday.com' if hero_event.brand == 'pec' else 'anna@' + (mailto | replace('mailto:', '')).split('@')[-1] %}
-  <div class="ch-muted">Questions? Reply to the email you got from us, or write to <a href="mailto:{{ ch_contact }}">{{ ch_contact }}</a>.</div>
 </main>
 
 <script>
@@ -383,6 +391,11 @@ function pinIcon(x, y, s, col) {                 // map pin centred on (x, y), s
   var r = s * .3, cy = y - s * .14; ctx.beginPath(); ctx.arc(x, cy, r, Math.PI * .8, Math.PI * .2); ctx.lineTo(x, y + s * .46); ctx.closePath(); ctx.stroke();
   ctx.beginPath(); ctx.arc(x, cy, r * .38, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
 }
+function heroCode() {
+  var days = 99;
+  if (E.start_date) { var p = E.start_date.split('-'), today = new Date(); days = Math.round((new Date(+p[0], p[1] - 1, +p[2]) - new Date(today.getFullYear(), today.getMonth(), today.getDate())) / 864e5); }
+  return days >= 14 ? [E.promo_code || '', E.promo_label || ''] : [E.promo_code_near || E.promo_code || '', E.promo_label_near || E.promo_label || ''];
+}
 function drawCard() {
   // the poster card Marek picked on 2026-09-28: bigger wordmark top left, the date in a small glass box top right
   // (day without a leading zero | full month over the weekday, no year), COMMUNITY / HERO, the name, the event line
@@ -448,7 +461,7 @@ function drawCard() {
   ctx.save(); ctx.shadowColor = K.glow; ctx.shadowBlur = 60; ctx.strokeStyle = ringGradient(cx, cy, r); ctx.lineWidth = 14;
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
   // venue bar: pin, venue + street on the left, the hero ticket code (own line) and what it gives on the right
-  var y = 1210, h = 190, code = E.promo_code || '', codeW = 0;
+  var y = 1210, h = 190, hc = heroCode(), code = hc[0], codeW = 0;
   glass(90, y, 1320, h, 40, 'rgba(255,255,255,.18)');
   if (code) { ctx.font = '900 60px Montserrat, Arial, sans-serif'; codeW = ctx.measureText(code).width; }
   var textMax = 1360 - 260 - (code ? codeW + 50 : 0);
@@ -457,7 +470,7 @@ function drawCard() {
   ctx.fillStyle = 'rgba(255,255,255,.7)'; fitText(E.venue_line || '', textMax, 36, '500'); ctx.fillText(E.venue_line || '', 260, y + h / 2 + 34);
   if (code) {
     ctx.textAlign = 'right'; ctx.font = '900 60px Montserrat, Arial, sans-serif'; gradText(code, 1360, y + h / 2 - 22, 'right');
-    ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '600 34px Montserrat, Arial, sans-serif'; ctx.fillText(E.promo_label || '', 1360, y + h / 2 + 36);
+    ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '600 34px Montserrat, Arial, sans-serif'; ctx.fillText(hc[1], 1360, y + h / 2 + 36);
   }
 }
 if (document.fonts && document.fonts.load) { Promise.all([document.fonts.load('900 150px Montserrat'), document.fonts.load('600 50px Montserrat')]).then(drawCard, drawCard); }
