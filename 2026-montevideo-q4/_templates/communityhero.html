@@ -299,9 +299,8 @@ document.querySelectorAll('[data-copy]').forEach(function (b) {
   });
 });
 
-// ---- the card: a 1500 x 1500 share image = the brand wordmark, the event line, the hero's own photo in a
-//      gradient ring, their name (last name in gradient) and a "Community Hero" pill on a dark canvas with
-//      glowing brand-coloured sweeps. Drawn again on every keystroke of the name and when the photo changes.
+// ---- the card: a 1500 x 1500 share image (the poster layout, see drawCard) on a dark canvas with glowing
+//      brand-coloured sweeps. Drawn again on every keystroke of the name and when the photo changes.
 var canvas = $('ch-canvas'), ctx = canvas.getContext('2d');
 var PALETTES = {                                   // [main, glow, accent, wordmark blend] per brand, all vivid on navy;
   'llmday': ['#2ee6a6', '#22d3ee', '#a855f7', 'screen'],            // 'screen' drops the black die-cut backing of a sticker
@@ -356,56 +355,92 @@ function ringGradient(cx, cy, r) {
   var g = ctx.createLinearGradient(cx - r, cy + r, cx + r, cy - r);
   g.addColorStop(0, PAL[1]); g.addColorStop(.5, PAL[0]); g.addColorStop(1, PAL[2]); return g;
 }
-function drawContain(img, cx, cy, boxW, boxH) {
-  var s = Math.min(boxW / img.width, boxH / img.height), w = img.width * s, h = img.height * s;
-  ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
+function gradText(t, x, y, align) {              // text filled with the brand gradient across its own width
+  var w = ctx.measureText(t).width, x0 = align === 'right' ? x - w : align === 'left' ? x : x - w / 2;
+  var g = ctx.createLinearGradient(x0, 0, x0 + w, 0); g.addColorStop(0, PAL[1]); g.addColorStop(.5, PAL[0]); g.addColorStop(1, PAL[2]);
+  ctx.fillStyle = g; ctx.fillText(t, x, y);
+}
+function spacedWidth(t, gap) { var w = 0; for (var i = 0; i < t.length; i++) w += ctx.measureText(t[i]).width; return w + gap * (t.length - 1); }
+function spacedLeft(t, x, y, gap) { ctx.save(); ctx.textAlign = 'left'; for (var i = 0; i < t.length; i++) { ctx.fillText(t[i], x, y); x += ctx.measureText(t[i]).width + gap; } ctx.restore(); }
+function glass(x, y, w, h, r, stroke, glow) {    // dark translucent panel with a thin outline
+  ctx.save(); if (glow) { ctx.shadowColor = glow; ctx.shadowBlur = 40; }
+  ctx.fillStyle = 'rgba(12,28,52,.78)'; ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.strokeStyle = stroke; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.stroke(); ctx.restore();
+}
+function pinIcon(x, y, s, col) {                 // map pin centred on (x, y), s = height
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = s * .09; ctx.lineJoin = 'round';
+  var r = s * .3, cy = y - s * .14; ctx.beginPath(); ctx.arc(x, cy, r, Math.PI * .8, Math.PI * .2); ctx.lineTo(x, y + s * .46); ctx.closePath(); ctx.stroke();
+  ctx.beginPath(); ctx.arc(x, cy, r * .38, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
 }
 function drawCard() {
+  // the poster card Marek picked on 2026-09-28: bigger wordmark top left, the date in a small glass box top right
+  // (day without a leading zero | full month over the weekday, no year), COMMUNITY / HERO, the name, the event line
+  // (scales with its length), the photo on the right, and a bar with the venue + its street and the hero ticket code
   var W = canvas.width, H = canvas.height;
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.shadowBlur = 0; ctx.clearRect(0, 0, W, H);
-  // navy background with a faint diagonal light
   var bg = ctx.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#08203a'); bg.addColorStop(.45, '#040d1c'); bg.addColorStop(1, '#0a1235');
   ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-  // two soft wide bands (right side, left side) and one thin arc in the top-right corner; all of them stay off the text
-  sweep(700, 740, 720, 150, -Math.PI * 0.18, Math.PI * 0.2, [PAL[1], PAL[0]], .5, 90);
-  sweep(560, 1120, 640, 130, Math.PI * 0.62, Math.PI * 1.22, [PAL[0], PAL[2]], .42, 80);
-  sweep(1500, 300, 330, 6, -Math.PI * 0.95, -Math.PI * 0.3, [PAL[1], PAL[2]], .8, 20);
-  // vignette so the centre stays clean
+  sweep(1250, 700, 520, 140, -Math.PI * .6, Math.PI * .1, [PAL[1], PAL[0]], .4, 100);
+  sweep(200, 1400, 600, 120, -Math.PI * .5, 0, [PAL[2], PAL[1]], .3, 80);
   var vg = ctx.createRadialGradient(W / 2, H * .46, 320, W / 2, H / 2, 1150); vg.addColorStop(0, 'rgba(3,8,20,0)'); vg.addColorStop(1, 'rgba(3,7,18,.55)');
   ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
-  // wordmark (the brand sticker from the site) and the event line
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  if (wmOk) { ctx.save(); ctx.globalCompositeOperation = PAL[3] || 'source-over'; drawContain(wm, W / 2, 150, 560, 190); ctx.restore(); }
-  else { ctx.fillStyle = PAL[0]; ctx.font = '900 ' + fitText(E.brand_name.toUpperCase(), 900, 110, '900') + 'px Montserrat, Arial, sans-serif'; ctx.fillText(E.brand_name.toUpperCase(), W / 2, 150); }
-  var sub = (E.subtitle || E.city || '').toUpperCase(), gap = 9;
-  ctx.font = '700 ' + fitText(sub, 1000 - gap * sub.length, 48, '700') + 'px Montserrat, Arial, sans-serif';
-  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 14; ctx.fillStyle = '#f2f6ff'; spaced(sub, W / 2, 330, gap); ctx.restore();
-  // the photo, then the gradient ring drawn over its edge so there is no gap between the two
-  var cx = W / 2, cy = 715, r = 360;
-  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
-  if (photo) { var s = Math.max(2 * r / photo.width, 2 * r / photo.height), pw = photo.width * s, ph = photo.height * s; ctx.drawImage(photo, cx - pw / 2, cy - ph / 2, pw, ph); }
-  else { ctx.fillStyle = '#12213a'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r); ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.font = '600 40px Montserrat, Arial, sans-serif'; ctx.fillText('Your photo goes here', cx, cy); }
-  ctx.restore();
-  ctx.save(); ctx.shadowColor = PAL[1]; ctx.shadowBlur = 70; ctx.strokeStyle = ringGradient(cx, cy, r); ctx.lineWidth = 18;
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
-  // the name: first name(s) in white, last name in the brand gradient, both lines at ONE size that fits the longer one
+  ctx.textBaseline = 'middle';
+  // wordmark, top left
+  if (wmOk) { var ws = Math.min(420 / wm.width, 250 / wm.height); ctx.save(); ctx.globalCompositeOperation = PAL[3] || 'source-over'; ctx.drawImage(wm, 88, 62, wm.width * ws, wm.height * ws); ctx.restore(); }
+  else { ctx.textAlign = 'left'; ctx.fillStyle = PAL[0]; fitText(E.brand_name.toUpperCase(), 520, 110, '900'); ctx.fillText(E.brand_name.toUpperCase(), 92, 180); }
+  // date box, top right, drawn at 80% around its right edge
+  if (E.day) {
+    ctx.save(); ctx.translate(1410, 180); ctx.scale(.8, .8); ctx.translate(-1410, -180);
+    var dw = 520, dh = 200, dx = 1410 - dw, dy = 80, month = (E.month || '').toUpperCase();
+    glass(dx, dy, dw, dh, 30, PAL[0] + '99', PAL[1]);
+    var ds = 150; do { ctx.font = '900 ' + ds + 'px Montserrat, Arial, sans-serif'; } while (ctx.measureText(E.day).width > 150 && (ds -= 4) > 90);   // two-digit days stay clear of the box edge and the divider
+    ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText(E.day, dx + 105, dy + dh / 2 + 6);
+    ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(dx + 200, dy + 40); ctx.lineTo(dx + 200, dy + dh - 40); ctx.stroke();
+    var ms = 46; while (ms > 24) { ctx.font = '800 ' + ms + 'px Montserrat, Arial, sans-serif'; if (spacedWidth(month, ms * .12) <= dw - 270) break; ms--; }
+    ctx.fillStyle = PAL[0]; spacedLeft(month, dx + 232, dy + 78, ms * .12);
+    ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = '600 36px Montserrat, Arial, sans-serif'; ctx.fillText(E.weekday || '', dx + 232, dy + 136);
+    ctx.restore();
+  }
+  // COMMUNITY / HERO, the name (one size for both lines)
+  ctx.textAlign = 'left'; ctx.font = '900 150px Montserrat, Arial, sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText('COMMUNITY', 90, 440); gradText('HERO', 90, 590, 'left');
+  ctx.fillStyle = PAL[0]; ctx.fillRect(96, 690, 110, 8);
   var name = (val('name') || 'Your Name').toUpperCase().replace(/\s+/g, ' ').trim(), parts = name.split(' ');
   var lastName = parts.length > 1 ? parts.pop() : '', firstName = parts.join(' ');
-  var size = Math.min(fitText(firstName, 1180, 140, '900'), lastName ? fitText(lastName, 1180, 140, '900') : 140);
-  ctx.font = '900 ' + size + 'px Montserrat, Arial, sans-serif';
-  var mid = 1205, y1 = lastName ? mid - size * 0.44 : mid, y2 = mid + size * 0.44;
-  ctx.fillStyle = '#ffffff'; ctx.fillText(firstName, W / 2, y1);
-  if (lastName) {
-    var tw = ctx.measureText(lastName).width, tg = ctx.createLinearGradient(W / 2 - tw / 2, 0, W / 2 + tw / 2, 0);
-    tg.addColorStop(0, PAL[1]); tg.addColorStop(.5, PAL[0]); tg.addColorStop(1, PAL[2]); ctx.fillStyle = tg; ctx.fillText(lastName, W / 2, y2);
+  var size = Math.min(fitText(firstName, 600, 80, '800'), lastName ? fitText(lastName, 600, 80, '800') : 80);
+  ctx.font = '800 ' + size + 'px Montserrat, Arial, sans-serif'; ctx.fillStyle = '#fff';
+  ctx.fillText(firstName, 96, 775); if (lastName) ctx.fillText(lastName, 96, 775 + size * 1.05);
+  // event line: 38px, shrinks with its length so it ends before the photo; below 28px it breaks into two lines
+  // at the space nearest the middle instead
+  var sub = (E.subtitle || E.city || '').toUpperCase(), sz = 38, lines = [sub];
+  var sw = function (t, s) { ctx.font = '700 ' + s + 'px Montserrat, Arial, sans-serif'; return spacedWidth(t, s * .19); };
+  while (sz > 28 && sw(sub, sz) > 690) sz--;
+  if (sw(sub, sz) > 690) {
+    var mid = sub.length / 2, cut = -1; for (var i = 0; i < sub.length; i++) if (sub[i] === ' ' && (cut < 0 || Math.abs(i - mid) < Math.abs(cut - mid))) cut = i;
+    lines = cut > 0 ? [sub.slice(0, cut), sub.slice(cut + 1)] : [sub]; sz = 38;
+    while (sz > 18 && Math.max.apply(null, lines.map(function (l) { return sw(l, sz); })) > 690) sz--;
   }
-  // the pill
-  var label = 'Community Hero'; ctx.font = '600 48px Montserrat, Arial, sans-serif';
-  var lw = ctx.measureText(label).width, pw2 = lw + 140, ph2 = 96, px = W / 2 - pw2 / 2, py = 1362;
-  ctx.save(); ctx.shadowColor = PAL[2]; ctx.shadowBlur = 36; ctx.fillStyle = 'rgba(255,255,255,.07)';
-  ctx.beginPath(); ctx.roundRect(px, py, pw2, ph2, ph2 / 2); ctx.fill();
-  ctx.strokeStyle = ringGradient(W / 2, py + ph2 / 2, pw2 / 2); ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
-  ctx.fillStyle = '#ffffff'; ctx.fillText(label, W / 2, py + ph2 / 2 + 2);
+  ctx.font = '700 ' + sz + 'px Montserrat, Arial, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.85)';
+  lines.forEach(function (l, i) { spacedLeft(l, 96, 1030 + (i - (lines.length - 1) / 2) * sz * 1.45, sz * .19); });
+  // the photo, then the gradient ring over its edge
+  var cx = 1085, cy = 830, r = 270;
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+  if (photo) { var s = Math.max(2 * r / photo.width, 2 * r / photo.height), pw = photo.width * s, ph = photo.height * s; ctx.drawImage(photo, cx - pw / 2, cy - ph / 2, pw, ph); }
+  else { ctx.fillStyle = '#12213a'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r); ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.textAlign = 'center'; ctx.font = '600 34px Montserrat, Arial, sans-serif'; ctx.fillText('Your photo goes here', cx, cy); }
+  ctx.restore();
+  ctx.save(); ctx.shadowColor = PAL[1]; ctx.shadowBlur = 60; ctx.strokeStyle = ringGradient(cx, cy, r); ctx.lineWidth = 14;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  // venue bar: pin, venue + street on the left, the hero ticket code (own line) and what it gives on the right
+  var y = 1210, h = 190, code = E.promo_code || '', codeW = 0;
+  glass(90, y, 1320, h, 40, 'rgba(255,255,255,.18)');
+  if (code) { ctx.font = '900 60px Montserrat, Arial, sans-serif'; codeW = ctx.measureText(code).width; }
+  var textMax = 1360 - 260 - (code ? codeW + 50 : 0);
+  pinIcon(190, y + h / 2, 84, PAL[0]); ctx.textAlign = 'left';
+  ctx.fillStyle = '#fff'; fitText(E.venue_short || E.city || '', textMax, 56, '800'); ctx.fillText(E.venue_short || E.city || '', 260, y + h / 2 - 26);
+  ctx.fillStyle = 'rgba(255,255,255,.7)'; fitText(E.venue_line || '', textMax, 36, '500'); ctx.fillText(E.venue_line || '', 260, y + h / 2 + 34);
+  if (code) {
+    ctx.textAlign = 'right'; ctx.font = '900 60px Montserrat, Arial, sans-serif'; gradText(code, 1360, y + h / 2 - 22, 'right');
+    ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '600 34px Montserrat, Arial, sans-serif'; ctx.fillText(E.promo_label || '', 1360, y + h / 2 + 36);
+  }
 }
 if (document.fonts && document.fonts.load) { Promise.all([document.fonts.load('900 150px Montserrat'), document.fonts.load('600 50px Montserrat')]).then(drawCard, drawCard); }
 $('ch-download').addEventListener('click', function () {

@@ -1383,6 +1383,26 @@ for _tp in (context.get('about_topics') or []):
             break
     if _lst:
         _ch_topic_talks.append({'category': _tp['category'], 'talks': _lst})
+
+def _ch_card_facts():
+    _d = None
+    try:
+        _d = datetime.datetime.fromisoformat(str(context.get('start_time') or ''))
+    except Exception:
+        try:
+            _d = datetime.datetime.strptime(str(context.get('date_string') or '').strip(), '%B %d, %Y')
+        except Exception:
+            _d = None
+    _addr = [p.strip() for p in str(_ch.get('venue_address') or '').split(',') if p.strip()]
+    return {
+        'day': str(_d.day) if _d else '', 'month': _d.strftime('%B') if _d else '', 'weekday': _d.strftime('%A') if _d else '',
+        'venue_short': str(context.get('venue_name') or _ch['venue_name'] or _ch['city']),
+        'venue_line': ', '.join(_addr[:2]),
+        'promo_code': str(context.get('communityhero_code', 'HERO30') or ''),
+        'promo_label': str(context.get('communityhero_code_label', '30% off') or ''),
+    }
+
+
 context['hero_event'] = {
     'brand': _ch['brand'], 'brand_name': _ch['brand_name'], 'brand_color': str(context.get('brand_color') or '#333'), 'slug': _ch['slug'],
     'event_name': _ch['event_name'], 'city': _ch['city'], 'date': _ch['date'], 'month_day': _ch['month_day'],
@@ -1400,6 +1420,9 @@ context['hero_event'] = {
                  'pec': '/assets/images/logo-white.png', 'prompt engineering conference': '/assets/images/logo-white.png'}.get(_ch['brand'], ''),
     'subtitle': re.sub(r'^\s*' + re.escape(str(_ch['brand_name'])) + r'\s*', '', str(_ch['event_name']), flags=re.I).strip() or str(_ch['city']),
     'luma_url': context['waitlist_event']['rsvp_url'],   # the Luma page the hero applied on (falls back to the event's #tickets)
+    # the card's date box (day without a leading zero, full month, weekday - no year) and venue bar: the short venue name
+    # from metadata (venue_name) over the first two parts of the venue section's address, plus the hero ticket code
+    **_ch_card_facts(),
 }
 _os.makedirs(BASE_FOLDER + "/communityhero", exist_ok=True)
 with open(BASE_FOLDER + "/communityhero/index.html", "w", encoding="utf-8") as f:
