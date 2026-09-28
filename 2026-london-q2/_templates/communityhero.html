@@ -1,8 +1,8 @@
 {# ── Community Hero (hidden page, /<event>/communityhero/). Standalone: does NOT extend _base.html.
      One-stop shop for people who applied for a Community Hero ticket (a free seat in exchange for telling
      their friends): 1. their details incl. a photo, 2. a 1500x1500 share card drawn in the browser (brand wordmark + their photo),
-     3. two ready-made post wordings and 4. two message drafts (all fed by the event facts + the About
-     panel), 5. a report of what they did with links and screenshots, posted as base64 JSON to
+     3. the event art from the home page, 4. two ready-made posts (Personal / Professional) and 5. three message drafts
+     (Coworker / Friend / Group), all fed by the event facts + the About panel, 6. a report of what they did with links and screenshots, posted as base64 JSON to
      communityhero_form_url (home/metadata.yml; backend llmday/_build/communityhero-form.gs = "Community hero"),
      which emails Anna From the brand alias with the hero in Cc: "<Name> - Community Hero - <Event>".
      Identical in all four repos (brand colour from {{ brand_color }}). Never listed in the sitemap. ── #}
@@ -67,7 +67,7 @@
     .ch-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
     .ch-tabs button { border: 1px solid #ddd; background: #fff; border-radius: 999px; padding: 7px 16px; font: inherit; font-size: .9rem; font-weight: 600; color: #444; cursor: pointer; }
     .ch-tabs button.on { background: var(--ch-accent); border-color: var(--ch-accent); color: #fff; }
-    .ch-text { width: 100%; min-height: 200px; border: 1px solid #ddd; border-radius: 12px; padding: 14px 16px; font: inherit; font-size: .97rem; line-height: 1.55; color: #111; background: #fafafa; resize: vertical; }
+    .ch-text { width: 100%; min-height: 120px; overflow: hidden; border: 1px solid #ddd; border-radius: 12px; padding: 14px 16px; font: inherit; font-size: .97rem; line-height: 1.55; color: #111; background: #fafafa; resize: vertical; }
     .ch-copied { font-size: .85rem; color: #2e7d32; }
     /* report */
     .ch-actions { display: grid; gap: 12px; }
@@ -136,7 +136,7 @@
 
     <div id="ch-rest" class="ch-rest" hidden>
     <div class="ch-card">
-      <div class="ch-step"><i>2</i><h2>Your card</h2><small>this is a card we propose for your posting, you may use your own design!</small></div>
+      <div class="ch-step"><i>2</i><h2>Your card</h2><small>this is a card we propose for your posting</small></div>
       <div class="ch-canvas-wrap"><canvas id="ch-canvas" width="1500" height="1500"></canvas></div>
       <div class="ch-row"><button type="button" class="btn-ch" id="ch-download">Download the card</button><span class="ch-hint" id="ch-card-hint">Something wrong with your image? Review your info in step one to correct.</span></div>
     </div>
@@ -144,26 +144,26 @@
     {% set ch_n = namespace(i=2) %}
     {% if hero_event.banner %}{% set ch_n.i = ch_n.i + 1 %}
     <div class="ch-card">
-      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Event splash art</h2><small>the same artwork as on our home page</small></div>
+      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Event art from the website</h2><small>if you prefer to post something more generic</small></div>
       <div class="ch-canvas-wrap"><img src="{{ hero_event.banner }}" alt="{{ hero_event.event_name }}"></div>
       <div class="ch-row"><a class="btn-ch" href="{{ hero_event.banner }}" download="{{ hero_event.event_name }}.{{ hero_event.banner.split('.')[-1] }}">Download the artwork</a><span class="ch-hint">Use it next to your card, or on its own.</span></div>
     </div>
     {% endif %}
 
     <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
-      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your post</h2><small>LinkedIn, X, Bluesky, wherever your people are</small></div>
-      <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button></div>
+      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your post</h2><small>LinkedIn, X, etc. - where your community is active</small></div>
+      <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="personal">Personal</button><button type="button" data-v="pro">Professional</button></div>
       <textarea class="ch-text" id="ch-post" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-post">Copy the post</button><span class="ch-copied" id="ch-post-copied"></span></div>
       <div class="ch-hint">Edit anything you like before posting. Both versions restart from your details in step 1.</div>
     </div>
 
     <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
-      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your message</h2><small>email, Slack, WhatsApp, a DM</small></div>
-      <div class="ch-tabs" data-set="msg"><button type="button" class="on" data-v="pro">Professional</button><button type="button" data-v="friendly">Friendly</button></div>
+      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your message</h2><small>Email, WhatsApp, Slack, Discord, etc.</small></div>
+      <div class="ch-tabs" data-set="msg"><button type="button" class="on" data-v="coworker">Coworker</button><button type="button" data-v="friend">Friend</button><button type="button" data-v="group">Group</button></div>
       <textarea class="ch-text" id="ch-msg" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-msg">Copy the message</button><span class="ch-copied" id="ch-msg-copied"></span></div>
-      <div class="ch-hint">Replace [Name] with your friend's name, or delete it for a group.</div>
+      <div class="ch-hint">Replace [Name] with their first name. Every version restarts from your details in step 1.</div>
     </div>
 
     <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
@@ -247,43 +247,65 @@ function sessionsProse(n) {
   return p.map(function (t, i) { return (i === 0 ? t.company + ' is presenting on ' : t.company + ' on ') + t.title; }).reduce(function (acc, s, i, arr) { return acc + (i === 0 ? '' : (i === arr.length - 1 ? ', and ' : ', ')) + s; }, '');
 }
 
+// ---- the hero code (same rule as the card: HERO30 while the event is 14+ days away, HERO50 inside that) -----
+// The code always sits alone on its own line: people copy it.
+function codeBlock(lead) { var hc = heroCode(); return hc[0] ? lead.replace('{off}', hc[1]) + '\n' + hc[0] + '\n\n' : ''; }
+var when = E.date + (E.venue_name ? ' · ' + E.venue_name : ''), tag = '#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
+
 // ---- posts ---------------------------------------------------------------------------------
 function post(v) {
+  if (v === 'personal') {                          // the hero's own voice, Mark's countdown format
+    return bold("I'm going to " + E.event_name + '!') + ' 🎉\n' + when + '\n\n' +
+      "I'm joining as a Community Hero, which means I get to bring my network along. Here is who I'm looking forward to:\n\n" + sessionLines(3) + '\n\n' +
+      codeBlock('Want to join me? {off} your ticket with the code:') +
+      'Register here: ' + E.event_url + '\n\n' + tag;
+  }
   if (v === 'pro') {                               // the company pages' question post
     return bold('Why is everyone in ' + E.city + ' talking about ' + topic1 + '?') + ' 🤔\n\n' +
-      E.event_name + ' is coming on ' + E.date + (E.venue_name ? ' at ' + E.venue_name : '') + ". What's coming up?\n\n" + sessionLines(3) + '\n\n' +
-      "I'm going as a Community Hero. Secure your spot and register here: " + E.event_url + '\n\nI hope to meet you at @' + E.brand_name + '!';
-  }
-  if (v === 'friendly') {                          // Mark's countdown post
-    return bold(E.event_name + ' · ' + E.date + (E.venue_name ? ' · ' + E.venue_name : '')) + '\n\n' +
-      'Some conferences you attend, some you go home from with a to-do list. Here is who I want to hear:\n\n' + sessionLines(3) + '\n\n' +
-      E.event_url + '\n\n#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
+      E.event_name + ' comes to ' + (E.venue_name || E.city) + ' on ' + E.date + ". What's on the agenda:\n\n" + sessionLines(3) + '\n\n' +
+      "I'll be there as a Community Hero. If these topics are on your team's roadmap, it's a day well spent.\n\n" +
+      codeBlock('{off} your ticket with the code:') +
+      'Register here: ' + E.event_url + '\n\nSee you at ' + E.brand_name + '!';
   }
   return '';
 }
 // ---- messages ------------------------------------------------------------------------------
-// Voice = Mark's own invitation emails (read 2026-09-23): "Hey Name !", short plain lines, "Time flies", the lineup
-// as the reason, "Secure your spot and register here:" + the link, one no-pressure line, first name to sign.
+// Voice = Mark's own invitation emails (read 2026-09-23): short plain lines, the lineup as the reason, the link,
+// one no-pressure line, first name to sign. Coworker = the work case, Friend = come with me, Group = one post for a
+// Slack / WhatsApp / Discord channel.
 function msg(v) {
-  var name = val('name') || '', p = pickTalks(2), A = p[0], B = p[1], rich = p.length >= 2;
-  var lineup = rich ? A.company + ' is presenting on ' + A.title + ', and ' + B.company + ' on ' + B.title + '.' + (E.speakers_n >= 3 ? ' ' + E.speakers_n + '+ talks, one day' + (E.venue_name ? ', ' + E.venue_name : '') + '.' : '')
+  var name = first(val('name')) || '', p = pickTalks(2), A = p[0], B = p[1], rich = p.length >= 2;
+  var lineup = rich ? A.company + ' is presenting on ' + A.title + ', and ' + B.company + ' on ' + B.title + '.' + (E.speakers_n >= 3 ? ' ' + E.speakers_n + '+ talks in one day.' : '')
                     : (E.speakers_n >= 3 ? E.speakers_n + '+ talks in one day' + (companies ? ', with ' + companies + ' presenting' : '') + '.' : 'The lineup is being announced and the first speakers are already up on the event page.');
-  if (v === 'pro') {
-    return 'Hi [Name],\n\n' + "I'm going to " + E.event_name + ' on ' + E.date + ' in ' + E.city + ' and thought of you.\n\n' + lineup + '\n\n' +
-      'Secure your spot and register here: ' + E.event_url + '\n\n' + 'No pressure at all, but it would be great to compare notes afterwards.\n\n' + name;
+  if (v === 'coworker') {
+    return 'Hi [Name],\n\n' + 'Are you free on ' + E.date + '? ' + E.event_name + ' is on' + (E.venue_name ? ' at ' + E.venue_name : '') + ' in ' + E.city + " and I think it's worth us both going.\n\n" +
+      lineup + " It lines up well with what we're working on, and we'd come back with ideas for the team.\n\n" +
+      codeBlock('{off} the ticket with the code:') +
+      'Register here: ' + E.event_url + '\n\n' + 'Shall we go together?\n\n' + name;
   }
-  if (v === 'friendly') {
-    return 'Hey [Name] !\n\n' + 'My friends at ' + E.brand_name + ' are organizing ' + E.event_name + ' on ' + E.date + ' in ' + E.city + ". Time flies, it's already so close, and I'm going.\n\n" +
-      (rich ? 'The lineup is the reason: ' + A.company + ' on ' + A.title + ', ' + B.company + ' on ' + B.title + '. Exactly your kind of thing.' : lineup) + '\n\n' +
+  if (v === 'friend') {
+    return 'Hey [Name]!\n\n' + "I'm going to " + E.event_name + ' on ' + E.date + " and it would be way more fun with you there.\n\n" +
+      (rich ? A.company + ' is talking about ' + A.title + ', and ' + B.company + ' about ' + B.title + '. Exactly your kind of thing.' : lineup) + '\n\n' +
+      codeBlock('I got you {off} the ticket with this code:') +
       'Grab your spot here: ' + E.event_url + '\n\n' + "Come with me? No hard feelings if it's not for you :-)\n\n" + name;
+  }
+  if (v === 'group') {
+    return 'Hi everyone 👋\n\n' + 'Heads up for anyone around ' + E.city + ': ' + E.event_name + ' is on ' + E.date + (E.venue_name ? ' at ' + E.venue_name : '') + '.\n\n' +
+      lineup + '\n\n' +
+      codeBlock("I'm going as a Community Hero, so I can share {off} with the code:") +
+      'Register here: ' + E.event_url + '\n\n' + "Reply here if you're going, it would be great to meet up there!\n\n" + name;
   }
   return '';
 }
-var variant = { post: 'pro', msg: 'pro' }, edited = { post: false, msg: false };
+var variant = { post: 'personal', msg: 'coworker' }, edited = { post: false, msg: false };
 function render(set) {
   var box = $(set === 'post' ? 'ch-post' : 'ch-msg');
   box.value = set === 'post' ? post(variant.post) : msg(variant.msg);
-  edited[set] = false;
+  edited[set] = false; fitBox(box);
+}
+function fitBox(box) {                           // as tall as the text, no scrollbar; dragging the corner still works
+  if (!box.offsetParent) return;                 // hidden (step 1 not done yet): sized when it appears
+  box.style.height = 'auto'; box.style.height = (box.scrollHeight + 2) + 'px';
 }
 document.querySelectorAll('.ch-tabs').forEach(function (tabs) {
   var set = tabs.getAttribute('data-set');
@@ -294,8 +316,8 @@ document.querySelectorAll('.ch-tabs').forEach(function (tabs) {
     });
   });
 });
-$('ch-post').addEventListener('input', function () { edited.post = true; });
-$('ch-msg').addEventListener('input', function () { edited.msg = true; });
+$('ch-post').addEventListener('input', function () { edited.post = true; fitBox(this); });
+$('ch-msg').addEventListener('input', function () { edited.msg = true; fitBox(this); });
 ['name'].forEach(function (k) { form.elements[k].addEventListener('input', function () { if (!edited.post) render('post'); if (!edited.msg) render('msg'); drawCard(); }); });
 render('post'); render('msg');
 document.querySelectorAll('[data-copy]').forEach(function (b) {
