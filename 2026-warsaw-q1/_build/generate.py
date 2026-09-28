@@ -1384,6 +1384,44 @@ for _tp in (context.get('about_topics') or []):
     if _lst:
         _ch_topic_talks.append({'category': _tp['category'], 'talks': _lst})
 
+def _ch_venue_display(heading, city, sponsors):
+    # the venue as the card and the texts name it (Marek 2026-09-28): a company office is "<Company> HQ" ("The
+    # offices of Harness.io" -> "Harness HQ", "Gable.ai Office", "MaibornWolff - office & event space", a bare
+    # company name that is one of the event's sponsors, i.e. the host); a venue with its own name keeps it
+    # ("ING Cedar - Hosting Sponsor" -> "ING Cedar", "Everyman Canary Wharf", "Microsoft Reactor Tel Aviv")
+    name = re.sub(r'\s+', ' ', str(heading or '')).strip()
+    if not name:
+        return ''
+    tld = r'\.(?:io|com|ai|dev|co|net|org|tech|cloud|consulting)\b'
+    office = False
+    base, _, suffix = name.partition(' - ')
+    if suffix:
+        if 'office' in suffix.lower():
+            office = True
+        name = base.strip()
+        if re.fullmatch(r'[\w-]+' + tld, name, flags=re.I):          # "Harness.io - New York": the company's office
+            office = True
+    m = re.match(r'^(?:the\s+)?offices?\s+of\s+(.+)$', name, flags=re.I)
+    if m:
+        name, office = m.group(1).strip(), True
+    m = re.match(r'^(.+?)\s+offices?$', name, flags=re.I)
+    if m:
+        name, office = m.group(1).strip(), True
+    placey = re.search(r'\b(house|hall|cent(er|re)|campus|room|hub|space|labs?|auditorium|hotel|reactor|cedar|studio|tower|club|arena|theatre|theater)\b', name, flags=re.I)
+    if not office and not placey:                                    # a bare sponsor name = the host's office
+        key = re.sub(r'[^a-z0-9]', '', name.lower())
+        for s in sponsors or []:
+            s = s or {}
+            stem = re.sub(r'[^a-z0-9]', '', re.sub(r'\.[a-z]+$', '', str(s.get('logo') or '').lower()))
+            host = re.sub(r'^www\.', '', re.sub(r'^https?://', '', str(s.get('url') or '').lower())).split('/')[0]
+            if key and key in (stem, re.sub(r'[^a-z0-9]', '', host.rsplit('.', 1)[0]), re.sub(r'[^a-z0-9]', '', host)):
+                office = True
+                break
+    if office:
+        return re.sub(tld, '', name, flags=re.I).strip() + ' HQ'
+    return name
+
+
 def _ch_card_facts():
     _d = None
     try:
@@ -1394,9 +1432,13 @@ def _ch_card_facts():
         except Exception:
             _d = None
     _addr = [p.strip() for p in str(_ch.get('venue_address') or '').split(',') if p.strip()]
+    _ch_venue = str(context.get('communityhero_venue') or '') or _ch_venue_display(_ob_vname or _ch['venue_name'], _ch['city'], context.get('sponsors'))
     return {
         'day': str(_d.day) if _d else '', 'month': _d.strftime('%B') if _d else '', 'weekday': _d.strftime('%A') if _d else '',
-        'venue_short': str(context.get('venue_name') or _ch['venue_name'] or _ch['city']),
+        # card + texts name the venue the same way: "<Company> HQ" for a host's office, otherwise the venue's own name
+        # (metadata communityhero_venue overrides)
+        'venue_short': _ch_venue or _ch['city'],
+        'venue_name': _ch_venue or _ch['venue_name'],
         # the street part only: the event line already names the city, so later parts that mention it are dropped
         'venue_line': ', '.join([_p for _i, _p in enumerate(_addr[:2]) if _i == 0 or str(_ch['city']).lower() not in _p.lower()]),
         'promo_code': str(context.get('communityhero_code', 'HERO30') or ''),
