@@ -10,7 +10,7 @@ date_string: "November 18, 2026"
 location_string: "House of AI, Hamburg, Germany"
 city_name: "Hamburg"
 # get this from the event url (empty until the Luma event exists = "Tickets will be available soon")
-luma_evt:
+luma_evt: evt-A6EmE2vrDywENqn
 cfp_url: https://cfp.ninja/e/llmday-2026-hamburg-q4
 
 # the number of tracks needs to be the same per day
