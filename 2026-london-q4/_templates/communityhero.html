@@ -69,6 +69,9 @@
     .ch-tabs button.on { background: var(--ch-accent); border-color: var(--ch-accent); color: #fff; }
     .ch-text { width: 100%; min-height: 120px; overflow: hidden; border: 1px solid #ddd; border-radius: 12px; padding: 14px 16px; font: inherit; font-size: .97rem; line-height: 1.55; color: #111; background: #fafafa; resize: vertical; }
     .ch-copied { font-size: .85rem; color: #2e7d32; }
+    .ch-tagrow { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px 16px; margin: 0 0 12px; }
+    .ch-tagrow .ch-consent { margin: 0; flex-shrink: 0; white-space: nowrap; }
+    .ch-tagrow .ch-tagpill { flex: 1 1 320px; margin-top: 0; }
     .ch-tagpill { margin-top: 10px; padding: 10px 16px; border-radius: 14px; font-size: .88rem; line-height: 1.5; color: #333;
       background: color-mix(in srgb, var(--ch-accent) 10%, #fff); border: 1px solid color-mix(in srgb, var(--ch-accent) 35%, #fff); }
     /* report */
@@ -155,9 +158,11 @@
     <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
       <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your post</h2><small>LinkedIn, X, etc. - where your community is active</small></div>
       <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="personal">Personal</button><button type="button" data-v="pro">Professional</button></div>
-      <label class="ch-consent" style="margin: 0 0 12px;"><input type="checkbox" id="ch-tags"><span>Add LinkedIn tags (@)</span></label>
+      <div class="ch-tagrow">
+        <label class="ch-consent"><input type="checkbox" id="ch-tags"><span>Add LinkedIn tags (@)</span></label>
+        <div class="ch-tagpill" id="ch-tags-hint" hidden>LinkedIn and X allow you to tag people and companies, which increases the reach of your post. When the &quot;@&quot; sign is added, click on the last name and the company name to tag people and companies in the post. If you&#39;d rather not tag or don&#39;t care to learn how to do it, please disable this option, or your post may be spoiled with random &quot;@&quot; signs everywhere.</div>
+      </div>
       <textarea class="ch-text" id="ch-post" spellcheck="false"></textarea>
-      <div class="ch-tagpill" id="ch-tags-hint" hidden>LinkedIn and X allow you to tag people and companies, which increases the reach of your post. When the &quot;@&quot; sign is added, click on the last name and the company name to tag people and companies in the post. If you&#39;d rather not tag or don&#39;t care to learn how to do it, please disable this option, or your post may be spoiled with random &quot;@&quot; signs everywhere.</div>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-post">Copy the post</button><span class="ch-copied" id="ch-post-copied"></span></div>
       <div class="ch-hint">Edit as you please before posting. Those messages are based on your input in step 1.</div>
     </div>
