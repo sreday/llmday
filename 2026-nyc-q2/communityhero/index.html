@@ -62,6 +62,9 @@
     .ch-tabs button.on { background: var(--ch-accent); border-color: var(--ch-accent); color: #fff; }
     .ch-text { width: 100%; min-height: 120px; overflow: hidden; border: 1px solid #ddd; border-radius: 12px; padding: 14px 16px; font: inherit; font-size: .97rem; line-height: 1.55; color: #111; background: #fafafa; resize: vertical; }
     .ch-copied { font-size: .85rem; color: #2e7d32; }
+    .ch-code-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+    .ch-code { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 3.2rem; line-height: 1.1; letter-spacing: .06em; color: var(--ch-accent); user-select: all; }
+    .ch-code-off { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.25rem; color: #444; }
     .ch-tagpill { margin-top: 10px; padding: 10px 16px; border-radius: 14px; font-size: .88rem; line-height: 1.5; color: #333;
       background: color-mix(in srgb, var(--ch-accent) 10%, #fff); border: 1px solid color-mix(in srgb, var(--ch-accent) 35%, #fff); }
     /* report */
@@ -145,8 +148,15 @@
     </div>
     
 
+    <div class="ch-card" id="ch-code-card">
+      <div class="ch-step"><i>4</i><h2>Your discount code</h2></div>
+      <div class="ch-code-row"><div class="ch-code" id="ch-code">HERO30</div><div class="ch-code-off" id="ch-code-off">30% off</div></div>
+      <div class="ch-row"><button type="button" class="btn-ch ghost" id="ch-code-copy">Copy code</button><span class="ch-copied" id="ch-code-copied"></span></div>
+      <div class="ch-hint">You may use this code publicly.</div>
+    </div>
+
     <div class="ch-card">
-      <div class="ch-step"><i>4</i><h2>Your post</h2><small>LinkedIn, X, etc. - where your community is active</small></div>
+      <div class="ch-step"><i>5</i><h2>Your post</h2><small>LinkedIn, X, etc. - where your community is active</small></div>
       <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="personal">Personal</button><button type="button" data-v="pro">Professional</button></div>
       <label class="ch-consent" style="margin: 0 0 12px;"><input type="checkbox" id="ch-tags"><span>Add LinkedIn tags (@)</span></label>
       <textarea class="ch-text" id="ch-post" spellcheck="false"></textarea>
@@ -156,7 +166,7 @@
     </div>
 
     <div class="ch-card">
-      <div class="ch-step"><i>5</i><h2>Your message</h2><small>Email, WhatsApp, Slack, Discord, etc.</small></div>
+      <div class="ch-step"><i>6</i><h2>Your message</h2><small>Email, WhatsApp, Slack, Discord, etc.</small></div>
       <div class="ch-tabs" data-set="msg"><button type="button" class="on" data-v="coworker">Coworker</button><button type="button" data-v="friend">Friend</button><button type="button" data-v="group">Group</button></div>
       <textarea class="ch-text" id="ch-msg" spellcheck="false"></textarea>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-msg">Copy the message</button><span class="ch-copied" id="ch-msg-copied"></span></div>
@@ -164,7 +174,7 @@
     </div>
 
     <div class="ch-card">
-      <div class="ch-step"><i>6</i><h2>Your Heroic actions</h2></div>
+      <div class="ch-step"><i>7</i><h2>Your Heroic actions</h2></div>
       <div class="ch-actions" id="ch-actions">
         <div class="ch-action" data-key="linkedin"><input type="checkbox" id="act-linkedin"><label class="main" for="act-linkedin">Posted on LinkedIn</label></div>
         <div class="ch-action" data-key="social"><input type="checkbox" id="act-social"><label class="main" for="act-social">Posted on X, Bluesky, Mastodon, Threads, etc.</label></div>
@@ -409,6 +419,17 @@ $('ch-tags').addEventListener('change', function () { $('ch-tags-hint').hidden =
 $('ch-msg').addEventListener('input', function () { edited.msg = true; fitBox(this); });
 ['name'].forEach(function (k) { form.elements[k].addEventListener('input', function () { if (!edited.post) render('post'); if (!edited.msg) render('msg'); drawCard(); }); });
 render('post'); render('msg');
+// the discount code step: the same code as on the card (HERO30, HERO50 inside 14 days of the event)
+(function () {
+  var hc = heroCode();
+  if (!hc[0]) { $('ch-code-card').hidden = true; return; }
+  $('ch-code').textContent = hc[0]; $('ch-code-off').textContent = hc[1];
+  $('ch-code-copy').addEventListener('click', function () {
+    var done = function () { $('ch-code-copied').textContent = 'Copied.'; setTimeout(function () { $('ch-code-copied').textContent = ''; }, 2500); };
+    var pick = function () { var r = document.createRange(); r.selectNodeContents($('ch-code')); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy'); done(); };
+    if (navigator.clipboard) navigator.clipboard.writeText(hc[0]).then(done, pick); else pick();
+  });
+})();
 document.querySelectorAll('[data-copy]').forEach(function (b) {
   b.addEventListener('click', function () {
     var box = $(b.getAttribute('data-copy')), out = $(b.getAttribute('data-copy') + '-copied');
