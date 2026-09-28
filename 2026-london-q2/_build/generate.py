@@ -1466,6 +1466,8 @@ def _ch_card_facts():
         'promo_label_near': str(context.get('communityhero_code_near_label', '50% off') or ''),
         # every talk with a company (keynotes flagged) - the posts pick 3-5 of them at random, a keynote always in
         'pick_talks': _ch_pick_pool(),
+        # a free event (Luma) has no discount: the page, the card and the texts say "Register for FREE" instead
+        'is_free': bool(context.get('communityhero_free', _ch.get('is_free'))),
     }
 
 
