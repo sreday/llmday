@@ -1428,9 +1428,24 @@ print("Waitlist: %s" % (_wl_note or "%d waiting, %d placed" % (_wl_waiting, _wl_
 # /<event>/communityhero/ pages -> the "Community hero" Apps Script -> a Google Sheet. COMMUNITYHERO_FEED = that
 # script's exec URL with ?list=1&token=... (Actions secret; local file path for testing). Same fetch as the waitlist;
 # only this brand's rows, newest first, with the completion marks and Anna's "approved" tick from the sheet.
+def _hero_feed_url():
+    """The heroes list comes from the SAME deployment the form posts to (home/metadata.yml communityhero_form_url):
+    only the token is taken from the COMMUNITYHERO_FEED secret. A secret holding an old deployment's URL (it served
+    v1 without the list, 2026-09-28) can no longer hide every report."""
+    src = os.environ.get("COMMUNITYHERO_FEED", "").strip()
+    form = str(context.get("communityhero_form_url") or "").strip()
+    tok = re.search(r"[?&]token=([^&#]+)", src)
+    if form.startswith("http") and tok:
+        return form.split("?")[0] + "?list=1&token=" + tok.group(1)
+    return src
+
+
 def _hero_rows_for_page():
-    raw, note = _wl_fetch(os.environ.get("COMMUNITYHERO_FEED", "").strip())
+    raw, note = _wl_fetch(_hero_feed_url())
     if raw is None:
+        if "forbidden" in note:
+            return [], ("The Community hero script refused the list: the token in the COMMUNITYHERO_FEED secret does not match "
+                        "COMMUNITYHERO_TOKEN in the script's properties (Apps Script > Project settings > Script properties).")
         return [], note.replace("WAITLIST_FEED", "COMMUNITYHERO_FEED").replace("waitlist", "heroes list")
     out = []
     for r in raw:
