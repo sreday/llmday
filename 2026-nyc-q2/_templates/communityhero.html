@@ -270,7 +270,7 @@ function personalPost() {
     function () {
       return "Guess who's going to " + E.event_name + ' as a Community Hero? This one! 🙋\n\n' +
         (N ? N + " sessions, one day, and a room full of people who care about this stuff as much as I do. I'm so in!" : "One day and a room full of people who care about this stuff as much as I do. I'm so in!") + '\n\n' +
-        (T ? "The talks I'm most excited about: " + T + '. Already making room in my notebook for these! 📝\n\n' : '') +
+        (T ? "The speakers I'm most excited to hear: " + T + '. Already making room in my notebook for them! 📝\n\n' : '') +
         (P ? 'Expect a full day of great conversations on ' + P + '. This community keeps getting better!\n\n' : '') +
         tail(join('Want to learn with me? Come to') + '!', 'Big thanks to the ' + B + " team for having me, can't wait! 🎉");
     },
@@ -283,7 +283,7 @@ function personalPost() {
     },
     function () {
       return 'So excited to be a Community Hero at ' + E.event_name + '! 🤩\n\n' +
-        (T ? (N ? N + ' sessions are lined up' : 'The sessions are lined up') + ", and I already know which ones I'm not missing: " + T + '.\n\n' : (N ? N + ' sessions are lined up!\n\n' : '')) +
+        (T ? (N ? N + ' sessions are lined up' : 'The sessions are lined up') + ", and I already know who I'm not missing: " + T + '.\n\n' : (N ? N + ' sessions are lined up!\n\n' : '')) +
         (P ? "If you're into " + P + ", this is your day. It's so great to see this community growing! 🌱" : "It's so great to see this community growing! 🌱") + '\n\n' +
         tail(join('See you in') + '? 😊', 'Big thanks to the ' + B + ' team for the invitation!');
     },
@@ -321,7 +321,7 @@ function proPost() {
       var W = who('Working myself as ' + aRole + ' at ' + comp, 'Working myself as ' + aRole, 'Working myself at ' + comp);
       return ("I'm supporting " + EV + ' as a Community Hero') + '\n\n' +
         (N ? "It's a full day with " + N + ' sessions.' : "It's a full day of sessions.") + '\n\n' +
-        block(W, ", I'm particularly interested in these talks:", ", this is exactly the kind of day I make time for.", 'A few of them are already on my list:') +
+        block(W, ", these are the speakers I'm most keen to hear from:", ", this is exactly the kind of day I make time for.", "The speakers I'm most keen to hear from:") +
         (P ? "I'm looking forward to good conversations on " + P + '.\n\n' : '') +
         tail("If you'd like to join me, it's in " + where, 'Thank you to the ' + B + " team for the invitation, I'm looking forward to it!");
     },
@@ -329,7 +329,7 @@ function proPost() {
       var W = who('As ' + aRole + ' at ' + comp, 'As ' + aRole, 'Working at ' + comp);
       return ("I'll be at " + EV + ' as a Community Hero') + '\n\n' +
         (N ? 'One day, ' + N + ' sessions' : 'One day of sessions') + (P ? ', and a room full of people working on ' + P + '.' : ', and a room full of people who care about this field.') + '\n\n' +
-        block(W, ", the talks I'm planning to catch are:", ", I'm really looking forward to the conversations.", "The talks I'm planning to catch:") +
+        block(W, ", these are the people I'm planning to listen to:", ", I'm really looking forward to the conversations.", "The people I'm planning to listen to:") +
         "If these topics are part of your work, I think it's well worth the day.\n\n" +
         tail('Join me in ' + where, 'Many thanks to the ' + B + ' team for having me, see you there!');
     },
@@ -337,7 +337,7 @@ function proPost() {
       var W = who('From my perspective as ' + aRole + ' at ' + comp, 'From my perspective as ' + aRole, 'From where I sit at ' + comp);
       return ('Community Hero at ' + EV) + '\n\n' +
         (N ? N + ' sessions in one day, and plenty to learn.' : 'A full day with plenty to learn.') + '\n\n' +
-        block(W, ", these are the talks I'd recommend:", ', I expect to come back with lots of new ideas.', "The talks I'd recommend:") +
+        block(W, ", these are the speakers I'd recommend catching:", ', I expect to come back with lots of new ideas.', "The speakers I'd recommend catching:") +
         (P ? 'The day covers ' + P + ', and the conversations between sessions are often just as valuable.\n\n' : '') +
         tail('Join me in ' + where, 'Thank you to ' + B + ' for the invitation, hope to see you there.');
     },
@@ -345,7 +345,7 @@ function proPost() {
       var W = who('In my role as ' + role + ' at ' + comp, 'In my role as ' + role, 'In my work at ' + comp);
       return ('Happy to support ' + EV + ' as a Community Hero') + '\n\n' +
         (N ? 'There are ' + N + ' sessions on the agenda.' : 'The agenda is shaping up nicely.') + '\n\n' +
-        block(W, ", I've marked these sessions for myself:", ", this agenda is right on point, and the day is already in my calendar.", "The ones I've marked for myself:") +
+        block(W, ", these are the speakers I'll be looking to listen to and chat with:", ", this agenda is right on point, and the day is already in my calendar.", "The speakers I'll be looking to listen to and chat with:") +
         (P ? 'If ' + P + " matter in your work too, this is a day well spent. It's also great to see this community keep growing." : "It's great to see this community keep growing.") + '\n\n' +
         tail('See you in ' + where + '?', 'Thanks to the ' + B + ' team for the invitation!');
     },
