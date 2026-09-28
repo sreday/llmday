@@ -191,6 +191,8 @@ def luma_is_free(evt_id):
 
 
 context["luma_is_free"] = luma_is_free(context.get("luma_evt"))
+if context.get("registration_free") is not None:   # events not on Luma (e.g. in10t_event): metadata says free or not
+    context["luma_is_free"] = bool(context.get("registration_free"))
 print("Luma event %s is_free=%s" % (context.get("luma_evt") or "(none)", context["luma_is_free"]))
 
 # ── CFP status from cfp.ninja (build time) ───────────────────────────────────

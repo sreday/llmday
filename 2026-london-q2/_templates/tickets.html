@@ -1,4 +1,9 @@
-{% if not luma_evt %}
+{% if in10t_event %}
+{# Registration on in10t.ai instead of Luma (Marek 2026-09-29, LLMday Tel Aviv: Sharone Zitzman's community
+   platform). metadata.yml: in10t_event: <id>, optional in10t_theme: dark. The widget is in10t's own embed script. #}
+<div class="text-start" data-in10t-event="{{ in10t_event }}"{% if in10t_theme %} data-theme="{{ in10t_theme }}"{% endif %} style="max-width: 720px; margin: 0 auto;"></div>
+<script src="https://in10t.ai/embed.js" async></script>
+{% elif not luma_evt %}
 <div class="text-center py-5">
   <p class="lead mb-0">Tickets will be available soon</p>
 </div>
