@@ -222,17 +222,6 @@ function lower(s) { return (s || '').charAt(0).toLowerCase() + (s || '').slice(1
 // Posts follow the team's own LinkedIn formats (read 2026-09-22): the company pages' bold question headline +
 // "What's coming up?" + one 🎙️ line per speaker, Mark's countdown post, Aleksandra's WHAT / WHERE / WHEN / WHY.
 // Messages sell the event on who presents on what, taken from the About panel (E.topic_talks), never on "it's cool".
-function bold(s) {                                 // the Unicode bold sans-serif the team uses for headlines
-  var out = '';
-  for (var i = 0; i < s.length; i++) {
-    var c = s.charCodeAt(i);
-    if (c >= 65 && c <= 90) out += String.fromCodePoint(0x1D5D4 + c - 65);
-    else if (c >= 97 && c <= 122) out += String.fromCodePoint(0x1D5EE + c - 97);
-    else if (c >= 48 && c <= 57) out += String.fromCodePoint(0x1D7EC + c - 48);
-    else out += s[i];
-  }
-  return out;
-}
 var TALKS = [];                                    // [{speaker, company, title, topic}] in About order, company required
 (E.topic_talks || []).forEach(function (t) { (t.talks || []).forEach(function (x) { if (x.company && x.title) TALKS.push({ speaker: x.speaker, company: x.company, title: x.title, topic: t.category }); }); });
 var companies = list(E.companies, 3), where = E.venue_name ? (E.venue_name.toLowerCase().indexOf(E.city.toLowerCase()) === -1 ? E.venue_name + ', ' + E.city : E.venue_name) : E.city, topic1 = (E.topics || [])[0] || E.event_name;
@@ -287,34 +276,34 @@ function personalPost() {
   var tail = function (ask, thanks) { return ask + '\nRSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
   var V = [
     function () {
-      return bold("I'm a Community Hero at " + E.event_name + '!') + '\n\n' +
+      return ("I'm a Community Hero at " + E.event_name + '!') + '\n\n' +
         (N ? 'It will be a great day with ' + N + ' amazing sessions!' : 'It will be a great day of amazing sessions!') + '\n\n' +
         (T ? "I'm personally looking forward to the talks by " + T + '.\n\n' : '') +
         (P ? 'This will be a day full of discussions on all things ' + P + '!\n\n' : '') +
         tail(join('Sounds like fun? Join me in'), 'Shout-out to the ' + B + ' team for the invitation, see you there!');
     },
     function () {
-      return bold("I'm a Community Hero at " + E.event_name + '!') + ' 🎉\n\n' +
+      return ("I'm a Community Hero at " + E.event_name + '!') + ' 🎉\n\n' +
         (N ? N + ' sessions, one day, and a room full of people who care about this stuff as much as I do.' : 'One day and a room full of people who care about this stuff as much as I do.') + '\n\n' +
         (T ? "The talks I'm most excited about: " + T + '.\n\n' : '') +
         (P ? 'Expect a full day of conversations on ' + P + '.\n\n' : '') +
         tail(join('Want to learn with me? Come to'), 'Thanks to the ' + B + " team for having me, can't wait!");
     },
     function () {
-      return bold("I'm a Community Hero at " + E.event_name + '!') + '\n\n' +
+      return ("I'm a Community Hero at " + E.event_name + '!') + '\n\n' +
         (N ? "I can't wait for this one: " + N + ' sessions and a lot to learn.' : "I can't wait for this one, there is a lot to learn.") + '\n\n' +
         (T ? 'On my must-see list: ' + T + '.\n\n' : '') +
         (P ? 'A whole day about ' + P + ', and the hallway chats are half the fun.\n\n' : '') +
         tail(join('Join me in') + '?', 'Thank you ' + B + ' for the invitation, see you there!');
     },
     function () {
-      return bold('Excited to be a Community Hero at ' + E.event_name + '!') + '\n\n' +
+      return ('Excited to be a Community Hero at ' + E.event_name + '!') + '\n\n' +
         (T ? (N ? N + ' sessions are lined up' : 'The sessions are lined up') + ", and I already know which ones I'm not missing: " + T + '.\n\n' : (N ? N + ' sessions are lined up.\n\n' : '')) +
         (P ? "If you're into " + P + ", this is your day. It's great to see this community growing!" : "It's great to see this community growing!") + '\n\n' +
         tail(join('See you in') + '?', 'Big thanks to the ' + B + ' team for the invitation!');
     },
     function () {
-      return bold('Community Hero reporting for ' + E.event_name + '!') + ' 🙌\n\n' +
+      return ('Community Hero reporting for ' + E.event_name + '!') + ' 🙌\n\n' +
         (N ? N + ' amazing sessions in one day' : 'A day of amazing sessions') + (T ? ", and I've done my homework." : ", and I've already cleared my calendar.") + '\n\n' +
         (T ? 'Top of my list: ' + T + '.\n\n' : '') +
         (P ? 'A full day of learning and discussions on ' + P + ', with a community that keeps getting stronger.\n\n' : '') +
@@ -337,35 +326,35 @@ function proPost() {
   var listOr = function (intro, fallback) { var s = L ? intro + '\n' + L : fallback; return s ? s + '\n\n' : ''; };
   var V = [
     function () {
-      return bold("I'm supporting " + EV + ' as a Community Hero') + '\n\n' +
+      return ("I'm supporting " + EV + ' as a Community Hero') + '\n\n' +
         listOr((N ? "It's a full day with " + N + ' sessions' : "It's a full day of sessions") + ', and a few of them are already on my list:',
                (N ? "It's a full day with " + N + ' sessions.' : "It's a full day of sessions.")) +
         (P ? "I'm looking forward to good conversations on " + P + '.\n\n' : '') +
         tail("If you'd like to join me, it's in " + where, 'Thank you to the ' + B + " team for the invitation, I'm looking forward to it!");
     },
     function () {
-      return bold("I'll be at " + EV + ' as a Community Hero') + '\n\n' +
+      return ("I'll be at " + EV + ' as a Community Hero') + '\n\n' +
         (N ? 'One day, ' + N + ' sessions' : 'One day of sessions') + (P ? ', and a room full of people working on ' + P + '.' : ', and a room full of people who care about this field.') + '\n\n' +
         listOr("The talks I'm planning to catch:", '') +
         "If these topics are part of your work, I think it's well worth the day.\n\n" +
         tail('Join me in ' + where, 'Many thanks to the ' + B + ' team for having me, see you there!');
     },
     function () {
-      return bold('Community Hero at ' + EV) + '\n\n' +
+      return ('Community Hero at ' + EV) + '\n\n' +
         listOr((N ? N + ' sessions in one day, and plenty to learn.' : 'A full day with plenty to learn.') + " The talks I'd recommend:",
                N ? N + ' sessions in one day, and plenty to learn.' : 'A full day with plenty to learn.') +
         (P ? 'The day covers ' + P + ', and the conversations between sessions are often just as valuable.\n\n' : '') +
         tail('Join me in ' + where, 'Thank you to ' + B + ' for the invitation, hope to see you there.');
     },
     function () {
-      return bold('Happy to support ' + EV + ' as a Community Hero') + '\n\n' +
+      return ('Happy to support ' + EV + ' as a Community Hero') + '\n\n' +
         listOr((N ? 'There are ' + N + ' sessions on the agenda.' : 'The agenda is shaping up nicely.') + " The ones I've marked for myself:",
                N ? 'There are ' + N + ' sessions on the agenda.' : 'The agenda is shaping up nicely.') +
         (P ? 'If ' + P + " matter in your role, this is a day well spent. It's also great to see this community keep growing." : "It's great to see this community keep growing.") + '\n\n' +
         tail('See you in ' + where + '?', 'Thanks to the ' + B + ' team for the invitation!');
     },
     function () {
-      return bold('Community Hero for ' + EV) + '\n\n' +
+      return ('Community Hero for ' + EV) + '\n\n' +
         "A quick overview if you're considering it:\n" + (N ? '• ' + N + ' sessions in one day\n' : '') + (P ? '• ' + P + '\n' : '') + '• ' + E.city + ', ' + E.month_day + '\n\n' +
         listOr("I've done my homework, and these are the speakers I'm looking forward to:", '') +
         tail('', 'Thanks to the ' + B + ' team for the invitation, I hope to see you there!');
