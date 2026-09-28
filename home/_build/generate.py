@@ -1468,7 +1468,7 @@ def _hero_rows_for_page():
             "event": str(r.get("event") or "").strip(), "event_url": _site_root + slug + "/" if slug else _site_root,
             "city": str(r.get("city") or "").strip(), "event_date": str(r.get("date") or "").strip(),
             "marks": marks, "done_n": sum(1 for m in marks if m["done"]), "links": links, "screenshots": int(r.get("screenshots") or 0),
-            "approved": bool(r.get("approved")),
+            "approved": bool(r.get("approved")), "slug": slug, "email_sha": str(r.get("email_sha") or "").strip().lower(),
         }
         row["search"] = " ".join(v for v in (row["name"], row["company"], row["event"], row["city"], "approved" if row["approved"] else "pending") if v).lower()
         out.append(row)
@@ -1477,6 +1477,86 @@ def _hero_rows_for_page():
 
 
 _hero_rows, _hero_note = _hero_rows_for_page()
+
+
+# Hero tickets from Luma (Marek 2026-09-28: "confirm whether it's accepted or not based on luma instead"): for every
+# event with hero reports, read the WHOLE guest list (every approval status) and find each hero: by the SHA-256 of
+# the email (the "Community hero" script v6 sends email_sha; no email ever reaches the page), else by name (exact, or
+# same surname + shortened first name). Luma's status wins; the sheet's "approved" column stays as a manual override
+# for heroes Luma cannot match. Every Luma call is read-only.
+_HERO_LUMA_LABELS = {"approved": "approved on Luma", "pending_approval": "pending on Luma", "waitlist": "waitlist on Luma",
+                     "declined": "declined on Luma", "invited": "invited on Luma", "session": "registered on Luma"}
+
+
+def _hero_luma(rows):
+    import hashlib
+    if not rows or not _LUMA_KEYS:
+        return
+    by_slug = {}
+    for h in rows:
+        by_slug.setdefault(h.get("slug") or "", []).append(h)
+    for slug, heroes in by_slug.items():
+        try:
+            with open("../%s/metadata.yml" % slug, encoding="utf-8") as _f:
+                evt = str((yaml.load(_f, Loader=yaml.FullLoader) or {}).get("luma_evt") or "").strip()
+        except Exception:
+            evt = ""
+        if not evt:
+            continue
+        key = None
+        for k in _LUMA_KEYS:
+            data, err = _luma_get("/v1/events/get", {"event_id": evt}, k)
+            if data and data.get("access") == "manage":
+                key = k
+                break
+        if not key:
+            continue
+        by_sha, by_name, cursor, pages = {}, {}, None, 0
+        while True:
+            params = {"event_id": evt, "pagination_limit": _LUMA_PAGE}
+            if cursor:
+                params["pagination_cursor"] = cursor
+            data, err = _luma_get("/v1/events/guests/list", params, key)
+            if data is None:
+                break
+            for g in data.get("entries") or []:
+                if not isinstance(g, dict):
+                    continue
+                g = g.get("guest") if isinstance(g.get("guest"), dict) else g
+                st = str(g.get("approval_status") or "session")
+                email = str(g.get("user_email") or g.get("email") or "").strip().lower()
+                if email:
+                    by_sha[hashlib.sha256(email.encode("utf-8")).hexdigest()] = st
+                for n in {_luma_norm(g.get("user_name")),
+                          _luma_norm("%s %s" % (g.get("user_first_name") or "", g.get("user_last_name") or ""))}:
+                    if n:
+                        by_name.setdefault(n, set()).add(st)
+            pages += 1
+            cursor = data.get("next_cursor")
+            if not data.get("has_more") or not cursor or pages >= 200:
+                break
+        for h in heroes:
+            st, how = by_sha.get(h.get("email_sha") or ""), "email"
+            if not st:
+                n = _luma_norm(h["name"])
+                hits = by_name.get(n) or set().union(*[v for k, v in by_name.items() if _luma_nickname(n, k)] or [set()])
+                st, how = (next(iter(hits)), "name") if len(hits) == 1 else (None, "")
+            if st:
+                h["luma_status"], h["luma_how"] = st, how
+                h["luma_label"] = _HERO_LUMA_LABELS.get(st, st.replace("_", " ") + " on Luma")
+                h["approved"] = st == "approved"
+            elif h.get("approved"):
+                pass                                  # not found on Luma, but ticked by hand in the sheet: keep the tick
+            else:
+                h["luma_status"], h["luma_label"] = "missing", "not on Luma yet"
+                h["luma_how"] = "no Luma guest with this %s" % ("email" if h.get("email_sha") else "name")
+            h["search"] += " " + h["luma_label"].lower()
+
+
+try:
+    _hero_luma(_hero_rows)
+except Exception as _hl_e:
+    print("Community heroes: Luma check failed (%s)" % _hl_e)
 print("Community heroes: %s" % (_hero_note or "%d reports, %d approved" % (len(_hero_rows), sum(1 for x in _hero_rows if x["approved"]))))
 # ── END COMMUNITY HEROES ─────────────────────────────────────────────────────
 
