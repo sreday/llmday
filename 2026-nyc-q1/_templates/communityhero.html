@@ -121,7 +121,11 @@
   <div class="ch-brand">{{ brand_name }} · community heroes</div>
   <h1 class="ch-title">Community Hero at {{ hero_event.event_name }}</h1>
   <div class="ch-sub">{{ hero_event.date }} · {{ hero_event.city }} · <a href="{{ hero_event.event_url }}" target="_blank" rel="noopener">event page</a></div>
+  {% if hero_event.is_free %}
+  <p class="ch-intro">You signed up as a Community Hero: helping us spread the word about this free event. Everything you need is on this page. Fill in your details, generate and grab your card, pick a post and a message to spread, then tell us what you did. We&#39;ll review your activities and get back to you!</p>
+  {% else %}
   <p class="ch-intro">You applied for a Community Hero ticket: free admission in exchange for helping us promote the event. Everything you need is on this page. Fill in your details, generate and grab your card, pick a post and a message to spread, then tell us what you did. We&#39;ll review your activities and confirm your free ticket!</p>
+  {% endif %}
 
   <form id="ch-form" novalidate>
     <div class="ch-card">
@@ -132,7 +136,7 @@
         <label class="ch-field" data-field="role"><span>Job title</span><input type="text" name="role" autocomplete="organization-title" maxlength="120"></label>
         <label class="ch-field" data-field="company"><span>Company</span><input type="text" name="company" autocomplete="organization" maxlength="120"></label>
         <label class="ch-field ch-wide" data-field="linkedin"><span>LinkedIn profile URL</span><input type="url" name="linkedin" autocomplete="url" placeholder="https://www.linkedin.com/in/..." maxlength="300"></label>
-        <label class="ch-field ch-wide" data-field="photo"><span>Your photo <small>(a clear headshot, it goes on your card)</small></span>
+        <label class="ch-field ch-wide" data-field="photo"><span>Your photo <small>(headshot picture or avatar, it goes on your card)</small></span>
           <div class="ch-photo-box" id="ch-photo-box"><img id="ch-photo-prev" alt="" hidden><div class="ch-photo-text" id="ch-photo-text"><b>Choose a photo</b> or drop it here. JPG or PNG, a square headshot works best, up to 10 MB.</div><input type="file" name="photo" id="ch-photo" accept="image/*"></div>
         </label>
       </div>
@@ -155,12 +159,14 @@
     </div>
     {% endif %}
 
+    {% if not hero_event.is_free %}
     <div class="ch-card" id="ch-code-card">{% set ch_n.i = ch_n.i + 1 %}
       <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your discount code</h2></div>
       <div class="ch-code-row"><div class="ch-code" id="ch-code">{{ hero_event.promo_code }}</div><div class="ch-code-off" id="ch-code-off">{{ hero_event.promo_label }}</div></div>
       <div class="ch-row"><button type="button" class="btn-ch ghost" id="ch-code-copy">Copy code</button><span class="ch-copied" id="ch-code-copied"></span></div>
       <div class="ch-hint">You may use this code publicly.</div>
     </div>
+    {% endif %}
 
     <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
       <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your post</h2><small>LinkedIn, X, etc. - where your community is active</small></div>
@@ -203,7 +209,7 @@
         </div>
       </div>
       <label class="ch-consent" id="ch-consent-wrap"><input type="checkbox" name="consent" value="yes"><span>I'm happy to share all the above with the organizers of {{ hero_event.event_name }}.</span></label>
-      <label class="ch-consent" id="ch-applied-wrap"><input type="checkbox" name="applied" value="yes"><span>I already applied for the free ticket <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>, sharing this form to prove my contribution as a Community Hero.</span></label>
+      <label class="ch-consent" id="ch-applied-wrap"><input type="checkbox" name="applied" value="yes"><span>{% if hero_event.is_free %}I already registered <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>{% else %}I already applied for the free ticket <a href="{{ hero_event.luma_url }}" target="_blank" rel="noopener">here</a>{% endif %}, sharing this form to prove my contribution as a Community Hero.</span></label>
       <div class="ch-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <div class="ch-row"><button type="submit" class="btn-ch" id="ch-send">Become a Community Hero</button><span class="ch-hint">Our team will review this and get back to you ASAP!</span><div class="ch-error" id="ch-error" hidden></div></div>
     </div>
@@ -252,7 +258,10 @@ function sessionsProse(n) {
 
 // ---- the hero code (same rule as the card: HERO30 while the event is 14+ days away, HERO50 inside that) -----
 // The code always sits alone on its own line: people copy it.
-function codeBlock(lead) { var hc = heroCode(); return hc[0] ? lead.replace('{off}', hc[1]) + '\n' + hc[0] + '\n\n' : ''; }
+function codeBlock(lead) {
+  if (E.is_free) return "It's free to attend, you just need to register.\n\n";
+  var hc = heroCode(); return hc[0] ? lead.replace('{off}', hc[1]) + '\n' + hc[0] + '\n\n' : '';
+}
 var when = E.date + (E.venue_name ? ' · ' + E.venue_name : ''), tag = '#' + E.brand_name.replace(/\s+/g, '') + ' #' + E.city.replace(/\s+/g, '');
 
 // ---- the Personal post (Marek 2026-09-28): five wordings of one structure, one picked at random per page load,
@@ -275,10 +284,13 @@ function talksText() {
 }
 function topicsText() { return list(E.topics, 3); }
 function codeInline() { var hc = heroCode(); return hc[0] ? hc[1] + ' with the code ' + hc[0] + '\n' : ''; }
+function rsvpLines() {                          // free event: "Register for FREE", no code; paid: RSVP + the code
+  return E.is_free ? 'Register for FREE: ' + E.event_url + '\n' : 'RSVP: ' + E.event_url + '\n' + codeInline();
+}
 function personalPost() {
   var N = sessionsText(), T = talksText(), P = topicsText(), B = tagged(E.brand_name);
   var join = function (lead) { return lead + ' ' + E.city + ' on ' + E.month_day; };
-  var tail = function (ask, thanks) { return ask + '\nRSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
+  var tail = function (ask, thanks) { return ask + '\n' + rsvpLines() + '\n' + thanks; };
   var V = [                                      // excited and warm, emojis welcome - the Professional post stays composed
     function () {
       return "I'm a Community Hero at " + E.event_name + '! 🎉\n\n' +
@@ -327,7 +339,7 @@ function talksBullets() {
 function proPost() {
   var N = sessionsText(), L = talksBullets(), P = topicsText(), B = tagged(E.brand_name), EV = E.event_name;
   var where = E.city + ' on ' + E.month_day;
-  var tail = function (ask, thanks) { return (ask ? ask + '\n' : '') + 'RSVP: ' + E.event_url + '\n' + codeInline() + '\n' + thanks; };
+  var tail = function (ask, thanks) { return (ask ? ask + '\n' : '') + rsvpLines() + '\n' + thanks; };
   // the hero's own job title and company from step 1 (company taggable); each version phrases it its own way
   var role = val('role'), comp = val('company') ? tagged(val('company')) : '', aRole = role ? (/^[aeiou]/i.test(role) ? 'an ' : 'a ') + role : '';
   var who = function (both, onlyRole, onlyComp) { return role && comp ? both : role ? onlyRole : comp ? onlyComp : ''; };
@@ -441,6 +453,7 @@ render('post'); render('msg');
 // the discount code step: the same code as on the card (HERO30, HERO50 inside 14 days of the event)
 (function () {
   var hc = heroCode();
+  if (!$('ch-code-card')) return;                 // free event: no code step
   if (!hc[0]) { $('ch-code-card').hidden = true; return; }
   $('ch-code').textContent = hc[0]; $('ch-code-off').textContent = hc[1];
   $('ch-code-copy').addEventListener('click', function () {
@@ -612,7 +625,7 @@ function drawCard() {
   ctx.save(); ctx.shadowColor = K.glow; ctx.shadowBlur = 60; ctx.strokeStyle = ringGradient(cx, cy, r); ctx.lineWidth = 14;
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
   // venue bar: pin, venue + street on the left, the hero ticket code (own line) and what it gives on the right
-  var y = 1210, h = 190, hc = heroCode(), code = hc[0], codeW = 0;
+  var y = 1210, h = 190, hc = E.is_free ? ['FREE', 'Register now'] : heroCode(), code = hc[0], codeW = 0;
   glass(90, y, 1320, h, 40, 'rgba(255,255,255,.18)');
   if (code) { ctx.font = '900 60px Montserrat, Arial, sans-serif'; codeW = ctx.measureText(code).width; }
   var textMax = 1360 - 260 - (code ? codeW + 50 : 0);
@@ -718,7 +731,7 @@ form.addEventListener('submit', function (ev) {
   var anyAction = Object.keys(acts).some(function (k) { return acts[k].done; }) || !!val('other');
   if (!anyAction) { showError('Tick at least one thing you did (or write it under "Anything else").'); return; }
   if (!form.elements['consent'].checked) { $('ch-consent-wrap').classList.add('is-invalid'); showError('Please tick the sharing consent so we can read your report.'); return; }
-  if (!form.elements['applied'].checked) { $('ch-applied-wrap').classList.add('is-invalid'); showError('Please confirm that you already applied for the Community Hero ticket on Luma (the link is in the checkbox line).'); return; }
+  if (!form.elements['applied'].checked) { $('ch-applied-wrap').classList.add('is-invalid'); showError({% if hero_event.is_free %}'Please confirm that you already registered on Luma (the link is in the checkbox line).'{% else %}'Please confirm that you already applied for the Community Hero ticket on Luma (the link is in the checkbox line).'{% endif %}); return; }
   if (bad.length) { showError(detailsMessage(bad)); return; }
   if (!CH_URL) { showError('This page is not connected yet (communityhero_form_url is empty). Please email us instead.'); return; }
   var body = {
