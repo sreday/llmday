@@ -12,6 +12,8 @@ city_name: "Tel Aviv"
 # get this from the event url
 # get this from the event url (empty until the Luma event exists = "Tickets will be available soon")
 luma_evt:
+in10t_event: eqasup     # registration on in10t.ai (Sharone), shown instead of Luma in the Tickets section
+registration_free: true   # the in10t tickets are free (with approval): no discount codes on this event
 cfp_url: https://cfp.ninja/e/llmday-2026-tel-aviv-q4
 
 # the number of tracks needs to be the same per day
