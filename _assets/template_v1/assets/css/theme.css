@@ -65,3 +65,28 @@ html #about, html #stats, html #faq, html #sisters, html .track-section-header[i
 .venue-v2 .figures-holder .figure.figure-3{animation-range:entry 20% entry 75%}}}
 @media (min-width:992px){.venue-v2 .row.gx-5>.col-xl-3{width:41.6667%;margin-left:0}}
 @media (min-width:1200px){.venue-v2 .row.gx-5>.col-xl-3{width:34%;margin-left:7.6667%}}
+
+/* Timeline v2 (2026-09-29): "what's next" on past event pages + "Where we meet" on sponsorship, one look on desktop and
+   mobile; the tl-v2 class is added by timeline_refresh() in the event generate.py (frozen 2022-2024 pages never get it) */
+.tl-v2.tl-v2{max-width:1040px;margin-left:auto;margin-right:auto}
+.tl-v2.tl-v2 .idx-tl-events,.tl-v2.tl-v2 .sp-stats-tl-events{display:flex;gap:10px;overflow:visible;align-items:stretch;justify-content:center}
+.tl-v2.tl-v2 .idx-tl-event,.tl-v2.tl-v2 .sp-stats-tl-event{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center}
+.tl-v2.tl-v2 .idx-tl-chip,.tl-v2.tl-v2 .sp-stats-tl-chip{flex:1;width:100%;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;gap:2px;padding:10px 6px;border-radius:10px;text-align:center;transition:background .15s,transform .15s,box-shadow .15s}
+.tl-v2.tl-v2 .idx-tl-chip:hover,.tl-v2.tl-v2 .sp-stats-tl-chip:hover{transform:translateY(-2px);box-shadow:0 6px 16px -8px rgba(0,0,0,.35)}
+.tl-v2.tl-v2 .idx-tl-city,.tl-v2.tl-v2 .sp-stats-tl-city{font-size:.8rem;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:normal;word-break:normal;hyphens:none;text-wrap:balance}
+.tl-v2.tl-v2 .idx-tl-date,.tl-v2.tl-v2 .sp-stats-tl-date,.tl-v2.tl-v2 .sp-stats-tl-seats{font-size:.72rem;line-height:1.35;margin-top:0;text-wrap:balance}
+.tl-v2.tl-v2 .sp-stats-tl-prospectus{width:100%;border-radius:8px}
+.tl-v2.tl-v2 .idx-tl-pin-event,.tl-v2.tl-v2 .sp-stats-tl-pin-event{flex:0 0 auto;display:flex;flex-direction:column;align-items:center}
+.tl-v2.tl-v2 .idx-tl-pin,.tl-v2.tl-v2 .sp-stats-tl-pin{font-size:1.9rem;top:-3px}
+@media (max-width:991px){
+.tl-v2.tl-v2 .idx-tl-line,.tl-v2.tl-v2 .sp-stats-tl-line,.tl-v2.tl-v2 .idx-tl-dot,.tl-v2.tl-v2 .sp-stats-tl-dot{display:none}
+.tl-v2.tl-v2 .idx-tl-events,.tl-v2.tl-v2 .sp-stats-tl-events{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.tl-v2.tl-v2 .idx-tl-pin-event,.tl-v2.tl-v2 .sp-stats-tl-pin-event{grid-column:1/-1;flex-direction:row;gap:12px;margin:2px 0}
+.tl-v2.tl-v2 .idx-tl-pin-event::before,.tl-v2.tl-v2 .idx-tl-pin-event::after,.tl-v2.tl-v2 .sp-stats-tl-pin-event::before,.tl-v2.tl-v2 .sp-stats-tl-pin-event::after{content:"";flex:1;height:2px;background:currentColor;opacity:.25}
+.tl-v2.tl-v2 .idx-tl-pin,.tl-v2.tl-v2 .sp-stats-tl-pin{font-size:1.4rem;margin:0;top:0}
+.tl-v2.tl-v2 .idx-tl-pin-event{color:var(--brand-dark)}
+.tl-v2.tl-v2 .sp-stats-tl-pin-event{color:#551845}}
+@media (max-width:575px){
+.tl-v2.tl-v2 .idx-tl-events,.tl-v2.tl-v2 .sp-stats-tl-events{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tl-v2.tl-v2 .idx-tl-city,.tl-v2.tl-v2 .sp-stats-tl-city{font-size:.85rem;min-height:0}}
+@media (min-width:1200px){.tl-v2.tl-v2 .idx-tl-date,.tl-v2.tl-v2 .sp-stats-tl-date{white-space:nowrap}}

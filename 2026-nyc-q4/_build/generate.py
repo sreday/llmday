@@ -1031,6 +1031,11 @@ print(f"  Timeline events: {len(_timeline_events)}, countries: {_total_countries
 # filter out partners/community orgs from event sponsors for sponsorship page
 _confirmed_sponsors = [s for s in context.get('sponsors', []) or [] if s.get('logo', '').strip() not in _sp_exclude_logos]
 
+# Timeline v2 (2026-09-29): "what's next" on index + "Where we meet" on sponsorship get the tl-v2 class, styled in
+# the shared theme.css tail (one look on desktop and mobile); pages built by older generate.py copies never get it
+def timeline_refresh(html):
+    return html.replace('class="idx-tl"', 'class="idx-tl tl-v2"', 1).replace('class="sp-stats-timeline"', 'class="sp-stats-timeline tl-v2"', 1)
+
 _sp_template = env.get_template('sponsorship.html')
 with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
     _f.write(_sp_template.render(
@@ -1056,6 +1061,10 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         open_source_tools=_sponsorship_config.get('open_source_tools', []),
         **{**context, 'event_size': _event_size, 'sponsors': _confirmed_sponsors}
     ))
+with open(BASE_FOLDER + '/sponsorship.html', encoding='utf-8') as _f:
+    _sp_html = _f.read()
+with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
+    _f.write(timeline_refresh(_sp_html))
 print("Done: sponsorship.html")
 # ── END SPONSORSHIP PAGE ─────────────────────────────────────────────────────
 
@@ -1075,7 +1084,7 @@ def venue_refresh(html):
             return src.replace("output=embed", "output=embed&z=%d" % (16 - VENUE_MAP_ZOOM_OUT))
         return src
     html = re.sub(r'src="https://www\.google\.com/maps[^"]*"', _src, html)
-    return html.replace('class="venue-section ', 'class="venue-section venue-v2 ', 1)
+    return timeline_refresh(html.replace('class="venue-section ', 'class="venue-section venue-v2 ', 1))
 
 pages = ["index.html"]
 print(f"Generating main pages: {pages}")
