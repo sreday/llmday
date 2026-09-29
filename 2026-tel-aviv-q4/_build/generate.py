@@ -1034,7 +1034,8 @@ _confirmed_sponsors = [s for s in context.get('sponsors', []) or [] if s.get('lo
 # Timeline v2 (2026-09-29): "what's next" on index + "Where we meet" on sponsorship get the tl-v2 class, styled in
 # the shared theme.css tail (one look on desktop and mobile); pages built by older generate.py copies never get it
 def timeline_refresh(html):
-    return html.replace('class="idx-tl"', 'class="idx-tl tl-v2"', 1).replace('class="sp-stats-timeline"', 'class="sp-stats-timeline tl-v2"', 1)
+    return (html.replace('class="idx-tl"', 'class="idx-tl tl-v2"', 1).replace('class="sp-stats-timeline"', 'class="sp-stats-timeline tl-v2"', 1)
+            .replace('class="schedule-meta"', 'class="schedule-meta meta-v2"', 1))
 
 _sp_template = env.get_template('sponsorship.html')
 with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
