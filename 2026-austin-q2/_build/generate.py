@@ -418,6 +418,43 @@ keynotes = [
 context["talks"] = talks
 context["keynotes"] = keynotes
 
+# ── LONGER SESSIONS ──────────────────────────────────────────────────────────
+# A 60/90/120-minute session goes into the sheet as the same talk (same
+# speaker, same title) in 2/3/4 consecutive rows of one track. Merge each such
+# run into its first row: that row's duration becomes the sum of the rows'
+# durations and "slots" counts them. A break between two rows ends a run.
+# The schedule is still built from every row (_talk_rows), because the
+# breaks' "talks_before" counts sheet rows; the merged-away rows are dropped
+# after the breaks go in. Everything else (pages, modals, counts) sees each
+# session once.
+_break_cuts = set()
+_rows_before = 0
+for _brk in context.get("breaks") or []:
+    _rows_before += _brk.get("talks_before") or 0
+    _break_cuts.add(_rows_before)
+_rows_by_track = {}
+for _talk in talks:
+    _rows_by_track.setdefault(_talk.get("track"), []).append(_talk)
+for _track_rows in _rows_by_track.values():
+    _lead = None
+    for _pos, _talk in enumerate(_track_rows):
+        _raw = _talk.get("duration")
+        _minutes = int(_raw) if _raw is not None and _raw != "" else DEFAULT_TALK_DURATION
+        if (_lead is not None and _pos not in _break_cuts
+                and _talk.get("name", "").strip() == _lead.get("name", "").strip()
+                and _talk.get("title", "").strip() == _lead.get("title", "").strip()):
+            _talk["merged_into"] = _lead["id"]
+            _lead["slots"] += 1
+            _lead["duration"] += _minutes
+        else:
+            _lead = _talk
+            _talk["slots"] = 1
+            _talk["duration"] = _minutes
+_talk_rows = list(talks)
+talks[:] = [t for t in talks if not t.get("merged_into")]
+_merged_ids = {t["id"] for t in _talk_rows if t.get("merged_into")}
+# ── END LONGER SESSIONS ──────────────────────────────────────────────────────
+
 # ── ABOUT THE CONFERENCE (expandable blurb + "Topics so far") ────────────────
 # Brand blurb + topic categories live in the repo-root about.yaml (not synced);
 # talks are keyword-matched into categories at build time.
@@ -513,9 +550,9 @@ context["about_topics"] = _about_topics
 
 # we order the tracks in how they appear in the CSV file
 tracks_ordered = []
-# all talks sorted in tracks
+# all talks sorted in tracks (every sheet row: see LONGER SESSIONS)
 tracks = dict()
-for talk in talks:
+for talk in _talk_rows:
     track = talk.get("track")
     if track not in tracks:
         tracks[track] = []
@@ -548,7 +585,8 @@ for track in tracks_ordered:
         comment="Scan each other's QR codes & head to a nearby pub!",
         duration=0,
     ))
-    tracks[track] = new_order
+    # the breaks are placed by sheet row; now each longer session is one item
+    tracks[track] = [t for t in new_order if not t.get("merged_into")]
 
 # insert keynotes or placeholders
 for i, track in enumerate(tracks_ordered):
@@ -613,11 +651,35 @@ context["schedule_time_bracket"] = (
 for track in tracks:
     tracks[track] = [t for t in tracks[track] if not t.get("placeholder")]
 
+# longer sessions in the table view: the table has one row per distinct start
+# time in a day, so a session spans every row inside [start, end), and those
+# later rows leave its track's cell out (covered_slots)
+covered_slots = {track: set() for track in tracks}
+_days = int(context.get("days") or 1)
+_per_day = max(len(tracks_ordered) // _days, 1)
+for _day in range(_days):
+    _day_tracks = tracks_ordered[_per_day * _day:_per_day * (_day + 1)]
+    _times = sorted({t["start_time"].strftime('%H:%M') for tr in _day_tracks for t in tracks[tr]})
+    for _track in _day_tracks:
+        for _talk in tracks[_track]:
+            if (_talk.get("slots") or 1) < 2:
+                continue
+            _end = _talk["start_time"] + timedelta(minutes=_talk["duration"])
+            _start_label = _talk["start_time"].strftime('%H:%M')
+            _talk["end_label"] = _end.strftime('%H:%M')
+            _inside = [x for x in _times if _start_label <= x < _talk["end_label"]]
+            _talk["row_span"] = len(_inside)
+            covered_slots[_track].update(x for x in _inside if x != _start_label)
+context["covered_slots"] = covered_slots
+
 context["talks_by_tracks"] = tracks
 print("Loaded %d confirmed talks in %d tracks: %s" % (len(context["talks"]), len(tracks), tracks.keys()))
 
-# template each talk page for the event
+# template each talk page for the event (a longer session's extra rows share
+# its page)
 for talk in talks_raw:
+    if talk["id"] in _merged_ids:
+        continue
     print("Generating talk subpage %s" % (talk.get("short_url")))
     with open(BASE_FOLDER + "/" + talk.get("short_url").replace(".html","")  + ".html", "w", encoding="utf-8") as f:
         template = env.get_template("talk.html")
