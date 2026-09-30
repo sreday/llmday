@@ -843,6 +843,9 @@
   .schedule-grid-table .speaker-info .affiliation {
     color: #666;
   }
+  /* a 60/90/120-minute session: one cell spanning its time rows, with its length */
+  .schedule-grid-table td.double-cell { vertical-align: middle; }
+  .slot-badge { display: inline-block; margin-top: 0.4rem; padding: 1px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; color: var(--brand-dark); background: var(--brand-lightest); border: 1px solid var(--brand-lighter); }
   .schedule-meta {
     display: flex;
     align-items: center;
@@ -1338,7 +1341,7 @@ In this talk, I will break down which specific capabilities matter most for clas
 
           <div class="item item-talk">
             <div class="meta">
-              <h4 class="time mb-3">11:30</h4>
+              <h4 class="time mb-3">11:30&ndash;12:30</h4><span class="slot-badge mb-2">60 min</span>
               <div class="profile">
                 <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16"><img class="profile-image rounded-circle mb-2" src="../speakers/Piotr Migdal & Przemyslaw Hejman.png" alt=""></a>
                 <div class="name">Piotr Migdal & Przemyslaw Hejman</div>
@@ -1355,29 +1358,6 @@ In this talk, I will break down which specific capabilities matter most for clas
 During the workshop, we will build a small benchmark from scratch. You will leave with a working setup and the skills to benchmark AI models and agents effectively.
 
 To get the most out of this session, please bring your laptop. We recommend installing **[Harbor](https://harborframework.com/)** prior to the event. The only technical prerequisites are **[UV](https://docs.astral.sh/uv/)** and Docker. Please also make sure you have an API key for your preferred models (e.g. Anthropic, OpenAI, Gemini, or OpenRouter).<a class="schedule-abstract-read-more" href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">... Read more</a></div>
-              
-            </div>
-          </div>
-
-          <div class="item item-talk">
-            <div class="meta">
-              <h4 class="time mb-3">12:00</h4>
-              <div class="profile">
-                <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17"><img class="profile-image rounded-circle mb-2" src="../speakers/Piotr Migdal & Przemyslaw Hejman.png" alt=""></a>
-                <div class="name">Piotr Migdal & Przemyslaw Hejman</div>
-              </div>
-            </div>
-            <div class="content">
-              
-              <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">1h Workshop: Hands-on AI agent evaluation: building benchmarks with Harbor</a>
-              </h3>
-              <div class="location mb-3">Quesma<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/V3IsI8rjZqI" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
-              <div class="desc schedule-abstract">This is a hands-on introduction to Harbor, an open source framework designed for AI agent evaluation, creating benchmarks, and reinforcement learning. You will learn why Harbor is a game-changer for AI development and see real-world examples, including our migration of **[CompileBench](https://quesma.com/blog/compilebench-in-harbor/)**.
-
-During the workshop, we will build a small benchmark from scratch. You will leave with a working setup and the skills to benchmark AI models and agents effectively.
-
-To get the most out of this session, please bring your laptop. We recommend installing **[Harbor](https://harborframework.com/)** prior to the event. The only technical prerequisites are **[UV](https://docs.astral.sh/uv/)** and Docker. Please also make sure you have an API key for your preferred models (e.g. Anthropic, OpenAI, Gemini, or OpenRouter).<a class="schedule-abstract-read-more" href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">... Read more</a></div>
               
             </div>
           </div>
@@ -1589,8 +1569,6 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
           </tr>
         </thead>
         <tbody>
-
-
 
 
 
@@ -1929,9 +1907,9 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
 
 
 
-            <td class="talk-cell">
+            <td class="talk-cell double-cell" rowspan="2">
               <a href="#modal-speaker-16" data-bs-toggle="modal" data-bs-target="#modal-speaker-16">1h Workshop: Hands-on AI agent evaluation: building benchmarks with Harbor</a>
-              <div class="speaker-info">Piotr Migdal & Przemyslaw Hejman <span class="affiliation">• Quesma</span></div>
+              <div class="speaker-info">Piotr Migdal & Przemyslaw Hejman <span class="affiliation">• Quesma</span></div><span class="slot-badge">60 min</span>
             </td>
 
 
@@ -1972,12 +1950,6 @@ This talk introduces Agentic-RAG, an emerging paradigm that combines retrieval w
 
 
 
-
-
-            <td class="talk-cell">
-              <a href="#modal-speaker-17" data-bs-toggle="modal" data-bs-target="#modal-speaker-17">1h Workshop: Hands-on AI agent evaluation: building benchmarks with Harbor</a>
-              <div class="speaker-info">Piotr Migdal & Przemyslaw Hejman <span class="affiliation">• Quesma</span></div>
-            </td>
 
 
           </tr>
@@ -4149,51 +4121,6 @@ AI Developer with a business background. He possesses a unique combination of te
 
 <!-- Modal Speaker 16 -->
 <div class="modal modal-speaker modal-speaker-16" id="modal-speaker-16" tabindex="-1" role="dialog" aria-labelledby="speaker-16-ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-body p-0">
-              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-              <div class="theme-bg-light p-5">
-                  <div class="row">
-                      <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="../speakers/Piotr Migdal & Przemyslaw Hejman.png" alt="" />
-                      </div>
-
-                      <div class="col text-center text-md-start mx-auto">
-                          <h2 class="name mb-2">Piotr Migdal & Przemyslaw Hejman</h2>
-                          <div class="meta mb-2">Quesma</div>
-                          <ul class="social-list list-inline mb-0">
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/piotrmigdal/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                            
-                            <li class="list-inline-item"><a  href="https://www.linkedin.com/in/przemyslaw-hejman/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                          </ul><!--//social-list-->
-                      </div><!--//col-->
-                  </div><!--//row-->
-              </div>
-              <div class="talk-title-bar">1h Workshop: Hands-on AI agent evaluation: building benchmarks with Harbor</div>
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
-                <p><p>This is a hands-on introduction to Harbor, an open source framework designed for AI agent evaluation, creating benchmarks, and reinforcement learning. You will learn why Harbor is a game-changer for AI development and see real-world examples, including our migration of <strong><a href="https://quesma.com/blog/compilebench-in-harbor/">CompileBench</a></strong>.</p>
-<p>During the workshop, we will build a small benchmark from scratch. You will leave with a working setup and the skills to benchmark AI models and agents effectively.</p>
-<p>To get the most out of this session, please bring your laptop. We recommend installing <strong><a href="https://harborframework.com/">Harbor</a></strong> prior to the event. The only technical prerequisites are <strong><a href="https://docs.astral.sh/uv/">UV</a></strong> and Docker. Please also make sure you have an API key for your preferred models (e.g. Anthropic, OpenAI, Gemini, or OpenRouter).</p></p>
-              </div>
-              <div class="desc p-2 p-lg-3">
-                <p></p>
-              </div>
-
-              <div class="desc p-2 p-lg-3">
-                <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
-                <p><p>Piotr Migdal is a founding engineer and AI specialist with a strong background in data visualization, machine learning, and applied research. He is a Founding Engineer at Quesma, where he leads development of Quesma Charts, using AI to transform data from sources such as CSV, SQL, and APIs into accurate, high quality visualizations for tools including ggplot2 and Grafana. Previously, he worked as an independent AI consultant, delivering user facing AI and data science solutions across medtech, biotech, gaming, and emerging technologies. Piotr is also the co founder and former CTO of Quantum Flytrap, focused on intuitive interfaces for quantum computing, and has experience as an AI researcher in game development and physics based simulation. He combines deep technical expertise with a strong emphasis on usability and clear communication of complex data.</p></p>
-              </div>
-
-          </div><!--//modal-body-->
-      </div><!--//modal-content-->
-  </div><!--//modal-dialog-->
-</div><!--//modal-->
-
-<!-- Modal Speaker 17 -->
-<div class="modal modal-speaker modal-speaker-17" id="modal-speaker-17" tabindex="-1" role="dialog" aria-labelledby="speaker-17-ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-body p-0">
