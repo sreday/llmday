@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
-"""Optimize images in static/ directory for web deployment."""
+"""Optimize images in static/ directory for web deployment.
 
+Content-addressed cache (2026-09-30): an image whose bytes and settings were
+optimized before is not re-encoded. The optimized bytes are kept in
+.cache/images/<sha256 of this script, the settings, the Pillow version and the
+source bytes>, so
+a replaced image (even under the same name) always misses, and the 35 copies
+of each sponsor logo cost one encode. CI keeps .cache/ between runs with
+actions/cache; --prune drops entries this run didn't use.
+"""
+
+import hashlib
+import os
 import sys
 from pathlib import Path
+import PIL
 from PIL import Image
 
 STATIC_DIR = Path("static")
@@ -13,6 +25,46 @@ MAX_PHOTO_WIDTH = 1200          # event photos, venue
 MAX_CARD_WIDTH = 800            # event card images
 JPEG_QUALITY = 85
 MIN_FILE_SIZE = 10 * 1024       # skip files under 10KB
+
+CACHE_DIR = Path(os.environ.get("SITE_CACHE_DIR", ".cache")) / "images"
+# Any change to this script (sizes, quality, code) invalidates every entry.
+SCRIPT_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:16]
+_used = set()
+_stats = {"hit": 0, "miss": 0}
+
+
+def cached(settings, optimize):
+    """Wrap an in-place optimizer so identical input + settings reuse the stored result."""
+    def run(path):
+        if path.stat().st_size < MIN_FILE_SIZE:
+            return
+        data = path.read_bytes()
+        key = hashlib.sha256(("%s|%s|%s|" % (SCRIPT_HASH, settings, PIL.__version__)).encode() + data).hexdigest()
+        entry = CACHE_DIR / key
+        _used.add(key)
+        if entry.exists():
+            path.write_bytes(entry.read_bytes())
+            _stats["hit"] += 1
+            return
+        optimize(path)
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        tmp = entry.with_suffix(".tmp")
+        tmp.write_bytes(path.read_bytes())
+        tmp.replace(entry)
+        _stats["miss"] += 1
+    return run
+
+
+def prune_cache():
+    """Delete cache entries this run didn't use, so the cache holds only the current site."""
+    if not CACHE_DIR.exists():
+        return
+    removed = 0
+    for entry in CACHE_DIR.iterdir():
+        if entry.name not in _used:
+            entry.unlink()
+            removed += 1
+    print(f"Image cache: pruned {removed} unused entries")
 
 
 def optimize_png(path, max_size, keep_alpha=True):
@@ -92,23 +144,27 @@ def main():
     total_after = 0
 
     groups = [
-        ("speakers/*.png",                   lambda f: optimize_png(f, MAX_PROFILE_SIZE), "Speaker photos"),
-        ("ambassadors/*.png",                lambda f: optimize_png(f, MAX_PROFILE_SIZE), "Ambassador photos"),
-        ("sponsors/*.png",                   lambda f: optimize_png(f, (MAX_LOGO_WIDTH, 9999)), "Sponsor logos"),
-        ("20*/sponsors/*.png",               lambda f: optimize_png(f, (MAX_LOGO_WIDTH, 9999)), "Per-event sponsor logos"),
-        ("assets/images/events/*.png",       lambda f: optimize_png(f, (MAX_CARD_WIDTH, 9999)), "Event card images (png)"),
-        ("assets/images/events/*.jpg",       lambda f: optimize_jpeg(f, MAX_CARD_WIDTH), "Event card images (jpg)"),
-        ("assets/images/events/*.jpeg",      lambda f: optimize_jpeg(f, MAX_CARD_WIDTH), "Event card images (jpeg)"),
-        ("photos/*.jpg",                     optimize_jpeg_quality_only, "Hero/slideshow photos (jpg)"),
-        ("photos/*.jpeg",                    optimize_jpeg_quality_only, "Hero/slideshow photos (jpeg)"),
-        ("20*/assets/images/venue/*.jpg",    lambda f: optimize_jpeg(f, MAX_PHOTO_WIDTH), "Venue photos (jpg)"),
-        ("20*/assets/images/venue/*.jpeg",   lambda f: optimize_jpeg(f, MAX_PHOTO_WIDTH), "Venue photos (jpeg)"),
+        ("speakers/*.png",                   cached("png|400x400", lambda f: optimize_png(f, MAX_PROFILE_SIZE)), "Speaker photos"),
+        ("ambassadors/*.png",                cached("png|400x400", lambda f: optimize_png(f, MAX_PROFILE_SIZE)), "Ambassador photos"),
+        ("sponsors/*.png",                   cached("png|400x9999", lambda f: optimize_png(f, (MAX_LOGO_WIDTH, 9999))), "Sponsor logos"),
+        ("20*/sponsors/*.png",               cached("png|400x9999", lambda f: optimize_png(f, (MAX_LOGO_WIDTH, 9999))), "Per-event sponsor logos"),
+        ("assets/images/events/*.png",       cached("png|800x9999", lambda f: optimize_png(f, (MAX_CARD_WIDTH, 9999))), "Event card images (png)"),
+        ("assets/images/events/*.jpg",       cached("jpeg|800|q85", lambda f: optimize_jpeg(f, MAX_CARD_WIDTH)), "Event card images (jpg)"),
+        ("assets/images/events/*.jpeg",      cached("jpeg|800|q85", lambda f: optimize_jpeg(f, MAX_CARD_WIDTH)), "Event card images (jpeg)"),
+        ("photos/*.jpg",                     cached("jpegq|q85", optimize_jpeg_quality_only), "Hero/slideshow photos (jpg)"),
+        ("photos/*.jpeg",                    cached("jpegq|q85", optimize_jpeg_quality_only), "Hero/slideshow photos (jpeg)"),
+        ("20*/assets/images/venue/*.jpg",    cached("jpeg|1200|q85", lambda f: optimize_jpeg(f, MAX_PHOTO_WIDTH)), "Venue photos (jpg)"),
+        ("20*/assets/images/venue/*.jpeg",   cached("jpeg|1200|q85", lambda f: optimize_jpeg(f, MAX_PHOTO_WIDTH)), "Venue photos (jpeg)"),
     ]
 
     for pattern, handler, label in groups:
         before, after = process_files(pattern, handler, label)
         total_before += before
         total_after += after
+
+    print(f"\nImage cache: {_stats['hit']} reused, {_stats['miss']} optimized")
+    if "--prune" in sys.argv:
+        prune_cache()
 
     if total_before > 0:
         saved = total_before - total_after
