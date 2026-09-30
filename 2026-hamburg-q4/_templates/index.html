@@ -484,7 +484,7 @@
     background: var(--brand-lightest);
   }
   /* A track with nothing on at this time (e.g. keynotes running on screen 1 only) gets the break colour (Marek 2026-09-22) */
-  .schedule-grid-table td.empty-cell { background: linear-gradient(90deg, color-mix(in srgb, var(--brand-lightest) 86%, #000), var(--brand-lightest) 85%); } /* slight left-to-right gradient per cell: each empty parallel track reads as its own column (Marek 2026-09-23) */
+  .schedule-grid-table td.empty-cell { background: linear-gradient(90deg, color-mix(in srgb, var(--brand-lightest) 70%, var(--brand-dark)), var(--brand-lightest) 85%); } /* left-to-right gradient per cell, from 30% darker (towards the brand's dark colour, not grey) to the coffee-break colour: each empty parallel track reads as its own column (Marek 2026-09-23, 2026-09-30) */
   .schedule-grid-table .time-cell {
     color: var(--brand);
     font-weight: 600;
