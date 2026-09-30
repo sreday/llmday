@@ -6,8 +6,17 @@ on:
   schedule:
     - cron: '10 4 * * *'   # daily ~5AM UK (04:10 UTC) so /status/ is fresh before work
   workflow_dispatch:
+    inputs:
+      clear_cache:
+        description: Rebuild every optimised image and teaser PNG from scratch
+        type: boolean
+        default: false
 permissions:
   contents: write
+# Every run rebuilds the whole site, so only the newest one needs to finish
+concurrency:
+  group: static-build
+  cancel-in-progress: true
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -32,11 +41,28 @@ jobs:
           make clean
           make generate
 
+      # Content-addressed cache of optimised images and teaser PNGs: an entry is reused only when
+      # every input that produced it is byte-identical, so a cached result can never be stale.
+      - name: Restore image and teaser cache
+        if: ${{ !inputs.clear_cache }}
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache
+          key: site-cache-${{ github.run_id }}
+          restore-keys: site-cache-
+
       - name: Optimize Images
-        run: python _build/optimize_images.py
+        run: python _build/optimize_images.py --prune
 
       - name: Render teaser PNGs
-        run: python _build/render_teasers.py   # headless Chrome (preinstalled on the runner); never fails the build
+        run: python _build/render_teasers.py --prune   # headless Chrome (preinstalled on the runner); never fails the build
+
+      - name: Save image and teaser cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache
+          key: site-cache-${{ github.run_id }}
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.4.0

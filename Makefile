@@ -1,6 +1,8 @@
 years := $(wildcard 20*)
 
 generate: $(addprefix static/,$(addsuffix /index.html,$(years))) static/index.html
+	# Serve the files as they are: no Jekyll pass on GitHub Pages (it took ~4 min per deploy)
+	touch static/.nojekyll
 
 20%/static/index.html: 20%/_build/* 20%/_templates/* 20%/_db/* 20%/Makefile 20%/metadata.*
 	@echo $@
