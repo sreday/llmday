@@ -507,7 +507,7 @@
     color: #666;
   }
   /* a 60/90/120-minute session: one cell spanning its time rows, with its length */
-  .schedule-grid-table td.double-cell { vertical-align: middle; }
+  .schedule-grid-table td.double-cell { vertical-align: middle; box-shadow: inset 0 0 0 2px var(--brand-lighter); } /* a thicker outline marks a longer session (Marek 2026-09-30) */
   .slot-badge { display: inline-block; margin-top: 0.4rem; padding: 1px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; color: var(--brand-dark); background: var(--brand-lightest); border: 1px solid var(--brand-lighter); }
   .schedule-meta {
     display: flex;
