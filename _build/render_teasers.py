@@ -11,10 +11,10 @@ card has a stable URL: /<event>/teasers/<brand>-<event>-<speaker>.png.
 Never fails the build: problems are printed as WARN and the page keeps working without its PNGs.
 
 Content-addressed cache (2026-09-30): each card's PNG is kept in .cache/teasers/<key>.png, where the key
-hashes this script, the Chrome version, the card's own HTML, the rest of the page (head, styles, badge
+hashes this script, Chrome's major version, the card's own HTML, the rest of the page (head, styles, badge
 inputs, scripts; everything outside the card list) and the bytes of every local file either refers to.
 Only cards whose key is new are screenshotted; the rest are copied. Not in the key: remote resources
-(Google Fonts). CI keeps .cache/ between runs with actions/cache; --prune drops entries this run didn't use.
+(Google Fonts). CI keeps .cache/ between runs with actions/cache; --prune drops entries unused for 14 days.
 """
 import glob
 import hashlib
@@ -38,6 +38,7 @@ CHUNK = 8            # cards per screenshot (8 * 1500 = 12000 px tall, under Chr
 BUDGET_MS = 12000    # virtual time for fonts + images to settle before the screenshot
 
 CACHE_DIR = os.path.join(os.environ.get("SITE_CACHE_DIR", ".cache"), "teasers")
+PRUNE_DAYS = 14      # --prune removes entries not used for this long
 with open(__file__, "rb") as _f:
     SCRIPT_HASH = hashlib.sha256(_f.read()).hexdigest()[:16]
 REF_RE = re.compile(r'(?:src|href)="([^"]+)"|url\(\s*[\'"]?([^\'")]+)[\'"]?\s*\)')
@@ -162,7 +163,10 @@ def main():
     total, events = 0, 0
     rendered_total, reused_total, used = 0, 0, set()
     r = subprocess.run([chrome, "--version"], capture_output=True, text=True)
-    chrome_version = (r.stdout or r.stderr or "unknown").strip()
+    # Only the major version goes into the key: GitHub updates its runner (and Chrome's build number)
+    # every few days, while a new major version is what could change how a card renders.
+    m = re.search(r"(\d+)\.", r.stdout or r.stderr or "")
+    chrome_version = "Chrome %s" % (m.group(1) if m else "unknown")
     side = int(round(CARD * SCALE))
     for page in pages:
         event_dir = os.path.dirname(os.path.dirname(page))
@@ -187,6 +191,7 @@ def main():
                 used.add(key + ".png")
             if cached_png and os.path.exists(cached_png):
                 shutil.copyfile(cached_png, os.path.join(out_dir, name))
+                os.utime(cached_png)  # last used now: --prune keeps it
                 reused += 1
                 done += 1
             else:
@@ -217,10 +222,14 @@ def main():
     print("render_teasers: %d PNGs in %d upcoming event(s), %d teaser page(s) found; %d reused from cache, %d rendered"
           % (total, events, len(pages), reused_total, rendered_total))
     if "--prune" in sys.argv and os.path.isdir(CACHE_DIR):
-        stale = [f for f in os.listdir(CACHE_DIR) if f not in used]
+        # Drop entries unused for PRUNE_DAYS, not merely unused by this run: while GitHub rolls out a new
+        # runner image, runs alternate between Chrome versions and both sets of entries must survive.
+        cutoff = datetime.now().timestamp() - PRUNE_DAYS * 86400
+        stale = [f for f in os.listdir(CACHE_DIR)
+                 if f not in used and os.path.getmtime(os.path.join(CACHE_DIR, f)) < cutoff]
         for f in stale:
             os.remove(os.path.join(CACHE_DIR, f))
-        print("render_teasers: pruned %d unused cache entries" % len(stale))
+        print("render_teasers: pruned %d cache entries unused for %d days" % (len(stale), PRUNE_DAYS))
 
 
 if __name__ == "__main__":
