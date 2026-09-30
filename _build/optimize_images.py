@@ -7,7 +7,7 @@ optimized before is not re-encoded. The optimized bytes are kept in
 source bytes>, so
 a replaced image (even under the same name) always misses, and the 35 copies
 of each sponsor logo cost one encode. CI keeps .cache/ between runs with
-actions/cache; --prune drops entries this run didn't use.
+actions/cache; --prune drops entries unused for 14 days.
 """
 
 import hashlib
@@ -44,6 +44,7 @@ def cached(settings, optimize):
         _used.add(key)
         if entry.exists():
             path.write_bytes(entry.read_bytes())
+            os.utime(entry)  # last used now: --prune keeps it
             _stats["hit"] += 1
             return
         optimize(path)
@@ -55,16 +56,22 @@ def cached(settings, optimize):
     return run
 
 
+PRUNE_DAYS = 14  # --prune removes entries not used for this long
+
+
 def prune_cache():
-    """Delete cache entries this run didn't use, so the cache holds only the current site."""
+    """Delete cache entries unused for PRUNE_DAYS (not merely unused by this run, so a Pillow upgrade
+    rolling out unevenly across runners doesn't wipe the other version's entries every run)."""
     if not CACHE_DIR.exists():
         return
+    import time
+    cutoff = time.time() - PRUNE_DAYS * 86400
     removed = 0
     for entry in CACHE_DIR.iterdir():
-        if entry.name not in _used:
+        if entry.name not in _used and entry.stat().st_mtime < cutoff:
             entry.unlink()
             removed += 1
-    print(f"Image cache: pruned {removed} unused entries")
+    print(f"Image cache: pruned {removed} entries unused for {PRUNE_DAYS} days")
 
 
 def optimize_png(path, max_size, keep_alpha=True):
