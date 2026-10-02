@@ -8,6 +8,7 @@ start_time: "2125-11-06T09:00:00-08:00"
 event_state: before
 date_string: "November 7, 2025"
 location_string: "Mars, Milky Way"
+city_name: "Mars"
 # get this from the event url
 luma_evt: evt-xAhCqaXMWAXAEEm
 cfp_url: https://cfp.ninja/e/llmday-amsterdam-2025-q4
