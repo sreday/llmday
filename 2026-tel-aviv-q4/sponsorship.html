@@ -494,6 +494,32 @@
   transform: translateY(0);
 }
 
+/* First edition in a city: launch banner + locked 20% switch */
+.sp-launch-banner {
+  max-width: 760px;
+  margin: 0 auto 2rem;
+  padding: 22px 28px;
+  text-align: center;
+  border: 1px solid var(--sp-accent);
+  border-radius: 12px;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--sp-accent) 30%, transparent);
+}
+.sp-launch-pill {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: var(--sp-accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: .95rem;
+  letter-spacing: .02em;
+}
+.sp-launch-text { margin: 0; color: #d0d0d0; font-size: 1.04rem; }
+.sp-discount-locked { cursor: default; }
+.sp-discount-locked .sp-discount-check:disabled + .sp-discount-switch { opacity: 1; }
+.sp-discount-lock { font-size: .9em; }
+
 /* Active discount card glow */
 .sp-discount-card-active {
   border-color: var(--sp-accent) !important;
@@ -780,6 +806,12 @@
 <section class="sp-section" id="opportunities">
   <div class="container">
     <h2 class="sp-section-title text-center">Sponsorship opportunities</h2>
+    
+    <div class="sp-launch-banner">
+      <div class="sp-launch-pill">First LLMday in Tel Aviv &middot; Launch edition &middot; 20% off</div>
+      <p class="sp-launch-text">We're planting our flag in a new city and want you there from the start. Come build it with us: 20% off every package, applied automatically.</p>
+    </div>
+    
     <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">
       We are a London-based company organizing conferences worldwide.<br>
       Sponsors are invoiced in GBP / £ &mdash; British Pound Sterling.<br>
@@ -807,7 +839,9 @@
             
             <ul class="sp-tier-benefits">
               
+              
               <li>Receive full attendee contact list</li>
+              
               
               
               <li class="sp-tier-warn">Cannot be purchased solo</li>
@@ -831,9 +865,11 @@
             
             <ul class="sp-tier-benefits">
               
+              
               <li>30-minute morning slot</li>
               
               <li>100% audience — no parallel talks</li>
+              
               
               
             </ul>
@@ -855,9 +891,11 @@
             
             <ul class="sp-tier-benefits">
               
+              
               <li>60-minute slot</li>
               
               <li>Let attendees play with your tech</li>
+              
               
               
             </ul>
@@ -879,9 +917,11 @@
             
             <ul class="sp-tier-benefits">
               
+              
               <li>30-minute afternoon slot</li>
               
               <li>May run alongside parallel tracks</li>
+              
               
               
             </ul>
@@ -903,9 +943,11 @@
             
             <ul class="sp-tier-benefits">
               
+              
               <li>Table (150 × 100cm), optional monitor</li>
               
               <li>Electricity, Wi-Fi, space for a rollup banner</li>
+              
               
               
             </ul>
@@ -927,9 +969,11 @@
             
             <ul class="sp-tier-benefits">
               
+              
               <li>Logo on the website, on-stage mention</li>
               
               <li>Swag distributed to all attendees</li>
+              
               
               
             </ul>
@@ -951,9 +995,11 @@
             
             <ul class="sp-tier-benefits">
               
+              
               <li>Microphone time before the selected break</li>
               
               <li>Distribute your swag alongside food & drinks</li>
+              
               
               
             </ul>
@@ -975,9 +1021,11 @@
             
             <ul class="sp-tier-benefits">
               
+              
               <li>Your logo on t-shirts, hoodies, socks, etc.</li>
               
               <li>Price per person depends on the item</li>
+              
               
               
             </ul>
@@ -988,24 +1036,25 @@
       
       <div class="col-12 col-md-4">
         <div class="sp-tier-card" data-tier-id="startup_discount">
-          <div class="sp-tier-name">Check eligibility for</div>
+          <div class="sp-tier-name">Launch partner</div>
           
           
           <div class="sp-tier-price">
-            <label class="sp-discount-toggle-label">
-              <input type="checkbox" class="sp-discount-check" onchange="spToggleDiscount(this.checked)">
+            
+            <label class="sp-discount-toggle-label sp-discount-locked" title="Launch edition: the 20% discount is always on">
+              <input type="checkbox" class="sp-discount-check" checked disabled>
               <span class="sp-discount-switch"></span>
-              20% Discount
+              20% off &middot; applied <span class="sp-discount-lock" aria-hidden="true">&#128274;</span>
             </label>
+            
           </div>
           
           <div class="sp-tier-body">
             
             <ul class="sp-tier-benefits">
               
-              <li>Early-stage startups under $5M in funding</li>
-              
-              <li>Sponsoring 3+ events in a year</li>
+              <li>Applied automatically: first LLMday in Tel Aviv</li>
+              <li>Valid on every package on this page</li>
               
               
             </ul>
@@ -1050,6 +1099,7 @@
 (function() {
   var spCurrentCurrency = 'GBP';
   var spDiscountActive = false;
+  var spDiscountLocked = true;
 
   /* ── Tokenize a price string into symbol / number / text tokens ── */
   function spTokenize(text) {
@@ -1204,6 +1254,7 @@
 
   /* ── Countdown + slide transition for discount toggle ────────── */
   window.spToggleDiscount = function(on) {
+    if (spDiscountLocked) on = true;
     spDiscountActive = on;
     var cc = spCurrentCurrency.toLowerCase();
     var priceAttr = on ? 'data-dprice-' + cc : 'data-price-' + cc;
@@ -1231,6 +1282,8 @@
     var sdCard = document.querySelector('.sp-tier-card[data-tier-id="startup_discount"]');
     if (sdCard) sdCard.classList.toggle('sp-discount-card-active', on);
   };
+
+  if (spDiscountLocked) window.spToggleDiscount(true);
 })();
 </script>
 
@@ -1686,6 +1739,14 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
         </button>
       </div>
       
+      
+      
+      
+      <details class="sp-faq-item">
+        <summary class="sp-faq-q">Why 20% off?</summary>
+        <div class="sp-faq-a-wrap"><div class="sp-faq-a">It's our first LLMday in Tel Aviv. Every launch edition is a bit of an experiment, so the sponsors who join us from day one get 20% off as a thank-you for coming along for the ride.</div></div>
+      </details>
+      
       <details class="sp-faq-item">
         <summary class="sp-faq-q">Who attends LLMday events?</summary>
         <div class="sp-faq-a-wrap"><div class="sp-faq-a">Mostly hands-on people working on real problems: across our events, roughly 59% are software, platform and DevOps engineers, 22% founders and engineering leaders, 14% business, consulting and product, and 5% ML/AI/data. The audience skews mid-to-senior. It works best if you bring team members who understand their world and can have real conversations. Anonymized job-title and company lists from past editions are available on request.</div></div>
@@ -1744,6 +1805,11 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    
+    { "@type": "Question",
+      "name": "Why 20% off?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It\u0027s our first LLMday in Tel Aviv. Every launch edition is a bit of an experiment, so the sponsors who join us from day one get 20% off as a thank-you for coming along for the ride." }
+    },
     
     { "@type": "Question",
       "name": "Who attends LLMday events?",
