@@ -726,6 +726,30 @@ _city_slug = '-'.join(_city_parts)
 
 _all_siblings = sorted(_glob.glob('../20*/'))
 
+# ── First edition in this city for the brand? ───────────────────────────────
+# True when no sibling folder for the same city has an earlier (year, quarter).
+# The sponsorship page then locks the 20% discount on. An explicit
+# `first_in_city: true|false` in metadata.yml overrides the folder scan
+# (e.g. for history that predates this repo).
+def _folder_city_and_when(_name):
+    _p = _name.split('-')
+    _year = next((int(x) for x in _p if re.match(r'^\d{4}$', x)), 0)
+    _q = next((int(x[1:]) for x in _p if re.match(r'^q\d+$', x, re.IGNORECASE)), 0)
+    _city = '-'.join(x for x in _p
+                     if not re.match(r'^\d{4}$', x)
+                     and not re.match(r'^q\d+$', x, re.IGNORECASE))
+    return _city, (_year, _q)
+
+_, _current_when = _folder_city_and_when(_current_folder)
+if context.get('first_in_city') is not None:
+    _first_in_city = bool(context.get('first_in_city'))
+else:
+    _first_in_city = not any(
+        _c == _city_slug and _w < _current_when
+        for _c, _w in (_folder_city_and_when(_os.path.basename(_os.path.normpath(_s)))
+                       for _s in _all_siblings)
+    )
+
 # ── Global stats: all events across all cities ──────────────────────────────
 _global_org_counts = {}
 _global_speaker_names = set()
@@ -1122,7 +1146,8 @@ with open(BASE_FOLDER + '/sponsorship.html', 'w', encoding='utf-8') as _f:
         exchange_rates=_exchange_rates,
         sister_brands=_sponsorship_config.get('sister_brands', []),
         open_source_tools=_sponsorship_config.get('open_source_tools', []),
-        **{**context, 'event_size': _event_size, 'sponsors': _confirmed_sponsors}
+        **{**context, 'event_size': _event_size, 'sponsors': _confirmed_sponsors,
+           'first_in_city': _first_in_city}
     ))
 with open(BASE_FOLDER + '/sponsorship.html', encoding='utf-8') as _f:
     _sp_html = _f.read()
