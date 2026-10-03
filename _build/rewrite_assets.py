@@ -12,6 +12,7 @@ static/**/*.css it rewrites local references in src, srcset, poster,
 
 Animated GIFs that have a .mp4 sibling (one-off ffmpeg conversions committed next
 to the GIF: ~250 KB instead of ~10 MB) and autoplaying <video src> loops become
+(a transparent GIF gets a .mov + .webm pair instead: both keep the alpha channel, see gif())
 <video class="lazy-loop">: nothing is downloaded until the video scrolls into view,
 and it pauses when it leaves (a tiny script is added before </body>; templates can
 use class="lazy-loop" data-src="..." too). With Save-Data or a 2G/3G connection
@@ -49,7 +50,9 @@ AUTOPLAY_VIDEO_RE = re.compile(r'<video\b([^>]*?)\ssrc\s*=\s*(["\'])([^"\']+)\2(
 LAZY_LOOP_JS = ("<script>/* rewrite_assets.py: loops load and play only while on screen */(function(){"
                 "var vs=document.querySelectorAll('video.lazy-loop');if(!vs.length)return;"
                 "var c=navigator.connection;if(c&&(c.saveData||/2g|3g/.test(c.effectiveType)))return;"
-                "function go(v){if(!v.src)v.src=v.dataset.src;var p=v.play();p&&p.catch&&p.catch(function(){})}"
+                "function go(v){if(!v.dataset.on){v.dataset.on=1;if(v.dataset.src){v.src=v.dataset.src}else{"
+                "v.querySelectorAll('source[data-src]').forEach(function(s){s.src=s.dataset.src});v.load()}}"
+                "var p=v.play();p&&p.catch&&p.catch(function(){})}"
                 "if(!('IntersectionObserver'in window)){vs.forEach(go);return}"
                 "var io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?go(e.target):e.target.pause()})},"
                 "{rootMargin:'300px'});vs.forEach(function(v){io.observe(v)})})()</script>")
@@ -125,8 +128,11 @@ def lazy_videos(base, text):
     """GIF <img> with a .mp4 sibling, and autoplay <video src>, -> <video class="lazy-loop">."""
     def gif(m):
         target = local_path(base, m.group(3))
-        mp4 = target.with_suffix(".mp4") if target else None
-        if not mp4 or not mp4.is_file():
+        if not target:
+            return m.group(0)
+        mp4, mov, webm = (target.with_suffix(x) for x in (".mp4", ".mov", ".webm"))
+        alpha = mov.is_file() and webm.is_file()
+        if not alpha and not mp4.is_file():
             return m.group(0)
         stem = os.path.splitext(urlsplit(m.group(3)).path)[0]
         attrs = (m.group(1) + m.group(4)).rstrip().rstrip("/")
@@ -136,6 +142,12 @@ def lazy_videos(base, text):
         poster_attr = f' poster="{stem}.poster.webp?v={file_hash(poster)}"' if poster.is_file() else ""
         label = f' aria-label="{alt.group(2)}"' if alt else ""
         _stats["videos"] += 1
+        if alpha:
+            # transparent GIF (footer mascots on the brand colour): an MP4 has no alpha channel, so it ships as
+            # HEVC-with-alpha .mov (Safari) + VP9-with-alpha .webm (Chrome, Firefox: they skip video/quicktime)
+            return (f'<video class="lazy-loop"{poster_attr}{label} muted loop playsinline preload="none"{attrs}>'
+                    f'<source data-src="{stem}.mov?v={file_hash(mov)}" type=\'video/quicktime; codecs="hvc1"\'>'
+                    f'<source data-src="{stem}.webm?v={file_hash(webm)}" type="video/webm"></video>')
         return (f'<video class="lazy-loop" data-src="{stem}.mp4?v={file_hash(mp4)}"{poster_attr}{label}'
                 f' muted loop playsinline preload="none"{attrs}></video>')
 
