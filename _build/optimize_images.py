@@ -168,9 +168,9 @@ def make_webp(path):
 
 
 def make_poster(gif):
-    """<name>.poster.webp (first frame) for a GIF that has a .mp4 sibling: rewrite_assets.py
-    turns such GIFs into lazy <video> loops and shows this until the video plays."""
-    if not gif.with_suffix(".mp4").exists():
+    """<name>.poster.webp (first frame, alpha kept) for a GIF that has a .mp4 or .webm sibling:
+    rewrite_assets.py turns such GIFs into lazy <video> loops and shows this until the video plays."""
+    if not (gif.with_suffix(".mp4").exists() or gif.with_suffix(".webm").exists()):
         return
     data = gif.read_bytes()
     key = hashlib.sha256(("%s|poster|%s|" % (SCRIPT_HASH, PIL.__version__)).encode() + data).hexdigest()
