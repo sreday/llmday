@@ -323,6 +323,7 @@
     .redflag-links a:hover { text-decoration-thickness: 2px; }
     @media (max-width: 720px) { .redflag-bar { position: static; } .redflag-inner { padding: 10px 16px; } .redflag-line { font-size: .86rem; } .redflag-line strong { flex-basis: 100%; } .redflag-links { margin-left: 0; } }
   </style>
+<meta name="build" content="63e4a33668-20261003T160617Z">
 </head>
 <body>
 
@@ -340,7 +341,7 @@
 </div>
 
 <main class="wrap">
-  <img class="mascot" src="/assets/images/404.png?v=76f832d91e" alt="" aria-hidden="true">
+  <img class="mascot" src="/assets/images/404.webp?v=eeaa0d896f" alt="" aria-hidden="true">
   <div class="brand">LLMday · status</div>
   <h1>Upcoming conferences</h1>
   <div class="sub">Confirmed talks, standardized 12 talks per track. Check start/end time to decide if we should accept more.</div>
@@ -523,8 +524,8 @@
 
   <section class="regs">
     <h2>Registrations</h2>
-    <div class="fresh" data-built="2026-10-03T15:50:42+00:00" title="Not live: the numbers refresh every time the website is built">
-      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-10-03 15:50 UTC</span>
+    <div class="fresh" data-built="2026-10-03T16:03:50+00:00" title="Not live: the numbers refresh every time the website is built">
+      <span class="pill fresh-pill">Last build</span><span class="fresh-text">2026-10-03 16:03 UTC</span>
     </div>
     
     
@@ -1187,7 +1188,7 @@
   </section>
   
 
-  <div class="foot">Generated 2026-10-03 15:50 UTC at build time. Organizer tool, not linked from the site.</div>
+  <div class="foot">Generated 2026-10-03 16:03 UTC at build time. Organizer tool, not linked from the site.</div>
 </main>
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
@@ -1393,5 +1394,6 @@ function tableSearch(boxId, wrapId, countId, emptyId, toggleId) {   // Waitlist 
 tableSearch('wl-search', 'wl', 'wl-count', 'wl-empty', 'wl-show-placed');
 tableSearch('hr-search', 'hr', 'hr-count', 'hr-empty', null);
 </script>
+<script>/* rewrite_assets.py: reload when a newer build is out */(function(){var m=document.querySelector('meta[name="build"]');if(!m||!window.fetch)return;var mine=m.getAttribute('content'),busy=0,bar=null;function engaged(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;var f=document.querySelectorAll('input,textarea');for(var i=0;i<f.length;i++){var e=f[i];if(/^(checkbox|radio)$/.test(e.type)?e.checked!==e.defaultChecked:(e.type!=='hidden'&&e.value!==e.defaultValue))return true}return !!document.querySelector('.modal.show')}function offer(){if(bar||!document.body)return;bar=document.createElement('div');bar.setAttribute('role','status');bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2000;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#111;color:#fff;padding:10px 12px 10px 18px;border-radius:999px;font:600 14px/1.3 Montserrat,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)';var t=document.createElement('span');t.textContent='This page was just updated (schedule, speakers or sponsors)';bar.appendChild(t);var b=document.createElement('button');b.type='button';b.textContent='Refresh';b.style.cssText='border:0;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;background:#fff;color:#111';b.onclick=function(){location.reload()};bar.appendChild(b);document.body.appendChild(bar)}function check(auto){if(busy||document.visibilityState==='hidden')return;busy=1;fetch('/build.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!j.build||j.build===mine)return;var again=false;try{again=sessionStorage.getItem('fresh-reload')===j.build;sessionStorage.setItem('fresh-reload',j.build)}catch(e){}if(auto&&!again&&!engaged())location.reload();else offer()})['catch'](function(){busy=0})}check(true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')check(true)});addEventListener('pageshow',function(e){if(e.persisted)check(true)});setInterval(function(){check(false)},300000)})()</script>
 </body>
 </html>
