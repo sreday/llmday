@@ -1464,8 +1464,9 @@ import hashlib as _hr_hash
 from urllib.parse import urlsplit as _hr_split
 
 _HERO_SLEEP_HOURS = 24
-# The "Community Hero" ticket type is older than the /communityhero/ form: heroes count from the day the form flow
-# started (Marek 2026-10-03: "let's start counting heroes from Sep 1 2026"). Older hero tickets are left out entirely.
+# The "Community Hero" ticket type is older than the /communityhero/ form: tracking (statuses, Sleeping Hero) starts
+# the day the form flow started (Marek 2026-10-03: "let's start counting heroes from Sep 1 2026"). Older hero tickets
+# are listed without statuses in a "Past Community Heroes" drop-down.
 _HERO_SINCE = datetime.datetime(2026, 9, 1, tzinfo=datetime.timezone.utc)
 _HERO_TICKET_RX = re.compile(r"hero", re.I)          # Luma ticket type "Community Hero" (any wording with "hero")
 
@@ -1514,7 +1515,7 @@ def _hero_reports():
         if not isinstance(r, dict) or str(r.get("brand") or "").lower() != _wl_brand:
             continue
         ts = _wl_parse_ts(r.get("ts"))
-        if not ts or ts < _HERO_SINCE:
+        if not ts or ts < _HERO_SINCE:                   # reports before the form flow started are tests
             continue
         out.append({
             "slug": _wl_re.sub(r"[^a-z0-9-]", "", str(r.get("slug") or "").lower()),
@@ -1596,8 +1597,6 @@ def _hero_applicants(events):
                 if not any(_HERO_TICKET_RX.search(n) for n in tnames):
                     continue
                 _req = _wl_parse_ts(g.get("registered_at") or g.get("created_at"))
-                if not _req or _req < _HERO_SINCE:
-                    continue
                 _k = "%s/%s" % (next((n for n in tnames if _HERO_TICKET_RX.search(n)), ""), g.get("approval_status"))
                 seen[_k] = seen.get(_k, 0) + 1
                 name = str(g.get("user_name") or "").strip() or " ".join(
@@ -1637,8 +1636,34 @@ def _hero_stage(form_at, ticket, start, requested_at, now):
     return "waiting"
 
 
+def _hero_speakers():
+    """(LinkedIn slugs, normalized names) of everyone with a live talk (talk / keynote / workshop) in any 2025+ event of
+    this repo: a hero who became a speaker leaves the hero lists (Marek 2026-10-03)."""
+    slugs, names = set(), set()
+    for folder in sorted(_wl_glob.glob("../20*")):
+        if not re.match(r"^20(2[5-9]|[3-9]\d)-", os.path.basename(folder)):
+            continue
+        try:
+            with open(os.path.join(folder, "_db", "talks.csv"), encoding="utf-8-sig", errors="replace", newline="") as f:
+                for r in _wl_csv.DictReader(f):
+                    n = str(r.get("name") or "").strip()
+                    if not n or n.startswith("_") or _talk_kind(r.get("status")) not in _LIVE_KINDS:
+                        continue
+                    for k in ("linkedin", "linkedin2"):
+                        if _wl_slug(r.get(k)):
+                            slugs.add(_wl_slug(r.get(k)))
+                    for part in _wl_re.split(r"\s*&\s*|\s*,\s*|\s+and\s+", n):
+                        if _luma_norm(part):
+                            names.add(_luma_norm(part))
+        except OSError:
+            continue
+    return slugs, names
+
+
 def _hero_build():
-    """(rows for the page, note, counts) - rows carry no email, hash, company, answers or proof."""
+    """(rows, past, fallen, note, counts). rows = heroes since _HERO_SINCE with ticket/form statuses; past = earlier
+    hero tickets, no statuses; fallen = declined tickets. One entry per person (the freshest), speakers left out.
+    Nothing personal beyond name + LinkedIn reaches the template."""
     events = _hero_events()
     reports, rep_note = _hero_reports()
     try:
@@ -1646,7 +1671,28 @@ def _hero_build():
     except Exception as e:                                   # never break the status build over Luma
         apps, app_note = [], "Luma could not be read for Community Hero tickets (%s)." % e.__class__.__name__
     now = datetime.datetime.now(datetime.timezone.utc)
-    used, rows = set(), []
+    far = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
+    iso = lambda d: d.astimezone(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") if d else ""
+
+    # a hero who became a speaker is no longer a hero
+    sp_slugs, sp_names = _hero_speakers()
+    is_speaker = lambda name_n, li: bool((_wl_slug(li) and _wl_slug(li) in sp_slugs) or (name_n and (
+        name_n in sp_names or any(_luma_nickname(name_n, s) for s in sp_names))))
+    n_speakers = sum(1 for a in apps if is_speaker(a["name_n"], a["linkedin"]))
+    apps = [a for a in apps if not is_speaker(a["name_n"], a["linkedin"])]
+    reports = [r for r in reports if not is_speaker(r["name_n"], r["linkedin"])]
+
+    # repeated people: only the freshest hero ticket counts (same email, else same LinkedIn, else same name)
+    def person(x):
+        return ("e:" + x["email_sha"]) if x.get("email_sha") else (("l:" + _wl_slug(x["linkedin"])) if _wl_slug(x.get("linkedin")) else "n:" + x["name_n"])
+    freshest = {}
+    for a in apps:
+        k = person(a)
+        if k not in freshest or (a["requested_at"] or far) > (freshest[k]["requested_at"] or far):
+            freshest[k] = a
+    apps = list(freshest.values())
+
+    used, rows, past, fallen = set(), [], [], []
 
     def match(a):
         cands = [i for i, r in enumerate(reports) if i not in used and r["slug"] == a["slug"]]
@@ -1660,11 +1706,17 @@ def _hero_build():
                 return hits[0]
         return None
 
+    def plain(a):                                            # past / fallen entries: no statuses
+        ev_name = events.get(a["slug"], (a["slug"], None, ""))[0]
+        return {"name": a["name"] or "(no name)", "linkedin": a["linkedin"], "event": ev_name,
+                "event_url": _site_root + a["slug"] + "/", "requested_at": iso(a["requested_at"]),
+                "requested_label": a["requested_at"].strftime("%d %b %Y").lstrip("0") if a["requested_at"] else "",
+                "_t": a["requested_at"] or far}
+
     def row(slug, name, linkedin, requested_at, ticket, rep):
         ev_name, start, _evt = events.get(slug, (slug, None, ""))
         form_at = rep["form_at"] if rep else None
         stage = _hero_stage(form_at, ticket, start, requested_at, now)
-        iso = lambda d: d.astimezone(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") if d else ""
         return {
             "name": name or "(no name)", "linkedin": linkedin, "event": ev_name, "slug": slug,
             "event_url": _site_root + slug + "/", "form_url": _site_root + slug + "/communityhero/",
@@ -1677,37 +1729,46 @@ def _hero_build():
         }
 
     for a in apps:
+        if a["luma_status"] == "declined":
+            fallen.append(plain(a))                          # fallen heroes: ticket rejected (any date)
+            continue
+        if not a["requested_at"] or a["requested_at"] < _HERO_SINCE:
+            past.append(plain(a))                            # before the form flow: listed, no statuses
+            continue
         i = match(a)
         rep = reports[i] if i is not None else None
         if i is not None:
             used.add(i)
-        st = a["luma_status"]
-        ticket = "granted" if st == "approved" else ("declined" if st == "declined" else "requested")
+        ticket = "granted" if a["luma_status"] == "approved" else "requested"
         rows.append(row(a["slug"], a["name"], a["linkedin"] or (rep or {}).get("linkedin", ""), a["requested_at"], ticket, rep))
     for i, r in enumerate(reports):                          # a report without a hero ticket (other ticket, or a test)
         if i not in used:
             rows.append(row(r["slug"], r["name"], r["linkedin"], None, "granted" if r["approved"] else "none", r))
     band = {"sleeping": 0, "waiting": 1, "completed": 2, "declined": 3, "over": 3}
-    far = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
     rows.sort(key=lambda x: (band[x["stage"]],
                              -_wl_parse_ts(x["form_at"]).timestamp() if x["stage"] == "completed" else
                              (x["_sort"].timestamp() if x["stage"] in ("sleeping", "waiting") else -(x["_sort"] or far).timestamp())))
-    for x in rows:
+    for lst in (past, fallen):
+        lst.sort(key=lambda x: x["_t"], reverse=True)        # newest first
+    for x in rows + past + fallen:
         x.pop("_sort", None)
+        x.pop("_t", None)
     counts = {k: sum(1 for x in rows if x["stage"] == k) for k in band}
-    counts["requested"] = sum(1 for x in rows if x["ticket"] in ("requested", "granted", "declined"))
+    counts["requested"] = sum(1 for x in rows if x["ticket"] in ("requested", "granted"))
     counts["granted"] = sum(1 for x in rows if x["ticket"] == "granted")
+    counts.update(past=len(past), fallen=len(fallen), speakers=n_speakers)
     note = " ".join(n for n in (rep_note, app_note) if n)
-    return rows, note, counts
+    return rows, past, fallen, note, counts
 
 
 try:
-    _hero_rows, _hero_note, _hero_counts = _hero_build()
+    _hero_rows, _hero_past, _hero_fallen, _hero_note, _hero_counts = _hero_build()
 except Exception as _hb_e:                                   # the status page must build no matter what
-    _hero_rows, _hero_note, _hero_counts = [], "Community heroes could not be built (%s)." % _hb_e.__class__.__name__, {}
-print("Community heroes: %d requested · %d granted · %d all completed · %d sleeping%s" % (
+    _hero_rows, _hero_past, _hero_fallen, _hero_note, _hero_counts = [], [], [], "Community heroes could not be built (%s)." % _hb_e.__class__.__name__, {}
+print("Community heroes: %d requested · %d granted · %d all completed · %d sleeping | %d past (before %s) · %d fallen · %d became speakers%s" % (
     _hero_counts.get("requested", 0), _hero_counts.get("granted", 0), _hero_counts.get("completed", 0),
-    _hero_counts.get("sleeping", 0), (" | " + _hero_note) if _hero_note else ""))
+    _hero_counts.get("sleeping", 0), _hero_counts.get("past", 0), _HERO_SINCE.strftime("%d %b %Y").lstrip("0"),
+    _hero_counts.get("fallen", 0), _hero_counts.get("speakers", 0), (" | " + _hero_note) if _hero_note else ""))
 # ── END COMMUNITY HEROES ─────────────────────────────────────────────────────
 
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
@@ -1721,7 +1782,7 @@ with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_announce_days=_ANNOUNCE_DAYS, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_flap_days=_ADDED_FLAP_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
-        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed, status_heroes=_hero_rows, status_heroes_note=_hero_note, status_hero_counts=_hero_counts, hero_sleep_hours=_HERO_SLEEP_HOURS,
+        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed, status_heroes=_hero_rows, status_heroes_note=_hero_note, status_hero_counts=_hero_counts, status_hero_past=_hero_past, status_hero_fallen=_hero_fallen, hero_sleep_hours=_HERO_SLEEP_HOURS,
         status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
