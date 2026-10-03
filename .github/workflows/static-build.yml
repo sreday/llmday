@@ -57,6 +57,15 @@ jobs:
       - name: Render teaser PNGs
         run: python _build/render_teasers.py --prune   # headless Chrome (preinstalled on the runner); never fails the build
 
+      # Pages use the .webp siblings optimize_images.py wrote, asset URLs get ?v=<content hash>
+      # (a changed file always gets a new URL; HTML itself is never cached long), images lazy-load
+      - name: WebP, versioned asset URLs, lazy images
+        run: python _build/rewrite_assets.py
+
+      - name: Page weight report
+        continue-on-error: true   # report only: lists first-view/full-scroll bytes and any missing files
+        run: python _build/page_weight.py static/index.html static/20*/index.html
+
       - name: Save image and teaser cache
         if: always()
         uses: actions/cache/save@v4
