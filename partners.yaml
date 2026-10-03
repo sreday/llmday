@@ -9,12 +9,14 @@
 # - Never show the same company twice on the home page: extra logo variants of
 #   an already-shown company go under hidden_duplicates.
 # Matching is case-insensitive.
+# - reliaburger.png is our own startup: deliberately NOT listed here, so it shows in the home Sponsor carousel
+#   with the other startups (Marek 2026-10-03). In event metadata.yml it still goes near the end of the
+#   sponsors list (before Hockeystick) - paying sponsors get the top spots at the conference.
 #
 # This file is homogenized across sreday and llmday - keep both copies in sync.
 
 non_sponsor_orgs:
   - hockeystick.png
-  - reliaburger.png
   - arf.png
   - ksug.ai.png
   - starterai.png
