@@ -1550,10 +1550,13 @@ def _hero_events():
         except Exception:
             continue
         out[slug] = (names.get(slug) or slug, _wl_parse_ts(m.get("start_time")), str(m.get("luma_evt") or "").strip())
+        if m.get("registration_free") or m.get("communityhero_free"):
+            _hero_free_meta.add(slug)
     return out
 
 
 _hero_shape_logged = []
+_hero_free_meta = set()       # metadata says free (registration_free / communityhero_free)
 
 
 def _hero_applicants(events):
@@ -1670,6 +1673,14 @@ def _hero_build():
         apps, app_note = _hero_applicants(events)
     except Exception as e:                                   # never break the status build over Luma
         apps, app_note = [], "Luma could not be read for Community Hero tickets (%s)." % e.__class__.__name__
+    # free events have no Community Hero programme (Marek 2026-10-03): their hero tickets and reports are left out.
+    # Free = metadata flag, else Luma's public event page (the same probe as the FREE pill on /status/), only for
+    # events that actually have hero entries
+    free = {slug for slug in {x["slug"] for x in apps + reports}
+            if slug in _hero_free_meta or _status_luma_free(events.get(slug, ("", None, ""))[2])}
+    n_free = sum(1 for a in apps if a["slug"] in free)
+    apps = [a for a in apps if a["slug"] not in free]
+    reports = [r for r in reports if r["slug"] not in free]
     now = datetime.datetime.now(datetime.timezone.utc)
     far = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
     iso = lambda d: d.astimezone(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") if d else ""
@@ -1756,7 +1767,7 @@ def _hero_build():
     counts = {k: sum(1 for x in rows if x["stage"] == k) for k in band}
     counts["requested"] = sum(1 for x in rows if x["ticket"] in ("requested", "granted"))
     counts["granted"] = sum(1 for x in rows if x["ticket"] == "granted")
-    counts.update(past=len(past), fallen=len(fallen), speakers=n_speakers)
+    counts.update(past=len(past), fallen=len(fallen), speakers=n_speakers, free=n_free, free_events=len(free))
     note = " ".join(n for n in (rep_note, app_note) if n)
     return rows, past, fallen, note, counts
 
@@ -1765,10 +1776,10 @@ try:
     _hero_rows, _hero_past, _hero_fallen, _hero_note, _hero_counts = _hero_build()
 except Exception as _hb_e:                                   # the status page must build no matter what
     _hero_rows, _hero_past, _hero_fallen, _hero_note, _hero_counts = [], [], [], "Community heroes could not be built (%s)." % _hb_e.__class__.__name__, {}
-print("Community heroes: %d requested · %d granted · %d all completed · %d sleeping | %d past (before %s) · %d fallen · %d became speakers%s" % (
+print("Community heroes: %d requested · %d granted · %d all completed · %d sleeping | %d past (before %s) · %d fallen · %d became speakers · %d on free events left out%s" % (
     _hero_counts.get("requested", 0), _hero_counts.get("granted", 0), _hero_counts.get("completed", 0),
     _hero_counts.get("sleeping", 0), _hero_counts.get("past", 0), _HERO_SINCE.strftime("%d %b %Y").lstrip("0"),
-    _hero_counts.get("fallen", 0), _hero_counts.get("speakers", 0), (" | " + _hero_note) if _hero_note else ""))
+    _hero_counts.get("fallen", 0), _hero_counts.get("speakers", 0), _hero_counts.get("free", 0), (" | " + _hero_note) if _hero_note else ""))
 # ── END COMMUNITY HEROES ─────────────────────────────────────────────────────
 
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
