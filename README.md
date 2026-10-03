@@ -83,7 +83,7 @@ repo root (home page only - conference pages are unaffected):
 
 ## Community heroes on /status/
 
-The Heroes tab tracks two measurable things per hero, for every 2025+ event (past ones stay as history):
+The Heroes tab tracks two measurable things per hero, for hero tickets requested since 1 Sep 2026 (when the form flow started; the ticket type is older):
 
 - **Ticket (Luma):** a guest holding a "Community Hero" ticket. Pending/waitlist = *Ticket requested*, approved = *Ticket granted*.
 - **Form:** Luma's "registration pending" email links to `/<event>/communityhero/`, so the hero *received the form* the
