@@ -21,6 +21,7 @@ non_sponsor_orgs:
   - filmforum.png
   - uhub.png
   - packt.png           # publisher / media partner
+  - in10t.png           # partner, not a paying sponsor (Marek 2026-10-03)
 
 community_partners:
   - jug-amsterdam.png
@@ -58,6 +59,7 @@ community_partners:
   - london-pytorch.png
   - it-schulungen.png
   - cubixai.png
+  - aws-girls-uruguay.png  # AWS Girls User Group Uruguay (the capybara)
 
 sister_conferences_job_boards:
   - IacConf.png
