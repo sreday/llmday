@@ -15,7 +15,7 @@ Byte-identical in sreday, llmday, platformday and PEC; stdlib only (yaml is opti
         python _build/redflag.py --range A..B         flags raised by those commits, e.g. 3a98fc0b5~1..3a98fc0b5
 It never fails a build: every problem degrades to a log line and exit code 0.
 
-Rules (CSV-parsed snapshots from git, never line diffs: abstracts contain newlines; confirmed/keynote rows only):
+Rules (CSV-parsed snapshots from git, never line diffs: abstracts contain newlines; live rows only: talk/keynote/workshop, legacy confirmed; drafts ignored):
   swap     one commit drops more than 5 speakers AND over 40% of a lineup of 6+ (the /status/ speaker log's
            _REMOVED_MASS), and 40%+ of the new lineup is new. Nothing new coming in = "mass removal".
   source   the new lineup is compared with every other 2025+ event folder: identical file = "exact copy of",
@@ -73,15 +73,23 @@ def norm(s):
     return " ".join(str(s or "").casefold().split())
 
 
+def live(status):
+    """Row is on the site: status talk / keynote / workshop, or legacy "confirmed" (same rules as talk_kind()
+    in _event_template/_build/generate.py). Drafts and declined rows are not part of the lineup."""
+    s = str(status or "").lower()
+    if re.search(r"\bdraft\b", s):
+        return False
+    return "keynote" in s or "confirmed" in s or bool(re.search(r"\b(talk|workshop)\b", s))
+
+
 def parse(text):
-    """{'rows': {normalized name: {name, title, tkey}}, 'titles': set, 'raw': text} of confirmed/keynote rows."""
+    """{'rows': {normalized name: {name, title, tkey}}, 'titles': set, 'raw': text} of live rows (talk/keynote/workshop)."""
     text = (text or "").replace("\x00", "")
     rows = {}
     try:
         for row in csv.DictReader(io.StringIO(text)):
             name = (row.get("name") or "").strip()
-            status = (row.get("status") or "").lower()
-            if not name or name.startswith("_") or not ("confirmed" in status or "keynote" in status):
+            if not name or name.startswith("_") or not live(row.get("status")):
                 continue
             title = (row.get("title") or "").strip()
             tkey = re.sub(r"\W+", "", title.lower())

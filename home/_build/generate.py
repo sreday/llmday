@@ -283,8 +283,8 @@ with open(BASE_FOLDER + "/404-index.json", "w", encoding="utf-8") as f:
 print("Writing out 404-index.json (%d event folders, %d pages)" % (len(_idx_events), sum(len(v) for v in _idx_pages.values())))
 
 # STATUS PAGE (hidden, /status/): lineup + sponsor progress of every upcoming event.
-# Talks: rows of ../<event>/_db/talks.csv whose status contains "confirmed" or "keynote", against 12 slots
-# per track (tracks from the event metadata). Sponsors: the event's sponsors list minus the partner
+# Talks: rows of ../<event>/_db/talks.csv with a live status (talk / keynote / workshop, legacy "confirmed"), against 12 slots
+# per track (tracks from the event metadata); status "draft" rows are shown next to them ("+ N draft") but never count. Sponsors: the event's sponsors list minus the partner
 # categories from ../partners.yaml (same split as the "Partners" pill on the site). Below the table,
 # "Data checks" lists per-event repo problems found by _status_lint (see there). Not in the sitemap.
 print(DIVIDER)
@@ -292,6 +292,24 @@ _STATUS_BRANDS = [("SREday", "https://sreday.com/status/", "#713660"),
                   ("LLMday", "https://llmday.com/status/", "#26986A"),
                   ("PLATFORMday", "https://platformday.com/status/", "#E2971D")]
 _SLOTS_PER_TRACK = 12
+
+
+# talks.csv "status" column (Marek 2026-10-03): talk / keynote / workshop / draft, legacy "confirmed" = talk.
+# Same rules as talk_kind() in _event_template/_build/generate.py and live() in ../_build/redflag.py.
+_LIVE_KINDS = ("talk", "keynote", "workshop")
+
+
+def _talk_kind(status):
+    s = str(status or "").strip().lower()
+    if re.search(r"\bdraft\b", s):
+        return "draft"
+    if "keynote" in s:
+        return "keynote"
+    if re.search(r"\bworkshop\b", s):
+        return "workshop"
+    if "confirmed" in s or re.search(r"\btalk\b", s):
+        return "talk"
+    return None
 # Start / end column (Marek 2026-09-27): an event still in the "before" state this close to its date has no
 # published schedule, which stops being normal and becomes a to-do; the cell says so in red instead of "no schedule yet".
 _ANNOUNCE_DAYS = 30
@@ -491,16 +509,18 @@ def _status_lint(folder, meta, tracks, past=False):
     for i, row in enumerate(rows, start=2):        # spreadsheet-style line numbers (1 = header)
         g = lambda k: (row.get(k) or "").strip()
         st = g("status").lower()
+        kind = _talk_kind(st)
         url = gh + "_db/talks.csv"
-        if st and "confirmed" not in st and "keynote" not in st:
-            add("warn", "row %d" % i, "unknown status '%s' (row stays hidden)" % g("status")[:40])
-        if "confirmed" not in st and "keynote" not in st:
+        if st and kind is None:
+            add("warn", "row %d" % i, "unknown status '%s' (row stays hidden; use talk, keynote, workshop or draft)" % g("status")[:40])
+        if kind is None:
             continue                                # hidden rows are not linted further
         name = g("name")
         if name.startswith("_"):
             continue                                # "_Registration & Networking": agenda item, not a speaker
-        where = "row %d · %s" % (i, name[:40] or "(no name)")
-        url = _lint_talk_url(folder, row)            # row issues link to the talk page itself
+        where = "row %d · %s%s" % (i, "draft · " if kind == "draft" else "", name[:40] or "(no name)")
+        # row issues link to the talk page itself; a draft has no page yet, so its issues link to talks.csv
+        url = _lint_talk_url(folder, row) if kind != "draft" else gh + "_db/talks.csv"
         # emails / urls wandering into the wrong column
         for f in ("name", "organization", "title", "track", "day", "photo", "status"):
             if _LINT_EMAIL.search(row.get(f) or ""):
@@ -547,10 +567,10 @@ def _status_lint(folder, meta, tracks, past=False):
         else:
             if len(title) > 200:
                 add("warn", where, "title is a paragraph (%d chars), abstract pasted in the title column?" % len(title))
-            if not past and "keynote" in st and not title.lower().startswith("keynote:"):
-                add("warn", where, "status keynote but the title does not start with 'Keynote:'")
-            if not past and "keynote" not in st and title.lower().startswith("keynote:"):
-                add("warn", where, "title starts with 'Keynote:' but status is '%s'" % g("status"))
+            # status keynote gives the Keynote pill by itself; a "Keynote:" title on another status gets the pill
+            # but stays a regular slot in its track (legacy), which is rarely what was meant
+            if not past and kind != "keynote" and title.lower().startswith("keynote:"):
+                add("warn", where, "title starts with 'Keynote:' but status is '%s' (use status keynote for a plenary keynote; the prefix is no longer needed)" % g("status"))
             # same title twice is fine for one speaker (a workshop over two slots), suspicious for two speakers
             key = re.sub(r"\W+", "", title.lower())
             if key in seen_titles and seen_titles[key][1] != name.lower():
@@ -590,12 +610,15 @@ for _ev in (context.get("events") or []):
         _em = {}
     _tracks = int(re.sub(r"[^\d]", "", str(_em.get("tracks") or "1")) or 1)
     _confirmed = 0
+    _drafts = 0
     try:
         with open("../" + _folder + "/_db/talks.csv", encoding="utf-8", errors="replace") as _cf:
             for _row in csv.DictReader(_cf):
-                _st = str(_row.get("status") or "").lower()
-                if "confirmed" in _st or "keynote" in _st:
+                _kind = _talk_kind(_row.get("status"))
+                if _kind in _LIVE_KINDS:
                     _confirmed += 1
+                elif _kind == "draft":
+                    _drafts += 1
     except Exception:
         pass
     _sponsors = [s for s in (_em.get("sponsors") or []) if isinstance(s, dict)
@@ -627,6 +650,8 @@ for _ev in (context.get("events") or []):
         "name": _ev.get("name") or _folder, "folder": _folder, "url": "/" + _folder + "/",
         "date": str(_em.get("date_string") or ""), "state": str(_em.get("event_state") or ""),
         "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
+        # drafts (Marek 2026-10-03): shown after the confirmed count and as a faded bar segment; never in pct/health
+        "drafts": _drafts, "draft_pct": round(100.0 * _drafts / _available) if _available else 0,
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
         "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,   # for the Luma registrations block
         # Sponsors tab (Marek 2026-09-18): the event's sponsors as built (partners already filtered out above)
@@ -635,7 +660,7 @@ for _ev in (context.get("events") or []):
                          for s in _sponsors],
         "expected": int(re.sub(r"[^\d]", "", str(_em.get("attendees") or "0")) or 0),    # "N attendees" as the event page shows it
     })
-    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings, cfp {_cfp or 'n/a'}")
+    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks + {_drafts} draft ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings, cfp {_cfp or 'n/a'}")
 _me = str(context.get("brand_name") or "")
 
 # Past events (Marek 2026-09-13: "can it analyse also past events? excluding 2022-2024 sreday of course"):
@@ -771,9 +796,8 @@ def _status_talks_at(root, commit, path):
     try:
         for row in csv.DictReader(io.StringIO(text)):
             name = (row.get("name") or "").strip()
-            status = (row.get("status") or "").lower()
-            if not name or name.startswith("_") or not ("confirmed" in status or "keynote" in status):
-                continue
+            if not name or name.startswith("_") or _talk_kind(row.get("status")) not in _LIVE_KINDS:
+                continue                                     # a draft is "added" when it goes live
             out[" ".join(name.casefold().split())] = row
     except Exception:
         return None
@@ -1016,9 +1040,8 @@ def _luma_speaker_names(folder):
     try:
         with open("../" + folder + "/_db/talks.csv", encoding="utf-8", errors="replace", newline="") as f:
             for row in csv.DictReader(f):
-                st = (row.get("status") or "").lower()
                 n = (row.get("name") or "").strip()
-                if not n or n.startswith("_") or not ("confirmed" in st or "keynote" in st):
+                if not n or n.startswith("_") or _talk_kind(row.get("status")) not in _LIVE_KINDS:
                     continue
                 for part in re.split(r"\s*(?:&|,|\band\b)\s*", n):
                     if _luma_norm(part):

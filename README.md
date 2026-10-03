@@ -54,6 +54,20 @@ events:
 ...
 ```
 
+## talks.csv status column
+
+| status | on the site | /status/ |
+|---|---|---|
+| `talk` | regular session in its track | counted |
+| `keynote` | plenary at the start of its day (first track, the other tracks wait), with a KEYNOTE pill - no `Keynote:` title prefix needed | counted |
+| `workshop` | session in its track with a WORKSHOP pill (a `2h Workshop:` style prefix is stripped from the title) | counted |
+| `draft` | left out of the build: no schedule entry, no talk page, not in the sitemap | shown as "+ N draft" and a faded bar segment, never in the % or health; still linted in Data checks |
+| anything else (`declined`, ...) | hidden | "unknown status" warning |
+
+Older sheets keep working: `confirmed` (or anything containing it) = `talk`, anything containing `keynote` = `keynote`,
+and a `Keynote:` title prefix still gives the pill on any live row. The rules live in `talk_kind()` in
+`_event_template/_build/generate.py`, `_talk_kind()` in `home/_build/generate.py` and `live()` in `_build/redflag.py`.
+
 ## Home-page sponsor vs partner carousels
 
 The main website's two logo carousels are categorized via `partners.yaml` at the
