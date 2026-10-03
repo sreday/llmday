@@ -653,8 +653,9 @@ for _ev in (context.get("events") or []):
         # drafts (Marek 2026-10-03): shown after the confirmed count and as a faded bar segment; never in pct/health
         "drafts": _drafts, "draft_pct": round(100.0 * _drafts / _available) if _available else 0,
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
-        "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,
-        "registration_free": _em.get("registration_free"),   # events not on Luma (Tel Aviv / in10t): metadata says free or not   # for the Luma registrations block
+        "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,   # for the Luma registrations block
+        # events not on Luma (Tel Aviv registers on in10t): metadata says free or not, and where registration lives
+        "registration_free": _em.get("registration_free"), "in10t_event": str(_em.get("in10t_event") or "").strip(),
         # Sponsors tab (Marek 2026-09-18): the event's sponsors as built (partners already filtered out above)
         # Text pills only (Marek: "pills with text is fine, no need to display logo"); name = logo file stem, tidied
         "sponsor_view": [{"name": _status_sponsor_name(s.get("logo")), "url": str(s.get("url") or "").strip()}
@@ -1170,7 +1171,8 @@ def _luma_registrations(rows):
     for r in rows:
         evt = r.get("luma_evt")
         if not evt:
-            r["luma_note"] = "no luma_evt in metadata.yml"
+            # an event registering elsewhere (in10t) is not on Luma on purpose: no "create it on Luma" nudge
+            r["luma_note"] = "registrations on in10t, not Luma" if r.get("in10t_event") else "no luma_evt in metadata.yml"
             continue
         ev, used, why = None, None, ""
         for key in _LUMA_KEYS:
