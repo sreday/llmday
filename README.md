@@ -81,6 +81,19 @@ repo root (home page only - conference pages are unaffected):
 - **Duplicates**: if a company has more than one logo file, list the extra
   variants under `hidden_duplicates` so it only appears once on the home page.
 
+## Community heroes on /status/
+
+The Heroes tab tracks two measurable things per hero, for every 2025+ event (past ones stay as history):
+
+- **Ticket (Luma):** a guest holding a "Community Hero" ticket. Pending/waitlist = *Ticket requested*, approved = *Ticket granted*.
+- **Form:** Luma's "registration pending" email links to `/<event>/communityhero/`, so the hero *received the form* the
+  moment the ticket was requested; a report from that page (the "Community hero" Apps Script sheet) = *All completed!*
+- **Sleeping Hero - needs attention:** 24 h after receiving the form, no report, ticket not declined, event still ahead.
+  Sleeping Heroes sit on top, then heroes inside their 24 h, then completed forms by submission time (newest first).
+
+The page shows a name linked to LinkedIn and nothing else personal (no email, company, answers or proof). Stages are
+recomputed from the viewer's clock. Needs `LUMA_API_KEYS` and `COMMUNITYHERO_FEED` in the build (both Actions secrets).
+
 ## Sponsor lead form
 
 The home page `#sponsor` section has an "Email us" expandable form under the Calendly widget
