@@ -1,44 +1,4 @@
 {
- "built": "2026-10-03T17:14:46Z",
- "flags": [
-  {
-   "brand": "llmday",
-   "folder": "2026-san-francisco-q2",
-   "event_name": "LLMday San Francisco 2026 Q2",
-   "kind": "swap",
-   "suspect_folder": "2026-san-francisco-q4",
-   "suspect_name": "LLMday San Francisco 2026 Q4",
-   "identical": false,
-   "overlap_pct": 100,
-   "gone": 26,
-   "before_n": 28,
-   "added": 23,
-   "after_n": 25,
-   "gone_names": [
-    "Sunil Gattupalle",
-    "Lior Schejter",
-    "Marta Gajowa",
-    "James Duffy",
-    "Aoi Minamoto"
-   ],
-   "added_names": [
-    "Paari Krishnamurthy",
-    "Miles Maggio",
-    "Jack Murphy",
-    "Gully Burns",
-    "Stan Miasnikov"
-   ],
-   "sha": "53c0f0d6e783facb6ad33f0bb1b3bb50f36ac630",
-   "when": "Thu 17 Sep, 23:32",
-   "iso": "2026-09-17T23:32:25+01:00",
-   "author": "Mark Pawlikowski",
-   "path": "2026-san-francisco-q2/_db/talks.csv",
-   "commit_url": "https://github.com/sreday/llmday/commit/53c0f0d6e783facb6ad33f0bb1b3bb50f36ac630",
-   "file_url": "https://github.com/sreday/llmday/commits/main/2026-san-francisco-q2/_db/talks.csv",
-   "event_url": "https://www.llmday.com/2026-san-francisco-q2/",
-   "status_url": "https://www.llmday.com/status/",
-   "headline": "LLMday San Francisco 2026 Q2 looks like it has the lineup of LLMday San Francisco 2026 Q4 (100% match)",
-   "short": "Looks like it has the lineup of LLMday San Francisco 2026 Q4 (100% match)"
-  }
- ]
+ "built": "2026-10-03T17:24:11Z",
+ "flags": []
 }
