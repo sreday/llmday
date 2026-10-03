@@ -56,6 +56,12 @@ LAZY_LOOP_JS = ("<script>/* rewrite_assets.py: loops load and play only while on
 IMG_RE = re.compile(r'<(img|iframe)\b([^>]*)>', re.I)
 EAGER_IMAGES = 3  # header logo + hero images stay eager; everything below loads as you scroll
 URL_RE = re.compile(r'url\(\s*(["\']?)([^"\')]+?)\1\s*\)')
+# SREday 2022-2024 archives are frozen: their built pages are deployed exactly as generated
+FROZEN_EVENTS = ("2022-", "2023-", "2024-")
+
+
+def frozen(path):
+    return path.relative_to(STATIC).parts[0].startswith(FROZEN_EVENTS)
 
 
 def file_hash(path):
@@ -206,9 +212,11 @@ def main():
         return 0
     # CSS first: its own ?v= hash must reflect the rewritten content
     for css in sorted(STATIC.rglob("*.css")):
-        rewrite_css(css)
+        if not frozen(css):
+            rewrite_css(css)
     for html in sorted(STATIC.rglob("*.html")):
-        rewrite_html(html)
+        if not frozen(html):
+            rewrite_html(html)
     print(f"Rewrote {_stats['files']} files: {_stats['webp']} references to WebP, "
           f"{_stats['versioned']} URLs versioned with ?v=, {_stats['videos']} loops made lazy")
     return 0
