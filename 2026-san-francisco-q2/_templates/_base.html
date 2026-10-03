@@ -15,7 +15,7 @@
 	<link rel="manifest" href="./assets/site.webmanifest">
 
 	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800|Roboto:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/fonts.css">
 
 	<!-- FontAwesome JS-->
 	<link rel="stylesheet" href="assets/css/icons.css">
@@ -28,9 +28,6 @@
     <meta property="og:title" content="{{ brand_name }} - {{ location_string }} - {{ date_string }}"/>
     <meta property="og:description" content="{{ brand_description }}. {{ brand_og_pitch }} {{ location_string }}!"/>
 
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
 
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site" content="{{ brand_twitter }}">
@@ -40,11 +37,12 @@
     <meta name="twitter:image" content="{{ og_image_url }}">
 
 
+<script>/* analytics load after the page is shown (venue wifi) */function _later(f){addEventListener('load',function(){(window.requestIdleCallback||setTimeout)(f)})}</script>
 <!-- Twitter conversion tracking base code -->
 <script>
 	!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
 	},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-	a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+	a=t.getElementsByTagName(n)[0],_later(function(){a.parentNode.insertBefore(u,a)}))}(window,document,'script');
 	twq('config','{{ brand_twt_pixel }}');
 	</script>
 	<!-- End Twitter conversion tracking base code -->
@@ -52,7 +50,7 @@
 </head>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ brand_ga_id }}"></script>
+<script>_later(function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id={{ brand_ga_id }}';document.head.appendChild(s)})</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -62,7 +60,6 @@
 </script>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ brand_gads_id }}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -272,11 +269,10 @@
 
 
 <!-- Javascript -->
-<script src="assets/plugins/popper.min.js"></script>
-<script src="assets/plugins/bootstrap/js/bootstrap.bundle.js"></script>
-<script src="assets/plugins/smoothscroll.min.js"></script>
-<script src="assets/plugins/gumshoe/gumshoe.polyfills.min.js"></script>
-<script src="assets/js/main.js"></script>
+<script defer src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script defer src="assets/plugins/smoothscroll.min.js"></script>
+<script defer src="assets/plugins/gumshoe/gumshoe.polyfills.min.js"></script>
+<script defer src="assets/js/main.js"></script>
 
 </body>
 </html>

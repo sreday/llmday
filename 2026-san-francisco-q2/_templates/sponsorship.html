@@ -446,6 +446,32 @@
   transform: translateY(0);
 }
 
+/* First edition in a city: launch banner + locked 20% switch */
+.sp-launch-banner {
+  max-width: 760px;
+  margin: 0 auto 2rem;
+  padding: 22px 28px;
+  text-align: center;
+  border: 1px solid var(--sp-accent);
+  border-radius: 12px;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--sp-accent) 30%, transparent);
+}
+.sp-launch-pill {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: var(--sp-accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: .95rem;
+  letter-spacing: .02em;
+}
+.sp-launch-text { margin: 0; color: #d0d0d0; font-size: 1.04rem; }
+.sp-discount-locked { cursor: default; }
+.sp-discount-locked .sp-discount-check:disabled + .sp-discount-switch { opacity: 1; }
+.sp-discount-lock { font-size: .9em; }
+
 /* Active discount card glow */
 .sp-discount-card-active {
   border-color: var(--sp-accent) !important;
@@ -596,6 +622,12 @@
 <section class="sp-section" id="opportunities">
   <div class="container">
     <h2 class="sp-section-title text-center">Sponsorship opportunities</h2>
+    {% if first_in_city %}
+    <div class="sp-launch-banner">
+      <div class="sp-launch-pill">First {{ brand_name }} in {{ city_name }} &middot; Launch edition &middot; 20% off</div>
+      <p class="sp-launch-text">We're planting our flag in a new city and want you there from the start. Come build it with us: 20% off every package, applied automatically.</p>
+    </div>
+    {% endif %}
     <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">
       We are a London-based company organizing conferences worldwide.<br>
       Sponsors are invoiced in GBP / £ &mdash; British Pound Sterling.<br>
@@ -612,15 +644,23 @@
       {% for tier in sponsorship_tiers %}
       <div class="col-12 col-md-4">
         <div class="sp-tier-card" data-tier-id="{{ tier.id }}">
-          <div class="sp-tier-name">{{ tier.name }}{% if tier.id not in ('startup_discount', 'food', 'clothing') %}<span class="sp-tier-original"></span>{% endif %}</div>
+          <div class="sp-tier-name">{% if first_in_city and tier.id == 'startup_discount' %}Launch partner{% else %}{{ tier.name }}{% endif %}{% if tier.id not in ('startup_discount', 'food', 'clothing') %}<span class="sp-tier-original"></span>{% endif %}</div>
           {% if tier.subtitle %}<div class="sp-tier-subtitle">{{ tier.subtitle }}</div>{% endif %}
           {% if tier.id == 'startup_discount' %}
           <div class="sp-tier-price">
+            {% if first_in_city %}
+            <label class="sp-discount-toggle-label sp-discount-locked" title="Launch edition: the 20% discount is always on">
+              <input type="checkbox" class="sp-discount-check" checked disabled>
+              <span class="sp-discount-switch"></span>
+              20% off &middot; applied <span class="sp-discount-lock" aria-hidden="true">&#128274;</span>
+            </label>
+            {% else %}
             <label class="sp-discount-toggle-label">
               <input type="checkbox" class="sp-discount-check" onchange="spToggleDiscount(this.checked)">
               <span class="sp-discount-switch"></span>
               {{ tier.price_label }}
             </label>
+            {% endif %}
           </div>
           {% else %}
           <div class="sp-tier-price"{% for cur_code, cur_data in tier.currencies.items() %} data-price-{{ cur_code|lower }}="{% if cur_data.price_label is defined %}{% if cur_data.price_label is mapping %}{{ cur_data.price_label[event_size] }}{% else %}{{ cur_data.price_label }}{% endif %}{% elif cur_data.price is defined %}{{ cur_data.symbol }}{{ cur_data.price[event_size] }}{% endif %}" data-dprice-{{ cur_code|lower }}="{% if cur_data.discounted_price_label is defined %}{% if cur_data.discounted_price_label is mapping %}{{ cur_data.discounted_price_label[event_size] }}{% else %}{{ cur_data.discounted_price_label }}{% endif %}{% elif cur_data.discounted_price is defined %}{{ cur_data.symbol }}{{ cur_data.discounted_price[event_size] }}{% endif %}"{% endfor %}>
@@ -630,9 +670,14 @@
           <div class="sp-tier-body">
             {% if tier.benefits or tier.requires %}
             <ul class="sp-tier-benefits">
+              {% if first_in_city and tier.id == 'startup_discount' %}
+              <li>Applied automatically: first {{ brand_name }} in {{ city_name }}</li>
+              <li>Valid on every package on this page</li>
+              {% else %}
               {% for b in tier.benefits %}
               <li>{{ b }}</li>
               {% endfor %}
+              {% endif %}
               {% if tier.requires %}
               <li class="sp-tier-warn">{{ tier.requires }}</li>
               {% endif %}
@@ -670,6 +715,7 @@
 (function() {
   var spCurrentCurrency = 'GBP';
   var spDiscountActive = false;
+  var spDiscountLocked = {{ 'true' if first_in_city else 'false' }};
 
   /* ── Tokenize a price string into symbol / number / text tokens ── */
   function spTokenize(text) {
@@ -824,6 +870,7 @@
 
   /* ── Countdown + slide transition for discount toggle ────────── */
   window.spToggleDiscount = function(on) {
+    if (spDiscountLocked) on = true;
     spDiscountActive = on;
     var cc = spCurrentCurrency.toLowerCase();
     var priceAttr = on ? 'data-dprice-' + cc : 'data-price-' + cc;
@@ -851,6 +898,8 @@
     var sdCard = document.querySelector('.sp-tier-card[data-tier-id="startup_discount"]');
     if (sdCard) sdCard.classList.toggle('sp-discount-card-active', on);
   };
+
+  if (spDiscountLocked) window.spToggleDiscount(true);
 })();
 </script>
 
@@ -1180,6 +1229,9 @@ window.addEventListener('hashchange', function() { spAutoExpand(window.location.
           <span id="sp-faq-all-label">Show all</span>
         </button>
       </div>
+      {% if first_in_city %}
+      {% set faq_items = [{"q": "Why 20% off?", "a": "It's our first " ~ brand_name ~ " in " ~ city_name ~ ". Every launch edition is a bit of an experiment, so the sponsors who join us from day one get 20% off as a thank-you for coming along for the ride."}] + faq_items %}
+      {% endif %}
       {% for item in faq_items %}
       <details class="sp-faq-item">
         <summary class="sp-faq-q">{{ item.q }}</summary>
