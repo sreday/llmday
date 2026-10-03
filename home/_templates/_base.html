@@ -22,6 +22,9 @@
 
 	<!-- Theme CSS -->  
 	<link id="theme-style" rel="stylesheet" href="assets/css/theme.css">
+	<!-- sales first: open the Calendly connection while the page loads (the booking widget sits on the home page) -->
+	<link rel="preconnect" href="https://calendly.com">
+	<link rel="preconnect" href="https://assets.calendly.com" crossorigin>
 
     <meta name="image" property="og:image" content="https://llmday.com/photos/{{ hero_pictures[0].split('/')[-1] }}">
     <meta property="og:type" content="article"/>

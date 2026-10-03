@@ -463,16 +463,20 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <div class="section-intro text-center text-white" style="margin-bottom:1rem;">or schedule a call below</div>
         <div class="sponsors-cta text-center">
 <!-- Calendly inline widget begin -->
-<div class="calendly-inline-widget d-none d-md-block" data-url="https://calendly.com/sreday/30min" style="min-width:320px;height:700px;"></div>
+<div class="calendly-inline-widget d-none d-md-block" id="calendly-inline" style="min-width:320px;height:700px;"></div>
 <a class="btn btn-primary btn-lg w-100 d-md-none" href="https://calendly.com/sreday/30min" target="_blank" rel="noopener noreferrer">Schedule a call</a>
 <script>
-  // Phones get the button above instead of the 700px inline widget; skip widget.js there.
+  // Sales first (Marek 2026-10-03): the booking iframe goes in while the page is still parsing - no widget.js
+  // round trip before it can start, never lazy (calendly.com is preconnected in <head>). Phones get the button above.
   if (window.matchMedia('(min-width: 768px)').matches) {
-    var calendlyJs = document.createElement('script');
-    calendlyJs.src = 'https://assets.calendly.com/assets/external/widget.js'; calendlyJs.async = true;
-    document.head.appendChild(calendlyJs);
+    var calF = document.createElement('iframe');
+    calF.src = 'https://calendly.com/sreday/30min?embed_domain=' + encodeURIComponent(location.host) + '&embed_type=Inline';
+    calF.title = 'Select a Date & Time - Calendly'; calF.loading = 'eager';
+    calF.style.cssText = 'width:100%;height:100%;border:0;';
+    document.getElementById('calendly-inline').appendChild(calF);
   }
 </script>
+<div class="d-none d-md-block mt-3"><a class="text-white" href="https://calendly.com/sreday/30min" target="_blank" rel="noopener noreferrer">Calendar not loading? Book the call on calendly.com</a></div>
 <!-- Calendly inline widget end -->
         </div>
 

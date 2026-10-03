@@ -58,6 +58,11 @@ LAZY_LOOP_JS = ("<script>/* rewrite_assets.py: loops load and play only while on
                 "{rootMargin:'300px'});vs.forEach(function(v){io.observe(v)})})()</script>")
 IMG_RE = re.compile(r'<(img|iframe)\b([^>]*)>', re.I)
 EAGER_IMAGES = 3  # header logo + hero images stay eager; everything below loads as you scroll
+# Sales come first (Marek 2026-10-03): nothing that sells sponsorship (or tickets) waits for a scroll.
+# Sponsor / partner logos (any src under sponsors/), the Calendly and Luma iframes are never made lazy,
+# and the sponsorship-facing pages get no lazy images or lazy video loops at all.
+EAGER_SRC = re.compile(r'(?:^|/)sponsors/|calendly\.com|lu\.ma/|luma\.com/', re.I)
+PRIORITY_PAGES = ("sponsorship.html", "host/index.html", "onboardsponsor/index.html")
 URL_RE = re.compile(r'url\(\s*(["\']?)([^"\')]+?)\1\s*\)')
 # SREday 2022-2024 archives are frozen: their built pages are deployed exactly as generated
 FROZEN_EVENTS = ("2022-", "2023-", "2024-")
@@ -181,6 +186,9 @@ def add_lazy(text):
         name, attrs = m.group(1).lower(), m.group(2)
         if re.search(r'\sloading\s*=', attrs, re.I):
             return m.group(0)
+        src = re.search(r'\ssrc\s*=\s*(["\'])(.*?)\1', attrs)
+        if src and EAGER_SRC.search(src.group(2)):
+            return m.group(0)
         if name == "img":
             seen["img"] += 1
             if seen["img"] <= EAGER_IMAGES or "fetchpriority" in attrs.lower():
@@ -197,13 +205,15 @@ def add_lazy(text):
 def rewrite_html(path):
     base = path.parent
     text = path.read_text(encoding="utf-8", errors="surrogateescape")
-    new = lazy_videos(base, text)
+    priority = path.relative_to(STATIC).as_posix().endswith(PRIORITY_PAGES)
+    new = text if priority else lazy_videos(base, text)
     new = ATTR_RE.sub(lambda m: m.group(1) + m.group(2) + rewrite_url(base, m.group(3)) + m.group(2), new)
     new = SRCSET_RE.sub(lambda m: m.group(1) + m.group(2) + rewrite_srcset(base, m.group(3)) + m.group(2), new)
     new = LINK_RE.sub(lambda t: HREF_RE.sub(
         lambda m: m.group(1) + m.group(2) + rewrite_url(base, m.group(3)) + m.group(2), t.group(0)), new)
     new = rewrite_css_urls(base, new)
-    new = add_lazy(new)
+    if not priority:
+        new = add_lazy(new)
     if new != text:
         path.write_text(new, encoding="utf-8", errors="surrogateescape")
         _stats["files"] += 1
