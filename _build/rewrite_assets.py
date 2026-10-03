@@ -35,6 +35,8 @@ import re
 import sys
 from pathlib import Path
 from urllib.parse import quote, unquote, urlsplit
+import datetime
+import json
 
 STATIC = Path("static")
 WEBP_FROM = (".png", ".jpg", ".jpeg")
@@ -214,6 +216,7 @@ def rewrite_html(path):
     new = rewrite_css_urls(base, new)
     if not priority:
         new = add_lazy(new)
+    new = add_fresh(new)
     if new != text:
         path.write_text(new, encoding="utf-8", errors="surrogateescape")
         _stats["files"] += 1
@@ -228,6 +231,24 @@ def rewrite_css(path):
         _hash_cache.pop(path, None)
 
 
+# Always-fresh pages (Marek 2026-10-03: attendees keep checking the ever-changing schedule). HTML is never
+# cached on purpose, but GitHub Pages sends max-age=600 and a tab left open all day never re-asks. Every page
+# gets <meta name="build"> and a small script; static/build.json holds the current build id. When a newer
+# build exists, a page that is opened or comes back to the foreground reloads itself (once per build), unless
+# the visitor is typing in a form or has a talk open: then, like the 5-minute check while it stays open,
+# it shows a "Refresh" bar instead. No service worker, nothing cached.
+BUILD_ID = (os.environ.get("GITHUB_SHA", "")[:10] + "-" if os.environ.get("GITHUB_SHA") else "") + \
+    datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+FRESH_JS = "<script>/* rewrite_assets.py: reload when a newer build is out */" + '(function(){var m=document.querySelector(\'meta[name="build"]\');if(!m||!window.fetch)return;var mine=m.getAttribute(\'content\'),busy=0,bar=null;function engaged(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;var f=document.querySelectorAll(\'input,textarea\');for(var i=0;i<f.length;i++){var e=f[i];if(/^(checkbox|radio)$/.test(e.type)?e.checked!==e.defaultChecked:(e.type!==\'hidden\'&&e.value!==e.defaultValue))return true}return !!document.querySelector(\'.modal.show\')}function offer(){if(bar||!document.body)return;bar=document.createElement(\'div\');bar.setAttribute(\'role\',\'status\');bar.style.cssText=\'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2000;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#111;color:#fff;padding:10px 12px 10px 18px;border-radius:999px;font:600 14px/1.3 Montserrat,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)\';var t=document.createElement(\'span\');t.textContent=\'This page was just updated (schedule, speakers or sponsors)\';bar.appendChild(t);var b=document.createElement(\'button\');b.type=\'button\';b.textContent=\'Refresh\';b.style.cssText=\'border:0;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;background:#fff;color:#111\';b.onclick=function(){location.reload()};bar.appendChild(b);document.body.appendChild(bar)}function check(auto){if(busy||document.visibilityState===\'hidden\')return;busy=1;fetch(\'/build.json?t=\'+Date.now(),{cache:\'no-store\'}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!j.build||j.build===mine)return;var again=false;try{again=sessionStorage.getItem(\'fresh-reload\')===j.build;sessionStorage.setItem(\'fresh-reload\',j.build)}catch(e){}if(auto&&!again&&!engaged())location.reload();else offer()})[\'catch\'](function(){busy=0})}check(true);document.addEventListener(\'visibilitychange\',function(){if(document.visibilityState===\'visible\')check(true)});addEventListener(\'pageshow\',function(e){if(e.persisted)check(true)});setInterval(function(){check(false)},300000)})()' + "</script>"
+
+
+def add_fresh(text):
+    if 'name="build"' in text or "</head>" not in text or "</body>" not in text:
+        return text
+    text = text.replace("</head>", '<meta name="build" content="%s">\n</head>' % BUILD_ID, 1)
+    return text.replace("</body>", FRESH_JS + "\n</body>", 1)
+
+
 def main():
     if not STATIC.is_dir():
         print("No static/ directory found, skipping")
@@ -239,6 +260,7 @@ def main():
     for html in sorted(STATIC.rglob("*.html")):
         if not frozen(html):
             rewrite_html(html)
+    (STATIC / "build.json").write_text(json.dumps({"build": BUILD_ID}), encoding="utf-8")
     print(f"Rewrote {_stats['files']} files: {_stats['webp']} references to WebP, "
           f"{_stats['versioned']} URLs versioned with ?v=, {_stats['videos']} loops made lazy")
     return 0
