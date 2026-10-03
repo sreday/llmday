@@ -27,7 +27,7 @@ MAX_STICKER = (600, 600)        # brand stickers/logos (shown at <= 300 px)
 MAX_IMAGE_WIDTH = 1200          # other site images (mascots, ambassadorship art, host logos)
 MAX_HERO_WIDTH = 1600           # hero/slideshow photos and painted backgrounds (darkened, full-width)
 JPEG_QUALITY = 85
-WEBP_QUALITY = 78               # WebP siblings; kept only when >= 10% smaller than the original
+WEBP_QUALITY = 78               # lossy WebP siblings of photos; PNG graphics get lossless WebP; kept only when >= 10% smaller
 WEBP_QUALITY_HERO = 72          # photos/: big backgrounds under a dark overlay
 WEBP_SKIP = ("favicon", "apple-touch", "android-chrome", "/teasers/")
 MIN_FILE_SIZE = 10 * 1024       # skip files under 10KB
@@ -134,7 +134,10 @@ def make_webp(path):
         return
     data = path.read_bytes()
     quality = WEBP_QUALITY_HERO if "photos" in path.parts else WEBP_QUALITY
-    key = hashlib.sha256(("%s|webp|%s|%s|" % (SCRIPT_HASH, quality, PIL.__version__)).encode() + data).hexdigest()
+    # PNGs are graphics (sponsor logos, stickers, slides, text): lossless WebP, same pixels, so sponsors never
+    # see a blurred or fringed logo (Marek 2026-10-03). Only photos (JPEGs, photos/ backgrounds) go lossy.
+    lossless = path.suffix.lower() == ".png" and "photos" not in path.parts
+    key = hashlib.sha256(("%s|webp|%s|%s|%s|" % (SCRIPT_HASH, quality, lossless, PIL.__version__)).encode() + data).hexdigest()
     entry = CACHE_DIR / key
     _used.add(key)
     out = path.with_suffix(".webp")
@@ -149,7 +152,10 @@ def make_webp(path):
                 img = img.convert("RGBA" if "transparency" in img.info or img.mode in ("LA", "PA") else "RGB")
             import io
             buf = io.BytesIO()
-            img.save(buf, "WEBP", quality=quality, method=4)
+            if lossless:
+                img.save(buf, "WEBP", lossless=True, quality=80, method=4, exact=True)
+            else:
+                img.save(buf, "WEBP", quality=quality, method=4)
             webp = buf.getvalue()
         except Exception as e:
             print(f"  WARNING: {path}: {e}")
