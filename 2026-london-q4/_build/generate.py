@@ -122,6 +122,39 @@ def generate_talk_url(talk):
     url = re.sub('[\\W]+', '', url)
     return url[:100]
 
+# talks.csv "status" column (Marek 2026-10-03). New values: talk / keynote / workshop / draft.
+# Legacy values keep working: "confirmed" (anything containing it) = talk, anything containing
+# "keynote" = keynote. draft = waiting for the speaker's confirmation: left out of the build, counted
+# on /status/. Anything else (declined, ...) stays hidden. Same rules in home/_build/generate.py
+# and _build/redflag.py.
+LIVE_KINDS = ('talk', 'keynote', 'workshop')
+
+def talk_kind(status):
+    s = str(status or '').strip().lower()
+    if re.search(r'\bdraft\b', s):
+        return 'draft'
+    if 'keynote' in s:
+        return 'keynote'
+    if re.search(r'\bworkshop\b', s):
+        return 'workshop'
+    if 'confirmed' in s or re.search(r'\btalk\b', s):
+        return 'talk'
+    return None
+
+_KEYNOTE_PREFIX = re.compile(r'^\s*keynote\s*:\s*', re.I)
+_WORKSHOP_PREFIX = re.compile(r'^\s*(?:\d+\s*h\s+)?workshop\s*:\s*', re.I)
+
+def talk_pill(talk):
+    """(pill, title without the prefix the pill replaces). Keynote: status keynote, or the legacy
+    "Keynote:" title prefix (also on a confirmed row). Workshop: status workshop."""
+    title = (talk.get("title") or "").strip()
+    kind = talk.get("kind")
+    if kind == 'keynote' or _KEYNOTE_PREFIX.match(title):
+        return 'Keynote', _KEYNOTE_PREFIX.sub('', title)
+    if kind == 'workshop':
+        return 'Workshop', _WORKSHOP_PREFIX.sub('', title)
+    return '', title
+
 def read_csv(path):
     """ Read the pre-process the CSV """
     items = []
@@ -373,6 +406,8 @@ context['waitlist_event']['rsvp_url'] = ('https://lu.ma/event/' + _wl_luma) if _
 # pick up the ids & photos
 for i, talk in enumerate(talks_raw):
     talk["id"] = str(i)
+    talk["kind"] = talk_kind(talk.get("status"))
+    talk["pill"], talk["title_display"] = talk_pill(talk)
     photo = talk.get("photo")
     if photo:
         talk["photo_url"] = "../speakers/" + photo
@@ -406,15 +441,13 @@ for i, talk in enumerate(talks_raw):
     else:
         talk["display_name"] = name
 
-# sort into talks and keynotes
-talks = [
-    talk for talk in talks_raw
-    if "confirmed" in talk["status"].lower()
-]
-keynotes = [
-    talk for talk in talks_raw
-    if "keynote" in talk["status"].lower()
-]
+# sort into talks (in a track: talk + workshop) and keynotes (plenary at the start of the day);
+# drafts and anything else stay out of the build
+talks = [talk for talk in talks_raw if talk["kind"] in ('talk', 'workshop')]
+keynotes = [talk for talk in talks_raw if talk["kind"] == 'keynote']
+_drafts = [talk for talk in talks_raw if talk["kind"] == 'draft']
+if _drafts:
+    print("Drafts left out of the build (status draft): %d" % len(_drafts))
 context["talks"] = talks
 context["keynotes"] = keynotes
 
@@ -517,9 +550,7 @@ if len(_about_talks) >= 3 and _about_cats:
     for _t in _about_talks:
         _hay_title = _t["title"].strip().lower()
         _hay_abs = (_t.get("abstract") or "").lower()
-        _about_title_disp = _t["title"].strip()
-        if _about_title_disp.lower().startswith("keynote:"):
-            _about_title_disp = _about_title_disp[len("keynote:"):].strip()
+        _about_title_disp = _t["title_display"]
         _about_entry = {
             "title": _about_title_disp,
             "url": ((_t.get("short_url") or "").replace(".html", "") + ".html#speakers-section") if _t.get("short_url") else "",
@@ -676,9 +707,13 @@ context["talks_by_tracks"] = tracks
 print("Loaded %d confirmed talks in %d tracks: %s" % (len(context["talks"]), len(tracks), tracks.keys()))
 
 # template each talk page for the event (a longer session's extra rows share
-# its page)
+# its page). Only rows on the schedule get a page: drafts and declined rows
+# must not leak into the sitemap.
 for talk in talks_raw:
     if talk["id"] in _merged_ids:
+        continue
+    if talk["kind"] not in LIVE_KINDS:
+        print("Skipping talk subpage %s (status '%s')" % (talk.get("short_url"), talk.get("status", "")))
         continue
     print("Generating talk subpage %s" % (talk.get("short_url")))
     with open(BASE_FOLDER + "/" + talk.get("short_url").replace(".html","")  + ".html", "w", encoding="utf-8") as f:
@@ -762,8 +797,7 @@ for _gf in _all_siblings:
     _gt_path = _os.path.join(_gf, '_db', 'talks.csv')
     if _os.path.exists(_gt_path):
         for _t in read_csv(_gt_path):
-            _status = _t.get('status', '').lower()
-            if 'confirmed' in _status or 'keynote' in _status:
+            if talk_kind(_t.get('status')) in LIVE_KINDS:
                 _spk_name = (_t.get('name') or _t.get('Name') or '').strip()
                 if _spk_name:
                     _global_speaker_names.add(_spk_name)
@@ -1198,10 +1232,10 @@ from urllib.parse import urlparse as _inv_urlparse
 
 
 def _inv_confirmed(rows):
-    """talks.csv rows that count as confirmed on /status/ (status has 'confirmed' or 'keynote';
-    '_Registration & Networking'-style agenda rows skipped)."""
+    """talks.csv rows that count as confirmed on /status/ (talk_kind talk/keynote/workshop, drafts
+    not counted; '_Registration & Networking'-style agenda rows skipped)."""
     return [r for r in rows
-            if re.search(r'confirmed|keynote', str(r.get('status', '')), re.I)
+            if talk_kind(r.get('status')) in LIVE_KINDS
             and not str(r.get('name', '')).strip().startswith('_')]
 
 
@@ -1435,15 +1469,13 @@ _tz_lines = [l for l in (_tz_venue_name, _tz_street) if l]
 context['teaser_talks'] = []
 for _t in keynotes + [x for x in talks if x not in keynotes]:
     _name = (_t.get('name') or '').strip()
-    _title = (_t.get('title') or '').strip()
+    _title = _t['title_display']
     if not _name or _name.startswith('_') or not _title:
         continue
-    if _title.lower().startswith('keynote:'):
-        _title = _title[len('keynote:'):].strip()
     context['teaser_talks'].append({
         'title': _title, 'name': _name, 'organization': (_t.get('organization') or '').strip(),
         'photo': ('../' + _t['photo_url']) if _t.get('photo_url') and str(_t['photo_url']).startswith('../') else (_t.get('photo_url') or ''),
-        'keynote': _t in keynotes, 'venue_lines': _tz_lines, 'city_line': _tz_city_line,
+        'keynote': _t in keynotes, 'workshop': _t['kind'] == 'workshop', 'venue_lines': _tz_lines, 'city_line': _tz_city_line,
         'file': '%s-%s-%s.png' % (str(context.get('brand_name', '')).lower(), _tz_slug(_ob_slug), _tz_slug(_name)),
     })
 context.setdefault('teaser_discount', '')
@@ -1476,7 +1508,7 @@ for _ev in (_ch_home.get('events') or []) + (_ch_home.get('events_past') or []):
 _ch_blurb = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', str(context.get('about_blurb') or ''))).strip()
 _ch_first = re.split(r'(?<=[.!?])\s+', _ch_blurb)[0] if _ch_blurb else ''
 # talks per About category (speaker, company, title) so the hero's posts and messages can say who presents on what
-_ch_by_title = {str(_t.get('title') or '').strip().lower(): _t for _t in _about_talks}
+_ch_by_title = {_t['title_display'].lower(): _t for _t in _about_talks}   # About entries carry the display title
 _ch_topic_talks = []
 for _tp in (context.get('about_topics') or []):
     if _tp.get('category') == '...and more':
@@ -1493,7 +1525,7 @@ for _tp in (context.get('about_topics') or []):
         except Exception:
             pass
         _sp = re.split(r'\s*&\s*|\s*,\s*|\s+and\s+', str(_t.get('name') or ''))[0].strip()
-        _lst.append({'speaker': _sp, 'company': _org, 'title': re.sub(r'^\s*Keynote:\s*', '', str(_t.get('title') or '').strip())})
+        _lst.append({'speaker': _sp, 'company': _org, 'title': _t['title_display']})
         if len(_lst) == 3:
             break
     if _lst:

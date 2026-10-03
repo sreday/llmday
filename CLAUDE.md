@@ -58,6 +58,11 @@ for event in 2025-* 2026-* 2027-*; do   # never the frozen 2022-2024 folders (sr
 done
 ```
 
+## talks.csv status
+`talk` / `keynote` / `workshop` are on the site (keynote = plenary + pill, workshop = pill), `draft` is left out of the build
+but counted separately on /status/; legacy `confirmed` = talk and a `Keynote:` title prefix still works. Table in README.md.
+Classifier: `talk_kind()` in `_event_template/_build/generate.py` (mirrored in home/_build/generate.py and _build/redflag.py).
+
 ## Key templates
 - `_templates/sponsorship.html` — sponsorship page; pricing tiers + expandable stats panel
 - `_templates/index.html` — event homepage

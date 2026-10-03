@@ -35,6 +35,9 @@
     .ev small { display: block; color: #888; font-weight: 400; font-size: .8rem; margin-top: 2px; }
     .bar { position: relative; height: 14px; border-radius: 999px; background: #eceef1; min-width: 180px; overflow: hidden; }
     .bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--c); }
+    /* drafts (status "draft" in talks.csv): a faded segment behind the confirmed fill, never part of the % */
+    .bar > i.draft { opacity: .3; }
+    .tlk .draft, .pct .draft { color: #888; font-weight: 400; white-space: nowrap; }
     /* Talks over the limit (Marek 2026-09-19): one white dot per extra talk, stacked from the right end of the full bar
        towards the left (max 7 drawn, the text below still gives the real number). Replaces the old 100% tick. */
     .bar > .plus { position: absolute; right: 5px; top: 0; bottom: 0; display: flex; flex-direction: row-reverse; align-items: center; gap: 4px; }
@@ -372,13 +375,14 @@
         <tr>
           <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a>{% if r.is_free %}<span class="free-pill" title="Free to attend on Luma">FREE</span>{% endif %}<small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}</small></td>
           <td class="num trk" data-unit="{{ 'track' if r.tracks | int == 1 else 'tracks' }}">{{ r.tracks }}</td>
-          <td class="num tlk" data-unit="talks"><strong>{{ r.confirmed }}</strong> / {{ r.available }}</td>
+          <td class="num tlk" data-unit="talks"><strong>{{ r.confirmed }}</strong>{% if r.drafts %} <span class="draft" title="status draft in talks.csv: waiting for confirmation, not on the site">+ {{ r.drafts }} draft</span>{% endif %} / {{ r.available }}</td>
           <td class="prog">
-            <div class="bar" title="{{ r.pct }}%">
+            <div class="bar" title="{{ r.pct }}%{% if r.drafts %} + {{ r.draft_pct }}% draft{% endif %}">
+              {% if r.drafts and not over %}<i class="draft" style="--c: var(--{{ r.health }}); width: {{ [r.pct + r.draft_pct, 100] | min }}%"></i>{% endif %}
               <i style="--c: var(--{{ r.health }}); width: {{ 100 if over else r.pct }}%"></i>
               {% if over %}<span class="plus" title="{{ r.confirmed - r.available }} over">{% for _ in range([r.confirmed - r.available, 7] | min) %}<s></s>{% endfor %}</span>{% endif %}
             </div>
-            <div class="pct">{{ r.pct }}%{% if over %} · {{ r.confirmed - r.available }} over{% endif %}</div>
+            <div class="pct">{{ r.pct }}%{% if over %} · {{ r.confirmed - r.available }} over{% endif %}{% if r.drafts %} <span class="draft">· +{{ r.draft_pct }}% draft</span>{% endif %}</div>
           </td>
           <td class="hl"><span class="pill {{ r.health }}" style="--c: var(--{{ r.health }})">{{ r.health_label }}</span></td>
           {% set announce = r.hours == 'N/A' and r.state == 'before' and r.days_left <= status_announce_days %}
