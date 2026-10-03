@@ -5,7 +5,7 @@ start_time: "2026-10-01T09:00:00-07:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
-event_state: active
+event_state: after
 date_string: "October 1, 2026"
 location_string: "San Francisco, California, US"
 city_name: "San Francisco"
