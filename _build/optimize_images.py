@@ -31,6 +31,13 @@ WEBP_QUALITY = 78               # WebP siblings; kept only when >= 10% smaller t
 WEBP_QUALITY_HERO = 72          # photos/: big backgrounds under a dark overlay
 WEBP_SKIP = ("favicon", "apple-touch", "android-chrome", "/teasers/")
 MIN_FILE_SIZE = 10 * 1024       # skip files under 10KB
+# SREday 2022-2024 archives are frozen: the steps added for page weight (resizes, WebP, posters)
+# leave their static/ output alone (rewrite_assets.py skips them too)
+FROZEN_EVENTS = ("2022-", "2023-", "2024-")
+
+
+def frozen(path):
+    return path.relative_to(STATIC_DIR).parts[0].startswith(FROZEN_EVENTS)
 
 CACHE_DIR = Path(os.environ.get("SITE_CACHE_DIR", ".cache")) / "images"
 # Any change to this script (sizes, quality, code) invalidates every entry.
@@ -188,9 +195,9 @@ def make_poster(gif):
     gif.with_name(gif.stem + ".poster.webp").write_bytes(entry.read_bytes())
 
 
-def process_files(pattern, handler, label):
+def process_files(pattern, handler, label, skip_frozen=False):
     """Find files matching glob pattern under STATIC_DIR and process them."""
-    files = sorted(STATIC_DIR.glob(pattern))
+    files = sorted(f for f in STATIC_DIR.glob(pattern) if not (skip_frozen and frozen(f)))
     if not files:
         return 0, 0
     print(f"\n{label} ({len(files)} files)...")
@@ -235,17 +242,20 @@ def main():
     ]
 
     for pattern, handler, label in groups:
-        before, after = process_files(pattern, handler, label)
+        # per-event sponsor logos and venue photos were optimized before the archives froze; the newer steps skip them
+        legacy = pattern.startswith("20*/sponsors/") or "/venue/" in pattern
+        before, after = process_files(pattern, handler, label, skip_frozen=not legacy)
         total_before += before
         total_after += after
 
-    webp_sources = [f for ext in ("png", "jpg", "jpeg") for f in STATIC_DIR.rglob(f"*.{ext}")]
+    webp_sources = [f for ext in ("png", "jpg", "jpeg") for f in STATIC_DIR.rglob(f"*.{ext}") if not frozen(f)]
     print(f"\nWebP siblings ({len(webp_sources)} candidates)...")
     for f in webp_sources:
         make_webp(f)
 
     for gif in STATIC_DIR.rglob("*.gif"):
-        make_poster(gif)
+        if not frozen(gif):
+            make_poster(gif)
 
     print(f"\nImage cache: {_stats['hit']} reused, {_stats['miss']} optimized")
     if "--prune" in sys.argv:
