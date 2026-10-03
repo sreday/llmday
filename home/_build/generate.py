@@ -1570,7 +1570,7 @@ def _hero_applicants(events):
         if not key:
             missing.append(slug)
             continue
-        cursor, pages = None, 0
+        cursor, pages, seen = None, 0, {}
         while True:
             params = {"event_id": evt, "pagination_limit": _LUMA_PAGE}
             if cursor:
@@ -1592,6 +1592,8 @@ def _hero_applicants(events):
                                                                         str(g.get("ticket_type_name") or "")]
                 if not any(_HERO_TICKET_RX.search(n) for n in tnames):
                     continue
+                _k = "%s/%s" % (next((n for n in tnames if _HERO_TICKET_RX.search(n)), ""), g.get("approval_status"))
+                seen[_k] = seen.get(_k, 0) + 1
                 name = str(g.get("user_name") or "").strip() or " ".join(
                     x for x in (str(g.get("user_first_name") or "").strip(), str(g.get("user_last_name") or "").strip()) if x)
                 linkedin = ""
@@ -1611,6 +1613,8 @@ def _hero_applicants(events):
             cursor = data.get("next_cursor")
             if not data.get("has_more") or not cursor or pages >= 200:
                 break
+        if seen:                                             # ticket names + statuses only: no personal data
+            print("Community heroes: %s: %s" % (slug, ", ".join("%s x%d" % kv for kv in sorted(seen.items()))))
     note = ("No Luma key with manage access to: %s." % ", ".join(missing)) if missing else ""
     return out, note
 
