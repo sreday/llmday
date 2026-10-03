@@ -1464,6 +1464,9 @@ import hashlib as _hr_hash
 from urllib.parse import urlsplit as _hr_split
 
 _HERO_SLEEP_HOURS = 24
+# The "Community Hero" ticket type is older than the /communityhero/ form: heroes count from the day the form flow
+# started (Marek 2026-10-03: "let's start counting heroes from Sep 1 2026"). Older hero tickets are left out entirely.
+_HERO_SINCE = datetime.datetime(2026, 9, 1, tzinfo=datetime.timezone.utc)
 _HERO_TICKET_RX = re.compile(r"hero", re.I)          # Luma ticket type "Community Hero" (any wording with "hero")
 
 
@@ -1511,7 +1514,7 @@ def _hero_reports():
         if not isinstance(r, dict) or str(r.get("brand") or "").lower() != _wl_brand:
             continue
         ts = _wl_parse_ts(r.get("ts"))
-        if not ts:
+        if not ts or ts < _HERO_SINCE:
             continue
         out.append({
             "slug": _wl_re.sub(r"[^a-z0-9-]", "", str(r.get("slug") or "").lower()),
@@ -1592,6 +1595,9 @@ def _hero_applicants(events):
                                                                         str(g.get("ticket_type_name") or "")]
                 if not any(_HERO_TICKET_RX.search(n) for n in tnames):
                     continue
+                _req = _wl_parse_ts(g.get("registered_at") or g.get("created_at"))
+                if not _req or _req < _HERO_SINCE:
+                    continue
                 _k = "%s/%s" % (next((n for n in tnames if _HERO_TICKET_RX.search(n)), ""), g.get("approval_status"))
                 seen[_k] = seen.get(_k, 0) + 1
                 name = str(g.get("user_name") or "").strip() or " ".join(
@@ -1605,7 +1611,7 @@ def _hero_applicants(events):
                 email = str(g.get("user_email") or g.get("email") or "").strip().lower()
                 out.append({
                     "slug": slug, "name": name, "name_n": _luma_norm(name), "linkedin": linkedin,
-                    "requested_at": _wl_parse_ts(g.get("registered_at") or g.get("created_at")),
+                    "requested_at": _req,
                     "luma_status": str(g.get("approval_status") or "pending_approval"),
                     "email_sha": _hr_hash.sha256(email.encode("utf-8")).hexdigest() if email else "",
                 })
