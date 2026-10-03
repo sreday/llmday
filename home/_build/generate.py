@@ -1447,14 +1447,30 @@ print("Waitlist: %s" % (_wl_note or "%d waiting, %d placed" % (_wl_waiting, _wl_
 # ── END WAITLIST ─────────────────────────────────────────────────────────────
 
 
-# ── COMMUNITY HEROES (Marek 2026-09-22): people who sent their Community Hero report through the hidden
-# /<event>/communityhero/ pages -> the "Community hero" Apps Script -> a Google Sheet. COMMUNITYHERO_FEED = that
-# script's exec URL with ?list=1&token=... (Actions secret; local file path for testing). Same fetch as the waitlist;
-# only this brand's rows, newest first, with the completion marks and Anna's "approved" tick from the sheet.
+# ── COMMUNITY HEROES (Marek 2026-09-22, reworked 2026-10-03) ──────────────────────────────────────────────────────
+# Two measurable tracks per hero, nothing about the conversations between Anna and the hero:
+#   Ticket (Luma): a "Community Hero" ticket pending / waitlist = Ticket requested, approved = Ticket granted.
+#   Form: the Luma "registration pending" email carries the /<event>/communityhero/ link, so the moment the ticket is
+#         requested the hero has received the form; a report from that page (the "Community hero" Apps Script sheet,
+#         COMMUNITYHERO_FEED) = All completed!
+#   Alert: 24 h after receiving the form with no report, ticket not declined, event still ahead = Sleeping Hero.
+# Applicants come from the Luma guest lists of every 2025+ event (past ones too: the tab is the history), reports from
+# the sheet; they are matched by the SHA-256 of the email (the script sends email_sha), else by name. The page shows a
+# name linked to LinkedIn, the event, the times, the statuses and the done/not-done ticks - nothing else personal:
+# no email (nor its hash), company, title, answers, proof links or screenshots reach the template. Every Luma call is
+# read-only; a missing key / feed is a note on the tab, never a failed build. The page recomputes the stages from the
+# viewer's clock (the build's own stages are the no-JS fallback and the log line).
+import hashlib as _hr_hash
+from urllib.parse import urlsplit as _hr_split
+
+_HERO_SLEEP_HOURS = 24
+_HERO_TICKET_RX = re.compile(r"hero", re.I)          # Luma ticket type "Community Hero" (any wording with "hero")
+
+
 def _hero_feed_url():
-    """The heroes list comes from the SAME deployment the form posts to (home/metadata.yml communityhero_form_url):
-    only the token is taken from the COMMUNITYHERO_FEED secret. A secret holding an old deployment's URL (it served
-    v1 without the list, 2026-09-28) can no longer hide every report."""
+    """The reports come from the SAME deployment the form posts to (home/metadata.yml communityhero_form_url): only the
+    token is taken from the COMMUNITYHERO_FEED secret. A secret holding an old deployment's URL (it served v1 without
+    the list, 2026-09-28) can no longer hide every report."""
     src = os.environ.get("COMMUNITYHERO_FEED", "").strip()
     form = str(context.get("communityhero_form_url") or "").strip()
     tok = re.search(r"[?&]token=([^&#]+)", src)
@@ -1463,13 +1479,33 @@ def _hero_feed_url():
     return src
 
 
-def _hero_rows_for_page():
+def _hero_linkedin(v):
+    """https://www.linkedin.com/in/<slug> from whatever the hero typed ("/in/x", "linkedin.com/in/x", "x"); '' if it
+    is not a LinkedIn address."""
+    v = str(v or "").strip()
+    if not v:
+        return ""
+    if not re.match(r"^https?://", v, re.I):
+        if "linkedin.com" in v.lower():
+            v = "https://" + v.lstrip("/")
+        elif re.match(r"^/?in/", v, re.I):
+            v = "https://www.linkedin.com/" + v.lstrip("/")
+        elif re.match(r"^[\w.-]{3,100}$", v):
+            v = "https://www.linkedin.com/in/" + v
+        else:
+            return ""
+    host = (_hr_split(v).netloc or "").lower()
+    return v if host == "linkedin.com" or host.endswith(".linkedin.com") else ""
+
+
+def _hero_reports():
+    """This brand's form reports: [{slug, name, name_n, linkedin, form_at, email_sha, marks, approved}], note."""
     raw, note = _wl_fetch(_hero_feed_url())
     if raw is None:
         if "forbidden" in note:
             return [], ("The Community hero script refused the list: the token in the COMMUNITYHERO_FEED secret does not match "
                         "COMMUNITYHERO_TOKEN in the script's properties (Apps Script > Project settings > Script properties).")
-        return [], note.replace("WAITLIST_FEED", "COMMUNITYHERO_FEED").replace("waitlist", "heroes list")
+        return [], note.replace("WAITLIST_FEED", "COMMUNITYHERO_FEED").replace("the waitlist is not shown", "Community hero reports are not shown").replace("waitlist", "Community hero")
     out = []
     for r in raw:
         if not isinstance(r, dict) or str(r.get("brand") or "").lower() != _wl_brand:
@@ -1477,110 +1513,191 @@ def _hero_rows_for_page():
         ts = _wl_parse_ts(r.get("ts"))
         if not ts:
             continue
-        slug = _wl_re.sub(r"[^a-z0-9-]", "", str(r.get("slug") or "").lower())
-        links = [l.strip() for l in str(r.get("proof") or "").split("|") if l.strip()]
-        marks = []
-        for key, label, title in (("linkedin_post", "LinkedIn", "posted on LinkedIn"), ("social_post", "Social", "posted on X / Bluesky / Mastodon / Threads"),
-                                  ("community", "Community", "shared in a community"), ("invites", "Invites", "messaged people directly"), ("other", "Other", "something else")):
-            v = str(r.get(key) or "").strip()
-            marks.append({"label": label, "done": bool(v), "title": (title + ": " + v) if v and v.lower() != "yes" else title,
-                          "url": v if v.lower().startswith("http") else ""})
-        row = {
-            "ts": ts, "when": ts.strftime("%d %b %Y").lstrip("0"),
-            "name": str(r.get("name") or "").strip(), "linkedin": str(r.get("linkedin") or "").strip(), "company": str(r.get("company") or "").strip(),
-            "event": str(r.get("event") or "").strip(), "event_url": _site_root + slug + "/" if slug else _site_root,
-            "city": str(r.get("city") or "").strip(), "event_date": str(r.get("date") or "").strip(),
-            "marks": marks, "done_n": sum(1 for m in marks if m["done"]), "links": links, "screenshots": int(r.get("screenshots") or 0),
-            "approved": bool(r.get("approved")), "slug": slug, "email_sha": str(r.get("email_sha") or "").strip().lower(),
-        }
-        row["search"] = " ".join(v for v in (row["name"], row["company"], row["event"], row["city"], "approved" if row["approved"] else "pending") if v).lower()
-        out.append(row)
-    out.sort(key=lambda x: x["ts"], reverse=True)
+        out.append({
+            "slug": _wl_re.sub(r"[^a-z0-9-]", "", str(r.get("slug") or "").lower()),
+            "name": str(r.get("name") or "").strip(), "name_n": _luma_norm(r.get("name")),
+            "linkedin": _hero_linkedin(r.get("linkedin")), "form_at": ts,
+            "email_sha": str(r.get("email_sha") or "").strip().lower(), "approved": bool(r.get("approved")),
+            # done / not done only: the values (links, texts) stay in the report email
+            "marks": [{"label": label, "done": bool(str(r.get(key) or "").strip())}
+                      for key, label in (("linkedin_post", "LinkedIn"), ("social_post", "Social"), ("community", "Community"),
+                                         ("invites", "Invites"), ("other", "Other"))],
+        })
     return out, ""
 
 
-_hero_rows, _hero_note = _hero_rows_for_page()
-
-
-# Hero tickets from Luma (Marek 2026-09-28: "confirm whether it's accepted or not based on luma instead"): for every
-# event with hero reports, read the WHOLE guest list (every approval status) and find each hero: by the SHA-256 of
-# the email (the "Community hero" script v6 sends email_sha; no email ever reaches the page), else by name (exact, or
-# same surname + shortened first name). Luma's status wins; the sheet's "approved" column stays as a manual override
-# for heroes Luma cannot match. Every Luma call is read-only.
-_HERO_LUMA_LABELS = {"approved": "approved on Luma", "pending_approval": "pending on Luma", "waitlist": "waitlist on Luma",
-                     "declined": "declined on Luma", "invited": "invited on Luma", "session": "registered on Luma"}
-
-
-def _hero_luma(rows):
-    import hashlib
-    if not rows or not _LUMA_KEYS:
-        return
-    by_slug = {}
-    for h in rows:
-        by_slug.setdefault(h.get("slug") or "", []).append(h)
-    for slug, heroes in by_slug.items():
+def _hero_events():
+    """{slug: (event name, start datetime or None, luma_evt)} for every 2025+ event folder of this repo (the SREday
+    2022-2024 archives are never read)."""
+    names = {}
+    for key in ("events", "events_past"):
+        for ev in (context.get(key) or []):
+            u = str((ev or {}).get("url") or "")
+            if u.startswith("./"):
+                names[u[2:].rstrip("/")] = str(ev.get("name") or "")
+    out = {}
+    for folder in sorted(_wl_glob.glob("../20*")):
+        slug = os.path.basename(folder)
+        if not re.match(r"^20(2[5-9]|[3-9]\d)-", slug):
+            continue
         try:
-            with open("../%s/metadata.yml" % slug, encoding="utf-8") as _f:
-                evt = str((yaml.load(_f, Loader=yaml.FullLoader) or {}).get("luma_evt") or "").strip()
+            with open(os.path.join(folder, "metadata.yml"), encoding="utf-8") as f:
+                m = yaml.load(f, Loader=yaml.FullLoader) or {}
         except Exception:
-            evt = ""
+            continue
+        out[slug] = (names.get(slug) or slug, _wl_parse_ts(m.get("start_time")), str(m.get("luma_evt") or "").strip())
+    return out
+
+
+_hero_shape_logged = []
+
+
+def _hero_applicants(events):
+    """Guests holding a Community Hero ticket on the events' Luma guest lists (every approval status):
+    [{slug, name, name_n, linkedin, requested_at, luma_status, email_sha}], note."""
+    if not _LUMA_KEYS:
+        return [], "LUMA_API_KEYS is not set in this build, so Community Hero tickets cannot be read from Luma."
+    out, missing = [], []
+    for slug, (_name, _start, evt) in sorted(events.items()):
         if not evt:
             continue
         key = None
         for k in _LUMA_KEYS:
-            data, err = _luma_get("/v1/events/get", {"event_id": evt}, k)
+            data, _err = _luma_get("/v1/events/get", {"event_id": evt}, k)
             if data and data.get("access") == "manage":
                 key = k
                 break
         if not key:
+            missing.append(slug)
             continue
-        by_sha, by_name, cursor, pages = {}, {}, None, 0
+        cursor, pages = None, 0
         while True:
             params = {"event_id": evt, "pagination_limit": _LUMA_PAGE}
             if cursor:
                 params["pagination_cursor"] = cursor
             data, err = _luma_get("/v1/events/guests/list", params, key)
             if data is None:
+                print("Community heroes: %s guest list failed after %d page(s) (%s)" % (slug, pages, err))
                 break
             for g in data.get("entries") or []:
                 if not isinstance(g, dict):
                     continue
                 g = g.get("guest") if isinstance(g.get("guest"), dict) else g
-                st = str(g.get("approval_status") or "session")
+                tickets = [t for t in (g.get("event_tickets") or []) if isinstance(t, dict)]
+                if not _hero_shape_logged:                   # field names only, never values: confirms the API shape
+                    _hero_shape_logged.append(1)
+                    print("Community heroes: Luma guest fields %s; ticket fields %s" % (
+                        sorted(g.keys())[:20], sorted(tickets[0].keys()) if tickets else "-"))
+                tnames = [str(t.get("name") or "") for t in tickets] + [str((g.get("event_ticket") or {}).get("name") or ""),
+                                                                        str(g.get("ticket_type_name") or "")]
+                if not any(_HERO_TICKET_RX.search(n) for n in tnames):
+                    continue
+                name = str(g.get("user_name") or "").strip() or " ".join(
+                    x for x in (str(g.get("user_first_name") or "").strip(), str(g.get("user_last_name") or "").strip()) if x)
+                linkedin = ""
+                for a in g.get("registration_answers") or []:
+                    if isinstance(a, dict) and ("linkedin" in _luma_norm(a.get("label")) or str(a.get("question_type") or "").lower() == "linkedin"):
+                        linkedin = _hero_linkedin(a.get("value") if a.get("value") is not None else a.get("answer"))
+                        if linkedin:
+                            break
                 email = str(g.get("user_email") or g.get("email") or "").strip().lower()
-                if email:
-                    by_sha[hashlib.sha256(email.encode("utf-8")).hexdigest()] = st
-                for n in {_luma_norm(g.get("user_name")),
-                          _luma_norm("%s %s" % (g.get("user_first_name") or "", g.get("user_last_name") or ""))}:
-                    if n:
-                        by_name.setdefault(n, set()).add(st)
+                out.append({
+                    "slug": slug, "name": name, "name_n": _luma_norm(name), "linkedin": linkedin,
+                    "requested_at": _wl_parse_ts(g.get("registered_at") or g.get("created_at")),
+                    "luma_status": str(g.get("approval_status") or "pending_approval"),
+                    "email_sha": _hr_hash.sha256(email.encode("utf-8")).hexdigest() if email else "",
+                })
             pages += 1
             cursor = data.get("next_cursor")
             if not data.get("has_more") or not cursor or pages >= 200:
                 break
-        for h in heroes:
-            st, how = by_sha.get(h.get("email_sha") or ""), "email"
-            if not st:
-                n = _luma_norm(h["name"])
-                hits = by_name.get(n) or set().union(*[v for k, v in by_name.items() if _luma_nickname(n, k)] or [set()])
-                st, how = (next(iter(hits)), "name") if len(hits) == 1 else (None, "")
-            if st:
-                h["luma_status"], h["luma_how"] = st, how
-                h["luma_label"] = _HERO_LUMA_LABELS.get(st, st.replace("_", " ") + " on Luma")
-                h["approved"] = st == "approved"
-            elif h.get("approved"):
-                pass                                  # not found on Luma, but ticked by hand in the sheet: keep the tick
-            else:
-                h["luma_status"], h["luma_label"] = "missing", "not on Luma yet"
-                h["luma_how"] = "no Luma guest with this %s" % ("email" if h.get("email_sha") else "name")
-            h["search"] += " " + h["luma_label"].lower()
+    note = ("No Luma key with manage access to: %s." % ", ".join(missing)) if missing else ""
+    return out, note
+
+
+def _hero_stage(form_at, ticket, start, requested_at, now):
+    if form_at:
+        return "completed"
+    if ticket == "declined":
+        return "declined"
+    if start and start < now:
+        return "over"
+    if requested_at and now - requested_at >= datetime.timedelta(hours=_HERO_SLEEP_HOURS):
+        return "sleeping"
+    return "waiting"
+
+
+def _hero_build():
+    """(rows for the page, note, counts) - rows carry no email, hash, company, answers or proof."""
+    events = _hero_events()
+    reports, rep_note = _hero_reports()
+    try:
+        apps, app_note = _hero_applicants(events)
+    except Exception as e:                                   # never break the status build over Luma
+        apps, app_note = [], "Luma could not be read for Community Hero tickets (%s)." % e.__class__.__name__
+    now = datetime.datetime.now(datetime.timezone.utc)
+    used, rows = set(), []
+
+    def match(a):
+        cands = [i for i, r in enumerate(reports) if i not in used and r["slug"] == a["slug"]]
+        for i in cands:
+            if a["email_sha"] and reports[i]["email_sha"] == a["email_sha"]:
+                return i
+        for test in (lambda r: r["name_n"] and r["name_n"] == a["name_n"],
+                     lambda r: r["name_n"] and a["name_n"] and _luma_nickname(r["name_n"], a["name_n"])):
+            hits = [i for i in cands if test(reports[i])]
+            if len(hits) == 1:
+                return hits[0]
+        return None
+
+    def row(slug, name, linkedin, requested_at, ticket, rep):
+        ev_name, start, _evt = events.get(slug, (slug, None, ""))
+        form_at = rep["form_at"] if rep else None
+        stage = _hero_stage(form_at, ticket, start, requested_at, now)
+        iso = lambda d: d.astimezone(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") if d else ""
+        return {
+            "name": name or "(no name)", "linkedin": linkedin, "event": ev_name, "slug": slug,
+            "event_url": _site_root + slug + "/", "form_url": _site_root + slug + "/communityhero/",
+            "requested_at": iso(requested_at), "form_at": iso(form_at), "event_start": iso(start),
+            "requested_label": requested_at.strftime("%d %b %Y %H:%M UTC").lstrip("0") if requested_at else "",
+            "form_label": form_at.strftime("%d %b %Y %H:%M UTC").lstrip("0") if form_at else "",
+            "ticket": ticket, "stage": stage, "marks": rep["marks"] if rep else [],
+            "search": " ".join(x for x in (name, ev_name, ticket, stage) if x).lower(),
+            "_sort": (requested_at or form_at or now),
+        }
+
+    for a in apps:
+        i = match(a)
+        rep = reports[i] if i is not None else None
+        if i is not None:
+            used.add(i)
+        st = a["luma_status"]
+        ticket = "granted" if st == "approved" else ("declined" if st == "declined" else "requested")
+        rows.append(row(a["slug"], a["name"], a["linkedin"] or (rep or {}).get("linkedin", ""), a["requested_at"], ticket, rep))
+    for i, r in enumerate(reports):                          # a report without a hero ticket (other ticket, or a test)
+        if i not in used:
+            rows.append(row(r["slug"], r["name"], r["linkedin"], None, "granted" if r["approved"] else "none", r))
+    band = {"sleeping": 0, "waiting": 1, "completed": 2, "declined": 3, "over": 3}
+    far = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
+    rows.sort(key=lambda x: (band[x["stage"]],
+                             -_wl_parse_ts(x["form_at"]).timestamp() if x["stage"] == "completed" else
+                             (x["_sort"].timestamp() if x["stage"] in ("sleeping", "waiting") else -(x["_sort"] or far).timestamp())))
+    for x in rows:
+        x.pop("_sort", None)
+    counts = {k: sum(1 for x in rows if x["stage"] == k) for k in band}
+    counts["requested"] = sum(1 for x in rows if x["ticket"] in ("requested", "granted", "declined"))
+    counts["granted"] = sum(1 for x in rows if x["ticket"] == "granted")
+    note = " ".join(n for n in (rep_note, app_note) if n)
+    return rows, note, counts
 
 
 try:
-    _hero_luma(_hero_rows)
-except Exception as _hl_e:
-    print("Community heroes: Luma check failed (%s)" % _hl_e)
-print("Community heroes: %s" % (_hero_note or "%d reports, %d approved" % (len(_hero_rows), sum(1 for x in _hero_rows if x["approved"]))))
+    _hero_rows, _hero_note, _hero_counts = _hero_build()
+except Exception as _hb_e:                                   # the status page must build no matter what
+    _hero_rows, _hero_note, _hero_counts = [], "Community heroes could not be built (%s)." % _hb_e.__class__.__name__, {}
+print("Community heroes: %d requested · %d granted · %d all completed · %d sleeping%s" % (
+    _hero_counts.get("requested", 0), _hero_counts.get("granted", 0), _hero_counts.get("completed", 0),
+    _hero_counts.get("sleeping", 0), (" | " + _hero_note) if _hero_note else ""))
 # ── END COMMUNITY HEROES ─────────────────────────────────────────────────────
 
 os.makedirs(BASE_FOLDER + "/status", exist_ok=True)
@@ -1594,12 +1711,22 @@ with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_announce_days=_ANNOUNCE_DAYS, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_flap_days=_ADDED_FLAP_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
-        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed, status_heroes=_hero_rows, status_heroes_note=_hero_note,
+        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed, status_heroes=_hero_rows, status_heroes_note=_hero_note, status_hero_counts=_hero_counts, hero_sleep_hours=_HERO_SLEEP_HOURS,
         status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],
         status_generated=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         **context))
+# privacy guard (Marek 2026-10-03): hero rows may only carry name + LinkedIn + event/times/statuses
+try:
+    with open(BASE_FOLDER + "/status/index.html", encoding="utf-8") as _pg:
+        _pg_html = _pg.read()
+    _pg_sec = _pg_html[_pg_html.find('<section class="heroes">'):]
+    _pg_sec = _pg_sec[:_pg_sec.find("</section>")]
+    if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+|email_sha|[0-9a-f]{64}", _pg_sec):
+        print("WARNING: PRIVACY - the Heroes tab contains an email address or hash; fix home/_build/generate.py before shipping")
+except OSError:
+    pass
 print("Writing out status/index.html (hidden, not in sitemap)")
 
 # MEETUPS

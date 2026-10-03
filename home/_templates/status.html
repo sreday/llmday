@@ -213,13 +213,31 @@
     .hr-marks span { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700; letter-spacing: .02em; background: #eef0f3; color: #aab0b8; }
     .hr-marks span.on { background: var(--good); color: #fff; }
     .hr-marks a { color: inherit; text-decoration: none; }
-    .hr-approved { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; background: var(--good); color: #fff; }
-    .hr-pending { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; background: #eef0f3; color: #888; }
-    .hr-declined { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; background: #fde2e1; color: #a4231c; }
-    .hr-waitlist { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; background: #fff2cc; color: #8a6100; }
-    .hr-missing { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700; border: 1px dashed #bbb; color: #999; }
-    .wl .hr-proof { white-space: nowrap; color: #666; font-size: .85rem; }
-    .wl .hr-proof a { color: var(--accent); }
+    /* Heroes (Marek 2026-10-03): ticket track + form track + Sleeping Hero alert */
+    .hr-ok, .hr-req, .hr-sleep, .hr-mute { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .74rem; font-weight: 700; white-space: nowrap; }
+    .hr-ok { background: var(--good); color: #fff; }
+    .hr-req { background: #e8f1ff; color: #1d4f91; }
+    .hr-sleep { background: var(--critical); color: #fff; }
+    .hr-mute { background: #eef0f3; color: #888; }
+    .hr-red { color: var(--critical); }
+    .wl .hr-row small { display: block; margin-top: 3px; color: #777; font-size: .78rem; }
+    .wl .hr-row small.hr-big { color: #111; font-weight: 700; font-size: .86rem; }
+    .wl tr.hr-sleeping { background: #fff4f3; }
+    .wl tr.hr-declined, .wl tr.hr-over { opacity: .6; }
+    .hr-link { display: inline-block; margin-top: 3px; font-size: .78rem; color: var(--accent); }
+    .hr-alert { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 12px; padding: 8px 16px; border-radius: 999px; background: var(--critical); color: #fff; font-weight: 700; }
+    .hr-alert b { font-size: 1.1rem; }
+    .hr-badge { display: inline-block; min-width: 20px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: var(--critical); color: #fff; font-size: .75rem; line-height: 20px; }
+    .hr-strip { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .hr-strip button { border: 1px solid #e3e5e9; background: #fff; border-radius: 12px; padding: 6px 12px; text-align: left; cursor: pointer; font-size: .8rem; color: #555; }
+    .hr-strip button b { display: block; color: #111; font-size: .84rem; }
+    .hr-strip button.has-sleep { border-color: var(--critical); }
+    .hr-strip button.on { background: #111; color: #ddd; } .hr-strip button.on b { color: #fff; }
+    .hr-chips { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+    .hr-chips button { border: 1px solid #ddd; background: #fff; border-radius: 999px; padding: 4px 12px; font-size: .8rem; cursor: pointer; }
+    .hr-chips button.on { background: #111; color: #fff; border-color: #111; }
+    .wl .hr-row .wl-who a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }   /* name = LinkedIn link */
+    .hr-hist-toggle { display: block; margin-top: 10px; font-size: .82rem; color: #777; cursor: pointer; }
     /* A short tab (an empty waitlist, two sponsors) must not shrink the page and yank the scroll position back up (Marek
        2026-09-22): every panel keeps at least the height of a well-filled Speakers list */
     html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active, html.tabbed .heroes.is-active { min-height: 640px; }
@@ -529,32 +547,40 @@
   </section>
   <section class="heroes">
     <h2>Heroes</h2>
-    <div class="sub">Community Heroes who sent their report, newest first{% if status_heroes %}: <strong>{{ status_heroes | length }}</strong>{% set appr = status_heroes | selectattr('approved') | list | length %}{% if appr %}, {{ appr }} approved{% endif %}{% endif %}. Green marks are the things they did; the ticket status comes from the event's Luma guest list (the sheet's "approved" column is the fallback when Luma cannot match someone).</div>
+    <div class="sub">Community Heroes: the <strong>ticket</strong> comes from Luma (a "Community Hero" ticket pending = <em>Ticket requested</em>, approved = <em>Ticket granted</em>), the <strong>form</strong> from the /communityhero/ page (Luma's "registration pending" email sends it, so <em>Hero received the form</em> the moment the ticket is requested; a report = <em>All completed!</em>). No report {{ hero_sleep_hours }} h after receiving the form = <strong class="hr-red">Sleeping Hero</strong>. Every 2025+ event, past ones as history. Times in your time zone.</div>
     {% if status_heroes_note %}<div class="added-note">{{ status_heroes_note }}</div>{% endif %}
     {% if status_heroes %}
+    <div class="hr-alert" id="hr-alert"{% if not status_hero_counts.sleeping %} hidden{% endif %}><b id="hr-alert-n">{{ status_hero_counts.sleeping }}</b> <span id="hr-alert-t">Sleeping Hero{{ '' if status_hero_counts.sleeping == 1 else 'es' }} - needs attention</span></div>
+    <div class="hr-strip" id="hr-strip"></div>
     <div class="wl-tools">
-      <input type="search" class="wl-search" id="hr-search" placeholder="Search name, company, city, conference, approved / pending" autocomplete="off">
+      <div class="hr-chips" id="hr-chips">
+        <button type="button" data-f="all" class="on">All</button>
+        <button type="button" data-f="sleeping">Sleeping</button>
+        <button type="button" data-f="waiting">Waiting (in {{ hero_sleep_hours }} h)</button>
+        <button type="button" data-f="completed">All completed</button>
+      </div>
+      <input type="search" class="wl-search" id="hr-search" placeholder="Search name, event, status" autocomplete="off">
       <span class="wl-count" id="hr-count"></span>
     </div>
     <div class="wl" id="hr">
       <table>
-        <thead><tr><th>When</th><th>Hero</th><th>Event</th><th>Did</th><th>Proof</th><th>Ticket</th></tr></thead>
+        <thead><tr><th>Hero</th><th>Event</th><th>Ticket</th><th>Form</th><th>Did</th></tr></thead>
         <tbody>
         {% for h in status_heroes %}
-        <tr class="wl-row" data-s="{{ h.search }}">
-          <td class="wl-when">{{ h.when }}</td>
-          <td class="wl-who">{% if h.linkedin %}<a href="{{ h.linkedin }}" target="_blank" rel="noopener">{{ h.name }}</a>{% else %}{{ h.name }}{% endif %}{% if h.company %}<small>{{ h.company }}</small>{% endif %}</td>
-          <td class="wl-for"><a href="{{ h.event_url }}">{{ h.event }}</a><small>{{ h.city }}{% if h.event_date %} · {{ h.event_date }}{% endif %}</small></td>
-          <td><div class="hr-marks">{% for m in h.marks %}<span class="{{ 'on' if m.done }}" title="{{ m.title }}">{% if m.url %}<a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.label }}</a>{% else %}{{ m.label }}{% endif %}</span>{% endfor %}</div></td>
-          <td class="hr-proof">{% for l in h.links %}<a href="{{ l }}" target="_blank" rel="noopener" title="{{ l }}">link {{ loop.index }}</a>{% if not loop.last %} · {% endif %}{% endfor %}{% if h.screenshots %}{% if h.links %} · {% endif %}{{ h.screenshots }} shot{{ '' if h.screenshots == 1 else 's' }}{% endif %}{% if not h.links and not h.screenshots %}<span style="color:#bbb">none</span>{% endif %}</td>
-          <td>{% if h.luma_status %}<span class="hr-{{ {'approved': 'approved', 'declined': 'declined', 'waitlist': 'waitlist', 'missing': 'missing'}.get(h.luma_status, 'pending') }}" title="{{ 'matched by ' ~ h.luma_how if h.luma_how in ('email', 'name') else h.luma_how }}">{{ h.luma_label }}</span>{% elif h.approved %}<span class="hr-approved" title="ticked in the Heroes sheet">approved</span>{% else %}<span class="hr-pending">pending</span>{% endif %}</td>
+        <tr class="wl-row hr-row hr-{{ h.stage }}" data-s="{{ h.search }}" data-ev="{{ h.slug }}" data-evname="{{ h.event }}" data-req="{{ h.requested_at }}" data-form="{{ h.form_at }}" data-start="{{ h.event_start }}" data-ticket="{{ h.ticket }}" data-stage="{{ h.stage }}">
+          <td class="wl-who">{% if h.linkedin %}<a href="{{ h.linkedin }}" target="_blank" rel="noopener noreferrer">{{ h.name }}</a>{% else %}{{ h.name }}{% endif %}</td>
+          <td class="wl-for"><a href="{{ h.event_url }}">{{ h.event }}</a></td>
+          <td class="hr-ticket">{% if h.ticket == 'granted' %}<span class="hr-ok">&#10003; Ticket granted</span>{% elif h.ticket == 'requested' %}<span class="hr-req">&#10003; Ticket requested</span>{% elif h.ticket == 'declined' %}<span class="hr-mute">Ticket declined</span>{% else %}<span class="hr-mute" title="a report from the form, but no Community Hero ticket on Luma">No hero ticket</span>{% endif %}{% if h.requested_at %}<small class="hr-t" data-t="{{ h.requested_at }}">{{ h.requested_label }}</small>{% endif %}</td>
+          <td class="hr-form">{% if h.stage == 'completed' %}<span class="hr-ok">&#10003; All completed!</span><small class="hr-t hr-big" data-t="{{ h.form_at }}" data-rel="1">{{ h.form_label }}</small>{% elif h.stage == 'sleeping' %}<span class="hr-sleep">Sleeping Hero - needs attention</span><small class="hr-left"></small>{% elif h.stage == 'waiting' %}<span class="hr-req">&#10003; Hero received the form</span><small class="hr-left"></small>{% elif h.stage == 'over' %}<span class="hr-mute">No form (event over)</span>{% else %}<span class="hr-mute">-</span>{% endif %}{% if h.stage in ('sleeping', 'waiting') %}<a class="hr-link" href="{{ h.form_url }}" target="_blank" rel="noopener">form page</a>{% endif %}</td>
+          <td>{% if h.marks %}<div class="hr-marks">{% for m in h.marks %}<span class="{{ 'on' if m.done }}">{{ m.label }}</span>{% endfor %}</div>{% endif %}</td>
         </tr>
         {% endfor %}
         </tbody>
       </table>
       <div class="wl-empty" id="hr-empty" hidden>Nobody matches that.</div>
+      <label class="hr-hist-toggle" id="hr-hist-wrap" hidden><input type="checkbox" id="hr-hist"> Show history (<span id="hr-hist-n">0</span>: ticket declined, or no form and the event is over)</label>
     </div>
-    {% elif not status_heroes_note %}<div class="allclear"><span class="count ok">No reports yet &#128077;</span></div>{% endif %}
+    {% elif not status_heroes_note %}<div class="allclear"><span class="count ok">No Community Hero tickets on Luma yet</span></div>{% endif %}
   </section>
   <section class="spons">
     <h2>Sponsors</h2>
@@ -825,7 +851,88 @@ function tableSearch(boxId, wrapId, countId, emptyId, toggleId) {   // Waitlist 
   apply();
 }
 tableSearch('wl-search', 'wl', 'wl-count', 'wl-empty', 'wl-show-placed');
-tableSearch('hr-search', 'hr', 'hr-count', 'hr-empty', null);
+(function () {                                     // Heroes (Marek 2026-10-03): stages from the viewer's clock, Sleeping Heroes on top
+  var wrap = document.getElementById('hr'); if (!wrap) return;
+  var tbody = wrap.querySelector('tbody'), rows = [].slice.call(tbody.querySelectorAll('tr.hr-row')),
+      H = 3600e3, SLEEP = {{ hero_sleep_hours }} * H, now = Date.now(), filter = 'all', ev = '',
+      box = document.getElementById('hr-search'), hist = document.getElementById('hr-hist');
+  function t(s) { var v = s ? Date.parse(s) : NaN; return isNaN(v) ? null : v; }
+  function span(ms) { ms = Math.abs(ms); var m = Math.round(ms / 60e3); if (m < 60) return Math.max(m, 1) + ' min';
+    var h = Math.round(ms / H); return h < 48 ? h + ' h' : Math.round(h / 24) + ' d'; }
+  function local(ms) { return new Date(ms).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); }
+  rows.forEach(function (tr) {
+    var req = t(tr.getAttribute('data-req')), form = t(tr.getAttribute('data-form')), start = t(tr.getAttribute('data-start')),
+        ticket = tr.getAttribute('data-ticket'), st;
+    if (form !== null) st = 'completed';
+    else if (ticket === 'declined') st = 'declined';
+    else if (start !== null && start < now) st = 'over';
+    else if (req !== null && now - req >= SLEEP) st = 'sleeping';
+    else st = 'waiting';
+    var cell = tr.querySelector('td.hr-form');
+    if (st !== tr.getAttribute('data-stage')) {          // the build was hours ago: the clock moved the hero on
+      cell.innerHTML = st === 'sleeping' ? '<span class="hr-sleep">Sleeping Hero - needs attention</span><small class="hr-left"></small>'
+        : st === 'over' ? '<span class="hr-mute">No form (event over)</span>' : cell.innerHTML;
+      if (st === 'sleeping') { var a = document.createElement('a'); a.className = 'hr-link'; a.target = '_blank'; a.rel = 'noopener';
+        a.href = tr.querySelector('td.wl-for a').getAttribute('href') + 'communityhero/'; a.textContent = 'form page'; cell.appendChild(a); }
+      tr.className = tr.className.replace(/\bhr-(completed|sleeping|waiting|declined|over)\b/, 'hr-' + st);
+      tr.setAttribute('data-stage', st);
+      tr.setAttribute('data-s', (tr.getAttribute('data-s') || '').replace(/\b(completed|sleeping|waiting|declined|over)\b/, st));
+    }
+    var left = tr.querySelector('.hr-left');
+    if (left && req !== null) left.textContent = st === 'sleeping' ? 'sleeping for ' + span(now - req - SLEEP) : span(req + SLEEP - now) + ' left';
+    [].forEach.call(tr.querySelectorAll('.hr-t[data-t]'), function (el) {
+      var v = t(el.getAttribute('data-t')); if (v === null) return;
+      el.textContent = local(v) + (el.getAttribute('data-rel') ? ' (' + span(now - v) + ' ago)' : '');
+      el.title = el.getAttribute('data-t');
+    });
+    tr._st = st; tr._req = req; tr._form = form;
+  });
+  var band = { sleeping: 0, waiting: 1, completed: 2, declined: 3, over: 3 };
+  rows.sort(function (a, b) {
+    var d = band[a._st] - band[b._st]; if (d) return d;
+    if (a._st === 'completed') return (b._form || 0) - (a._form || 0);             // newest report first
+    if (a._st === 'sleeping' || a._st === 'waiting') return (a._req || 0) - (b._req || 0);   // longest asleep / soonest deadline
+    return (b._req || 0) - (a._req || 0);
+  }).forEach(function (tr) { tbody.appendChild(tr); });
+  var sleeping = rows.filter(function (r) { return r._st === 'sleeping'; }).length,
+      histN = rows.filter(function (r) { return band[r._st] === 3; }).length;
+  var alertEl = document.getElementById('hr-alert');
+  if (alertEl) { alertEl.hidden = !sleeping; document.getElementById('hr-alert-n').textContent = sleeping;
+    document.getElementById('hr-alert-t').textContent = 'Sleeping Hero' + (sleeping === 1 ? '' : 'es') + ' - needs attention'; }
+  var tab = document.querySelector('[data-tab="heroes"]');
+  if (tab && sleeping) tab.innerHTML = 'Heroes <span class="hr-badge">' + sleeping + '</span>';
+  if (histN) { document.getElementById('hr-hist-wrap').hidden = false; document.getElementById('hr-hist-n').textContent = histN; }
+  // per-event strip: N requested · granted · all completed · sleeping; a click narrows the list to that event
+  var per = {}, order = [];
+  rows.forEach(function (r) { var k = r.getAttribute('data-ev'); if (!per[k]) { per[k] = { name: r.getAttribute('data-evname'), req: 0, gr: 0, done: 0, sl: 0 }; order.push(k); }
+    var p = per[k], tk = r.getAttribute('data-ticket'); if (tk !== 'none') p.req++; if (tk === 'granted') p.gr++; if (r._st === 'completed') p.done++; if (r._st === 'sleeping') p.sl++; });
+  var strip = document.getElementById('hr-strip');
+  order.sort(function (a, b) { return per[b].sl - per[a].sl || per[b].req - per[a].req; }).forEach(function (k) {
+    var p = per[k], b = document.createElement('button'); b.type = 'button'; b.setAttribute('data-ev', k);
+    b.innerHTML = '<b></b><span></span>'; b.firstChild.textContent = p.name;
+    b.lastChild.textContent = p.req + ' requested · ' + p.gr + ' granted · ' + p.done + ' all completed' + (p.sl ? ' · ' + p.sl + ' sleeping' : '');
+    if (p.sl) b.className = 'has-sleep';
+    b.addEventListener('click', function () { ev = ev === k ? '' : k; [].forEach.call(strip.children, function (c) { c.classList.toggle('on', c.getAttribute('data-ev') === ev); }); apply(); });
+    strip.appendChild(b);
+  });
+  [].forEach.call(document.querySelectorAll('#hr-chips button'), function (b) {
+    b.addEventListener('click', function () { filter = b.getAttribute('data-f');
+      [].forEach.call(document.querySelectorAll('#hr-chips button'), function (c) { c.classList.toggle('on', c === b); }); apply(); });
+  });
+  function apply() {
+    var words = box.value.toLowerCase().split(/\s+/).filter(Boolean), shown = 0, showHist = hist && hist.checked;
+    rows.forEach(function (r) {
+      var s = r.getAttribute('data-s') || '', ok = (filter === 'all' || r._st === filter) && (!ev || r.getAttribute('data-ev') === ev)
+        && (band[r._st] < 3 || showHist || filter !== 'all' || words.length);
+      for (var j = 0; ok && j < words.length; j++) if (s.indexOf(words[j]) === -1) ok = false;
+      r.classList.toggle('hidden', !ok); if (ok) shown++;
+    });
+    document.getElementById('hr-count').textContent = (words.length || ev || filter !== 'all') ? shown + ' match' + (shown === 1 ? '' : 'es') : '';
+    document.getElementById('hr-empty').hidden = shown > 0;
+  }
+  box.addEventListener('input', apply); if (hist) hist.addEventListener('change', apply);
+  apply();
+})();
 </script>
 </body>
 </html>
