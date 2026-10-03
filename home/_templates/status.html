@@ -237,6 +237,13 @@
     .hr-chips button { border: 1px solid #ddd; background: #fff; border-radius: 999px; padding: 4px 12px; font-size: .8rem; cursor: pointer; }
     .hr-chips button.on { background: #111; color: #fff; border-color: #111; }
     .wl .hr-row .wl-who a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }   /* name = LinkedIn link */
+    .hr-drop { margin-top: 14px; border: 1px solid #e3e5e9; border-radius: 14px; background: #fff; padding: 10px 16px; }
+    .hr-drop summary { cursor: pointer; } .hr-drop summary small { color: #888; margin-left: 6px; }
+    .hr-drop-n { display: inline-block; min-width: 22px; padding: 0 7px; border-radius: 999px; background: #eef0f3; color: #555; font-size: .78rem; text-align: center; }
+    .hr-plain { margin: 10px 0 2px; padding: 0; list-style: none; columns: 2 320px; column-gap: 28px; }
+    .hr-plain li { padding: 3px 0; break-inside: avoid; } .hr-plain li a:first-child { color: var(--accent); }
+    .hr-plain li span { color: #888; font-size: .85rem; } .hr-plain .hr-ev { color: #888; }
+    .hr-alert[hidden], .hr-hist-toggle[hidden] { display: none; }   /* their display rules would otherwise beat [hidden] */
     .hr-hist-toggle { display: block; margin-top: 10px; font-size: .82rem; color: #777; cursor: pointer; }
     /* A short tab (an empty waitlist, two sponsors) must not shrink the page and yank the scroll position back up (Marek
        2026-09-22): every panel keeps at least the height of a well-filled Speakers list */
@@ -547,7 +554,7 @@
   </section>
   <section class="heroes">
     <h2>Heroes</h2>
-    <div class="sub">Community Heroes: the <strong>ticket</strong> comes from Luma (a "Community Hero" ticket pending = <em>Ticket requested</em>, approved = <em>Ticket granted</em>), the <strong>form</strong> from the /communityhero/ page (Luma's "registration pending" email sends it, so <em>Hero received the form</em> the moment the ticket is requested; a report = <em>All completed!</em>). No report {{ hero_sleep_hours }} h after receiving the form = <strong class="hr-red">Sleeping Hero</strong>. Hero tickets requested since 1 Sep 2026 (when the form started), on every event. Times in your time zone.</div>
+    <div class="sub">Community Heroes: the <strong>ticket</strong> comes from Luma (a "Community Hero" ticket pending = <em>Ticket requested</em>, approved = <em>Ticket granted</em>), the <strong>form</strong> from the /communityhero/ page (Luma's "registration pending" email sends it, so <em>Hero received the form</em> the moment the ticket is requested; a report = <em>All completed!</em>). No report {{ hero_sleep_hours }} h after receiving the form = <strong class="hr-red">Sleeping Hero</strong>. Hero tickets requested since 1 Sep 2026 (when the form started); earlier heroes and rejected tickets are in the lists below. A hero who becomes a speaker leaves these lists; someone with several hero tickets is listed once, by the freshest. Times in your time zone.</div>
     {% if status_heroes_note %}<div class="added-note">{{ status_heroes_note }}</div>{% endif %}
     {% if status_heroes %}
     <div class="hr-alert" id="hr-alert"{% if not status_hero_counts.sleeping %} hidden{% endif %}><b id="hr-alert-n">{{ status_hero_counts.sleeping }}</b> <span id="hr-alert-t">Sleeping Hero{{ '' if status_hero_counts.sleeping == 1 else 'es' }} - needs attention</span></div>
@@ -578,9 +585,19 @@
         </tbody>
       </table>
       <div class="wl-empty" id="hr-empty" hidden>Nobody matches that.</div>
-      <label class="hr-hist-toggle" id="hr-hist-wrap" hidden><input type="checkbox" id="hr-hist"> Show history (<span id="hr-hist-n">0</span>: ticket declined, or no form and the event is over)</label>
+      <label class="hr-hist-toggle" id="hr-hist-wrap" hidden><input type="checkbox" id="hr-hist"> Show history (<span id="hr-hist-n">0</span>: no form and the event is over)</label>
     </div>
     {% elif not status_heroes_note %}<div class="allclear"><span class="count ok">No Community Hero tickets on Luma yet</span></div>{% endif %}
+    {% for lst, title, hint in ((status_hero_past, 'Past Community Heroes', 'hero tickets from before 1 Sep 2026, when the form started - listed without statuses'), (status_hero_fallen, 'Fallen heroes', 'Community Hero tickets that were declined on Luma')) %}
+    {% if lst %}
+    <details class="hr-drop">
+      <summary><b>{{ title }}</b> <span class="hr-drop-n">{{ lst | length }}</span> <small>{{ hint }}</small></summary>
+      <ul class="hr-plain">
+        {% for h in lst %}<li>{% if h.linkedin %}<a href="{{ h.linkedin }}" target="_blank" rel="noopener noreferrer">{{ h.name }}</a>{% else %}{{ h.name }}{% endif %} <span>· <a class="hr-ev" href="{{ h.event_url }}">{{ h.event }}</a>{% if h.requested_label %} · {{ h.requested_label }}{% endif %}</span></li>{% endfor %}
+      </ul>
+    </details>
+    {% endif %}
+    {% endfor %}
   </section>
   <section class="spons">
     <h2>Sponsors</h2>
