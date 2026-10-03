@@ -15,7 +15,7 @@
 	<link rel="manifest" href="./assets/site.webmanifest?v=7dcecc9c23">
 
 	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800|Roboto:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/fonts.css?v=ac4f21e544">
 
 	<!-- FontAwesome JS-->
 	<link rel="stylesheet" href="assets/css/icons.css?v=df743de650">
@@ -28,9 +28,6 @@
     <meta property="og:title" content="LLMday - PagerDuty, Lisbon, Portugal - June 23, 2026"/>
     <meta property="og:description" content="Conference on Large Language Models, Agents & AI Systems. Probably the most awesome LLM conference! PagerDuty, Lisbon, Portugal!"/>
 
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
 
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site" content="@llmday_com">
@@ -40,11 +37,12 @@
     <meta name="twitter:image" content="https://llmday.com/assets/images/events/llmday-2026-lisbon-q2.png">
 
 
+<script>/* analytics load after the page is shown (venue wifi) */function _later(f){addEventListener('load',function(){(window.requestIdleCallback||setTimeout)(f)})}</script>
 <!-- Twitter conversion tracking base code -->
 <script>
 	!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
 	},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-	a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+	a=t.getElementsByTagName(n)[0],_later(function(){a.parentNode.insertBefore(u,a)}))}(window,document,'script');
 	twq('config','ofo1h');
 	</script>
 	<!-- End Twitter conversion tracking base code -->
@@ -52,7 +50,7 @@
 </head>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G"></script>
+<script>_later(function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G';document.head.appendChild(s)})</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -62,7 +60,6 @@
 </script>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17496979257"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -927,7 +924,7 @@ it day to day</a></li>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Introduction, meet & greet</a>
+                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><span class="kn-pill">Keynote</span>Introduction, meet & greet</a>
               </h3>
               <div class="location mb-3">PagerDuty</div>
               <div class="desc schedule-abstract"><a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
@@ -946,7 +943,7 @@ it day to day</a></li>
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Reliability Engineering for Inference Serving</a>
+                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><span class="kn-pill">Keynote</span>Reliability Engineering for Inference Serving</a>
               </h3>
               <div class="location mb-3">Abide AI<a class="event-watch-btn event-watch-btn-sm" href="https://youtu.be/wdHUVhrDdZo" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a></div>
               <div class="desc schedule-abstract">Training gave us powerful models, but inference is where the real production battle begins. Agentic workflows are burning money by the second, GPU economics are tightening each quarter, and a single unpredictable latency tail or silent kernel failure can turn a working system into an outage. Reliability thus is no longer just about uptime.This keynote is a call to SREs, GPU engineers, and LLMOps practitioners. I’ll share some of the hard lessons, emerging patterns, and new rules shaping the next decade of reliable AI systems<a class="schedule-abstract-read-more" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">... Read more</a></div>
@@ -3141,7 +3138,7 @@ That's where frontier LLMs change the game. Training a retriever for your domain
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Introduction, meet & greet</div>
+              <div class="talk-title-bar"><span class="kn-pill">Keynote</span>Introduction, meet & greet</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p></p>
@@ -3184,7 +3181,7 @@ That's where frontier LLMs change the game. Training a retriever for your domain
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Reliability Engineering for Inference Serving</div>
+              <div class="talk-title-bar"><span class="kn-pill">Keynote</span>Reliability Engineering for Inference Serving</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Training gave us powerful models, but inference is where the real production battle begins. Agentic workflows are burning money by the second, GPU economics are tightening each quarter, and a single unpredictable latency tail or silent kernel failure can turn a working system into an outage. Reliability thus is no longer just about uptime.This keynote is a call to SREs, GPU engineers, and LLMOps practitioners. I’ll share some of the hard lessons, emerging patterns, and new rules shaping the next decade of reliable AI systems</p></p>
@@ -3230,11 +3227,10 @@ That's where frontier LLMs change the game. Training a retriever for your domain
 
 
 <!-- Javascript -->
-<script src="assets/plugins/popper.min.js?v=884325b71a"></script>
-<script src="assets/plugins/bootstrap/js/bootstrap.bundle.js?v=39827da903"></script>
-<script src="assets/plugins/smoothscroll.min.js?v=5d08587d4d"></script>
-<script src="assets/plugins/gumshoe/gumshoe.polyfills.min.js?v=c16ae2d7c9"></script>
-<script src="assets/js/main.js?v=72cf53ce03"></script>
+<script defer src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js?v=d722fa9982"></script>
+<script defer src="assets/plugins/smoothscroll.min.js?v=5d08587d4d"></script>
+<script defer src="assets/plugins/gumshoe/gumshoe.polyfills.min.js?v=c16ae2d7c9"></script>
+<script defer src="assets/js/main.js?v=72cf53ce03"></script>
 
 <script>/* rewrite_assets.py: loops load and play only while on screen */(function(){var vs=document.querySelectorAll('video.lazy-loop');if(!vs.length)return;var c=navigator.connection;if(c&&(c.saveData||/2g|3g/.test(c.effectiveType)))return;function go(v){if(!v.src)v.src=v.dataset.src;var p=v.play();p&&p.catch&&p.catch(function(){})}if(!('IntersectionObserver'in window)){vs.forEach(go);return}var io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?go(e.target):e.target.pause()})},{rootMargin:'300px'});vs.forEach(function(v){io.observe(v)})})()</script>
 </body>

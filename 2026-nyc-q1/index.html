@@ -15,7 +15,7 @@
 	<link rel="manifest" href="./assets/site.webmanifest?v=7dcecc9c23">
 
 	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800|Roboto:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/fonts.css?v=ac4f21e544">
 
 	<!-- FontAwesome JS-->
 	<link rel="stylesheet" href="assets/css/icons.css?v=df743de650">
@@ -28,9 +28,6 @@
     <meta property="og:title" content="LLMday - VIAM, New York, US - March 6, 2026"/>
     <meta property="og:description" content="Conference on Large Language Models, Agents & AI Systems. Probably the most awesome LLM conference in VIAM, New York, US!"/>
 
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
 
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site" content="@llmday_com">
@@ -40,11 +37,12 @@
     <meta name="twitter:image" content="https://llmday.com/assets/images/events/llmday-2026-nyc-q1.png">
 
 
+<script>/* analytics load after the page is shown (venue wifi) */function _later(f){addEventListener('load',function(){(window.requestIdleCallback||setTimeout)(f)})}</script>
 <!-- Twitter conversion tracking base code -->
 <script>
 	!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
 	},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-	a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+	a=t.getElementsByTagName(n)[0],_later(function(){a.parentNode.insertBefore(u,a)}))}(window,document,'script');
 	twq('config','ofo1h');
 	</script>
 	<!-- End Twitter conversion tracking base code -->
@@ -52,7 +50,7 @@
 </head>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G"></script>
+<script>_later(function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G';document.head.appendChild(s)})</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -62,7 +60,6 @@
 </script>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17496979257"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -919,7 +916,7 @@
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">Welcome message</a>
+                <a class="theme-link" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0"><span class="kn-pill">Keynote</span>Welcome message</a>
               </h3>
               <div class="location mb-3">LLMday</div>
               <div class="desc schedule-abstract">Hello everyone, let us walk you through the day!<a class="schedule-abstract-read-more" href="#modal-speaker-0" data-bs-toggle="modal" data-bs-target="#modal-speaker-0">... Read more</a></div>
@@ -938,7 +935,7 @@
             <div class="content">
               
               <h3 class="title mb-3">
-                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1">Building Evaluation Systems for AI Coding Agents at Scale</a>
+                <a class="theme-link" href="#modal-speaker-1" data-bs-toggle="modal" data-bs-target="#modal-speaker-1"><span class="kn-pill">Keynote</span>Building Evaluation Systems for AI Coding Agents at Scale</a>
               </h3>
               <div class="location mb-3">Anthropic</div>
               <div class="desc schedule-abstract">As AI coding assistants move from novelty to daily workflow, how do we know they're actually helping? This talk explores the technical and philosophical challenges of evaluating AI coding agents when they're deployed to millions of users.
@@ -3065,7 +3062,7 @@ document.getElementById('lead-form').addEventListener('submit', function(ev) {
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Welcome message</div>
+              <div class="talk-title-bar"><span class="kn-pill">Keynote</span>Welcome message</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>Hello everyone, let us walk you through the day!</p></p>
@@ -3103,7 +3100,7 @@ document.getElementById('lead-form').addEventListener('submit', function(ev) {
                       </div><!--//col-->
                   </div><!--//row-->
               </div>
-              <div class="talk-title-bar">Building Evaluation Systems for AI Coding Agents at Scale</div>
+              <div class="talk-title-bar"><span class="kn-pill">Keynote</span>Building Evaluation Systems for AI Coding Agents at Scale</div>
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p><p>As AI coding assistants move from novelty to daily workflow, how do we know they're actually helping? This talk explores the technical and philosophical challenges of evaluating AI coding agents when they're deployed to millions of users.
@@ -3154,11 +3151,10 @@ Closing the loop: Connecting evaluation back to training through RL and human fe
 
 
 <!-- Javascript -->
-<script src="assets/plugins/popper.min.js?v=884325b71a"></script>
-<script src="assets/plugins/bootstrap/js/bootstrap.bundle.js?v=39827da903"></script>
-<script src="assets/plugins/smoothscroll.min.js?v=5d08587d4d"></script>
-<script src="assets/plugins/gumshoe/gumshoe.polyfills.min.js?v=c16ae2d7c9"></script>
-<script src="assets/js/main.js?v=72cf53ce03"></script>
+<script defer src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js?v=d722fa9982"></script>
+<script defer src="assets/plugins/smoothscroll.min.js?v=5d08587d4d"></script>
+<script defer src="assets/plugins/gumshoe/gumshoe.polyfills.min.js?v=c16ae2d7c9"></script>
+<script defer src="assets/js/main.js?v=72cf53ce03"></script>
 
 <script>/* rewrite_assets.py: loops load and play only while on screen */(function(){var vs=document.querySelectorAll('video.lazy-loop');if(!vs.length)return;var c=navigator.connection;if(c&&(c.saveData||/2g|3g/.test(c.effectiveType)))return;function go(v){if(!v.src)v.src=v.dataset.src;var p=v.play();p&&p.catch&&p.catch(function(){})}if(!('IntersectionObserver'in window)){vs.forEach(go);return}var io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?go(e.target):e.target.pause()})},{rootMargin:'300px'});vs.forEach(function(v){io.observe(v)})})()</script>
 </body>

@@ -15,7 +15,7 @@
 	<link rel="manifest" href="./assets/site.webmanifest?v=7dcecc9c23">
 
 	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800|Roboto:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/fonts.css?v=ac4f21e544">
 
 	<!-- FontAwesome JS-->
 	<link rel="stylesheet" href="assets/css/icons.css?v=df743de650">
@@ -28,9 +28,6 @@
     <meta property="og:title" content="LLMday - CIC Warsaw, Poland - February 12, 2026"/>
     <meta property="og:description" content="Conference on Large Language Models, Agents & AI Systems. Probably the most awesome LLM conference in CIC Warsaw, Poland!"/>
 
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
 
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site" content="@llmday_com">
@@ -40,11 +37,12 @@
     <meta name="twitter:image" content="https://llmday.com/assets/images/events/llmday-2026-warsaw-q1.png">
 
 
+<script>/* analytics load after the page is shown (venue wifi) */function _later(f){addEventListener('load',function(){(window.requestIdleCallback||setTimeout)(f)})}</script>
 <!-- Twitter conversion tracking base code -->
 <script>
 	!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
 	},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-	a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+	a=t.getElementsByTagName(n)[0],_later(function(){a.parentNode.insertBefore(u,a)}))}(window,document,'script');
 	twq('config','ofo1h');
 	</script>
 	<!-- End Twitter conversion tracking base code -->
@@ -52,7 +50,7 @@
 </head>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G"></script>
+<script>_later(function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G';document.head.appendChild(s)})</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -62,7 +60,6 @@
 </script>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17496979257"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -249,6 +246,8 @@
   .talk-content .desc {
     padding-bottom: 0.25rem;
   }
+  /* Keynote / Workshop pill before the title, same as the schedule (index.html) */
+  .kn-pill { display: inline-block; background: var(--brand); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .45em; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-right: 10px; vertical-align: middle; line-height: 1.4; }
 </style>
 
 <section id="speakers-section" class="speakers-section section">
@@ -296,7 +295,13 @@
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Video</h5>
                 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-                  <iframe src="https://www.youtube.com/embed/86adfirHjSk" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                  
+                  <button type="button" aria-label="Play video"
+                    data-src="https://www.youtube-nocookie.com/embed/86adfirHjSk?autoplay=1"
+                    onclick="var f=document.createElement('iframe');f.src=this.dataset.src;f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';f.allowFullscreen=true;f.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;border:0;';this.replaceWith(f);"
+                    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;padding:0;cursor:pointer;background:#000 url('https://i.ytimg.com/vi/86adfirHjSk/hqdefault.jpg') center/cover;">
+                    <svg width="68" height="48" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.2.3 34 .3 34 .3s-21.2 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.3 13 .3 24 .3 24s0 11 1.2 16.3a8.5 8.5 0 0 0 6 6C12.8 47.7 34 47.7 34 47.7s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.7 35 67.7 24 67.7 24s0-11-1.2-16.3z" fill="#f00"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+                  </button>
                 </div>
               </div>
               
@@ -678,11 +683,10 @@ document.getElementById('lead-form').addEventListener('submit', function(ev) {
 
 
 <!-- Javascript -->
-<script src="assets/plugins/popper.min.js?v=884325b71a"></script>
-<script src="assets/plugins/bootstrap/js/bootstrap.bundle.js?v=39827da903"></script>
-<script src="assets/plugins/smoothscroll.min.js?v=5d08587d4d"></script>
-<script src="assets/plugins/gumshoe/gumshoe.polyfills.min.js?v=c16ae2d7c9"></script>
-<script src="assets/js/main.js?v=72cf53ce03"></script>
+<script defer src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js?v=d722fa9982"></script>
+<script defer src="assets/plugins/smoothscroll.min.js?v=5d08587d4d"></script>
+<script defer src="assets/plugins/gumshoe/gumshoe.polyfills.min.js?v=c16ae2d7c9"></script>
+<script defer src="assets/js/main.js?v=72cf53ce03"></script>
 
 <script>/* rewrite_assets.py: loops load and play only while on screen */(function(){var vs=document.querySelectorAll('video.lazy-loop');if(!vs.length)return;var c=navigator.connection;if(c&&(c.saveData||/2g|3g/.test(c.effectiveType)))return;function go(v){if(!v.src)v.src=v.dataset.src;var p=v.play();p&&p.catch&&p.catch(function(){})}if(!('IntersectionObserver'in window)){vs.forEach(go);return}var io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?go(e.target):e.target.pause()})},{rootMargin:'300px'});vs.forEach(function(v){io.observe(v)})})()</script>
 </body>
