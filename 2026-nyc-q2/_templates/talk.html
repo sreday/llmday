@@ -13,11 +13,13 @@
   .talk-content .desc {
     padding-bottom: 0.25rem;
   }
+  /* Keynote / Workshop pill before the title, same as the schedule (index.html) */
+  .kn-pill { display: inline-block; background: var(--brand); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .45em; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-right: 10px; vertical-align: middle; line-height: 1.4; }
 </style>
 
 <section id="speakers-section" class="speakers-section section">
   <div class="container">
-    <h1 class="section-heading text-center mb-3">{{ talk.title }}</h1>
+    <h1 class="section-heading text-center mb-3">{% if talk.pill %}<span class="kn-pill">{{ talk.pill }}</span>{{ talk.title_display }}{% else %}{{ talk.title }}{% endif %}</h1>
     <div class="row">
 
       <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
@@ -60,7 +62,13 @@
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Video</h5>
                 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-                  <iframe src="{{ talk.youtube_embed_url }}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  {# Thumbnail first, player on click: the YouTube iframe is ~600 KB+ before anyone presses play (venue wifi) #}
+                  <button type="button" aria-label="Play video"
+                    data-src="{{ talk.youtube_embed_url | replace('www.youtube.com', 'www.youtube-nocookie.com') }}?autoplay=1"
+                    onclick="var f=document.createElement('iframe');f.src=this.dataset.src;f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';f.allowFullscreen=true;f.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;border:0;';this.replaceWith(f);"
+                    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;padding:0;cursor:pointer;background:#000 url('https://i.ytimg.com/vi/{{ talk.youtube_embed_url.split('/')[-1] }}/hqdefault.jpg') center/cover;">
+                    <svg width="68" height="48" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.2.3 34 .3 34 .3s-21.2 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.3 13 .3 24 .3 24s0 11 1.2 16.3a8.5 8.5 0 0 0 6 6C12.8 47.7 34 47.7 34 47.7s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.7 35 67.7 24 67.7 24s0-11-1.2-16.3z" fill="#f00"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+                  </button>
                 </div>
               </div>
               {% endif %}
