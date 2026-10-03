@@ -653,7 +653,8 @@ for _ev in (context.get("events") or []):
         # drafts (Marek 2026-10-03): shown after the confirmed count and as a faded bar segment; never in pct/health
         "drafts": _drafts, "draft_pct": round(100.0 * _drafts / _available) if _available else 0,
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
-        "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,   # for the Luma registrations block
+        "luma_evt": str(_em.get("luma_evt") or "").strip(), "sponsor_list": _sponsors,
+        "registration_free": _em.get("registration_free"),   # events not on Luma (Tel Aviv / in10t): metadata says free or not   # for the Luma registrations block
         # Sponsors tab (Marek 2026-09-18): the event's sponsors as built (partners already filtered out above)
         # Text pills only (Marek: "pills with text is fine, no need to display logo"); name = logo file stem, tidied
         "sponsor_view": [{"name": _status_sponsor_name(s.get("logo")), "url": str(s.get("url") or "").strip()}
@@ -1272,7 +1273,10 @@ def _status_luma_free(evt_id):
 for r in _status_rows:
     _alerts = []
     _forced = os.environ.get("STATUS_TEST_FREE_EVENTS", "").split(",")          # local testing only
-    r["is_free"] = bool(r["luma_evt"] and (r["luma_evt"] in _forced or _status_luma_free(r["luma_evt"])))
+    if r.get("registration_free") is not None:            # metadata wins, like the event build (luma_is_free)
+        r["is_free"] = bool(r["registration_free"])
+    else:
+        r["is_free"] = bool(r["luma_evt"] and (r["luma_evt"] in _forced or _status_luma_free(r["luma_evt"])))
     if r["is_free"]:
         _alerts.append(("free", "Free event - 50% show up rate"))
         # Free to attend (Marek 2026-09-19): no "Paid attendees" category at all (a stray priced ticket counts as a
