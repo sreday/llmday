@@ -15,10 +15,10 @@
 	<link rel="manifest" href="./assets/site.webmanifest">
 	
 	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800|Roboto:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/fonts.css">
 	
 	<!-- FontAwesome JS-->
-	<script defer src="assets/fontawesome/js/all.min.js"></script>
+	<link rel="stylesheet" href="assets/css/icons.css">
 
 	<!-- Theme CSS -->  
 	<link id="theme-style" rel="stylesheet" href="assets/css/theme.css">
@@ -28,9 +28,6 @@
     <meta property="og:title" content="LLMday - {{ meetup.location }} - {{ meetup.date }}"/>
     <meta property="og:description" content="Conference on Large Language Models, Agents &amp; AI Systems. Probably the most awesome LLM conference in {{ location_string }}!"/>
 
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
 
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site" content="@llmday_com">
@@ -40,18 +37,19 @@
     <meta name="twitter:image" content="https://llmday.com/photos/{{ hero_pictures[0].split('/')[-1] }}">
 
 
+<script>/* analytics load after the page is shown (venue wifi) */function _later(f){addEventListener('load',function(){(window.requestIdleCallback||setTimeout)(f)})}</script>
 <!-- Twitter conversion tracking base code -->
 <script>
 	!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
 	},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-	a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+	a=t.getElementsByTagName(n)[0],_later(function(){a.parentNode.insertBefore(u,a)}))}(window,document,'script');
 	twq('config','ofo1h');
 	</script>
 	<!-- End Twitter conversion tracking base code -->
 </head>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G"></script>
+<script>_later(function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-CQ2KV6LK8G';document.head.appendChild(s)})</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);} 
@@ -180,11 +178,10 @@
 
 
 <!-- Javascript -->          
-<script src="assets/plugins/popper.min.js"></script>
-<script src="assets/plugins/bootstrap/js/bootstrap.bundle.js"></script>  
-<script src="assets/plugins/smoothscroll.min.js"></script>
-<script src="assets/plugins/gumshoe/gumshoe.polyfills.min.js"></script> 
-<script src="assets/js/main.js"></script>  
+<script defer src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>  
+<script defer src="assets/plugins/smoothscroll.min.js"></script>
+<script defer src="assets/plugins/gumshoe/gumshoe.polyfills.min.js"></script> 
+<script defer src="assets/js/main.js"></script>  
 
 </body>
 </html> 
