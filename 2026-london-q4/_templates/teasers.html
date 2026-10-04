@@ -173,7 +173,7 @@
         while (s > min && el.scrollWidth > el.clientWidth + 1) { s -= 1; el.style.fontSize = s + 'px'; }
       }
       // the title tries its layouts - with the phrase break (if any) and without - at every size from its tier down to
-      // 80%, within its line budget (else budget + 1). Score = font size - 8 px per line holding a single word; best
+      // 80%, within its line budget (else budget + 1, 5 lines at most). Score = font size - 8 px per line holding a single word; best
       // score wins (ties: fewer lines, then the phrase break). text-wrap: balance does the rest.
       function fitTitle(el) {
         var tier = +el.dataset.size, want = +el.dataset.lines, min = Math.max(30, Math.round(tier * .8));
@@ -186,7 +186,7 @@
           return { n: keys.length, lone: ws.length === 1 ? 0 : lone };
         }
         var best = null;
-        [want, want + 1].some(function (budget) {
+        [want, Math.min(want + 1, 5)].some(function (budget) {   // never past 5 lines
           variants.forEach(function (h, vi) {
             el.innerHTML = h;
             for (var s = tier; s >= min; s--) {
