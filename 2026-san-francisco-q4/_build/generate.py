@@ -1427,17 +1427,63 @@ print("Sponsor onboarding: %s | %d opportunities | size %s" % (
     context['sponsor_onboarding_event']['event_name'], len(context['sponsor_onboarding_event']['items']), _event_size))
 # ── END SPONSOR ONBOARDING ──────────────────────────────────────────────────
 
+# PAST EVENTS (Marek 2026-10-04): once the event is over, the onboarding, fasttrack, teasers, communityhero,
+# invitation and onboardsponsor pages are written as "This event has ended" (ended.html) so a past event's forms,
+# cards and ticket codes can no longer be used. The waitlist stays live. Over = metadata says event_state: after, OR a
+# full 24 h have passed since the event ended (end of its last day, `days` long, in the event's own timezone), so a
+# forgotten flag does not leave the pages up; the daily scheduled build picks that moment up.
+def _event_over():
+    if str(context.get('event_state') or '').strip() == 'after':
+        return True
+    try:
+        start = datetime.datetime.fromisoformat(str(context.get('start_time') or ''))
+    except ValueError:
+        return False
+    tz = start.tzinfo or datetime.timezone.utc
+    days = max(1, int(context.get('days') or 1))
+    ends = datetime.datetime.combine(start.date() + datetime.timedelta(days=days), datetime.time(0, 0), tz)
+    return datetime.datetime.now(tz) >= ends + datetime.timedelta(hours=24)
+
+
+_EVENT_ENDED = _event_over()
+
+
+def _next_sponsorship_url():
+    """the sponsorship page of the brand's next upcoming event (home metadata `events`, earliest start that is not over
+    yet), else the site root: the past event's sponsor onboarding sends sponsors there instead of a dead end"""
+    _best = None
+    for _ev in (globals().get('_og_home_meta') or {}).get('events') or []:
+        _folder = str((_ev or {}).get('url') or '').strip('./').rstrip('/')
+        _mpath = _os.path.join('..', _folder, 'metadata.yml')
+        if not _folder or _folder == _ob_slug or not _os.path.exists(_mpath):
+            continue
+        try:
+            with open(_mpath, encoding='utf-8') as _f:
+                _start = str((yaml.load(_f, Loader=yaml.FullLoader) or {}).get('start_time') or '')
+        except Exception:                                         # noqa: BLE001 - a broken folder must not break this build
+            continue
+        if _start[:10] >= datetime.date.today().isoformat() and (not _best or _start < _best[0]):
+            _best = (_start, _folder)
+    return context.get('base_path', '') + (_best[1] + '/sponsorship.html' if _best else '')
+
+
+def _hidden_page(name, **ended):
+    if not _EVENT_ENDED:
+        return env.get_template(name).render(page=name, **context)
+    return env.get_template('ended.html').render(page=name, **dict(context, **ended))
+
+
 # HIDDEN PAGE: /<event>/onboarding/ (speaker onboarding form). Standalone template,
 # noindex, deliberately NOT appended to SITEMAP_URLS.
 _os.makedirs(BASE_FOLDER + "/onboarding", exist_ok=True)
 with open(BASE_FOLDER + "/onboarding/index.html", "w", encoding="utf-8") as f:
-    f.write(env.get_template("onboarding.html").render(page="onboarding.html", **context))
+    f.write(_hidden_page("onboarding.html"))
 print("Writing out onboarding/index.html (hidden, not in sitemap)")
 
 # HIDDEN PAGE: /<event>/fasttrack/ (invite-only speaker submission form). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/fasttrack", exist_ok=True)
 with open(BASE_FOLDER + "/fasttrack/index.html", "w", encoding="utf-8") as f:
-    f.write(env.get_template("fasttrack.html").render(page="fasttrack.html", **context))
+    f.write(_hidden_page("fasttrack.html"))
 print("Writing out fasttrack/index.html (hidden, not in sitemap)")
 
 # HIDDEN PAGE: /<event>/teasers/ (one 1200x1200 social card per confirmed session, v1 2026-09-24).
@@ -1486,7 +1532,7 @@ _tz_brand = str(context.get('brand_name', ''))
 context['teaser_wordmark'] = (_tz_brand if ' ' in _tz_brand else re.sub(r'(?<=[A-Z])(?=[a-z])', ' ', _tz_brand)).upper()
 _os.makedirs(BASE_FOLDER + "/teasers", exist_ok=True)
 with open(BASE_FOLDER + "/teasers/index.html", "w", encoding="utf-8") as f:
-    f.write(env.get_template("teasers.html").render(page="teasers.html", **context))
+    f.write(_hidden_page("teasers.html"))
 print("Writing out teasers/index.html (hidden, not in sitemap): %d cards" % len(context['teaser_talks']))
 
 # HIDDEN PAGE: /<event>/waitlist/ (lineup full: same form as the fast track, dark). Same rules as onboarding.
@@ -1590,6 +1636,33 @@ def _ch_pick_pool():
     return _out
 
 
+# the location under the venue name on the card (Marek 2026-10-04): "City, Country" instead of the street, so the card reads
+# "The Sunset Room / Austin, US". The country is the address's last country-looking part (UK / US short, others in
+# full), else a US state + ZIP means US, else a lookup by city; the same rule as the session teasers.
+_CH_COUNTRY = {'uk': 'UK', 'united kingdom': 'UK', 'england': 'UK', 'great britain': 'UK', 'usa': 'US', 'us': 'US',
+               'united states': 'US', 'united states of america': 'US'}
+_CH_COUNTRIES = ['Netherlands', 'Poland', 'Germany', 'France', 'Spain', 'Portugal', 'India', 'Brazil', 'Uruguay', 'Canada', 'Israel',
+                 'Ireland', 'Italy', 'Belgium', 'Switzerland', 'Austria', 'Sweden', 'Denmark', 'Norway', 'Finland', 'Czechia',
+                 'Czech Republic', 'Singapore', 'Australia', 'Mexico']
+_CH_CITY_COUNTRY = {'london': 'UK', 'amsterdam': 'Netherlands', 'warsaw': 'Poland', 'katowice': 'Poland', 'paris': 'France',
+                    'cologne': 'Germany', 'munich': 'Germany', 'hamburg': 'Germany', 'lisbon': 'Portugal', 'barcelona': 'Spain',
+                    'bangalore': 'India', 'chennai': 'India', 'hyderabad': 'India', 'campinas': 'Brazil', 'montevideo': 'Uruguay'}
+_CH_US_STATE = re.compile(r'\b(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY)\s+\d{5}\b')
+
+
+def _ch_country(address, city):
+    for p in reversed([x.strip() for x in str(address or '').split(',') if x.strip()]):
+        k = re.sub(r'[^a-z ]', '', p.lower()).strip()
+        if k in _CH_COUNTRY:
+            return _CH_COUNTRY[k]
+        for c in _CH_COUNTRIES:
+            if c.lower() in p.lower():
+                return c
+        if _CH_US_STATE.search(p):
+            return 'US'
+    return _CH_CITY_COUNTRY.get(str(city or '').strip().lower(), '')
+
+
 def _ch_card_facts():
     _d = None
     try:
@@ -1607,8 +1680,8 @@ def _ch_card_facts():
         # (metadata communityhero_venue overrides)
         'venue_short': _ch_venue or _ch['city'],
         'venue_name': _ch_venue or _ch['venue_name'],
-        # the street part only: the event line already names the city, so later parts that mention it are dropped
-        'venue_line': ', '.join([_p for _i, _p in enumerate(_addr[:2]) if _i == 0 or str(_ch['city']).lower() not in _p.lower()]),
+        # "City, Country" under the venue name (_ch_country), not the street
+        'venue_line': ', '.join([_p for _p in (str(_ch['city'] or '').strip(), _ch_country(_ch.get('venue_address'), _ch['city'])) if _p]),
         'promo_code': str(context.get('communityhero_code', 'HERO30') or ''),
         'promo_label': str(context.get('communityhero_code_label', '30% off') or ''),
         # inside 14 days of the event the card shows the bigger discount (the page decides, on the day the card is drawn)
@@ -1645,20 +1718,21 @@ context['hero_event'] = {
 }
 _os.makedirs(BASE_FOLDER + "/communityhero", exist_ok=True)
 with open(BASE_FOLDER + "/communityhero/index.html", "w", encoding="utf-8") as f:
-    f.write(env.get_template("communityhero.html").render(page="communityhero.html", **context))
+    f.write(_hidden_page("communityhero.html"))
 print("Writing out communityhero/index.html (hidden, not in sitemap)")
 # ── END COMMUNITY HERO ──────────────────────────────────────────────────────
 
 # HIDDEN PAGE: /<event>/invitation/ (speaker invitation letter, "convince your boss"). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/invitation", exist_ok=True)
 with open(BASE_FOLDER + "/invitation/index.html", "w", encoding="utf-8") as f:
-    f.write(env.get_template("invitation.html").render(page="invitation.html", **context))
+    f.write(_hidden_page("invitation.html"))
 print("Writing out invitation/index.html (hidden, not in sitemap)")
 
 # HIDDEN PAGE: /<event>/onboardsponsor/ (sponsor onboarding form). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/onboardsponsor", exist_ok=True)
 with open(BASE_FOLDER + "/onboardsponsor/index.html", "w", encoding="utf-8") as f:
-    f.write(env.get_template("onboardsponsor.html").render(page="onboardsponsor.html", **context))
+    f.write(_hidden_page("onboardsponsor.html", ended_cta_url=_next_sponsorship_url() if _EVENT_ENDED else "",
+                         ended_cta_label="Sponsor our next event", ended_note="Looking to sponsor? Have a look at our next event."))
 print("Writing out onboardsponsor/index.html (hidden, not in sitemap)")
 
 # SITEMAP
