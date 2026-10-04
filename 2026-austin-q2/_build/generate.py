@@ -1825,6 +1825,27 @@ def _tz_name_lines(name):
     return best[1]
 
 
+def _tz_opposite(hexc):
+    """the download arrow's colour (Marek 2026-10-04): the brand colour's complementary hue (opposite on the colour
+    wheel), darkened until it reads on the white disc (contrast 4.5:1 or more)"""
+    import colorsys
+    try:
+        rgb = [int(str(hexc).lstrip('#')[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    except ValueError:
+        return '#222'
+    h, l, sat = colorsys.rgb_to_hls(*rgb)
+    h, l = (h + .5) % 1, min(l, .42)
+
+    def contrast(c):
+        lin = [x / 12.92 if x <= .03928 else ((x + .055) / 1.055) ** 2.4 for x in c]
+        return 1.05 / (.2126 * lin[0] + .7152 * lin[1] + .0722 * lin[2] + .05)
+    c = colorsys.hls_to_rgb(h, l, sat)
+    while contrast(c) < 4.5 and l > .1:
+        l -= .02
+        c = colorsys.hls_to_rgb(h, l, sat)
+    return '#%02x%02x%02x' % tuple(round(x * 255) for x in c)
+
+
 # the ball: a free event says FREE EVENT; otherwise 20% off 3+ weeks before the event (the day this build runs), 50% closer
 _tz_days = None
 try:
@@ -1833,7 +1854,7 @@ except ValueError:
     pass
 _tz_pct = 20 if _tz_days is None or _tz_days >= 21 else 50
 context['tz'] = {
-    'scheme': _tz_k, 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'logo': _tz_logo, 'blend': _tz_blend,
+    'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'logo': _tz_logo, 'blend': _tz_blend,
     'free': bool(context['hero_event'].get('is_free')), 'pct': _tz_pct, 'code': '%s%d' % (_tz_prefix, _tz_pct),
     'conf': str(context['hero_event'].get('subtitle') or '').upper(),
     'day': context['hero_event'].get('day', ''), 'mon': str(context['hero_event'].get('month', ''))[:3].upper(),
