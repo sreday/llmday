@@ -1859,8 +1859,15 @@ for _t in talks_raw:                                         # spreadsheet order
         'photo': ('../' + _t['photo_url']) if str(_t.get('photo_url') or '').startswith('../') else (_t.get('photo_url') or ''),
         'track': str(_t.get('track') or '').strip(), 'day': str(_t.get('day') or '').strip(), 'kind': 'keynote' if _t in keynotes else _t.get('kind', 'talk'),
         'search': ' '.join([_name, _org, _title]).lower(),
-        'file': '%s-%s-%s.png' % (str(context.get('brand_name', '')).lower(), _tz_slug(_ob_slug), _tz_slug(_name)),
+        'file': '%s-%s-%s.png' % (_tz_slug(_name), _tz_slug(context.get('brand_name', '')), _tz_slug(_ob_slug)),   # speaker first
     })
+    _tz_seen = [x['file'] for x in context['teaser_talks'][:-1]]
+    if context['teaser_talks'][-1]['file'] in _tz_seen:      # a second talk by the same speaker: -2, -3... (no overwriting)
+        _base = context['teaser_talks'][-1]['file'][:-4]
+        _n = 2
+        while '%s-%d.png' % (_base, _n) in _tz_seen:
+            _n += 1
+        context['teaser_talks'][-1]['file'] = '%s-%d.png' % (_base, _n)
 _os.makedirs(BASE_FOLDER + "/teasers", exist_ok=True)
 with open(BASE_FOLDER + "/teasers/index.html", "w", encoding="utf-8") as f:
     f.write(_hidden_page("teasers.html"))
