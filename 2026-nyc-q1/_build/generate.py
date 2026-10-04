@@ -1614,6 +1614,18 @@ def _ch_country(address, city):
     return _CH_CITY_COUNTRY.get(str(city or '').strip().lower(), '')
 
 
+def _ch_place(city, address):
+    """"City, Country" for the community hero card and the session teasers (Marek 2026-10-04): the US and the UK are
+    written in full when the whole line stays within 24 characters ("Austin, United States", "London, United
+    Kingdom"), short when the city is long ("San Francisco, US", "Redwood City, US"); other countries always in full"""
+    city = str(city or '').strip()
+    country = _ch_country(address, city)
+    full = {'US': 'United States', 'UK': 'United Kingdom'}.get(country)
+    if full and len('%s, %s' % (city, full)) <= 24:
+        country = full
+    return ', '.join([_p for _p in (city, country) if _p])
+
+
 def _ch_card_facts():
     _d = None
     try:
@@ -1632,7 +1644,7 @@ def _ch_card_facts():
         'venue_short': _ch_venue or _ch['city'],
         'venue_name': _ch_venue or _ch['venue_name'],
         # "City, Country" under the venue name (_ch_country), not the street
-        'venue_line': ', '.join([_p for _p in (str(_ch['city'] or '').strip(), _ch_country(_ch.get('venue_address'), _ch['city'])) if _p]),
+        'venue_line': _ch_place(_ch['city'], _ch.get('venue_address')),
         'promo_code': str(context.get('communityhero_code', 'HERO30') or ''),
         'promo_label': str(context.get('communityhero_code_label', '30% off') or ''),
         # inside 14 days of the event the card shows the bigger discount (the page decides, on the day the card is drawn)
