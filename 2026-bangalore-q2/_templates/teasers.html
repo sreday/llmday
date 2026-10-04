@@ -37,15 +37,18 @@
     .tz-group-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 30px 0 14px; }
     .tz-group-head h2 { font: 700 1.2rem 'Montserrat', sans-serif; margin: 0; }
     .tz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 26px; }
-    .tz-slot { display: flex; flex-direction: column; gap: 10px; }
+    .tz-slot { display: flex; flex-direction: column; gap: 10px; position: relative; }   /* anchors the download icon to the image's corner */
     .tz-slot[hidden] { display: none; }
     /* the preview shows the 1200px card scaled to the column width; the export renders the unscaled card */
     .tz-frame { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.14); background: #000; }
     .tz-frame .tz-card { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
-    .tz-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: .85rem; color: #555; }
-    .tz-meta b { color: #222; font-weight: 600; }
-    .tz-dl { text-decoration: none; font: 600 .8rem 'Montserrat', sans-serif; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--brand); background: #fff; color: var(--brand); white-space: nowrap; }
-    .tz-dl:hover { background: var(--brand); color: #fff; }
+    .tz-dl { position: absolute; right: 12px; bottom: 12px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.92); color: var(--brand); box-shadow: 0 4px 14px rgba(0,0,0,.35); z-index: 2; transition: transform .15s; }
+    .tz-dl:hover { transform: scale(1.12); }
+    .tz-dl svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .tz-dl-arrow { animation: tz-bob 1.6s ease-in-out infinite; }
+    @keyframes tz-bob { 0%, 100% { transform: translateY(-1.5px); } 50% { transform: translateY(2px); } }
+    @media (prefers-reduced-motion: reduce) { .tz-dl-arrow { animation: none; } }
     .tz-empty { color: #666; }
 
     /* ── the card, 1200 x 1200 ────────────────────────────────────────────── */
@@ -65,8 +68,8 @@
     .tz-mid * { position: static; }
     .tz-top { display: flex; align-items: center; gap: 32px; }
     .tz-col { width: 590px; }   /* leaves the enlarged photo 37 px of air */
-    .tz-conf { font-weight: 700; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
-    .tz-talk { margin-top: 18px; font-weight: 900; line-height: 1.08; text-wrap: balance; }
+    .tz-conf { left: 76px; top: 280px; font-weight: 700; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }   /* under the logo */
+    .tz-talk { font-weight: 900; line-height: 1.08; text-wrap: balance; }
     .tz-talk .nw { white-space: nowrap; }
     .tz-photo { width: 390px; height: 390px; margin-left: auto; flex: 0 0 auto; object-fit: contain; display: block;
       transform: scale(var(--tz-photo-scale, 1.2)); transform-origin: var(--tz-photo-origin, 50% 25%); }
@@ -93,7 +96,7 @@
     /* sheet mode (#sheet-<start>-<count>): what the build-time renderer screenshots - the chosen cards stacked at 1200 px, nothing else */
     body.tz-sheet { background: #000; }
     .tz-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
-    .tz-sheet .tz-head, .tz-sheet .tz-controls, .tz-sheet .tz-group-head, .tz-sheet .tz-meta, .tz-sheet .tz-slot.tz-off, .tz-sheet .tz-empty { display: none; }
+    .tz-sheet .tz-head, .tz-sheet .tz-controls, .tz-sheet .tz-group-head, .tz-sheet .tz-dl, .tz-sheet .tz-slot.tz-off, .tz-sheet .tz-empty { display: none; }
     .tz-sheet .tz-grid { display: block; }
     .tz-sheet .tz-slot { gap: 0; }
     .tz-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
@@ -122,11 +125,12 @@
     <div id="tz-groups"></div>
     <div class="tz-grid" id="tz-pool">
       {% for t in teaser_talks %}
-      <div class="tz-slot" data-search="{{ t.search }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}">
+      <div class="tz-slot" data-search="{{ t.search }}" data-names="{{ t.name|lower }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}">
         <div class="tz-frame">
           <div class="tz-card" id="tz-card-{{ loop.index }}" data-file="{{ t.file }}">
             {{ tz.sweeps|safe }}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
+            <div class="tz-conf">{{ tz.conf }}</div>
             <div class="tz-ball"><div class="tz-ball-in">
               {% if tz.free %}<div class="tz-ball-line" data-fit="48" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="48" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
               {% else %}<div class="tz-ball-line" data-fit="36" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-sep"></div><div class="tz-ball-line" data-fit="38" data-min="16" style="color:var(--accent);letter-spacing:.04em">{{ tz.code }}</div>{% endif %}
@@ -134,7 +138,6 @@
             <div class="tz-mid">
               <div class="tz-top">
                 <div class="tz-col">
-                  <div class="tz-conf">{{ tz.conf }}</div>
                   <div class="tz-talk" data-size="{{ t.size }}" data-lines="{{ t.lines }}" style="font-size:{{ t.size }}px">{{ t.title_html|safe }}</div>
                 </div>
                 {% if t.photo %}<img class="tz-photo" src="{{ t.photo }}" alt="">{% endif %}
@@ -155,7 +158,7 @@
             <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>
           </div>
         </div>
-        <div class="tz-meta"><span><b>{{ t.name }}</b>{% if t.organization %} · {{ t.organization }}{% endif %}{% if t.kind == 'keynote' %} · keynote{% endif %}{% if t.track %} · track {{ t.track }}{% endif %}</span><a class="tz-dl" href="./{{ t.file }}" download="{{ t.file }}">Download PNG</a></div>
+        <a class="tz-dl" href="./{{ t.file }}" download="{{ t.file }}" title="Download {{ t.name }} (PNG)" aria-label="Download the card of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
       </div>
       {% endfor %}
     </div>
@@ -172,11 +175,12 @@
         el.style.fontSize = s + 'px';
         while (s > min && el.scrollWidth > el.clientWidth + 1) { s -= 1; el.style.fontSize = s + 'px'; }
       }
-      // the title tries its layouts - with the phrase break (if any) and without - at every size from its tier down to
-      // 80%, within its line budget (else budget + 1, 5 lines at most). Score = font size - 8 px per line holding a single word; best
-      // score wins (ties: fewer lines, then the phrase break). text-wrap: balance does the rest.
+      // the title: bigger text over more lines (Marek 2026-10-04) - the largest size, 64 px down to 28, at which it fills
+      // its space: at most 5 lines, no taller than the photo row (390 px; the conference name sits under the logo), so nothing below
+      // moves), no word wider than the column. A line holding a single word costs 3 px (size comes first). Both layouts are tried - with the
+      // phrase break (if any) and without; ties: fewer lines, then the phrase break. text-wrap: balance does the rest.
       function fitTitle(el) {
-        var tier = +el.dataset.size, want = +el.dataset.lines, min = Math.max(30, Math.round(tier * .8));
+        var maxS = 64, minS = 28, maxH = 390;
         var withBr = el.innerHTML, variants = withBr.indexOf('class="sep"') >= 0 ? [withBr, withBr.replace(/<br class="sep">/, ' ')] : [withBr];
         function measure() {
           var tops = {}, ws = el.querySelectorAll('.w');
@@ -185,25 +189,18 @@
           keys.forEach(function (k) { if (tops[k] === 1) lone++; });
           return { n: keys.length, lone: ws.length === 1 ? 0 : lone };
         }
-        function search(floor, budgets) {
-          var best = null;
-          budgets.some(function (budget) {
-            variants.forEach(function (h, vi) {
-              el.innerHTML = h;
-              for (var s = tier; s >= floor; s--) {
-                el.style.fontSize = s + 'px';
-                var m = measure(); if (m.n > budget) continue;
-                var c = { h: h, s: s, n: m.n, vi: vi, score: s - 8 * m.lone };
-                if (!best || c.score > best.score || (c.score === best.score && (c.n < best.n || (c.n === best.n && c.vi < best.vi)))) best = c;
-              }
-            });
-            return best;
-          });
-          return best;
-        }
-        // never past 5 lines: nothing fits 5 lines at 80% (titles of 120+ characters) -> 5 lines again, down to 70%
-        var floor70 = Math.max(28, Math.round(tier * .7));
-        var best = search(min, [want, Math.min(want + 1, 5)]) || search(floor70, [5]) || { h: variants[variants.length - 1], s: floor70 };
+        var best = null;
+        variants.forEach(function (h, vi) {
+          el.innerHTML = h;
+          for (var s = maxS; s >= minS; s--) {
+            el.style.fontSize = s + 'px';
+            if (el.offsetHeight > maxH || el.scrollWidth > el.clientWidth) continue;
+            var m = measure(); if (m.n > 5) continue;
+            var c = { h: h, s: s, n: m.n, vi: vi, score: s - 3 * m.lone };
+            if (!best || c.score > best.score || (c.score === best.score && (c.n < best.n || (c.n === best.n && c.vi < best.vi)))) best = c;
+          }
+        });
+        if (!best) best = { h: variants[variants.length - 1], s: minS };
         el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
       }
       function fitAll() {
@@ -241,9 +238,28 @@
         var t = s.dataset.track ? 'Track ' + s.dataset.track : 'No track';
         return multiDay && s.dataset.day ? 'Day ' + s.dataset.day + ' · ' + t : t;
       }
+      // a match: the text appears in speaker / company / title, or every word typed is a speaker name (or its start) with
+      // at most one letter wrong (missing, extra, swapped or different): "pawlikowsky", "kalner", "tasmia niaz"
+      function lev1(a, b) {                      // edit distance of a and b is at most 1
+        if (a === b) return true;
+        if (Math.abs(a.length - b.length) > 1) return false;
+        var i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++;
+        if (a.length === b.length) return a.slice(i + 1) === b.slice(i + 1) || (a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2));
+        return a.length > b.length ? a.slice(i + 1) === b.slice(i) : a.slice(i) === b.slice(i + 1);
+      }
+      function wordClose(q, w) {
+        if (w.indexOf(q) === 0) return true;
+        if (q.length < 3) return false;
+        return lev1(q, w) || lev1(q, w.slice(0, q.length)) || lev1(q, w.slice(0, q.length - 1)) || lev1(q, w.slice(0, q.length + 1));
+      }
+      function matches(slot, q) {
+        if (slot.dataset.search.indexOf(q) >= 0) return true;
+        var words = slot.dataset.names.split(/[^a-z0-9\u00c0-\u024f]+/).filter(Boolean);
+        return q.split(/\s+/).every(function (t) { return words.some(function (w) { return wordClose(t, w); }); });
+      }
       function render() {
         var q = search.value.trim().toLowerCase(), shown = 0;
-        slots.forEach(function (s) { s.hidden = !!q && s.dataset.search.indexOf(q) < 0; if (!s.hidden) shown++; });
+        slots.forEach(function (s) { s.hidden = !!q && !matches(s, q); if (!s.hidden) shown++; });
         groups.innerHTML = '';
         if (mode === 'sheet') {
           pool.hidden = false;
