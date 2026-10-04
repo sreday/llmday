@@ -1,13 +1,13 @@
-"""Render the /<event>/teasers/ cards to 1500x1500 PNGs with headless Chrome (2026-09-24).
+"""Render the /<event>/talks/ cards (the session teasers; /teasers/ until 2026-10-04) to 1500x1500 PNGs with headless Chrome (2026-09-24).
 
 Runs after `make generate` (and after optimize_images.py) in the GitHub build, from the repo root:
     python _build/render_teasers.py [--all] [--root static]
-For every static/<event>/teasers/index.html of an upcoming event (start_time in static/<event>/metadata.yml
+For every static/<event>/talks/index.html of an upcoming event (start_time in static/<event>/metadata.yml
 not older than yesterday; --all renders past events too) it opens the page in headless Chrome with
 #sheet-<start>-<count> (the page then shows only those cards, stacked at their true 1200 px size), takes
 one screenshot at device scale 1.25 and slices it into 1500x1500 files named as the page's data-file
 attributes, next to index.html. The cards therefore need no browser-side rendering library, and every
-card has a stable URL: /<event>/teasers/<brand>-<event>-<speaker>.png.
+card has a stable URL: /<event>/talks/<brand>-<event>-<speaker>.png.
 Never fails the build: problems are printed as WARN and the page keeps working without its PNGs.
 
 Content-addressed cache (2026-09-30): each card's PNG is kept in .cache/teasers/<key>.png, where the key
@@ -79,11 +79,11 @@ def card_files(index_html):
 
 
 def page_parts(index_html):
-    """Split the teaser page into (context, [card html, ...]): each card is its .tz-slot block up to the
+    """Split the teaser page into (context, [card html, ...]): each card is its .tz-slot block (data- attributes since 2026-10-04) up to the
     next one; the context is everything else (head, styles, controls, scripts)."""
     with open(index_html, encoding="utf-8") as f:
         html = f.read()
-    starts = [m.start() for m in re.finditer(r'<div class="tz-slot">', html)]
+    starts = [m.start() for m in re.finditer(r'<div class="tz-slot"[ >]', html)]
     if not starts:
         return html, []
     end = html.find("<script", starts[-1])
@@ -159,7 +159,7 @@ def main():
     if not chrome:
         print("WARN render_teasers: no Chrome/Chromium found, no PNGs rendered")
         return
-    pages = sorted(glob.glob(os.path.join(root, "20*", "teasers", "index.html")))
+    pages = sorted(glob.glob(os.path.join(root, "20*", "talks", "index.html")))
     total, events = 0, 0
     rendered_total, reused_total, used = 0, 0, set()
     r = subprocess.run([chrome, "--version"], capture_output=True, text=True)

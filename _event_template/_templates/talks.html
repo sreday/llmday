@@ -1,0 +1,286 @@
+{# ── Session teasers (hidden page, /<event>/talks/; was /teasers/, which now forwards here). Standalone: does NOT
+     extend _base.html. One social card per confirmed session, in the order of talks.csv, laid out at 1200 px and
+     exported as a 1500x1500 PNG at build time by _build/render_teasers.py (headless Chrome opens this page with
+     #sheet-<start>-<count>, which shows only those cards stacked at their true size, unsorted and unfiltered; the
+     script slices the screenshot into the files named by data-file, next to this page). The card design (Marek
+     2026-10-04, community hero style): square brand logo, discount ball (or FREE EVENT), conference name, title,
+     raw headshot, speaker + company (panels: names only), date + venue ticket. Facts come from generate.py (context
+     `tz` and `teaser_talks`). The page: search by speaker / company / title, sort by spreadsheet order or by track (once the sheet has tracks),
+     and download the PNGs of what is shown ("Download all", or "Download track N" per track). Never in the sitemap.
+     Identical in all four repos. ── #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Talks: {{ onboarding_event.event_name }}</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --brand: {{ brand_color }}; --accent: {{ tz.scheme.accent }}; }
+    html, body { margin: 0; background: #f3f2f6; color: #111; font-family: 'Roboto', sans-serif; }
+    .tz-page { max-width: 1320px; margin: 0 auto; padding: 36px 20px 80px; }
+    .tz-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; margin-bottom: 18px; }
+    .tz-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; }
+    .tz-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.7rem; margin: 4px 0 0; line-height: 1.2; }
+    .tz-sub { color: #555; font-size: .95rem; margin-top: 4px; }
+    .tz-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 22px; }
+    .tz-search { flex: 1 1 260px; font: 400 1rem 'Roboto', sans-serif; padding: 10px 14px; border: 1px solid #cfcfd6; border-radius: 999px; background: #fff; }
+    .tz-sort { display: inline-flex; border: 1px solid #cfcfd6; border-radius: 999px; overflow: hidden; background: #fff; }
+    .tz-sort button { font: 600 .85rem 'Montserrat', sans-serif; padding: 9px 16px; border: 0; background: transparent; color: #444; cursor: pointer; }
+    .tz-sort[hidden] { display: none; }
+    .tz-sort button[aria-pressed="true"] { background: var(--brand); color: #fff; }
+    .tz-btn { font: 600 .9rem 'Montserrat', sans-serif; padding: 10px 18px; border-radius: 999px; border: 0; background: var(--brand); color: #fff; cursor: pointer; white-space: nowrap; }
+    .tz-btn:disabled { opacity: .5; cursor: default; }
+    .tz-count { font-size: .85rem; color: #666; }
+    .tz-group-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 30px 0 14px; }
+    .tz-group-head h2 { font: 700 1.2rem 'Montserrat', sans-serif; margin: 0; }
+    .tz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 26px; }
+    .tz-slot { display: flex; flex-direction: column; gap: 10px; }
+    .tz-slot[hidden] { display: none; }
+    /* the preview shows the 1200px card scaled to the column width; the export renders the unscaled card */
+    .tz-frame { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.14); background: #000; }
+    .tz-frame .tz-card { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+    .tz-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: .85rem; color: #555; }
+    .tz-meta b { color: #222; font-weight: 600; }
+    .tz-dl { text-decoration: none; font: 600 .8rem 'Montserrat', sans-serif; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--brand); background: #fff; color: var(--brand); white-space: nowrap; }
+    .tz-dl:hover { background: var(--brand); color: #fff; }
+    .tz-empty { color: #666; }
+
+    /* ── the card, 1200 x 1200 ────────────────────────────────────────────── */
+    .tz-card { width: 1200px; height: 1200px; position: relative; overflow: hidden; color: #fff; font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, {{ tz.scheme.bg[0] }} 0%, {{ tz.scheme.bg[1] }} 45%, {{ tz.scheme.bg[2] }} 100%); }
+    .tz-card > * { position: absolute; }
+    .tz-sw, .tz-vig { inset: 0; width: 1200px; height: 1200px; }
+    .tz-vig { background: radial-gradient(circle at 50% 46%, rgba(3,3,12,0) 260px, rgba(3,3,12,.55) 920px); }
+    .tz-logo { left: 64px; top: 52px; width: 210px; height: 210px; object-fit: contain; mix-blend-mode: {{ tz.blend }}; }
+    .tz-ball { left: 896px; top: 44px; width: 248px; height: 248px; padding: 4px; box-sizing: border-box; border-radius: 50%; background: {{ tz.ramp }};
+      box-shadow: 0 0 50px {{ tz.scheme.glow }}66; }
+    .tz-ball-in { width: 100%; height: 100%; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: radial-gradient(circle at 50% 35%, #1c1a2c, #08080f 75%); }
+    .tz-ball-line { width: 168px; text-align: center; font-weight: 900; line-height: 1; white-space: nowrap; overflow: hidden; }
+    .tz-ball-sep { width: 130px; border-top: 4px dashed rgba(255,255,255,.28); margin: 16px 0; }
+    .tz-mid { left: 72px; top: 300px; width: 1056px; height: 630px; display: flex; flex-direction: column; justify-content: center; }
+    .tz-mid * { position: static; }
+    .tz-top { display: flex; align-items: center; gap: 32px; }
+    .tz-col { width: 634px; }
+    .tz-conf { font-weight: 700; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+    .tz-talk { margin-top: 18px; font-weight: 900; line-height: 1.08; text-wrap: balance; }
+    .tz-talk .nw { white-space: nowrap; }
+    .tz-photo { width: 390px; height: 390px; margin-left: auto; flex: 0 0 auto; object-fit: contain; display: block; }
+    .tz-who { margin-top: 40px; }
+    .tz-bar { width: 96px; height: 8px; background: {{ tz.ramp }}; margin-bottom: 24px; }
+    .tz-name { font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; }
+    .tz-panel { line-height: 1.2; }
+    .tz-org { font-weight: 600; color: var(--accent); margin-top: 8px; white-space: nowrap; overflow: hidden; }
+    .tz-ticket { left: 64px; top: 984px; width: 1072px; height: 150px; border-radius: 28px; background: {{ tz.ramp }}; padding: 3px; box-sizing: border-box; }
+    .tz-ticket-in { width: 100%; height: 100%; border-radius: 25px; background: rgba(8,8,20,.88); display: flex; align-items: center; }
+    .tz-date { width: 330px; display: flex; align-items: center; justify-content: center; gap: 16px; }
+    .tz-day { font-weight: 900; font-size: 80px; line-height: 1; }
+    .tz-mon { color: var(--accent); font-size: 26px; font-weight: 800; letter-spacing: .12em; }
+    .tz-wday { font-weight: 600; font-size: 21px; color: rgba(255,255,255,.75); margin-top: 4px; }
+    .tz-perf { height: 100%; border-left: 4px dashed rgba(255,255,255,.28); }
+    .tz-where { padding-left: 36px; display: flex; align-items: center; gap: 18px; }
+    .tz-where svg { width: 53px; height: 53px; flex: 0 0 auto; stroke: var(--accent); fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    .tz-venue { font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; }
+    .tz-place { font-weight: 500; color: rgba(255,255,255,.75); margin-top: 5px; white-space: nowrap; overflow: hidden; }
+    .tz-notch { left: 381px; width: 34px; height: 34px; border-radius: 50%; }
+    @media (max-width: 575.98px) { .tz-grid { grid-template-columns: 1fr; } }
+    /* sheet mode (#sheet-<start>-<count>): what the build-time renderer screenshots - the chosen cards stacked at 1200 px, nothing else */
+    body.tz-sheet { background: #000; }
+    .tz-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
+    .tz-sheet .tz-head, .tz-sheet .tz-controls, .tz-sheet .tz-group-head, .tz-sheet .tz-meta, .tz-sheet .tz-slot.tz-off, .tz-sheet .tz-empty { display: none; }
+    .tz-sheet .tz-grid { display: block; }
+    .tz-sheet .tz-slot { gap: 0; }
+    .tz-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+    .tz-sheet .tz-frame .tz-card { transform: none !important; }
+  </style>
+</head>
+<body>
+  <div class="tz-page">
+    <div class="tz-head">
+      <div>
+        <div class="tz-brand">{{ brand_name }} · talks</div>
+        <h1 class="tz-title">{{ onboarding_event.event_name }}</h1>
+        <div class="tz-sub">{{ date_string }} · {{ tz.venue }} · one card per session, a 1500 x 1500 px PNG each, rendered on every site build from talks.csv{% if tz.free %} · free event{% else %} · discount on the cards: {{ tz.pct }}% off, {{ tz.code }}{% endif %}. Hidden page for the team.</div>
+      </div>
+    </div>
+    <div class="tz-controls">
+      <input class="tz-search" id="tz-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search speaker, company or talk title">
+      <div class="tz-sort" role="group" aria-label="Sort">
+        <button type="button" data-sort="sheet" aria-pressed="true">Spreadsheet order</button>
+        <button type="button" data-sort="track" aria-pressed="false">By track</button>
+      </div>
+      <button class="tz-btn" id="tz-all" type="button" data-dl="all">Download all</button>
+      <span class="tz-count" id="tz-count"></span>
+    </div>
+
+    <div id="tz-groups"></div>
+    <div class="tz-grid" id="tz-pool">
+      {% for t in teaser_talks %}
+      <div class="tz-slot" data-search="{{ t.search }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}">
+        <div class="tz-frame">
+          <div class="tz-card" id="tz-card-{{ loop.index }}" data-file="{{ t.file }}">
+            {{ tz.sweeps|safe }}<div class="tz-vig"></div>
+            {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
+            <div class="tz-ball"><div class="tz-ball-in">
+              {% if tz.free %}<div class="tz-ball-line" data-fit="48" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="48" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
+              {% else %}<div class="tz-ball-line" data-fit="36" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-sep"></div><div class="tz-ball-line" data-fit="38" data-min="16" style="color:var(--accent);letter-spacing:.04em">{{ tz.code }}</div>{% endif %}
+            </div></div>
+            <div class="tz-mid">
+              <div class="tz-top">
+                <div class="tz-col">
+                  <div class="tz-conf">{{ tz.conf }}</div>
+                  <div class="tz-talk" data-size="{{ t.size }}" data-lines="{{ t.lines }}" style="font-size:{{ t.size }}px">{{ t.title_html|safe }}</div>
+                </div>
+                {% if t.photo %}<img class="tz-photo" src="{{ t.photo }}" alt="">{% endif %}
+              </div>
+              <div class="tz-who">
+                <div class="tz-bar"></div>
+                {% if t.panel %}{% for l in t.name_lines %}<div class="tz-name tz-panel" data-fit="42" data-min="22">{{ l }}</div>{% endfor %}
+                {% else %}<div class="tz-name" data-fit="48" data-min="22">{{ t.name }}</div>{% if t.organization %}<div class="tz-org" data-fit="30" data-min="18">{{ t.organization }}</div>{% endif %}{% endif %}
+              </div>
+            </div>
+            <div class="tz-ticket"><div class="tz-ticket-in">
+              <div class="tz-date"><div class="tz-day">{{ tz.day }}</div><div><div class="tz-mon">{{ tz.mon }}</div><div class="tz-wday">{{ tz.weekday }}</div></div></div>
+              <div class="tz-perf"></div>
+              <div class="tz-where"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-19-16-19-31a19 19 0 0 1 38 0c0 15-19 31-19 31z"/><circle cx="32" cy="27" r="7.5"/></svg>
+                <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18">{{ tz.place }}</div></div></div>
+            </div></div>
+            <div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
+            <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>
+          </div>
+        </div>
+        <div class="tz-meta"><span><b>{{ t.name }}</b>{% if t.organization %} · {{ t.organization }}{% endif %}{% if t.kind == 'keynote' %} · keynote{% endif %}{% if t.track %} · track {{ t.track }}{% endif %}</span><a class="tz-dl" href="./{{ t.file }}" download="{{ t.file }}">Download PNG</a></div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if not teaser_talks %}<p class="tz-empty">No confirmed sessions yet.</p>{% endif %}
+    <p class="tz-empty" id="tz-none" hidden>Nothing matches that search.</p>
+  </div>
+
+  <script>
+    (function () {
+      var sheet = /^#sheet-(\d+)-(\d+)$/.exec(location.hash);
+      // 1. text fit, on the unscaled card (offset* sizes ignore the preview's transform)
+      function fitLines(el) {                    // single-line texts: shrink until they fit their box
+        var s = +el.dataset.fit, min = +(el.dataset.min || 16);
+        el.style.fontSize = s + 'px';
+        while (s > min && el.scrollWidth > el.clientWidth + 1) { s -= 1; el.style.fontSize = s + 'px'; }
+      }
+      // the title tries its layouts - with the phrase break (if any) and without - at every size from its tier down to
+      // 80%, within its line budget (else budget + 1). Score = font size - 8 px per line holding a single word; best
+      // score wins (ties: fewer lines, then the phrase break). text-wrap: balance does the rest.
+      function fitTitle(el) {
+        var tier = +el.dataset.size, want = +el.dataset.lines, min = Math.max(30, Math.round(tier * .8));
+        var withBr = el.innerHTML, variants = withBr.indexOf('class="sep"') >= 0 ? [withBr, withBr.replace(/<br class="sep">/, ' ')] : [withBr];
+        function measure() {
+          var tops = {}, ws = el.querySelectorAll('.w');
+          [].forEach.call(ws, function (w) { tops[w.offsetTop] = (tops[w.offsetTop] || 0) + 1; });
+          var keys = Object.keys(tops), lone = 0;
+          keys.forEach(function (k) { if (tops[k] === 1) lone++; });
+          return { n: keys.length, lone: ws.length === 1 ? 0 : lone };
+        }
+        var best = null;
+        [want, want + 1].some(function (budget) {
+          variants.forEach(function (h, vi) {
+            el.innerHTML = h;
+            for (var s = tier; s >= min; s--) {
+              el.style.fontSize = s + 'px';
+              var m = measure(); if (m.n > budget) continue;
+              var c = { h: h, s: s, n: m.n, vi: vi, score: s - 8 * m.lone };
+              if (!best || c.score > best.score || (c.score === best.score && (c.n < best.n || (c.n === best.n && c.vi < best.vi)))) best = c;
+            }
+          });
+          return best;
+        });
+        if (!best) best = { h: variants[variants.length - 1], s: min };
+        el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
+      }
+      function fitAll() {
+        document.querySelectorAll('.tz-card [data-fit]').forEach(fitLines);
+        document.querySelectorAll('.tz-talk[data-lines]').forEach(fitTitle);
+      }
+      // 2. scale every 1200px card into its preview frame
+      function scale() {
+        document.querySelectorAll('.tz-frame').forEach(function (f) {
+          var w = f.clientWidth; if (!w) return;
+          f.querySelector('.tz-card').style.transform = 'scale(' + (w / 1200) + ')';
+        });
+      }
+      var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+      ready.then(function () { fitAll(); if (!sheet) scale(); });
+
+      // sheet mode for the build-time renderer: #sheet-<start>-<count> keeps only those cards, unscaled, in sheet order
+      if (sheet) {
+        var from = +sheet[1], to = from + +sheet[2];
+        document.body.classList.add('tz-sheet');
+        document.querySelectorAll('.tz-slot').forEach(function (s, i) { if (i < from || i >= to) s.classList.add('tz-off'); });
+        return;
+      }
+      window.addEventListener('resize', scale);
+      if (window.ResizeObserver) { var ro = new ResizeObserver(scale); document.querySelectorAll('.tz-frame').forEach(function (f) { ro.observe(f); }); }
+
+      // 3. search + sorting: spreadsheet order (one grid) or by track (one grid per track, each with its download button)
+      var pool = document.getElementById('tz-pool'), groups = document.getElementById('tz-groups');
+      var slots = [].slice.call(pool.querySelectorAll('.tz-slot')), search = document.getElementById('tz-search');
+      var mode = 'sheet', multiDay = slots.some(function (s) { return s.dataset.day && s.dataset.day !== slots[0].dataset.day; });
+      // "By track" only once the sheet has tracks (2+ distinct values): a "before" event has none yet, so just "Download all"
+      var trackSet = {}; slots.forEach(function (s) { if (s.dataset.track) trackSet[s.dataset.day + '|' + s.dataset.track] = 1; });
+      if (Object.keys(trackSet).length < 2) document.querySelector('.tz-sort').hidden = true;
+      function trackLabel(s) {
+        var t = s.dataset.track ? 'Track ' + s.dataset.track : 'No track';
+        return multiDay && s.dataset.day ? 'Day ' + s.dataset.day + ' · ' + t : t;
+      }
+      function render() {
+        var q = search.value.trim().toLowerCase(), shown = 0;
+        slots.forEach(function (s) { s.hidden = !!q && s.dataset.search.indexOf(q) < 0; if (!s.hidden) shown++; });
+        groups.innerHTML = '';
+        if (mode === 'sheet') {
+          pool.hidden = false;
+          slots.forEach(function (s) { pool.appendChild(s); });
+        } else {
+          pool.hidden = true;
+          var order = [], by = {};
+          slots.forEach(function (s) { var k = trackLabel(s); if (!by[k]) { by[k] = []; order.push(k); } by[k].push(s); });
+          order.forEach(function (k) {
+            var visible = by[k].filter(function (s) { return !s.hidden; }).length;
+            if (!visible) { by[k].forEach(function (s) { pool.appendChild(s); }); return; }
+            var head = document.createElement('div'); head.className = 'tz-group-head';
+            head.innerHTML = '<h2></h2><button class="tz-btn" type="button"></button>';
+            head.querySelector('h2').textContent = k + ' (' + visible + ')';
+            var btn = head.querySelector('button'); btn.textContent = 'Download ' + k.toLowerCase();
+            btn.addEventListener('click', function () { download(by[k], btn); });
+            var grid = document.createElement('div'); grid.className = 'tz-grid';
+            by[k].forEach(function (s) { grid.appendChild(s); });
+            groups.appendChild(head); groups.appendChild(grid);
+          });
+        }
+        document.getElementById('tz-count').textContent = shown + ' of ' + slots.length + ' cards';
+        document.getElementById('tz-none').hidden = shown > 0 || !slots.length;
+        requestAnimationFrame(scale);
+      }
+      document.querySelectorAll('.tz-sort button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          mode = b.dataset.sort;
+          document.querySelectorAll('.tz-sort button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          render();
+        });
+      });
+      search.addEventListener('input', render);
+
+      // 4. downloads: the PNGs of the given cards that are shown, one after another (the browser asks once to allow it)
+      function download(list, btn) {
+        var links = list.filter(function (s) { return !s.hidden; }).map(function (s) { return s.querySelector('a.tz-dl'); });
+        if (!links.length) return;
+        btn.disabled = true;
+        links.forEach(function (a, i) { setTimeout(function () { a.click(); if (i === links.length - 1) btn.disabled = false; }, i * 400); });
+      }
+      var all = document.getElementById('tz-all');
+      all.addEventListener('click', function () { download(slots, all); });
+      render();
+    })();
+  </script>
+</body>
+</html>

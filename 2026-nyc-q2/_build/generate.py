@@ -1427,7 +1427,7 @@ print("Sponsor onboarding: %s | %d opportunities | size %s" % (
     context['sponsor_onboarding_event']['event_name'], len(context['sponsor_onboarding_event']['items']), _event_size))
 # ── END SPONSOR ONBOARDING ──────────────────────────────────────────────────
 
-# PAST EVENTS (Marek 2026-10-04): once the event is over, the onboarding, fasttrack, teasers, communityhero,
+# PAST EVENTS (Marek 2026-10-04): once the event is over, the onboarding, fasttrack, talks (teasers), communityhero,
 # invitation and onboardsponsor pages are written as "This event has ended" (ended.html) so a past event's forms,
 # cards and ticket codes can no longer be used. The waitlist stays live. Over = metadata says event_state: after, OR a
 # full 24 h have passed since the event ended (end of its last day, `days` long, in the event's own timezone), so a
@@ -1485,55 +1485,6 @@ _os.makedirs(BASE_FOLDER + "/fasttrack", exist_ok=True)
 with open(BASE_FOLDER + "/fasttrack/index.html", "w", encoding="utf-8") as f:
     f.write(_hidden_page("fasttrack.html"))
 print("Writing out fasttrack/index.html (hidden, not in sitemap)")
-
-# HIDDEN PAGE: /<event>/teasers/ (one 1200x1200 social card per confirmed session, v1 2026-09-24).
-# Facts: keynotes first, then confirmed talks; title without the "Keynote:" prefix; headshot from the
-# repo (photo_url is relative to the event page, one level up from /teasers/); venue name + address
-# from the onboarding scrape; optional metadata `teaser_discount` / `teaser_code` prefill the badge.
-def _tz_slug(s):
-    return re.sub(r'[^a-z0-9]+', '-', str(s or '').lower()).strip('-')
-_tz_venue_name = str(context['onboarding_event'].get('venue_name') or '')
-_tz_venue_addr = str(context['onboarding_event'].get('venue_address') or '')
-_tz_city = str(context.get('city_name') or '')
-_tz_addr_parts = [p.strip() for p in _tz_venue_addr.split(',') if p.strip()]
-# footer = three lines: venue name / street + area + postcode (+ anything after the country, e.g. "Level -2") /
-# CITY, COUNTRY in bold. The city part is the one naming city_name; the country is the part right after it
-# when it is short (UK, USA, Germany...).
-_tz_city_idx = next((i for i, p in enumerate(_tz_addr_parts) if _tz_city and _tz_city.lower() in p.lower()), None)
-if _tz_city_idx is not None:
-    _tz_before = _tz_addr_parts[:_tz_city_idx]
-    _tz_after = _tz_addr_parts[_tz_city_idx + 1:]
-    _tz_country = _tz_after[0] if _tz_after and len(_tz_after[0].split()) <= 2 and not any(ch.isdigit() for ch in _tz_after[0]) else ''
-    _tz_rest = _tz_after[1:] if _tz_country else _tz_after
-    _tz_city_line = (_tz_addr_parts[_tz_city_idx] + (', ' + _tz_country if _tz_country else '')).upper()
-    _tz_street = ', '.join(_tz_before + _tz_rest)
-else:
-    _tz_city_line = _tz_city.upper()
-    _tz_street = ', '.join(_tz_addr_parts)
-if _tz_venue_name and _tz_street.lower().startswith(_tz_venue_name.lower()):
-    _tz_street = _tz_street[len(_tz_venue_name):].strip(' ,')
-_tz_lines = [l for l in (_tz_venue_name, _tz_street) if l]
-context['teaser_talks'] = []
-for _t in keynotes + [x for x in talks if x not in keynotes]:
-    _name = (_t.get('name') or '').strip()
-    _title = _t['title_display']
-    if not _name or _name.startswith('_') or not _title:
-        continue
-    context['teaser_talks'].append({
-        'title': _title, 'name': _name, 'organization': (_t.get('organization') or '').strip(),
-        'photo': ('../' + _t['photo_url']) if _t.get('photo_url') and str(_t['photo_url']).startswith('../') else (_t.get('photo_url') or ''),
-        'keynote': _t in keynotes, 'workshop': _t['kind'] == 'workshop', 'venue_lines': _tz_lines, 'city_line': _tz_city_line,
-        'file': '%s-%s-%s.png' % (str(context.get('brand_name', '')).lower(), _tz_slug(_ob_slug), _tz_slug(_name)),
-    })
-context.setdefault('teaser_discount', '')
-context.setdefault('teaser_code', '')
-# wordmark: the brand name split at the camel-case seam and upper-cased (SREday -> SRE DAY), drawn as outlined text like the logo
-_tz_brand = str(context.get('brand_name', ''))
-context['teaser_wordmark'] = (_tz_brand if ' ' in _tz_brand else re.sub(r'(?<=[A-Z])(?=[a-z])', ' ', _tz_brand)).upper()
-_os.makedirs(BASE_FOLDER + "/teasers", exist_ok=True)
-with open(BASE_FOLDER + "/teasers/index.html", "w", encoding="utf-8") as f:
-    f.write(_hidden_page("teasers.html"))
-print("Writing out teasers/index.html (hidden, not in sitemap): %d cards" % len(context['teaser_talks']))
 
 # HIDDEN PAGE: /<event>/waitlist/ (lineup full: same form as the fast track, dark). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/waitlist", exist_ok=True)
@@ -1721,6 +1672,193 @@ with open(BASE_FOLDER + "/communityhero/index.html", "w", encoding="utf-8") as f
     f.write(_hidden_page("communityhero.html"))
 print("Writing out communityhero/index.html (hidden, not in sitemap)")
 # ── END COMMUNITY HERO ──────────────────────────────────────────────────────
+
+# HIDDEN PAGE: /<event>/talks/ (the session teasers, Marek 2026-10-04; was /teasers/, which now redirects here). One
+# 1200x1200 social card per confirmed session (exported as a 1500x1500 PNG by _build/render_teasers.py) in the order
+# of talks.csv, searchable by speaker, company and title, downloadable per sorting ("Download all" / "Download track N").
+# The card: the brand's square logo top left (never typed out), the discount ball top right (20% off 3+ weeks before
+# the event, 50% closer; SRE / LLM / PLAT / PEC + the percent; "FREE EVENT" for a free event), the conference name,
+# the title (size tier by length, a line budget, orphan-free breaks: _tz_title_html here + the fit script in
+# talks.html), the headshot exactly as on the site, speaker + company (a panel of 3+ names drops the company and
+# shows every full name on two lines), and a ticket with the date and "venue / City, Country" (the community hero
+# facts above, same rules). Built after the community hero because it reuses hero_event.
+def _tz_slug(s):
+    return re.sub(r'[^a-z0-9]+', '-', str(s or '').lower()).strip('-')
+
+
+_TZ_SCHEMES = {   # the community hero colour schemes (communityhero.html SCHEMES)
+    'llmday': {'bg': ['#07261d', '#03120d', '#062019'], 'ramp': ['#a7f3d0', '#3db07f', '#26986a'], 'accent': '#6ee7b7', 'glow': '#3db07f',
+               'sweeps': [['#3db07f', '#6ee7b7'], ['#26986a', '#3db07f']]},
+    'sreday': {'bg': ['#2a0f33', '#12061c', '#1d0b35'], 'ramp': ['#f472b6', '#c084fc', '#818cf8'], 'accent': '#d8b4fe', 'glow': '#c084fc',
+               'sweeps': [['#e879f9', '#a855f7'], ['#7c3aed', '#f472b6']]},
+    'platformday': {'bg': ['#2b1606', '#120903', '#1f0c05'], 'ramp': ['#fde047', '#fb923c', '#ef4444'], 'accent': '#fbbf24', 'glow': '#f97316',
+                    'sweeps': [['#f97316', '#fbbf24'], ['#ef4444', '#f97316']]},
+    'pec': {'bg': ['#141031', '#07061a', '#0d1430'], 'ramp': ['#ef4444', '#f59e0b', '#facc15', '#22c55e', '#06b6d4', '#3b82f6', '#a855f7'],
+            'accent': '#facc15', 'glow': '#a855f7', 'sweeps': None},
+}
+_TZ_SCHEMES['prompt engineering conference'] = _TZ_SCHEMES['pec']
+# the square logo per brand (home assets are copied to the site root; the page sits at /<event>/talks/), blend = how it
+# is drawn ('screen' drops the black die-cut backing of a sticker), prefix = the discount code's
+_TZ_BRAND = {'sreday': ('../../assets/images/sreday_square.png', 'normal', 'SRE'),
+             'llmday': ('../../assets/images/llmday_sticker_new.png', 'screen', 'LLM'),
+             'platformday': ('../../assets/images/platformday_sticker.png', 'screen', 'PLAT'),
+             'pec': ('../../assets/images/icons/android-chrome-512x512.png', 'normal', 'PEC')}
+_TZ_BRAND['prompt engineering conference'] = _TZ_BRAND['pec']
+_tz_key = str(context['hero_event'].get('brand') or '').lower()
+_tz_k = _TZ_SCHEMES.get(_tz_key) or {'bg': ['#08203a', '#040d1c', '#0a1235'], 'ramp': [str(context.get('brand_color') or '#333'), '#22d3ee', '#a855f7'],
+                                     'accent': str(context.get('brand_color') or '#22d3ee'), 'glow': '#22d3ee',
+                                     'sweeps': [['#22d3ee', str(context.get('brand_color') or '#333')], ['#a855f7', '#22d3ee']]}
+_tz_logo, _tz_blend, _tz_prefix = _TZ_BRAND.get(_tz_key, ('', 'normal', str(context.get('brand_name', ''))[:4].upper()))
+
+
+def _tz_ramp(angle=90):
+    return 'linear-gradient(%ddeg, %s)' % (angle, ', '.join(_tz_k['ramp']))
+
+
+def _tz_sweeps_svg():
+    """the hero backdrop's two glowing brand sweeps as one SVG (PEC: both carry the whole rainbow)"""
+    defs, paths = [], []
+    for i, (cx, cy, r, w, a0, a1, alpha, blur) in enumerate([(1000, 560, 416, 112, -math.pi * .6, math.pi * .1, .4, 80),
+                                                             (160, 1120, 480, 96, -math.pi * .5, 0, .3, 64)]):
+        cols = _tz_k['ramp'] if _tz_k['sweeps'] is None else _tz_k['sweeps'][i]
+        reach = 1 if _tz_k['sweeps'] is None else .55
+        stops = ''.join('<stop offset="%.2f" stop-color="%s"/>' % (j / (len(cols) - 1) * reach, c) for j, c in enumerate(cols))
+        if _tz_k['sweeps'] is not None:
+            stops += '<stop offset="1" stop-color="#000" stop-opacity="0"/>'
+        defs.append('<linearGradient id="tzg%d" gradientUnits="userSpaceOnUse" x1="%d" y1="%d" x2="%d" y2="%d">%s</linearGradient>'
+                    '<filter id="tzf%d" x="-50%%" y="-50%%" width="200%%" height="200%%"><feGaussianBlur stdDeviation="%d"/></filter>'
+                    % (i, cx - r, cy - r, cx + r, cy + r, stops, i, blur // 2))
+        x0, y0, x1, y1 = cx + r * math.cos(a0), cy + r * math.sin(a0), cx + r * math.cos(a1), cy + r * math.sin(a1)
+        d = 'M%.1f %.1f A%d %d 0 %d 1 %.1f %.1f' % (x0, y0, r, r, 1 if abs(a1 - a0) > math.pi else 0, x1, y1)
+        paths.append('<path d="%s" stroke="url(#tzg%d)" stroke-width="%d" fill="none" stroke-linecap="round" opacity="%.2f" filter="url(#tzf%d)"/>'
+                     '<path d="%s" stroke="url(#tzg%d)" stroke-width="%d" fill="none" stroke-linecap="round" opacity="%.2f"/>'
+                     % (d, i, w * 1.5, alpha, i, d, i, w, alpha * .9))
+    return '<svg class="tz-sw" viewBox="0 0 1200 1200" aria-hidden="true"><defs>%s</defs>%s</svg>' % (''.join(defs), ''.join(paths))
+
+
+# ── title text rules (tuned on 100 real titles, Marek 2026-10-04) ──
+_TZ_ARTICLES = {'a', 'an', 'the'}
+_TZ_SHORT = {'a', 'an', 'the', 'of', 'to', 'in', 'on', 'at', 'by', 'for', 'and', 'or', 'nor', 'but', 'with', 'from', 'into', 'onto',
+             'vs', 'vs.', 'via', 'is', 'are', 'as', 'its', 'your', 'our', 'my', 'their', '&', 'no', 'not', 'without'}
+_TZ_NB = ' '
+_TZ_TIERS = [(20, 64), (32, 58), (45, 54), (60, 50), (75, 46), (95, 42), (999, 38)]   # px on the 1200 card by characters
+_TZ_LINES = [(22, 1), (44, 2), (75, 3), (999, 4)]                                    # line budget by characters
+_TZ_COL = 634                                                                         # the title column, px
+_TZ_SEP = re.compile(r'(?<=\w[:?.!])\s+(?=\S)|\s+(?=[—–]\s)')
+
+
+def _tz_title_size(text):
+    return next(px for lim, px in _TZ_TIERS if len(text) <= lim)
+
+
+def _tz_title_lines(text):
+    return next(n for lim, n in _TZ_LINES if len(text) <= lim)
+
+
+def _tz_deorphan(text):
+    """a line never ends on "a" / "the" / "of"...: articles stick to their noun; other short words stick forward unless an
+    article follows (then the article sticks instead, no three-word chains); a dash sticks to the word before it"""
+    words = text.split()
+    out = []
+    for i, w in enumerate(words):
+        out.append(w)
+        if i == len(words) - 1:
+            break
+        nxt = words[i + 1]
+        lw, ln = w.lower().strip('"“”‘’()'), nxt.lower().strip('"“”‘’()')
+        glue = lw in _TZ_ARTICLES or ((lw in _TZ_SHORT or (len(lw) <= 2 and lw.isalnum())) and ln not in _TZ_ARTICLES) or nxt in ('—', '–')
+        out.append(_TZ_NB if glue else ' ')
+    return ''.join(out)
+
+
+def _tz_tie_last(text, px):
+    """never a lone last word: tie the last two chunks when the pair surely fits the column at this size"""
+    chunks = text.split(' ')
+    if len(chunks) > 2 and len(chunks[-2]) + len(chunks[-1]) + 1 <= .95 * _TZ_COL / (.7 * px):
+        return ' '.join(chunks[:-2]) + ' ' + chunks[-2] + _TZ_NB + chunks[-1]
+    return text
+
+
+def _tz_chunks_html(text, px):
+    """escaped chunks (words glued by no-break spaces count as one) in spans the fit script measures; hyphenated words
+    (open-source, 60-Day) never break at the hyphen"""
+    from html import escape as _esc
+    return ' '.join('<span class="w">%s</span>' % re.sub(r'(\S*\w-\w\S*)', r'<span class="nw">\1</span>', _esc(c))
+                    for c in _tz_tie_last(_tz_deorphan(text), px).split(' '))
+
+
+def _tz_title_html(text):
+    """the title, plus a phrase break (<br class="sep">) at the first colon / ? / . / ! / dash outside quotation marks
+    when both halves are real phrases; the fit script keeps or drops it, whichever reads better"""
+    text = re.sub(r'\s+-\s+', ' \u2013 ', text)               # a spaced hyphen is a dash: "Invisible Data – The Largest..."
+    px = _tz_title_size(text)
+    m = next((x for x in _TZ_SEP.finditer(text) if sum(text[:x.start()].count(q) for q in '"“”') % 2 == 0), None)
+    if m and m.start() >= 8 and _tz_title_lines(text) > 1 and len(text) - m.end() >= 8:
+        return _tz_chunks_html(text[:m.start()], px) + '<br class="sep">' + _tz_chunks_html(text[m.end():], px)
+    return _tz_chunks_html(text, px)
+
+
+def _tz_name_lines(name):
+    """1-2 speakers: the name as written. A panel (3+): every full name over two balanced lines"""
+    sp = [s for s in re.split(r'\s*,\s*|\s*&\s*|\s+and\s+', name or '') if s.strip()]
+    if len(sp) < 3:
+        return [name]
+    best = None
+    for k in range(1, len(sp)):
+        rest = sp[k:]
+        a = ', '.join(sp[:k]) + ','
+        b = ('& ' + rest[0]) if len(rest) == 1 else ', '.join(rest[:-1]) + ' & ' + rest[-1]
+        if best is None or abs(len(a) - len(b)) < best[0]:
+            best = (abs(len(a) - len(b)), [a, b])
+    return best[1]
+
+
+# the ball: a free event says FREE EVENT; otherwise 20% off 3+ weeks before the event (the day this build runs), 50% closer
+_tz_days = None
+try:
+    _tz_days = (datetime.datetime.fromisoformat(str(context.get('start_time') or '')).date() - datetime.date.today()).days
+except ValueError:
+    pass
+_tz_pct = 20 if _tz_days is None or _tz_days >= 21 else 50
+context['tz'] = {
+    'scheme': _tz_k, 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'logo': _tz_logo, 'blend': _tz_blend,
+    'free': bool(context['hero_event'].get('is_free')), 'pct': _tz_pct, 'code': '%s%d' % (_tz_prefix, _tz_pct),
+    'conf': str(context['hero_event'].get('subtitle') or '').upper(),
+    'day': context['hero_event'].get('day', ''), 'mon': str(context['hero_event'].get('month', ''))[:3].upper(),
+    'weekday': context['hero_event'].get('weekday', ''),
+    'venue': context['hero_event'].get('venue_short', ''), 'place': context['hero_event'].get('venue_line', ''),
+}
+context['teaser_talks'] = []
+_tz_shown = {id(_x) for _x in keynotes + talks}              # confirmed sessions (each repo sorts its rows into these)
+for _t in talks_raw:                                         # spreadsheet order
+    if id(_t) not in _tz_shown or _t.get('merged_into'):
+        continue
+    _name = (_t.get('name') or '').strip()
+    _title = str(_t.get('title_display') or _t.get('title') or '').strip()
+    if _title.lower().startswith('keynote:'):
+        _title = _title[len('keynote:'):].strip()
+    if not _name or _name.startswith('_') or not _title:
+        continue
+    _org = (_t.get('organization') or '').strip()
+    _lines = _tz_name_lines(_name)
+    context['teaser_talks'].append({
+        'title': _title, 'title_html': _tz_title_html(_title), 'size': _tz_title_size(_title), 'lines': _tz_title_lines(_title),
+        'name': _name, 'name_lines': _lines, 'panel': len(_lines) > 1, 'organization': '' if len(_lines) > 1 else _org,
+        'photo': ('../' + _t['photo_url']) if str(_t.get('photo_url') or '').startswith('../') else (_t.get('photo_url') or ''),
+        'track': str(_t.get('track') or '').strip(), 'day': str(_t.get('day') or '').strip(), 'kind': 'keynote' if _t in keynotes else _t.get('kind', 'talk'),
+        'search': ' '.join([_name, _org, _title]).lower(),
+        'file': '%s-%s-%s.png' % (str(context.get('brand_name', '')).lower(), _tz_slug(_ob_slug), _tz_slug(_name)),
+    })
+_os.makedirs(BASE_FOLDER + "/talks", exist_ok=True)
+with open(BASE_FOLDER + "/talks/index.html", "w", encoding="utf-8") as f:
+    f.write(_hidden_page("talks.html"))
+# the old address keeps working: /teasers/ forwards to /talks/
+_os.makedirs(BASE_FOLDER + "/teasers", exist_ok=True)
+with open(BASE_FOLDER + "/teasers/index.html", "w", encoding="utf-8") as f:
+    f.write('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow">'
+            '<meta http-equiv="refresh" content="0; url=../talks/"><title>Moved</title></head>'
+            '<body><a href="../talks/">The session teasers moved to /talks/</a></body></html>')
+print("Writing out talks/index.html (hidden, not in sitemap): %d cards" % len(context['teaser_talks']))
 
 # HIDDEN PAGE: /<event>/invitation/ (speaker invitation letter, "convince your boss"). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/invitation", exist_ok=True)
