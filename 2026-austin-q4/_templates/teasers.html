@@ -185,20 +185,25 @@
           keys.forEach(function (k) { if (tops[k] === 1) lone++; });
           return { n: keys.length, lone: ws.length === 1 ? 0 : lone };
         }
-        var best = null;
-        [want, Math.min(want + 1, 5)].some(function (budget) {   // never past 5 lines
-          variants.forEach(function (h, vi) {
-            el.innerHTML = h;
-            for (var s = tier; s >= min; s--) {
-              el.style.fontSize = s + 'px';
-              var m = measure(); if (m.n > budget) continue;
-              var c = { h: h, s: s, n: m.n, vi: vi, score: s - 8 * m.lone };
-              if (!best || c.score > best.score || (c.score === best.score && (c.n < best.n || (c.n === best.n && c.vi < best.vi)))) best = c;
-            }
+        function search(floor, budgets) {
+          var best = null;
+          budgets.some(function (budget) {
+            variants.forEach(function (h, vi) {
+              el.innerHTML = h;
+              for (var s = tier; s >= floor; s--) {
+                el.style.fontSize = s + 'px';
+                var m = measure(); if (m.n > budget) continue;
+                var c = { h: h, s: s, n: m.n, vi: vi, score: s - 8 * m.lone };
+                if (!best || c.score > best.score || (c.score === best.score && (c.n < best.n || (c.n === best.n && c.vi < best.vi)))) best = c;
+              }
+            });
+            return best;
           });
           return best;
-        });
-        if (!best) best = { h: variants[variants.length - 1], s: min };
+        }
+        // never past 5 lines: nothing fits 5 lines at 80% (titles of 120+ characters) -> 5 lines again, down to 70%
+        var floor70 = Math.max(28, Math.round(tier * .7));
+        var best = search(min, [want, Math.min(want + 1, 5)]) || search(floor70, [5]) || { h: variants[variants.length - 1], s: floor70 };
         el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
       }
       function fitAll() {
