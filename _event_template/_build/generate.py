@@ -1741,8 +1741,8 @@ _TZ_ARTICLES = {'a', 'an', 'the'}
 _TZ_SHORT = {'a', 'an', 'the', 'of', 'to', 'in', 'on', 'at', 'by', 'for', 'and', 'or', 'nor', 'but', 'with', 'from', 'into', 'onto',
              'vs', 'vs.', 'via', 'is', 'are', 'as', 'its', 'your', 'our', 'my', 'their', '&', 'no', 'not', 'without'}
 _TZ_NB = ' '
-_TZ_TIERS = [(20, 64), (32, 58), (45, 54), (60, 50), (75, 46), (95, 42), (999, 38)]   # px on the 1200 card by characters
-_TZ_LINES = [(22, 1), (44, 2), (75, 3), (999, 4)]                                    # line budget by characters
+_TZ_TIERS = [(20, 64), (32, 58), (45, 56), (60, 54), (80, 50), (100, 48), (999, 44)]   # px on the 1200 card by characters
+_TZ_LINES = [(22, 1), (44, 2), (64, 3), (84, 4), (999, 5)]                          # line budget by characters (5 at most)
 _TZ_COL = 590                                                                         # the title column, px
 _TZ_SEP = re.compile(r'(?<=\w[:?.!])\s+(?=\S)|\s+(?=[—–]\s)')
 
