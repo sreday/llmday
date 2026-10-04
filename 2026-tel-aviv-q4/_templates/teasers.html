@@ -1,4 +1,4 @@
-{# ── Session teasers (hidden page, /<event>/talks/; was /teasers/, which now forwards here). Standalone: does NOT
+{# ── Session teasers (hidden page, /<event>/teasers/). Standalone: does NOT
      extend _base.html. One social card per confirmed session, in the order of talks.csv, laid out at 1200 px and
      exported as a 1500x1500 PNG at build time by _build/render_teasers.py (headless Chrome opens this page with
      #sheet-<start>-<count>, which shows only those cards stacked at their true size, unsorted and unfiltered; the
@@ -14,7 +14,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Talks: {{ onboarding_event.event_name }}</title>
+  <title>Teasers: {{ onboarding_event.event_name }}</title>
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
@@ -61,15 +61,18 @@
       background: radial-gradient(circle at 50% 35%, #1c1a2c, #08080f 75%); }
     .tz-ball-line { width: 168px; text-align: center; font-weight: 900; line-height: 1; white-space: nowrap; overflow: hidden; }
     .tz-ball-sep { width: 130px; border-top: 4px dashed rgba(255,255,255,.28); margin: 16px 0; }
-    .tz-mid { left: 72px; top: 300px; width: 1056px; height: 630px; display: flex; flex-direction: column; justify-content: center; }
+    .tz-mid { left: 72px; top: 312px; width: 1056px; height: 630px; display: flex; flex-direction: column; justify-content: center; }
     .tz-mid * { position: static; }
     .tz-top { display: flex; align-items: center; gap: 32px; }
-    .tz-col { width: 634px; }
+    .tz-col { width: 590px; }   /* leaves the enlarged photo 37 px of air */
     .tz-conf { font-weight: 700; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
     .tz-talk { margin-top: 18px; font-weight: 900; line-height: 1.08; text-wrap: balance; }
     .tz-talk .nw { white-space: nowrap; }
-    .tz-photo { width: 390px; height: 390px; margin-left: auto; flex: 0 0 auto; object-fit: contain; display: block; }
-    .tz-who { margin-top: 40px; }
+    .tz-photo { width: 390px; height: 390px; margin-left: auto; flex: 0 0 auto; object-fit: contain; display: block;
+      transform: scale(var(--tz-photo-scale, 1.2)); transform-origin: var(--tz-photo-origin, 50% 25%); }
+    /* the headshot is drawn 20% bigger (468 px) over its 390 px slot, growing mostly downwards (there is room above the
+       ticket) so it keeps clear of the discount ball; tested against every live card + edge cases (2026-10-04) */
+    .tz-who { margin-top: 64px; }   /* clears the enlarged photo's bottom edge for long names */
     .tz-bar { width: 96px; height: 8px; background: {{ tz.ramp }}; margin-bottom: 24px; }
     .tz-name { font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; }
     .tz-panel { line-height: 1.2; }
@@ -101,7 +104,7 @@
   <div class="tz-page">
     <div class="tz-head">
       <div>
-        <div class="tz-brand">{{ brand_name }} · talks</div>
+        <div class="tz-brand">{{ brand_name }} · teasers</div>
         <h1 class="tz-title">{{ onboarding_event.event_name }}</h1>
         <div class="tz-sub">{{ date_string }} · {{ tz.venue }} · one card per session, a 1500 x 1500 px PNG each, rendered on every site build from talks.csv{% if tz.free %} · free event{% else %} · discount on the cards: {{ tz.pct }}% off, {{ tz.code }}{% endif %}. Hidden page for the team.</div>
       </div>
