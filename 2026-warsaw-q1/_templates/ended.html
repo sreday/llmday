@@ -1,0 +1,37 @@
+{# ── "This event has ended" (Marek 2026-10-04). Rendered IN PLACE of the onboarding, fasttrack, teasers,
+     communityhero, invitation and onboardsponsor pages once the event is over (event_state: after, or 24 h after its
+     last day; see _event_over in generate.py), so a past event's forms, cards and ticket codes can no longer be used
+     (the waitlist stays live). The sponsor onboarding passes ended_cta_url / _label / ended_note to point sponsors at
+     the next event's sponsorship page. Standalone, noindex, never in the sitemap. Same file in all four
+     repos (brand colour from {{ brand_color }}). ── #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Event ended: {{ onboarding_event.event_name }}</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,800|Roboto:400&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent: {{ brand_color }}; }
+    html, body { margin: 0; height: 100%; background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
+    .ev-wrap { min-height: 100%; display: flex; align-items: center; justify-content: center; padding: 24px 16px; box-sizing: border-box; }
+    .ev-card { max-width: 520px; width: 100%; background: #fff; border: 1px solid #e6e6e6; border-left: 4px solid var(--accent); border-radius: 16px;
+               padding: 36px 32px; box-shadow: 0 4px 20px rgba(0,0,0,.06); box-sizing: border-box; }
+    .ev-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent); font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.7rem; line-height: 1.2; margin: 8px 0 10px; }
+    p { color: #555; font-size: 1rem; line-height: 1.6; margin: 0 0 22px; }
+    a.ev-btn { display: inline-block; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .95rem; padding: 12px 24px;
+               border-radius: 999px; background: var(--accent); color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="ev-wrap"><div class="ev-card">
+    <div class="ev-brand">{{ onboarding_event.event_name }}</div>
+    <h1>This event has ended</h1>
+    <p>{{ onboarding_event.event_name }} took place on {{ date_string }}{% if city_name %} in {{ city_name }}{% endif %}. This page is no longer active. {{ ended_note|default("See what's coming up next.") }}</p>
+    <a class="ev-btn" href="{{ ended_cta_url or base_path or '../../' }}">{{ ended_cta_label|default('Upcoming ' ~ brand_name ~ ' events') }}</a>
+  </div></div>
+</body>
+</html>
