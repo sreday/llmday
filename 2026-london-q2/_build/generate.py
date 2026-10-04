@@ -1427,7 +1427,7 @@ print("Sponsor onboarding: %s | %d opportunities | size %s" % (
     context['sponsor_onboarding_event']['event_name'], len(context['sponsor_onboarding_event']['items']), _event_size))
 # ── END SPONSOR ONBOARDING ──────────────────────────────────────────────────
 
-# PAST EVENTS (Marek 2026-10-04): once the event is over, the onboarding, fasttrack, talks (teasers), communityhero,
+# PAST EVENTS (Marek 2026-10-04): once the event is over, the onboarding, fasttrack, teasers, communityhero,
 # invitation and onboardsponsor pages are written as "This event has ended" (ended.html) so a past event's forms,
 # cards and ticket codes can no longer be used. The waitlist stays live. Over = metadata says event_state: after, OR a
 # full 24 h have passed since the event ended (end of its last day, `days` long, in the event's own timezone), so a
@@ -1673,13 +1673,13 @@ with open(BASE_FOLDER + "/communityhero/index.html", "w", encoding="utf-8") as f
 print("Writing out communityhero/index.html (hidden, not in sitemap)")
 # ── END COMMUNITY HERO ──────────────────────────────────────────────────────
 
-# HIDDEN PAGE: /<event>/talks/ (the session teasers, Marek 2026-10-04; was /teasers/, which now redirects here). One
+# HIDDEN PAGE: /<event>/teasers/ (the session teasers, redesigned by Marek 2026-10-04). One
 # 1200x1200 social card per confirmed session (exported as a 1500x1500 PNG by _build/render_teasers.py) in the order
 # of talks.csv, searchable by speaker, company and title, downloadable per sorting ("Download all" / "Download track N").
 # The card: the brand's square logo top left (never typed out), the discount ball top right (20% off 3+ weeks before
 # the event, 50% closer; SRE / LLM / PLAT / PEC + the percent; "FREE EVENT" for a free event), the conference name,
 # the title (size tier by length, a line budget, orphan-free breaks: _tz_title_html here + the fit script in
-# talks.html), the headshot exactly as on the site, speaker + company (a panel of 3+ names drops the company and
+# teasers.html), the headshot exactly as on the site, speaker + company (a panel of 3+ names drops the company and
 # shows every full name on two lines), and a ticket with the date and "venue / City, Country" (the community hero
 # facts above, same rules). Built after the community hero because it reuses hero_event.
 def _tz_slug(s):
@@ -1697,7 +1697,7 @@ _TZ_SCHEMES = {   # the community hero colour schemes (communityhero.html SCHEME
             'accent': '#facc15', 'glow': '#a855f7', 'sweeps': None},
 }
 _TZ_SCHEMES['prompt engineering conference'] = _TZ_SCHEMES['pec']
-# the square logo per brand (home assets are copied to the site root; the page sits at /<event>/talks/), blend = how it
+# the square logo per brand (home assets are copied to the site root; the page sits at /<event>/teasers/), blend = how it
 # is drawn ('screen' drops the black die-cut backing of a sticker), prefix = the discount code's
 _TZ_BRAND = {'sreday': ('../../assets/images/sreday_square.png', 'normal', 'SRE'),
              'llmday': ('../../assets/images/llmday_sticker_new.png', 'screen', 'LLM'),
@@ -1743,7 +1743,7 @@ _TZ_SHORT = {'a', 'an', 'the', 'of', 'to', 'in', 'on', 'at', 'by', 'for', 'and',
 _TZ_NB = ' '
 _TZ_TIERS = [(20, 64), (32, 58), (45, 54), (60, 50), (75, 46), (95, 42), (999, 38)]   # px on the 1200 card by characters
 _TZ_LINES = [(22, 1), (44, 2), (75, 3), (999, 4)]                                    # line budget by characters
-_TZ_COL = 634                                                                         # the title column, px
+_TZ_COL = 590                                                                         # the title column, px
 _TZ_SEP = re.compile(r'(?<=\w[:?.!])\s+(?=\S)|\s+(?=[—–]\s)')
 
 
@@ -1849,16 +1849,10 @@ for _t in talks_raw:                                         # spreadsheet order
         'search': ' '.join([_name, _org, _title]).lower(),
         'file': '%s-%s-%s.png' % (str(context.get('brand_name', '')).lower(), _tz_slug(_ob_slug), _tz_slug(_name)),
     })
-_os.makedirs(BASE_FOLDER + "/talks", exist_ok=True)
-with open(BASE_FOLDER + "/talks/index.html", "w", encoding="utf-8") as f:
-    f.write(_hidden_page("talks.html"))
-# the old address keeps working: /teasers/ forwards to /talks/
 _os.makedirs(BASE_FOLDER + "/teasers", exist_ok=True)
 with open(BASE_FOLDER + "/teasers/index.html", "w", encoding="utf-8") as f:
-    f.write('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow">'
-            '<meta http-equiv="refresh" content="0; url=../talks/"><title>Moved</title></head>'
-            '<body><a href="../talks/">The session teasers moved to /talks/</a></body></html>')
-print("Writing out talks/index.html (hidden, not in sitemap): %d cards" % len(context['teaser_talks']))
+    f.write(_hidden_page("teasers.html"))
+print("Writing out teasers/index.html (hidden, not in sitemap): %d cards" % len(context['teaser_talks']))
 
 # HIDDEN PAGE: /<event>/invitation/ (speaker invitation letter, "convince your boss"). Same rules as onboarding.
 _os.makedirs(BASE_FOLDER + "/invitation", exist_ok=True)
