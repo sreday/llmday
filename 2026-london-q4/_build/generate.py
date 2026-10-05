@@ -166,6 +166,8 @@ def md_plain(text):
     out = re.sub(r'</?(?:p|li|ul|ol|h[1-6]|br|div|blockquote|pre|hr|tr|table)\b[^>]*>', ' ', html_out)   # blocks -> a space
     out = re.sub(r'<[^>]+>', '', out)                                                                    # inline tags go
     out = html.unescape(out)
+    out = re.sub(r'\*+', '', out)                    # leftover * / ** (unclosed or mismatched emphasis)
+    out = re.sub(r'(?<!\w)_+|_+(?!\w)', '', out)     # leftover _ / __ at word edges; snake_case keeps its underscores
     return re.sub(r'\s+', ' ', out).strip()
 
 def read_csv(path):
@@ -188,11 +190,26 @@ file_loader = FileSystemLoader("_templates")
 env = Environment(loader=file_loader)
 env.add_extension(MarkdownExtension)
 env.filters["short_url"] = generate_short_url
+_MD_INLINE_BULLET = re.compile(r'\s+\*\s+(?=[A-Z0-9"“(])')
+_MD_LIST_ITEM = re.compile(r'^(?:[*+-]|\d+[.)])\s+\S')
 def _markdown_no_headers(text):
-    lines = text.split('\n')
+    lines = []
+    for line in text.split('\n'):
+        # bullets pasted on one line ("explores: * Why X * The Y * Z"): 2+ " * Capitalised" -> one item per line
+        if line.count('**') % 2:                  # an unpaired ** would print literally: drop the last one
+            _k = line.rfind('**')
+            line = line[:_k] + line[_k + 2:]
+        if len(_MD_INLINE_BULLET.findall(line)) >= 2:
+            lines.extend(_MD_INLINE_BULLET.sub('\n* ', line).split('\n'))
+        else:
+            lines.append(line)
     cleaned = []
     for line in lines:
         stripped = line.lstrip()
+        # a list straight under a paragraph ("covering:\n* item") needs a blank line first, or markdown
+        # prints the "* " literally
+        if _MD_LIST_ITEM.match(stripped) and cleaned and cleaned[-1].strip() and not _MD_LIST_ITEM.match(cleaned[-1].lstrip()):
+            cleaned.append('')
         if stripped.startswith('#'):
             # convert "#### Heading" → "**Heading**"
             heading_text = stripped.lstrip('#').strip()
