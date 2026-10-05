@@ -1796,7 +1796,7 @@ def _tz_chunks_html(text, px):
     (open-source, 60-Day) never break at the hyphen"""
     from html import escape as _esc
     return ' '.join('<span class="w">%s</span>' % re.sub(r'(\S*\w-\w\S*)', r'<span class="nw">\1</span>', _esc(c))
-                    for c in _tz_tie_last(_tz_deorphan(text), px).split(' '))
+                    for c in _tz_deorphan(text).split(' '))   # no last-pair tie: the fit's lone-word penalty handles it and big text can wrap
 
 
 def _tz_title_html(text):

@@ -182,12 +182,18 @@
       function fitTitle(el) {
         var maxS = 64, minS = 28, maxH = 390;
         var withBr = el.innerHTML, variants = withBr.indexOf('class="sep"') >= 0 ? [withBr, withBr.replace(/<br class="sep">/, ' ')] : [withBr];
+        // one more layout per variant: long hyphenated words (Screenshot-First) may split at the hyphen, -3 px, used only when
+        // keeping them whole would cost more (a stranded word, a smaller size)
+        variants = variants.concat(variants.filter(function (h) { return h.indexOf('class="nw"') >= 0; })
+          .map(function (h) { return h.replace(/<span class="nw">([^<]*)<\/span>/g, '$1'); }));
+        var splitFrom = variants.length - variants.filter(function (h) { return h.indexOf('class="nw"') < 0 && withBr.indexOf('class="nw"') >= 0; }).length;
         function measure() {
           var tops = {}, ws = el.querySelectorAll('.w');
           [].forEach.call(ws, function (w) { tops[w.offsetTop] = (tops[w.offsetTop] || 0) + 1; });
           var keys = Object.keys(tops), lone = 0;
           keys.forEach(function (k) { if (tops[k] === 1) lone++; });
-          return { n: keys.length, lone: ws.length === 1 ? 0 : lone };
+          var n = Math.round(el.offsetHeight / (parseFloat(el.style.fontSize) * 1.08));   // a split word spans two lines
+          return { n: n, lone: ws.length === 1 ? 0 : lone };
         }
         var best = null;
         variants.forEach(function (h, vi) {
@@ -196,7 +202,7 @@
             el.style.fontSize = s + 'px';
             if (el.offsetHeight > maxH || el.scrollWidth > el.clientWidth) continue;
             var m = measure(); if (m.n > 5) continue;
-            var c = { h: h, s: s, n: m.n, vi: vi, score: s - 3 * m.lone };
+            var c = { h: h, s: s, n: m.n, vi: vi, score: s - 3 * m.lone - (vi >= splitFrom ? 3 : 0) };
             if (!best || c.score > best.score || (c.score === best.score && (c.n < best.n || (c.n === best.n && c.vi < best.vi)))) best = c;
           }
         });
