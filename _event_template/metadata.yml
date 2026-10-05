@@ -8,6 +8,8 @@ start_time: "2125-11-06T09:00:00-08:00"
 event_state: before
 date_string: "November 7, 2025"
 location_string: "Mars, Milky Way"
+# venue changed and the new one isn\'t confirmed yet: uncomment to show "To be confirmed soon" (hides address, map, photos)
+# venue_tbc: true
 city_name: "Mars"
 # get this from the event url
 luma_evt: evt-xAhCqaXMWAXAEEm

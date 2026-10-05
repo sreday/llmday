@@ -776,7 +776,7 @@
 </section><!--//speakers-section-->
 {% endif %}
 
-{% include 'venue.html' %}
+{% if venue_tbc %}{% include 'venue_tbc.html' %}{% else %}{% include 'venue.html' %}{% endif %}
 
 {% if sponsors %}
 <section id="sponsors" class="sponsors-section section">

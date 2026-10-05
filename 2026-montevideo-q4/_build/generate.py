@@ -362,7 +362,10 @@ def _ob_venue(path='_templates/venue.html'):
 
 
 _ob = dict(context.get('onboarding') or {})
-_ob_vname, _ob_vaddr = _ob_venue()
+# venue_tbc: true in metadata.yml (the venue changed, the new one isn't confirmed): the venue section says "To be
+# confirmed soon" with the city only (no address, map or photos), and every page/card names the venue the same way
+_VENUE_TBC = 'Venue to be confirmed soon'
+_ob_vname, _ob_vaddr = (_VENUE_TBC, str(context.get('location_string', ''))) if context.get('venue_tbc') else _ob_venue()
 _ob_date = str(context.get('date_string', ''))
 context['onboarding_event'] = {
     'brand':         str(context.get('brand_name', '')).lower(),
@@ -1636,7 +1639,8 @@ def _ch_card_facts():
         except Exception:
             _d = None
     _addr = [p.strip() for p in str(_ch.get('venue_address') or '').split(',') if p.strip()]
-    _ch_venue = str(context.get('communityhero_venue') or '') or _ch_venue_display(_ob_vname or _ch['venue_name'], _ch['city'], context.get('sponsors'))
+    _ch_venue = str(context.get('communityhero_venue') or '') or (_VENUE_TBC if context.get('venue_tbc') else '') \
+        or _ch_venue_display(_ob_vname or _ch['venue_name'], _ch['city'], context.get('sponsors'))
     return {
         'day': str(_d.day) if _d else '', 'month': _d.strftime('%B') if _d else '', 'weekday': _d.strftime('%A') if _d else '',
         # card + texts name the venue the same way: "<Company> HQ" for a host's office, otherwise the venue's own name
