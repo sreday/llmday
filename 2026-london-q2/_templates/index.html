@@ -453,8 +453,8 @@
   /* Table view */
   .schedule-table-view { display: none; }
   .schedule-table-view.active { display: block; }
-  /* one track: the table at half the width, centred (Marek 2026-10-06); full width on phones */
-  @media (min-width: 768px) { .schedule-table-view.single-track { max-width: 50%; margin: 0 auto; } }
+  /* one track: the table at 60% width, centred (Marek 2026-10-06); full width on phones */
+  @media (min-width: 768px) { .schedule-table-view.single-track { max-width: 60%; margin: 0 auto; } }
   .schedule-timeline-view { display: block; }
   .schedule-timeline-view.hidden { display: none; }
   /* view switch (Normal / Compact / Table), same slider pill as the sponsorship page's currency switch */
@@ -597,9 +597,9 @@
   .track-section-header {
     background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: white;
-    padding: 1rem 1.5rem;
-    margin: 2rem 0 0 0;
-    border-radius: 4px 4px 0 0;
+    padding: 1rem 1.75rem;
+    margin: 2rem 0 .75rem 0;
+    border-radius: 999px;                                   /* a pill across the full width (Marek 2026-10-06) */
     font-size: 1.25rem;
     font-weight: 700;
   }
@@ -647,7 +647,7 @@
     <!-- Timeline View (default) -->
     <div id="timeline-view-{{ day }}" class="schedule-timeline-view">
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-      <div class="track-section-header" id="track-{{ day }}-{{ loop.index }}">{{ rooms[loop.index0] }} &bull; Track {{ track }}</div>
+      <div class="track-section-header" id="track-{{ day }}-{{ loop.index }}">Track {{ track }} &bull; {{ rooms[loop.index0] }}</div>
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 {% for talk in talks_by_tracks[track] %}
@@ -814,6 +814,8 @@
       };
       var saved = null;
       try { saved = localStorage.getItem('scheduleView'); } catch (e) {}
+      // phones open on the compact lineup unless the visitor picked a view before (Marek 2026-10-06)
+      if (!saved && window.matchMedia && matchMedia('(max-width: 767.98px)').matches) saved = 'compact';
       if (saved && saved !== 'normal') setScheduleView(saved);
       requestAnimationFrame(svAll);
       window.addEventListener('load', svAll);
