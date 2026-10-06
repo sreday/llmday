@@ -343,7 +343,23 @@
     });
     if (!best) return null;
     var lm = best.lm;
-    return { ey: (lm[468].y + lm[473].y) / 2, fx: (lm[234].x + lm[454].x) / 2, chin: lm[152].y, brow: lm[10].y };
+    return { ey: (lm[468].y + lm[473].y) / 2, fx: (lm[234].x + lm[454].x) / 2, chin: lm[152].y, brow: lm[10].y, l: lm[234], r: lm[454], mouth: lm[13] };
+  }
+  // darker skin needs more light (Marek 2026-10-06): the median grey of the cheeks and nose (between the eyes and the
+  // mouth, middle half of the face) on the untoned photo; below 145 every grey level adds 0.016 Lumetri exposure, capped at
+  // +1.3 in total. In the calibration set Kishore Pulagam (skin 88) was brightened by about +1.0, Manu Gurudatha and Thomas
+  // Cameron (around 120) by about +0.4, light skin by the house +0.2.
+  var SKIN_REF = 145, SKIN_GAIN = 0.016, EXP_MAX = 1.3;
+  function skinMedian(L, f) {
+    var g = L.gray, W = g.width, H = g.height, d = g.data, vals = [];
+    var x0 = Math.min(f.l.x, f.r.x) + Math.abs(f.r.x - f.l.x) * .25, x1 = Math.max(f.l.x, f.r.x) - Math.abs(f.r.x - f.l.x) * .25;
+    var y0 = f.ey + (f.mouth.y - f.ey) * .25, y1 = f.mouth.y - (f.mouth.y - f.ey) * .1;
+    for (var y = Math.round(y0 * H); y < y1 * H; y++) for (var x = Math.round(x0 * W); x < x1 * W; x++) {
+      var i = (y * W + x) * 4; if (d[i + 3] >= 250) vals.push(d[i]);
+    }
+    if (vals.length < 50) return null;
+    vals.sort(function (a, b) { return a - b; });
+    return vals[Math.floor(vals.length / 2)];
   }
   function autoLayer(L, f, i, n) {
     // several people: smaller heads, side by side in layer order (back = left), eyes still on the guide
@@ -356,6 +372,8 @@
     var tx = C.x + AUTO.faceDX * C.r + (n > 1 ? (i - (n - 1) / 2) * AUTO.headChin * C.r * shrink * 0.75 : 0), ty = C.y - AUTO.eyeY * C.r;
     L.pan = { x: (tx - C.x + w / 2 - f.fx * w) / PAN_RANGE, y: (ty - top + L.headTop * h - f.ey * h) / PAN_RANGE };
     TONE_KEYS.forEach(function (k) { L[k] = AUTO.look[k]; }); regray(L);
+    var skin = skinMedian(L, f);
+    if (skin !== null && skin < SKIN_REF) L.exp = Math.min(EXP_MAX, Math.round((AUTO.look.exp + (SKIN_REF - skin) * SKIN_GAIN) * 20) / 20);
     L.tone.getContext('2d').putImageData(applyTone(L.gray, lut(L)), 0, 0); thumb(L);
   }
   $('auto').addEventListener('click', function () {
