@@ -81,6 +81,21 @@
     .editing { font-size: .85rem; color: #777; margin: 18px 0 14px; padding-top: 14px; border-top: 1px solid #eee; }
     .editing b { color: #333; }
     .ctl input:disabled { opacity: .4; cursor: not-allowed; }
+    /* batch export window (Marek 2026-10-06) */
+    .bx { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(20,16,24,.35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .bx[hidden] { display: none; }
+    .bx-box { position: relative; width: min(720px, 100%); max-height: calc(100vh - 40px); overflow: auto; background: #fff; border-radius: 20px; padding: 22px 24px; box-shadow: 0 24px 60px rgba(0,0,0,.25); }
+    .bx-box h2 { font: 700 1.2rem 'Montserrat', sans-serif; margin: 0 0 6px; }
+    .bx-box > .hint { margin: 0 0 12px; }
+    .bx-x { position: absolute; top: 12px; right: 14px; border: 0; background: #f0f0f3; width: 34px; height: 34px; border-radius: 50%; font-size: 1.3rem; cursor: pointer; }
+    .bx-list { list-style: none; margin: 10px 0 0; padding: 0; font-size: .85rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+    .bx-list li { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; overflow: hidden; }
+    .bx-list li span { overflow: hidden; text-overflow: ellipsis; }
+    .bx-list li b { font-weight: 600; color: #777; } .bx-list li b.ok { color: #1a8a3a; } .bx-list li b.warn { color: #c0392b; }
+    .bx-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px; }
+    .bx-thumbs figure { margin: 0; text-align: center; font-size: .7rem; color: #555; }
+    .bx-thumbs img { width: 100%; aspect-ratio: 1; border-radius: 10px; background: #fff conic-gradient(#e9e9ee 25%, #fff 0 50%, #e9e9ee 0 75%, #fff 0) 0 0 / 12px 12px; }
+    .bx-thumbs figure.warn img { outline: 3px solid #c0392b; }
     .btn-auto { width: 100%; margin: 0 0 6px; background: color-mix(in srgb, var(--accent) 12%, #fff); color: color-mix(in srgb, var(--accent) 75%, #000); border: 2px solid var(--accent); }
     .btn-auto:disabled { opacity: .45; cursor: not-allowed; }
     .auto-msg { min-height: 1.2em; margin-bottom: 8px; }
@@ -107,6 +122,7 @@
         <div class="hint">Follows the layers, as in talks.csv.</div>
       </div>
       <div class="row"><button type="button" class="btn btn-main" id="dl" disabled>Download PNG</button></div>
+      <button type="button" class="btn btn-ghost" id="batch-open" style="width:100%;margin-top:10px">Batch export&hellip; <small style="font-weight:500;color:#777">(up to 10, Auto, zip)</small></button>
     </div>
     <div class="card">
       <div class="editing" id="editing" style="margin-top:0;padding-top:0;border-top:0">Add a photo to start.</div>
@@ -128,6 +144,18 @@
       <div class="hint">Lumetri Color units. Double-click to reset. Blue line = eye level (preview only).</div>
       <div class="row"><button type="button" class="btn btn-ghost" id="reset">Reset layer</button></div>
     </div>
+  </div>
+</div>
+<div class="bx" id="bx" hidden>
+  <div class="bx-box" role="dialog" aria-label="Batch export">
+    <button type="button" class="bx-x" id="bx-x" aria-label="Close">&times;</button>
+    <h2>Batch export</h2>
+    <p class="hint">Up to 10 keyed PNGs, one speaker each. Every photo gets Auto (framing and tones) and is exported under its own name into one zip. No preview; check the results below after the export.</p>
+    <label class="drop" id="bx-drop"><input type="file" id="bx-file" accept="image/png,image/webp,image/*" multiple><span id="bx-text"><b>Choose photos</b> or drop them here (up to 10)</span></label>
+    <ul class="bx-list" id="bx-list"></ul>
+    <div class="row"><button type="button" class="btn btn-main" id="bx-go" disabled>Export zip</button></div>
+    <div class="hint" id="bx-msg"></div>
+    <div class="bx-thumbs" id="bx-thumbs"></div>
   </div>
 </div>
 <script>
@@ -173,19 +201,23 @@
     img.onerror = function () { $('drop-text').textContent = 'One image could not be read. Try a PNG.'; if (done) done(); };
     img.onload = function () {
       if (layers.length >= MAX_LAYERS) { if (done) done(); return; }
-      var s = Math.min(1, WORK_MAX / Math.max(img.width, img.height));
-      var work = document.createElement('canvas'); work.width = Math.round(img.width * s); work.height = Math.round(img.height * s);
-      var w = work.getContext('2d'); w.drawImage(img, 0, 0, work.width, work.height);
-      var colour = w.getImageData(0, 0, work.width, work.height), gray = toGray(colour, 0);
-      var tone = document.createElement('canvas'); tone.width = work.width; tone.height = work.height;
-      var L = { name: file.name, src: img, colour: colour, gray: gray, grayFlt: 0, tone: tone, headTop: findHeadTop(gray), zoom: 1.25, pan: { x: 0, y: 0 } };
-      TONE_KEYS.forEach(function (k) { L[k] = 0; });
-      tone.getContext('2d').putImageData(applyTone(gray, lut(L)), 0, 0);
+      var L = makeLayer(img, file.name);
       layers.push(L);
       select(layers.length - 1);
       if (done) done();
     };
     img.src = url;
+  }
+  function makeLayer(img, name) {                                        // a photo with default settings (not yet in the list)
+    var s = Math.min(1, WORK_MAX / Math.max(img.width, img.height));
+    var work = document.createElement('canvas'); work.width = Math.round(img.width * s); work.height = Math.round(img.height * s);
+    var w = work.getContext('2d'); w.drawImage(img, 0, 0, work.width, work.height);
+    var colour = w.getImageData(0, 0, work.width, work.height), gray = toGray(colour, 0);
+    var tone = document.createElement('canvas'); tone.width = work.width; tone.height = work.height;
+    var L = { name: name, src: img, colour: colour, gray: gray, grayFlt: 0, tone: tone, headTop: findHeadTop(gray), zoom: 1.25, pan: { x: 0, y: 0 } };
+    TONE_KEYS.forEach(function (k) { L[k] = 0; });
+    tone.getContext('2d').putImageData(applyTone(gray, lut(L)), 0, 0);
+    return L;
   }
   function findHeadTop(id) {                                            // the first row where the person starts (0.5% of the row opaque)
     var d = id.data, w = id.width, need = Math.max(2, w * 0.005);
@@ -254,13 +286,14 @@
   // a speaker may leave the circle only above this line: 20% of the circle's height above its centre (Marek 2026-10-06)
   var CUT = 0.2;
   function layer(size) { var c = document.createElement('canvas'); c.width = c.height = size; return c; }
-  function compose(g, size, imgs) {                                       // imgs[i] = the picture to draw for layers[i]
+  function compose(g, size, imgs, list) {                                 // imgs[i] = the picture to draw for list[i] (default: the layers)
+    list = list || layers;
     var k = size / SIZE, hasCircle = circle.complete && circle.naturalWidth;
     g.clearRect(0, 0, size, size);
-    if (!layers.length) { if (hasCircle) g.drawImage(circle, 0, 0, size, size); return; }
+    if (!list.length) { if (hasCircle) g.drawImage(circle, 0, 0, size, size); return; }
     var P = layer(size), pg = P.getContext('2d');                       // all people, placed, back to front
     pg.imageSmoothingQuality = 'high';
-    layers.forEach(function (L, i) { var im = imgs[i], p = placement(L, im); pg.drawImage(im, p.x * k, p.y * k, p.w * k, p.h * k); });
+    list.forEach(function (L, i) { var im = imgs[i], p = placement(L, im); pg.drawImage(im, p.x * k, p.y * k, p.w * k, p.h * k); });
     var Cc = layer(size), cg = Cc.getContext('2d');                     // the circle with the people cut out of it
     if (hasCircle) cg.drawImage(circle, 0, 0, size, size);
     cg.globalCompositeOperation = 'destination-out'; cg.drawImage(P, 0, 0);
@@ -291,7 +324,7 @@
     f.putImageData(applyTone(toGray(f.getImageData(0, 0, full.width, full.height), L.flt), lut(L)), 0, 0);
     return full;
   }
-  function render(size) { var out = layer(size); compose(out.getContext('2d'), size, layers.map(fullTone)); return out; }
+  function render(size, list) { list = list || layers; var out = layer(size); compose(out.getContext('2d'), size, list.map(fullTone), list); return out; }
   $('dl').addEventListener('click', function () {
     if (!layers.length) return;
     render(SIZE).toBlob(function (b) {
@@ -389,6 +422,100 @@
       msg.textContent = 'The face finder could not load (' + (e && e.message ? e.message : e) + '). Check the connection and try again.';
     }).then(function () { btn.disabled = !layers.length; });
   });
+
+  // ── batch export (Marek 2026-10-06): up to 10 photos, Auto on each, one zip, no preview ──
+  var BATCH_MAX = 10, batch = [];
+  function crcTable() { var t = [], c; for (var n = 0; n < 256; n++) { c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; }
+  var CRC = crcTable();
+  function crc32(u8) { var c = 0xFFFFFFFF; for (var i = 0; i < u8.length; i++) c = CRC[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function makeZip(files) {                                               // stored (PNG does not compress further), UTF-8 names
+    var enc = new TextEncoder(), parts = [], central = [], off = 0, now = new Date();
+    var dt = ((now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1)) & 0xFFFF,
+        dd = (((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate()) & 0xFFFF;
+    files.forEach(function (f) {
+      var name = enc.encode(f.name), crc = crc32(f.data), h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+      h.setUint16(10, dt, true); h.setUint16(12, dd, true); h.setUint32(14, crc, true); h.setUint32(18, f.data.length, true);
+      h.setUint32(22, f.data.length, true); h.setUint16(26, name.length, true); h.setUint16(28, 0, true);
+      parts.push(new Uint8Array(h.buffer), name, f.data);
+      var c = new DataView(new ArrayBuffer(46));
+      c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(10, 0, true);
+      c.setUint16(12, dt, true); c.setUint16(14, dd, true); c.setUint32(16, crc, true); c.setUint32(20, f.data.length, true); c.setUint32(24, f.data.length, true);
+      c.setUint16(28, name.length, true); c.setUint32(42, off, true);
+      central.push(new Uint8Array(c.buffer), name);
+      off += 30 + name.length + f.data.length;
+    });
+    var csize = central.reduce(function (a, b) { return a + b.length; }, 0), e = new DataView(new ArrayBuffer(22));
+    e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, csize, true); e.setUint32(16, off, true);
+    return new Blob(parts.concat(central, [new Uint8Array(e.buffer)]), { type: 'application/zip' });
+  }
+  function loadImg(file) { return new Promise(function (ok, bad) { var im = new Image(); im.onload = function () { ok(im); }; im.onerror = bad; im.src = URL.createObjectURL(file); }); }
+  function blobOf(canvas) { return new Promise(function (ok) { canvas.toBlob(function (b) { b.arrayBuffer().then(function (a) { ok(new Uint8Array(a)); }); }, 'image/png'); }); }
+  function batchList() {
+    $('bx-list').innerHTML = '';
+    batch.forEach(function (b) {
+      var li = document.createElement('li'), n = document.createElement('span'), st = document.createElement('b');
+      n.textContent = b.file.name; st.textContent = b.state || 'ready'; st.className = b.cls || ''; li.appendChild(n); li.appendChild(st); $('bx-list').appendChild(li);
+    });
+    $('bx-go').disabled = !batch.length;
+  }
+  function batchAdd(files) {
+    var list = [].slice.call(files || []).filter(function (f) { return /^image\//.test(f.type); });
+    var room = BATCH_MAX - batch.length;
+    $('bx-msg').textContent = list.length > room ? 'Only ' + room + ' more fit (10 at most); the rest were skipped.' : '';
+    list.slice(0, Math.max(0, room)).forEach(function (f) { batch.push({ file: f }); });
+    $('bx-thumbs').innerHTML = ''; batchList();
+  }
+  async function batchRun() {
+    var go = $('bx-go'), msg = $('bx-msg'), out = [], report = [], used = {};
+    go.disabled = true; $('bx-thumbs').innerHTML = '';
+    var fl = null;
+    try { msg.textContent = landmarker ? 'Starting...' : 'Loading the face finder (first time only)...'; fl = await getLandmarker(); }
+    catch (e) { msg.textContent = 'The face finder could not load, so every photo gets the default framing. '; }
+    for (var i = 0; i < batch.length; i++) {
+      var b = batch[i]; b.state = 'working...'; b.cls = ''; batchList(); msg.textContent = 'Photo ' + (i + 1) + ' of ' + batch.length + '...';
+      try {
+        var img = await loadImg(b.file), L = makeLayer(img, b.file.name), f = fl ? findFace(fl, L) : null;
+        if (f) autoLayer(L, f, 0, 1);
+        else { TONE_KEYS.forEach(function (k) { L[k] = AUTO.look[k]; }); }               // no face: default framing, house tones
+        var base = b.file.name.replace(/\.[^.]+$/, ''), name = base + '.png', n = 2;
+        while (used[name.toLowerCase()]) name = base + ' (' + (n++) + ').png';
+        used[name.toLowerCase()] = true;
+        var full = render(SIZE, [L]); out.push({ name: name, data: await blobOf(full) });
+        var th = document.createElement('figure'), ti = document.createElement('img'), cap = document.createElement('figcaption');
+        ti.src = render(200, [L]).toDataURL('image/png'); cap.textContent = base; th.appendChild(ti); th.appendChild(cap);
+        if (!f) th.className = 'warn';
+        $('bx-thumbs').appendChild(th);
+        b.state = f ? 'done' : 'no face: default framing'; b.cls = f ? 'ok' : 'warn';
+        report.push((f ? 'OK       ' : 'NO FACE  ') + name + (f ? '  (size ' + L.zoom.toFixed(2) + 'x, exposure ' + (L.exp > 0 ? '+' : '') + L.exp.toFixed(2) + ')' : '  - default framing, adjust by hand'));
+        URL.revokeObjectURL(img.src);
+      } catch (e) {
+        b.state = 'could not be read'; b.cls = 'warn'; report.push('ERROR    ' + b.file.name + '  - could not be read');
+      }
+      batchList();
+      await new Promise(function (r) { setTimeout(r, 0); });                         // let the page breathe between photos
+    }
+    var nd = new Date(), pad = function (v) { return (v < 10 ? '0' : '') + v; };
+    var stamp = nd.getFullYear() + '-' + pad(nd.getMonth() + 1) + '-' + pad(nd.getDate());
+    var head = '{{ brand_name }} headshots, batch export ' + stamp + ' ' + pad(nd.getHours()) + ':' + pad(nd.getMinutes()) + '\n\n';
+    out.push({ name: '_report.txt', data: new TextEncoder().encode(head + report.join('\n') + '\n') });
+    var zip = makeZip(out), a = document.createElement('a');
+    a.href = URL.createObjectURL(zip); a.download = 'headshots-{{ brand_name | lower | replace(" ", "-") }}-' + stamp + '.zip';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
+    var bad = report.filter(function (r) { return r.indexOf('OK') !== 0; }).length;
+    msg.textContent = (out.length - 1) + ' headshot' + (out.length === 2 ? '' : 's') + ' in the zip' + (bad ? '; ' + bad + ' need a look (red below, listed in _report.txt).' : '. All framed by Auto.');
+    go.disabled = false;
+  }
+  $('batch-open').addEventListener('click', function () { $('bx').hidden = false; });
+  $('bx-x').addEventListener('click', function () { $('bx').hidden = true; });
+  $('bx').addEventListener('click', function (e) { if (e.target === this) this.hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $('bx').hidden = true; });
+  $('bx-file').addEventListener('change', function () { batchAdd(this.files); this.value = ''; });
+  var bxd = $('bx-drop');
+  ['dragenter', 'dragover'].forEach(function (ev) { bxd.addEventListener(ev, function (e) { e.preventDefault(); bxd.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { bxd.addEventListener(ev, function (e) { e.preventDefault(); bxd.classList.remove('over'); }); });
+  bxd.addEventListener('drop', function (e) { if (e.dataTransfer.files) batchAdd(e.dataTransfer.files); });
+  $('bx-go').addEventListener('click', function () { batchRun(); });
 
   // ── the layer list: front on top; select, move forward / back, remove ──
   function thumb(L) {
@@ -507,7 +634,7 @@
     el.addEventListener('drop', function (e) { if (e.dataTransfer.files) addFiles(e.dataTransfer.files); });
   });
   select(-1);
-  window.__headshot = { getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
+  window.__headshot = { batchAdd: batchAdd, batchRun: batchRun, makeZip: makeZip, getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
 })();
 </script>
 </body>
