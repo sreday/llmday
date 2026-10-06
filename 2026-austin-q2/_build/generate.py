@@ -711,9 +711,6 @@ context["schedule_time_bracket"] = (
     + " - "
     + schedule_end.strftime('%-I:%M%p').replace(':00', '')
 )
-# per-day labels for the compact schedule's track header ("Fri Oct 2")
-context["schedule_day_labels"] = [(schedule_start + timedelta(days=_d)).strftime('%a %b %-d')
-                                  for _d in range(int(context.get("days", 1) or 1))]
 
 # remove placeholders
 for track in tracks:
