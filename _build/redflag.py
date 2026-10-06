@@ -5,7 +5,7 @@ Every talks.csv change is a GitHub web upload, one event per commit. When the wr
 event folder, the whole lineup of that event is swapped by a single push (2026-09-21: SREday London Q3 received
 the San Francisco Q4 file three days before the event). This module spots that shape and names the likely source.
 
-Byte-identical in sreday, llmday, platformday and PEC; stdlib only (yaml is optional, for event names).
+Identical in sreday, llmday, platformday and PEC except live() (PEC shows confirmed/keynote only); stdlib only (yaml is optional, for event names).
   * import, every home build (home/_build/generate.py, STATUS block): active_flags() = the flags that are still
     true. They become the red bar on top of /status/, the first error of the event's Data checks, and
     /status/redflags.json. The "Red flag alert" Gmail script (llmday/_build/redflag-alert.gs) reads that json every
@@ -17,7 +17,11 @@ It never fails a build: every problem degrades to a log line and exit code 0.
 
 Rules (CSV-parsed snapshots from git, never line diffs: abstracts contain newlines; live rows only: talk/keynote/workshop, legacy confirmed; drafts ignored):
   swap     one commit drops more than 5 speakers AND over 40% of a lineup of 6+ (the /status/ speaker log's
-           _REMOVED_MASS), and 40%+ of the new lineup is new. Nothing new coming in = "mass removal".
+           _REMOVED_MASS), or 8+ speakers whatever the share (Marek 2026-10-05), and 40%+ of the new lineup is new.
+           Nothing new coming in = "mass removal".
+  hidden   one commit adds 8+ rows that are in the file but not on the site (draft / empty / unknown status;
+           declined, rejected, cancelled and withdrawn rows don't count): the talks were not built, which is a
+           spreadsheet problem (a shifted status column, a filter, a bad export) to fix at the source.
   source   the new lineup is compared with every other 2025+ event folder: identical file = "exact copy of",
            60%+ shared names/titles = "looks like it has the lineup of".
   twin     two events share 80%+ of their lineups; catches a wrong file uploaded into a brand-new folder.
@@ -45,6 +49,8 @@ except ImportError:                     # names fall back to the folder name
 SAME = 0.85              # difflib ratio at/above which two names are one speaker (same as _ADDED_SAME on /status/)
 MASS = (5, 0.4)          # more than 5 gone AND over 40% of the lineup (same as _REMOVED_MASS on /status/)
 MIN_LINEUP = 6           # smaller lineups change wholesale all the time
+BIG_REMOVAL = 8          # this many speakers gone from one event in one upload is a flag whatever the share
+HIDDEN_JUMP = 8          # this many more rows in the file but not on the site, in one upload = a spreadsheet problem
 ADDED_SHARE = 0.4        # share of the new lineup that must be new for a "swap" (else: mass removal)
 LOOKS_LIKE = 0.6         # share of the new lineup found in another event = "has the lineup of"
 TWIN = 0.8               # two events sharing this much, both ways = twins
@@ -82,21 +88,31 @@ def live(status):
     return "keynote" in s or "confirmed" in s or bool(re.search(r"\b(talk|workshop)\b", s))
 
 
+def parked(status):
+    """Row is in the file but not on the site and was not turned down on purpose: draft, empty or unknown status."""
+    return not live(status) and not re.search(r"declin|reject|cancel|withdr", str(status or "").lower())
+
+
 def parse(text):
-    """{'rows': {normalized name: {name, title, tkey}}, 'titles': set, 'raw': text} of live rows (talk/keynote/workshop)."""
+    """{'rows': {normalized name: {name, title, tkey}}, 'titles': set, 'hidden': {normalized name: name}, 'raw': text}:
+    rows = live rows (talk/keynote/workshop), hidden = named rows that are in the file but not displayed."""
     text = (text or "").replace("\x00", "")
-    rows = {}
+    rows, hidden = {}, {}
     try:
         for row in csv.DictReader(io.StringIO(text)):
             name = (row.get("name") or "").strip()
-            if not name or name.startswith("_") or not live(row.get("status")):
+            if not name or name.startswith("_"):
+                continue
+            if not live(row.get("status")):
+                if parked(row.get("status")):
+                    hidden[norm(name)] = name
                 continue
             title = (row.get("title") or "").strip()
             tkey = re.sub(r"\W+", "", title.lower())
             rows[norm(name)] = {"name": name, "title": title, "tkey": tkey if len(tkey) >= 12 else ""}
     except csv.Error:
         pass
-    return {"rows": rows, "titles": set(r["tkey"] for r in rows.values() if r["tkey"]),
+    return {"rows": rows, "titles": set(r["tkey"] for r in rows.values() if r["tkey"]), "hidden": hidden,
             "raw": text.replace("\r\n", "\n").strip()}
 
 
@@ -261,6 +277,9 @@ def headline(flag):
         return "%s is an exact copy of the %s lineup" % (ev, other)
     if other:
         return "%s looks like it has the lineup of %s (%d%% match)" % (ev, other, flag["overlap_pct"])
+    if flag["kind"] == "hidden":
+        return "%s: %d more talks are in talks.csv but not on the site after one upload (%d hidden, was %d), fix the spreadsheet" % (
+            ev, flag["hidden_after"] - flag["hidden_before"], flag["hidden_after"], flag["hidden_before"])
     if flag["kind"] == "removal":
         return "%s lost %d of %d speakers in one upload" % (ev, flag["gone"], flag["before_n"])
     return "%s had %d of %d speakers replaced in one upload, source unknown" % (ev, flag["gone"], flag["before_n"])
@@ -288,10 +307,19 @@ def check_commit(root, folder, sha, iso="", author="", cloned=False):
     before = snapshot(root, sha + "~1", path)
     if after is None or before is None:
         return None                                              # outside the shallow window
+    # talks that are in the file but were not built: draft / empty / unknown status rows jump in one upload
+    new_hidden = [k for k in after["hidden"] if k not in before["hidden"]]
+    if not cloned and len(after["hidden"]) - len(before["hidden"]) >= HIDDEN_JUMP:
+        gone_h, _ = churn(before, after)
+        return _flag(root, folder, "hidden", sha, iso, author,
+                     hidden_before=len(before["hidden"]), hidden_after=len(after["hidden"]),
+                     hidden_names=[after["hidden"][k] for k in new_hidden[:5]],
+                     gone=len(gone_h), before_n=len(before["rows"]), after_n=len(after["rows"]),
+                     gone_names=[before["rows"][k]["name"] for k in gone_h[:5]])
     if len(before["rows"]) < MIN_LINEUP:
         return _check_twin_at(root, folder, sha, iso, author, after) if not before["rows"] and not cloned else None
     gone, added = churn(before, after)
-    if not (len(gone) > MASS[0] and len(gone) > MASS[1] * len(before["rows"])):
+    if not (len(gone) >= BIG_REMOVAL or (len(gone) > MASS[0] and len(gone) > MASS[1] * len(before["rows"]))):
         return None
     # the fix looks like a swap too: it brings back one of the file's own older lineups
     older = (git(root, "log", "-n", str(RESTORE_DEPTH + 1), "--format=%H", sha + "~1", "--", path) or "").split()
@@ -378,7 +406,10 @@ def active_flags(root, folders):
             if not flag:
                 continue
             wrong = snapshot(root, sha, path)
-            if wrong and overlap_fuzzy(now, wrong) >= RESTORE:    # the page still shows what that commit brought in
+            if flag["kind"] == "hidden":                          # still true while the hidden rows have not come back
+                if len(now["hidden"]) - flag["hidden_before"] >= HIDDEN_JUMP:
+                    flags.append(flag)
+            elif wrong and overlap_fuzzy(now, wrong) >= RESTORE:  # the page still shows what that commit brought in
                 flags.append(flag)
             break                                                 # only the most recent swap matters
     for folder in folders:                                        # a talks.csv next to _db/ instead of inside it
@@ -413,6 +444,9 @@ def active_flags(root, folders):
 
 def preview(flag):
     lines = ["Did you just nuke %s?" % flag["event_name"], "  " + flag["headline"]]
+    if flag["kind"] == "hidden":
+        lines.append("  %d hidden rows, was %d, %s by %s" % (flag["hidden_after"], flag["hidden_before"], flag["when"], flag["author"]))
+        lines.append("  now hidden: %s" % ", ".join(flag["hidden_names"]))
     if flag["kind"] in ("swap", "removal"):
         lines.append("  %d of %d speakers gone, %d of %d new, %s by %s" % (flag["gone"], flag["before_n"], flag["added"],
                                                                         flag["after_n"], flag["when"], flag["author"]))
