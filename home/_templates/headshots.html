@@ -194,7 +194,7 @@
     if (room <= 0) { $('drop-text').textContent = 'Five layers already: remove one to add another.'; return; }
     if (list.length > room) $('drop-text').textContent = 'Only ' + room + ' more fit (5 at most); the rest were skipped.';
     // one at a time, in the order given, so the layer order follows the files (the first is the back)
-    (function next(i) { if (i < Math.min(list.length, room)) load(list[i], function () { next(i + 1); }); })(0);
+    (function next(i) { if (i < Math.min(list.length, room)) load(list[i], function () { next(i + 1); }); else commit(); })(0);
   }
   function load(file, done) {
     var url = URL.createObjectURL(file), img = new Image();
@@ -341,6 +341,7 @@
     $('name').value = n.length ? (n.length === 1 ? n[0] : n.slice(0, -1).join(', ') + ' & ' + n[n.length - 1]) + '.png' : '';
   }
   $('name').addEventListener('input', function () { nameTouched = this.value.trim() !== ''; if (!nameTouched) autoName(); });
+  $('name').addEventListener('change', function () { commit(); });
 
   // ── Auto (Marek 2026-10-06): frame the face and set the tones like the headshots already on the site ──
   // Calibrated on the 14 PLATFORMday speakers that have both the raw photo (Dropbox) and the finished After Effects
@@ -417,6 +418,7 @@
       var missed = [];
       layers.forEach(function (L, i) { var f = findFace(fl, L); if (f) autoLayer(L, f, i, layers.length); else missed.push(L.name); });
       select(active);
+      commit();
       msg.textContent = missed.length ? 'No face found in ' + missed.join(', ') + '; adjust that one by hand.' : (layers.length > 1 ? 'All layers framed and toned. Fine-tune any layer if needed.' : 'Framed and toned. Fine-tune if needed.');
     }).catch(function (e) {
       msg.textContent = 'The face finder could not load (' + (e && e.message ? e.message : e) + '). Check the connection and try again.';
@@ -569,6 +571,7 @@
     var old = layer(SIZE); old.getContext('2d').drawImage(cv, 0, 0);       // the preview before the swap, to cross-fade from
     select(active, true);
     if (li_animate) fadeFrom(old);
+    commit();
   }
   function fadeFrom(old) {                                                // 250 ms cross-fade from the old stacking to the new one
     var t0 = performance.now();
@@ -583,6 +586,7 @@
     else if (active >= layers.length || active > i) active = Math.max(0, active - 1);
     else if (active === i) active = Math.min(i, layers.length - 1);
     select(active);
+    commit();
   }
 
   // ── controls (all write to the selected layer) ──
@@ -596,11 +600,12 @@
   function fromSliders() { var L = cur(); if (!L) return; L.zoom = parseFloat(zoom.value); TONE_KEYS.forEach(function (k) { L[k] = parseFloat(tones[k].value); }); }
   sliders.forEach(function (r) {
     r.addEventListener('input', function () { fromSliders(); readouts(); if (r === zoom) draw(); else retone(); });
-    r.addEventListener('dblclick', function () { r.value = r.dataset.default; fromSliders(); readouts(); if (r === zoom) draw(); else retone(); });
+    r.addEventListener('dblclick', function () { r.value = r.dataset.default; fromSliders(); readouts(); if (r === zoom) draw(); else retone(); commit(); });
+    r.addEventListener('change', commit);                                  // a slider released = one undo step
   });
   $('reset').addEventListener('click', function () {
     var L = cur(); if (!L) return;
-    sliders.forEach(function (r) { r.value = r.dataset.default; }); fromSliders(); L.pan = { x: 0, y: 0 }; knobAt(L.pan); readouts(); retone();
+    sliders.forEach(function (r) { r.value = r.dataset.default; }); fromSliders(); L.pan = { x: 0, y: 0 }; knobAt(L.pan); readouts(); retone(); commit();
   });
 
   // joystick (as on the community hero page): the knob's place is the selected layer's offset, -1..1 = ±370 px
@@ -614,7 +619,8 @@
   function joyAt(e) { var b = joy.getBoundingClientRect(); setPan((e.clientX - b.left - b.width / 2) / JOY_R, (e.clientY - b.top - b.height / 2) / JOY_R); }
   joy.addEventListener('pointerdown', function (e) { if (!cur()) return; e.preventDefault(); joy.setPointerCapture(e.pointerId); joyAt(e); });
   joy.addEventListener('pointermove', function (e) { if (joy.hasPointerCapture(e.pointerId)) joyAt(e); });
-  joy.addEventListener('dblclick', function () { setPan(0, 0); });
+  joy.addEventListener('dblclick', function () { setPan(0, 0); commit(); });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { joy.addEventListener(ev, function () { if (cur()) commit(); }); });
 
   // drag the selected photo itself on the preview (moves it 1:1 with the pointer); the other layers stay put
   var stage = $('stage'), last = null;
@@ -624,7 +630,7 @@
     var k = SIZE / stage.getBoundingClientRect().width;
     setPan(L.pan.x + (e.clientX - last.x) * k / PAN_RANGE, L.pan.y + (e.clientY - last.y) * k / PAN_RANGE); last = { x: e.clientX, y: e.clientY };
   });
-  ['pointerup', 'pointercancel'].forEach(function (ev) { stage.addEventListener(ev, function () { last = null; stage.classList.remove('dragging'); }); });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { stage.addEventListener(ev, function () { var moved = !!last; last = null; stage.classList.remove('dragging'); if (moved) commit(); }); });
 
   // file input + drag and drop (on the picker and on the preview), several files at once
   $('file').addEventListener('change', function () { addFiles(this.files); this.value = ''; });
@@ -633,8 +639,50 @@
     ['dragleave', 'drop'].forEach(function (ev) { el.addEventListener(ev, function (e) { e.preventDefault(); el.classList.remove('over'); }); });
     el.addEventListener('drop', function (e) { if (e.dataTransfer.files) addFiles(e.dataTransfer.files); });
   });
-  select(-1);
-  window.__headshot = { batchAdd: batchAdd, batchRun: batchRun, makeZip: makeZip, getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
+  // ── undo / redo (Marek 2026-10-06): Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z (and Ctrl+Y). Every finished change is one step: a slider
+  // released or reset, a joystick or photo drag, Auto, Reset layer, photos added, a layer removed or moved, the file name.
+  // A step remembers which layers are in which order and every layer's settings (not the pictures themselves).
+  var hist = [], hpos = -1, HMAX = 100, restoring = false;
+  function settingsOf(L) { var o = { zoom: L.zoom, pan: { x: L.pan.x, y: L.pan.y } }; TONE_KEYS.forEach(function (k) { o[k] = L[k]; }); return o; }
+  function snap() { return { list: layers.map(function (L) { return { L: L, s: settingsOf(L) }; }), active: active, name: $('name').value, nameTouched: nameTouched }; }
+  function sameSnap(a, b) {
+    if (!a || !b || a.list.length !== b.list.length || a.name !== b.name) return false;
+    for (var i = 0; i < a.list.length; i++) if (a.list[i].L !== b.list[i].L || JSON.stringify(a.list[i].s) !== JSON.stringify(b.list[i].s)) return false;
+    return true;
+  }
+  function commit() {
+    if (restoring) return;
+    var st = snap(); if (hpos >= 0 && sameSnap(hist[hpos], st)) return;
+    hist = hist.slice(0, hpos + 1); hist.push(st); if (hist.length > HMAX) hist.shift(); hpos = hist.length - 1;
+  }
+  function restore(st) {
+    restoring = true;
+    layers.length = 0;
+    st.list.forEach(function (e) {
+      var L = e.L, before = JSON.stringify(TONE_KEYS.map(function (k) { return L[k]; }));
+      L.zoom = e.s.zoom; L.pan = { x: e.s.pan.x, y: e.s.pan.y }; TONE_KEYS.forEach(function (k) { L[k] = e.s[k]; });
+      if (JSON.stringify(TONE_KEYS.map(function (k) { return L[k]; })) !== before) { regray(L); L.tone.getContext('2d').putImageData(applyTone(L.gray, lut(L)), 0, 0); }
+      layers.push(L);
+    });
+    nameTouched = st.nameTouched; $('name').value = st.name;
+    select(Math.min(st.active, layers.length - 1));
+    $('name').value = st.name;                                            // renderList's auto-name must not override the step
+    restoring = false;
+  }
+  function undo() { if (hpos > 0) { hpos--; restore(hist[hpos]); } }
+  function redo() { if (hpos < hist.length - 1) { hpos++; restore(hist[hpos]); } }
+  document.addEventListener('keydown', function (e) {
+    if (!(e.metaKey || e.ctrlKey) || e.altKey) return;
+    var k = e.key.toLowerCase(), t = e.target;
+    if (k !== 'z' && k !== 'y') return;
+    if (t && (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && /^(text|search|email|url)$/i.test(t.type)))) return;   // the field's own text undo
+    if (!$('bx').hidden) return;                                          // not while the batch window is open
+    e.preventDefault();
+    if (k === 'y' || e.shiftKey) redo(); else undo();
+  });
+
+  select(-1); commit();
+  window.__headshot = { undo: undo, redo: redo, commit: commit, batchAdd: batchAdd, batchRun: batchRun, makeZip: makeZip, getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
 })();
 </script>
 </body>
