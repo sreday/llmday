@@ -127,6 +127,33 @@ def card_keys(index_html, chrome_version):
     return keys
 
 
+HD_NAME = "_render-hd.html"
+
+
+def hd_page(page):
+    """<page> with every ../../speakers/<file> it uses pointed at the original <repo>/speakers/<file> when that
+    exists, written next to it as _render-hd.html (same folder, so every other relative path still works) and
+    removed again by main(). Falls back to <page> when there is nothing to swap."""
+    originals = os.path.abspath("speakers")
+    if not os.path.isdir(originals):
+        return page
+    with open(page, encoding="utf-8") as f:
+        html = f.read()
+
+    def swap(m):
+        name = m.group(2)
+        hd = os.path.join(originals, name)
+        return m.group(1) + hd.replace("\\", "/") + '"' if os.path.isfile(hd) else m.group(0)
+
+    out = re.sub(r'(src=")\.\./\.\./speakers/([^"]+)"', swap, html)
+    if out == html:
+        return page
+    path = os.path.join(os.path.dirname(page), HD_NAME)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(out)
+    return path
+
+
 def runs_of(indices):
     """Consecutive runs of card indices, each at most CHUNK long (one screenshot each)."""
     runs = []
@@ -178,8 +205,13 @@ def main():
         if not files:
             print("render_teasers %s: no cards" % event)
             continue
-        url = "file:///" + os.path.abspath(page).replace("\\", "/")
         out_dir = os.path.dirname(page)
+        # Headshots from the full-size originals in <repo>/speakers (1000x1000), not static/speakers, which
+        # optimize_images.py shrank to 400 px for the website: a card draws the photo ~585 px wide in the 1500 px
+        # PNG, so the 400 px copy came out mushy (Marek 2026-10-06). The page itself keeps the light copies; only
+        # this render copy of it points its photos at the originals (and the cache key hashes those bytes).
+        page = hd_page(page)
+        url = "file:///" + os.path.abspath(page).replace("\\", "/")
         keys = card_keys(page, chrome_version)
         if len(keys) != len(files):  # page layout not understood: render everything, cache nothing
             print("WARN render_teasers %s: %d cards but %d slots, not caching" % (event, len(files), len(keys)))
@@ -215,6 +247,8 @@ def main():
                     if keys[i]:
                         os.makedirs(CACHE_DIR, exist_ok=True)
                         shutil.copyfile(out, os.path.join(CACHE_DIR, keys[i] + ".png"))
+        if os.path.basename(page) == HD_NAME:
+            os.remove(page)
         rendered_total += done - reused
         reused_total += reused
         total += done
@@ -237,3 +271,7 @@ if __name__ == "__main__":
         main()
     except Exception as e:  # never break the deploy over a picture
         print("WARN render_teasers: %s: %s" % (type(e).__name__, e))
+    finally:                # a render copy must never be deployed, whatever happened above
+        _root = sys.argv[sys.argv.index("--root") + 1] if "--root" in sys.argv else "static"
+        for _left in glob.glob(os.path.join(_root, "20*", "teasers", HD_NAME)):
+            os.remove(_left)
