@@ -139,11 +139,11 @@
       </div>
       <div class="tones">
         <div class="ctl"><label for="exp">Exposure <output id="exp-v">0.0</output></label><input type="range" id="exp" min="-2" max="2" step="0.05" value="0" data-default="0"></div>
-        <div class="ctl"><label for="con">Contrast <output id="con-v">0</output></label><input type="range" id="con" min="-50" max="50" step="1" value="0" data-default="0"></div>
-        <div class="ctl"><label for="hil">Highlights <output id="hil-v">0</output></label><input type="range" id="hil" min="-100" max="50" step="1" value="0" data-default="0"></div>
-        <div class="ctl"><label for="sha">Shadows <output id="sha-v">0</output></label><input type="range" id="sha" min="-50" max="100" step="1" value="0" data-default="0"></div>
-        <div class="ctl"><label for="wht">Whites <output id="wht-v">0</output></label><input type="range" id="wht" min="-50" max="50" step="1" value="0" data-default="0"></div>
-        <div class="ctl"><label for="blk">Blacks <output id="blk-v">0</output></label><input type="range" id="blk" min="-50" max="50" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="con">Contrast <output id="con-v">0</output></label><input type="range" id="con" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="hil">Highlights <output id="hil-v">0</output></label><input type="range" id="hil" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="sha">Shadows <output id="sha-v">0</output></label><input type="range" id="sha" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="wht">Whites <output id="wht-v">0</output></label><input type="range" id="wht" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="blk">Blacks <output id="blk-v">0</output></label><input type="range" id="blk" min="-100" max="100" step="1" value="0" data-default="0"></div>
         <div class="ctl wide"><label for="flt">Colour filter <output id="flt-v">none</output></label><input type="range" id="flt" min="-100" max="100" step="1" value="0" data-default="0"><div class="flt-ends"><span>cool</span><span>warm</span></div></div>
       </div>
       <div class="hint">Lumetri Color units. Double-click to reset. Blue line = eye level (preview only).</div>
@@ -388,7 +388,10 @@
   // mouth, middle half of the face) on the untoned photo; below 145 every grey level adds 0.016 Lumetri exposure, capped at
   // +1.3 in total. In the calibration set Kishore Pulagam (skin 88) was brightened by about +1.0, Manu Gurudatha and Thomas
   // Cameron (around 120) by about +0.4, light skin by the house +0.2.
-  var SKIN_REF = 145, SKIN_GAIN = 0.016, EXP_MAX = 1.3;
+  // measured on the photo's colour (brightest of R/G/B), not the grey value: warm light skin turns darker in black and white
+  // and was mistaken for dark skin (Wojciech Strzalkowski got +0.95). Kishore Pulagam (128) gets about +1.1, Manu
+  // Gurudatha (157) +0.55, from Sergey Sergeev (175) up only the house +0.2.
+  var SKIN_REF = 175, SKIN_GAIN = 0.019, EXP_MAX = 1.3;
   function skinMedian(L, f) {
     var g = L.gray, W = g.width, H = g.height, d = g.data, vals = [];
     var x0 = Math.min(f.l.x, f.r.x) + Math.abs(f.r.x - f.l.x) * .25, x1 = Math.max(f.l.x, f.r.x) - Math.abs(f.r.x - f.l.x) * .25;
@@ -427,6 +430,41 @@
     while (r < W - 1 && d[(y * W + r + 1) * 4 + 3] >= 128) r++;
     return (r - l) / W;
   }
+  // Auto levels (Marek 2026-10-06, Wojciech Strzalkowski came out milky): after exposure, Blacks and Whites bring the
+  // person's darkest 1% to near-black and brightest 1% near white, only as far as needed - a dim, flat photo gets real
+  // blacks back; a well spread one (Zoe Yan) is left as it is.
+  var LEVELS = { lo: 12, hi: 238 };
+  function personLevels(L) {                                             // p1 / p99 of the person's grey values (sampled)
+    var d = L.gray.data, v = [];
+    for (var i = 0; i < d.length; i += 4 * 5) if (d[i + 3] >= 250) v.push(d[i]);
+    if (v.length < 200) return null;
+    v.sort(function (a, b) { return a - b; });
+    return { p1: v[Math.floor(.01 * (v.length - 1))], p99: v[Math.floor(.99 * (v.length - 1))] };
+  }
+  function autoLevels(L) {
+    var lv = personLevels(L); if (!lv) return;
+    var best = null, T = {}; TONE_KEYS.forEach(function (k) { T[k] = L[k]; });
+    for (var blk = -30; blk <= 0; blk += 5) for (var wht = -20; wht <= 40; wht += 5) {   // blacks capped at -30: harder crushes noisy hair
+      T.blk = blk; T.wht = wht;
+      var lo = toneValue(lv.p1, T), hi = toneValue(lv.p99, T);
+      var cost = Math.pow(Math.max(0, lo - LEVELS.lo), 2) + Math.pow(Math.max(0, LEVELS.lo - 4 - lo), 2) * 0.5
+               + Math.pow(Math.max(0, LEVELS.hi - hi), 2) + Math.pow(Math.max(0, hi - 250), 2) * 2
+               + 0.4 * (blk * blk + wht * wht) / 25;                         // only as far as needed
+      if (!best || cost < best.c) best = { c: cost, blk: blk, wht: wht };
+    }
+    L.blk = best.blk; L.wht = best.wht;
+  }
+  function skinBright(L, f) {                                             // median of the brightest channel (R/G/B) on the cheeks and nose
+    var c = L.colour, W = c.width, H = c.height, d = c.data, vals = [];
+    var x0 = Math.min(f.l.x, f.r.x) + Math.abs(f.r.x - f.l.x) * .25, x1 = Math.max(f.l.x, f.r.x) - Math.abs(f.r.x - f.l.x) * .25;
+    var y0 = f.ey + (f.mouth.y - f.ey) * .25, y1 = f.mouth.y - (f.mouth.y - f.ey) * .1;
+    for (var y = Math.round(y0 * H); y < y1 * H; y++) for (var x = Math.round(x0 * W); x < x1 * W; x++) {
+      var i = (y * W + x) * 4; if (d[i + 3] >= 250) vals.push(Math.max(d[i], d[i + 1], d[i + 2]));
+    }
+    if (vals.length < 50) return null;
+    vals.sort(function (a, b) { return a - b; });
+    return vals[Math.floor(vals.length / 2)];
+  }
   function autoLayer(L, f, i, n) {
     var slot = n > 1 && GROUP[Math.min(n, 5)] ? GROUP[Math.min(n, 5)][Math.min(i, Math.min(n, 5) - 1)] : null, k = slot ? slot.h : 1;
     var top = C.y - C.r * 1.2, aspect = L.tone.height / L.tone.width, h;
@@ -440,8 +478,9 @@
     var tx = slot ? C.x + slot.x * C.r : C.x + AUTO.faceDX * C.r, ty = C.y - (slot ? slot.up : AUTO.eyeY) * C.r;
     L.pan = { x: (tx - C.x + w / 2 - f.fx * w) / PAN_RANGE, y: (ty - top + L.headTop * h - f.ey * h) / PAN_RANGE };
     TONE_KEYS.forEach(function (k2) { L[k2] = AUTO.look[k2]; }); regray(L);
-    var skin = skinMedian(L, f);
+    var skin = skinBright(L, f);
     if (skin !== null && skin < SKIN_REF) L.exp = Math.min(EXP_MAX, Math.round((AUTO.look.exp + (SKIN_REF - skin) * SKIN_GAIN) * 20) / 20);
+    autoLevels(L);
     L.tone.getContext('2d').putImageData(applyTone(L.gray, lut(L)), 0, 0); thumb(L);
   }
   $('auto').addEventListener('click', function () {
@@ -719,7 +758,7 @@
   });
 
   select(-1); commit();
-  window.__headshot = { undo: undo, redo: redo, commit: commit, batchAdd: batchAdd, batchRun: batchRun, makeZip: makeZip, getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
+  window.__headshot = { findFace: findFace, skinMedian: skinMedian, skinBright: skinBright, undo: undo, redo: redo, commit: commit, batchAdd: batchAdd, batchRun: batchRun, makeZip: makeZip, getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
 })();
 </script>
 </body>
