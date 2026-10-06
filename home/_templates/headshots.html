@@ -645,8 +645,10 @@
   // The token only reaches the inbox repo; each site imports valid 1000x1000 PNGs from its folder there (workflow
   // import-headshots.yml) every 15 minutes. Kept in sessionStorage, or localStorage when "Remember" is ticked; it is only
   // ever sent to api.github.com. Download stays available either way.
+  // GH_ENABLED: the whole GitHub connection is hidden for now (Marek 2026-10-06); set to true to bring it back
+  var GH_ENABLED = false;
   var SITE_KEY = 'llmday', INBOX = 'sreday/headshots-inbox', GH_KEY = 'hs-gh-token';
-  function ghToken() { try { return sessionStorage.getItem(GH_KEY) || localStorage.getItem(GH_KEY) || ''; } catch (e) { return ''; } }
+  function ghToken() { if (!GH_ENABLED) return ''; try { return sessionStorage.getItem(GH_KEY) || localStorage.getItem(GH_KEY) || ''; } catch (e) { return ''; } }
   function ghSet(t, remember) {
     try { sessionStorage.removeItem(GH_KEY); localStorage.removeItem(GH_KEY); if (t) (remember ? localStorage : sessionStorage).setItem(GH_KEY, t); } catch (e) {}
   }
@@ -713,6 +715,7 @@
     } catch (e) { msgEl.textContent = ghError(e); return false; }
   }
   function ghRefresh(login) {
+    if (!GH_ENABLED) { $('gh-state').hidden = true; $('push').hidden = true; $('bx-send').hidden = true; return; }
     var on = !!ghToken();
     $('push').hidden = !on; $('bx-send').hidden = !on; $('push').disabled = !on || !layers.length; $('bx-send').disabled = !on || !batch.length;
     $('gh-out').hidden = !on;
