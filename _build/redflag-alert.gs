@@ -75,12 +75,19 @@ function composeAlert(f) {
   if (f.kind === 'path') {
     lines.push('A talks.csv for ' + f.event_name + ' was uploaded outside the _db folder, so the website ignores it:', f.path, '',
                'The lineup on the website did not change. Please upload the file again into ' + f.folder + '/_db/ and delete the stray copy.');
+  } else if (f.kind === 'hidden') {
+    var hid = f.hidden_names || [];
+    lines.push('It looks like ' + f.event_name + ' has talks in its talks.csv that are not showing on the website, please check the spreadsheet.', '',
+               (f.hidden_after - f.hidden_before) + ' more rows became hidden in a single upload' + (f.when ? ' on ' + f.when : '') + (f.author ? ' by ' + f.author : '') +
+               ' (' + f.hidden_after + ' hidden now, ' + f.hidden_before + ' before). Only rows with status talk, keynote or workshop are shown,',
+               'so this is usually a typo in the status column ("talks"), a shifted column or a bad export.');
+    if (hid.length) lines.push('', 'Now hidden: ' + hid.join(', ') + ((f.hidden_after - f.hidden_before) > hid.length ? ', ...' : ''));
   } else if (f.kind === 'twin') {
     lines.push('It looks like ' + f.event_name + ' has the lineup of ' + f.suspect_name + ', please check.', '',
                f.identical ? 'The two talks.csv files are identical.' : f.overlap_pct + '% of the ' + f.after_n + ' speakers are the same in both events.');
   } else {
     if (f.suspect_name) lines.push('It looks like ' + f.event_name + ' has the lineup of ' + f.suspect_name + ', please check.');
-    else if (f.kind === 'removal') lines.push('It looks like ' + f.event_name + ' just lost most of its lineup, please check.');
+    else if (f.kind === 'removal') lines.push('It looks like ' + f.event_name + ' just lost ' + f.gone + ' of its ' + f.before_n + ' speakers, please check.');
     else lines.push('It looks like the whole lineup of ' + f.event_name + ' was replaced in one upload, please check.');
     lines.push('', f.gone + ' of ' + f.before_n + ' speakers disappeared' + (f.added ? ' and ' + f.added + ' new ones came in' : '') +
                ' in a single upload' + (f.when ? ' on ' + f.when : '') + (f.author ? ' by ' + f.author : '') + '.');
@@ -94,7 +101,11 @@ function composeAlert(f) {
   if (f.file_url) lines.push('File history: ' + f.file_url);
   if (f.event_url) lines.push('Live page: ' + f.event_url);
   if (f.status_url) lines.push('Status page: ' + f.status_url);
-  if (f.kind !== 'path') {
+  if (f.kind === 'hidden') {
+    lines.push('', 'To fix it, correct the status column in the spreadsheet and upload talks.csv into ' + f.folder + '/_db/ again.',
+               'If this was intentional, ignore this email. The red bar on the status page goes away when you add',
+               String(f.sha || '').slice(0, 7) + ' to redflag_ack in home/metadata.yml.');
+  } else if (f.kind !== 'path') {
     lines.push('', 'To fix it, upload the right talks.csv into ' + f.folder + '/_db/ again, or revert the upload on GitHub.',
                'If this was intentional, ignore this email. The red bar on the status page goes away when you add',
                String(f.sha || '').slice(0, 7) + ' to redflag_ack in home/metadata.yml.');
