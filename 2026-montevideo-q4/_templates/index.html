@@ -389,6 +389,7 @@
 
 {% if event_state == 'before' %}
 <section id="schedule" class="schedule-section section theme-bg-light">
+  <div class="sched-aurora" aria-hidden="true"></div>
   <div class="container">
     <h2 class="section-heading text-center mb-5">Schedule</h2>
     <h4 class="section-heading text-center mb-5">Coming soon</h4>
@@ -569,6 +570,21 @@
     color: #ccc;
     font-weight: 300;
   }
+  /* schedule header, liquid glass (Marek 2026-10-05, idea 40): a soft aurora in the brand colour behind the title
+     and chips, fading out below; the chips and the view switch are frosted glass on top of it */
+  .schedule-section { position: relative; isolation: isolate; overflow: clip; }
+  .sched-aurora { position: absolute; left: -5%; right: -5%; top: 0; height: 460px; z-index: -1; pointer-events: none;
+    background: linear-gradient(120deg, color-mix(in srgb, var(--brand) 62%, transparent),
+      color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 45%, transparent),
+      rgba(245,158,11,.42), rgba(20,184,166,.32));
+    filter: blur(40px); -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
+  .schedule-meta { flex-wrap: wrap; gap: .75rem; }
+  .schedule-meta-divider { display: none; }
+  .schedule-meta-item, .sv-toggle {
+    background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.75);
+    -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+    box-shadow: 0 10px 30px rgba(60,20,50,.12), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.25); }
+  .schedule-meta-item { padding: .6rem 1.3rem; border-radius: 999px; color: #1d1b20; }
   /* Track section header */
   .track-section-header {
     background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
@@ -587,6 +603,7 @@
 </style>
 
 <section id="schedule" class="schedule-section section theme-bg-light">
+  <div class="sched-aurora" aria-hidden="true"></div>
   <div class="container">
     <h2 class="section-heading text-center mb-4">Schedule</h2>
 
