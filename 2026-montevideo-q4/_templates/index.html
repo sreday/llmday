@@ -456,6 +456,9 @@
   .schedule-timeline-view { display: block; }
   .schedule-timeline-view.hidden { display: none; }
   /* view switch (Normal / Compact / Table), same slider pill as the sponsorship page's currency switch */
+  /* the view switch centred on its own row, the room buttons underneath (Marek 2026-10-06) */
+  .track-nav-inner { flex-direction: column; gap: .75rem; }
+  .track-nav-inner .sv-toggle { order: -1; }
   .sv-toggle { display: inline-flex; align-items: center; position: relative; gap: 2px; padding: 4px; border-radius: 999px;
     background: color-mix(in srgb, var(--brand) 8%, white); border: 1px solid color-mix(in srgb, var(--brand) 28%, white);
     font-size: .9rem; font-weight: 600; vertical-align: middle; }
