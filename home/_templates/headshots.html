@@ -95,6 +95,21 @@
     .bx-list li { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; overflow: hidden; }
     .bx-list li span { overflow: hidden; text-overflow: ellipsis; }
     .bx-list li b { font-weight: 600; color: #777; } .bx-list li b.ok { color: #1a8a3a; } .bx-list li b.warn { color: #c0392b; }
+    /* GitHub push (Marek 2026-10-06): optional, through the images-only inbox repo */
+    .hs-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .gh-state { text-align: right; font-size: .85rem; padding-top: 4px; }
+    .gh-state a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    .gh-sub { display: block; color: #999; font-size: .75rem; }
+    .btn-push { background: #24292f; color: #fff; }
+    .btn-push[hidden] { display: none; }
+    .btn-push:disabled { opacity: .45; cursor: not-allowed; }
+    .gh-steps { font-size: .85rem; color: #444; padding-left: 20px; margin: 4px 0 12px; line-height: 1.6; }
+    #gh-token { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font: inherit; }
+    .gh-remember { display: block; font-size: .82rem; color: #555; margin-top: 8px; }
+    .ok-box { width: min(560px, 100%); }
+    .ok-imgs { display: flex; gap: 16px; justify-content: center; margin: 10px 0; }
+    .ok-imgs figure { margin: 0; text-align: center; font-size: .8rem; color: #555; }
+    .ok-imgs img { width: 200px; height: 200px; border-radius: 12px; background: #fff conic-gradient(#e9e9ee 25%, #fff 0 50%, #e9e9ee 0 75%, #fff 0) 0 0 / 14px 14px; }
     .bx-new { flex: 0 0 54px; font-size: 1.35rem; line-height: 1; padding: 10px 0; }
     .bx-new[hidden] { display: none; }
     .bx-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px; }
@@ -108,8 +123,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="brand">{{ brand_name }} · tools</div>
-  <h1>Headshot maker</h1>
+  <div class="hs-top"><div><div class="brand">{{ brand_name }} · tools</div><h1>Headshot maker</h1></div>
+    <div class="gh-state" id="gh-state"><a href="#" id="gh-link">Connect GitHub</a><span class="gh-sub">optional, to send headshots to the site</span></div></div>
   <div class="grid">
     <div class="card pv">
       <div class="stage" id="stage"><canvas id="cv" width="1000" height="1000"></canvas><div class="empty" id="empty"><div><b>Drop transparent PNGs here</b><br>or add them on the right (up to 5)</div></div></div>
@@ -126,7 +141,8 @@
         <input type="text" id="name" placeholder="Speaker Name.png" spellcheck="false">
         <div class="hint">Follows the layers, as in talks.csv.</div>
       </div>
-      <div class="row"><button type="button" class="btn btn-main" id="dl" disabled>Download PNG</button></div>
+      <div class="row"><button type="button" class="btn btn-main" id="dl" disabled>Download PNG</button><button type="button" class="btn btn-push" id="push" disabled hidden>Push to site</button></div>
+      <div class="hint" id="push-msg"></div>
       <button type="button" class="btn btn-ghost" id="batch-open" style="width:100%;margin-top:10px">Batch export&hellip; <small style="font-weight:500;color:#777">(up to 10, Auto, zip)</small></button>
     </div>
     <div class="card">
@@ -158,9 +174,33 @@
     <p class="hint">Up to 10 keyed PNGs, one speaker each. Every photo gets Auto (framing and tones) and is exported under its own name into one zip. No preview; check the results below after the export.</p>
     <label class="drop" id="bx-drop"><input type="file" id="bx-file" accept="image/png,image/webp,image/*" multiple><span id="bx-text"><b>Choose photos</b> or drop them here (up to 10)</span></label>
     <ul class="bx-list" id="bx-list"></ul>
-    <div class="row"><button type="button" class="btn btn-main" id="bx-go" disabled>Export zip</button><button type="button" class="btn btn-ghost bx-new" id="bx-new" title="Start a new batch" aria-label="Start a new batch" hidden>&#8635;</button></div>
+    <div class="row"><button type="button" class="btn btn-main" id="bx-go" disabled>Export zip</button><button type="button" class="btn btn-push" id="bx-send" disabled hidden>Send all to site</button><button type="button" class="btn btn-ghost bx-new" id="bx-new" title="Start a new batch" aria-label="Start a new batch" hidden>&#8635;</button></div>
     <div class="hint" id="bx-msg"></div>
     <div class="bx-thumbs" id="bx-thumbs"></div>
+  </div>
+</div>
+<div class="bx" id="gh" hidden>
+  <div class="bx-box" role="dialog" aria-label="Connect GitHub">
+    <button type="button" class="bx-x" id="gh-x" aria-label="Close">&times;</button>
+    <h2>Connect GitHub</h2>
+    <p class="hint">"Push to site" sends the finished PNG to <a href="https://github.com/sreday/headshots-inbox" target="_blank" rel="noopener">sreday/headshots-inbox</a>; the site picks it up from there within about 15 minutes (only valid 1000&times;1000 headshots are accepted). The token below can only reach that inbox, never the site itself.</p>
+    <ol class="gh-steps">
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub &rarr; new fine-grained token</a>.</li>
+      <li>Resource owner: <b>sreday</b>. Repository access: <b>Only select repositories</b> &rarr; <b>headshots-inbox</b>.</li>
+      <li>Permissions &rarr; Repository &rarr; <b>Contents: Read and write</b> (nothing else). Expiration: 90 days.</li>
+      <li>Generate, copy, paste here.</li>
+    </ol>
+    <input type="password" id="gh-token" placeholder="github_pat_..." autocomplete="off" spellcheck="false">
+    <label class="gh-remember"><input type="checkbox" id="gh-remember"> Remember on this computer (otherwise it is forgotten when the tab closes)</label>
+    <div class="row"><button type="button" class="btn btn-main" id="gh-save">Connect</button><button type="button" class="btn btn-ghost" id="gh-out" hidden>Disconnect</button></div>
+    <div class="hint" id="gh-msg"></div>
+  </div>
+</div>
+<div class="bx" id="ok" hidden>
+  <div class="bx-box ok-box" role="dialog" aria-label="Replace">
+    <h2 id="ok-title">Replace the current headshot?</h2>
+    <div class="ok-imgs" id="ok-imgs"></div>
+    <div class="row" id="ok-btns"></div>
   </div>
 </div>
 <script>
@@ -532,7 +572,7 @@
       var li = document.createElement('li'), n = document.createElement('span'), st = document.createElement('b');
       n.textContent = b.file.name; st.textContent = b.state || 'ready'; st.className = b.cls || ''; li.appendChild(n); li.appendChild(st); $('bx-list').appendChild(li);
     });
-    $('bx-go').disabled = !batch.length;
+    $('bx-go').disabled = !batch.length; $('bx-send').disabled = !batch.length || !ghToken();
   }
   function batchAdd(files) {
     var list = [].slice.call(files || []).filter(function (f) { return /^image\//.test(f.type); });
@@ -541,9 +581,9 @@
     list.slice(0, Math.max(0, room)).forEach(function (f) { batch.push({ file: f }); });
     $('bx-thumbs').innerHTML = ''; batchList();
   }
-  async function batchRun() {
+  async function batchRun(mode) {                                       // mode 'zip' (download) or 'send' (to the site via the inbox)
     var go = $('bx-go'), msg = $('bx-msg'), out = [], report = [], used = {};
-    go.disabled = true; $('bx-new').hidden = true; $('bx-thumbs').innerHTML = '';
+    go.disabled = true; $('bx-send').disabled = true; $('bx-new').hidden = true; $('bx-thumbs').innerHTML = '';
     var fl = null;
     try { msg.textContent = landmarker ? 'Starting...' : 'Loading the face finder (first time only)...'; fl = await getLandmarker(); }
     catch (e) { msg.textContent = 'The face finder could not load, so every photo gets the default framing. '; }
@@ -573,26 +613,132 @@
     var nd = new Date(), pad = function (v) { return (v < 10 ? '0' : '') + v; };
     var stamp = nd.getFullYear() + '-' + pad(nd.getMonth() + 1) + '-' + pad(nd.getDate());
     var head = '{{ brand_name }} headshots, batch export ' + stamp + ' ' + pad(nd.getHours()) + ':' + pad(nd.getMinutes()) + '\n\n';
+    if (mode === 'send') {
+      var sent = await sendFiles(out, msg);
+      go.disabled = false; $('bx-send').disabled = !ghToken(); $('bx-new').hidden = false;
+      return sent;
+    }
     out.push({ name: '_report.txt', data: new TextEncoder().encode(head + report.join('\n') + '\n') });
     var zip = makeZip(out), a = document.createElement('a');
     a.href = URL.createObjectURL(zip); a.download = 'headshots-{{ brand_name | lower | replace(" ", "-") }}-' + stamp + '.zip';
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
     var bad = report.filter(function (r) { return r.indexOf('OK') !== 0; }).length;
     msg.textContent = (out.length - 1) + ' headshot' + (out.length === 2 ? '' : 's') + ' in the zip' + (bad ? '; ' + bad + ' need a look (red below, listed in _report.txt).' : '. All framed by Auto.');
-    go.disabled = false; $('bx-new').hidden = false;                       // offer a fresh start
+    go.disabled = false; $('bx-send').disabled = !ghToken(); $('bx-new').hidden = false;   // offer a fresh start
   }
   $('batch-open').addEventListener('click', function () { $('bx').hidden = false; });
   $('bx-x').addEventListener('click', function () { $('bx').hidden = true; });
   $('bx').addEventListener('click', function (e) { if (e.target === this) this.hidden = true; });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $('bx').hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('bx').hidden = true; $('gh').hidden = true; } });
   $('bx-file').addEventListener('change', function () { batchAdd(this.files); this.value = ''; });
   var bxd = $('bx-drop');
   ['dragenter', 'dragover'].forEach(function (ev) { bxd.addEventListener(ev, function (e) { e.preventDefault(); bxd.classList.add('over'); }); });
   ['dragleave', 'drop'].forEach(function (ev) { bxd.addEventListener(ev, function (e) { e.preventDefault(); bxd.classList.remove('over'); }); });
   bxd.addEventListener('drop', function (e) { if (e.dataTransfer.files) batchAdd(e.dataTransfer.files); });
-  $('bx-go').addEventListener('click', function () { batchRun(); });
+  $('bx-go').addEventListener('click', function () { batchRun('zip'); });
+  $('bx-send').addEventListener('click', function () { batchRun('send'); });
   $('bx-new').addEventListener('click', function () {                     // start a new batch: empty list, no results
     batch = []; $('bx-thumbs').innerHTML = ''; $('bx-msg').textContent = ''; this.hidden = true; batchList();
+  });
+
+  // ── GitHub (Marek 2026-10-06): optional "Push to site" through sreday/headshots-inbox ──
+  // The token only reaches the inbox repo; each site imports valid 1000x1000 PNGs from its folder there (workflow
+  // import-headshots.yml) every 15 minutes. Kept in sessionStorage, or localStorage when "Remember" is ticked; it is only
+  // ever sent to api.github.com. Download stays available either way.
+  var SITE_KEY = 'llmday', INBOX = 'sreday/headshots-inbox', GH_KEY = 'hs-gh-token';
+  function ghToken() { try { return sessionStorage.getItem(GH_KEY) || localStorage.getItem(GH_KEY) || ''; } catch (e) { return ''; } }
+  function ghSet(t, remember) {
+    try { sessionStorage.removeItem(GH_KEY); localStorage.removeItem(GH_KEY); if (t) (remember ? localStorage : sessionStorage).setItem(GH_KEY, t); } catch (e) {}
+  }
+  function ghApi(path, opts) {
+    opts = opts || {};
+    return fetch('https://api.github.com' + path, { method: opts.method || 'GET', body: opts.body ? JSON.stringify(opts.body) : undefined,
+      headers: { 'Authorization': 'Bearer ' + ghToken(), 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j.message || ('GitHub said ' + r.status)); e.status = r.status; throw e; } return j; }); });
+  }
+  function b64(u8) { var s = '', CH = 0x8000; for (var i = 0; i < u8.length; i += CH) s += String.fromCharCode.apply(null, u8.subarray(i, i + CH)); return btoa(s); }
+  async function commitFiles(files, message) {                            // one commit on the inbox's main, retried once if main moved
+    for (var attempt = 0; attempt < 2; attempt++) {
+      var ref = await ghApi('/repos/' + INBOX + '/git/ref/heads/main'), base = ref.object.sha;
+      var baseCommit = await ghApi('/repos/' + INBOX + '/git/commits/' + base), tree = [];
+      for (var i = 0; i < files.length; i++) {
+        var blob = await ghApi('/repos/' + INBOX + '/git/blobs', { method: 'POST', body: { content: b64(files[i].data), encoding: 'base64' } });
+        tree.push({ path: SITE_KEY + '/' + files[i].name, mode: '100644', type: 'blob', sha: blob.sha });
+      }
+      var t = await ghApi('/repos/' + INBOX + '/git/trees', { method: 'POST', body: { base_tree: baseCommit.tree.sha, tree: tree } });
+      var c = await ghApi('/repos/' + INBOX + '/git/commits', { method: 'POST', body: { message: message, tree: t.sha, parents: [base] } });
+      try { await ghApi('/repos/' + INBOX + '/git/refs/heads/main', { method: 'PATCH', body: { sha: c.sha } }); return c.html_url || ('https://github.com/' + INBOX + '/commit/' + c.sha); }
+      catch (e) { if (attempt === 1 || (e.status !== 422 && e.status !== 409)) throw e; }
+    }
+  }
+  function exists(name) {                                                 // is this speaker already on the live site?
+    return fetch('/speakers/' + encodeURIComponent(name), { method: 'HEAD', cache: 'no-store' }).then(function (r) { return r.ok; }).catch(function () { return false; });
+  }
+  function ask(title, imgs, buttons) {                                    // small dialog: thumbnails + buttons, resolves with the chosen value
+    return new Promise(function (done) {
+      $('ok-title').textContent = title; $('ok-imgs').innerHTML = ''; $('ok-btns').innerHTML = '';
+      imgs.forEach(function (im) { var f = document.createElement('figure'), i = document.createElement('img'), c = document.createElement('figcaption'); i.src = im[0]; c.textContent = im[1]; f.appendChild(i); f.appendChild(c); $('ok-imgs').appendChild(f); });
+      buttons.forEach(function (b) { var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'btn ' + (b[2] || 'btn-ghost'); bt.textContent = b[0];
+        bt.addEventListener('click', function () { $('ok').hidden = true; done(b[1]); }); $('ok-btns').appendChild(bt); });
+      $('ok').hidden = false;
+    });
+  }
+  function ghError(e) {
+    if (e && (e.status === 401 || e.status === 403)) return 'GitHub refused the token (expired, or no write access to ' + INBOX + '). Reconnect with a new one.';
+    return 'Could not send: ' + (e && e.message ? e.message : e) + '. Download still works.';
+  }
+  async function sendFiles(files, msgEl) {                                // [{name, data}] -> one inbox commit; asks before replacing
+    if (!ghToken()) { msgEl.textContent = 'Connect GitHub first.'; return false; }
+    var list = files.filter(function (f) { return /\.png$/i.test(f.name); });
+    msgEl.textContent = 'Checking which speakers are already on the site...';
+    var already = [];
+    for (var i = 0; i < list.length; i++) if (await exists(list[i].name)) already.push(list[i]);
+    if (already.length) {
+      var choice = list.length === 1
+        ? await ask('Replace the current headshot of ' + list[0].name.replace(/\.png$/i, '') + '?',
+                    [['/speakers/' + encodeURIComponent(list[0].name) + '?t=' + Date.now(), 'on the site now'], [URL.createObjectURL(new Blob([list[0].data], { type: 'image/png' })), 'new']],
+                    [['Cancel', 'cancel'], ['Replace', 'all', 'btn-main']])
+        : await ask(already.length + ' of ' + list.length + ' are already on the site: ' + already.map(function (f) { return f.name.replace(/\.png$/i, ''); }).join(', '), [],
+                    [['Cancel', 'cancel'], ['Skip those', 'skip'], ['Replace them', 'all', 'btn-main']]);
+      if (choice === 'cancel') { msgEl.textContent = 'Not sent.'; return false; }
+      if (choice === 'skip') list = list.filter(function (f) { return already.indexOf(f) < 0; });
+    }
+    if (!list.length) { msgEl.textContent = 'Nothing new to send.'; return false; }
+    msgEl.textContent = 'Sending ' + list.length + ' headshot' + (list.length > 1 ? 's' : '') + '...';
+    try {
+      var url = await commitFiles(list, SITE_KEY + ': ' + list.map(function (f) { return f.name.replace(/\.png$/i, ''); }).join(', '));
+      msgEl.innerHTML = 'Sent. It appears on the site within about 15 minutes. <a target="_blank" rel="noopener"></a>';
+      var a = msgEl.querySelector('a'); a.href = url; a.textContent = 'See the commit';
+      return true;
+    } catch (e) { msgEl.textContent = ghError(e); return false; }
+  }
+  function ghRefresh(login) {
+    var on = !!ghToken();
+    $('push').hidden = !on; $('bx-send').hidden = !on; $('push').disabled = !on || !layers.length; $('bx-send').disabled = !on || !batch.length;
+    $('gh-out').hidden = !on;
+    $('gh-state').innerHTML = on ? 'GitHub: <b></b> &middot; <a href="#" id="gh-link">settings</a>' : '<a href="#" id="gh-link">Connect GitHub</a><span class="gh-sub">optional, to send headshots to the site</span>';
+    if (on) $('gh-state').querySelector('b').textContent = login ? '@' + login : 'connected';
+    $('gh-link').addEventListener('click', function (e) { e.preventDefault(); $('gh-msg').textContent = ''; $('gh').hidden = false; });
+  }
+  $('gh-x').addEventListener('click', function () { $('gh').hidden = true; });
+  $('gh').addEventListener('click', function (e) { if (e.target === this) this.hidden = true; });
+  $('gh-save').addEventListener('click', async function () {
+    var t = $('gh-token').value.trim(); if (!t) { $('gh-msg').textContent = 'Paste the token first.'; return; }
+    ghSet(t, $('gh-remember').checked); $('gh-msg').textContent = 'Checking...';
+    try {
+      var repo = await ghApi('/repos/' + INBOX);
+      if (!repo.permissions || !repo.permissions.push) throw Object.assign(new Error('the token has no write access to ' + INBOX), { status: 403 });
+      var me = await ghApi('/user').catch(function () { return {}; });
+      $('gh-token').value = ''; $('gh-msg').textContent = 'Connected.'; ghRefresh(me.login); setTimeout(function () { $('gh').hidden = true; }, 700);
+    } catch (e) { ghSet('', false); ghRefresh(); $('gh-msg').textContent = ghError(e); }
+  });
+  $('gh-out').addEventListener('click', function () { ghSet('', false); ghRefresh(); $('gh-msg').textContent = 'Disconnected; the token is forgotten on this computer.'; });
+  $('push').addEventListener('click', async function () {
+    if (!layers.length) return;
+    var btn = this; btn.disabled = true;
+    var name = ($('name').value.trim() || 'headshot').replace(/\.png$/i, '') + '.png';
+    await sendFiles([{ name: name, data: await blobOf(render(SIZE)) }], $('push-msg'));
+    btn.disabled = !layers.length;
   });
 
   // ── the layer list: front on top; select, move forward / back, remove ──
@@ -627,7 +773,7 @@
       if (dy) L.li.animate([{ transform: 'translateY(' + dy + 'px)' }, { transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.2,.8,.2,1)' });
     });
     $('count').textContent = layers.length + ' / ' + MAX_LAYERS; autoName();
-    $('empty').hidden = layers.length > 0; $('dl').disabled = !layers.length;
+    $('empty').hidden = layers.length > 0; $('dl').disabled = !layers.length; $('push').disabled = !layers.length || !ghToken();
     sliders.forEach(function (r) { r.disabled = !layers.length; }); $('reset').disabled = !layers.length; $('auto').disabled = !layers.length;
     $('auto').innerHTML = layers.length > 1 ? '&#10024; Auto (all layers)' : '&#10024; Auto';
     $('drop').style.display = layers.length >= MAX_LAYERS ? 'none' : '';
@@ -752,13 +898,13 @@
     var k = e.key.toLowerCase(), t = e.target;
     if (k !== 'z' && k !== 'y') return;
     if (t && (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && /^(text|search|email|url)$/i.test(t.type)))) return;   // the field's own text undo
-    if (!$('bx').hidden) return;                                          // not while the batch window is open
+    if (!$('bx').hidden || !$('gh').hidden || !$('ok').hidden) return;    // not while a window is open
     e.preventDefault();
     if (k === 'y' || e.shiftKey) redo(); else undo();
   });
 
-  select(-1); commit();
-  window.__headshot = { findFace: findFace, skinMedian: skinMedian, skinBright: skinBright, undo: undo, redo: redo, commit: commit, batchAdd: batchAdd, batchRun: batchRun, makeZip: makeZip, getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
+  select(-1); commit(); ghRefresh();
+  window.__headshot = { sendFiles: sendFiles, ghSet: ghSet, findFace: findFace, skinMedian: skinMedian, skinBright: skinBright, undo: undo, redo: redo, commit: commit, batchAdd: batchAdd, batchRun: batchRun, makeZip: makeZip, getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
 })();
 </script>
 </body>

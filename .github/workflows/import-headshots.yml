@@ -1,0 +1,86 @@
+# Import headshots (Marek 2026-10-06): the /headshots/ tool's "Push to site" button commits finished PNGs to the public
+# repo sreday/headshots-inbox, into one folder per site. This workflow takes the files added or changed there since the
+# last import (kept in .headshots-inbox-sha), accepts only valid 1000x1000 RGBA PNGs with a safe name, copies them into
+# speakers/, commits them and starts the normal build. The token in the tool only reaches the inbox, so nothing but
+# speaker headshots can ever arrive here this way. Identical in sreday, llmday, platformday and PEC except SITE_KEY.
+name: Import headshots
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: import-headshots
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    env:
+      SITE_KEY: llmday
+      INBOX: sreday/headshots-inbox
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: sreday/headshots-inbox
+          path: _inbox
+          fetch-depth: 0
+      - name: Pillow
+        run: pip install --quiet pillow
+      - name: Pick and check new headshots
+        id: pick
+        run: |
+          python3 - <<'PY'
+          import os, re, subprocess, shutil
+          from PIL import Image
+          site = os.environ['SITE_KEY']
+          git = lambda *a: subprocess.run(['git', '-C', '_inbox'] + list(a), capture_output=True, text=True)
+          head = git('rev-parse', 'HEAD').stdout.strip()
+          last = open('.headshots-inbox-sha').read().strip() if os.path.exists('.headshots-inbox-sha') else ''
+          out = open(os.environ['GITHUB_OUTPUT'], 'a')
+          if not last or git('cat-file', '-e', last + '^{commit}').returncode != 0:
+              open('.headshots-inbox-sha', 'w').write(head + '\n')        # first run (or history rewritten): start from here
+              print('starting point set to', head); out.write('imported=0\nbaseline=1\n'); raise SystemExit
+          names = [p for p in git('diff', '--name-only', '--diff-filter=AM', last, head, '--', site + '/').stdout.splitlines() if p]
+          ok = []
+          for p in names:
+              name = p[len(site) + 1:]
+              why = ''
+              if '/' in name or '\\' in name or '..' in name or not re.fullmatch(r'[^/\\]{1,120}\.png', name): why = 'unsafe name'
+              else:
+                  f = os.path.join('_inbox', p)
+                  if os.path.getsize(f) > 5 * 1024 * 1024: why = 'over 5 MB'
+                  else:
+                      with open(f, 'rb') as fh:
+                          if fh.read(8) != b'\x89PNG\r\n\x1a\n': why = 'not a PNG'
+                      if not why:
+                          try:
+                              im = Image.open(f); im.load()
+                              if im.size != (1000, 1000) or im.mode != 'RGBA': why = 'not 1000x1000 RGBA (%sx%s %s)' % (im.size + (im.mode,))
+                          except Exception as e: why = 'unreadable (%s)' % e
+              if why: print('SKIPPED', p, '-', why); continue
+              shutil.copyfile(os.path.join('_inbox', p), os.path.join('speakers', name)); ok.append(name); print('IMPORTED', name)
+          if ok: open('.headshots-inbox-sha', 'w').write(head + '\n')
+          out.write('imported=%d\nbaseline=0\n' % len(ok))
+          open('_imported.txt', 'w').write(''.join(n + '\n' for n in ok))
+          PY
+      - name: Commit and build
+        if: steps.pick.outputs.imported != '0' || steps.pick.outputs.baseline == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- .headshots-inbox-sha
+          if [ -s _imported.txt ]; then while IFS= read -r n || [ -n "$n" ]; do git add -- "speakers/$n"; done < _imported.txt; fi
+          if git diff --cached --quiet; then exit 0; fi
+          if [ "${{ steps.pick.outputs.baseline }}" = "1" ]; then msg="Headshot inbox: starting point"; else msg="Import ${{ steps.pick.outputs.imported }} headshot(s) from headshots-inbox"; fi
+          git commit -q -m "$msg" -m "$(cat _imported.txt 2>/dev/null)"
+          for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done
+          if [ "${{ steps.pick.outputs.imported }}" != "0" ]; then gh workflow run static-build.yml --ref main; fi
