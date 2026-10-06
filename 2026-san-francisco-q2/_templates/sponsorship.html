@@ -447,19 +447,10 @@
 }
 
 /* First edition in a city: launch banner + locked 20% switch */
-.sp-launch-banner {
-  max-width: 760px;
-  margin: 0 auto 2rem;
-  padding: 22px 28px;
-  text-align: center;
-  border: 1px solid var(--sp-accent);
-  border-radius: 12px;
-  box-shadow: 0 0 20px color-mix(in srgb, var(--sp-accent) 30%, transparent);
-}
+.sp-launch-banner { margin: 0 auto 1.75rem; text-align: center; }   /* just the pill (Marek 2026-10-06) */
 .sp-launch-pill {
   display: inline-block;
   padding: 6px 14px;
-  margin-bottom: 12px;
   border-radius: 999px;
   background: var(--sp-accent);
   color: #fff;
@@ -467,10 +458,8 @@
   font-size: .95rem;
   letter-spacing: .02em;
 }
-.sp-launch-text { margin: 0; color: #d0d0d0; font-size: 1.04rem; }
 .sp-discount-locked { cursor: default; }
 .sp-discount-locked .sp-discount-check:disabled + .sp-discount-switch { opacity: 1; }
-.sp-discount-lock { font-size: .9em; }
 
 /* Active discount card glow */
 .sp-discount-card-active {
@@ -624,8 +613,7 @@
     <h2 class="sp-section-title text-center">Sponsorship opportunities</h2>
     {% if first_in_city %}
     <div class="sp-launch-banner">
-      <div class="sp-launch-pill">First {{ brand_name }} in {{ city_name }} &middot; Launch edition &middot; 20% off</div>
-      <p class="sp-launch-text">We're planting our flag in a new city and want you there from the start. Come build it with us: 20% off every package, applied automatically.</p>
+      <div class="sp-launch-pill">First {{ brand_name }} in {{ city_name }} - 20% launch discount applied!</div>
     </div>
     {% endif %}
     <p class="sp-gbp-note text-center" style="font-size:1.04rem;margin-top:-.8rem;margin-bottom:1.5rem;">
@@ -652,7 +640,7 @@
             <label class="sp-discount-toggle-label sp-discount-locked" title="Launch edition: the 20% discount is always on">
               <input type="checkbox" class="sp-discount-check" checked disabled>
               <span class="sp-discount-switch"></span>
-              20% off &middot; applied <span class="sp-discount-lock" aria-hidden="true">&#128274;</span>
+              20% off
             </label>
             {% else %}
             <label class="sp-discount-toggle-label">
