@@ -43,6 +43,13 @@
     .ch-field.is-invalid input, .ch-field.is-invalid textarea { border-color: var(--ch-danger) !important; }
     .ch-hint { font-size: .8rem; color: #888; margin-top: 6px; }
     .ch-rest { animation: ch-unfold .55s ease-out; }
+    /* while step 1 is open, the top of step 2 peeks out under a frosted pane with a lock (Marek 2026-10-06, option 2);
+       inert, so nothing in it can be clicked or focused. JS sets the height to 20% of the step 2 card. */
+    .ch-rest.peek { position: relative; overflow: hidden; max-height: 230px; pointer-events: none; user-select: none; animation: none;
+      -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+    .ch-rest.peek::after { content: '\1F512\00a0 Your card unlocks after step 1'; position: absolute; inset: 0; z-index: 5; display: flex;
+      align-items: flex-start; justify-content: center; padding-top: 26px; font: 600 15px 'Montserrat', sans-serif; color: #444;
+      background: rgba(255,255,255,.45); -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px); border-radius: 16px; }
     @keyframes ch-unfold { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
     .ch-hint.warn { color: #b26a00; }
     /* the photo field */
@@ -159,7 +166,7 @@
       <div class="ch-row"><button type="button" class="btn-ch" id="ch-next">Next steps</button><span class="ch-hint" id="ch-next-hint">Check your details, then continue. You can still edit them later.</span></div>
     </div>
 
-    <div id="ch-rest" class="ch-rest" hidden>
+    <div id="ch-rest" class="ch-rest peek" inert aria-hidden="true">
     <div class="ch-card">
       <div class="ch-step"><i>2</i><h2>Your card</h2><small>this is a card we propose for your posting</small></div>
       <div class="ch-canvas-wrap"><canvas id="ch-canvas" width="1500" height="1500"></canvas></div>
@@ -762,6 +769,12 @@ function checkDetails() {                       // step 1: name, email, job titl
   bad.forEach(function (k) { form.querySelector('[data-field="' + k + '"]').classList.add('is-invalid'); });
   return bad;
 }
+// the step 2 peek: 20% of the card's real height (it changes with the page width)
+function sizePeek() {
+  var rest = $('ch-rest'); if (!rest.classList.contains('peek') || !rest.firstElementChild) return;
+  rest.style.maxHeight = Math.round(rest.firstElementChild.offsetHeight * 0.2 + 24) + 'px';
+}
+window.addEventListener('load', sizePeek); window.addEventListener('resize', sizePeek); sizePeek();
 function detailsMessage(bad) {
   if (bad.length === 1 && bad[0] === 'linkedin') return 'The LinkedIn link should start with https://www.linkedin.com/';
   if (bad.length === 1 && bad[0] === 'photo') return 'Please add your photo, it goes on your card.';
@@ -772,7 +785,8 @@ $('ch-next').addEventListener('click', function () {   // unfold the rest of the
   if (bad.length) { hint.className = 'ch-hint warn'; hint.textContent = detailsMessage(bad); var el = form.querySelector('[data-field="' + bad[0] + '"] input'); if (el.type === 'file') el.parentNode.scrollIntoView({ behavior: 'smooth', block: 'center' }); else el.focus(); return; }
   hint.className = 'ch-hint'; hint.textContent = 'All set. Your card and posts are below.';
   var rest = $('ch-rest');
-  if (rest.hidden) { rest.hidden = false; drawCard(); render('post'); render('msg'); }
+  if (rest.classList.contains('peek')) { rest.classList.remove('peek'); rest.style.maxHeight = ''; rest.inert = false; rest.removeAttribute('aria-hidden');
+    drawCard(); render('post'); render('msg'); }
   rest.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 function cardPayload() {                        // the card as drawn, attached to the email to Anna (script v5)
