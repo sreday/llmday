@@ -6,8 +6,9 @@
 name: Import headshots
 
 on:
-  schedule:
-    - cron: '*/15 * * * *'
+  # paused with the GitHub connection on /headshots/ (Marek 2026-10-06); add back to resume:
+  # schedule:
+  #   - cron: '*/15 * * * *'
   workflow_dispatch:
 
 permissions:
