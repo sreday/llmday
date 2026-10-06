@@ -35,7 +35,10 @@
     .stage.dragging { cursor: grabbing; }
     .stage canvas { display: block; width: 100%; height: auto; aspect-ratio: 1; }
     .empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; color: #777; font-size: .95rem; pointer-events: none; padding: 20px; }
-    .empty b { color: var(--accent); }
+    .empty b { color: color-mix(in srgb, var(--accent) 80%, #000); font-size: 1.05rem; }
+    /* readable over the coloured circle (Marek 2026-10-06): a frosted white card behind the text */
+    .empty > div { background: rgba(255,255,255,.9); color: #333; padding: 14px 22px; border-radius: 16px; line-height: 1.5;
+      box-shadow: 0 8px 24px rgba(0,0,0,.18); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
     .empty[hidden] { display: none; }
     .stage.over { outline: 3px dashed var(--accent); outline-offset: -6px; }
     .ctl + .ctl { margin-top: 14px; }
