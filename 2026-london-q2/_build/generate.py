@@ -629,6 +629,13 @@ _planned_tracks = context.get("tracks") if isinstance(context.get("tracks"), int
 context["tracks"] = tracks_ordered
 context["tracks_display"] = _planned_tracks or max(len(tracks_ordered), 1)
 
+# no keynotes (Marek 2026-10-06): the opening "Coffee break" (the break before the first talk) becomes "Registration and
+# coffee" - without a plenary to open the day, that slot is when people arrive and register
+if not keynotes:
+    for _b in context.get("breaks") or []:
+        if int(_b.get("talks_before") or 0) == 0 and str(_b.get("title", "")).strip().lower() == "coffee break":
+            _b["title"] = "Registration and coffee"
+        break
 # insert breaks & wrap up into each track
 breaks = context.get("breaks")
 for track in tracks_ordered:
