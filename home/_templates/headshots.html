@@ -95,6 +95,8 @@
     .bx-list li { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; overflow: hidden; }
     .bx-list li span { overflow: hidden; text-overflow: ellipsis; }
     .bx-list li b { font-weight: 600; color: #777; } .bx-list li b.ok { color: #1a8a3a; } .bx-list li b.warn { color: #c0392b; }
+    .bx-new { flex: 0 0 54px; font-size: 1.35rem; line-height: 1; padding: 10px 0; }
+    .bx-new[hidden] { display: none; }
     .bx-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px; }
     .bx-thumbs figure { margin: 0; text-align: center; font-size: .7rem; color: #555; }
     .bx-thumbs img { width: 100%; aspect-ratio: 1; border-radius: 10px; background: #fff conic-gradient(#e9e9ee 25%, #fff 0 50%, #e9e9ee 0 75%, #fff 0) 0 0 / 12px 12px; }
@@ -156,7 +158,7 @@
     <p class="hint">Up to 10 keyed PNGs, one speaker each. Every photo gets Auto (framing and tones) and is exported under its own name into one zip. No preview; check the results below after the export.</p>
     <label class="drop" id="bx-drop"><input type="file" id="bx-file" accept="image/png,image/webp,image/*" multiple><span id="bx-text"><b>Choose photos</b> or drop them here (up to 10)</span></label>
     <ul class="bx-list" id="bx-list"></ul>
-    <div class="row"><button type="button" class="btn btn-main" id="bx-go" disabled>Export zip</button></div>
+    <div class="row"><button type="button" class="btn btn-main" id="bx-go" disabled>Export zip</button><button type="button" class="btn btn-ghost bx-new" id="bx-new" title="Start a new batch" aria-label="Start a new batch" hidden>&#8635;</button></div>
     <div class="hint" id="bx-msg"></div>
     <div class="bx-thumbs" id="bx-thumbs"></div>
   </div>
@@ -473,7 +475,7 @@
   }
   async function batchRun() {
     var go = $('bx-go'), msg = $('bx-msg'), out = [], report = [], used = {};
-    go.disabled = true; $('bx-thumbs').innerHTML = '';
+    go.disabled = true; $('bx-new').hidden = true; $('bx-thumbs').innerHTML = '';
     var fl = null;
     try { msg.textContent = landmarker ? 'Starting...' : 'Loading the face finder (first time only)...'; fl = await getLandmarker(); }
     catch (e) { msg.textContent = 'The face finder could not load, so every photo gets the default framing. '; }
@@ -509,7 +511,7 @@
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
     var bad = report.filter(function (r) { return r.indexOf('OK') !== 0; }).length;
     msg.textContent = (out.length - 1) + ' headshot' + (out.length === 2 ? '' : 's') + ' in the zip' + (bad ? '; ' + bad + ' need a look (red below, listed in _report.txt).' : '. All framed by Auto.');
-    go.disabled = false;
+    go.disabled = false; $('bx-new').hidden = false;                       // offer a fresh start
   }
   $('batch-open').addEventListener('click', function () { $('bx').hidden = false; });
   $('bx-x').addEventListener('click', function () { $('bx').hidden = true; });
@@ -521,6 +523,9 @@
   ['dragleave', 'drop'].forEach(function (ev) { bxd.addEventListener(ev, function (e) { e.preventDefault(); bxd.classList.remove('over'); }); });
   bxd.addEventListener('drop', function (e) { if (e.dataTransfer.files) batchAdd(e.dataTransfer.files); });
   $('bx-go').addEventListener('click', function () { batchRun(); });
+  $('bx-new').addEventListener('click', function () {                     // start a new batch: empty list, no results
+    batch = []; $('bx-thumbs').innerHTML = ''; $('bx-msg').textContent = ''; this.hidden = true; batchList();
+  });
 
   // ── the layer list: front on top; select, move forward / back, remove ──
   function thumb(L) {
