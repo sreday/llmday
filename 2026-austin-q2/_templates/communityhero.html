@@ -60,6 +60,11 @@
     .ch-photo-text { font-size: .92rem; color: #444; line-height: 1.5; }
     .ch-photo-text b { color: var(--ch-accent); }
     .ch-field.is-invalid .ch-photo-box { border-color: var(--ch-danger); }
+    /* post step: the LinkedIn tag hint sits top right, beside the tabs and the tag switch (Marek 2026-10-06) */
+    .ch-post-top { display: flex; gap: 18px; align-items: flex-start; }
+    .ch-post-ctl { flex: 0 0 auto; }
+    .ch-post-top .ch-tagpill { flex: 1; margin: 0 0 12px; font-size: .88rem; line-height: 1.5; }
+    @media (max-width: 640px) { .ch-post-top { flex-direction: column; gap: 0; } }
     /* photo zoom under the card (Marek 2026-10-06): starts fully zoomed out (the photo fills the circle), only zooms in */
     .ch-zoom { display: flex; align-items: center; gap: 10px; margin: 14px 0 6px; font-size: .9rem; color: #555; }
     .ch-zoom[hidden] { display: none; }
@@ -199,10 +204,14 @@
 
     <div class="ch-card">{% set ch_n.i = ch_n.i + 1 %}
       <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Your post</h2><small>LinkedIn, X, etc. - where your community is active</small></div>
-      <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="personal">Personal</button><button type="button" data-v="pro">Professional</button></div>
-      <label class="ch-consent" style="margin: 0 0 12px;"><input type="checkbox" id="ch-tags"><span>Add LinkedIn tags (@)</span></label>
+      <div class="ch-post-top">
+        <div class="ch-post-ctl">
+          <div class="ch-tabs" data-set="post"><button type="button" class="on" data-v="personal">Personal</button><button type="button" data-v="pro">Professional</button></div>
+          <label class="ch-consent" style="margin: 0 0 12px;"><input type="checkbox" id="ch-tags"><span>Add LinkedIn tags (@)</span></label>
+        </div>
+        <div class="ch-tagpill" id="ch-tags-hint" hidden>When you see <b>@</b> before a person&rsquo;s or company&rsquo;s name, click it and select the correct match to tag them on LinkedIn (and possibly other platforms), which can help increase your post&rsquo;s reach.</div>
+      </div>
       <textarea class="ch-text" id="ch-post" spellcheck="false"></textarea>
-      <div class="ch-tagpill" id="ch-tags-hint" hidden>LinkedIn (and possibly other platforms) allows you to tag people and companies, which can increase the reach of your post.<span style="display: block; margin-top: 8px;">When you see an <b>@</b> before a person&rsquo;s name or a company, click it and select the correct person/entity from the list.</span></div>
       <div class="ch-row"><button type="button" class="btn-ch ghost" data-copy="ch-post">Copy the post</button><span class="ch-copied" id="ch-post-copied"></span></div>
       <div class="ch-hint">Edit as you please before posting. Those messages are based on your input in step 1.</div>
     </div>
