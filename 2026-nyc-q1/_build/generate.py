@@ -1736,8 +1736,9 @@ def _tz_slug(s):
 _TZ_SCHEMES = {   # the community hero colour schemes (communityhero.html SCHEMES)
     'llmday': {'bg': ['#07261d', '#03120d', '#062019'], 'ramp': ['#a7f3d0', '#3db07f', '#26986a'], 'accent': '#6ee7b7', 'glow': '#3db07f',
                'sweeps': [['#3db07f', '#6ee7b7'], ['#26986a', '#3db07f']]},
-    'sreday': {'bg': ['#2a0f33', '#12061c', '#1d0b35'], 'ramp': ['#f472b6', '#c084fc', '#818cf8'], 'accent': '#d8b4fe', 'glow': '#c084fc',
-               'sweeps': [['#e879f9', '#a855f7'], ['#7c3aed', '#f472b6']]},
+    # SREday teasers: neon red -> purple -> blue (Marek 2026-10-06, option 5); the community hero keeps its own SCHEMES
+    'sreday': {'bg': ['#0b0620', '#05030f', '#060c24'], 'ramp': ['#ff3b3b', '#b14cff', '#3b82ff'], 'accent': '#a5b4fc', 'glow': '#b14cff',
+               'sweeps': [['#ff3b3b', '#b14cff'], ['#3b82ff', '#b14cff']]},
     'platformday': {'bg': ['#2b1606', '#120903', '#1f0c05'], 'ramp': ['#fde047', '#fb923c', '#ef4444'], 'accent': '#fbbf24', 'glow': '#f97316',
                     'sweeps': [['#f97316', '#fbbf24'], ['#ef4444', '#f97316']]},
     'pec': {'bg': ['#141031', '#07061a', '#0d1430'], 'ramp': ['#ef4444', '#f59e0b', '#facc15', '#22c55e', '#06b6d4', '#3b82f6', '#a855f7'],
