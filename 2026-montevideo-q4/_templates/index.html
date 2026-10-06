@@ -453,6 +453,8 @@
   /* Table view */
   .schedule-table-view { display: none; }
   .schedule-table-view.active { display: block; }
+  /* one track: the table at half the width, centred (Marek 2026-10-06); full width on phones */
+  @media (min-width: 768px) { .schedule-table-view.single-track { max-width: 50%; margin: 0 auto; } }
   .schedule-timeline-view { display: block; }
   .schedule-timeline-view.hidden { display: none; }
   /* view switch (Normal / Compact / Table), same slider pill as the sponsorship page's currency switch */
@@ -697,7 +699,7 @@
     </div>
 
     <!-- Table View -->
-    <div id="table-view-{{ day }}" class="schedule-table-view">
+    <div id="table-view-{{ day }}" class="schedule-table-view{% if (tracks|length) // days == 1 %} single-track{% endif %}">
       <table class="schedule-grid-table">
         <thead>
           <tr>
