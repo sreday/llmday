@@ -82,6 +82,8 @@
     /* the card */
     .ch-canvas-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #e6e6e6; background: #eee; max-width: 560px; margin: 0 auto; }
     .ch-canvas-wrap canvas { width: 100%; height: auto; display: block; }
+    .ch-canvas-wrap canvas.can-drag { cursor: grab; }
+    .ch-canvas-wrap canvas.dragging { cursor: grabbing; }
     .ch-canvas-wrap img { width: 100%; height: auto; display: block; }
     .ch-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 16px; }
     .btn-ch { display: inline-flex; align-items: center; justify-content: center; min-width: 150px; border: none; border-radius: 999px; padding: 12px 26px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; background: var(--ch-accent); color: #fff; transition: filter .15s, transform .1s; text-decoration: none; }
@@ -561,7 +563,31 @@ function lockJoy() {
   joy.classList.toggle('locked', locked); joy.setAttribute('aria-disabled', locked ? 'true' : 'false');
   joy.title = locked ? 'Zoom in first, then drag to move the photo' : 'Drag to move the photo, double-click to centre it';
   if (locked && (photoPan.x || photoPan.y)) setPan(0, 0);
+  canvas.style.touchAction = locked ? '' : 'none';                       // zoomed in: a finger on the card drags the photo
 }
+// drag the photo on the card itself (Marek 2026-10-06): inside the photo circle, once zoomed in; it moves with the
+// pointer and keeps the joystick knob in step. Frozen at full zoom out, like the joystick.
+var PHOTO = { cx: 1085, cy: 830, r: 270 }, cardDrag = null;
+function photoSpare() {                        // how far the photo can move each way inside the circle, in card pixels
+  if (!photo) return { x: 0, y: 0 };
+  var s = Math.max(2 * PHOTO.r / photo.width, 2 * PHOTO.r / photo.height) * photoZoom;
+  return { x: Math.max(0, photo.width * s / 2 - PHOTO.r), y: Math.max(0, photo.height * s / 2 - PHOTO.r) };
+}
+function cardPoint(e) { var b = canvas.getBoundingClientRect(); return { x: (e.clientX - b.left) * canvas.width / b.width, y: (e.clientY - b.top) * canvas.height / b.height }; }
+function onPhoto(pt) { var dx = pt.x - PHOTO.cx, dy = pt.y - PHOTO.cy; return dx * dx + dy * dy <= PHOTO.r * PHOTO.r; }
+function canDrag() { return !!photo && !joy.classList.contains('locked'); }
+canvas.addEventListener('pointerdown', function (e) {
+  var pt = cardPoint(e); if (!canDrag() || !onPhoto(pt)) return;
+  e.preventDefault(); canvas.setPointerCapture(e.pointerId); canvas.classList.add('dragging'); cardDrag = pt;
+});
+canvas.addEventListener('pointermove', function (e) {
+  var pt = cardPoint(e);
+  canvas.classList.toggle('can-drag', canDrag() && onPhoto(pt));
+  if (!cardDrag || !canvas.hasPointerCapture(e.pointerId)) return;
+  var sp = photoSpare();
+  setPan(photoPan.x + (sp.x ? (pt.x - cardDrag.x) / sp.x : 0), photoPan.y + (sp.y ? (pt.y - cardDrag.y) / sp.y : 0)); cardDrag = pt;
+});
+['pointerup', 'pointercancel'].forEach(function (ev) { canvas.addEventListener(ev, function () { cardDrag = null; canvas.classList.remove('dragging'); }); });
 function joyAt(e) { var b = joy.getBoundingClientRect(); setPan((e.clientX - b.left - b.width / 2) / JOY_R, (e.clientY - b.top - b.height / 2) / JOY_R); }
 joy.addEventListener('pointerdown', function (e) { e.preventDefault(); if (joy.classList.contains('locked')) return; joy.setPointerCapture(e.pointerId); joyAt(e); });
 joy.addEventListener('pointermove', function (e) { if (joy.hasPointerCapture(e.pointerId)) joyAt(e); });
@@ -688,7 +714,7 @@ function drawCard() {
   ctx.font = '700 ' + sz + 'px Montserrat, Arial, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.85)';
   lines.forEach(function (l, i) { spacedLeft(l, 96, 1030 + (i - (lines.length - 1) / 2) * sz * 1.45, sz * .19); });
   // the photo, then the gradient ring over its edge
-  var cx = 1085, cy = 830, r = 270;
+  var cx = PHOTO.cx, cy = PHOTO.cy, r = PHOTO.r;
   ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
   if (photo) { var s = Math.max(2 * r / photo.width, 2 * r / photo.height) * photoZoom, pw = photo.width * s, ph = photo.height * s;
     // the joystick pans within what the zoom leaves outside the circle, so the circle always stays filled
