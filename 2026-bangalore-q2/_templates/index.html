@@ -458,6 +458,12 @@
   .schedule-timeline-view { display: block; }
   .schedule-timeline-view.hidden { display: none; }
   /* view switch (Normal / Compact / Table), same slider pill as the sponsorship page's currency switch */
+  .sched-glass { margin-top: 1.5rem; padding: 28px 30px 34px; border-radius: 36px;
+    background: rgba(255,255,255,.45); border: 1px solid rgba(255,255,255,.75);
+    -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%);
+    box-shadow: 0 24px 60px rgba(30,20,40,.12), inset 0 1px 0 rgba(255,255,255,.9); }
+  .sched-glass .track-nav { margin-bottom: 1rem; }
+  @media (max-width: 767.98px) { .sched-glass { padding: 16px 12px 20px; border-radius: 24px; } }
   /* the view switch centred on its own row, the room buttons underneath (Marek 2026-10-06) */
   .track-nav-inner { flex-direction: column; gap: .75rem; }
   .track-nav-inner .sv-toggle { order: -1; }
@@ -471,7 +477,6 @@
     pointer-events: none; z-index: 0; }
   .sv-btn { background: none; border: 0; color: var(--brand); font-weight: 600; font-size: .9rem; padding: .4rem 1rem; border-radius: 999px;
     cursor: pointer; line-height: 1.2; position: relative; z-index: 1; transition: color .25s, background .15s; }
-  .sv-btn:hover:not(.active) { background: color-mix(in srgb, var(--brand) 14%, white); }
   .sv-btn.active { color: #fff; }
   @media (max-width: 575.98px) { .sv-label { display: none; } .sv-btn { padding: .4rem .8rem; } }
   /* compact view: one tight list per track (time | title, speaker · company), breaks in italics */
@@ -621,6 +626,7 @@
       <span class="schedule-meta-item">{{ city_name }}, in-person</span>
     </div>
 
+    <div class="sched-glass">{# the whole schedule on one frosted glass sheet (Marek 2026-10-06) #}
 {% for day in range(days) %}
     {% if days > 1 %}<h4 class="section-heading text-center mb-5">Day {{ day + 1 }}</h4>{% endif %}
 
@@ -772,6 +778,7 @@
     </div>
 
 {% endfor %}
+    </div><!-- /.sched-glass -->
 
     <script>
     // Normal / Compact / Table, for every day at once; the choice is remembered per browser (a convenience only)
