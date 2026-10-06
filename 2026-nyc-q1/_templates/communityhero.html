@@ -76,6 +76,9 @@
     .ch-joy i { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%;
       background: var(--ch-accent); box-shadow: 0 3px 8px rgba(0,0,0,.25), inset 0 2px 0 rgba(255,255,255,.35); }
     .ch-joy-wrap small { color: #777; font-size: .8rem; line-height: 1.3; }
+    /* fully zoomed out: the photo already fills the circle, so the joystick sits centred and frozen */
+    .ch-joy.locked { opacity: .45; cursor: not-allowed; }
+    .ch-joy.locked i { background: #b8b8b8; box-shadow: none; }
     /* the card */
     .ch-canvas-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #e6e6e6; background: #eee; max-width: 560px; margin: 0 auto; }
     .ch-canvas-wrap canvas { width: 100%; height: auto; display: block; }
@@ -545,17 +548,25 @@ if (E.wordmark) wm.src = E.wordmark; else setTimeout(drawCard, 0);
 // the photo (required): kept as an Image, previewed as a round thumbnail in step 1
 var photo = null, photoBox = $('ch-photo-box'), photoInput = $('ch-photo'), photoPrev = $('ch-photo-prev'), photoText = $('ch-photo-text');
 var photoZoom = 1, zoomRow = $('ch-zoom-row'), zoomInput = $('ch-zoom');   // 1 = fully zoomed out (fills the circle), up to 3x in
-zoomInput.addEventListener('input', function () { photoZoom = parseFloat(this.value) || 1; drawCard(); });
+zoomInput.addEventListener('input', function () { photoZoom = parseFloat(this.value) || 1; lockJoy(); drawCard(); });
 // joystick: photoPan is the knob's offset from the pad's centre, -1..1 on each axis
 var photoPan = { x: 0, y: 0 }, joy = $('ch-joy'), joyKnob = $('ch-joy-knob'), JOY_R = 19;
 function setPan(x, y) {
   var d = Math.sqrt(x * x + y * y); if (d > 1) { x /= d; y /= d; }
   photoPan = { x: x, y: y }; joyKnob.style.transform = 'translate(' + (x * JOY_R) + 'px,' + (y * JOY_R) + 'px)'; drawCard();
 }
+// at full zoom out (Marek 2026-10-06) the joystick goes back to the centre and stays frozen until the photo is zoomed in
+function lockJoy() {
+  var locked = photoZoom <= 1.001;
+  joy.classList.toggle('locked', locked); joy.setAttribute('aria-disabled', locked ? 'true' : 'false');
+  joy.title = locked ? 'Zoom in first, then drag to move the photo' : 'Drag to move the photo, double-click to centre it';
+  if (locked && (photoPan.x || photoPan.y)) setPan(0, 0);
+}
 function joyAt(e) { var b = joy.getBoundingClientRect(); setPan((e.clientX - b.left - b.width / 2) / JOY_R, (e.clientY - b.top - b.height / 2) / JOY_R); }
-joy.addEventListener('pointerdown', function (e) { e.preventDefault(); joy.setPointerCapture(e.pointerId); joyAt(e); });
+joy.addEventListener('pointerdown', function (e) { e.preventDefault(); if (joy.classList.contains('locked')) return; joy.setPointerCapture(e.pointerId); joyAt(e); });
 joy.addEventListener('pointermove', function (e) { if (joy.hasPointerCapture(e.pointerId)) joyAt(e); });
 joy.addEventListener('dblclick', function () { setPan(0, 0); });
+lockJoy();                                                                  // starts fully zoomed out = frozen
 function setPhoto(file) {
   if (!file) return;
   if (!/^image\//.test(file.type)) { photoText.textContent = 'That is not an image file. JPG or PNG, please.'; return; }
@@ -564,7 +575,7 @@ function setPhoto(file) {
   img.onload = function () {
     photo = img; photoPrev.src = url; photoPrev.hidden = false;
     photoZoom = 1; zoomInput.value = 1; zoomRow.hidden = false;             // a new photo starts zoomed out again
-    photoPan = { x: 0, y: 0 }; joyKnob.style.transform = '';               // ... and centred
+    photoPan = { x: 0, y: 0 }; joyKnob.style.transform = ''; lockJoy();    // ... and centred, joystick frozen
     photoText.innerHTML = '<b></b> · click to change'; photoText.querySelector('b').textContent = file.name;
     form.querySelector('[data-field="photo"]').classList.remove('is-invalid'); drawCard();
   };
