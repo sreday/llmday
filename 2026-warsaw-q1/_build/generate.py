@@ -1705,7 +1705,8 @@ context['hero_event'] = {
     'topic_talks': _ch_topic_talks,
     # the share card (1500x1500, drawn in the browser): the brand wordmark the hero of the event page uses, root-absolute
     # because home assets are copied to the site root, and the event line = the event name without the brand
-    'wordmark': {'llmday': '/assets/LLMday Sticker.png', 'sreday': '/assets/images/sreday_sticker.png',
+    'wordmark': {'llmday': '/assets/LLMday Sticker.png', 'sreday': '/assets/images/sreday_square.png',   # the SRE/DAY outline logo, as on the teasers (Marek 2026-10-06)
+                
                  'platformday': '/assets/images/platformday_sticker.png',
                  'pec': '/assets/images/logo-token.png', 'prompt engineering conference': '/assets/images/logo-token.png'}.get(_ch['brand'], ''),
     'subtitle': re.sub(r'^\s*' + re.escape(str(_ch['brand_name'])) + r'\s*', '', str(_ch['event_name']), flags=re.I).strip() or str(_ch['city']),
