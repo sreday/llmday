@@ -454,6 +454,43 @@
   .schedule-table-view.active { display: block; }
   .schedule-timeline-view { display: block; }
   .schedule-timeline-view.hidden { display: none; }
+  /* view switch (Normal / Compact / Table), same slider pill as the sponsorship page's currency switch */
+  .sv-toggle { display: inline-flex; align-items: center; position: relative; gap: 2px; padding: 4px; border-radius: 999px;
+    background: color-mix(in srgb, var(--brand) 8%, white); border: 1px solid color-mix(in srgb, var(--brand) 28%, white);
+    font-size: .9rem; font-weight: 600; vertical-align: middle; }
+  .sv-label { padding: 0 .55rem 0 .8rem; color: color-mix(in srgb, var(--brand) 70%, #555); font-size: .72rem; letter-spacing: .06em;
+    text-transform: uppercase; position: relative; z-index: 1; }
+  .sv-slider { position: absolute; top: 4px; left: 4px; height: calc(100% - 8px); border-radius: 999px; background: var(--brand);
+    box-shadow: 0 1px 4px rgba(0,0,0,.2); transition: transform .3s cubic-bezier(.4,0,.2,1), width .3s cubic-bezier(.4,0,.2,1);
+    pointer-events: none; z-index: 0; }
+  .sv-btn { background: none; border: 0; color: var(--brand); font-weight: 600; font-size: .9rem; padding: .4rem 1rem; border-radius: 999px;
+    cursor: pointer; line-height: 1.2; position: relative; z-index: 1; transition: color .25s, background .15s; }
+  .sv-btn:hover:not(.active) { background: color-mix(in srgb, var(--brand) 14%, white); }
+  .sv-btn.active { color: #fff; }
+  @media (max-width: 575.98px) { .sv-label { display: none; } .sv-btn { padding: .4rem .8rem; } }
+  /* compact view: one tight list per track (time | title, speaker · company), breaks in italics */
+  .schedule-compact-view { display: none; max-width: 860px; margin: 0 auto; }
+  .schedule-compact-view.active { display: block; }
+  .sc-track { --sc: var(--brand); margin-bottom: 2.75rem; scroll-margin-top: 90px; }
+  .sc-track.sc-t2 { --sc: #c2410c; } .sc-track.sc-t3 { --sc: #0f766e; } .sc-track.sc-t4 { --sc: #6d28d9; }
+  .sc-head { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; padding-bottom: .7rem; border-bottom: 1px solid #d9dde3; }
+  .sc-badge { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--sc); border: 1.5px solid var(--sc); border-radius: 5px; padding: 1px 7px; }
+  .sc-room { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.35rem; color: #1f2328; }
+  .sc-where { margin-left: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8rem; color: #6b7280; }
+  .sc-list { list-style: none; margin: 0; padding: 0; }
+  .sc-row { display: flex; gap: 1.1rem; padding: .7rem 0; border-bottom: 1px solid #e3e6ea; }
+  .sc-time { flex: 0 0 3.6rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92rem; color: #6b7280; padding-top: .1rem; }
+  .sc-body { flex: 1; min-width: 0; }
+  .sc-pill { display: inline-block; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .68rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--sc); border: 1.5px solid var(--sc); border-radius: 5px; padding: 0 6px; margin-bottom: .3rem; }
+  .sc-title { display: block; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.02rem; line-height: 1.35; color: #1f2328; text-decoration: none; }
+  .sc-title:hover { color: var(--sc); text-decoration: underline; }
+  .sc-who { font-size: .88rem; color: #1f2328; margin-top: .15rem; }
+  .sc-org, .sc-dur { color: #6b7280; }
+  .sc-break .sc-body { font-style: italic; color: #6b7280; }
+  .sc-foot { font-size: .85rem; color: #6b7280; margin-top: -1.5rem; }
+  @media (max-width: 575.98px) { .sc-where { margin-left: 0; width: 100%; } .sc-time { flex-basis: 3rem; font-size: .85rem; } .sc-row { gap: .7rem; } }
   .schedule-grid-table {
     width: 100%;
     border-collapse: collapse;
@@ -577,7 +614,7 @@
 {% endfor %}
         </div>
 {% endif %}
-        <span class="view-toggle-link" id="view-toggle-{{ day }}" onclick="toggleView({{ day }})">view as table</span>
+        <span class="sv-toggle" role="group" aria-label="Schedule view"><span class="sv-slider"></span><span class="sv-label">View</span><button type="button" class="sv-btn active" data-view="normal" onclick="setScheduleView('normal')">Normal</button><button type="button" class="sv-btn" data-view="compact" onclick="setScheduleView('compact')">Compact</button><button type="button" class="sv-btn" data-view="table" onclick="setScheduleView('table')">Table</button></span>
       </div>
     </div>
 
@@ -613,6 +650,35 @@
         </div>
       </div>
 {% endfor %}
+    </div>
+
+    <!-- Compact View -->
+    <div id="compact-view-{{ day }}" class="schedule-compact-view">
+{% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
+{% set _room = rooms[loop.index0] or '' %}
+      <div class="sc-track sc-t{{ loop.index }}" id="track-c-{{ day }}-{{ loop.index }}">
+        <div class="sc-head"><span class="sc-badge">Track {{ track }}</span><span class="sc-room">{{ _room[:1]|upper }}{{ _room[1:] }}</span><span class="sc-where">{{ brand_name }} {{ city_name }}{% if schedule_day_labels %} &middot; {{ schedule_day_labels[day] }}{% endif %}</span></div>
+        <ol class="sc-list">
+{% for talk in talks_by_tracks[track] %}
+          <li class="sc-row{% if not talk.name %} sc-break{% endif %}">
+            <span class="sc-time">{{ talk.start_time.strftime('%H:%M') }}</span>
+            <div class="sc-body">
+{% if talk.name %}
+              {% if talk.pill %}<span class="sc-pill">{{ talk.pill }}</span>{% endif %}
+              <a class="sc-title" href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}">{{ talk.title_display if talk.pill else talk.title }}</a>
+              <div class="sc-who">{{ talk.name }}{% if talk.organization %} <span class="sc-org">&middot; {{ talk.organization }}</span>{% endif %}{% if talk.slots and talk.slots > 1 %} <span class="sc-dur">&middot; {{ talk.duration }} min</span>{% endif %}</div>
+{% else %}
+              {{ talk.title }}
+{% endif %}
+            </div>
+          </li>
+{% endfor %}
+        </ol>
+      </div>
+{% endfor %}
+{% set _sc_venue = onboarding_event.venue_name if onboarding_event else '' %}
+{% set _sc_addr = (onboarding_event.venue_address if onboarding_event else '') or '' %}
+      <p class="sc-foot">{% if _sc_venue %}{{ _sc_venue }}{% if _sc_addr and _sc_addr != _sc_venue %}, {{ _sc_addr.split(',')[:2]|map('trim')|join(', ') }}{% endif %}. {% endif %}Tap a title for the abstract.</p>
     </div>
 
     <!-- Table View -->
@@ -691,26 +757,44 @@
 {% endfor %}
 
     <script>
-    function toggleView(day) {
-      const timelineView = document.getElementById('timeline-view-' + day);
-      const tableView = document.getElementById('table-view-' + day);
-      const toggleBtn = document.getElementById('view-toggle-' + day);
-      const trackLinks = document.getElementById('track-links-' + day);
-
-      if (tableView.classList.contains('active')) {
-        tableView.classList.remove('active');
-        timelineView.classList.remove('hidden');
-        toggleBtn.textContent = 'view as table';
-        toggleBtn.classList.remove('active');
-        if (trackLinks) trackLinks.style.display = 'flex';
-      } else {
-        tableView.classList.add('active');
-        timelineView.classList.add('hidden');
-        toggleBtn.textContent = 'view as timeline';
-        toggleBtn.classList.add('active');
-        if (trackLinks) trackLinks.style.display = 'none';
+    // Normal / Compact / Table, for every day at once; the choice is remembered per browser (a convenience only)
+    (function () {
+      function svMove(tg) {
+        var b = tg.querySelector('.sv-btn.active'), s = tg.querySelector('.sv-slider');
+        if (!b || !s) return;
+        s.style.width = b.offsetWidth + 'px';
+        s.style.transform = 'translateX(' + (b.offsetLeft - 4) + 'px)';
       }
-    }
+      function svAll() { document.querySelectorAll('.sv-toggle').forEach(svMove); }
+      window.setScheduleView = function (v) {
+        if (['normal', 'compact', 'table'].indexOf(v) < 0) v = 'normal';
+        for (var d = 0; ; d++) {
+          var tl = document.getElementById('timeline-view-' + d);
+          if (!tl) break;
+          var cp = document.getElementById('compact-view-' + d), tb = document.getElementById('table-view-' + d);
+          var links = document.getElementById('track-links-' + d);
+          tl.classList.toggle('hidden', v !== 'normal');
+          if (cp) cp.classList.toggle('active', v === 'compact');
+          if (tb) tb.classList.toggle('active', v === 'table');
+          if (links) {
+            links.style.display = v === 'table' ? 'none' : 'flex';
+            links.querySelectorAll('a[href^="#track-"]').forEach(function (a) {
+              a.setAttribute('href', a.getAttribute('href').replace(/^#track-(c-)?/, v === 'compact' ? '#track-c-' : '#track-'));
+            });
+          }
+        }
+        document.querySelectorAll('.sv-btn').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-view') === v); });
+        svAll();
+        try { localStorage.setItem('scheduleView', v); } catch (e) {}
+      };
+      var saved = null;
+      try { saved = localStorage.getItem('scheduleView'); } catch (e) {}
+      if (saved && saved !== 'normal') setScheduleView(saved);
+      requestAnimationFrame(svAll);
+      window.addEventListener('load', svAll);
+      window.addEventListener('resize', svAll);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(svAll);
+    })();
     </script>
 
     {% if event_state == 'after' %}
