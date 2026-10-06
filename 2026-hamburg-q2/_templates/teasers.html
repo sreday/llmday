@@ -128,7 +128,9 @@
       <div class="tz-slot" data-search="{{ t.search }}" data-names="{{ t.name|lower }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}">
         <div class="tz-frame">
           <div class="tz-card" id="tz-card-{{ loop.index }}" data-file="{{ t.file }}">
-            {{ tz.sweeps|safe }}<div class="tz-vig"></div>
+            {# each card gets its own gradient/filter ids (from its file name): with shared ids every card borrowed card 1's, and they
+               vanished whenever card 1 was hidden - a filtered page, or a PNG run that re-renders only some cards #}
+            {% set _k = t.file|replace('.png', '') %}{{ tz.sweeps|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
             <div class="tz-conf">{{ tz.conf }}</div>
             <div class="tz-ball"><div class="tz-ball-in">
