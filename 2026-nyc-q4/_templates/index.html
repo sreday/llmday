@@ -794,7 +794,8 @@
           if (cp) cp.classList.toggle('active', v === 'compact');
           if (tb) tb.classList.toggle('active', v === 'table');
           if (links) {
-            links.style.display = v === 'table' ? 'none' : 'flex';
+            // hidden but still taking its space, so the view switch next to it never moves (Marek 2026-10-05)
+            links.style.visibility = v === 'table' ? 'hidden' : '';
             links.querySelectorAll('a[href^="#track-"]').forEach(function (a) {
               a.setAttribute('href', a.getAttribute('href').replace(/^#track-(c-)?/, v === 'compact' ? '#track-c-' : '#track-'));
             });
@@ -938,6 +939,30 @@
   .modal-speaker .desc {
     padding-bottom: 0.125rem;
   }
+  /* speaker modal, liquid glass (Marek 2026-10-05, option 01 "Frosted sheet"): one frosted pane over the blurred
+     page; the header lets the page glow through, the reading area turns more opaque; headshot shown raw */
+  body:has(.modal-speaker.show) .modal-backdrop.show { --bs-backdrop-opacity: 1; background: rgba(20,16,24,.28);
+    -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); }
+  .modal-speaker .modal-content { background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.75); border-radius: 32px; overflow: hidden;
+    -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: 0 24px 60px rgba(20,10,30,.25), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); }
+  .modal-speaker .modal-body > .theme-bg-light { background: transparent !important; }
+  .modal-speaker .profile-image { width: 140px; border-radius: 0; border: 0; box-shadow: none; filter: none; }
+  .modal-speaker h2.name { font-size: 2rem; }
+  .modal-speaker .meta { color: #5f5a63; font-size: 1.05rem; }
+  .modal-speaker .social-list a { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: var(--brand);
+    background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.85); box-shadow: inset 0 1px 0 #fff; font-size: 1rem; }
+  .modal-speaker .talk-title-bar { font-family: 'Montserrat', sans-serif; font-size: 1.15rem; padding: 1.1rem 2rem;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 85%, transparent), color-mix(in srgb, var(--brand) 65%, transparent));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35); }
+  .modal-speaker .desc { background: rgba(255,255,255,.86); padding: 1.6rem 2.6rem .4rem !important; }
+  .modal-speaker .desc:last-child { padding-bottom: 2.2rem !important; }
+  .modal-speaker .desc h5 { font-family: 'Montserrat', sans-serif; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .6rem; }
+  .modal-speaker .modal-close-btn { top: 18px; right: 18px; width: 42px; height: 42px; padding: 0; border-radius: 50%; font-size: 1.7rem;
+    display: grid; place-items: center; color: #1d1b20; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.85);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 4px 14px rgba(0,0,0,.12), inset 0 1px 0 #fff; }
+  .modal-speaker .modal-close-btn:hover { background: rgba(255,255,255,.9); color: var(--brand); }
+  @media (max-width: 575.98px) { .modal-speaker .modal-content { border-radius: 24px; } .modal-speaker .desc { padding: 1.2rem 1.3rem .3rem !important; } }
 </style>
 
 {% for talk in talks + keynotes %}
@@ -950,7 +975,7 @@
               <div class="theme-bg-light p-5">
                   <div class="row">
                       <div class="col-12 col-md-auto text-center">
-                          <img class="profile-image mb-3 mb-md-0 me-md-4 rounded-circle mx-auto" src="{{ talk.photo_url }}" alt="" />
+                          <img class="profile-image mb-3 mb-md-0 me-md-4 mx-auto" src="{{ talk.photo_url }}" alt="" />
                       </div>
 
                       <div class="col text-center text-md-start mx-auto">
@@ -970,9 +995,11 @@
                 <h5 style="color:var(--brand);font-weight:700;">Abstract</h5>
                 <p>{{ talk.abstract | markdown }}</p>
               </div>
+{% if talk.description %}
               <div class="desc p-2 p-lg-3">
                 <p>{{ talk.description | markdown }}</p>
               </div>
+{% endif %}
 {% if talk.bio %}
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Bio</h5>
