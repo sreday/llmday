@@ -21,6 +21,7 @@ ICONS = {
     "fa-linkedin": "brands/linkedin",
     "fa-twitter": "brands/twitter",
     "fa-whatsapp": "brands/whatsapp",
+    "fa-discord": "brands/discord",       # PEC community link
     "fa-youtube": "brands/youtube",
     "fa-envelope": "solid/envelope",
     "fa-map-marker-alt": "solid/location-dot",

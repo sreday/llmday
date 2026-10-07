@@ -27,6 +27,9 @@
             {% else %}
             Details coming soon...
             {% endif %}
+            {% if event.youtube_playlist %}
+            <a href="{{ event.youtube_playlist }}" class="yt-playlist-btn" target="_blank" rel="noopener">Playlist</a>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -36,10 +39,12 @@
     <div class="text-center mt-4">
       <a class="btn-secondary btn btn-lg" href="https://luma.com/sre" target="_blank">Subscribe to our LUMA calendar</a>
     </div>
+    {% if hero_video %}
     <div class="hero-video-standalone mt-5">
       {# lazy-loop (see _build/rewrite_assets.py): loads and plays only when scrolled into view #}
       <video class="lazy-loop" data-src="{{ hero_video }}?v=3" muted loop playsinline preload="none" poster="{{ hero_pictures[0] }}"></video>
     </div>
+    {% endif %}
     {% endif %}
     {% if meetups %}
     <h3 class="section-heading text-center mb-3">Upcoming meetups</h3>

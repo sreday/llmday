@@ -11,6 +11,7 @@ location_string: "Mars, Milky Way"
 # venue changed and the new one isn\'t confirmed yet: uncomment to show "To be confirmed soon" (hides address, map, photos)
 # venue_tbc: true
 city_name: "Mars"
+calendly_sponsor_url: "https://calendly.com/sreday/30min"
 # get this from the event url
 luma_evt: evt-xAhCqaXMWAXAEEm
 cfp_url: https://cfp.ninja/e/llmday-amsterdam-2025-q4

@@ -436,9 +436,9 @@
     </div></div>
   </details>
 
-  <div class="sisters">
+  {% if status_sisters %}<div class="sisters">
     {% for s in status_sisters %}<a href="{{ s.url }}" style="--c: {{ s.color }}">{{ s.name }} status</a>{% endfor %}
-  </div>
+  </div>{% endif %}
 
   <nav class="tabs" aria-label="Status sections">
     <button type="button" data-tab="regs" aria-selected="false">Registrations</button>

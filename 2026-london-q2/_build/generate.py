@@ -338,9 +338,12 @@ if _os.path.exists(_og_home_meta_path):
             break
 if _og_photo:
     context['og_image_url'] = 'https://%s/%s' % (context['brand_domain'], _og_photo)
-else:
+elif context.get('hero_pictures'):
     print("WARNING: no event thumbnail available -- og:image falls back to default hero photo")
     context['og_image_url'] = 'https://%s/photos/%s' % (context['brand_domain'], context['hero_pictures'][0].split('/')[-1])
+else:
+    print("WARNING: no event thumbnail available -- og:image falls back to hero-1.jpg")
+    context['og_image_url'] = context.get('base_path', '') + '/assets/images/hero-1.jpg'
 print("og:image = %s" % context['og_image_url'])
 
 # ── SPEAKER ONBOARDING: facts for the hidden /onboarding/ page ──────────────
@@ -420,7 +423,7 @@ if str(context.get("event_state") or "").strip() == "before":
 
 _ob_date = str(context.get('date_string', ''))
 context['onboarding_event'] = {
-    'brand':         str(context.get('brand_name', '')).lower(),
+    'brand':         str(context.get('brand_key') or context.get('brand_name', '')).lower(),   # brand_key: short form-backend key where the brand name is several words (PEC: pec)
     'brand_name':    context.get('brand_name', ''),
     'slug':          _ob_slug,
     'event_name':    _ob.get('event_name') or _ob_event_name(_ob_slug, context.get('city_name'), context.get('brand_name', '')),

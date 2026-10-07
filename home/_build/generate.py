@@ -127,9 +127,9 @@ context["counts"] = {
 }
 
 # SPONSOR LOGOS CAROUSEL
-# Scan all event subfolders (../20*) for sponsor logos, deduplicate, sort
+# Scan the root sponsors/ folder for logos, deduplicate, sort
 print(DIVIDER)
-print("Scanning sponsor logos from event subfolders")
+print("Scanning sponsor logos from ../sponsors")
 SPONSORS_DEST = BASE_FOLDER + "/sponsors"
 os.makedirs(SPONSORS_DEST, exist_ok=True)
 seen = set()
@@ -787,6 +787,7 @@ _ADDED_SAME = 0.85                   # difflib ratio at/above which a "new" name
 _ADDED_FLAP_DAYS = 2
 _REMOVED_FULL = ("name", "organization", "title", "abstract", "photo")   # all filled = a known, fully entered speaker
 _REMOVED_MASS = (5, 0.4)             # one commit dropping more than 5 speakers AND over 40% of a lineup = csv accident, not news
+                                     # (or 8+ speakers whatever the share, as BIG_REMOVAL in ../_build/redflag.py)
 
 
 def _status_git(*args, cwd=None):
@@ -1834,7 +1835,7 @@ print("Writing out status/index.html (hidden, not in sitemap)")
 
 # MEETUPS
 print(DIVIDER)
-meetups = context.get("meetups") + context.get("meetups_past")
+meetups = (context.get("meetups") or []) + (context.get("meetups_past") or [])
 print(f"Generating {len(meetups)} meetup pages")
 for meetup in meetups:
     print(f"Generating {meetup.get('name')} meetup subpage")
