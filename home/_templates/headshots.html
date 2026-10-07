@@ -449,7 +449,9 @@
   // Both targets are set a little smaller than the old After Effects files (head x0.96, shoulders x0.86: the chest now
   // just spans the circle instead of overflowing it): on average 0.1 smaller on the Size slider, broad shoulders up to
   // 0.2 smaller (Thomas Cameron), narrow ones barely (Jay Paulson -0.02).
-  var BODY = { head: 1.160 * 0.96, shoulders: 2.270 * 0.86, w: 0.4, below: 1.2, headOnly: 0.925 };
+  // Marek 2026-10-06: Auto headshots came out smaller than the current trend on the site, so the final Auto size is
+  // scaled up by 20% (head + shoulders blend, head-only fallback and group slots alike); the eye line stays put.
+  var BODY = { head: 1.160 * 0.96, shoulders: 2.270 * 0.86, w: 0.4, below: 1.2, headOnly: 0.925, size: 1.2 };
   // Several people (measured on Marek's group headshots: 100 duos, 7 trios, 3 quads, 2 pentas): staggered depth rows,
   // never one flat row. Per slot, back (= first layer) to front (= last layer): face centre x and eye line height in r from
   // the circle centre, head size relative to a single headshot.
@@ -513,6 +515,7 @@
                              : AUTO.faceH * C.r * k * 0.96 / Math.max(0.02, f.chin - f.brow);   // no clear hair line: face height
     if (sw && sw > 0.05) h = Math.exp((1 - BODY.w) * Math.log(hHead) + BODY.w * Math.log(BODY.shoulders * C.r * k / sw * aspect));
     else h = hHead * BODY.headOnly / 0.96;                                // no measurable shoulders: head only, a bit smaller
+    h *= BODY.size;
     var w = h / aspect;
     L.zoom = Math.max(0.5, Math.min(3, w / (2 * C.r))); w = 2 * C.r * L.zoom; h = L.tone.height * (w / L.tone.width);
     var tx = slot ? C.x + slot.x * C.r : C.x + AUTO.faceDX * C.r, ty = C.y - (slot ? slot.up : AUTO.eyeY) * C.r;
