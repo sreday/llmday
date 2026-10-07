@@ -55,8 +55,10 @@
   </div>
 </section>
 <style>
-  .kn-pill { display: inline-block; background: var(--brand); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .6em; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-right: 8px; vertical-align: middle; line-height: 1.4; }
-  .talk-cell .kn-pill { font-size: .7em; padding: 2px 8px; margin-right: 6px; }
+  /* outlined like the list view's .sc-pill and the TRACK pill (Marek 2026-10-06: compact pills match the others) */
+  .kn-pill { display: inline-block; background: transparent; color: var(--brand); border: 1.5px solid currentColor; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .6em; letter-spacing: .08em; text-transform: uppercase; padding: 1px 6px; border-radius: 5px; margin-right: 8px; vertical-align: middle; line-height: 1.4; }
+  .talk-cell .kn-pill { font-size: .7em; padding: 0 6px; margin-right: 6px; }
+  .talk-title-bar .kn-pill { color: #fff; }   /* modal header sits on the brand colour */
   .btn-about-conf {
     display: inline-flex;
     align-items: center;
