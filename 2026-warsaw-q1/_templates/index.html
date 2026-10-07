@@ -496,7 +496,7 @@
   .sc-pill { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: .62rem; font-weight: 700;
     letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--sc); border-radius: 999px; padding: 3px 10px; line-height: 1.4; margin-bottom: .3rem; }
   .sc-title { display: block; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.02rem; line-height: 1.35; color: #1f2328; text-decoration: none; }
-  .sc-title:hover { color: var(--sc); text-decoration: underline; }
+  .sc-title:hover { color: var(--sc); text-decoration: none; }
   .sc-who { font-size: .88rem; color: #1f2328; margin-top: .15rem; }
   .sc-org, .sc-dur { color: #6b7280; }
   .sc-break .sc-body { font-style: italic; color: #6b7280; }
@@ -784,6 +784,8 @@
     <script>
     // Normal / Compact / Table, for every day at once; the choice is remembered per browser (a convenience only)
     (function () {
+      var svPhone = !!(window.matchMedia && matchMedia('(max-width: 767.98px)').matches);
+      var svKey = svPhone ? 'scheduleViewPhone' : 'scheduleView';
       function svMove(tg) {
         var b = tg.querySelector('.sv-btn.active'), s = tg.querySelector('.sv-slider');
         if (!b || !s) return;
@@ -811,12 +813,13 @@
         }
         document.querySelectorAll('.sv-btn').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-view') === v); });
         svAll();
-        try { localStorage.setItem('scheduleView', v); } catch (e) {}
+        try { localStorage.setItem(svKey, v); } catch (e) {}
       };
       var saved = null;
-      try { saved = localStorage.getItem('scheduleView'); } catch (e) {}
-      // phones open on the compact lineup unless the visitor picked a view before (Marek 2026-10-06)
-      if (!saved && window.matchMedia && matchMedia('(max-width: 767.98px)').matches) saved = 'compact';
+      try { saved = localStorage.getItem(svKey); } catch (e) {}
+      // phones open on the compact lineup (Marek 2026-10-06); a phone keeps its own remembered view, so a view
+      // stored before this default, or picked on a desktop, never overrides it (Marek 2026-10-07)
+      if (!saved && svPhone) saved = 'compact';
       if (saved && saved !== 'normal') setScheduleView(saved);
       requestAnimationFrame(svAll);
       window.addEventListener('load', svAll);
