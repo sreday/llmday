@@ -450,8 +450,9 @@
   // just spans the circle instead of overflowing it): on average 0.1 smaller on the Size slider, broad shoulders up to
   // 0.2 smaller (Thomas Cameron), narrow ones barely (Jay Paulson -0.02).
   // Marek 2026-10-06: Auto headshots came out smaller than the current trend on the site, so the final Auto size is
-  // scaled up by 20% (head + shoulders blend, head-only fallback and group slots alike); the eye line stays put.
-  var BODY = { head: 1.160 * 0.96, shoulders: 2.270 * 0.86, w: 0.4, below: 1.2, headOnly: 0.925, size: 1.2 };
+  // scaled up by 8% (head + shoulders blend, head-only fallback and group slots alike); the eye line stays put.
+  // 20% (2026-10-06) was too big (Marek 2026-10-07).
+  var BODY = { head: 1.160 * 0.96, shoulders: 2.270 * 0.86, w: 0.4, below: 1.2, headOnly: 0.925, size: 1.08 };
   // Several people (measured on Marek's group headshots: 100 duos, 7 trios, 3 quads, 2 pentas): staggered depth rows,
   // never one flat row. Per slot, back (= first layer) to front (= last layer): face centre x and eye line height in r from
   // the circle centre, head size relative to a single headshot.
