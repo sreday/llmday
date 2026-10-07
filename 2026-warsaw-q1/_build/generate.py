@@ -735,9 +735,9 @@ for track in tracks:
         if end > schedule_end:
             schedule_end = end
 context["schedule_time_bracket"] = (
-    schedule_start.strftime('%-I:%M%p').replace(':00', '')
+    schedule_start.strftime('%I:%M%p').lstrip('0').replace(':00', '')   # no leading zero, portable (Windows has no %-I)
     + " - "
-    + schedule_end.strftime('%-I:%M%p').replace(':00', '')
+    + schedule_end.strftime('%I:%M%p').lstrip('0').replace(':00', '')
 )
 
 # remove placeholders
