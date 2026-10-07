@@ -681,9 +681,8 @@
 }
 .hero-block .social-list li a {
 	display: inline-block;
-	transition: transform .2s ease, text-shadow .2s ease;
+	transition: transform .2s ease;
 }
 .hero-block .social-list li a:hover {
 	transform: translateY(-2px);
-	text-shadow: 0 6px 14px rgba(0,0,0,.45);
 }

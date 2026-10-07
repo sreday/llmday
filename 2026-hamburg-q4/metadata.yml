@@ -9,6 +9,7 @@ event_state: before
 date_string: "November 18, 2026"
 location_string: "House of AI, Hamburg, Germany"
 city_name: "Hamburg"
+calendly_sponsor_url: "https://calendly.com/sreday/30min"
 # get this from the event url (empty until the Luma event exists = "Tickets will be available soon")
 luma_evt: evt-A6EmE2vrDywENqn
 cfp_url: https://cfp.ninja/e/llmday-2026-hamburg-q4

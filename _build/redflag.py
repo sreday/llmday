@@ -5,7 +5,7 @@ Every talks.csv change is a GitHub web upload, one event per commit. When the wr
 event folder, the whole lineup of that event is swapped by a single push (2026-09-21: SREday London Q3 received
 the San Francisco Q4 file three days before the event). This module spots that shape and names the likely source.
 
-Identical in sreday, llmday, platformday and PEC except live() (PEC shows confirmed/keynote only); stdlib only (yaml is optional, for event names).
+Identical in sreday, llmday, platformday and PEC; stdlib only (yaml is optional, for event names).
   * import, every home build (home/_build/generate.py, STATUS block): active_flags() = the flags that are still
     true. They become the red bar on top of /status/, the first error of the event's Data checks, and
     /status/redflags.json. The "Red flag alert" Gmail script (llmday/_build/redflag-alert.gs) reads that json every

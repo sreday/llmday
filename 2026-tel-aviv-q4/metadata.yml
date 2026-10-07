@@ -9,6 +9,7 @@ event_state: before
 date_string: "November 17, 2026"
 location_string: "Microsoft Reactor, Tel Aviv, Israel"
 city_name: "Tel Aviv"
+calendly_sponsor_url: "https://calendly.com/sreday/30min"
 # get this from the event url
 # get this from the event url (empty until the Luma event exists = "Tickets will be available soon")
 luma_evt:
