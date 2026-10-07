@@ -239,6 +239,7 @@ with open('metadata.yml', encoding='utf-8') as f:
     BASE_FOLDER = "./" + context.get("base_folder")
 
 
+
 def luma_is_free(evt_id):
     if not evt_id:
         return False
@@ -397,6 +398,26 @@ _ob = dict(context.get('onboarding') or {})
 # confirmed soon" with the city only (no address, map or photos), and every page/card names the venue the same way
 _VENUE_TBC = 'Venue to be confirmed soon'
 _ob_vname, _ob_vaddr = (_VENUE_TBC, str(context.get('location_string', ''))) if context.get('venue_tbc') else _ob_venue()
+
+# AUTO-PUBLISH THE SCHEDULE (Marek 2026-10-06): an event on event_state "before" goes "active" once 70% of its talk
+# slots are announced, by the /status/ criteria: live talks.csv rows (talk / keynote / workshop, never draft) against
+# 12 slots per track (metadata "tracks"). Only with a confirmed venue ("don't publish schedule if there's no venue"):
+# no venue_tbc and a venue name in _templates/venue.html. An event set to active (or after) by hand is left alone.
+# Same numbers as _SLOTS_PER_TRACK / SCHEDULE_AUTO_PCT in home/_build/generate.py.
+SCHEDULE_AUTO_PCT = 70
+SLOTS_PER_TRACK = 12
+if str(context.get("event_state") or "").strip() == "before":
+    _auto_tracks = int(re.sub(r"[^\d]", "", str(context.get("tracks") or "1")) or 1)
+    _auto_live = sum(1 for t in talks_raw if talk_kind(t.get("status")) in LIVE_KINDS)
+    _auto_pct = round(100.0 * _auto_live / (_auto_tracks * SLOTS_PER_TRACK))
+    _auto_venue = not context.get("venue_tbc") and bool(_ob_vname) \
+        and not re.search(r"\b(tba|tbc|tbd|to be (confirmed|announced))\b", _ob_vname, re.I)
+    if _auto_pct >= SCHEDULE_AUTO_PCT and _auto_venue:
+        context["event_state"] = "active"
+        print("Schedule auto-published: %d/%d talks (%d%%), event_state before -> active" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK, _auto_pct))
+    else:
+        print("Schedule not published yet: %d/%d talks (%d%%, publishes at %d%%)%s" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK, _auto_pct, SCHEDULE_AUTO_PCT, "" if _auto_venue else ", and no confirmed venue"))
+
 _ob_date = str(context.get('date_string', ''))
 context['onboarding_event'] = {
     'brand':         str(context.get('brand_name', '')).lower(),
