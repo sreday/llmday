@@ -30,6 +30,7 @@
     .tz-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--brand); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; }
     .tz-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.7rem; margin: 4px 0 0; line-height: 1.2; }
     .tz-sub { color: #555; font-size: .95rem; margin-top: 4px; }
+    .tz-hint { margin-top: 28px; text-align: center; font-size: .9rem; color: #777; }
     .tz-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 22px; }
     .tz-search { flex: 1 1 260px; font: 400 1rem 'Roboto', sans-serif; padding: 10px 14px; border: 1px solid #cfcfd6; border-radius: 999px; background: #fff; }
     .tz-sort { display: inline-flex; border: 1px solid #cfcfd6; border-radius: 999px; overflow: hidden; background: #fff; }
@@ -143,11 +144,11 @@
     .tz-sheet .tz-slot { gap: 0; }
     .tz-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
     .tz-sheet .tz-frame .tz-card { transform: none !important; }
-    .tz-sheet .th-frame, .tz-sheet .tz-tabs, .tz-sheet .th-name { display: none !important; }
+    .tz-sheet .th-frame, .tz-sheet .tz-tabs, .tz-sheet .th-name, .tz-sheet .tz-hint { display: none !important; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
-    .th-sheet .tz-head, .th-sheet .tz-tabs, .th-sheet .tz-controls, .th-sheet .tz-group-head, .th-sheet a.tz-dl, .th-sheet a.th-dl, .th-sheet .tz-frame, .th-sheet .th-name,
+    .th-sheet .tz-head, .th-sheet .tz-hint, .th-sheet .tz-tabs, .th-sheet .tz-controls, .th-sheet .tz-group-head, .th-sheet a.tz-dl, .th-sheet a.th-dl, .th-sheet .tz-frame, .th-sheet .th-name,
     .th-sheet .tz-slot.tz-off, .th-sheet .tz-empty { display: none !important; }
     .th-sheet .tz-grid { display: block; }
     .th-sheet .tz-slot { gap: 0; }
@@ -161,7 +162,6 @@
       <div>
         <div class="tz-brand">{{ brand_name }} · teasers</div>
         <h1 class="tz-title">{{ onboarding_event.event_name }}</h1>
-        <div class="tz-sub" id="tz-sub">Talk teaser for each talk, exactly as the talks appear on the website. Download individually, all of them or by track.</div>
       </div>
     </div>
     <div class="tz-tabs" role="tablist"{% if teasers_expired %} hidden{% endif %}>
@@ -234,6 +234,8 @@
     </div>
     {% if not teaser_talks %}<p class="tz-empty">No confirmed sessions yet.</p>{% endif %}
     <p class="tz-empty" id="tz-none" hidden>Nothing matches that search.</p>
+    {# the hint sits under the pictures (Marek 2026-10-07) #}
+    <div class="tz-sub tz-hint" id="tz-sub">Talk teaser (1500 x 1500 PNG) for each talk, exactly as the talks appear on the website. Download individually, all of them or by track.</div>
   </div>
 
   <script>
