@@ -2015,7 +2015,7 @@ for _n in (1, 2, 3):
                 _sp_photos.append('../assets/images/venue/venue-%d.jpg' % _n)
     except OSError:
         pass
-_SP_DARK = (0, 10, 20, 30, 40, 50)
+_SP_DARK = (-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80)
 context['sp_host_photos'] = len(_sp_photos)
 context['sp_groups'] = {'Host': [], 'Sponsor': [], 'Partner': []}
 for _s in context.get('sponsors') or []:
@@ -2029,12 +2029,12 @@ for _s in context.get('sponsors') or []:
     if _s.get('host') or (_words.strip() and _words in _sp_venue_words and _logo.lower() not in _sp_partner_logos):
         for _i, _ph in enumerate(_sp_photos or ['']):
             _base = '%s - Host%s' % (_safe, (' %d' % (_i + 1)) if len(_sp_photos) > 1 else '')
-            # the page's darken slider (Marek 2026-10-07) picks one of these: every venue picture rendered 0-50% darker
-            # than the standard card (0 = the 85% brightness one, keeps its file name)
+            # the page's lighter/darker slider (Marek 2026-10-07, widened 2026-10-08) picks one of these: every venue picture
+            # rendered 50% lighter to 80% darker than the standard card (0 = the 85% brightness one, keeps its file name)
             for _d in (_SP_DARK if _ph else (0,)):
                 context['sp_groups']['Host'].append({'name': _nm, 'role': 'Host', 'logo': '../sponsors/' + _logo, 'photo': _ph,
                                                      'v': _i + 1, 'dark': _d, 'bright': round(.85 * (1 - _d / 100), 3),
-                                                     'file': _base + (' - darker %d' % _d if _d else '') + '.png'})
+                                                     'file': _base + (' - darker %d' % _d if _d > 0 else ' - lighter %d' % -_d if _d < 0 else '') + '.png'})
     else:
         _role = 'Partner' if _logo.lower() in _sp_partner_logos else 'Sponsor'
         context['sp_groups'][_role].append({'name': _nm, 'role': _role, 'logo': '../sponsors/' + _logo, 'photo': '',
