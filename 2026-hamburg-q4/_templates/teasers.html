@@ -12,6 +12,8 @@
      rendered to "<speaker>.png" by the same script; the brand name is always the real logo cut into pieces (th.imgs), never a font (#thumbs-<start>-<count> stacks them at their true size).
      After the event (teasers_expired) the page stays up with the thumbnails only: the teaser cards carry discount codes
      and the ticket, so they expire like the other hidden pages; the thumbnails are for the talk videos.
+     Third tab, "Sponsor cards" (Marek 2026-10-07): a host / sponsor card per confirmed sponsor (context `sp_cards`), same frame,
+     rendered by the same script (#spcards-<start>-<count>) into "<Sponsor> - Host.png" / "<Sponsor> - Sponsor.png"; expires with the teasers.
      Identical in all four repos. ── #}
 <!DOCTYPE html>
 <html lang="en">
@@ -145,6 +147,31 @@
     .tz-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
     .tz-sheet .tz-frame .tz-card { transform: none !important; }
     .tz-sheet .th-frame, .tz-sheet .tz-tabs, .tz-sheet .th-name, .tz-sheet .tz-hint { display: none !important; }
+    .tz-sheet #sp-pool, .th-sheet #sp-pool { display: none !important; }
+    /* ── sponsor cards (third tab, Marek 2026-10-07): the teaser frame, a big HOST / SPONSOR, the logo maxed out in a circle ── */
+    #sp-pool { display: none; }
+    body.sp-mode #sp-pool { display: grid; }
+    body.sp-mode #tz-pool, body.sp-mode #tz-groups, body.sp-mode .tz-search, body.sp-mode .tz-sort, body.sp-mode #tz-none { display: none !important; }
+    .sp-slot { display: flex; flex-direction: column; position: relative; }
+    .sp-head { grid-column: 1 / -1; font: 700 1.2rem 'Montserrat', sans-serif; margin: 14px 0 -8px; }
+    .sp-sheet .sp-head { display: none !important; }
+    .sp-photo { left: 0; top: 0; width: 1200px; height: 1200px; background-size: cover; background-position: center; }
+    .sp-fv { left: 0; top: 0; width: 1200px; height: 1200px; background: radial-gradient(circle at 50% 50%, rgba(10,6,3,.2) 220px, rgba(10,6,3,.9) 820px),
+      linear-gradient(180deg, rgba(10,6,3,.75) 0%, rgba(10,6,3,0) 30%, rgba(10,6,3,0) 62%, rgba(10,6,3,.88) 82%); }
+    .sp-bar { left: 72px; top: 356px; width: 96px; height: 8px; background: {{ tz.ramp }}; }
+    .sp-word { left: 72px; top: 384px; font-weight: 900; font-size: 100px; line-height: 1; letter-spacing: -.01em; color: {{ sp_word }}; white-space: nowrap;
+      text-shadow: 0 6px 30px rgba(0,0,0,.5); }
+    .sp-ring { left: 626px; top: 356px; width: 520px; height: 520px; border-radius: 50%; padding: 7px; background: {{ tz.ramp45 }}; box-shadow: 0 0 80px {{ tz.scheme.glow }}66; }
+    .sp-disc { width: 100%; height: 100%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+    .sp-disc img { display: block; height: auto; width: 60%; }   /* sized by the script: the logo maxed out, 6% of the circle kept clear */
+    /* sponsor sheet mode (#spcards-<start>-<count>): those cards stacked at 1200 px for the renderer */
+    body.sp-sheet { background: #000; }
+    .sp-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
+    .sp-sheet .tz-page > *:not(#sp-pool) { display: none !important; }
+    .sp-sheet #sp-pool { display: block !important; }
+    .sp-sheet .sp-slot.tz-off, .sp-sheet a.tz-dl { display: none !important; }
+    .sp-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+    .sp-sheet .tz-frame .tz-card { transform: none !important; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
@@ -167,6 +194,7 @@
     <div class="tz-tabs" role="tablist"{% if teasers_expired %} hidden{% endif %}>
       <button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>
       <button type="button" role="tab" data-tab="th" aria-selected="false">YouTube thumbnails</button>
+      {% if sp_cards and not teasers_expired %}<button type="button" role="tab" data-tab="sp" aria-selected="false">Sponsor cards</button>{% endif %}
     </div>
     <div class="tz-controls">
       <input class="tz-search" id="tz-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search speaker, company or talk title">
@@ -232,6 +260,37 @@
       </div>
       {% endfor %}
     </div>
+    <!--spsec-->{% if sp_cards and not teasers_expired %}<div class="tz-grid" id="sp-pool">
+      {% for g in ['Host', 'Sponsor', 'Partner'] %}{% if sp_groups[g] %}
+      <h2 class="sp-head">{{ g if g == 'Host' or sp_groups[g]|length == 1 else g ~ 's' }}</h2>
+      {% for c in sp_groups[g] %}
+      <div class="sp-slot">
+        <div class="tz-frame">
+          <div class="tz-card sp-card" id="sp-card-{{ g|lower }}-{{ loop.index }}" data-file="{{ c.file }}">
+            {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
+            {% if c.photo %}<div class="sp-photo" style="background-image:url('{{ c.photo }}')"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
+            {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
+            <div class="tz-conf">{{ tz.conf }}</div>
+            <div class="tz-ball"><div class="tz-ball-in">
+              {% if tz.free %}<div class="tz-ball-line" data-fit="58" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="58" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
+              {% else %}<div class="tz-ball-line" data-fit="48" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-line" data-fit="56" data-min="16" style="color:var(--accent);letter-spacing:.04em;margin-top:10px">{{ tz.code }}</div>{% endif %}
+            </div></div>
+            <div class="sp-bar"></div><div class="sp-word">{{ c.role|upper }}</div>
+            <div class="sp-ring"><div class="sp-disc"><img src="{{ c.logo }}" alt="{{ c.name }}"></div></div>
+            <div class="tz-ticket"><div class="tz-ticket-in">
+              <div class="tz-date"><div class="tz-day">{{ tz.day }}</div><div><div class="tz-mon">{{ tz.mon }}</div><div class="tz-wday">{{ tz.weekday }}</div></div></div>
+              <div class="tz-perf"></div>
+              <div class="tz-where"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-19-16-19-31a19 19 0 0 1 38 0c0 15-19 31-19 31z"/><circle cx="32" cy="27" r="7.5"/></svg>
+                <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18">{{ tz.place }}</div></div></div>
+            </div></div>
+            <div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
+            <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>
+          </div>
+        </div>
+        <a class="tz-dl sp-dl" href="./{{ c.file|urlencode }}" download="{{ c.file }}" title="Download the {{ c.role|lower }} card of {{ c.name }} (PNG)" aria-label="Download the {{ c.role|lower }} card of {{ c.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
+      </div>
+      {% endfor %}{% endif %}{% endfor %}
+    </div>{% endif %}<!--/spsec-->
     {% if not teaser_talks %}<p class="tz-empty">No confirmed sessions yet.</p>{% endif %}
     <p class="tz-empty" id="tz-none" hidden>Nothing matches that search.</p>
     {# the hint sits under the pictures (Marek 2026-10-07) #}
@@ -240,7 +299,13 @@
 
   <script>
     (function () {
-      var sheet = /^#sheet-(\d+)-(\d+)$/.exec(location.hash), thSheet = /^#thumbs-(\d+)-(\d+)$/.exec(location.hash);
+      var sheet = /^#sheet-(\d+)-(\d+)$/.exec(location.hash), thSheet = /^#thumbs-(\d+)-(\d+)$/.exec(location.hash),
+        spSheet = /^#spcards-(\d+)-(\d+)$/.exec(location.hash);
+      // sponsor logos: as big as their own shape allows inside the circle - the logo's corners on a circle 6% inside the rim
+      document.querySelectorAll('.sp-disc img').forEach(function (img) {
+        function size() { var a = img.naturalWidth / img.naturalHeight; if (a) img.style.width = (506 * .88 * a / Math.sqrt(a * a + 1)) + 'px'; }
+        if (img.complete) size(); else img.addEventListener('load', size);
+      });
       // 1. text fit, on the unscaled card (offset* sizes ignore the preview's transform)
       function fitLines(el) {                    // single-line texts: shrink until they fit their box
         var s = +el.dataset.fit, min = +(el.dataset.min || 16);
@@ -290,6 +355,7 @@
       function fitTab(t) {
         if (fitted[t]) return; fitted[t] = 1;
         if (t === 'th') { document.querySelectorAll('.th-card [data-thfit]').forEach(fitWord); return; }
+        if (t === 'sp') { document.querySelectorAll('.sp-card [data-fit]').forEach(fitLines); return; }
         document.querySelectorAll('.tz-card [data-fit]').forEach(fitLines);
         document.querySelectorAll('.tz-talk[data-lines]').forEach(fitTitle);
       }
@@ -308,13 +374,19 @@
       var ready = (document.fonts && document.fonts.ready)
         ? Promise.all([document.fonts.ready{% if th.font %}, document.fonts.load({{ th.font|tojson }}).catch(function () {}){% endif %}]).then(function () { return document.fonts.ready; })
         : Promise.resolve();
-      if (sheet || thSheet) ready.then(function () { fitTab(thSheet ? 'th' : 'tz'); });
+      if (sheet || thSheet || spSheet) ready.then(function () { fitTab(thSheet ? 'th' : spSheet ? 'sp' : 'tz'); });
 
       // sheet mode for the build-time renderer: #sheet-<start>-<count> keeps only those cards, unscaled, in sheet order
       if (sheet) {
         var from = +sheet[1], to = from + +sheet[2];
         document.body.classList.add('tz-sheet');
         document.querySelectorAll('.tz-slot').forEach(function (s, i) { if (i < from || i >= to) s.classList.add('tz-off'); });
+        return;
+      }
+      if (spSheet) {                             // the sponsor cards, stacked at 1200 px
+        var sFrom = +spSheet[1], sTo = sFrom + +spSheet[2];
+        document.body.classList.add('sp-sheet');
+        document.querySelectorAll('.sp-slot').forEach(function (s, i) { if (i < sFrom || i >= sTo) s.classList.add('tz-off'); });
         return;
       }
       if (thSheet) {                             // the same for the YouTube thumbnails, stacked at 1280 x 720
@@ -386,7 +458,9 @@
             groups.appendChild(head); groups.appendChild(grid);
           });
         }
-        document.getElementById('tz-count').textContent = shown + ' of ' + slots.length + (tab === 'th' ? ' thumbnails' : ' cards');
+        var spN = document.querySelectorAll('.sp-slot').length;
+        document.getElementById('tz-count').textContent = tab === 'sp' ? spN + ' sponsor card' + (spN === 1 ? '' : 's')
+          : shown + ' of ' + slots.length + (tab === 'th' ? ' thumbnails' : ' cards');
         document.getElementById('tz-none').hidden = shown > 0 || !slots.length;
         requestAnimationFrame(scale);
       }
@@ -428,18 +502,20 @@
       function setTab(t) {
         tab = t;
         document.body.classList.toggle('th-mode', t === 'th');
+        document.body.classList.toggle('sp-mode', t === 'sp');
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
-        sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.' : subTz;
+        sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
+          : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
         ready.then(function () { fitTab(t); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
-        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : location.pathname); });
+        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : location.pathname); });
       });
 
       // 4. downloads: the PNGs of the given cards that are shown, one after another (the browser asks once to allow it)
       function download(list, btn) {
-        var cls = tab === 'th' ? 'a.th-dl' : 'a.tz-dl:not(.th-dl)';
+        var cls = tab === 'th' ? 'a.th-dl' : tab === 'sp' ? 'a.sp-dl' : 'a.tz-dl:not(.th-dl)';
         var links = list.filter(function (s) { return !s.hidden; }).map(function (s) { return s.querySelector(cls); });
         if (!links.length) return;
         btn.disabled = true;
@@ -447,9 +523,9 @@
       }
       var all = document.getElementById('tz-all');
       all.addEventListener('click', function () {   // in the order shown (website, names, tracks...)
-        download([].slice.call(document.querySelectorAll('#tz-groups .tz-slot, #tz-pool .tz-slot')), all);
+        download([].slice.call(document.querySelectorAll(tab === 'sp' ? '#sp-pool .sp-slot' : '#tz-groups .tz-slot, #tz-pool .tz-slot')), all);
       });
-      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : 'tz'{% endif %});
+      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : 'tz'{% endif %});
     })();
   </script>
 </body>

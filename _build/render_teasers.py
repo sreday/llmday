@@ -49,6 +49,9 @@ KINDS = [
      "hash": "sheet", "strip": r"<!--th-->.*?<!--/th-->", "ext": ".png"},
     {"name": "youtube", "card_re": r'class="th-card[^"]*" id="th-card-\d+" data-file="([^"]+)"', "w": 1280, "h": 720, "scale": 1,
      "hash": "thumbs", "strip": r"<!--tz-->.*?<!--/tz-->", "ext": ".png", "max": YT_MAX},
+    # the sponsor cards (third tab, 2026-10-07): their own slots in their own section, upcoming events only like the teasers
+    {"name": "sponsor", "card_re": r'class="tz-card sp-card" id="sp-card-[a-z]+-\d+" data-file="([^"]+)"', "w": CARD, "h": CARD, "scale": SCALE,
+     "hash": "spcards", "strip": r"(?!)", "ext": ".png", "slot": "sp-slot"},
 ]
 BUDGET_MS = 12000    # virtual time for fonts + images to settle before the screenshot
 
@@ -93,18 +96,21 @@ def card_files(index_html, kind=KINDS[0]):
         return re.findall(kind["card_re"], f.read())
 
 
-def page_parts(index_html):
+def page_parts(index_html, slot="tz-slot"):
     """Split the teaser page into (context, [card html, ...]): each card is its .tz-slot block (data- attributes since 2026-10-04) up to the
-    next one; the context is everything else (head, styles, controls, scripts)."""
+    next one; the context is everything else (head, styles, controls, scripts). The sponsor-card section (<!--spsec-->) is left out
+    of the talk cards and their context; for slot="sp-slot" the cards are that section's .sp-slot blocks."""
     with open(index_html, encoding="utf-8") as f:
         html = f.read()
-    starts = [m.start() for m in re.finditer(r'<div class="tz-slot"[ >]', html)]
+    if slot == "tz-slot":
+        html = re.sub(r"<!--spsec-->.*?<!--/spsec-->", "", html, flags=re.S)
+    starts = [m.start() for m in re.finditer(r'<div class="%s"[ >]' % slot, html)]
     if not starts:
         return html, []
-    end = html.find("<script", starts[-1])
+    end = html.find("<!--/spsec-->" if slot == "sp-slot" else "<script", starts[-1])
     end = len(html) if end < 0 else end
     bounds = starts + [end]
-    cards = [re.sub(r' id="t[zh]-card-\d+"', "", html[bounds[i]:bounds[i + 1]]) for i in range(len(starts))]
+    cards = [re.sub(r' id="(?:t[zh]-card-\d+|sp-card-[a-z]+-\d+)"', "", html[bounds[i]:bounds[i + 1]]) for i in range(len(starts))]
     return html[:starts[0]] + html[end:], cards
 
 
@@ -126,9 +132,9 @@ def refs_digest(text, base_dir, h, outputs=()):
 
 
 def card_keys(index_html, chrome_version, kind=KINDS[0]):
-    context, cards = page_parts(index_html)
+    context, cards = page_parts(index_html, kind.get("slot", "tz-slot"))
     cards = [re.sub(kind["strip"], "", c, flags=re.S) for c in cards]   # the other kind's markup does not change this picture
-    outputs = set(card_files(index_html, KINDS[0])) | set(card_files(index_html, KINDS[1]))
+    outputs = set().union(*(card_files(index_html, k) for k in KINDS))
     base_dir = os.path.dirname(index_html)
     ctx = hashlib.sha256()
     ctx.update(("%s|%s|%s|%dx%d|%s|%d|" % (SCRIPT_HASH, chrome_version, kind["name"], kind["w"], kind["h"], kind["scale"], BUDGET_MS)).encode())
@@ -221,7 +227,7 @@ def main():
         event = os.path.basename(event_dir)
         upcoming = render_all or event_is_upcoming(event_dir)
         events += 1
-        if not card_files(page) and not card_files(page, KINDS[1]):
+        if not any(card_files(page, k) for k in KINDS):
             print("render_teasers %s: no cards" % event)
             continue
         out_dir = os.path.dirname(page)
@@ -231,7 +237,7 @@ def main():
         # this render copy of it points its photos at the originals (and the cache key hashes those bytes).
         page = hd_page(page)
         url = "file:///" + os.path.abspath(page).replace("\\", "/")
-        for kind in (KINDS if upcoming else KINDS[1:]):   # a past event: its YouTube thumbnails only
+        for kind in (KINDS if upcoming else [k for k in KINDS if k["name"] == "youtube"]):   # a past event: its YouTube thumbnails only
             files = card_files(page, kind)
             if not files:
                 continue
