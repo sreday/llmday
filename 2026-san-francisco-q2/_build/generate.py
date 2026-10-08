@@ -1801,6 +1801,20 @@ _tz_k = _TZ_SCHEMES.get(_tz_key) or {'bg': ['#08203a', '#040d1c', '#0a1235'], 'r
                                      'accent': str(context.get('brand_color') or '#22d3ee'), 'glow': '#22d3ee',
                                      'sweeps': [['#22d3ee', str(context.get('brand_color') or '#333')], ['#a855f7', '#22d3ee']]}
 _tz_logo, _tz_blend, _tz_prefix = _TZ_BRAND.get(_tz_key, ('', 'normal', str(context.get('brand_name', ''))[:4].upper()))
+# the logo starts on the text column (Marek 2026-10-07: "the logos need to start visually aligned with the text"): its
+# drawn ink, not its box, begins at x=74 like the title / name / bar below it. The box keeps 210 x 210 (contain, pinned
+# left) and moves by the logo's own transparent margin, measured here; no Pillow or no file: the old 64 px box edge.
+_TZ_INK_X = 74
+_tz_logo_left = 64
+if _tz_logo:
+    try:
+        from PIL import Image as _TzImage
+        _tz_im = _TzImage.open(_tz_logo.replace('../../assets/', '../home/assets/', 1)).convert('RGBA')
+        _tz_bb = _tz_im.getchannel('A').point(lambda v: 255 if v > 40 else 0).getbbox()
+        if _tz_bb:
+            _tz_logo_left = round(_TZ_INK_X - _tz_bb[0] * min(210 / _tz_im.width, 210 / _tz_im.height), 1)
+    except Exception as _e:                                       # noqa: BLE001 - the card still renders, 10 px off
+        print('WARN teasers: logo margin not measured (%s: %s)' % (type(_e).__name__, _e))
 
 
 def _tz_ramp(angle=90):
@@ -1936,7 +1950,7 @@ except ValueError:
     pass
 _tz_pct = 20 if _tz_days is None or _tz_days >= 21 else 50
 context['tz'] = {
-    'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'logo': _tz_logo, 'blend': _tz_blend,
+    'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'logo': _tz_logo, 'logo_left': _tz_logo_left, 'blend': _tz_blend,
     'free': bool(context['hero_event'].get('is_free')), 'pct': _tz_pct, 'code': '%s%d' % (_tz_prefix, _tz_pct),
     'conf': str(context['hero_event'].get('subtitle') or '').upper(),
     'day': context['hero_event'].get('day', ''), 'mon': str(context['hero_event'].get('month', ''))[:3].upper(),
