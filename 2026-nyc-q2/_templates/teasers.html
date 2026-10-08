@@ -7,7 +7,7 @@
      raw headshot, speaker + company (panels: names only), date + venue ticket. Facts come from generate.py (context
      `tz` and `teaser_talks`). The page: search by speaker / company / title, sort by spreadsheet order or by track (once the sheet has tracks),
      and download the PNGs of what is shown ("Download all", or "Download track N" per track). Sort orders (Marek 2026-10-07): as on
-     the website (the schedule), spreadsheet, first name, last name, by track. Never in the sitemap.
+     the website (the schedule, the default), first name, last name, by track. Never in the sitemap.
      Second tab, "YouTube thumbnails" (Marek 2026-10-07): one 1280x720 thumbnail per talk after Marek's brand samples (context `th`),
      rendered to "<speaker>.png" by the same script; the brand name is always the real logo cut into pieces (th.imgs), never a font (#thumbs-<start>-<count> stacks them at their true size).
      After the event (teasers_expired) the page stays up with the thumbnails only: the teaser cards carry discount codes
@@ -171,8 +171,7 @@
     <div class="tz-controls">
       <input class="tz-search" id="tz-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search speaker, company or talk title">
       <div class="tz-sort" role="group" aria-label="Sort">
-        <button type="button" data-sort="web" aria-pressed="false">As website</button>
-        <button type="button" data-sort="sheet" aria-pressed="true">Spreadsheet</button>
+        <button type="button" data-sort="web" aria-pressed="true">As website</button>
         <button type="button" data-sort="first" aria-pressed="false">First name</button>
         <button type="button" data-sort="last" aria-pressed="false">Last name</button>
         <button type="button" data-sort="track" aria-pressed="false">By track</button>
@@ -328,7 +327,7 @@
       // 3. search + sorting: spreadsheet order (one grid) or by track (one grid per track, each with its download button)
       var pool = document.getElementById('tz-pool'), groups = document.getElementById('tz-groups');
       var slots = [].slice.call(pool.querySelectorAll('.tz-slot')), search = document.getElementById('tz-search');
-      var mode = 'sheet', multiDay = slots.some(function (s) { return s.dataset.day && s.dataset.day !== slots[0].dataset.day; });
+      var mode = 'web', multiDay = slots.some(function (s) { return s.dataset.day && s.dataset.day !== slots[0].dataset.day; });
       // "By track" only once the sheet has tracks (2+ distinct values): a "before" event has none yet, so just "Download all"
       var trackSet = {}; slots.forEach(function (s) { if (s.dataset.track) trackSet[s.dataset.day + '|' + s.dataset.track] = 1; });
       if (Object.keys(trackSet).length < 2) document.querySelector('.tz-sort [data-sort="track"]').hidden = true;
@@ -359,7 +358,7 @@
         var q = search.value.trim().toLowerCase(), shown = 0;
         slots.forEach(function (s) { s.hidden = !!q && !matches(s, q); if (!s.hidden) shown++; });
         groups.innerHTML = '';
-        if (mode !== 'track') {                  // one grid: spreadsheet order, website (schedule) order, first or last name
+        if (mode !== 'track') {                  // one grid: website (schedule) order - the default - or first / last name
           pool.hidden = false;
           var ordered = slots.slice();
           if (mode === 'web') ordered.sort(function (a, b) { return a.dataset.web - b.dataset.web; });
