@@ -7,6 +7,10 @@
      raw headshot, speaker + company (panels: names only), date + venue ticket. Facts come from generate.py (context
      `tz` and `teaser_talks`). The page: search by speaker / company / title, sort by spreadsheet order or by track (once the sheet has tracks),
      and download the PNGs of what is shown ("Download all", or "Download track N" per track). Never in the sitemap.
+     Second tab, "YouTube thumbnails" (Marek 2026-10-07): one 1280x720 thumbnail per talk after Marek's brand samples (context `th`),
+     rendered to "<speaker>.png" by the same script (#thumbs-<start>-<count> stacks them at their true size).
+     After the event (teasers_expired) the page stays up with the thumbnails only: the teaser cards carry discount codes
+     and the ticket, so they expire like the other hidden pages; the thumbnails are for the talk videos.
      Identical in all four repos. ── #}
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +20,7 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Teasers: {{ onboarding_event.event_name }}</title>
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Montserrat:wght@500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root { --brand: {{ brand_color }}; --accent: {{ tz.scheme.accent }}; }
     html, body { margin: 0; background: #f3f2f6; color: #111; font-family: 'Roboto', sans-serif; }
@@ -50,6 +54,31 @@
     @keyframes tz-bob { 0%, 100% { transform: translateY(-1.5px); } 50% { transform: translateY(2px); } }
     @media (prefers-reduced-motion: reduce) { .tz-dl-arrow { animation: none; } }
     .tz-empty { color: #666; }
+    /* tabs: talk teasers | YouTube thumbnails - the same talks, search, sorting and downloads, one picture per tab */
+    .tz-tabs { display: flex; gap: 6px; border-bottom: 2px solid #dcdbe3; margin: 0 0 20px; }
+    .tz-tabs[hidden] { display: none; }
+    .tz-tabs button { font: 700 .95rem 'Montserrat', sans-serif; padding: 10px 18px; border: 0; background: transparent; color: #666; cursor: pointer;
+      border-bottom: 3px solid transparent; margin-bottom: -2px; }
+    .tz-tabs button[aria-selected="true"] { color: var(--brand); border-bottom-color: var(--brand); }
+    .th-frame, a.th-dl { display: none; }
+    body.th-mode .tz-frame, body.th-mode a.tz-dl:not(.th-dl) { display: none; }
+    body.th-mode .th-frame { display: block; }
+    body.th-mode a.th-dl { display: flex; }
+    body.th-mode .tz-grid { grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); }
+    .th-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.14); background: #000; }
+    .th-frame .th-card { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+
+    /* ── the YouTube thumbnail, 1280 x 720 ───────────────────────────────── */
+    .th-card { width: 1280px; height: 720px; position: relative; overflow: hidden; }
+    .th-card > * { position: absolute; }
+    .th-word { top: 20px; height: 720px; width: 318px; display: flex; align-items: center; line-height: .92; white-space: nowrap; }
+    .th-word span { display: block; }
+    .th-l { left: 28px; justify-content: flex-end; text-align: right; }
+    .th-r { left: 934px; justify-content: flex-start; text-align: left; }
+    /* the headshot's circle (r 370.5 at 499.5 / 598.5 of the 1000 px file) drawn r 270 around 640 / 405: 729 px, the head above it */
+    .th-split .th-photo { left: 276px; top: -31px; width: 729px; height: 729px; object-fit: contain; }
+    .th-logo { left: 40px; top: 238px; width: 620px; height: auto; }
+    .th-logo-l .th-photo { left: 640px; top: 24px; width: 620px; height: 620px; object-fit: contain; }
 
     /* ── the card, 1200 x 1200 ────────────────────────────────────────────── */
     .tz-card { width: 1200px; height: 1200px; position: relative; overflow: hidden; color: #fff; font-family: 'Montserrat', Arial, sans-serif;
@@ -101,16 +130,30 @@
     .tz-sheet .tz-slot { gap: 0; }
     .tz-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
     .tz-sheet .tz-frame .tz-card { transform: none !important; }
+    .tz-sheet .th-frame, .tz-sheet .tz-tabs { display: none !important; }
+    /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
+    body.th-sheet { background: #000; }
+    .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
+    .th-sheet .tz-head, .th-sheet .tz-tabs, .th-sheet .tz-controls, .th-sheet .tz-group-head, .th-sheet a.tz-dl, .th-sheet a.th-dl, .th-sheet .tz-frame,
+    .th-sheet .tz-slot.tz-off, .th-sheet .tz-empty { display: none !important; }
+    .th-sheet .tz-grid { display: block; }
+    .th-sheet .tz-slot { gap: 0; }
+    .th-sheet .th-frame { display: block; width: 1280px; height: 720px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+    .th-sheet .th-frame .th-card { transform: none !important; }
   </style>
 </head>
-<body>
+<body{% if teasers_expired %} class="th-mode"{% endif %}>
   <div class="tz-page">
     <div class="tz-head">
       <div>
         <div class="tz-brand">{{ brand_name }} · teasers</div>
         <h1 class="tz-title">{{ onboarding_event.event_name }}</h1>
-        <div class="tz-sub">Talk teaser for each talk, exactly as the talks appear on the website. Download individually, all of them or by track.</div>
+        <div class="tz-sub" id="tz-sub">Talk teaser for each talk, exactly as the talks appear on the website. Download individually, all of them or by track.</div>
       </div>
+    </div>
+    <div class="tz-tabs" role="tablist"{% if teasers_expired %} hidden{% endif %}>
+      <button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>
+      <button type="button" role="tab" data-tab="th" aria-selected="false">YouTube thumbnails</button>
     </div>
     <div class="tz-controls">
       <input class="tz-search" id="tz-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search speaker, company or talk title">
@@ -126,7 +169,7 @@
     <div class="tz-grid" id="tz-pool">
       {% for t in teaser_talks %}
       <div class="tz-slot" data-search="{{ t.search }}" data-names="{{ t.name|lower }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}">
-        <div class="tz-frame">
+        {% if not teasers_expired %}<!--tz--><div class="tz-frame">
           <div class="tz-card" id="tz-card-{{ loop.index }}" data-file="{{ t.file }}">
             {# each card gets its own gradient/filter ids (from its file name): with shared ids every card borrowed card 1's, and they
                vanished whenever card 1 was hidden - a filtered page, or a PNG run that re-renders only some cards #}
@@ -159,8 +202,16 @@
             <div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
             <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>
           </div>
-        </div>
-        <a class="tz-dl" href="./{{ t.file }}" download="{{ t.file }}" title="Download {{ t.name }} (PNG)" aria-label="Download the card of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
+        </div><!--/tz-->{% endif %}
+        <!--th--><div class="th-frame">
+          <div class="th-card th-{{ 'logo-l' if th.layout == 'logo' else 'split' }}" id="th-card-{{ loop.index }}" data-file="{{ t.thumb }}" style="background:{{ th.bg }}">
+            {% if th.layout == 'logo' %}<img class="th-logo" src="{{ th.logo }}" alt="">
+            {% else %}{% for w in th.words %}<div class="th-word {{ 'th-l' if loop.first else 'th-r' }}" data-thfit="1" style="font:{{ th.font }};color:{{ th.color }}"><span>{{ w|safe }}</span></div>{% endfor %}{% endif %}
+            {% if t.photo %}<img class="th-photo" src="{{ t.photo }}" alt="">{% endif %}
+          </div>
+        </div><!--/th-->
+        {% if not teasers_expired %}<a class="tz-dl" href="./{{ t.file }}" download="{{ t.file }}" title="Download {{ t.name }} (PNG)" aria-label="Download the card of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>{% endif %}
+        <a class="tz-dl th-dl" href="./{{ t.thumb|urlencode }}" download="{{ t.thumb }}" title="Download the YouTube thumbnail of {{ t.name }} (PNG)" aria-label="Download the YouTube thumbnail of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
       </div>
       {% endfor %}
     </div>
@@ -170,7 +221,7 @@
 
   <script>
     (function () {
-      var sheet = /^#sheet-(\d+)-(\d+)$/.exec(location.hash);
+      var sheet = /^#sheet-(\d+)-(\d+)$/.exec(location.hash), thSheet = /^#thumbs-(\d+)-(\d+)$/.exec(location.hash);
       // 1. text fit, on the unscaled card (offset* sizes ignore the preview's transform)
       function fitLines(el) {                    // single-line texts: shrink until they fit their box
         var s = +el.dataset.fit, min = +(el.dataset.min || 16);
@@ -211,7 +262,15 @@
         if (!best) best = { h: variants[variants.length - 1], s: minS };
         el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
       }
-      function fitAll() {
+      function fitWord(el) {                    // thumbnail lettering: shrink until every line fits its 318 px box
+        var s = parseFloat(getComputedStyle(el).fontSize), sp = el.firstElementChild;
+        while (s > 40 && (sp.scrollWidth > el.clientWidth + 1 || sp.offsetHeight > 560)) { s -= 2; el.style.fontSize = s + 'px'; }
+      }
+      // fitting measures the laid-out card, so each tab is fitted the first time it is shown (a hidden card measures 0)
+      var fitted = {};
+      function fitTab(t) {
+        if (fitted[t]) return; fitted[t] = 1;
+        if (t === 'th') { document.querySelectorAll('.th-card [data-thfit]').forEach(fitWord); return; }
         document.querySelectorAll('.tz-card [data-fit]').forEach(fitLines);
         document.querySelectorAll('.tz-talk[data-lines]').forEach(fitTitle);
       }
@@ -221,9 +280,16 @@
           var w = f.clientWidth; if (!w) return;
           f.querySelector('.tz-card').style.transform = 'scale(' + (w / 1200) + ')';
         });
+        document.querySelectorAll('.th-frame').forEach(function (f) {
+          var w = f.clientWidth; if (!w) return;
+          f.querySelector('.th-card').style.transform = 'scale(' + (w / 1280) + ')';
+        });
       }
-      var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
-      ready.then(function () { fitAll(); if (!sheet) scale(); });
+      // the thumbnail lettering font is loaded explicitly: its cards start hidden, and a hidden font use triggers no download
+      var ready = (document.fonts && document.fonts.ready)
+        ? Promise.all([document.fonts.ready{% if th.font %}, document.fonts.load({{ th.font|tojson }}).catch(function () {}){% endif %}]).then(function () { return document.fonts.ready; })
+        : Promise.resolve();
+      if (sheet || thSheet) ready.then(function () { fitTab(thSheet ? 'th' : 'tz'); });
 
       // sheet mode for the build-time renderer: #sheet-<start>-<count> keeps only those cards, unscaled, in sheet order
       if (sheet) {
@@ -232,8 +298,14 @@
         document.querySelectorAll('.tz-slot').forEach(function (s, i) { if (i < from || i >= to) s.classList.add('tz-off'); });
         return;
       }
+      if (thSheet) {                             // the same for the YouTube thumbnails, stacked at 1280 x 720
+        var tFrom = +thSheet[1], tTo = tFrom + +thSheet[2];
+        document.body.classList.add('th-sheet');
+        document.querySelectorAll('.tz-slot').forEach(function (s, i) { if (i < tFrom || i >= tTo) s.classList.add('tz-off'); });
+        return;
+      }
       window.addEventListener('resize', scale);
-      if (window.ResizeObserver) { var ro = new ResizeObserver(scale); document.querySelectorAll('.tz-frame').forEach(function (f) { ro.observe(f); }); }
+      if (window.ResizeObserver) { var ro = new ResizeObserver(scale); document.querySelectorAll('.tz-frame, .th-frame').forEach(function (f) { ro.observe(f); }); }
 
       // 3. search + sorting: spreadsheet order (one grid) or by track (one grid per track, each with its download button)
       var pool = document.getElementById('tz-pool'), groups = document.getElementById('tz-groups');
@@ -289,7 +361,7 @@
             groups.appendChild(head); groups.appendChild(grid);
           });
         }
-        document.getElementById('tz-count').textContent = shown + ' of ' + slots.length + ' cards';
+        document.getElementById('tz-count').textContent = shown + ' of ' + slots.length + (tab === 'th' ? ' thumbnails' : ' cards');
         document.getElementById('tz-none').hidden = shown > 0 || !slots.length;
         requestAnimationFrame(scale);
       }
@@ -302,16 +374,31 @@
       });
       search.addEventListener('input', render);
 
+      // 3b. tabs: talk teasers (the 1500 px PNG cards) or YouTube thumbnails (1280 x 720 PNG); #thumbnails opens the second
+      var tab = 'tz', sub = document.getElementById('tz-sub'), subTz = sub.textContent;
+      function setTab(t) {
+        tab = t;
+        document.body.classList.toggle('th-mode', t === 'th');
+        document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
+        sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.' : subTz;
+        render();
+        ready.then(function () { fitTab(t); scale(); });
+      }
+      document.querySelectorAll('.tz-tabs button').forEach(function (b) {
+        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : location.pathname); });
+      });
+
       // 4. downloads: the PNGs of the given cards that are shown, one after another (the browser asks once to allow it)
       function download(list, btn) {
-        var links = list.filter(function (s) { return !s.hidden; }).map(function (s) { return s.querySelector('a.tz-dl'); });
+        var cls = tab === 'th' ? 'a.th-dl' : 'a.tz-dl:not(.th-dl)';
+        var links = list.filter(function (s) { return !s.hidden; }).map(function (s) { return s.querySelector(cls); });
         if (!links.length) return;
         btn.disabled = true;
         links.forEach(function (a, i) { setTimeout(function () { a.click(); if (i === links.length - 1) btn.disabled = false; }, i * 400); });
       }
       var all = document.getElementById('tz-all');
       all.addEventListener('click', function () { download(slots, all); });
-      render();
+      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : 'tz'{% endif %});
     })();
   </script>
 </body>

@@ -1929,6 +1929,21 @@ context['tz'] = {
     'weekday': context['hero_event'].get('weekday', ''),
     'venue': context['hero_event'].get('venue_short', ''), 'place': context['hero_event'].get('venue_line', ''),
 }
+# YouTube thumbnails (Marek 2026-10-07): the second tab of /<event>/teasers/, one 1280x720 image per talk (rendered to
+# PNG named after the speaker by _build/render_teasers.py, YouTube's size, under its 2 MB limit), after Marek's four samples: the brand name
+# split around the headshot (SRE | DAY in Monoton, the SREday hero font; LLM | DAY, PLAT FORM | DAY in heavy brand
+# colour), PEC: its logo left, the headshot right. 'words' = left / right lettering (<br> breaks a line), 'font' its CSS.
+_TH_BRANDS = {
+    'sreday': {'layout': 'split', 'bg': 'linear-gradient(125deg, #7a2e3c 0%, #4f3168 48%, #2e3c80 100%)',
+               'words': ['SRE', 'DAY'], 'font': "400 172px 'Monoton', sans-serif", 'color': '#fff'},
+    'llmday': {'layout': 'split', 'bg': '#141414', 'words': ['LLM', 'DAY'], 'font': "900 176px 'Montserrat', sans-serif", 'color': '#26986A'},
+    'platformday': {'layout': 'split', 'bg': '#0e0e0e', 'words': ['PLAT<br>FORM', 'DAY'], 'font': "900 132px 'Montserrat', sans-serif",
+                    'color': '#E2971D'},
+    'pec': {'layout': 'logo', 'bg': 'linear-gradient(125deg, #3d1c4f 0%, #2a2466 45%, #1a2a8c 100%)', 'logo': '../../assets/images/logo-token.png'},
+}
+_TH_BRANDS['prompt engineering conference'] = _TH_BRANDS['pec']
+context['th'] = _TH_BRANDS.get(_tz_key) or {'layout': 'split', 'bg': '#111', 'words': [str(context.get('brand_name', '')), ''],
+                                            'font': "900 120px 'Montserrat', sans-serif", 'color': str(context.get('brand_color') or '#fff')}
 context['teaser_talks'] = []
 _tz_shown = {id(_x) for _x in keynotes + talks}              # confirmed sessions (each repo sorts its rows into these)
 for _t in talks_raw:                                         # spreadsheet order
@@ -1957,9 +1972,18 @@ for _t in talks_raw:                                         # spreadsheet order
         while '%s-%d.png' % (_base, _n) in _tz_seen:
             _n += 1
         context['teaser_talks'][-1]['file'] = '%s-%d.png' % (_base, _n)
+_th_seen = set()
+for _x in context['teaser_talks']:                          # the talk's YouTube thumbnail, next to its teaser PNG: named just
+    _base = re.sub(r'[\\/:*?"<>|]+', '', _x['name']).strip() or _x['file'][:-4]   # after the speaker (Marek 2026-10-07)
+    _x['thumb'], _n = _base + '.png', 2
+    while _x['thumb'] in _th_seen:                          # a second talk by the same speaker: "Name-2.png"
+        _x['thumb'], _n = '%s-%d.png' % (_base, _n), _n + 1
+    _th_seen.add(_x['thumb'])
 _os.makedirs(BASE_FOLDER + "/teasers", exist_ok=True)
 with open(BASE_FOLDER + "/teasers/index.html", "w", encoding="utf-8") as f:
-    f.write(_hidden_page("teasers.html"))
+    # the YouTube thumbnails never expire (Marek 2026-10-07: the talk videos go up after the event), so a past event's
+    # teasers page stays up with that tab only; the teaser cards (discount codes, ticket) are dropped as before
+    f.write(env.get_template("teasers.html").render(page="teasers.html", teasers_expired=_EVENT_ENDED, **context))
 print("Writing out teasers/index.html (hidden, not in sitemap): %d cards" % len(context['teaser_talks']))
 
 # HIDDEN PAGE: /<event>/invitation/ (speaker invitation letter, "convince your boss"). Same rules as onboarding.
