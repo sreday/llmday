@@ -774,6 +774,7 @@ print("Loaded %d confirmed talks in %d tracks: %s" % (len(context["talks"]), len
 # template each talk page for the event (a longer session's extra rows share
 # its page). Only rows on the schedule get a page: drafts and declined rows
 # must not leak into the sitemap.
+_talk_pages = []
 for talk in talks_raw:
     if talk["id"] in _merged_ids:
         continue
@@ -781,10 +782,8 @@ for talk in talks_raw:
         print("Skipping talk subpage %s (status '%s')" % (talk.get("short_url"), talk.get("status", "")))
         continue
     print("Generating talk subpage %s" % (talk.get("short_url")))
-    with open(BASE_FOLDER + "/" + talk.get("short_url").replace(".html","")  + ".html", "w", encoding="utf-8") as f:
-        template = env.get_template("talk.html")
-        f.write(template.render(talk=talk, **context))
-        SITEMAP_URLS.append((talk.get("short_url").replace(".html",""), 0.75))
+    _talk_pages.append(talk)                                 # written once the YouTube thumbnails are named (see og:image below)
+    SITEMAP_URLS.append((talk.get("short_url").replace(".html",""), 0.75))
 
 # ── SPONSORSHIP PAGE ─────────────────────────────────────────────────────────
 import os as _os
@@ -2079,7 +2078,7 @@ for _t in talks_raw:                                         # spreadsheet order
         'name': _name, 'name_lines': _lines, 'panel': len(_lines) > 1, 'organization': '' if len(_lines) > 1 else _org,
         'photo': ('../' + _t['photo_url']) if str(_t.get('photo_url') or '').startswith('../') else (_t.get('photo_url') or ''),
         'track': str(_t.get('track') or '').strip(), 'day': str(_t.get('day') or '').strip(), 'kind': 'keynote' if _t in keynotes else _t.get('kind', 'talk'),
-        'search': ' '.join([_name, _org, _title]).lower(),
+                '_id': id(_t), 'search': ' '.join([_name, _org, _title]).lower(),
         # sorting keys (Marek 2026-10-07): the first speaker's first / last name, and the website's order = the schedule
         # (day, start time, track as the site orders them)
         'first': (re.split(r'\s*(?:&|,|\band\b)\s*', _name)[0].split() or [''])[0].lower(),
@@ -2104,6 +2103,17 @@ for _x in context['teaser_talks']:                          # the talk's YouTube
     while _x['thumb'] in _th_seen:                          # a second talk by the same speaker: "Name-2.png"
         _x['thumb'], _n = '%s-%d.png' % (_base, _n), _n + 1
     _th_seen.add(_x['thumb'])
+# each talk page's social preview (og:image / twitter:image) is the talk's YouTube thumbnail (Marek 2026-10-08), the PNG
+# _build/render_teasers.py puts next to the teasers page; a page with no thumbnail keeps the event's picture
+import urllib.parse as _og_parse
+_th_by_talk = {_x['_id']: _x['thumb'] for _x in context['teaser_talks']}
+for talk in _talk_pages:
+    _ctx = context
+    if id(talk) in _th_by_talk:
+        _ctx = dict(context, og_image_url='https://%s/%s/teasers/%s' % (context['brand_domain'], _os.path.basename(_os.getcwd()),
+                                                                        _og_parse.quote(_th_by_talk[id(talk)])))
+    with open(BASE_FOLDER + "/" + talk.get("short_url").replace(".html","")  + ".html", "w", encoding="utf-8") as f:
+        f.write(env.get_template("talk.html").render(talk=talk, **_ctx))
 _os.makedirs(BASE_FOLDER + "/teasers", exist_ok=True)
 with open(BASE_FOLDER + "/teasers/index.html", "w", encoding="utf-8") as f:
     # the YouTube thumbnails never expire (Marek 2026-10-07: the talk videos go up after the event), so a past event's
