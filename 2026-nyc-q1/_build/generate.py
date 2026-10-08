@@ -1849,9 +1849,9 @@ def _tz_title_lines(text):
 
 def _tz_deorphan(text):
     """a line never ends on "a" / "the" / "of"...: articles stick to their noun; other short words stick forward unless an
-    article follows (then the article sticks instead, no three-word chains); a dash sticks to the word before it"""
+    article follows (then the article sticks instead); a dash sticks to the word before it; a chunk never holds more than three words"""
     words = text.split()
-    out = []
+    out, run = [], 1
     for i, w in enumerate(words):
         out.append(w)
         if i == len(words) - 1:
@@ -1859,7 +1859,9 @@ def _tz_deorphan(text):
         nxt = words[i + 1]
         lw, ln = w.lower().strip('"“”‘’()'), nxt.lower().strip('"“”‘’()')
         glue = lw in _TZ_ARTICLES or ((lw in _TZ_SHORT or (len(lw) <= 2 and lw.isalnum())) and ln not in _TZ_ARTICLES) or nxt in ('—', '–')
+        glue = glue and run < 3   # a chunk holds 3 words at most: "Go With AI Without Sharing" glued whole could not wrap
         out.append(_TZ_NB if glue else ' ')
+        run = run + 1 if glue else 1
     return ''.join(out)
 
 
