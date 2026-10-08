@@ -240,7 +240,7 @@
               <div class="tz-date"><div class="tz-day">{{ tz.day }}</div><div><div class="tz-mon">{{ tz.mon }}</div><div class="tz-wday">{{ tz.weekday }}</div></div></div>
               <div class="tz-perf"></div>
               <div class="tz-where"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-19-16-19-31a19 19 0 0 1 38 0c0 15-19 31-19 31z"/><circle cx="32" cy="27" r="7.5"/></svg>
-                <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18">{{ tz.place }}</div></div></div>
+                <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18"{% if tz.place_full and tz.place_full != tz.place %} data-full="{{ tz.place_full }}"{% endif %}>{{ tz.place }}</div></div></div>
             </div></div>
             <div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
             <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>
@@ -281,7 +281,7 @@
               <div class="tz-date"><div class="tz-day">{{ tz.day }}</div><div><div class="tz-mon">{{ tz.mon }}</div><div class="tz-wday">{{ tz.weekday }}</div></div></div>
               <div class="tz-perf"></div>
               <div class="tz-where"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-19-16-19-31a19 19 0 0 1 38 0c0 15-19 31-19 31z"/><circle cx="32" cy="27" r="7.5"/></svg>
-                <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18">{{ tz.place }}</div></div></div>
+                <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18"{% if tz.place_full and tz.place_full != tz.place %} data-full="{{ tz.place_full }}"{% endif %}>{{ tz.place }}</div></div></div>
             </div></div>
             <div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
             <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>
@@ -310,6 +310,8 @@
       function fitLines(el) {                    // single-line texts: shrink until they fit their box
         var s = +el.dataset.fit, min = +(el.dataset.min || 16);
         el.style.fontSize = s + 'px';
+        // "San Francisco, United States" when it fits at full size, else the short "San Francisco, US" (Marek 2026-10-07)
+        if (el.dataset.full) { if (!el.dataset.short) el.dataset.short = el.textContent; el.textContent = el.dataset.full; if (el.scrollWidth > el.clientWidth + 1) el.textContent = el.dataset.short; }
         while (s > min && el.scrollWidth > el.clientWidth + 1) { s -= 1; el.style.fontSize = s + 'px'; }
       }
       // the title: bigger text over more lines (Marek 2026-10-04) - the largest size, 64 px down to 28, at which it fills
