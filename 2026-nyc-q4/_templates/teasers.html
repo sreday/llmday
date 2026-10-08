@@ -6,9 +6,10 @@
      2026-10-04, community hero style): square brand logo, discount ball (or FREE EVENT), conference name, title,
      raw headshot, speaker + company (panels: names only), date + venue ticket. Facts come from generate.py (context
      `tz` and `teaser_talks`). The page: search by speaker / company / title, sort by spreadsheet order or by track (once the sheet has tracks),
-     and download the PNGs of what is shown ("Download all", or "Download track N" per track). Never in the sitemap.
+     and download the PNGs of what is shown ("Download all", or "Download track N" per track). Sort orders (Marek 2026-10-07): as on
+     the website (the schedule), spreadsheet, first name, last name, by track. Never in the sitemap.
      Second tab, "YouTube thumbnails" (Marek 2026-10-07): one 1280x720 thumbnail per talk after Marek's brand samples (context `th`),
-     rendered to "<speaker>.png" by the same script (#thumbs-<start>-<count> stacks them at their true size).
+     rendered to "<speaker>.png" by the same script; the brand name is always the real logo cut into pieces (th.imgs), never a font (#thumbs-<start>-<count> stacks them at their true size).
      After the event (teasers_expired) the page stays up with the thumbnails only: the teaser cards carry discount codes
      and the ticket, so they expire like the other hidden pages; the thumbnails are for the talk videos.
      Identical in all four repos. ── #}
@@ -20,7 +21,7 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Teasers: {{ onboarding_event.event_name }}</title>
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
-  <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Montserrat:wght@500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root { --brand: {{ brand_color }}; --accent: {{ tz.scheme.accent }}; }
     html, body { margin: 0; background: #f3f2f6; color: #111; font-family: 'Roboto', sans-serif; }
@@ -67,6 +68,12 @@
     body.th-mode .tz-grid { grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); }
     .th-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.14); background: #000; }
     .th-frame .th-card { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+    /* the speaker's name on each thumbnail preview (Marek 2026-10-07): a compact white chip left of the download button, page
+       UI only (never in the exported PNG), to find and sort thumbnails that carry no name of their own */
+    .th-name { display: none; position: absolute; right: 60px; bottom: 19px; max-width: calc(100% - 84px); box-sizing: border-box;
+      padding: 5px 11px; border-radius: 999px; background: rgba(255,255,255,.92); color: #333; font: 600 .78rem/1.2 'Roboto', sans-serif;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: 0 4px 14px rgba(0,0,0,.35); z-index: 2; pointer-events: none; }
+    body.th-mode .th-name { display: block; }
 
     /* ── the YouTube thumbnail, 1280 x 720 ───────────────────────────────── */
     .th-card { width: 1280px; height: 720px; position: relative; overflow: hidden; }
@@ -130,11 +137,11 @@
     .tz-sheet .tz-slot { gap: 0; }
     .tz-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
     .tz-sheet .tz-frame .tz-card { transform: none !important; }
-    .tz-sheet .th-frame, .tz-sheet .tz-tabs { display: none !important; }
+    .tz-sheet .th-frame, .tz-sheet .tz-tabs, .tz-sheet .th-name { display: none !important; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
-    .th-sheet .tz-head, .th-sheet .tz-tabs, .th-sheet .tz-controls, .th-sheet .tz-group-head, .th-sheet a.tz-dl, .th-sheet a.th-dl, .th-sheet .tz-frame,
+    .th-sheet .tz-head, .th-sheet .tz-tabs, .th-sheet .tz-controls, .th-sheet .tz-group-head, .th-sheet a.tz-dl, .th-sheet a.th-dl, .th-sheet .tz-frame, .th-sheet .th-name,
     .th-sheet .tz-slot.tz-off, .th-sheet .tz-empty { display: none !important; }
     .th-sheet .tz-grid { display: block; }
     .th-sheet .tz-slot { gap: 0; }
@@ -158,7 +165,10 @@
     <div class="tz-controls">
       <input class="tz-search" id="tz-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search speaker, company or talk title">
       <div class="tz-sort" role="group" aria-label="Sort">
-        <button type="button" data-sort="sheet" aria-pressed="true">Spreadsheet order</button>
+        <button type="button" data-sort="web" aria-pressed="false">As website</button>
+        <button type="button" data-sort="sheet" aria-pressed="true">Spreadsheet</button>
+        <button type="button" data-sort="first" aria-pressed="false">First name</button>
+        <button type="button" data-sort="last" aria-pressed="false">Last name</button>
         <button type="button" data-sort="track" aria-pressed="false">By track</button>
       </div>
       <button class="tz-btn" id="tz-all" type="button" data-dl="all">Download all</button>
@@ -168,7 +178,7 @@
     <div id="tz-groups"></div>
     <div class="tz-grid" id="tz-pool">
       {% for t in teaser_talks %}
-      <div class="tz-slot" data-search="{{ t.search }}" data-names="{{ t.name|lower }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}">
+      <div class="tz-slot" data-search="{{ t.search }}" data-names="{{ t.name|lower }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}" data-web="{{ t.web }}" data-first="{{ t.first }}" data-last="{{ t.last }}">
         {% if not teasers_expired %}<!--tz--><div class="tz-frame">
           <div class="tz-card" id="tz-card-{{ loop.index }}" data-file="{{ t.file }}">
             {# each card gets its own gradient/filter ids (from its file name): with shared ids every card borrowed card 1's, and they
@@ -206,11 +216,13 @@
         <!--th--><div class="th-frame">
           <div class="th-card th-{{ 'logo-l' if th.layout == 'logo' else 'split' }}" id="th-card-{{ loop.index }}" data-file="{{ t.thumb }}" style="background:{{ th.bg }}">
             {% if th.layout == 'logo' %}<img class="th-logo" src="{{ th.logo }}" alt="">
+            {% elif th.imgs %}{% for im in th.imgs %}<div class="th-word {{ 'th-l' if loop.first else 'th-r' }}" style="top:{{ th.img_top or 20 }}px"><img src="{{ im[0] }}" alt="" style="width:{{ im[1] }}px;display:block"></div>{% endfor %}
             {% else %}{% for w in th.words %}<div class="th-word {{ 'th-l' if loop.first else 'th-r' }}" data-thfit="1" style="font:{{ th.font }};color:{{ th.color }}"><span>{{ w|safe }}</span></div>{% endfor %}{% endif %}
             {% if t.photo %}<img class="th-photo" src="{{ t.photo }}" alt="">{% endif %}
           </div>
         </div><!--/th-->
         {% if not teasers_expired %}<a class="tz-dl" href="./{{ t.file }}" download="{{ t.file }}" title="Download {{ t.name }} (PNG)" aria-label="Download the card of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>{% endif %}
+        <span class="th-name" title="Not part of the thumbnail">{{ t.name }}</span>
         <a class="tz-dl th-dl" href="./{{ t.thumb|urlencode }}" download="{{ t.thumb }}" title="Download the YouTube thumbnail of {{ t.name }} (PNG)" aria-label="Download the YouTube thumbnail of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
       </div>
       {% endfor %}
@@ -313,7 +325,7 @@
       var mode = 'sheet', multiDay = slots.some(function (s) { return s.dataset.day && s.dataset.day !== slots[0].dataset.day; });
       // "By track" only once the sheet has tracks (2+ distinct values): a "before" event has none yet, so just "Download all"
       var trackSet = {}; slots.forEach(function (s) { if (s.dataset.track) trackSet[s.dataset.day + '|' + s.dataset.track] = 1; });
-      if (Object.keys(trackSet).length < 2) document.querySelector('.tz-sort').hidden = true;
+      if (Object.keys(trackSet).length < 2) document.querySelector('.tz-sort [data-sort="track"]').hidden = true;
       function trackLabel(s) {
         var t = s.dataset.track ? 'Track ' + s.dataset.track : 'No track';
         return multiDay && s.dataset.day ? 'Day ' + s.dataset.day + ' · ' + t : t;
@@ -341,9 +353,15 @@
         var q = search.value.trim().toLowerCase(), shown = 0;
         slots.forEach(function (s) { s.hidden = !!q && !matches(s, q); if (!s.hidden) shown++; });
         groups.innerHTML = '';
-        if (mode === 'sheet') {
+        if (mode !== 'track') {                  // one grid: spreadsheet order, website (schedule) order, first or last name
           pool.hidden = false;
-          slots.forEach(function (s) { pool.appendChild(s); });
+          var ordered = slots.slice();
+          if (mode === 'web') ordered.sort(function (a, b) { return a.dataset.web - b.dataset.web; });
+          if (mode === 'first' || mode === 'last') {
+            var k1 = mode, k2 = mode === 'first' ? 'last' : 'first';
+            ordered.sort(function (a, b) { return a.dataset[k1].localeCompare(b.dataset[k1]) || a.dataset[k2].localeCompare(b.dataset[k2]) || a.dataset.i - b.dataset.i; });
+          }
+          ordered.forEach(function (s) { pool.appendChild(s); });
         } else {
           pool.hidden = true;
           var order = [], by = {};
@@ -365,11 +383,35 @@
         document.getElementById('tz-none').hidden = shown > 0 || !slots.length;
         requestAnimationFrame(scale);
       }
+      // sorting animation (Marek 2026-10-07): every card glides from where it was to its new place (FLIP: measure, reorder,
+      // offset each card back to its old spot, then let the offset go); off for prefers-reduced-motion
+      var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function animated(change) {
+        if (still) { change(); return; }
+        var before = new Map();
+        slots.forEach(function (s) { if (!s.hidden && s.offsetParent) before.set(s, s.getBoundingClientRect()); });
+        change();
+        var moved = [];
+        slots.forEach(function (s) {
+          var a = before.get(s); if (!a || s.hidden || !s.offsetParent) return;
+          var b = s.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top;
+          if (!dx && !dy) return;
+          s.style.transition = 'none'; s.style.transform = 'translate(' + dx + 'px,' + dy + 'px)'; s.style.zIndex = 3; moved.push(s);
+        });
+        if (!moved.length) return;
+        void document.body.offsetHeight;          // commit the offsets before letting them go
+        moved.forEach(function (s, i) {
+          s.style.transition = 'transform .55s cubic-bezier(.22,.8,.24,1) ' + Math.min(i * 12, 180) + 'ms';
+          s.style.transform = '';
+          s.addEventListener('transitionend', function done() { s.style.transition = ''; s.style.zIndex = ''; s.removeEventListener('transitionend', done); });
+        });
+      }
       document.querySelectorAll('.tz-sort button').forEach(function (b) {
         b.addEventListener('click', function () {
+          if (mode === b.dataset.sort) return;
           mode = b.dataset.sort;
           document.querySelectorAll('.tz-sort button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-          render();
+          animated(render);
         });
       });
       search.addEventListener('input', render);
@@ -397,7 +439,9 @@
         links.forEach(function (a, i) { setTimeout(function () { a.click(); if (i === links.length - 1) btn.disabled = false; }, i * 400); });
       }
       var all = document.getElementById('tz-all');
-      all.addEventListener('click', function () { download(slots, all); });
+      all.addEventListener('click', function () {   // in the order shown (website, names, tracks...)
+        download([].slice.call(document.querySelectorAll('#tz-groups .tz-slot, #tz-pool .tz-slot')), all);
+      });
       setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : 'tz'{% endif %});
     })();
   </script>
