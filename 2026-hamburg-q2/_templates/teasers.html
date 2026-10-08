@@ -178,6 +178,8 @@
     .sp-venues button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #cfcfd6; background: #fff; color: #444; font: 700 .9rem 'Montserrat', sans-serif; cursor: pointer; }
     .sp-venues button:first-of-type { margin-left: 4px; }
     .sp-venues button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .sp-dark input { width: 140px; accent-color: var(--brand); cursor: pointer; }
+    .sp-dark output { min-width: 3em; color: #444; font-weight: 700; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
@@ -268,14 +270,15 @@
     </div>
     <!--spsec-->{% if sp_cards and not teasers_expired %}<div class="tz-grid" id="sp-pool">
       {% for g in ['Host', 'Sponsor', 'Partner'] %}{% if sp_groups[g] %}
-      <h2 class="sp-head">{{ g if g == 'Host' or sp_groups[g]|length == 1 else g ~ 's' }}{% if g == 'Host' and sp_groups[g]|length > 1 %}
-        <span class="sp-venues" role="group" aria-label="Venue picture">Venue picture{% for c in sp_groups[g] %}<button type="button" data-v="{{ loop.index }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ loop.index }}</button>{% endfor %}</span>{% endif %}</h2>
+      <h2 class="sp-head">{{ g if g == 'Host' or sp_groups[g]|length == 1 else g ~ 's' }}{% if g == 'Host' and sp_host_photos > 1 %}
+        <span class="sp-venues" role="group" aria-label="Venue picture">Venue picture{% for i in range(1, sp_host_photos + 1) %}<button type="button" data-v="{{ i }}" aria-pressed="{{ 'true' if i == 1 else 'false' }}">{{ i }}</button>{% endfor %}</span>{% endif %}{% if g == 'Host' and sp_host_photos %}
+        <label class="sp-venues sp-dark">Darken <input type="range" id="sp-dark" min="0" max="50" step="10" value="0" aria-label="Darken the venue picture"><output id="sp-dark-out">0%</output></label>{% endif %}</h2>
       {% for c in sp_groups[g] %}
-      <div class="sp-slot"{% if g == 'Host' and sp_groups[g]|length > 1 %} data-host="{{ loop.index }}"{% endif %}>
+      <div class="sp-slot"{% if g == 'Host' and sp_host_photos %} data-host="{{ c.v }}" data-dark="{{ c.dark }}"{% endif %}>
         <div class="tz-frame">
           <div class="tz-card sp-card" id="sp-card-{{ g|lower }}-{{ loop.index }}" data-file="{{ c.file }}">
             {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
-            {% if c.photo %}<div class="sp-photo" style="background-image:url('{{ c.photo }}')"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
+            {% if c.photo %}<div class="sp-photo" style="background-image:url('{{ c.photo }}'){% if c.bright is defined %};filter:brightness({{ c.bright }}){% endif %}"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
             <div class="tz-conf">{{ tz.conf }}</div>
             <div class="tz-ball"><div class="tz-ball-in">
@@ -544,13 +547,15 @@
       }
       // the host's venue picture: only the chosen version of the host card shows (and downloads); the renderer's sheet mode
       // returned above, so it still renders all three
-      function pickVenue(v) {
-        document.querySelectorAll('.sp-slot[data-host]').forEach(function (s) { s.hidden = s.dataset.host !== String(v); });
-        document.querySelectorAll('.sp-venues button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === String(v) ? 'true' : 'false'); });
+      var spV = '1', spD = '0', spDark = document.getElementById('sp-dark');
+      function pickHost() {                       // one host card shows: the chosen venue picture at the chosen darkness
+        document.querySelectorAll('.sp-slot[data-host]').forEach(function (s) { s.hidden = !(s.dataset.host === spV && s.dataset.dark === spD); });
+        document.querySelectorAll('.sp-venues button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === spV ? 'true' : 'false'); });
         requestAnimationFrame(scale);
       }
-      document.querySelectorAll('.sp-venues button').forEach(function (b) { b.addEventListener('click', function () { pickVenue(b.dataset.v); }); });
-      if (document.querySelector('.sp-slot[data-host]')) pickVenue(1);
+      document.querySelectorAll('.sp-venues button').forEach(function (b) { b.addEventListener('click', function () { spV = b.dataset.v; pickHost(); }); });
+      if (spDark) spDark.addEventListener('input', function () { spD = spDark.value; document.getElementById('sp-dark-out').textContent = spD + '%'; pickHost(); });
+      if (document.querySelector('.sp-slot[data-host]')) pickHost();
       var all = document.getElementById('tz-all');
       all.addEventListener('click', function () {   // in the order shown (website, names, tracks...)
         download([].slice.call(document.querySelectorAll(tab === 'sp' ? '#sp-pool .sp-slot' : '#tz-groups .tz-slot, #tz-pool .tz-slot')), all);
