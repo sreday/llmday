@@ -66,7 +66,7 @@ Classifier: `talk_kind()` in `_event_template/_build/generate.py` (mirrored in h
 ## Key templates
 - `_templates/sponsorship.html` — sponsorship page; pricing tiers + expandable stats panel
 - `_templates/index.html` — event homepage
-- `_templates/_base.html` — shared layout; its og:image/twitter:image use the event's `photo_url` card image from `home/metadata.yml` (computed as `og_image_url` in generate.py, falling back to the first hero photo with a build warning)
+- `_templates/_base.html` — shared layout; its og:image/twitter:image use the event's `photo_url` card image from `home/metadata.yml` (computed as `og_image_url` in generate.py, falling back to the first hero photo with a build warning); a talk page uses its YouTube thumbnail (`teasers/<Speaker>.png`) plus its own og_title/og_description. In CI `_build/og_images.py` then turns every page's picture into a <250 KB 1200 px JPEG at `/og/<hash>.jpg` and writes the full og/twitter tag set right after `<title>` (fallbacks: event picture, home picture; redirect stubs copy their target)
 
 ## Stats panel (sp-stats-inner)
 The "I need more stats" expandable section on the sponsorship page has two kinds of content:

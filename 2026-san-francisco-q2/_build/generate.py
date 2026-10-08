@@ -2106,11 +2106,19 @@ for _x in context['teaser_talks']:                          # the talk's YouTube
 # each talk page's social preview (og:image / twitter:image) is the talk's YouTube thumbnail (Marek 2026-10-08), the PNG
 # _build/render_teasers.py puts next to the teasers page; a page with no thumbnail keeps the event's picture
 import urllib.parse as _og_parse
+def _og_talk_title(t):                                      # "Speaker: Talk title | LLMday Austin"
+    _tt = str(t.get('title_display') or t.get('title') or '').strip()
+    if _tt.lower().startswith('keynote:'):
+        _tt = _tt[len('keynote:'):].strip()
+    return '%s: %s | %s %s' % (str(t.get('name') or '').strip(), _tt, context.get('brand_name', ''), context.get('city_name', ''))
+def _og_talk_desc(t):                                       # the abstract's first ~200 characters, cut at a word
+    _a = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', str(t.get('abstract') or ''))).strip()
+    return _a if len(_a) <= 200 else _a[:200].rsplit(' ', 1)[0].rstrip(',;:.-') + '...'
 _th_by_talk = {_x['_id']: _x['thumb'] for _x in context['teaser_talks']}
 for talk in _talk_pages:
     _ctx = context
     if id(talk) in _th_by_talk:
-        _ctx = dict(context, og_image_url='https://%s/%s/teasers/%s' % (context['brand_domain'], _os.path.basename(_os.getcwd()),
+        _ctx = dict(context, og_type='article', og_title=_og_talk_title(talk), og_description=_og_talk_desc(talk), og_image_url='https://%s/%s/teasers/%s' % (context['brand_domain'], _os.path.basename(_os.getcwd()),
                                                                         _og_parse.quote(_th_by_talk[id(talk)])))
     with open(BASE_FOLDER + "/" + talk.get("short_url").replace(".html","")  + ".html", "w", encoding="utf-8") as f:
         f.write(env.get_template("talk.html").render(talk=talk, **_ctx))
