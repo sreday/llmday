@@ -227,10 +227,10 @@
             {% set _k = t.file|replace('.png', '') %}{{ tz.sweeps|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
             <div class="tz-conf">{{ tz.conf }}</div>
-            <div class="tz-ball"><div class="tz-ball-in">
+            {% if tz.show %}<div class="tz-ball"><div class="tz-ball-in">
               {% if tz.free %}<div class="tz-ball-line" data-fit="49" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="49" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
               {% else %}<div class="tz-ball-line" data-fit="41" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-line" data-fit="48" data-min="16" style="color:var(--accent);letter-spacing:.04em;margin-top:10px">{{ tz.code }}</div>{% endif %}
-            </div></div>
+            </div></div>{% endif %}
             <div class="tz-mid">
               <div class="tz-top">
                 <div class="tz-col">
@@ -281,10 +281,10 @@
             {% if c.photo %}<div class="sp-photo" style="background-image:url('{{ c.photo }}'){% if c.bright is defined %};filter:brightness({{ c.bright }}){% endif %}"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
             <div class="tz-conf">{{ tz.conf }}</div>
-            <div class="tz-ball"><div class="tz-ball-in">
+            {% if tz.show %}<div class="tz-ball"><div class="tz-ball-in">
               {% if tz.free %}<div class="tz-ball-line" data-fit="49" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="49" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
               {% else %}<div class="tz-ball-line" data-fit="41" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-line" data-fit="48" data-min="16" style="color:var(--accent);letter-spacing:.04em;margin-top:10px">{{ tz.code }}</div>{% endif %}
-            </div></div>
+            </div></div>{% endif %}
             <div class="sp-word">{{ c.role|upper }}</div>
             <div class="sp-ring"><div class="sp-disc"><img src="{{ c.logo }}" alt="{{ c.name }}"></div></div>
             <div class="tz-ticket"><div class="tz-ticket-in">
