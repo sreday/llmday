@@ -57,6 +57,11 @@ jobs:
       - name: Render teaser PNGs
         run: python _build/render_teasers.py --prune   # headless Chrome (preinstalled on the runner); never fails the build
 
+      # every page's link preview: a <250 KB 1200 px JPEG per picture (static/og/<hash>.jpg), full og/twitter tag set,
+      # fallback to the event/home picture, redirect stubs take their target's preview; never fails the build
+      - name: Link preview pictures and tags
+        run: python _build/og_images.py --prune
+
       # Pages use the .webp siblings optimize_images.py wrote, asset URLs get ?v=<content hash>
       # (a changed file always gets a new URL; HTML itself is never cached long), images lazy-load
       - name: WebP, versioned asset URLs, lazy images
