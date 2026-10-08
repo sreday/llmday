@@ -1931,14 +1931,19 @@ context['tz'] = {
 }
 # YouTube thumbnails (Marek 2026-10-07): the second tab of /<event>/teasers/, one 1280x720 image per talk (rendered to
 # PNG named after the speaker by _build/render_teasers.py, YouTube's size, under its 2 MB limit), after Marek's four samples: the brand name
-# split around the headshot (SRE | DAY in Monoton, the SREday hero font; LLM | DAY, PLAT FORM | DAY in heavy brand
-# colour), PEC: its logo left, the headshot right. 'words' = left / right lettering (<br> breaks a line), 'font' its CSS.
+# split around the headshot (SRE | DAY, LLM | DAY, PLAT FORM | DAY), PEC: its logo left, the headshot right.
+# The fallback for an unknown brand types its name ('words', 'font'); the four brands never do.
 _TH_BRANDS = {
-    'sreday': {'layout': 'split', 'bg': 'linear-gradient(125deg, #7a2e3c 0%, #4f3168 48%, #2e3c80 100%)',
-               'words': ['SRE', 'DAY'], 'font': "400 172px 'Monoton', sans-serif", 'color': '#fff'},
-    'llmday': {'layout': 'split', 'bg': '#141414', 'words': ['LLM', 'DAY'], 'font': "900 176px 'Montserrat', sans-serif", 'color': '#26986A'},
-    'platformday': {'layout': 'split', 'bg': '#0e0e0e', 'words': ['PLAT<br>FORM', 'DAY'], 'font': "900 132px 'Montserrat', sans-serif",
-                    'color': '#E2971D'},
+    # every brand name is the real logo cut into pieces (Marek 2026-10-07: "the whole charm of them is that they use trimmed
+    # logos, rather than reinterpreted fonts"): transparent, trimmed PNGs next to each logo in home/assets/images, cut from
+    # sreday_square.png, llmday_sticker_new.png and platformday_sticker.png. imgs = [left, right] as [src, width px]; the
+    # widths keep the logo's own proportions; img_top shifts the pair (their centre sits at img_top + 360).
+    'sreday': {'layout': 'split', 'bg': 'linear-gradient(125deg, #7a2e3c 0%, #4f3168 48%, #2e3c80 100%)', 'img_top': 20,
+               'imgs': [['../../assets/images/sreday_sre.png', 295], ['../../assets/images/sreday_day.png', 318]]},
+    'llmday': {'layout': 'split', 'bg': '#141414', 'img_top': 22,
+               'imgs': [['../../assets/images/llmday_llm.png', 300], ['../../assets/images/llmday_day.png', 300]]},
+    'platformday': {'layout': 'split', 'bg': '#0e0e0e', 'img_top': 35,
+                    'imgs': [['../../assets/images/platformday_platform.png', 318], ['../../assets/images/platformday_day.png', 318]]},
     'pec': {'layout': 'logo', 'bg': 'linear-gradient(125deg, #3d1c4f 0%, #2a2466 45%, #1a2a8c 100%)', 'logo': '../../assets/images/logo-token.png'},
 }
 _TH_BRANDS['prompt engineering conference'] = _TH_BRANDS['pec']
@@ -1963,6 +1968,12 @@ for _t in talks_raw:                                         # spreadsheet order
         'photo': ('../' + _t['photo_url']) if str(_t.get('photo_url') or '').startswith('../') else (_t.get('photo_url') or ''),
         'track': str(_t.get('track') or '').strip(), 'day': str(_t.get('day') or '').strip(), 'kind': 'keynote' if _t in keynotes else _t.get('kind', 'talk'),
         'search': ' '.join([_name, _org, _title]).lower(),
+        # sorting keys (Marek 2026-10-07): the first speaker's first / last name, and the website's order = the schedule
+        # (day, start time, track as the site orders them)
+        'first': (re.split(r'\s*(?:&|,|\band\b)\s*', _name)[0].split() or [''])[0].lower(),
+        'last': (re.split(r'\s*(?:&|,|\band\b)\s*', _name)[0].split() or [''])[-1].lower(),
+        '_web': (str(_t.get('day') or '1'), str(_t.get('start_time') or '~'),
+                 tracks_ordered.index(_t.get('track')) if _t.get('track') in tracks_ordered else -1),
         'file': '%s-%s-%s.png' % (_tz_slug(_name), _tz_slug(context.get('brand_name', '')), _tz_slug(_ob_slug)),   # speaker first
     })
     _tz_seen = [x['file'] for x in context['teaser_talks'][:-1]]
@@ -1972,6 +1983,8 @@ for _t in talks_raw:                                         # spreadsheet order
         while '%s-%d.png' % (_base, _n) in _tz_seen:
             _n += 1
         context['teaser_talks'][-1]['file'] = '%s-%d.png' % (_base, _n)
+for _i, _x in enumerate(sorted(context['teaser_talks'], key=lambda x: x['_web'])):
+    _x['web'] = _i                                            # position on the website (schedule order)
 _th_seen = set()
 for _x in context['teaser_talks']:                          # the talk's YouTube thumbnail, next to its teaser PNG: named just
     _base = re.sub(r'[\\/:*?"<>|]+', '', _x['name']).strip() or _x['file'][:-4]   # after the speaker (Marek 2026-10-07)
