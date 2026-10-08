@@ -1951,8 +1951,77 @@ _TH_BRANDS = {
 _TH_BRANDS['prompt engineering conference'] = _TH_BRANDS['pec']
 context['th'] = _TH_BRANDS.get(_tz_key) or {'layout': 'split', 'bg': '#111', 'words': [str(context.get('brand_name', '')), ''],
                                             'font': "900 120px 'Montserrat', sans-serif", 'color': str(context.get('brand_color') or '#fff')}
+# Sponsor cards (Marek 2026-10-07): the third tab of /<event>/teasers/ (#sponsors), 1200x1200 cards exported as 1500x1500
+# PNGs by _build/render_teasers.py, like the talk teasers. Same frame as a talk teaser (brand logo, event line, code ball,
+# date/venue ticket, sweeps); in the middle a big HOST / SPONSOR / PARTNER in the brand colour and the logo, untouched,
+# maxed out in a white circle. On top the host (the sponsor whose name is in the venue name, or `host: true` on its
+# sponsors entry in metadata.yml): one card per venue photo (venue-1..3), never the ING Cedar placeholders new events ship
+# with. Then one card per sponsor, then per partner - sponsor or partner exactly as the home carousels split them
+# (../partners.yaml: non_sponsor_orgs, community_partners, sister_conferences_job_boards, minor_companies = partner;
+# hidden_duplicates get no card; Reliaburger is not listed there, so it is a sponsor, as on the carousel).
+_SP_PLACEHOLDER_MD5 = {'f9506377aab307012c4c3be41b572b1c', '4bd670b2998b63c3865770dfa8e948cd', 'ddb05183a86250b940d6e9b285fd4859'}  # ING Cedar
+try:
+    with open('../partners.yaml', encoding='utf-8') as _f:
+        _pcfg = yaml.load(_f, Loader=yaml.FullLoader) or {}
+    _sp_partner_logos = {str(l).lower() for _k in ('non_sponsor_orgs', 'community_partners', 'sister_conferences_job_boards', 'minor_companies')
+                         for l in (_pcfg.get(_k) or [])}
+    _sp_hidden_logos = {str(l).lower() for l in (_pcfg.get('hidden_duplicates') or [])}
+except OSError:                                               # no partners.yaml: the sponsorship page's exclusion list
+    _sp_partner_logos, _sp_hidden_logos = {l.lower() for l in _sp_exclude_logos}, set()
+_sp_venue_words = ' %s ' % re.sub(r'[^a-z0-9]+', ' ', ' '.join([str(context['hero_event'].get('venue_short', '')), str(context.get('location_string', ''))]).lower()).strip()
+_sp_venue_txt = _sp_venue_words.replace(' ', '')
+_sp_photos = []
+import hashlib as _hashlib
+for _n in (1, 2, 3):
+    try:
+        with open('assets/images/venue/venue-%d.jpg' % _n, 'rb') as _f:
+            if _hashlib.md5(_f.read()).hexdigest() not in _SP_PLACEHOLDER_MD5 or 'ingcedar' in _sp_venue_txt:
+                _sp_photos.append('../assets/images/venue/venue-%d.jpg' % _n)
+    except OSError:
+        pass
+context['sp_groups'] = {'Host': [], 'Sponsor': [], 'Partner': []}
+for _s in context.get('sponsors') or []:
+    _logo = str((_s or {}).get('logo') or '').strip()
+    if not _logo or _logo.lower() in _sp_hidden_logos:
+        continue
+    _stem = re.sub(r'\.[a-z0-9]+$', '', _logo.lower())
+    _words = ' %s ' % re.sub(r'[^a-z0-9]+', ' ', _stem).strip()          # whole words only: "ing" is not in "Building"
+    _nm = str(_s.get('name') or '').strip() or _normalize_company_name(re.sub(r'[-_]+', ' ', _stem).title())
+    _safe = re.sub(r'[\\/:*?"<>|]+', '', _nm)
+    if _s.get('host') or (_words.strip() and _words in _sp_venue_words and _logo.lower() not in _sp_partner_logos):
+        for _i, _ph in enumerate(_sp_photos or ['']):
+            context['sp_groups']['Host'].append({'name': _nm, 'role': 'Host', 'logo': '../sponsors/' + _logo, 'photo': _ph,
+                                                 'file': '%s - Host%s.png' % (_safe, (' %d' % (_i + 1)) if len(_sp_photos) > 1 else '')})
+    else:
+        _role = 'Partner' if _logo.lower() in _sp_partner_logos else 'Sponsor'
+        context['sp_groups'][_role].append({'name': _nm, 'role': _role, 'logo': '../sponsors/' + _logo, 'photo': '',
+                                            'file': '%s - %s.png' % (_safe, _role)})
+context['sp_cards'] = context['sp_groups']['Host'] + context['sp_groups']['Sponsor'] + context['sp_groups']['Partner']
+# the logos in sponsors/ sit in padded squares; the cards use copies trimmed to the logo itself (only empty or white margin
+# cut, nothing else touched) so the circle can max the logo out by its real shape. No Pillow: the padded files are used.
+_sp_trimmed = {}
+try:
+    from PIL import Image as _Image, ImageChops as _Chops
+    _os.makedirs(BASE_FOLDER + '/teasers/sp-logos', exist_ok=True)
+    for _c in context['sp_cards']:
+        _src = _c['logo'][3:]                                     # '../sponsors/x.png' as seen from teasers/ -> 'sponsors/x.png'
+        if _src not in _sp_trimmed:
+            _im = _Image.open('../' + _src)
+            _im = _im.convert('RGBA') if (_im.mode in ('RGBA', 'LA', 'P') and 'transparency' in _im.info) or _im.mode in ('RGBA', 'LA') else _im.convert('RGB')
+            if _im.mode == 'RGBA' and _im.getchannel('A').getextrema()[0] < 250:
+                _bb = _im.getchannel('A').point(lambda v: 255 if v > 8 else 0).getbbox()
+            else:                                                 # no transparency: trim the white margin
+                _bb = _Chops.difference(_im.convert('RGB'), _Image.new('RGB', _im.size, (255, 255, 255))).convert('L').point(lambda v: 255 if v > 12 else 0).getbbox()
+            _name = re.sub(r'\.[a-z0-9]+$', '', _os.path.basename(_src)) + '.png'
+            (_im.crop(_bb) if _bb else _im).save(BASE_FOLDER + '/teasers/sp-logos/' + _name)
+            _sp_trimmed[_src] = 'sp-logos/' + _name
+        _c['logo'] = _sp_trimmed[_src]
+except Exception as _e:                                           # noqa: BLE001 - a broken logo must not break the build
+    print('WARN sponsor cards: logos not trimmed (%s: %s)' % (type(_e).__name__, _e))
+# the big word's colour: the brand colour where it reads on the dark card, else the scheme accent
+context['sp_word'] = {'platformday': '#E2971D', 'llmday': '#3db07f'}.get(_tz_key) or _tz_k['accent']
 context['teaser_talks'] = []
-_tz_shown = {id(_x) for _x in keynotes + talks}              # confirmed sessions (each repo sorts its rows into these)
+_tz_shown ={id(_x) for _x in keynotes + talks}              # confirmed sessions (each repo sorts its rows into these)
 for _t in talks_raw:                                         # spreadsheet order
     if id(_t) not in _tz_shown or _t.get('merged_into'):
         continue
