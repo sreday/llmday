@@ -65,7 +65,10 @@
     body.th-mode .tz-frame, body.th-mode a.tz-dl:not(.th-dl) { display: none; }
     body.th-mode .th-frame { display: block; }
     body.th-mode a.th-dl { display: flex; }
-    body.th-mode .tz-grid { grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); }
+    /* thumbnails: 4 in a row (Marek 2026-10-07), 2 on narrower screens, 1 on phones */
+    body.th-mode .tz-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    @media (max-width: 1000px) { body.th-mode .tz-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 575.98px) { body.th-mode .tz-grid { grid-template-columns: 1fr; } }
     .th-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.14); background: #000; }
     .th-frame .th-card { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
     /* the speaker's name on each thumbnail preview (Marek 2026-10-07): a compact white chip left of the download button, page
@@ -74,6 +77,9 @@
       padding: 5px 11px; border-radius: 999px; background: rgba(255,255,255,.92); color: #333; font: 600 .78rem/1.2 'Roboto', sans-serif;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: 0 4px 14px rgba(0,0,0,.35); z-index: 2; pointer-events: none; }
     body.th-mode .th-name { display: block; }
+    body.th-mode a.th-dl { right: 8px; bottom: 8px; width: 32px; height: 32px; }
+    body.th-mode a.th-dl svg { width: 18px; height: 18px; }
+    body.th-mode .th-name { right: 46px; bottom: 12px; max-width: calc(100% - 62px); padding: 4px 9px; font-size: .72rem; }
 
     /* ── the YouTube thumbnail, 1280 x 720 ───────────────────────────────── */
     .th-card { width: 1280px; height: 720px; position: relative; overflow: hidden; }
