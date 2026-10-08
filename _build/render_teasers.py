@@ -10,6 +10,12 @@ attributes, next to index.html. The cards therefore need no browser-side renderi
 card has a stable URL: /<event>/teasers/<brand>-<event>-<speaker>.png.
 Never fails the build: problems are printed as WARN and the page keeps working without its PNGs.
 
+YouTube thumbnails (2026-10-07): the same page also holds one 1280x720 thumbnail per talk (.th-card, second tab).
+They are rendered the same way (#thumbs-<start>-<count>, device scale 1) into "<speaker>.png" (Marek 2026-10-07),
+kept under YouTube's 2 MB limit. Each kind has its own cache keys: a card's key ignores the other kind's markup.
+The thumbnails never expire (Marek 2026-10-07): past events get theirs rendered too (their pages no longer hold
+teaser cards); the teaser cards are still rendered for upcoming events only.
+
 Content-addressed cache (2026-09-30): each card's PNG is kept in .cache/teasers/<key>.png, where the key
 hashes this script, Chrome's major version, the card's own HTML, the rest of the page (head, styles, badge
 inputs, scripts; everything outside the card list) and the bytes of every local file either refers to.
@@ -35,6 +41,15 @@ except ImportError:  # pragma: no cover
 CARD = 1200          # the card's CSS size
 SCALE = 1.25         # 1200 * 1.25 = 1500 px output
 CHUNK = 8            # cards per screenshot (8 * 1500 = 12000 px tall, under Chrome's surface limit)
+YT_MAX = 2 * 1024 * 1024   # YouTube's thumbnail size limit
+# the two picture kinds on a teaser page: the card markup, its CSS size, device scale, sheet hash, the other kind's
+# markup (between these comment markers) that its cache key leaves out, and the output format
+KINDS = [
+    {"name": "teaser", "card_re": r'class="tz-card" id="tz-card-\d+" data-file="([^"]+)"', "w": CARD, "h": CARD, "scale": SCALE,
+     "hash": "sheet", "strip": r"<!--th-->.*?<!--/th-->", "ext": ".png"},
+    {"name": "youtube", "card_re": r'class="th-card[^"]*" id="th-card-\d+" data-file="([^"]+)"', "w": 1280, "h": 720, "scale": 1,
+     "hash": "thumbs", "strip": r"<!--tz-->.*?<!--/tz-->", "ext": ".png", "max": YT_MAX},
+]
 BUDGET_MS = 12000    # virtual time for fonts + images to settle before the screenshot
 
 CACHE_DIR = os.path.join(os.environ.get("SITE_CACHE_DIR", ".cache"), "teasers")
@@ -73,9 +88,9 @@ def event_is_upcoming(event_dir):
         return True
 
 
-def card_files(index_html):
+def card_files(index_html, kind=KINDS[0]):
     with open(index_html, encoding="utf-8") as f:
-        return re.findall(r'class="tz-card" id="tz-card-\d+" data-file="([^"]+)"', f.read())
+        return re.findall(kind["card_re"], f.read())
 
 
 def page_parts(index_html):
@@ -89,7 +104,7 @@ def page_parts(index_html):
     end = html.find("<script", starts[-1])
     end = len(html) if end < 0 else end
     bounds = starts + [end]
-    cards = [re.sub(r' id="tz-card-\d+"', "", html[bounds[i]:bounds[i + 1]]) for i in range(len(starts))]
+    cards = [re.sub(r' id="t[zh]-card-\d+"', "", html[bounds[i]:bounds[i + 1]]) for i in range(len(starts))]
     return html[:starts[0]] + html[end:], cards
 
 
@@ -110,12 +125,13 @@ def refs_digest(text, base_dir, h, outputs=()):
             h.update(b"missing")
 
 
-def card_keys(index_html, chrome_version):
+def card_keys(index_html, chrome_version, kind=KINDS[0]):
     context, cards = page_parts(index_html)
-    outputs = set(card_files(index_html))
+    cards = [re.sub(kind["strip"], "", c, flags=re.S) for c in cards]   # the other kind's markup does not change this picture
+    outputs = set(card_files(index_html, KINDS[0])) | set(card_files(index_html, KINDS[1]))
     base_dir = os.path.dirname(index_html)
     ctx = hashlib.sha256()
-    ctx.update(("%s|%s|%d|%s|%d|" % (SCRIPT_HASH, chrome_version, CARD, SCALE, BUDGET_MS)).encode())
+    ctx.update(("%s|%s|%s|%dx%d|%s|%d|" % (SCRIPT_HASH, chrome_version, kind["name"], kind["w"], kind["h"], kind["scale"], BUDGET_MS)).encode())
     ctx.update(context.encode())
     refs_digest(context, base_dir, ctx, outputs)
     keys = []
@@ -165,10 +181,16 @@ def runs_of(indices):
     return runs
 
 
-def shoot(chrome, url, height, out_png):
+def save_tile(tile, out, kind):
+    tile.save(out, "PNG", optimize=True)
+    if kind.get("max") and os.path.getsize(out) > kind["max"]:   # YouTube's 2 MB: fall back to a 256-colour PNG
+        tile.quantize(256, dither=Image.FLOYDSTEINBERG).save(out, "PNG", optimize=True)
+
+
+def shoot(chrome, url, height, out_png, width=CARD, scale=SCALE):
     cmd = [chrome, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--no-sandbox", "--disable-dev-shm-usage",
-           "--allow-file-access-from-files", "--force-device-scale-factor=%s" % SCALE,
-           "--window-size=%d,%d" % (CARD, height), "--virtual-time-budget=%d" % BUDGET_MS,
+           "--allow-file-access-from-files", "--force-device-scale-factor=%s" % scale,
+           "--window-size=%d,%d" % (width, height), "--virtual-time-budget=%d" % BUDGET_MS,
            "--screenshot=%s" % out_png, url]
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
@@ -194,15 +216,12 @@ def main():
     # every few days, while a new major version is what could change how a card renders.
     m = re.search(r"(\d+)\.", r.stdout or r.stderr or "")
     chrome_version = "Chrome %s" % (m.group(1) if m else "unknown")
-    side = int(round(CARD * SCALE))
     for page in pages:
         event_dir = os.path.dirname(os.path.dirname(page))
         event = os.path.basename(event_dir)
-        if not render_all and not event_is_upcoming(event_dir):
-            continue
+        upcoming = render_all or event_is_upcoming(event_dir)
         events += 1
-        files = card_files(page)
-        if not files:
+        if not card_files(page) and not card_files(page, KINDS[1]):
             print("render_teasers %s: no cards" % event)
             continue
         out_dir = os.path.dirname(page)
@@ -212,48 +231,53 @@ def main():
         # this render copy of it points its photos at the originals (and the cache key hashes those bytes).
         page = hd_page(page)
         url = "file:///" + os.path.abspath(page).replace("\\", "/")
-        keys = card_keys(page, chrome_version)
-        if len(keys) != len(files):  # page layout not understood: render everything, cache nothing
-            print("WARN render_teasers %s: %d cards but %d slots, not caching" % (event, len(files), len(keys)))
-            keys = [None] * len(files)
-        done, reused, missing = 0, 0, []
-        for i, (name, key) in enumerate(zip(files, keys)):
-            cached_png = key and os.path.join(CACHE_DIR, key + ".png")
-            if key:
-                used.add(key + ".png")
-            if cached_png and os.path.exists(cached_png):
-                shutil.copyfile(cached_png, os.path.join(out_dir, name))
-                os.utime(cached_png)  # last used now: --prune keeps it
-                reused += 1
-                done += 1
-            else:
-                missing.append(i)
-        with tempfile.TemporaryDirectory() as tmp:
-            for run in runs_of(missing):
-                start = run[0]
-                shot = os.path.join(tmp, "sheet-%d.png" % start)
-                ok, err = shoot(chrome, "%s#sheet-%d-%d" % (url, start, len(run)), CARD * len(run), shot)
-                if not ok:
-                    print("WARN render_teasers %s: screenshot failed for cards %d-%d %s" % (event, start, run[-1], err))
-                    continue
-                img = Image.open(shot)
-                if img.width < side or img.height < side * len(run):
-                    print("WARN render_teasers %s: screenshot %dx%d smaller than expected %dx%d" % (event, img.width, img.height, side, side * len(run)))
-                for j, i in enumerate(run):
-                    out = os.path.join(out_dir, files[i])
-                    tile = img.crop((0, j * side, side, (j + 1) * side)).convert("RGB")
-                    tile.save(out, "PNG", optimize=True)
+        for kind in (KINDS if upcoming else KINDS[1:]):   # a past event: its YouTube thumbnails only
+            files = card_files(page, kind)
+            if not files:
+                continue
+            kw, kh = int(round(kind["w"] * kind["scale"])), int(round(kind["h"] * kind["scale"]))
+            keys = card_keys(page, chrome_version, kind)
+            if len(keys) != len(files):  # page layout not understood: render everything, cache nothing
+                print("WARN render_teasers %s: %d %s pictures but %d slots, not caching" % (event, len(files), kind["name"], len(keys)))
+                keys = [None] * len(files)
+            done, reused, missing = 0, 0, []
+            for i, (name, key) in enumerate(zip(files, keys)):
+                cached = key and os.path.join(CACHE_DIR, key + kind["ext"])
+                if key:
+                    used.add(key + kind["ext"])
+                if cached and os.path.exists(cached):
+                    shutil.copyfile(cached, os.path.join(out_dir, name))
+                    os.utime(cached)  # last used now: --prune keeps it
+                    reused += 1
                     done += 1
-                    if keys[i]:
-                        os.makedirs(CACHE_DIR, exist_ok=True)
-                        shutil.copyfile(out, os.path.join(CACHE_DIR, keys[i] + ".png"))
+                else:
+                    missing.append(i)
+            with tempfile.TemporaryDirectory() as tmp:
+                for run in runs_of(missing):
+                    start = run[0]
+                    shot = os.path.join(tmp, "sheet-%d.png" % start)
+                    ok, err = shoot(chrome, "%s#%s-%d-%d" % (url, kind["hash"], start, len(run)), kind["h"] * len(run), shot,
+                                    width=kind["w"], scale=kind["scale"])
+                    if not ok:
+                        print("WARN render_teasers %s: %s screenshot failed for %d-%d %s" % (event, kind["name"], start, run[-1], err))
+                        continue
+                    img = Image.open(shot)
+                    if img.width < kw or img.height < kh * len(run):
+                        print("WARN render_teasers %s: screenshot %dx%d smaller than expected %dx%d" % (event, img.width, img.height, kw, kh * len(run)))
+                    for j, i in enumerate(run):
+                        out = os.path.join(out_dir, files[i])
+                        save_tile(img.crop((0, j * kh, kw, (j + 1) * kh)).convert("RGB"), out, kind)
+                        done += 1
+                        if keys[i]:
+                            os.makedirs(CACHE_DIR, exist_ok=True)
+                            shutil.copyfile(out, os.path.join(CACHE_DIR, keys[i] + kind["ext"]))
+            rendered_total += done - reused
+            reused_total += reused
+            total += done
+            print("render_teasers %s: %d/%d %s pictures (%d reused, %d rendered)" % (event, done, len(files), kind["name"], reused, done - reused))
         if os.path.basename(page) == HD_NAME:
             os.remove(page)
-        rendered_total += done - reused
-        reused_total += reused
-        total += done
-        print("render_teasers %s: %d/%d cards -> PNG (%d reused, %d rendered)" % (event, done, len(files), reused, done - reused))
-    print("render_teasers: %d PNGs in %d upcoming event(s), %d teaser page(s) found; %d reused from cache, %d rendered"
+    print("render_teasers: %d pictures in %d event(s), %d teaser page(s) found; %d reused from cache, %d rendered"
           % (total, events, len(pages), reused_total, rendered_total))
     if "--prune" in sys.argv and os.path.isdir(CACHE_DIR):
         # Drop entries unused for PRUNE_DAYS, not merely unused by this run: while GitHub rolls out a new
