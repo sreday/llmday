@@ -1700,6 +1700,15 @@ def _ch_place_full(city, address):
     return ', '.join([_p for _p in (city, country) if _p])
 
 
+def _ch_venue_sans_city(venue, city):
+    """the cards' venue name without a trailing city: the line under it already says "Montevideo, Uruguay", so
+    "World Trade Center Montevideo" shows as "World Trade Center" (Marek 2026-10-08)"""
+    venue, city = str(venue or '').strip(), str(city or '').strip()
+    if city and venue.lower().endswith(' ' + city.lower()):
+        return venue[:-len(city)].rstrip(' ,-')
+    return venue
+
+
 def _ch_card_facts():
     _d = None
     try:
@@ -1716,7 +1725,7 @@ def _ch_card_facts():
         'day': str(_d.day) if _d else '', 'month': _d.strftime('%B') if _d else '', 'weekday': _d.strftime('%A') if _d else '',
         # card + texts name the venue the same way: "<Company> HQ" for a host's office, otherwise the venue's own name
         # (metadata communityhero_venue overrides)
-        'venue_short': _ch_venue or _ch['city'],
+        'venue_short': _ch_venue_sans_city(_ch_venue, _ch['city']) or _ch['city'],
         'venue_name': _ch_venue or _ch['venue_name'],
         # "City, Country" under the venue name (_ch_country), not the street
         'venue_line': _ch_place(_ch['city'], _ch.get('venue_address')),
@@ -2052,8 +2061,6 @@ try:
         _c['logo'] = _sp_trimmed[_src]
 except Exception as _e:                                           # noqa: BLE001 - a broken logo must not break the build
     print('WARN sponsor cards: logos not trimmed (%s: %s)' % (type(_e).__name__, _e))
-# the big word's colour: the scheme's bright accent, readable on the photo and the dark card (Marek 2026-10-07: "brighter")
-context['sp_word'] = _tz_k['accent']
 context['teaser_talks'] = []
 _tz_shown ={id(_x) for _x in keynotes + talks}              # confirmed sessions (each repo sorts its rows into these)
 for _t in talks_raw:                                         # spreadsheet order
