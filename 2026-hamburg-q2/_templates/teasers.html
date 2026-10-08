@@ -315,37 +315,49 @@
         while (s > min && el.scrollWidth > el.clientWidth + 1) { s -= 1; el.style.fontSize = s + 'px'; }
       }
       // the title: bigger text over more lines (Marek 2026-10-04) - the largest size, 64 px down to 28, at which it fills
-      // its space: at most 5 lines, no taller than the photo row (390 px; the conference name sits under the logo), so nothing below
-      // moves), no word wider than the column. A line holding a single word costs 3 px (size comes first). Both layouts are tried - with the
-      // phrase break (if any) and without; ties: fewer lines, then the phrase break. text-wrap: balance does the rest.
+      // its box: no taller than the photo row less 18 px (372 px, so a full box keeps clear of the conference name above and
+      // nothing below moves), no word wider than the column. No line cap (Marek 2026-10-07: 5 lines squeezed 130-character
+      // titles to 32 px in a half-empty box; the box height alone now stops it, ~7 lines). A line holding one chunk narrower than half
+      // the column costs 5 px, a last line holding a single such word 8 px (size comes first: "Orchestration" filling its own
+      // line is fine, "Inside" or "Trust" alone is not). Layouts tried: with the phrase break (if any) and without,
+      // each also with its last two words tied (no stranded last word); long hyphenated words (Screenshot-First) may also split at
+      // the hyphen, -8 px, used only when keeping them whole would cost more. Ties: the bigger size, then fewer lines, then the
+      // first layout. text-wrap: balance does the rest.
       function fitTitle(el) {
-        var maxS = 64, minS = 28, maxH = 390;
-        var withBr = el.innerHTML, variants = withBr.indexOf('class="sep"') >= 0 ? [withBr, withBr.replace(/<br class="sep">/, ' ')] : [withBr];
-        // one more layout per variant: long hyphenated words (Screenshot-First) may split at the hyphen, -3 px, used only when
-        // keeping them whole would cost more (a stranded word, a smaller size)
-        variants = variants.concat(variants.filter(function (h) { return h.indexOf('class="nw"') >= 0; })
-          .map(function (h) { return h.replace(/<span class="nw">([^<]*)<\/span>/g, '$1'); }));
-        var splitFrom = variants.length - variants.filter(function (h) { return h.indexOf('class="nw"') < 0 && withBr.indexOf('class="nw"') >= 0; }).length;
+        var maxS = 64, minS = 28, maxH = 372;
+        var withBr = el.innerHTML, variants = [{ h: withBr, split: 0 }];
+        if (withBr.indexOf('class="sep"') >= 0) variants.push({ h: withBr.replace(/<br class="sep">/, ' '), split: 0 });
+        variants.forEach(function (v) {
+          if (v.h.indexOf('class="nw"') >= 0) variants.push({ h: v.h.replace(/<span class="nw">([^<]*)<\/span>/g, '$1'), split: 1 });
+        });
+        variants.slice().forEach(function (v) {   // the last two chunks as one: "Actually Trust" never leaves "Trust" alone
+          var t = v.h.replace(/<\/span> <span class="w">((?:(?!<span class="w">)[\s\S])*)$/, '\u00a0$1');
+          if (t !== v.h) variants.push({ h: t, split: v.split });
+        });
         function measure() {
-          var tops = {}, ws = el.querySelectorAll('.w');
-          [].forEach.call(ws, function (w) { tops[w.offsetTop] = (tops[w.offsetTop] || 0) + 1; });
-          var keys = Object.keys(tops), lone = 0;
-          keys.forEach(function (k) { if (tops[k] === 1) lone++; });
+          var tops = {}, words = {}, wide = {}, ws = el.querySelectorAll('.w'), half = el.clientWidth / 2;
+          [].forEach.call(ws, function (w) {
+            tops[w.offsetTop] = (tops[w.offsetTop] || 0) + 1;
+            words[w.offsetTop] = (words[w.offsetTop] || 0) + w.textContent.trim().split(/[\s\u00a0]+/).length;
+            wide[w.offsetTop] = w.offsetWidth >= half;
+          });
+          var keys = Object.keys(tops).map(Number).sort(function (a, b) { return a - b; }), last = keys[keys.length - 1], lone = 0, widow = 0;
+          keys.forEach(function (k) { if (tops[k] === 1 && !wide[k]) { if (k !== last) lone++; else if (words[k] === 1) widow = 1; } });
           var n = Math.round(el.offsetHeight / (parseFloat(el.style.fontSize) * 1.08));   // a split word spans two lines
-          return { n: n, lone: ws.length === 1 ? 0 : lone };
+          return { n: n, lone: ws.length === 1 ? 0 : lone, widow: ws.length === 1 ? 0 : widow };
         }
         var best = null;
-        variants.forEach(function (h, vi) {
-          el.innerHTML = h;
+        variants.forEach(function (v, vi) {
+          el.innerHTML = v.h;
           for (var s = maxS; s >= minS; s--) {
             el.style.fontSize = s + 'px';
             if (el.offsetHeight > maxH || el.scrollWidth > el.clientWidth) continue;
-            var m = measure(); if (m.n > 5) continue;
-            var c = { h: h, s: s, n: m.n, vi: vi, score: s - 3 * m.lone - (vi >= splitFrom ? 3 : 0) };
-            if (!best || c.score > best.score || (c.score === best.score && (c.n < best.n || (c.n === best.n && c.vi < best.vi)))) best = c;
+            var m = measure();
+            var c = { h: v.h, s: s, n: m.n, vi: vi, score: s - 5 * m.lone - 8 * m.widow - 8 * v.split };
+            if (!best || c.score > best.score || (c.score === best.score && (c.s > best.s || (c.s === best.s && (c.n < best.n || (c.n === best.n && c.vi < best.vi)))))) best = c;
           }
         });
-        if (!best) best = { h: variants[variants.length - 1], s: minS };
+        if (!best) best = { h: variants[variants.length - 1].h, s: minS };
         el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
       }
       function fitWord(el) {                    // thumbnail lettering: shrink until every line fits its 318 px box
