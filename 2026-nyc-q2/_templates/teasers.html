@@ -172,6 +172,12 @@
     .sp-sheet .sp-slot.tz-off, .sp-sheet a.tz-dl { display: none !important; }
     .sp-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
     .sp-sheet .tz-frame .tz-card { transform: none !important; }
+    .sp-slot[hidden] { display: none; }
+    /* venue picture switcher on the host (Marek 2026-10-07): one host card, its venue photo 1 / 2 / 3 picked here */
+    .sp-venues { display: inline-flex; align-items: center; gap: 6px; margin-left: 14px; font: 600 .85rem 'Montserrat', sans-serif; color: #666; vertical-align: middle; }
+    .sp-venues button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #cfcfd6; background: #fff; color: #444; font: 700 .9rem 'Montserrat', sans-serif; cursor: pointer; }
+    .sp-venues button:first-of-type { margin-left: 4px; }
+    .sp-venues button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
@@ -262,9 +268,10 @@
     </div>
     <!--spsec-->{% if sp_cards and not teasers_expired %}<div class="tz-grid" id="sp-pool">
       {% for g in ['Host', 'Sponsor', 'Partner'] %}{% if sp_groups[g] %}
-      <h2 class="sp-head">{{ g if g == 'Host' or sp_groups[g]|length == 1 else g ~ 's' }}</h2>
+      <h2 class="sp-head">{{ g if g == 'Host' or sp_groups[g]|length == 1 else g ~ 's' }}{% if g == 'Host' and sp_groups[g]|length > 1 %}
+        <span class="sp-venues" role="group" aria-label="Venue picture">Venue picture{% for c in sp_groups[g] %}<button type="button" data-v="{{ loop.index }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ loop.index }}</button>{% endfor %}</span>{% endif %}</h2>
       {% for c in sp_groups[g] %}
-      <div class="sp-slot">
+      <div class="sp-slot"{% if g == 'Host' and sp_groups[g]|length > 1 %} data-host="{{ loop.index }}"{% endif %}>
         <div class="tz-frame">
           <div class="tz-card sp-card" id="sp-card-{{ g|lower }}-{{ loop.index }}" data-file="{{ c.file }}">
             {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
@@ -472,7 +479,7 @@
             groups.appendChild(head); groups.appendChild(grid);
           });
         }
-        var spN = document.querySelectorAll('.sp-slot').length;
+        var spN = [].filter.call(document.querySelectorAll('.sp-slot'), function (s) { return !s.hidden; }).length;
         document.getElementById('tz-count').textContent = tab === 'sp' ? spN + ' sponsor card' + (spN === 1 ? '' : 's')
           : shown + ' of ' + slots.length + (tab === 'th' ? ' thumbnails' : ' cards');
         document.getElementById('tz-none').hidden = shown > 0 || !slots.length;
@@ -535,6 +542,15 @@
         btn.disabled = true;
         links.forEach(function (a, i) { setTimeout(function () { a.click(); if (i === links.length - 1) btn.disabled = false; }, i * 400); });
       }
+      // the host's venue picture: only the chosen version of the host card shows (and downloads); the renderer's sheet mode
+      // returned above, so it still renders all three
+      function pickVenue(v) {
+        document.querySelectorAll('.sp-slot[data-host]').forEach(function (s) { s.hidden = s.dataset.host !== String(v); });
+        document.querySelectorAll('.sp-venues button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === String(v) ? 'true' : 'false'); });
+        requestAnimationFrame(scale);
+      }
+      document.querySelectorAll('.sp-venues button').forEach(function (b) { b.addEventListener('click', function () { pickVenue(b.dataset.v); }); });
+      if (document.querySelector('.sp-slot[data-host]')) pickVenue(1);
       var all = document.getElementById('tz-all');
       all.addEventListener('click', function () {   // in the order shown (website, names, tracks...)
         download([].slice.call(document.querySelectorAll(tab === 'sp' ? '#sp-pool .sp-slot' : '#tz-groups .tz-slot, #tz-pool .tz-slot')), all);
