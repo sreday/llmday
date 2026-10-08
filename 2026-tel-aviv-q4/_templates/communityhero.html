@@ -739,7 +739,10 @@ function drawCard() {
   var textMax = 1360 - 260 - (code ? codeW + 50 : 0);
   pinIcon(190, y + h / 2, 84, K.accent); ctx.textAlign = 'left';
   ctx.fillStyle = '#fff'; fitText(E.venue_short || E.city || '', textMax, 56, '800'); ctx.fillText(E.venue_short || E.city || '', 260, y + h / 2 - 26);
-  ctx.fillStyle = 'rgba(255,255,255,.7)'; fitText(E.venue_line || '', textMax, 36, '500'); ctx.fillText(E.venue_line || '', 260, y + h / 2 + 34);
+  ctx.fillStyle = 'rgba(255,255,255,.7)';
+  // the US / UK in full when the line fits at full size, else "San Francisco, US" (Marek 2026-10-07)
+  var vl = E.venue_line || ''; ctx.font = '500 36px Montserrat, Arial, sans-serif'; if (E.venue_line_full && ctx.measureText(E.venue_line_full).width <= textMax) vl = E.venue_line_full;
+  fitText(vl, textMax, 36, '500'); ctx.fillText(vl, 260, y + h / 2 + 34);
   if (code) {
     ctx.textAlign = 'right'; ctx.font = '900 60px Montserrat, Arial, sans-serif'; gradText(code, 1360, y + h / 2 - 22, 'right');
     ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '600 34px Montserrat, Arial, sans-serif'; ctx.fillText(hc[1], 1360, y + h / 2 + 36);

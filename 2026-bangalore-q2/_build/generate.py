@@ -1691,6 +1691,15 @@ def _ch_place(city, address):
     return ', '.join([_p for _p in (city, country) if _p])
 
 
+def _ch_place_full(city, address):
+    """"City, Country" with the US / UK always in full: the cards measure it and take it whenever it fits the line at full
+    size, else they fall back to _ch_place (Marek 2026-10-07: "if there's space, United States rather than US")"""
+    city = str(city or '').strip()
+    country = _ch_country(address, city)
+    country = {'US': 'United States', 'UK': 'United Kingdom'}.get(country, country)
+    return ', '.join([_p for _p in (city, country) if _p])
+
+
 def _ch_card_facts():
     _d = None
     try:
@@ -1711,6 +1720,7 @@ def _ch_card_facts():
         'venue_name': _ch_venue or _ch['venue_name'],
         # "City, Country" under the venue name (_ch_country), not the street
         'venue_line': _ch_place(_ch['city'], _ch.get('venue_address')),
+        'venue_line_full': _ch_place_full(_ch['city'], _ch.get('venue_address')),
         'promo_code': str(context.get('communityhero_code', 'HERO30') or ''),
         'promo_label': str(context.get('communityhero_code_label', '30% off') or ''),
         # inside 14 days of the event the card shows the bigger discount (the page decides, on the day the card is drawn)
@@ -1930,6 +1940,7 @@ context['tz'] = {
     'day': context['hero_event'].get('day', ''), 'mon': str(context['hero_event'].get('month', ''))[:3].upper(),
     'weekday': context['hero_event'].get('weekday', ''),
     'venue': context['hero_event'].get('venue_short', ''), 'place': context['hero_event'].get('venue_line', ''),
+    'place_full': context['hero_event'].get('venue_line_full', ''),
 }
 # YouTube thumbnails (Marek 2026-10-07): the second tab of /<event>/teasers/, one 1280x720 image per talk (rendered to
 # PNG named after the speaker by _build/render_teasers.py, YouTube's size, under its 2 MB limit), after Marek's four samples: the brand name
