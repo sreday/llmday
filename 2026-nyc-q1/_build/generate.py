@@ -2018,8 +2018,8 @@ try:
         _c['logo'] = _sp_trimmed[_src]
 except Exception as _e:                                           # noqa: BLE001 - a broken logo must not break the build
     print('WARN sponsor cards: logos not trimmed (%s: %s)' % (type(_e).__name__, _e))
-# the big word's colour: the brand colour where it reads on the dark card, else the scheme accent
-context['sp_word'] = {'platformday': '#E2971D', 'llmday': '#3db07f'}.get(_tz_key) or _tz_k['accent']
+# the big word's colour: the scheme's bright accent, readable on the photo and the dark card (Marek 2026-10-07: "brighter")
+context['sp_word'] = _tz_k['accent']
 context['teaser_talks'] = []
 _tz_shown ={id(_x) for _x in keynotes + talks}              # confirmed sessions (each repo sorts its rows into these)
 for _t in talks_raw:                                         # spreadsheet order

@@ -156,12 +156,11 @@
     .sp-slot { display: flex; flex-direction: column; position: relative; }
     .sp-head { grid-column: 1 / -1; font: 700 1.2rem 'Montserrat', sans-serif; margin: 14px 0 -8px; }
     .sp-sheet .sp-head { display: none !important; }
-    .sp-photo { left: 0; top: 0; width: 1200px; height: 1200px; background-size: cover; background-position: center; }
+    .sp-photo { left: 0; top: 0; width: 1200px; height: 1200px; background-size: cover; background-position: center; filter: brightness(.85); }   /* venue 15% darker (Marek 2026-10-07) */
     .sp-fv { left: 0; top: 0; width: 1200px; height: 1200px; background: radial-gradient(circle at 50% 50%, rgba(10,6,3,.2) 220px, rgba(10,6,3,.9) 820px),
       linear-gradient(180deg, rgba(10,6,3,.75) 0%, rgba(10,6,3,0) 30%, rgba(10,6,3,0) 62%, rgba(10,6,3,.88) 82%); }
-    .sp-bar { left: 72px; top: 356px; width: 96px; height: 8px; background: {{ tz.ramp }}; }
-    .sp-word { left: 72px; top: 384px; font-weight: 900; font-size: 100px; line-height: 1; letter-spacing: -.01em; color: {{ sp_word }}; white-space: nowrap;
-      text-shadow: 0 6px 30px rgba(0,0,0,.5); }
+    .sp-word { left: 72px; top: 420px; font-weight: 900; font-size: 100px; line-height: 1; letter-spacing: -.01em; color: {{ sp_word }}; white-space: nowrap;
+      text-shadow: 0 4px 24px rgba(0,0,0,.8), 0 0 3px rgba(0,0,0,.6); }
     .sp-ring { left: 626px; top: 356px; width: 520px; height: 520px; border-radius: 50%; padding: 7px; background: {{ tz.ramp45 }}; box-shadow: 0 0 80px {{ tz.scheme.glow }}66; }
     .sp-disc { width: 100%; height: 100%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
     .sp-disc img { display: block; height: auto; width: 60%; }   /* sized by the script: the logo maxed out, 6% of the circle kept clear */
@@ -276,7 +275,7 @@
               {% if tz.free %}<div class="tz-ball-line" data-fit="49" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="49" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
               {% else %}<div class="tz-ball-line" data-fit="41" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-line" data-fit="48" data-min="16" style="color:var(--accent);letter-spacing:.04em;margin-top:10px">{{ tz.code }}</div>{% endif %}
             </div></div>
-            <div class="sp-bar"></div><div class="sp-word">{{ c.role|upper }}</div>
+            <div class="sp-word">{{ c.role|upper }}</div>
             <div class="sp-ring"><div class="sp-disc"><img src="{{ c.logo }}" alt="{{ c.name }}"></div></div>
             <div class="tz-ticket"><div class="tz-ticket-in">
               <div class="tz-date"><div class="tz-day">{{ tz.day }}</div><div><div class="tz-mon">{{ tz.mon }}</div><div class="tz-wday">{{ tz.weekday }}</div></div></div>
