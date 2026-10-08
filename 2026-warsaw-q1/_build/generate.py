@@ -1779,9 +1779,11 @@ _TZ_SCHEMES = {   # the community hero colour schemes (communityhero.html SCHEME
 _TZ_SCHEMES['prompt engineering conference'] = _TZ_SCHEMES['pec']
 # the square logo per brand (home assets are copied to the site root; the page sits at /<event>/teasers/), blend = how it
 # is drawn ('screen' drops the black die-cut backing of a sticker), prefix = the discount code's
-_TZ_BRAND = {'sreday': ('../../assets/images/sreday_square.png', 'normal', 'SRE'),
-             'llmday': ('../../assets/images/llmday_sticker_new.png', 'screen', 'LLM'),
-             'platformday': ('../../assets/images/platformday_sticker.png', 'screen', 'PLAT'),
+# the brand logos Marek picked for the cards (2026-10-07, from Dropbox _misc: sreday_sticker.svg, LLMDAY LOGO.png,
+# PLATFORMday LOGO.png), trimmed web copies drawn exactly as they are - never blended or recoloured
+_TZ_BRAND = {'sreday': ('../../assets/images/sreday_logo.png', 'normal', 'SRE'),
+             'llmday': ('../../assets/images/llmday_logo.png', 'normal', 'LLM'),
+             'platformday': ('../../assets/images/platformday_logo.png', 'normal', 'PLAT'),
              'pec': ('../../assets/images/icons/android-chrome-512x512.png', 'normal', 'PEC')}
 _TZ_BRAND['prompt engineering conference'] = _TZ_BRAND['pec']
 _tz_key = str(context['hero_event'].get('brand') or '').lower()

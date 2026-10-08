@@ -105,8 +105,8 @@
       box-shadow: 0 0 50px {{ tz.scheme.glow }}66; }
     .tz-ball-in { width: 100%; height: 100%; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
       background: radial-gradient(circle at 50% 35%, #1c1a2c, #08080f 75%); }
-    .tz-ball-line { width: 168px; text-align: center; font-weight: 900; line-height: 1; white-space: nowrap; overflow: hidden; }
-    .tz-ball-sep { width: 130px; border-top: 4px dashed rgba(255,255,255,.28); margin: 16px 0; }
+    .tz-ball-line { width: 196px; text-align: center; font-weight: 900; line-height: 1; white-space: nowrap; overflow: hidden; }
+    /* no dashed line between the discount and the code (Marek 2026-10-07): the two lines grow into the space instead */
     .tz-mid { left: 72px; top: 312px; width: 1056px; height: 630px; display: flex; flex-direction: column; justify-content: center; }
     .tz-mid * { position: static; }
     .tz-top { display: flex; align-items: center; gap: 32px; }
@@ -192,8 +192,8 @@
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
             <div class="tz-conf">{{ tz.conf }}</div>
             <div class="tz-ball"><div class="tz-ball-in">
-              {% if tz.free %}<div class="tz-ball-line" data-fit="48" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="48" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
-              {% else %}<div class="tz-ball-line" data-fit="36" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-sep"></div><div class="tz-ball-line" data-fit="38" data-min="16" style="color:var(--accent);letter-spacing:.04em">{{ tz.code }}</div>{% endif %}
+              {% if tz.free %}<div class="tz-ball-line" data-fit="58" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="58" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
+              {% else %}<div class="tz-ball-line" data-fit="48" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-line" data-fit="56" data-min="16" style="color:var(--accent);letter-spacing:.04em;margin-top:10px">{{ tz.code }}</div>{% endif %}
             </div></div>
             <div class="tz-mid">
               <div class="tz-top">
