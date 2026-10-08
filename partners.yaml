@@ -24,6 +24,7 @@ non_sponsor_orgs:
   - uhub.png
   - packt.png           # publisher / media partner
   - in10t.png           # partner, not a paying sponsor (Marek 2026-10-03)
+  - ccub.png            # Cámara de Comercio (ccub.uy): partner, not a sponsor (Marek 2026-10-08)
 
 community_partners:
   - jug-amsterdam.png
