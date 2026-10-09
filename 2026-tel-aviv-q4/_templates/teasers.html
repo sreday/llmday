@@ -273,8 +273,8 @@
     .mx-swho .mx-org { font-weight: 400; color: var(--accent); }
     .mx-srow .mx-photo { width: 184px; height: 184px; object-fit: contain; flex: 0 0 auto; }
     .mx-stack.n2 .mx-photo { width: 250px; height: 250px; }
-    /* ── Generic covers (fifth tab, Marek 2026-10-08): only the event's logo big, a big location and a big date, no other
-       text - "halo" (a slime ring round the logo, no photos) and "triptych" (the three venue photos, only when the event has
+    /* ── Generic covers (fifth tab, Marek 2026-10-08): only the event's logo big, the city, the country under it and the date,
+       no other text, laid out the same on both (Marek 2026-10-09) - "halo" (a slime ring round the logo, no photos) and "triptych" (the three venue photos, only when the event has
        real ones), Marek's picks from Desktop "Generic covers v2". The logo is drawn exactly as it is: never trimmed,
        recoloured or given a glow. ── */
     #gn-pool { display: none; }
@@ -498,17 +498,20 @@
           <div class="tz-card gn-card" id="gn-card-{{ d }}" data-file="{{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-') }}-cover-{{ d }}.png">
           {% if d == 'halo' %}
             {{ tz.sweeps_halo|replace('tzg', 'tzg-gn-h-')|replace('tzf', 'tzf-gn-h-')|safe }}
+            {% set _cp = gn.city.split(' · ') %}
             <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:375px;top:245px;width:450px;height:450px">
-            <div class="gn-city" style="top:900px;font-size:66px">{{ gn.city }}</div>
-            <div class="gn-date" style="top:1000px;font-size:44px">{{ gn.date }}</div>
+            <div class="gn-city" style="top:770px;font-size:96px;letter-spacing:.14em">{{ _cp[0] }}</div>
+            {% if _cp|length > 1 %}<div class="gn-city" style="top:885px;font-size:50px;color:rgba(255,255,255,.85)">{{ _cp[1:]|join(' · ') }}</div>{% endif %}
+            <div class="gn-date" style="top:{{ 975 if _cp|length > 1 else 900 }}px;font-size:42px">{{ gn.date }}</div>
           {% else %}
             {% for i in range(3) %}<div class="gn-ph" style="left:{{ i * 402 }}px;top:0;width:396px;height:1200px;background-image:url('{{ _ph[i] }}');filter:grayscale(.4) brightness(.5)"></div>{% endfor %}
             <div style="inset:0;background:{{ tz.ramp }};mix-blend-mode:overlay;opacity:.4"></div>
             <div style="inset:0;background:linear-gradient(180deg,{{ tz.scheme.bg[1] }}cc 0%,{{ tz.scheme.bg[1] }}40 30%,{{ tz.scheme.bg[1] }}73 55%,{{ tz.scheme.bg[1] }}f2 100%)"></div>
-            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:360px;top:150px;width:480px;height:480px">
-            <div class="gn-rule" style="left:500px;top:690px;width:200px"></div>
-            <div class="gn-city" style="top:730px;font-size:68px">{{ gn.city }}</div>
-            <div class="gn-date" style="top:840px;font-size:46px">{{ gn.date }}</div>
+            {% set _cp = gn.city.split(' · ') %}
+            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:375px;top:245px;width:450px;height:450px">
+            <div class="gn-city" style="top:770px;font-size:96px;letter-spacing:.14em">{{ _cp[0] }}</div>
+            {% if _cp|length > 1 %}<div class="gn-city" style="top:885px;font-size:50px;color:rgba(255,255,255,.85)">{{ _cp[1:]|join(' · ') }}</div>{% endif %}
+            <div class="gn-date" style="top:{{ 975 if _cp|length > 1 else 900 }}px;font-size:42px">{{ gn.date }}</div>
           {% endif %}
           </div>
         </div>
