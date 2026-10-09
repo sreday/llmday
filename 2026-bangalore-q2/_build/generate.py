@@ -2021,6 +2021,9 @@ except OSError:                                               # no partners.yaml
     _sp_partner_logos, _sp_hidden_logos = {l.lower() for l in _sp_exclude_logos}, set()
 _sp_venue_words = ' %s ' % re.sub(r'[^a-z0-9]+', ' ', ' '.join([str(context['hero_event'].get('venue_short', '')), str(context.get('location_string', ''))]).lower()).strip()
 _sp_venue_txt = _sp_venue_words.replace(' ', '')
+# the venue's own name squeezed ("House of AI" -> houseofai): a logo with exactly that name is the host, even when it is listed
+# as a partner elsewhere (Marek 2026-10-08: House of AI hosts LLMday Hamburg)
+_sp_venue_own = re.sub(r'[^a-z0-9]+', '', str(context['hero_event'].get('venue_short') or str(context.get('location_string', '')).split(',')[0]).lower())
 _sp_photos = []
 import hashlib as _hashlib
 for _n in (1, 2, 3):
@@ -2041,7 +2044,10 @@ for _s in context.get('sponsors') or []:
     _words = ' %s ' % re.sub(r'[^a-z0-9]+', ' ', _stem).strip()          # whole words only: "ing" is not in "Building"
     _nm = str(_s.get('name') or '').strip() or _normalize_company_name(re.sub(r'[-_]+', ' ', _stem).title())
     _safe = re.sub(r'[\\/:*?"<>|]+', '', _nm)
-    if _s.get('host') or (_words.strip() and _words in _sp_venue_words and _logo.lower() not in _sp_partner_logos):
+    if _sp_venue_own and re.sub(r'[^a-z0-9]+', '', _stem) == _sp_venue_own and not _s.get('name'):
+        _nm = str(context['hero_event'].get('venue_short') or _nm)        # "House of AI", not "Houseofai" from the file name
+        _safe = re.sub(r'[\\/:*?"<>|]+', '', _nm)
+    if _s.get('host') or (_sp_venue_own and re.sub(r'[^a-z0-9]+', '', _stem) == _sp_venue_own) or (_words.strip() and _words in _sp_venue_words and _logo.lower() not in _sp_partner_logos):
         for _i, _ph in enumerate(_sp_photos or ['']):
             _base = '%s - Host%s' % (_safe, (' %d' % (_i + 1)) if len(_sp_photos) > 1 else '')
             # the page's lighter/darker slider (Marek 2026-10-07, widened 2026-10-08) picks one of these: every venue picture
