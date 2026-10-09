@@ -272,9 +272,9 @@
     </div>
     <div class="tz-tabs" role="tablist"{% if teasers_expired %} hidden{% endif %}>
       <button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>
+      {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="mx" aria-selected="false">Duo / Trio</button>{% endif %}
       <button type="button" role="tab" data-tab="th" aria-selected="false">YouTube thumbnails</button>
       {% if sp_cards and not teasers_expired %}<button type="button" role="tab" data-tab="sp" aria-selected="false">Sponsor cards</button>{% endif %}
-      {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="mx" aria-selected="false">Duo / Trio</button>{% endif %}
     </div>
     <div class="tz-controls">
       <input class="tz-search" id="tz-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search speaker, company or talk title">
