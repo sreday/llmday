@@ -62,7 +62,7 @@ KINDS = [
     {"name": "youtube", "card_re": r'class="th-card[^"]*" id="th-card-\d+" data-file="([^"]+)"', "w": 1280, "h": 720, "scale": 1,
      "hash": "thumbs", "strip": r"<!--tz-->.*?<!--/tz-->", "ext": ".png", "max": YT_MAX},
     # the sponsor cards (third tab, 2026-10-07): their own slots in their own section, upcoming events only like the teasers
-    {"name": "sponsor", "card_re": r'class="tz-card sp-card" id="sp-card-[a-z]+-\d+" data-file="([^"]+)"', "w": CARD, "h": CARD, "scale": SCALE,
+    {"name": "sponsor", "card_re": r'class="tz-card sp-card[^"]*" id="sp-card-[a-z]+-\d+" data-file="([^"]+)"', "w": CARD, "h": CARD, "scale": SCALE,
      "hash": "spcards", "strip": r"(?!)", "ext": ".png", "slot": "sp-slot"},
 ]
 BUDGET_MS = 12000    # virtual time for fonts + images to settle before the screenshot
@@ -263,6 +263,7 @@ def main():
     cached_only = "--cached-only" in sys.argv
     jobs = int(sys.argv[sys.argv.index("--jobs") + 1]) if "--jobs" in sys.argv else 1
     missing_total = 0
+    cached_new = 0     # pictures drawn AND saved to the cache: only these may queue another deploy (no loop on an uncachable card)
     chrome = find_chrome()
     if not chrome:
         print("WARN render_teasers: no Chrome/Chromium found, no PNGs rendered")
@@ -345,6 +346,7 @@ def main():
                         if keys[i]:
                             os.makedirs(CACHE_DIR, exist_ok=True)
                             shutil.copyfile(out, os.path.join(CACHE_DIR, keys[i] + kind["ext"]))
+                            cached_new += 1
             rendered_total += done - reused
             reused_total += reused
             total += done
@@ -355,7 +357,7 @@ def main():
           % (total, events, len(pages), reused_total, rendered_total, ", %d left for the render job" % missing_total if cached_only else ""))
     if os.environ.get("GITHUB_OUTPUT"):   # the render job queues one more deploy only when it drew something
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-            f.write("rendered=%d\nmissing=%d\n" % (rendered_total, missing_total))
+            f.write("rendered=%d\nmissing=%d\n" % (cached_new, missing_total))
     if "--prune" in sys.argv and os.path.isdir(CACHE_DIR):
         # Drop entries unused for PRUNE_DAYS, not merely unused by this run: while GitHub rolls out a new
         # runner image, runs alternate between Chrome versions and both sets of entries must survive.
