@@ -47,16 +47,7 @@ jobs:
           make --version
           make deps
 
-      - name: Build 🔧
-        env:
-          LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations
-          WAITLIST_FEED: ${{ secrets.WAITLIST_FEED }}   # "Speaker waitlist" script exec URL + ?list=1&token=...; /status/ Waitlist tab
-          COMMUNITYHERO_FEED: ${{ secrets.COMMUNITYHERO_FEED }}   # "Community hero" script exec URL + ?list=1&token=...; /status/ Heroes tab
-        run: |
-          make clean
-          make -j4 generate   # 4 events at a time (the runner has 4 cores); each builds in its own folder
-
-      # Content-addressed cache of optimised images and teaser PNGs: an entry is reused only when
+      # Content-addressed cache of optimised images and teaser PNGs (and finished events' Luma hero rows, read by the build): an entry is reused only when
       # every input that produced it is byte-identical, so a cached result can never be stale.
       - name: Restore image and teaser cache
         if: ${{ !inputs.clear_cache }}
@@ -68,6 +59,15 @@ jobs:
 
       - name: Remember the cache as restored
         run: mkdir -p .cache && touch .cache/.restored && find .cache -type f | sort > /tmp/cache-before.txt
+
+      - name: Build 🔧
+        env:
+          LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations
+          WAITLIST_FEED: ${{ secrets.WAITLIST_FEED }}   # "Speaker waitlist" script exec URL + ?list=1&token=...; /status/ Waitlist tab
+          COMMUNITYHERO_FEED: ${{ secrets.COMMUNITYHERO_FEED }}   # "Community hero" script exec URL + ?list=1&token=...; /status/ Heroes tab
+        run: |
+          make clean
+          make -j4 generate   # 4 events at a time (the runner has 4 cores); each builds in its own folder
 
       - name: Optimize Images
         run: python _build/optimize_images.py --prune
@@ -140,6 +140,13 @@ jobs:
       - name: Deps
         run: make deps
 
+      - name: Restore image and teaser cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache
+          key: site-cache-render-${{ github.run_id }}
+          restore-keys: site-cache-
+
       - name: Build 🔧
         env:
           LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations
@@ -148,13 +155,6 @@ jobs:
         run: |
           make clean
           make -j4 generate   # the same pages the deploy built, so the cache keys match
-
-      - name: Restore image and teaser cache
-        uses: actions/cache/restore@v4
-        with:
-          path: .cache
-          key: site-cache-render-${{ github.run_id }}
-          restore-keys: site-cache-
 
       - name: Optimize Images
         run: python _build/optimize_images.py   # as in the deploy: the cards' keys hash the optimised files they use

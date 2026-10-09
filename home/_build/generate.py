@@ -1587,9 +1587,29 @@ def _hero_applicants(events):
     if not _LUMA_KEYS:
         return [], "LUMA_API_KEYS is not set in this build, so Community Hero tickets cannot be read from Luma."
     out, missing = [], []
+    # a finished event's hero tickets no longer change (Marek 2026-10-09: deploys under 5 minutes): its rows - only what
+    # /status/ shows, already public there - are kept in the build cache and read back on every push; the daily
+    # scheduled build fetches them from Luma again. Upcoming events are always read live.
+    import json as _hc_json
+    _hc_dir = os.path.join("..", ".cache", "luma-heroes")
+    _hc_now = datetime.datetime.now(datetime.timezone.utc)
+    _hc_fresh = os.environ.get("GITHUB_EVENT_NAME") == "schedule"
     for slug, (_name, _start, evt) in sorted(events.items()):
         if not evt:
             continue
+        _hc_past = bool(_start and _start < _hc_now - datetime.timedelta(days=2))
+        _hc_file = os.path.join(_hc_dir, "%s-%s.json" % (slug, re.sub(r"[^A-Za-z0-9]", "", evt)))
+        if _hc_past and not _hc_fresh and os.path.exists(_hc_file):
+            try:
+                with open(_hc_file, encoding="utf-8") as f:
+                    _rows = _hc_json.load(f)
+                for _r in _rows:
+                    _r["requested_at"] = _wl_parse_ts(_r.get("requested_at"))
+                out.extend(_rows)
+                continue
+            except Exception as _e:
+                print("Community heroes: %s cache unreadable (%s), reading Luma" % (slug, _e))
+        _hc_mark, _hc_ok = len(out), True
         key = None
         for k in _LUMA_KEYS:
             data, _err = _luma_get("/v1/events/get", {"event_id": evt}, k)
@@ -1607,6 +1627,7 @@ def _hero_applicants(events):
             data, err = _luma_get("/v1/events/guests/list", params, key)
             if data is None:
                 print("Community heroes: %s guest list failed after %d page(s) (%s)" % (slug, pages, err))
+                _hc_ok = False
                 break
             for g in data.get("entries") or []:
                 if not isinstance(g, dict):
@@ -1643,6 +1664,14 @@ def _hero_applicants(events):
             cursor = data.get("next_cursor")
             if not data.get("has_more") or not cursor or pages >= 200:
                 break
+        if _hc_past and _hc_ok:
+            try:
+                os.makedirs(_hc_dir, exist_ok=True)
+                with open(_hc_file, "w", encoding="utf-8") as f:
+                    _hc_json.dump([dict(_r, requested_at=_r["requested_at"].isoformat() if _r.get("requested_at") else None)
+                                   for _r in out[_hc_mark:]], f)
+            except Exception as _e:
+                print("Community heroes: %s not cached (%s)" % (slug, _e))
         if seen:                                             # ticket names + statuses only: no personal data
             print("Community heroes: %s: %s" % (slug, ", ".join("%s x%d" % kv for kv in sorted(seen.items()))))
     note = ("No Luma key with manage access to: %s." % ", ".join(missing)) if missing else ""
