@@ -220,10 +220,13 @@
     .mx-cols.n2 .mx-photo { width: 330px; height: 330px; }
     .mx-col .mx-rule { width: 72px; height: 6px; background: {{ tz.ramp }}; margin: 14px 0; }
     .mx-col .mx-name { font-weight: 800; font-size: 28px; line-height: 1.15; white-space: nowrap; }
-    .mx-col .mx-org { font-weight: 600; font-size: 21px; color: var(--accent); margin-top: 4px; white-space: nowrap; }
-    .mx-col .mx-title { font-weight: 900; line-height: 1.12; margin-top: 16px; height: 200px; text-wrap: balance; }
-    .mx-cols.n2 .mx-title { height: 140px; }
-    .mx-cols.n2 .mx-name { font-size: 34px; }
+    .mx-col .mx-org { font-weight: 600; font-size: 21px; line-height: 1.25; color: var(--accent); margin-top: 4px; }   /* a long company wraps instead of shrinking every company on the card */
+    .mx-col .mx-title { font-weight: 900; line-height: 1.12; margin-top: 16px; text-wrap: balance; }
+    /* one size per role across the card (Marek 2026-10-08, "design lacking": each column fitted its own title, so
+       "The Third Option" came out huge beside a long title), and the block centred between the event line and the ticket */
+    .mx-center { display: flex; flex-direction: column; justify-content: center; }
+    .mx-center > .mx-cols { align-items: flex-start; }
+        .mx-cols.n2 .mx-name { font-size: 34px; }
     .mx-cols.n2 .mx-org { font-size: 24px; }
     /* Stack (Marek 2026-10-08, replaces the numbered List): a row per talk - title, then name and company - the photo on the
        right, a gradient line between rows (a plain element: html-to-image drew border-image as a full fill) */
@@ -722,12 +725,12 @@
       function mxMiddle() {
         var n = mxPicks.length, t;
         if (mxLayout === 'cols') {
-          return '<div class="mx-mid mx-cols n' + n + '">' + mxPicks.map(function (p) {
+          return '<div class="mx-mid mx-center"><div class="mx-cols n' + n + '">' + mxPicks.map(function (p) {
             return '<div class="mx-col">' + (p.photo ? '<img class="mx-photo" src="' + esc(p.photo) + '" alt="">' : '<div class="mx-photo"></div>') +
               '<div class="mx-rule"></div><div class="mx-name mx-fit" data-max="' + (n === 2 ? 34 : 28) + '" data-min="16" data-box="44">' + esc(p.name) + '</div>' +
-              '<div class="mx-org mx-fit" data-max="' + (n === 2 ? 24 : 21) + '" data-min="14" data-box="32">' + esc(p.org) + '</div>' +
-              '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 44 : 34) + '" data-min="18">' + esc(p.title) + '</div></div>';
-          }).join('') + '</div>';
+              '<div class="mx-org" style="font-size:' + (n === 2 ? 24 : 21) + 'px">' + esc(p.org) + '</div>' +
+              '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 44 : 34) + '" data-min="18" data-box="' + (n === 2 ? 150 : 200) + '">' + esc(p.title) + '</div></div>';
+          }).join('') + '</div></div>';
         }
         return '<div class="mx-mid mx-stack n' + n + '">' + mxPicks.map(function (p, i) {
           return (i ? '<div class="mx-line"></div>' : '') + '<div class="mx-srow"><div class="mx-stext">' +
@@ -764,6 +767,13 @@
         frame.innerHTML = ''; frame.appendChild(card);
         card.querySelectorAll('[data-fit]').forEach(fitLines);
         card.querySelectorAll('.mx-fit').forEach(mxShrink);
+        var orgs = [].slice.call(card.querySelectorAll('.mx-col .mx-org')), orgH = Math.max.apply(null, orgs.map(function (e) { return e.offsetHeight; }).concat(0));
+        orgs.forEach(function (e) { e.style.minHeight = orgH + 'px'; });   // the titles start on one line across the columns
+        ['.mx-title', '.mx-name.mx-fit'].forEach(function (sel) {
+          var els = [].slice.call(card.querySelectorAll(sel)); if (els.length < 2) return;
+          var min = Math.min.apply(null, els.map(function (e) { return parseFloat(e.style.fontSize); }));
+          els.forEach(function (e) { e.style.fontSize = min + 'px'; });
+        });
         scale();
       }
       if (mxSec) {
