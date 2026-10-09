@@ -2115,14 +2115,20 @@ for _t in talks_raw:                                         # spreadsheet order
     _title = str(_t.get('title_display') or _t.get('title') or '').strip()
     if _title.lower().startswith('keynote:'):
         _title = _title[len('keynote:'):].strip()
-    if not _name or _name.startswith('_') or not _title:
+    if not _name or _name.startswith('_'):
         continue
+    # a card missing its photo or a real title is shown greyed out: no download, not in Download all / Duo / Trio /
+    # Carousel, never rendered (Marek 2026-10-09)
+    _missing = [_w for _w, _gone in (('title', _title.strip(' .').lower() in ('', 'tbd', 'tba', 'tbc', 'to be announced', 'to be confirmed', 'to be decided')),
+                                     ('photo', not _t.get('photo_url'))) if _gone]
+    _title = _title or 'TBD'
     _org = (_t.get('organization') or '').strip()
     _lines = _tz_name_lines(_name)
     context['teaser_talks'].append({
         'title': _title, 'title_html': _tz_title_html(_title), 'size': _tz_title_size(_title), 'lines': _tz_title_lines(_title),
         'name': _name, 'name_lines': _lines, 'panel': len(_lines) > 1, 'organization': '' if len(_lines) > 1 else _org,
         'photo': ('../' + _t['photo_url']) if str(_t.get('photo_url') or '').startswith('../') else (_t.get('photo_url') or ''),
+        'missing': ' and '.join(_missing),
         'track': str(_t.get('track') or '').strip(), 'day': str(_t.get('day') or '').strip(), 'kind': 'keynote' if _t in keynotes else _t.get('kind', 'talk'),
                 '_id': id(_t), 'search': ' '.join([_name, _org, _title]).lower(),
         # sorting keys (Marek 2026-10-07): the first speaker's first / last name, and the website's order = the schedule

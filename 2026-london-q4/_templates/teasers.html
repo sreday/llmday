@@ -196,6 +196,10 @@
     .sp-slot[hidden] { display: none; }
     /* from here to the closing tools marker: the page's tools, drawn in the browser only - not in the build renderer's cache key */
     /*tools*/
+    /* a card missing its photo or title (Marek 2026-10-09): greyed out, nothing to download */
+    .tz-slot.tz-na .tz-frame, .tz-slot.tz-na .th-frame { filter: grayscale(1); opacity: .4; pointer-events: none; }
+    .tz-na-note { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); padding: 6px 12px; border-radius: 999px;
+      background: rgba(0,0,0,.72); color: #fff; font: 600 .8rem 'Montserrat', sans-serif; white-space: nowrap; z-index: 2; }
     /* zipping (Marek 2026-10-09): the faded button fills with its normal colour, left to right, as the cards are done; kept in the tools block so no picture is redrawn */
     .tz-btn.tz-zipping:disabled { opacity: 1; background: linear-gradient(var(--brand), var(--brand)) left / var(--zp, 0%) 100% no-repeat,
       color-mix(in srgb, var(--brand) 50%, #fff); transition: background-size .25s ease-out; }
@@ -376,9 +380,9 @@
     <div id="tz-groups"></div>
     <div class="tz-grid" id="tz-pool">
       {% for t in teaser_talks %}
-      <div class="tz-slot" data-search="{{ t.search }}" data-names="{{ t.name|lower }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}" data-web="{{ t.web }}" data-first="{{ t.first }}" data-last="{{ t.last }}">
+      <div class="tz-slot{% if t.missing %} tz-na{% endif %}" data-search="{{ t.search }}" data-names="{{ t.name|lower }}" data-track="{{ t.track }}" data-day="{{ t.day }}" data-i="{{ loop.index0 }}" data-web="{{ t.web }}" data-first="{{ t.first }}" data-last="{{ t.last }}">
         {% if not teasers_expired %}<!--tz--><div class="tz-frame">
-          <div class="tz-card" id="tz-card-{{ loop.index }}" data-file="{{ t.file }}">
+          <div class="tz-card" id="tz-card-{{ loop.index }}" {% if t.missing %}data-na-file{% else %}data-file{% endif %}="{{ t.file }}">
             {# each card gets its own gradient/filter ids (from its file name): with shared ids every card borrowed card 1's, and they
                vanished whenever card 1 was hidden - a filtered page, or a PNG run that re-renders only some cards #}
             {% set _k = t.file|replace('.png', '') %}{{ tz.sweeps|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}<div class="tz-vig"></div>
@@ -410,16 +414,17 @@
           </div>
         </div><!--/tz-->{% endif %}
         <!--th--><div class="th-frame">
-          <div class="th-card th-{{ 'logo-l' if th.layout == 'logo' else 'split' }}" id="th-card-{{ loop.index }}" data-file="{{ t.thumb }}" style="background:{{ th.bg }}">
+          <div class="th-card th-{{ 'logo-l' if th.layout == 'logo' else 'split' }}" id="th-card-{{ loop.index }}" {% if t.missing %}data-na-file{% else %}data-file{% endif %}="{{ t.thumb }}" style="background:{{ th.bg }}">
             {% if th.layout == 'logo' %}<img class="th-logo" src="{{ th.logo }}" alt="">
             {% elif th.imgs %}{% for im in th.imgs %}<div class="th-word {{ 'th-l' if loop.first else 'th-r' }}" style="top:{{ th.img_top or 20 }}px"><img src="{{ im[0] }}" alt="" style="width:{{ im[1] }}px;display:block"></div>{% endfor %}
             {% else %}{% for w in th.words %}<div class="th-word {{ 'th-l' if loop.first else 'th-r' }}" data-thfit="1" style="font:{{ th.font }};color:{{ th.color }}"><span>{{ w|safe }}</span></div>{% endfor %}{% endif %}
             {% if t.photo %}<img class="th-photo" src="{{ t.photo }}" alt="">{% endif %}
           </div>
         </div><!--/th-->
-        {% if not teasers_expired %}<a class="tz-dl" href="./{{ t.file }}" download="{{ t.file }}" title="Download {{ t.name }} (PNG)" aria-label="Download the card of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>{% endif %}
+        {% if t.missing %}<div class="tz-na-note">Missing {{ t.missing }} - no download</div>{% endif %}
+        {% if not teasers_expired and not t.missing %}<a class="tz-dl" href="./{{ t.file }}" download="{{ t.file }}" title="Download {{ t.name }} (PNG)" aria-label="Download the card of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>{% endif %}
         <span class="th-name" title="Not part of the thumbnail">{{ t.name }}</span>
-        <a class="tz-dl th-dl" href="./{{ t.thumb|urlencode }}" download="{{ t.thumb }}" title="Download the YouTube thumbnail of {{ t.name }} (PNG)" aria-label="Download the YouTube thumbnail of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
+        {% if not t.missing %}<a class="tz-dl th-dl" href="./{{ t.thumb|urlencode }}" download="{{ t.thumb }}" title="Download the YouTube thumbnail of {{ t.name }} (PNG)" aria-label="Download the YouTube thumbnail of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>{% endif %}
       </div>
       {% endfor %}
     </div>
@@ -867,7 +872,7 @@
       function download(list, btn, label) {
         var kind = tab === 'th' ? 'thumbnails' : tab === 'sp' ? 'sponsor-cards' : 'teasers';
         var cls = tab === 'th' ? 'a.th-dl' : tab === 'sp' ? 'a.sp-dl' : 'a.tz-dl:not(.th-dl)';
-        var slots = list.filter(function (s) { return !s.hidden; }), files = [], skipped = [], keep = btn.textContent;
+        var slots = list.filter(function (s) { return !s.hidden && !s.classList.contains('tz-na'); }), files = [], skipped = [], keep = btn.textContent;
         if (!slots.length) return;
         btn.disabled = true; btn.classList.add('tz-zipping'); btn.style.setProperty('--zp', '0%');
         slots.reduce(function (done, s, i) {
@@ -1100,7 +1105,7 @@
         return c.textContent.replace(/\s+/g, ' ').trim();
       }
       function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-      var mxTalks = slots.filter(function (s) { return s.querySelector('.tz-card'); }).map(function (s) {
+      var mxTalks = slots.filter(function (s) { return s.querySelector('.tz-card') && !s.classList.contains('tz-na'); }).map(function (s) {
         var names = [].map.call(s.querySelectorAll('.tz-name'), function (n) { return n.textContent.trim(); });
         var org = s.querySelector('.tz-org'), photo = s.querySelector('.tz-photo');
         return { slot: s, name: names.join(' & '), org: org ? org.textContent.trim() : '', track: s.dataset.track || '',
