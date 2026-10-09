@@ -386,7 +386,7 @@
             <button type="button" data-mx="cols" aria-pressed="true">Columns</button>
             <button type="button" data-mx="stack" aria-pressed="false">Stack</button>
           </div>
-          <button class="tz-btn" id="mx-all" type="button">Download all</button>
+          <button class="tz-btn" id="mx-all" type="button">Auto-divide and download all</button>
           <span class="tz-count" id="mx-count"></span>
         </div>
         <p class="mx-empty" id="mx-empty">Pick 2 or 3 talks on the left.</p>
@@ -794,7 +794,9 @@
         var box = slot.getBoundingClientRect();
         card.querySelectorAll('.mx-name').forEach(function (nm, i) {
           var m = document.createElement('span'); m.className = 'mx-move';
-          m.innerHTML = '<button type="button" aria-label="Move earlier">&larr;</button><button type="button" aria-label="Move later">&rarr;</button>';
+          // Columns run left to right, Stack top to bottom (Marek 2026-10-08): the arrows point the way the talks move
+          m.innerHTML = mxLayout === 'stack' ? '<button type="button" aria-label="Move up">&uarr;</button><button type="button" aria-label="Move down">&darr;</button>'
+            : '<button type="button" aria-label="Move left">&larr;</button><button type="button" aria-label="Move right">&rarr;</button>';
           var b = m.querySelectorAll('button'); b[0].disabled = i === 0; b[1].disabled = i === n - 1;
           b[0].addEventListener('click', function () { mxPicks.splice(i - 1, 0, mxPicks.splice(i, 1)[0]); mxDraw(); });
           b[1].addEventListener('click', function () { mxPicks.splice(i + 1, 0, mxPicks.splice(i, 1)[0]); mxDraw(); });
@@ -866,7 +868,7 @@
               return pngOf(mxBuild(g, stage)).then(function (url) { savePng(url, mxName(g)); return new Promise(function (ok) { setTimeout(ok, 400); }); });
             });
           }, Promise.resolve()).catch(function (err) { alert('Could not render the PNGs: ' + err); })
-            .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Download all'; });
+            .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Auto-divide and download all'; });
         });
         document.getElementById('mx-all').title = 'Every talk in website order: as many Trios as fit, the rest as Duos';
         mxDraw();
