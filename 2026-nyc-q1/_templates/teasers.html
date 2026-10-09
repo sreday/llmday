@@ -242,6 +242,8 @@
        right, a gradient line between rows (a plain element: html-to-image drew border-image as a full fill) */
     .mx-stack { display: flex; flex-direction: column; }
     .mx-line { height: 2px; background: {{ tz.ramp }}; flex: 0 0 auto; }
+    .mx-stack .mx-line { width: calc(100% - 212px); }   /* ends before the headshot column: photo 184 + gap 28 (Marek 2026-10-08) */
+    .mx-stack.n2 .mx-line { width: calc(100% - 278px); }   /* Duo: photo 250 + gap 28 */
     .mx-srow { display: flex; align-items: center; gap: 28px; height: 203px; }
     .mx-stack.n2 .mx-srow { height: 305px; }
     .mx-stext { flex: 1 1 auto; min-width: 0; }
@@ -626,7 +628,7 @@
         document.body.classList.toggle('mx-mode', t === 'mx');
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
-          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Download all makes every talk into Trios (and Duos for the rest), in website order. Rendered here in your browser.'
+          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
         ready.then(function () { fitTab(t === 'mx' ? 'tz' : t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); scale(); });
