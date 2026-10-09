@@ -141,9 +141,10 @@
        are cut out instead, below and the ticket's and the discount circle's dark side 80% filled with a dash of transparency (Marek: "almost filled"), so a hint of the picture shows through */
     .sp-onphoto .tz-ticket-in { background: rgba(8,8,20,.8); }
     .sp-onphoto .tz-ball-in { background: rgba(8,8,20,.8); }   /* the discount circle too (Marek 2026-10-09) */
-    /* the ticket keeps its two dents (Marek 2026-10-09: "alpha instead of a solid"): real holes cut out of the ticket where the
-       notch dots sit (r 17 round x 398, y 985 / 1133 on the card = 334, 1 / 149 on the ticket), so the photo shows through them */
-    .sp-onphoto .tz-ticket { -webkit-mask: radial-gradient(circle at 334px 1px, transparent 17px, #000 17.5px), radial-gradient(circle at 334px 149px, transparent 17px, #000 17.5px);
+    /* every ticket footer's two dents (Marek 2026-10-09: "alpha instead of a solid", then "ship it to all teasers"): real holes
+       cut out of the ticket (r 17 round x 398, y 985 / 1133 on the card = 334, 1 / 149 on the ticket) - whatever is behind the
+       card's footer shows through them, a photo, a slime or the background; no solid dots any more */
+    .tz-card .tz-ticket { -webkit-mask: radial-gradient(circle at 334px 1px, transparent 17px, #000 17.5px), radial-gradient(circle at 334px 149px, transparent 17px, #000 17.5px);
       -webkit-mask-composite: source-in; mask: radial-gradient(circle at 334px 1px, transparent 17px, #000 17.5px), radial-gradient(circle at 334px 149px, transparent 17px, #000 17.5px); mask-composite: intersect; }
     /* the gradient rim on its own (a masked ring), or the see-through middle would show the solid gradient behind it */
     .sp-onphoto .tz-ticket, .sp-onphoto .tz-ball { background: none; }
@@ -156,7 +157,6 @@
     .tz-where svg { width: 53px; height: 53px; flex: 0 0 auto; stroke: var(--accent); fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
     .tz-venue { font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; }
     .tz-place { font-weight: 500; color: rgba(255,255,255,.75); margin-top: 5px; white-space: nowrap; overflow: hidden; }
-    .tz-notch { left: 381px; width: 34px; height: 34px; border-radius: 50%; }
     @media (max-width: 575.98px) { .tz-grid { grid-template-columns: 1fr; } }
     /* sheet mode (#sheet-<start>-<count>): what the build-time renderer screenshots - the chosen cards stacked at 1200 px, nothing else */
     body.tz-sheet { background: #000; }
@@ -404,8 +404,6 @@
               <div class="tz-where"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-19-16-19-31a19 19 0 0 1 38 0c0 15-19 31-19 31z"/><circle cx="32" cy="27" r="7.5"/></svg>
                 <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18"{% if tz.place_full and tz.place_full != tz.place %} data-full="{{ tz.place_full }}"{% endif %}>{{ tz.place }}</div></div></div>
             </div></div>
-            <div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
-            <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>
           </div>
         </div><!--/tz-->{% endif %}
         <!--th--><div class="th-frame">
@@ -445,8 +443,6 @@
               <div class="tz-where"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-19-16-19-31a19 19 0 0 1 38 0c0 15-19 31-19 31z"/><circle cx="32" cy="27" r="7.5"/></svg>
                 <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18"{% if tz.place_full and tz.place_full != tz.place %} data-full="{{ tz.place_full }}"{% endif %}>{{ tz.place }}</div></div></div>
             </div></div>
-            {% if not c.photo %}<div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
-            <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>{% endif %}
           </div>
         </div>
         <a class="tz-dl sp-dl" href="./{{ c.file|urlencode }}" download="{{ c.file }}" title="Download the {{ c.role|lower }} card of {{ c.name }} (PNG)" aria-label="Download the {{ c.role|lower }} card of {{ c.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
