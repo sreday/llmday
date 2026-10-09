@@ -117,13 +117,15 @@ def page_parts(index_html, slot="tz-slot"):
         html = f.read()
     if slot == "tz-slot":
         html = re.sub(r"<!--spsec-->.*?<!--/spsec-->", "", html, flags=re.S)
-    starts = [m.start() for m in re.finditer(r'<div class="%s"[ >]' % slot, html)]
+    starts = [m.start() for m in re.finditer(r'<div class="%s(?: tz-na)?"[ >]' % slot, html)]
     if not starts:
         return html, []
     end = html.find("<!--/spsec-->" if slot == "sp-slot" else "<script", starts[-1])
     end = len(html) if end < 0 else end
     bounds = starts + [end]
     cards = [re.sub(r' id="(?:t[zh]-card-\d+|sp-card-[a-z]+-\d+)"', "", html[bounds[i]:bounds[i + 1]]) for i in range(len(starts))]
+    # a greyed-out card (missing photo or title, Marek 2026-10-09) is never drawn: it ends the card before it and is dropped
+    cards = [c for c in cards if not c.startswith('<div class="tz-slot tz-na"')]
     return html[:starts[0]] + html[end:], cards
 
 
