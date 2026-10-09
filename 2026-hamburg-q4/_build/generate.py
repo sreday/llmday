@@ -241,19 +241,26 @@ with open('metadata.yml', encoding='utf-8') as f:
 
 
 def luma_is_free(evt_id):
+    """Luma's own answer, free or paid - only an EXPLICIT one counts (Marek 2026-10-09: the CI build got a page without
+    "is_free" from Luma, read it as paid and put PLAT60 on free PLATFORMday Austin). The JSON event API first, then the
+    embed page; no clear answer = luma_connected stays off, so the teasers show no code ball at all rather than a wrong one."""
     if not evt_id:
         return False
-    try:
-        import urllib.request
-        req = urllib.request.Request(
-            "https://luma.com/embed/event/%s/simple" % evt_id,
-            headers={"User-Agent": "Mozilla/5.0"})
-        body = urllib.request.urlopen(req, timeout=10).read().decode("utf-8", "ignore")
-        context["luma_connected"] = True   # Luma answered: only then may a teaser show a code ball (Marek 2026-10-08)
-        return '"is_free":true' in body
-    except Exception as e:
-        print("WARN: could not check Luma pricing (%s); assuming paid" % e)
-        return False
+    import urllib.request
+    for url in ("https://api.lu.ma/event/get?event_api_id=%s" % evt_id, "https://luma.com/embed/event/%s/simple" % evt_id):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "accept": "application/json, text/html"})
+            body = urllib.request.urlopen(req, timeout=10).read().decode("utf-8", "ignore")
+        except Exception as e:
+            print("WARN: Luma pricing not readable at %s (%s)" % (url.split('?')[0], e))
+            continue
+        _m = re.search(r'"is_free"\s*:\s*(true|false)', body)
+        if _m:
+            context["luma_connected"] = True   # Luma answered: only then may a teaser show a code ball (Marek 2026-10-08)
+            return _m.group(1) == "true"
+        print("WARN: Luma answered %s without is_free (%d bytes: %r)" % (url.split('?')[0], len(body), body[:120]))
+    print("WARN: free or paid unknown for %s - teasers show no code ball" % evt_id)
+    return False
 
 
 context["luma_is_free"] = luma_is_free(context.get("luma_evt"))
