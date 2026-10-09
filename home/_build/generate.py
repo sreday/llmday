@@ -1571,7 +1571,9 @@ def _hero_events():
                 m = yaml.load(f, Loader=yaml.FullLoader) or {}
         except Exception:
             continue
-        out[slug] = (names.get(slug) or slug, _wl_parse_ts(m.get("start_time")), str(m.get("luma_evt") or "").strip())
+        # luma_no_api: true - the event ran on someone else's Luma account (not Plus): no key can read it, so it is not
+        # asked about (and not listed as "No Luma key with manage access") - Marek 2026-10-09, LLMday Warsaw 2026 Q1
+        out[slug] = (names.get(slug) or slug, _wl_parse_ts(m.get("start_time")), "" if m.get("luma_no_api") else str(m.get("luma_evt") or "").strip())
         if m.get("registration_free") or m.get("communityhero_free"):
             _hero_free_meta.add(slug)
     return out
