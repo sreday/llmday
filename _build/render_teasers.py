@@ -175,7 +175,17 @@ def card_keys(index_html, chrome_version, kind=KINDS[0], frozen=False):
     if frozen:
         return [frozen_key(c, base_dir, kind) for c in cards]
     outputs = set().union(*(card_files(index_html, k) for k in KINDS))
-    context = render_context(context) or context
+    if kind["name"] == "youtube":
+        # a thumbnail shows the brand lettering and the speaker's headshot, nothing of the talk's text (Marek 2026-10-09:
+        # "what matters is was the speaker added / removed, and what's their latest picture"): its key is its own card
+        # markup (the speaker, the photo, the lettering, the background - without the slot's title / track / order data),
+        # the thumbnail styles and the lettering fit, and the files it uses
+        cards = [re.sub(r'^<div class="tz-slot"[^>]*>', "", c) for c in cards]
+        styles = "".join(re.findall(r"<style[^>]*>(.*?)</style>", context, re.S))
+        fit = re.search(r"function fitWord\(el\) \{.*?\n      \}", context, re.S)
+        context = "\n".join(r for r in re.findall(r"[^{}]*\{[^{}]*\}", styles) if ".th-" in r or "th-sheet" in r) + (fit.group(0) if fit else context)
+    else:
+        context = render_context(context) or context
     ctx = hashlib.sha256()
     ctx.update(("%s|%s|%s|%dx%d|%s|%d|" % (SCRIPT_HASH, chrome_version, kind["name"], kind["w"], kind["h"], kind["scale"], BUDGET_MS)).encode())
     ctx.update(context.encode())
