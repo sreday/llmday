@@ -162,7 +162,8 @@
       linear-gradient(180deg, rgba(10,6,3,.75) 0%, rgba(10,6,3,0) 30%, rgba(10,6,3,0) 62%, rgba(10,6,3,.88) 82%); }
     .sp-word { left: 72px; top: 566px; font-weight: 900; font-size: 100px; line-height: 1; letter-spacing: -.01em; color: #fff; white-space: nowrap;   /* white, centred on the circle's middle (Marek 2026-10-08) */
       text-shadow: 0 4px 24px rgba(0,0,0,.8), 0 0 3px rgba(0,0,0,.6); }
-    .sp-ring { left: 626px; top: 356px; width: 520px; height: 520px; border-radius: 50%; padding: 7px; background: {{ tz.ramp45 }}; box-shadow: 0 0 80px {{ tz.scheme.glow }}66; }
+    /* the circle 500 px, pushed right: more air between HOST / SPONSOR / PARTNER and the logo (Marek 2026-10-08) */
+    .sp-ring { left: 668px; top: 366px; width: 500px; height: 500px; border-radius: 50%; padding: 7px; background: {{ tz.ramp45 }}; box-shadow: 0 0 80px {{ tz.scheme.glow }}66; }
     .sp-disc { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 50% 50%, #fff 0, #fff 30%, #f8f8fa 44%, #fbfbfc 54%, #f3f3f6 66%, #f8f8fa 78%, #ededf1 94%, #ebebef 100%); display: flex; align-items: center; justify-content: center; }   /* faint pale-grey rings instead of flat white, blending into each other - no hard edges (Marek 2026-10-07) */
     .sp-disc img { display: block; height: auto; width: 60%; }   /* sized by the script: the logo maxed out, 6% of the circle kept clear */
     /* sponsor sheet mode (#spcards-<start>-<count>): those cards stacked at 1200 px for the renderer */
@@ -266,6 +267,35 @@
     .gn-date { left: 0; width: 1200px; text-align: center; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
     .gn-rule { height: 4px; border-radius: 2px; background: {{ tz.ramp }}; }
     .gn-foot { left: 0; width: 1200px; text-align: center; font-weight: 600; font-size: 20px; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.6); white-space: nowrap; }
+    /* ── Carousel (sixth tab, Marek 2026-10-08): a LinkedIn document post - a square PDF, one page per slide: an optional
+       Generic cover, then talks as singles or Duos / Trios, within the recommended length (LinkedIn: PDF, 100 MB / 300
+       pages max, every page the same size; 8-12 slides read best). Built in the browser, nothing at build time. ── */
+    #cr-sec { display: none; }
+    body.cr-mode #cr-sec { display: grid; }
+    body.cr-mode #tz-pool, body.cr-mode #tz-groups, body.cr-mode .tz-controls, body.cr-mode #tz-none, body.cr-mode #sp-pool { display: none !important; }
+    #cr-sec { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+    @media (max-width: 900px) { #cr-sec { grid-template-columns: 1fr; } }
+    .cr-step { background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.08); padding: 14px 16px; margin-bottom: 16px; }
+    .cr-step h3 { font: 700 .95rem 'Montserrat', sans-serif; margin: 0 0 10px; }
+    .cr-step h3 span { font-weight: 400; color: #777; font-size: .85rem; margin-left: 6px; }
+    .cr-covers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .cr-cov { position: relative; border-radius: 10px; cursor: pointer; outline: 3px solid transparent; outline-offset: 2px; }
+    .cr-cov[aria-pressed="true"] { outline-color: var(--brand); }
+    .cr-cov .tz-frame { border-radius: 8px; box-shadow: none; }
+    .cr-cov b { display: block; font: 600 .78rem 'Montserrat', sans-serif; text-align: center; margin-top: 6px; color: #444; }
+    .cr-none { aspect-ratio: 1 / 1; border-radius: 8px; border: 2px dashed #cfcfd6; display: flex; align-items: center; justify-content: center; color: #888; font: 600 .8rem 'Montserrat', sans-serif; background: #fafafc; }
+    .cr-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .cr-pick .mx-list { max-height: 420px; }
+    .cr-side { position: sticky; top: 16px; }
+    .cr-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.08); padding: 12px; min-height: 120px; }
+    .cr-tile { position: relative; }
+    .cr-tile .tz-frame { border-radius: 6px; box-shadow: none; }
+    .cr-tile i { position: absolute; left: 5px; top: 5px; z-index: 2; font: 700 .7rem 'Montserrat', sans-serif; font-style: normal; background: rgba(255,255,255,.92); color: #333; border-radius: 999px; padding: 1px 7px; }
+    .cr-meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin: 14px 0 10px; }
+    .cr-title { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+    .cr-title input { flex: 1; min-width: 0; font: 400 .9rem 'Roboto', sans-serif; padding: 8px 12px; border: 1px solid #cfcfd6; border-radius: 8px; }
+    .cr-note { font-size: .8rem; color: #777; margin-top: 8px; line-height: 1.4; }
+    .cr-step select { font: 600 .85rem 'Montserrat', sans-serif; padding: 6px 10px; border-radius: 999px; border: 1px solid #cfcfd6; background: #fff; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
@@ -289,6 +319,7 @@
       <button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>
       {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="mx" aria-selected="false">Duo / Trio</button>{% endif %}
       {% if gn.photos and not teasers_expired %}<button type="button" role="tab" data-tab="gn" aria-selected="false">Generic</button>{% endif %}
+      {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="cr" aria-selected="false">Carousel</button>{% endif %}
       {% if sp_cards and not teasers_expired %}<button type="button" role="tab" data-tab="sp" aria-selected="false">Sponsor cards</button>{% endif %}
       <button type="button" role="tab" data-tab="th" aria-selected="false">Thumbnails</button>
     </div>
@@ -391,6 +422,46 @@
       </div>
       {% endfor %}{% endif %}{% endfor %}
     </div>{% endif %}<!--/spsec-->
+    <!--crsec-->{% if teaser_talks and not teasers_expired %}<div id="cr-sec">
+      <div>
+        <div class="cr-step" id="cr-cover-step">
+          <h3>1. Cover <span>the first slide, the hook</span></h3>
+          <div class="cr-covers" id="cr-covers"></div>
+        </div>
+        <div class="cr-step">
+          <h3>2. Slides</h3>
+          <div class="cr-row">
+            <div class="tz-sort" role="group" aria-label="Slides">
+              <button type="button" data-cr="single" aria-pressed="true">Single talks</button>
+              <button type="button" data-cr="group" aria-pressed="false">Duos &amp; Trios</button>
+            </div>
+            <div class="tz-sort" role="group" aria-label="Layout" id="cr-layout" hidden>
+              <button type="button" data-crl="cols" aria-pressed="true">Columns</button>
+              <button type="button" data-crl="stack" aria-pressed="false">Stack</button>
+            </div>
+            <label class="tz-count">Max slides <select id="cr-max"><option>10</option><option selected>12</option><option>15</option><option>20</option></select></label>
+          </div>
+        </div>
+        <div class="cr-step cr-pick">
+          <h3>3. Talks <span id="cr-hint">in website order</span></h3>
+          <div class="cr-row" style="margin-bottom:10px">
+            <button class="tz-btn" type="button" id="cr-fit">Select all that fit</button>
+            <button class="tz-btn" type="button" id="cr-clear" style="background:#fff;color:var(--brand);border:1px solid var(--brand)">Clear</button>
+          </div>
+          <input class="tz-search" id="cr-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search the talks" style="width:100%;box-sizing:border-box;margin-bottom:10px">
+          <div class="mx-list" id="cr-list" role="group" aria-label="Talks in the carousel"></div>
+        </div>
+      </div>
+      <div class="cr-side">
+        <div class="cr-strip" id="cr-strip"></div>
+        <div class="cr-meta">
+          <span class="tz-count" id="cr-count"></span>
+          <button class="tz-btn" type="button" id="cr-dl" disabled>Download PDF</button>
+        </div>
+        <div class="cr-title"><input id="cr-ttl" type="text" value="{{ onboarding_event.event_name }}: speakers" aria-label="Document title for the LinkedIn post"><button class="tz-btn" type="button" id="cr-copy">Copy title</button></div>
+        <p class="cr-note">LinkedIn: post &rarr; <b>Add a document</b> &rarr; this PDF, and give it the title above. Square 1080 &times; 1080 pages, one picture each; keep the tab in front while it renders.</p>
+      </div>
+    </div>{% endif %}<!--/crsec-->
     <!--gnsec-->{% if gn.photos and not teasers_expired %}{% set _ph = [gn.photos[0 % gn.photos|length], gn.photos[1 % gn.photos|length], gn.photos[2 % gn.photos|length]] %}
     {% set _rp = tz.scheme.ramp %}<div class="tz-grid" id="gn-pool">
       {% for d in ['portholes', 'duotone', 'triptych'] %}
@@ -468,7 +539,7 @@
         spSheet = /^#spcards-(\d+)-(\d+)$/.exec(location.hash);
       // sponsor logos: as big as their own shape allows inside the circle - the logo's corners on a circle 6% inside the rim
       document.querySelectorAll('.sp-disc img').forEach(function (img) {
-        function size() { var a = img.naturalWidth / img.naturalHeight; if (a) img.style.width = (506 * .88 * a / Math.sqrt(a * a + 1)) + 'px'; }
+        function size() { var a = img.naturalWidth / img.naturalHeight; if (a) img.style.width = (486 * .88 * a / Math.sqrt(a * a + 1)) + 'px'; }
         if (img.complete) size(); else img.addEventListener('load', size);
       });
       // 1. text fit, on the unscaled card (offset* sizes ignore the preview's transform)
@@ -691,16 +762,18 @@
         document.body.classList.toggle('sp-mode', t === 'sp');
         document.body.classList.toggle('mx-mode', t === 'mx');
         document.body.classList.toggle('gn-mode', t === 'gn');
+        document.body.classList.toggle('cr-mode', t === 'cr');
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
+          : t === 'cr' ? 'A LinkedIn carousel (a square PDF for a document post): a cover, then talks as singles or Duos & Trios, within the recommended length.'
           : t === 'gn' ? 'Three covers for the whole event (1500 x 1500 PNG): its logo, city and date over the venue photos. Rendered here in your browser.'
           : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
-        ready.then(function () { fitTab(t === 'mx' ? 'tz' : t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); scale(); });
+        ready.then(function () { fitTab(t === 'mx' || t === 'cr' ? 'tz' : t); if (t === 'cr') fitTab('gn'); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); if (t === 'cr' && typeof crDraw === 'function') crDraw(); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
-        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#generic' : location.pathname); });
+        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#generic' : b.dataset.tab === 'cr' ? '#carousel' : location.pathname); });
       });
 
       // 4. downloads: the PNGs of the given cards that are shown, one after another (the browser asks once to allow it)
@@ -733,6 +806,31 @@
         return Promise.all([pngLib, pngFonts]).then(function (r) {
           return r[0].toPng(card, { width: 1200, height: 1200, pixelRatio: 1.25, style: { transform: 'none' }, fontEmbedCSS: r[1] });
         });
+      }
+      // a ZIP of files kept as they are (PNGs are already compressed): local headers, the data, the central directory
+      var crcTable = null;
+      function crc32(u) {
+        if (!crcTable) { crcTable = []; for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; crcTable[n] = c >>> 0; } }
+        var crc = 0xFFFFFFFF; for (var i = 0; i < u.length; i++) crc = crcTable[(crc ^ u[i]) & 0xFF] ^ (crc >>> 8);
+        return (crc ^ 0xFFFFFFFF) >>> 0;
+      }
+      function zipOf(files) {
+        var parts = [], central = [], off = 0, enc = new TextEncoder(), now = new Date();
+        var dtime = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
+        var ddate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+        files.forEach(function (f) {
+          var name = enc.encode(f.name), crc = crc32(f.bytes), h = new DataView(new ArrayBuffer(30)), c = new DataView(new ArrayBuffer(46));
+          [[0, 0x04034b50, 4], [4, 20, 2], [6, 0x0800, 2], [8, 0, 2], [10, dtime, 2], [12, ddate, 2], [14, crc, 4], [18, f.bytes.length, 4],
+           [22, f.bytes.length, 4], [26, name.length, 2], [28, 0, 2]].forEach(function (x) { x[2] === 4 ? h.setUint32(x[0], x[1], true) : h.setUint16(x[0], x[1], true); });
+          [[0, 0x02014b50, 4], [4, 20, 2], [6, 20, 2], [8, 0x0800, 2], [10, 0, 2], [12, dtime, 2], [14, ddate, 2], [16, crc, 4], [20, f.bytes.length, 4],
+           [24, f.bytes.length, 4], [28, name.length, 2], [30, 0, 2], [32, 0, 2], [34, 0, 2], [36, 0, 2], [38, 0, 4], [42, off, 4]].forEach(function (x) { x[2] === 4 ? c.setUint32(x[0], x[1], true) : c.setUint16(x[0], x[1], true); });
+          parts.push(new Uint8Array(h.buffer), name, f.bytes); central.push(new Uint8Array(c.buffer), name);
+          off += 30 + name.length + f.bytes.length;
+        });
+        var size = central.reduce(function (n, b) { return n + b.length; }, 0), e = new DataView(new ArrayBuffer(22));
+        [[0, 0x06054b50, 4], [4, 0, 2], [6, 0, 2], [8, files.length, 2], [10, files.length, 2], [12, size, 4], [16, off, 4], [20, 0, 2]]
+          .forEach(function (x) { x[2] === 4 ? e.setUint32(x[0], x[1], true) : e.setUint16(x[0], x[1], true); });
+        return new Blob(parts.concat(central, [new Uint8Array(e.buffer)]), { type: 'application/zip' });
       }
       function savePng(url, name) { var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
       // the host's venue picture: only the chosen version of the host card shows (and downloads); the renderer's sheet mode
@@ -836,9 +934,9 @@
         var n = picks.length, card = mxTalks[0].slot.querySelector('.tz-card').cloneNode(true);   // the event's frame, from the first talk card
         card.removeAttribute('id'); card.style.transform = '';
         var mid = card.querySelector('.tz-mid'); mid.insertAdjacentHTML('afterend', mxMiddle(picks)); mid.remove();
-        // its own slimes (Marek 2026-10-08): "sunrise" behind a Duo, "waves" behind a Trio, with ids of their own
+        // its own slimes (Marek 2026-10-08): "waves" behind Duos and Trios alike, so a carousel of both looks like one set
         var sw = card.querySelector('.tz-sw');
-        if (sw) sw.outerHTML = (n === 2 ? {{ tz.sweeps_sunrise|tojson }} : {{ tz.sweeps_waves|tojson }}).replace(/tz([gf])/g, 'tz$1-mx-');
+        if (sw) sw.outerHTML = {{ tz.sweeps_waves|tojson }}.replace(/tz([gf])/g, 'tz$1-mx-');
         host.innerHTML = ''; host.appendChild(card);
         card.querySelectorAll('[data-fit]').forEach(fitLines);
         card.querySelectorAll('.mx-fit').forEach(mxShrink);
@@ -940,18 +1038,191 @@
           stage.style.cssText = 'position:fixed;left:-13000px;top:0;width:1200px;height:1200px;overflow:hidden';
           document.body.appendChild(stage);
           btn.disabled = true;
+          var files = [];                          // one ZIP of all the cards (Marek 2026-10-08), not a burst of downloads
           groups.reduce(function (done, g, k) {
             return done.then(function () {
               btn.textContent = 'Rendering ' + (k + 1) + ' of ' + groups.length + '...';
-              return pngOf(mxBuild(g, stage)).then(function (url) { savePng(url, mxName(g)); return new Promise(function (ok) { setTimeout(ok, 400); }); });
+              return pngOf(mxBuild(g, stage)).then(function (url) { return fetch(url); }).then(function (r) { return r.arrayBuffer(); })
+                .then(function (b) { files.push({ name: mxName(g), bytes: new Uint8Array(b) }); });
             });
-          }, Promise.resolve()).catch(function (err) { alert('Could not render the PNGs: ' + err); })
+          }, Promise.resolve()).then(function () {
+            var url = URL.createObjectURL(zipOf(files)), a = document.createElement('a');
+            a.href = url; a.download = {{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-duos-trios.zip';
+            document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+          }).catch(function (err) { alert('Could not render the PNGs: ' + err); })
             .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Auto-divide and download all'; });
         });
         document.getElementById('mx-all').title = 'Every talk in website order: as many Trios as fit, the rest as Duos';
         mxDraw();
       }
-      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : location.hash === '#generic' && document.getElementById('gn-pool') ? 'gn' : 'tz'{% endif %});
+
+      // 6. Carousel (Marek 2026-10-08): a LinkedIn document post - one square PDF, a JPEG per page. Slides: the chosen Generic
+      // cover, then the ticked talks as singles (their built PNGs) or auto-divided into Trios and Duos (as Duo / Trio
+      // builds them). The PDF is written here by hand: every page 810 x 810 pt (1080 px), one flattened image each.
+      var crSec = document.getElementById('cr-sec'), crCover = document.getElementById('gn-pool') ? 'portholes' : 'none',
+        crMode = 'single', crLayout = 'cols', crPicked = [];
+      var crTalks = mxTalks.slice().sort(function (a, b) { return a.slot.dataset.web - b.slot.dataset.web; });
+      function crGroups(list) {                  // the auto-divide rule: Trios, then Duos, never a talk on its own
+        var n = list.length, groups = [], at = 0;
+        if (n < 2) return groups;
+        var duos = n % 3 === 0 ? 0 : n % 3 === 2 ? 1 : 2, trios = (n - 2 * duos) / 3;
+        for (var t = 0; t < trios; t++) { groups.push(list.slice(at, at + 3)); at += 3; }
+        for (var d = 0; d < duos; d++) { groups.push(list.slice(at, at + 2)); at += 2; }
+        return groups;
+      }
+      function crSlidesFor(n) { return (crCover === 'none' ? 0 : 1) + (crMode === 'single' ? n : crGroups(new Array(n)).length); }
+      function crMax() { return +document.getElementById('cr-max').value; }
+      function crSlides() {                      // what the carousel holds, in order
+        var list = crTalks.filter(function (p) { return crPicked.indexOf(p) >= 0; }), out = [];
+        if (crCover !== 'none') out.push({ kind: 'cover', d: crCover });
+        if (crMode === 'single') list.forEach(function (p) { out.push({ kind: 'talk', p: p }); });
+        else crGroups(list).forEach(function (g) { out.push({ kind: 'group', g: g }); });
+        return out;
+      }
+      function crFitCity(card) {                 // the cover's city line, fitted as on the Generic tab
+        card.querySelectorAll('.gn-city').forEach(function (e) {
+          var w = e.firstElementChild && e.firstElementChild.tagName === 'SPAN' ? e.firstElementChild : null;
+          if (!w) { w = document.createElement('span'); w.style.whiteSpace = 'nowrap'; while (e.firstChild) w.appendChild(e.firstChild); e.appendChild(w); }
+          var px = parseFloat(e.style.fontSize); while (px > 18 && w.offsetWidth > 1080) { px -= 1; e.style.fontSize = px + 'px'; }
+        });
+      }
+      function crCard(slide, host) {             // the slide's 1200 px card, built into host
+        host.innerHTML = '';
+        if (slide.kind === 'group') { var keep = mxLayout; mxLayout = crLayout; var c = mxBuild(slide.g, host); mxLayout = keep; return c; }
+        var src = slide.kind === 'cover' ? document.getElementById('gn-card-' + slide.d) : slide.p.slot.querySelector('.tz-card');
+        var card = src.cloneNode(true); card.removeAttribute('id'); card.style.transform = ''; host.appendChild(card);
+        if (slide.kind === 'cover') crFitCity(card); else card.querySelectorAll('[data-fit]').forEach(fitLines);
+        return card;
+      }
+      function crDraw() {
+        if (!crSec) return;
+        var slides = crSlides(), max = crMax(), n = crPicked.length;
+        document.getElementById('cr-layout').hidden = crMode !== 'group';
+        document.querySelectorAll('[data-cr]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cr === crMode ? 'true' : 'false'); });
+        document.querySelectorAll('[data-crl]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.crl === crLayout ? 'true' : 'false'); });
+        document.querySelectorAll('.cr-cov').forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.d === crCover ? 'true' : 'false'); });
+        document.querySelectorAll('#cr-list .mx-item').forEach(function (it) {
+          var p = crTalks[+it.dataset.k], on = crPicked.indexOf(p) >= 0, fits = on || crSlidesFor(n + 1) <= max;
+          it.querySelector('input').checked = on; it.querySelector('input').disabled = !fits; it.classList.toggle('mx-full', !fits);
+        });
+        var odd = crMode === 'group' && n === 1;
+        document.getElementById('cr-count').textContent = slides.length + ' of ' + max + ' slides' + (slides.length ? ' · ~' + Math.max(1, Math.round(slides.length * .35)) + ' MB' : '') + (odd ? ' · pick one more talk' : '');
+        document.getElementById('cr-hint').textContent = crMode === 'single' ? 'one slide each, in website order' : 'grouped into Trios (and Duos for the rest), in website order';
+        document.getElementById('cr-dl').disabled = !slides.length;
+        var strip = document.getElementById('cr-strip'); strip.innerHTML = '';
+        if (!slides.length) { strip.innerHTML = '<p class="mx-empty" style="grid-column:1/-1;margin:0">Tick talks on the left, or Select all that fit.</p>'; return; }
+        slides.forEach(function (sl, i) {
+          var t = document.createElement('div'); t.className = 'cr-tile';
+          t.innerHTML = '<i>' + (i + 1) + '</i><div class="tz-frame"></div>';
+          strip.appendChild(t);
+          crCard(sl, t.querySelector('.tz-frame'));
+        });
+        scale();
+      }
+      // JPEG of a slide at 1500 px: a single talk uses its built PNG when the site has one, everything else is rendered
+      function crJpeg(slide, stage) {
+        function toJpeg(src) {
+          return new Promise(function (ok, fail) {
+            var im = new Image(); im.onload = function () {
+              var c = document.createElement('canvas'); c.width = c.height = 1500;
+              var g = c.getContext('2d'); g.fillStyle = '#000'; g.fillRect(0, 0, 1500, 1500); g.drawImage(im, 0, 0, 1500, 1500);
+              c.toBlob(function (b) { b.arrayBuffer().then(function (a) { ok(new Uint8Array(a)); }); }, 'image/jpeg', .88);
+            }; im.onerror = fail; im.src = src;
+          });
+        }
+        var built = slide.kind === 'talk' && slide.p.slot.querySelector('a.tz-dl:not(.th-dl)');
+        var first = built ? fetch(built.getAttribute('href'), { cache: 'force-cache' }).then(function (r) {
+          if (!r.ok || !/image/.test(r.headers.get('content-type') || '')) throw new Error('no built PNG');
+          return r.blob();
+        }).then(function (b) { return toJpeg(URL.createObjectURL(b)); }) : Promise.reject();
+        return first.catch(function () { return pngOf(crCard(slide, stage)).then(toJpeg); });
+      }
+      function crPdf(jpegs) {                    // a minimal PDF 1.4: catalog, pages, then per slide a page, its content, its image
+        var enc = new TextEncoder(), parts = [], off = 0, xref = [], n = jpegs.length;
+        function add(x) { var b = typeof x === 'string' ? enc.encode(x) : x; parts.push(b); off += b.length; }
+        function obj(i, body) { xref[i] = off; add(i + ' 0 obj\n'); body.forEach(add); add('\nendobj\n'); }
+        add(new Uint8Array([37, 80, 68, 70, 45, 49, 46, 52, 10, 37, 226, 227, 207, 211, 10]));   // %PDF-1.4 + a binary marker line
+        var kids = jpegs.map(function (_, i) { return (3 + i * 3) + ' 0 R'; }).join(' ');
+        obj(1, ['<< /Type /Catalog /Pages 2 0 R >>']);
+        obj(2, ['<< /Type /Pages /Kids [' + kids + '] /Count ' + n + ' >>']);
+        jpegs.forEach(function (j, i) {
+          var p = 3 + i * 3, draw = 'q 810 0 0 810 0 0 cm /Im0 Do Q';
+          obj(p, ['<< /Type /Page /Parent 2 0 R /MediaBox [0 0 810 810] /Resources << /XObject << /Im0 ' + (p + 2) + ' 0 R >> >> /Contents ' + (p + 1) + ' 0 R >>']);
+          obj(p + 1, ['<< /Length ' + draw.length + ' >>\nstream\n' + draw + '\nendstream']);
+          obj(p + 2, ['<< /Type /XObject /Subtype /Image /Width 1500 /Height 1500 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + j.length + ' >>\nstream\n', j, '\nendstream']);
+        });
+        var size = 3 + n * 3, start = off, x = 'xref\n0 ' + size + '\n0000000000 65535 f \n';
+        for (var i = 1; i < size; i++) x += ('0000000000' + xref[i]).slice(-10) + ' 00000 n \n';
+        add(x + 'trailer\n<< /Size ' + size + ' /Root 1 0 R >>\nstartxref\n' + start + '\n%%EOF\n');
+        return new Blob(parts, { type: 'application/pdf' });
+      }
+      if (crSec) {
+        var covers = document.getElementById('cr-covers');
+        if (!document.getElementById('gn-pool')) document.getElementById('cr-cover-step').hidden = true;
+        else [['none', 'No cover'], ['portholes', 'Portholes'], ['duotone', 'Duotone'], ['triptych', 'Triptych']].forEach(function (c) {
+          var el = document.createElement('div'); el.className = 'cr-cov'; el.dataset.d = c[0]; el.setAttribute('role', 'button'); el.tabIndex = 0;
+          el.innerHTML = c[0] === 'none' ? '<div class="cr-none">No cover</div><b>No cover</b>' : '<div class="tz-frame"></div><b>' + c[1] + '</b>';
+          covers.appendChild(el);
+          if (c[0] !== 'none') crCard({ kind: 'cover', d: c[0] }, el.querySelector('.tz-frame'));
+          function pick() {
+            var before = crCover; crCover = c[0];
+            while (crSlides().length > crMax() && crPicked.length) crPicked.pop();   // a cover takes a slot: drop the last talk if full
+            if (before !== crCover) crDraw();
+          }
+          el.addEventListener('click', pick); el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+        });
+        var crList = document.getElementById('cr-list');
+        crTalks.forEach(function (p, k) {
+          var it = document.createElement('label'); it.className = 'mx-item'; it.dataset.k = k;
+          it.innerHTML = '<input type="checkbox">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="" loading="lazy">' : '<span class="mx-noimg"></span>') + '<div><b></b><span></span></div>';
+          it.querySelector('b').textContent = p.name;
+          if (p.org) { var co = document.createElement('i'); co.textContent = ' · ' + p.org; it.querySelector('b').appendChild(co); }
+          it.querySelector('div span').textContent = p.title;
+          it.querySelector('input').addEventListener('change', function (e) {
+            var at = crPicked.indexOf(p);
+            if (e.target.checked && at < 0) crPicked.push(p); else if (!e.target.checked && at >= 0) crPicked.splice(at, 1);
+            crDraw();
+          });
+          crList.appendChild(it);
+        });
+        document.getElementById('cr-search').addEventListener('input', function () {
+          var q = this.value.trim().toLowerCase();
+          document.querySelectorAll('#cr-list .mx-item').forEach(function (it) { it.hidden = !!q && !matches(crTalks[+it.dataset.k].slot, q); });
+        });
+        document.querySelectorAll('[data-cr]').forEach(function (b) { b.addEventListener('click', function () {
+          crMode = b.dataset.cr; while (crSlides().length > crMax() && crPicked.length) crPicked.pop(); crDraw(); }); });
+        document.querySelectorAll('[data-crl]').forEach(function (b) { b.addEventListener('click', function () { crLayout = b.dataset.crl; crDraw(); }); });
+        document.getElementById('cr-max').addEventListener('change', function () { while (crSlides().length > crMax() && crPicked.length) crPicked.pop(); crDraw(); });
+        document.getElementById('cr-fit').addEventListener('click', function () {   // the first talks in website order, as many as fit
+          crPicked = [];
+          crTalks.forEach(function (p) { if (crSlidesFor(crPicked.length + 1) <= crMax()) crPicked.push(p); });
+          if (crMode === 'group' && crPicked.length % 3 === 1 && crSlidesFor(crPicked.length) > crSlidesFor(crPicked.length - 1)) crPicked.pop();
+          crDraw();
+        });
+        document.getElementById('cr-clear').addEventListener('click', function () { crPicked = []; crDraw(); });
+        document.getElementById('cr-copy').addEventListener('click', function () {
+          var b = this, v = document.getElementById('cr-ttl').value;
+          (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy title'; }, 1500); })
+            .catch(function () { document.getElementById('cr-ttl').select(); });
+        });
+        document.getElementById('cr-dl').addEventListener('click', function () {
+          var btn = this, slides = crSlides(), jpegs = [];
+          if (!slides.length) return;
+          var stage = document.createElement('div');
+          stage.style.cssText = 'position:fixed;left:-13000px;top:0;width:1200px;height:1200px;overflow:hidden';
+          document.body.appendChild(stage);
+          btn.disabled = true;
+          slides.reduce(function (done, sl, i) {
+            return done.then(function () { btn.textContent = 'Rendering ' + (i + 1) + ' of ' + slides.length + '...'; return crJpeg(sl, stage).then(function (j) { jpegs.push(j); }); });
+          }, Promise.resolve()).then(function () {
+            var url = URL.createObjectURL(crPdf(jpegs)), a = document.createElement('a');
+            a.href = url; a.download = {{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-carousel.pdf';
+            document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+          }).catch(function (err) { alert('Could not build the PDF: ' + err); })
+            .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Download PDF'; });
+        });
+      }
+      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : location.hash === '#generic' && document.getElementById('gn-pool') ? 'gn' : location.hash === '#carousel' && document.getElementById('cr-sec') ? 'cr' : 'tz'{% endif %});
     })();
   </script>
 </body>
