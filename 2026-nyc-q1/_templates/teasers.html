@@ -259,8 +259,9 @@
     .mx-swho .mx-org { font-weight: 400; color: var(--accent); }
     .mx-srow .mx-photo { width: 184px; height: 184px; object-fit: contain; flex: 0 0 auto; }
     .mx-stack.n2 .mx-photo { width: 250px; height: 250px; }
-    /* ── Generic covers (fifth tab, Marek 2026-10-08): the event's logo big in the middle, city and date, the venue photos
-       behind - three designs he picked (portholes, duotone, triptych). The logo is drawn exactly as it is: never trimmed,
+    /* ── Generic covers (fifth tab, Marek 2026-10-08): only the event's logo big, a big location and a big date, no other
+       text - "halo" (a slime ring round the logo, no photos) and "triptych" (the three venue photos, only when the event has
+       real ones), Marek's picks from Desktop "Generic covers v2". The logo is drawn exactly as it is: never trimmed,
        recoloured or given a glow. ── */
     #gn-pool { display: none; }
     body.gn-mode #gn-pool { display: grid; }
@@ -268,10 +269,9 @@
     .gn-slot { display: flex; flex-direction: column; position: relative; }
     .gn-card .gn-ph { background-size: cover; background-position: center; }
     .gn-card .gn-logo { object-fit: contain; }
-    .gn-city { left: 0; width: 1200px; text-align: center; font-weight: 800; letter-spacing: .3em; text-transform: uppercase; white-space: nowrap; }
-    .gn-date { left: 0; width: 1200px; text-align: center; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
-    .gn-rule { height: 4px; border-radius: 2px; background: {{ tz.ramp }}; }
-    .gn-foot { left: 0; width: 1200px; text-align: center; font-weight: 600; font-size: 20px; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.6); white-space: nowrap; }
+    .gn-city { left: 0; width: 1200px; text-align: center; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; white-space: nowrap; }
+    .gn-date { left: 0; width: 1200px; text-align: center; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+    .gn-rule { height: 5px; border-radius: 3px; background: {{ tz.ramp }}; }
     /* ── Carousel (sixth tab, Marek 2026-10-08): a LinkedIn document post - a square PDF, one page per slide: an optional
        Generic cover, then talks as singles or Duos / Trios, within the recommended length (LinkedIn: PDF, 100 MB / 300
        pages max, every page the same size; 8-12 slides read best). Built in the browser, nothing at build time. ── */
@@ -329,7 +329,7 @@
     <div class="tz-tabs" role="tablist"{% if teasers_expired %} hidden{% endif %}>
       <button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>
       {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="mx" aria-selected="false">Duo / Trio</button>{% endif %}
-      {% if gn.photos and not teasers_expired %}<button type="button" role="tab" data-tab="gn" aria-selected="false">Generic</button>{% endif %}
+      {% if not teasers_expired %}<button type="button" role="tab" data-tab="gn" aria-selected="false">Generic</button>{% endif %}
       {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="cr" aria-selected="false">Carousel</button>{% endif %}
       {% if sp_cards and not teasers_expired %}<button type="button" role="tab" data-tab="sp" aria-selected="false">Sponsor cards</button>{% endif %}
       <button type="button" role="tab" data-tab="th" aria-selected="false">Thumbnails</button>
@@ -474,43 +474,25 @@
         <p class="cr-note">LinkedIn: post &rarr; <b>Add a document</b> &rarr; this PDF, and give it the title above. Square 1080 &times; 1080 pages, one picture each; keep the tab in front while it renders.</p>
       </div>
     </div>{% endif %}<!--/crsec-->
-    <!--gnsec-->{% if gn.photos and not teasers_expired %}{% set _ph = [gn.photos[0 % gn.photos|length], gn.photos[1 % gn.photos|length], gn.photos[2 % gn.photos|length]] %}
-    {% set _rp = tz.scheme.ramp %}<div class="tz-grid" id="gn-pool">
-      {% for d in ['portholes', 'duotone', 'triptych'] %}
+    <!--gnsec-->{% if not teasers_expired %}{% set _ph = [gn.photos[0 % gn.photos|length], gn.photos[1 % gn.photos|length], gn.photos[2 % gn.photos|length]] if gn.photos else [] %}
+    <div class="tz-grid" id="gn-pool">
+      {% for d in (['halo', 'triptych'] if gn.photos else ['halo']) %}
       <div class="gn-slot">
         <div class="tz-frame">
           <div class="tz-card gn-card" id="gn-card-{{ d }}" data-file="{{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-') }}-cover-{{ d }}.png">
-          {% if d == 'portholes' %}
-            {{ tz.sweeps_sunrise|replace('tzg', 'tzg-gn-p-')|replace('tzf', 'tzf-gn-p-')|safe }}
-            {% if gn.venue %}<div class="gn-foot" style="top:70px;color:var(--accent)">{{ gn.venue }}</div>{% endif %}
-            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:360px;top:140px;width:480px;height:480px">
-            <div class="gn-city" style="top:660px;font-size:56px">{{ gn.city }}</div>
-            <div class="gn-rule" style="left:510px;top:742px;width:180px"></div>
-            <div class="gn-date" style="top:772px;font-size:28px">{{ gn.date }}</div>
-            {% for x, y in [(150, 900), (465, 850), (780, 900)] %}<div style="left:{{ x }}px;top:{{ y }}px;width:270px;height:270px;border-radius:50%;background:{{ tz.ramp45 }};padding:5px;box-sizing:border-box;box-shadow:0 20px 50px rgba(0,0,0,.6)">
-              <div class="gn-ph" style="position:static;width:100%;height:100%;border-radius:50%;background-image:url('{{ _ph[loop.index0] }}');filter:brightness(.8)"></div></div>{% endfor %}
-          {% elif d == 'duotone' %}
-            {% for clip in ['polygon(0 0, 52% 0, 30% 100%, 0 100%)', 'polygon(52% 0, 82% 0, 62% 100%, 30% 100%)', 'polygon(82% 0, 100% 0, 100% 100%, 62% 100%)'] %}
-            <div style="inset:0;clip-path:{{ clip }}"><div class="gn-ph" style="position:absolute;inset:0;background-image:url('{{ _ph[loop.index0] }}');filter:grayscale(1) brightness(.55) contrast(1.1)"></div>
-              <div style="position:absolute;inset:0;background:{{ [_rp[0], _rp[(_rp|length) // 2], _rp[-1]][loop.index0] }};mix-blend-mode:color;opacity:.85"></div></div>{% endfor %}
-            <div style="inset:0;background:radial-gradient(circle at 50% 46%,rgba(5,3,15,0) 0,rgba(5,3,15,.25) 420px,rgba(5,3,15,.85) 900px)"></div>
-            <div style="left:290px;top:180px;width:620px;height:620px;border-radius:50%;background:{{ tz.ramp45 }};padding:6px;box-sizing:border-box;box-shadow:0 0 90px {{ tz.scheme.glow }}80">
-              <div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 40%,{{ tz.scheme.bg[0] }},{{ tz.scheme.bg[1] }} 70%)"></div></div>
-            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:400px;top:290px;width:400px;height:400px">
-            <div style="left:120px;top:850px;width:960px;height:220px;border-radius:28px;background:{{ tz.scheme.bg[1] }}d1"></div>
-            <div class="gn-city" style="top:885px;font-size:54px">{{ gn.city }}</div>
-            <div class="gn-rule" style="left:520px;top:962px;width:160px"></div>
-            <div class="gn-date" style="top:990px;font-size:28px">{{ gn.date }}</div>
+          {% if d == 'halo' %}
+            {{ tz.sweeps_halo|replace('tzg', 'tzg-gn-h-')|replace('tzf', 'tzf-gn-h-')|safe }}
+            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:375px;top:245px;width:450px;height:450px">
+            <div class="gn-city" style="top:900px;font-size:66px">{{ gn.city }}</div>
+            <div class="gn-date" style="top:1000px;font-size:44px">{{ gn.date }}</div>
           {% else %}
-            {% for i in range(3) %}<div class="gn-ph" style="left:{{ i * 402 }}px;top:0;width:396px;height:1200px;background-image:url('{{ _ph[i] }}');filter:grayscale(.55) brightness(.5)"></div>{% endfor %}
-            <div style="inset:0;background:{{ tz.ramp }};mix-blend-mode:overlay;opacity:.45"></div>
-            <div style="inset:0;background:linear-gradient(180deg,{{ tz.scheme.bg[1] }}d9 0%,{{ tz.scheme.bg[1] }}26 30%,{{ tz.scheme.bg[1] }}59 55%,{{ tz.scheme.bg[1] }}f2 85%)"></div>
-            <div style="left:300px;top:250px;width:600px;height:600px;background:radial-gradient(circle,{{ tz.scheme.bg[1] }}d9 0,{{ tz.scheme.bg[1] }}80 45%,{{ tz.scheme.bg[1] }}00 70%)"></div>
-            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:375px;top:250px;width:450px;height:450px">
-            <div class="gn-rule" style="left:500px;top:742px;width:200px"></div>
-            <div class="gn-city" style="top:778px;font-size:54px">{{ gn.city }}</div>
-            <div class="gn-date" style="top:860px;font-size:28px">{{ gn.date }}</div>
-            <div class="gn-foot" style="top:1110px">{{ gn.venue }}{% if gn.venue and gn.site %} &nbsp;·&nbsp; {% endif %}{{ gn.site }}</div>
+            {% for i in range(3) %}<div class="gn-ph" style="left:{{ i * 402 }}px;top:0;width:396px;height:1200px;background-image:url('{{ _ph[i] }}');filter:grayscale(.4) brightness(.5)"></div>{% endfor %}
+            <div style="inset:0;background:{{ tz.ramp }};mix-blend-mode:overlay;opacity:.4"></div>
+            <div style="inset:0;background:linear-gradient(180deg,{{ tz.scheme.bg[1] }}cc 0%,{{ tz.scheme.bg[1] }}40 30%,{{ tz.scheme.bg[1] }}73 55%,{{ tz.scheme.bg[1] }}f2 100%)"></div>
+            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:360px;top:150px;width:480px;height:480px">
+            <div class="gn-rule" style="left:500px;top:690px;width:200px"></div>
+            <div class="gn-city" style="top:730px;font-size:68px">{{ gn.city }}</div>
+            <div class="gn-date" style="top:840px;font-size:46px">{{ gn.date }}</div>
           {% endif %}
           </div>
         </div>
@@ -638,8 +620,8 @@
         fitted[t] = 1;
         if (t === 'th') { document.querySelectorAll('.th-card [data-thfit]').forEach(fitWord); return; }
         if (t === 'sp') { document.querySelectorAll('.sp-card [data-fit]').forEach(fitLines); return; }
-        if (t === 'gn') {                        // the city line shrinks until the text itself fits 1080 px
-          document.querySelectorAll('.gn-city').forEach(function (e) {
+        if (t === 'gn') {                        // the city and date lines shrink until the text itself fits 1080 px
+          document.querySelectorAll('.gn-city, .gn-date').forEach(function (e) {
             var w = document.createElement('span'); w.style.whiteSpace = 'nowrap'; while (e.firstChild) w.appendChild(e.firstChild); e.appendChild(w);
             var px = parseFloat(e.style.fontSize); while (px > 18 && w.offsetWidth > 1080) { px -= 1; e.style.fontSize = px + 'px'; }
           });
@@ -822,7 +804,7 @@
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
           : t === 'cr' ? 'A LinkedIn carousel (a square PDF for a document post): a cover, then talks as singles or Duos & Trios, within the recommended length.'
-          : t === 'gn' ? 'Three covers for the whole event (1500 x 1500 PNG): its logo, city and date over the venue photos. Rendered here in your browser.'
+          : t === 'gn' ? (document.getElementById('gn-card-triptych') ? 'Two covers' : 'A cover') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only. Rendered here in your browser.'
           : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
@@ -1155,7 +1137,7 @@
       // cover, then the ticked talks solo (their built PNGs) or auto-divided into Trios and Duos (as Duo / Trio builds them),
       // or the sponsor cards. No slide limit (LinkedIn allows 300 pages / 100 MB). The PDF is written here by hand: every page
       // 810 x 810 pt (1080 px), one flattened image each.
-      var crSec = document.getElementById('cr-sec'), crCover = document.getElementById('gn-pool') ? 'portholes' : 'none',
+      var crSec = document.getElementById('cr-sec'), crCover = document.getElementById('gn-pool') ? 'halo' : 'none',
         crMode = 'single', crLayout = 'cols', crPicked = [], crSpPicked = null, crAll = false;   // crAll: Select all was the last choice
       var crTalks = mxTalks.slice().sort(function (a, b) { return a.slot.dataset.web - b.slot.dataset.web; });
       function crGroups(list) {                  // the auto-divide rule: Trios, then Duos, never a talk on its own
@@ -1191,8 +1173,8 @@
         else crGroups(list).forEach(function (g) { out.push({ kind: 'group', g: g }); });
         return out;
       }
-      function crFitCity(card) {                 // the cover's city line, fitted as on the Generic tab
-        card.querySelectorAll('.gn-city').forEach(function (e) {
+      function crFitCity(card) {                 // the cover's city and date lines, fitted as on the Generic tab
+        card.querySelectorAll('.gn-city, .gn-date').forEach(function (e) {
           var w = e.firstElementChild && e.firstElementChild.tagName === 'SPAN' ? e.firstElementChild : null;
           if (!w) { w = document.createElement('span'); w.style.whiteSpace = 'nowrap'; while (e.firstChild) w.appendChild(e.firstChild); e.appendChild(w); }
           var px = parseFloat(e.style.fontSize); while (px > 18 && w.offsetWidth > 1080) { px -= 1; e.style.fontSize = px + 'px'; }
@@ -1314,7 +1296,7 @@
       if (crSec) {
         var covers = document.getElementById('cr-covers');
         if (!document.getElementById('gn-pool')) document.getElementById('cr-cover-step').hidden = true;
-        else [['none', 'No cover'], ['portholes', 'Portholes'], ['duotone', 'Duotone'], ['triptych', 'Triptych']].forEach(function (c) {
+        else [['none', 'No cover'], ['halo', 'Halo'], ['triptych', 'Triptych']].filter(function (c) { return c[0] === 'none' || document.getElementById('gn-card-' + c[0]); }).forEach(function (c) {
           var el = document.createElement('div'); el.className = 'cr-cov'; el.dataset.d = c[0]; el.setAttribute('role', 'button'); el.tabIndex = 0;
           el.innerHTML = c[0] === 'none' ? '<div class="cr-none">No cover</div><b>No cover</b>' : '<div class="tz-frame"></div><b>' + c[1] + '</b>';
           covers.appendChild(el);

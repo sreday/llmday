@@ -1859,6 +1859,8 @@ _TZ_CORNERS = [(120, 140, 400, 104, math.pi * .02, math.pi * .62, .34, 80), (111
 _TZ_SUNRISE = [(600, 1250, 420, 100, -math.pi * .98, -math.pi * .02, .36, 84), (600, 1250, 600, 56, -math.pi * .95, -math.pi * .05, .2, 60)]
 _TZ_WAVES = [(600, -1650, 2050, 64, math.pi * .35, math.pi * .65, .3, 60), (600, -1450, 2050, 64, math.pi * .35, math.pi * .65, .24, 60),
              (600, -1250, 2050, 64, math.pi * .35, math.pi * .65, .18, 60)]
+# "halo": one ring open at the bottom round the logo, the Generic slime cover Marek picked (2026-10-08, "Generic covers v2")
+_TZ_HALO = [(600, 470, 400, 100, -math.pi * 1.15, math.pi * .15, .34, 90)]
 
 
 # ── title text rules (tuned on 100 real titles, Marek 2026-10-04) ──
@@ -1969,7 +1971,7 @@ except ValueError:
     pass
 _tz_pct = 20 if _tz_days is None or _tz_days >= 21 else 60   # SRE60 / LLM60 / PLAT60 / PEC60 (Marek 2026-10-08)
 context['tz'] = {
-    'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'sweeps_sunrise': _tz_sweeps_svg(_TZ_SUNRISE), 'sweeps_waves': _tz_sweeps_svg(_TZ_WAVES), 'sweeps_corners': _tz_sweeps_svg(_TZ_CORNERS), 'logo': _tz_logo, 'logo_left': _tz_logo_left, 'blend': _tz_blend,
+    'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'sweeps_sunrise': _tz_sweeps_svg(_TZ_SUNRISE), 'sweeps_waves': _tz_sweeps_svg(_TZ_WAVES), 'sweeps_corners': _tz_sweeps_svg(_TZ_CORNERS), 'sweeps_halo': _tz_sweeps_svg(_TZ_HALO), 'logo': _tz_logo, 'logo_left': _tz_logo_left, 'blend': _tz_blend,
     'free': bool(context['hero_event'].get('is_free')),
     # Marek 2026-10-08: no ball at all unless the event is on Luma (and Luma answered) AND has a confirmed venue -
     # Tel Aviv (free, in10t registration) and Campinas (paid, venue TBC, no Luma yet) show no ball, never a code nobody can use
