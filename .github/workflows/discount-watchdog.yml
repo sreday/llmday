@@ -1,0 +1,29 @@
+name: Discount watchdog
+# Hourly (Marek 2026-10-09): the live teasers pages must show today's discount (20% 3+ weeks out, 40% closer, days
+# counted from the UTC date like generate.py). A mismatch queues one normal deploy; it never builds anything itself, so deploys stay fast.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: write   # queues static-build.yml when a page is stale
+concurrency:
+  group: discount-watchdog
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:   # only the event dates and the script, not the photos
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /_build/discount_watchdog.py
+            /20*/metadata.yml
+      - name: Compare the live discount with today's
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 _build/discount_watchdog.py https://llmday.com
