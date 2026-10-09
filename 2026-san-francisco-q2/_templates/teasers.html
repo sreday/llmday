@@ -291,6 +291,12 @@
     .cr-none { aspect-ratio: 1 / 1; border-radius: 8px; border: 2px dashed #cfcfd6; display: flex; align-items: center; justify-content: center; color: #888; font: 600 .8rem 'Montserrat', sans-serif; background: #fafafc; }
     .cr-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
     .cr-pick .mx-list { max-height: 420px; }
+    .cr-pick .mx-list[hidden] { display: none; }
+    .cr-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cr-chips button { font: 600 .85rem 'Montserrat', sans-serif; padding: 8px 14px; border-radius: 999px; border: 1px solid #cfcfd6; background: #fff; color: #444; cursor: pointer; }
+    .cr-chips button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .cr-sp-thumb { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex: 0 0 auto; background: #fff; display: flex; align-items: center; justify-content: center; border: 1px solid #e3e2ea; }
+    .cr-sp-thumb img { max-width: 80%; max-height: 80%; }
     .cr-side { position: sticky; top: 16px; }
     .cr-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.08); padding: 12px; min-height: 120px; }
     .cr-tile { position: relative; }
@@ -437,24 +443,25 @@
           <h3>2. Slides</h3>
           <div class="cr-row">
             <div class="tz-sort" role="group" aria-label="Slides">
-              <button type="button" data-cr="single" aria-pressed="true">Single talks</button>
+              <button type="button" data-cr="single" aria-pressed="true">Solo talks</button>
               <button type="button" data-cr="group" aria-pressed="false">Duos &amp; Trios</button>
+              {% if sp_cards %}<button type="button" data-cr="sponsors" aria-pressed="false">Sponsors</button>{% endif %}
             </div>
             <div class="tz-sort" role="group" aria-label="Layout" id="cr-layout" hidden>
               <button type="button" data-crl="cols" aria-pressed="true">Columns</button>
               <button type="button" data-crl="stack" aria-pressed="false">Stack</button>
             </div>
-            <label class="tz-count">Max slides <select id="cr-max"><option>10</option><option selected>12</option><option>15</option><option>20</option></select></label>
           </div>
         </div>
         <div class="cr-step cr-pick">
-          <h3>3. Talks <span id="cr-hint">in website order</span></h3>
+          <h3><span id="cr-step3" style="font-size:inherit;color:inherit;margin:0;font-weight:inherit">3. Talks</span> <span id="cr-hint"></span></h3>
           <div class="cr-row" style="margin-bottom:10px">
-            <button class="tz-btn" type="button" id="cr-fit">Select all that fit</button>
+            <div class="cr-chips" id="cr-chips" role="group" aria-label="Select"></div>
             <button class="tz-btn" type="button" id="cr-clear" style="background:#fff;color:var(--brand);border:1px solid var(--brand)">Clear</button>
           </div>
           <input class="tz-search" id="cr-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search the talks" style="width:100%;box-sizing:border-box;margin-bottom:10px">
           <div class="mx-list" id="cr-list" role="group" aria-label="Talks in the carousel"></div>
+          <div class="mx-list" id="cr-splist" role="group" aria-label="Sponsor cards in the carousel" hidden></div>
         </div>
       </div>
       <div class="cr-side">
@@ -608,7 +615,11 @@
       // fitting measures the laid-out card, so each tab is fitted the first time it is shown (a hidden card measures 0)
       var fitted = {};
       function fitTab(t) {
-        if (fitted[t]) return; fitted[t] = 1;
+        // fit only what is laid out: a hidden pool measures 0, so the titles kept their largest size and ran into the event
+        // line when the page opened on Duo / Trio or Carousel first (2026-10-08); it is fitted when it is first shown instead
+        var pool = { tz: 'tz-pool', gn: 'gn-pool', sp: 'sp-pool' }[t], el = pool && document.getElementById(pool);
+        if (fitted[t] || (el && el.offsetParent === null && !document.body.classList.contains('tz-sheet') && !document.body.classList.contains('sp-sheet'))) return;
+        fitted[t] = 1;
         if (t === 'th') { document.querySelectorAll('.th-card [data-thfit]').forEach(fitWord); return; }
         if (t === 'sp') { document.querySelectorAll('.sp-card [data-fit]').forEach(fitLines); return; }
         if (t === 'gn') {                        // the city line shrinks until the text itself fits 1080 px
@@ -714,7 +725,7 @@
             head.innerHTML = '<h2></h2><button class="tz-btn" type="button"></button>';
             head.querySelector('h2').textContent = k + ' (' + visible + ')';
             var btn = head.querySelector('button'); btn.textContent = 'Download ' + k.toLowerCase();
-            btn.addEventListener('click', function () { download(by[k], btn); });
+            btn.addEventListener('click', function () { download(by[k], btn, k); });
             var grid = document.createElement('div'); grid.className = 'tz-grid';
             by[k].forEach(function (s) { grid.appendChild(s); });
             groups.appendChild(head); groups.appendChild(grid);
@@ -798,24 +809,46 @@
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
         moveInk(t); slideIn(prev, t);
-        ready.then(function () { moveInk(t); fitTab(t === 'mx' || t === 'cr' ? 'tz' : t); if (t === 'cr') fitTab('gn'); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); if (t === 'cr' && typeof crDraw === 'function') crDraw(); scale(); });
+        ready.then(function () { moveInk(t); fitTab(t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); if (t === 'cr' && typeof crDraw === 'function') crDraw(); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
         b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#generic' : b.dataset.tab === 'cr' ? '#carousel' : location.pathname); });
       });
 
-      // 4. downloads: the PNGs of the given cards that are shown, one after another (the browser asks once to allow it)
-      function download(list, btn) {
+      // 4. downloads: every "Download all" is one ZIP (Marek 2026-10-08) of the shown cards' PNGs - the built files, or, where
+      // there is none (a local build) or the host card has been re-framed, the card rendered here
+      function download(list, btn, label) {
+        var kind = tab === 'th' ? 'thumbnails' : tab === 'sp' ? 'sponsor-cards' : 'teasers';
         var cls = tab === 'th' ? 'a.th-dl' : tab === 'sp' ? 'a.sp-dl' : 'a.tz-dl:not(.th-dl)';
-        var links = list.filter(function (s) { return !s.hidden; }).map(function (s) { return s.querySelector(cls); });
-        if (!links.length) return;
+        var slots = list.filter(function (s) { return !s.hidden; }), files = [], keep = btn.textContent;
+        if (!slots.length) return;
         btn.disabled = true;
-        links.forEach(function (a, i) { setTimeout(function () { a.click(); if (i === links.length - 1) btn.disabled = false; }, i * 400); });
+        slots.reduce(function (done, s, i) {
+          return done.then(function () {
+            btn.textContent = 'Zipping ' + (i + 1) + ' of ' + slots.length + '...';
+            var a = s.querySelector(cls), name = a.getAttribute('download');
+            var custom = tab === 'sp' && s.dataset.host && !(spPos === 50 && spVig === 0);
+            if (custom) name = name.replace(/\.png$/, '') + ' - position ' + spPos + ' - vignette ' + spVig + '.png';
+            var get = custom ? Promise.reject() : fetch(a.getAttribute('href')).then(function (r) {
+              if (!r.ok || !/image/.test(r.headers.get('content-type') || '')) throw new Error('not built');
+              return r.arrayBuffer();
+            });
+            return get.catch(function () {
+              var card = s.querySelector(tab === 'th' ? '.th-card' : '.tz-card');
+              return (tab === 'th' ? pngOf(card, 1280, 720, 1) : pngOf(card)).then(function (u) { return fetch(u); }).then(function (r) { return r.arrayBuffer(); });
+            }).then(function (b) { files.push({ name: name, bytes: new Uint8Array(b) }); });
+          });
+        }, Promise.resolve()).then(function () {
+          var url = URL.createObjectURL(zipOf(files)), z = document.createElement('a');
+          z.href = url; z.download = ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + kind + (label ? '-' + label : '')).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/-+/g, '-') + '.zip';
+          document.body.appendChild(z); z.click(); z.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+        }).catch(function (err) { alert('Could not make the ZIP: ' + err); })
+          .then(function () { btn.disabled = false; btn.textContent = keep; });
       }
       // in-browser PNG of a 1200 px card (Duo / Trio, a re-framed host card): html-to-image, loaded on first use, with only
       // Montserrat's latin + latin-ext files embedded - every Google Fonts subset the page loads took ~1 minute (2026-10-08)
       var pngLib = null, pngFonts = null;
-      function pngOf(card) {
+      function pngOf(card, w, h, ratio) {
         pngLib = pngLib || new Promise(function (ok, fail) {
           var sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js';
           sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = fail; document.head.appendChild(sc);
@@ -832,7 +865,7 @@
             })).then(function (pairs) { pairs.forEach(function (p) { blocks = blocks.split(p[0]).join('url(' + p[1] + ')'); }); return blocks; });
           });
         return Promise.all([pngLib, pngFonts]).then(function (r) {
-          return r[0].toPng(card, { width: 1200, height: 1200, pixelRatio: 1.25, style: { transform: 'none' }, fontEmbedCSS: r[1] });
+          return r[0].toPng(card, { width: w || 1200, height: h || 1200, pixelRatio: ratio || 1.25, style: { transform: 'none' }, fontEmbedCSS: r[1] });
         });
       }
       // a ZIP of files kept as they are (PNGs are already compressed): local headers, the data, the central directory
@@ -1085,10 +1118,11 @@
       }
 
       // 6. Carousel (Marek 2026-10-08): a LinkedIn document post - one square PDF, a JPEG per page. Slides: the chosen Generic
-      // cover, then the ticked talks as singles (their built PNGs) or auto-divided into Trios and Duos (as Duo / Trio
-      // builds them). The PDF is written here by hand: every page 810 x 810 pt (1080 px), one flattened image each.
+      // cover, then the ticked talks solo (their built PNGs) or auto-divided into Trios and Duos (as Duo / Trio builds them),
+      // or the sponsor cards. No slide limit (LinkedIn allows 300 pages / 100 MB). The PDF is written here by hand: every page
+      // 810 x 810 pt (1080 px), one flattened image each.
       var crSec = document.getElementById('cr-sec'), crCover = document.getElementById('gn-pool') ? 'portholes' : 'none',
-        crMode = 'single', crLayout = 'cols', crPicked = [];
+        crMode = 'single', crLayout = 'cols', crPicked = [], crSpPicked = null, crAll = false;   // crAll: Select all was the last choice
       var crTalks = mxTalks.slice().sort(function (a, b) { return a.slot.dataset.web - b.slot.dataset.web; });
       function crGroups(list) {                  // the auto-divide rule: Trios, then Duos, never a talk on its own
         var n = list.length, groups = [], at = 0;
@@ -1098,11 +1132,27 @@
         for (var d = 0; d < duos; d++) { groups.push(list.slice(at, at + 2)); at += 2; }
         return groups;
       }
-      function crSlidesFor(n) { return (crCover === 'none' ? 0 : 1) + (crMode === 'single' ? n : crGroups(new Array(n)).length); }
-      function crMax() { return +document.getElementById('cr-max').value; }
+      // the sponsor cards: the host as it is set on the Sponsor cards tab (venue picture, darkness, position, vignette), then
+      // every sponsor and partner; keyed so the host stays picked when its picture changes
+      function crSponsors() {
+        return [].filter.call(document.querySelectorAll('.sp-slot'), function (s) { return !s.dataset.host || !s.hidden; }).map(function (s, i) {
+          var role = (s.querySelector('.sp-word') || {}).textContent || '';
+          return { key: s.dataset.host ? 'host' : 'sp' + [].indexOf.call(document.querySelectorAll('.sp-slot'), s), slot: s,
+                   group: /host/i.test(role) ? 'Host' : /partner/i.test(role) ? 'Partners' : 'Sponsors',
+                   name: (s.querySelector('.sp-disc img') || {}).alt || role, logo: (s.querySelector('.sp-disc img') || {}).getAttribute ? s.querySelector('.sp-disc img').getAttribute('src') : '' };
+        });
+      }
+      function crItems() {                       // what step 3 lists, with the group each belongs to
+        if (crMode === 'sponsors') return crSponsors();
+        return crTalks.map(function (p) { return { key: p, p: p, group: p.slot.dataset.track ? trackLabel(p.slot) : '' }; });
+      }
+      function crIsPicked(it) { return crMode === 'sponsors' ? crSpPicked.indexOf(it.key) >= 0 : crPicked.indexOf(it.p) >= 0; }
+      function crSetPicked(keys) { if (crMode === 'sponsors') crSpPicked = keys; else crPicked = keys; }
       function crSlides() {                      // what the carousel holds, in order
-        var list = crTalks.filter(function (p) { return crPicked.indexOf(p) >= 0; }), out = [];
+        var out = [];
         if (crCover !== 'none') out.push({ kind: 'cover', d: crCover });
+        if (crMode === 'sponsors') { crSponsors().forEach(function (it) { if (crSpPicked.indexOf(it.key) >= 0) out.push({ kind: 'sp', slot: it.slot }); }); return out; }
+        var list = crTalks.filter(function (p) { return crPicked.indexOf(p) >= 0; });
         if (crMode === 'single') list.forEach(function (p) { out.push({ kind: 'talk', p: p }); });
         else crGroups(list).forEach(function (g) { out.push({ kind: 'group', g: g }); });
         return out;
@@ -1114,31 +1164,74 @@
           var px = parseFloat(e.style.fontSize); while (px > 18 && w.offsetWidth > 1080) { px -= 1; e.style.fontSize = px + 'px'; }
         });
       }
-      function crCard(slide, host) {             // the slide's 1200 px card, built into host
+      function crCard(slide, host) {             // the slide's 1200 px card, built into host and fitted there
         host.innerHTML = '';
         if (slide.kind === 'group') { var keep = mxLayout; mxLayout = crLayout; var c = mxBuild(slide.g, host); mxLayout = keep; return c; }
-        var src = slide.kind === 'cover' ? document.getElementById('gn-card-' + slide.d) : slide.p.slot.querySelector('.tz-card');
+        var src = slide.kind === 'cover' ? document.getElementById('gn-card-' + slide.d) : slide.kind === 'sp' ? slide.slot.querySelector('.tz-card') : slide.p.slot.querySelector('.tz-card');
         var card = src.cloneNode(true); card.removeAttribute('id'); card.style.transform = ''; host.appendChild(card);
-        if (slide.kind === 'cover') crFitCity(card); else card.querySelectorAll('[data-fit]').forEach(fitLines);
+        if (slide.kind === 'cover') crFitCity(card);
+        else {
+          card.querySelectorAll('[data-fit]').forEach(fitLines);
+          card.querySelectorAll('.tz-talk[data-lines]').forEach(fitTitle);   // the copy is fitted itself, laid out or not elsewhere
+        }
         return card;
       }
       function crDraw() {
         if (!crSec) return;
-        var slides = crSlides(), max = crMax(), n = crPicked.length;
+        if (crMode === 'sponsors' && crSpPicked === null) { crSpPicked = crSponsors().map(function (it) { return it.key; }); crAll = true; }   // all, the first time
+        var ttl = document.getElementById('cr-ttl'), ttlTalks = {{ (onboarding_event.event_name ~ ': speakers')|tojson }}, ttlSp = {{ (onboarding_event.event_name ~ ': sponsors & partners')|tojson }};
+        if (crMode === 'sponsors' && ttl.value === ttlTalks) ttl.value = ttlSp; else if (crMode !== 'sponsors' && ttl.value === ttlSp) ttl.value = ttlTalks;   // unless edited
+        var slides = crSlides(), items = crItems();
         document.getElementById('cr-layout').hidden = crMode !== 'group';
         document.querySelectorAll('[data-cr]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cr === crMode ? 'true' : 'false'); });
         document.querySelectorAll('[data-crl]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.crl === crLayout ? 'true' : 'false'); });
         document.querySelectorAll('.cr-cov').forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.d === crCover ? 'true' : 'false'); });
-        document.querySelectorAll('#cr-list .mx-item').forEach(function (it) {
-          var p = crTalks[+it.dataset.k], on = crPicked.indexOf(p) >= 0, fits = on || crSlidesFor(n + 1) <= max;
-          it.querySelector('input').checked = on; it.querySelector('input').disabled = !fits; it.classList.toggle('mx-full', !fits);
+        document.getElementById('cr-step3').textContent = crMode === 'sponsors' ? '3. Sponsors' : '3. Talks';
+        document.getElementById('cr-hint').textContent = crMode === 'group' ? 'grouped into Trios (and Duos for the rest), in website order' : '';
+        document.getElementById('cr-list').hidden = crMode === 'sponsors'; document.getElementById('cr-splist').hidden = crMode !== 'sponsors';
+        document.getElementById('cr-search').hidden = crMode === 'sponsors';
+        // the sponsor list follows the host chosen on the Sponsor cards tab
+        if (crMode === 'sponsors') {
+          var spl = document.getElementById('cr-splist'); spl.innerHTML = '';
+          items.forEach(function (it) {
+            var row = document.createElement('label'); row.className = 'mx-item';
+            row.innerHTML = '<input type="checkbox"><span class="cr-sp-thumb">' + (it.logo ? '<img src="' + esc(it.logo) + '" alt="">' : '') + '</span><div><b></b><span></span></div>';
+            row.querySelector('b').textContent = it.name; row.querySelector('div span').textContent = it.group === 'Host' ? 'Host' : it.group.replace(/s$/, '');
+            row.querySelector('input').checked = crIsPicked(it);
+            row.querySelector('input').addEventListener('change', function (e) {
+              var at = crSpPicked.indexOf(it.key);
+              if (e.target.checked && at < 0) crSpPicked.push(it.key); else if (!e.target.checked && at >= 0) crSpPicked.splice(at, 1);
+              crAll = false; crDraw();
+            });
+            spl.appendChild(row);
+          });
+        } else document.querySelectorAll('#cr-list .mx-item').forEach(function (it) { it.querySelector('input').checked = crPicked.indexOf(crTalks[+it.dataset.k]) >= 0; });
+        // Select all (one choice) and one chip per track / sponsor group (any number of them)
+        var chips = document.getElementById('cr-chips'), groups = [];
+        items.forEach(function (it) { if (it.group && groups.indexOf(it.group) < 0) groups.push(it.group); });
+        if (groups.length < 2) groups = [];
+        var all = crAll && items.length && items.every(crIsPicked);   // pressed when it was chosen, not when the tracks add up to all
+        chips.innerHTML = '';
+        [['all', 'Select all']].concat(groups.map(function (g) { return [g, g]; })).forEach(function (c) {
+          var b = document.createElement('button'); b.type = 'button'; b.textContent = c[1];
+          var mine = items.filter(function (it) { return c[0] === 'all' || it.group === c[0]; });
+          b.setAttribute('aria-pressed', c[0] === 'all' ? (all ? 'true' : 'false') : (!all && mine.length && mine.every(crIsPicked) ? 'true' : 'false'));
+          b.addEventListener('click', function () {
+            var keys = items.filter(crIsPicked).map(function (it) { return it.key; });
+            if (c[0] === 'all') { keys = all ? [] : items.map(function (it) { return it.key; }); crAll = !all; crSetPicked(keys); crDraw(); return; }
+            crAll = false;
+            if (all) keys = mine.map(function (it) { return it.key; });             // from "all" to just this track
+            else if (mine.every(crIsPicked)) keys = keys.filter(function (k) { return !mine.some(function (it) { return it.key === k; }); });
+            else mine.forEach(function (it) { if (keys.indexOf(it.key) < 0) keys.push(it.key); });
+            crSetPicked(keys); crDraw();
+          });
+          chips.appendChild(b);
         });
-        var odd = crMode === 'group' && n === 1;
-        document.getElementById('cr-count').textContent = slides.length + ' of ' + max + ' slides' + (slides.length ? ' · ~' + Math.max(1, Math.round(slides.length * .35)) + ' MB' : '') + (odd ? ' · pick one more talk' : '');
-        document.getElementById('cr-hint').textContent = crMode === 'single' ? 'one slide each, in website order' : 'grouped into Trios (and Duos for the rest), in website order';
+        var odd = crMode === 'group' && crPicked.length === 1;
+        document.getElementById('cr-count').textContent = slides.length + ' slide' + (slides.length === 1 ? '' : 's') + (slides.length ? ' · ~' + Math.max(1, Math.round(slides.length * .3)) + ' MB' : '') + (odd ? ' · pick one more talk' : '');
         document.getElementById('cr-dl').disabled = !slides.length;
         var strip = document.getElementById('cr-strip'); strip.innerHTML = '';
-        if (!slides.length) { strip.innerHTML = '<p class="mx-empty" style="grid-column:1/-1;margin:0">Tick talks on the left, or Select all that fit.</p>'; return; }
+        if (!slides.length) { strip.innerHTML = '<p class="mx-empty" style="grid-column:1/-1;margin:0">Tick ' + (crMode === 'sponsors' ? 'sponsor cards' : 'talks') + ' on the left, or Select all.</p>'; return; }
         slides.forEach(function (sl, i) {
           var t = document.createElement('div'); t.className = 'cr-tile';
           t.innerHTML = '<i>' + (i + 1) + '</i><div class="tz-frame"></div>';
@@ -1147,7 +1240,7 @@
         });
         scale();
       }
-      // JPEG of a slide at 1500 px: a single talk uses its built PNG when the site has one, everything else is rendered
+      // JPEG of a slide at 1500 px: a solo talk uses its built PNG when the site has one, everything else is rendered
       function crJpeg(slide, stage) {
         function toJpeg(src) {
           return new Promise(function (ok, fail) {
@@ -1191,12 +1284,7 @@
           var el = document.createElement('div'); el.className = 'cr-cov'; el.dataset.d = c[0]; el.setAttribute('role', 'button'); el.tabIndex = 0;
           el.innerHTML = c[0] === 'none' ? '<div class="cr-none">No cover</div><b>No cover</b>' : '<div class="tz-frame"></div><b>' + c[1] + '</b>';
           covers.appendChild(el);
-          if (c[0] !== 'none') crCard({ kind: 'cover', d: c[0] }, el.querySelector('.tz-frame'));
-          function pick() {
-            var before = crCover; crCover = c[0];
-            while (crSlides().length > crMax() && crPicked.length) crPicked.pop();   // a cover takes a slot: drop the last talk if full
-            if (before !== crCover) crDraw();
-          }
+          function pick() { if (crCover !== c[0]) { crCover = c[0]; crDraw(); } }
           el.addEventListener('click', pick); el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
         });
         var crList = document.getElementById('cr-list');
@@ -1209,7 +1297,7 @@
           it.querySelector('input').addEventListener('change', function (e) {
             var at = crPicked.indexOf(p);
             if (e.target.checked && at < 0) crPicked.push(p); else if (!e.target.checked && at >= 0) crPicked.splice(at, 1);
-            crDraw();
+            crAll = false; crDraw();
           });
           crList.appendChild(it);
         });
@@ -1217,17 +1305,9 @@
           var q = this.value.trim().toLowerCase();
           document.querySelectorAll('#cr-list .mx-item').forEach(function (it) { it.hidden = !!q && !matches(crTalks[+it.dataset.k].slot, q); });
         });
-        document.querySelectorAll('[data-cr]').forEach(function (b) { b.addEventListener('click', function () {
-          crMode = b.dataset.cr; while (crSlides().length > crMax() && crPicked.length) crPicked.pop(); crDraw(); }); });
+        document.querySelectorAll('[data-cr]').forEach(function (b) { b.addEventListener('click', function () { if (crMode !== b.dataset.cr) crAll = false; crMode = b.dataset.cr; crDraw(); }); });
         document.querySelectorAll('[data-crl]').forEach(function (b) { b.addEventListener('click', function () { crLayout = b.dataset.crl; crDraw(); }); });
-        document.getElementById('cr-max').addEventListener('change', function () { while (crSlides().length > crMax() && crPicked.length) crPicked.pop(); crDraw(); });
-        document.getElementById('cr-fit').addEventListener('click', function () {   // the first talks in website order, as many as fit
-          crPicked = [];
-          crTalks.forEach(function (p) { if (crSlidesFor(crPicked.length + 1) <= crMax()) crPicked.push(p); });
-          if (crMode === 'group' && crPicked.length % 3 === 1 && crSlidesFor(crPicked.length) > crSlidesFor(crPicked.length - 1)) crPicked.pop();
-          crDraw();
-        });
-        document.getElementById('cr-clear').addEventListener('click', function () { crPicked = []; crDraw(); });
+        document.getElementById('cr-clear').addEventListener('click', function () { crAll = false; crSetPicked([]); crDraw(); });
         document.getElementById('cr-copy').addEventListener('click', function () {
           var b = this, v = document.getElementById('cr-ttl').value;
           (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy title'; }, 1500); })
@@ -1244,11 +1324,13 @@
             return done.then(function () { btn.textContent = 'Rendering ' + (i + 1) + ' of ' + slides.length + '...'; return crJpeg(sl, stage).then(function (j) { jpegs.push(j); }); });
           }, Promise.resolve()).then(function () {
             var url = URL.createObjectURL(crPdf(jpegs)), a = document.createElement('a');
-            a.href = url; a.download = {{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-carousel.pdf';
+            a.href = url; a.download = {{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + (crMode === 'sponsors' ? '-sponsors' : '') + '-carousel.pdf';
             document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
           }).catch(function (err) { alert('Could not build the PDF: ' + err); })
             .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Download PDF'; });
         });
+        // the cover thumbnails, once the fonts are in
+        ready.then(function () { document.querySelectorAll('.cr-cov[data-d]').forEach(function (el) { if (el.dataset.d !== 'none') crCard({ kind: 'cover', d: el.dataset.d }, el.querySelector('.tz-frame')); }); scale(); });
       }
       setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : location.hash === '#generic' && document.getElementById('gn-pool') ? 'gn' : location.hash === '#carousel' && document.getElementById('cr-sec') ? 'cr' : 'tz'{% endif %});
     })();
