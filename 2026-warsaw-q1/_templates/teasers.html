@@ -211,7 +211,10 @@
     #mx-sec { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 28px; align-items: start; }
     @media (max-width: 900px) { #mx-sec { grid-template-columns: 1fr; } }
     .mx-pick { background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.08); padding: 14px; max-height: 760px; display: flex; flex-direction: column; }
-    .mx-pick .tz-search { margin-bottom: 10px; flex: 0 0 auto; }
+    .mx-pick .tz-search { flex: 1 1 auto; min-width: 0; }
+    /* the count sits at the end of the search bar (Marek 2026-10-09), instead of "0 of 3 picked" + "Pick 2 or 3 talks" */
+    .mx-find { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .mx-n { flex: 0 0 auto; font: 600 .85rem 'Montserrat', sans-serif; color: #666; white-space: nowrap; }
     .mx-list { overflow-y: auto; flex: 1 1 auto; }
     .mx-item { display: flex; align-items: center; gap: 12px; padding: 8px 6px; border-radius: 8px; cursor: pointer; }
     .mx-item:hover { background: #f3f2f6; }
@@ -520,7 +523,7 @@
     </div>{% endif %}<!--/gnsec-->
     <!--mxsec-->{% if teaser_talks and not teasers_expired %}<div id="mx-sec">
       <div class="mx-pick">
-        <input class="tz-search" id="mx-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search the talks to pick">
+        <div class="mx-find"><input class="tz-search" id="mx-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search the talks to pick"><span class="mx-n" id="mx-count" aria-live="polite">0 selected</span></div>
         <div class="mx-list" id="mx-list" role="group" aria-label="Pick 2 or 3 talks"></div>
       </div>
       <div class="mx-side">
@@ -531,9 +534,7 @@
           </div>
           <button class="tz-btn" id="mx-all" type="button">Auto-divide and download all</button>
           <button class="tz-btn" id="mx-rand" type="button">Shuffle and download all</button>
-          <span class="tz-count" id="mx-count"></span>
         </div>
-        <p class="mx-empty" id="mx-empty">Pick 2 or 3 talks on the left.</p>
         <div class="mx-slot" id="mx-slot" hidden>
           <div class="tz-frame" id="mx-frame"></div>
           <div id="mx-moves"></div>
@@ -1052,8 +1053,7 @@
       }
       function mxDraw() {
         var frame = document.getElementById('mx-frame'), slot = document.getElementById('mx-slot'), moves = document.getElementById('mx-moves'), n = mxPicks.length;
-        document.getElementById('mx-count').textContent = n + ' of 3 picked';
-        document.getElementById('mx-empty').hidden = n >= 2;
+        document.getElementById('mx-count').textContent = n + ' selected';
         slot.hidden = n < 2;
         document.querySelectorAll('.mx-item').forEach(function (it) {
           var on = mxPicks.indexOf(mxTalks[+it.dataset.k]) >= 0; it.querySelector('input').checked = on;
