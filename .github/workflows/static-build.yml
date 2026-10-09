@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:   # notes that are not part of the site do not deploy
+      - '**/README.md'
+      - '.claude/**'
   schedule:
     - cron: '10 4 * * *'   # daily ~5AM UK (04:10 UTC) so /status/ is fresh before work
   workflow_dispatch:
@@ -22,15 +25,22 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15   # deploys queue now: a hung one must not hold the site for GitHub's default 6 hours
     steps:
       - name: Start the clock
         run: echo "T0=$(date +%s)" >> $GITHUB_ENV
 
       - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v4
 
       - name: History for /status/ speaker log
         run: git fetch --no-tags --shallow-since="$(date -u -d '45 days ago' +%F)" origin ${{ github.ref_name }}
+
+      - name: Pip cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ hashFiles('_build/requirements.txt') }}
 
       - name: Deps
         run: |
@@ -98,6 +108,7 @@ jobs:
         with:
           branch: gh-pages
           folder: static
+          single-commit: true   # gh-pages keeps only the live site, not every past version (the repo had grown to GBs)
 
       - name: Build time
         if: always()
@@ -112,12 +123,19 @@ jobs:
   render-teasers:
     needs: build-and-deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 40   # a first full redraw of every picture fits; whatever it drew is saved even when it stops
     concurrency:
       group: teaser-render
       cancel-in-progress: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v4
+
+      - name: Pip cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ hashFiles('_build/requirements.txt') }}
 
       - name: Deps
         run: make deps
