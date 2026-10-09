@@ -253,6 +253,19 @@
     .mx-swho .mx-org { font-weight: 400; color: var(--accent); }
     .mx-srow .mx-photo { width: 184px; height: 184px; object-fit: contain; flex: 0 0 auto; }
     .mx-stack.n2 .mx-photo { width: 250px; height: 250px; }
+    /* ── Generic covers (fifth tab, Marek 2026-10-08): the event's logo big in the middle, city and date, the venue photos
+       behind - three designs he picked (portholes, duotone, triptych). The logo is drawn exactly as it is: never trimmed,
+       recoloured or given a glow. ── */
+    #gn-pool { display: none; }
+    body.gn-mode #gn-pool { display: grid; }
+    body.gn-mode #tz-pool, body.gn-mode #tz-groups, body.gn-mode .tz-controls, body.gn-mode #tz-none, body.gn-mode #sp-pool { display: none !important; }
+    .gn-slot { display: flex; flex-direction: column; position: relative; }
+    .gn-card .gn-ph { background-size: cover; background-position: center; }
+    .gn-card .gn-logo { object-fit: contain; }
+    .gn-city { left: 0; width: 1200px; text-align: center; font-weight: 800; letter-spacing: .3em; text-transform: uppercase; white-space: nowrap; }
+    .gn-date { left: 0; width: 1200px; text-align: center; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+    .gn-rule { height: 4px; border-radius: 2px; background: {{ tz.ramp }}; }
+    .gn-foot { left: 0; width: 1200px; text-align: center; font-weight: 600; font-size: 20px; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.6); white-space: nowrap; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
@@ -275,6 +288,7 @@
     <div class="tz-tabs" role="tablist"{% if teasers_expired %} hidden{% endif %}>
       <button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>
       {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="mx" aria-selected="false">Duo / Trio</button>{% endif %}
+      {% if gn.photos and not teasers_expired %}<button type="button" role="tab" data-tab="gn" aria-selected="false">Generic</button>{% endif %}
       {% if sp_cards and not teasers_expired %}<button type="button" role="tab" data-tab="sp" aria-selected="false">Sponsor cards</button>{% endif %}
       <button type="button" role="tab" data-tab="th" aria-selected="false">Thumbnails</button>
     </div>
@@ -377,6 +391,49 @@
       </div>
       {% endfor %}{% endif %}{% endfor %}
     </div>{% endif %}<!--/spsec-->
+    <!--gnsec-->{% if gn.photos and not teasers_expired %}{% set _ph = [gn.photos[0 % gn.photos|length], gn.photos[1 % gn.photos|length], gn.photos[2 % gn.photos|length]] %}
+    {% set _rp = tz.scheme.ramp %}<div class="tz-grid" id="gn-pool">
+      {% for d in ['portholes', 'duotone', 'triptych'] %}
+      <div class="gn-slot">
+        <div class="tz-frame">
+          <div class="tz-card gn-card" id="gn-card-{{ d }}" data-file="{{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-') }}-cover-{{ d }}.png">
+          {% if d == 'portholes' %}
+            {{ tz.sweeps_sunrise|replace('tzg', 'tzg-gn-p-')|replace('tzf', 'tzf-gn-p-')|safe }}
+            {% if gn.venue %}<div class="gn-foot" style="top:70px;color:var(--accent)">{{ gn.venue }}</div>{% endif %}
+            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:360px;top:140px;width:480px;height:480px">
+            <div class="gn-city" style="top:660px;font-size:56px">{{ gn.city }}</div>
+            <div class="gn-rule" style="left:510px;top:742px;width:180px"></div>
+            <div class="gn-date" style="top:772px;font-size:28px">{{ gn.date }}</div>
+            {% for x, y in [(150, 900), (465, 850), (780, 900)] %}<div style="left:{{ x }}px;top:{{ y }}px;width:270px;height:270px;border-radius:50%;background:{{ tz.ramp45 }};padding:5px;box-sizing:border-box;box-shadow:0 20px 50px rgba(0,0,0,.6)">
+              <div class="gn-ph" style="position:static;width:100%;height:100%;border-radius:50%;background-image:url('{{ _ph[loop.index0] }}');filter:brightness(.8)"></div></div>{% endfor %}
+          {% elif d == 'duotone' %}
+            {% for clip in ['polygon(0 0, 52% 0, 30% 100%, 0 100%)', 'polygon(52% 0, 82% 0, 62% 100%, 30% 100%)', 'polygon(82% 0, 100% 0, 100% 100%, 62% 100%)'] %}
+            <div style="inset:0;clip-path:{{ clip }}"><div class="gn-ph" style="position:absolute;inset:0;background-image:url('{{ _ph[loop.index0] }}');filter:grayscale(1) brightness(.55) contrast(1.1)"></div>
+              <div style="position:absolute;inset:0;background:{{ [_rp[0], _rp[(_rp|length) // 2], _rp[-1]][loop.index0] }};mix-blend-mode:color;opacity:.85"></div></div>{% endfor %}
+            <div style="inset:0;background:radial-gradient(circle at 50% 46%,rgba(5,3,15,0) 0,rgba(5,3,15,.25) 420px,rgba(5,3,15,.85) 900px)"></div>
+            <div style="left:290px;top:180px;width:620px;height:620px;border-radius:50%;background:{{ tz.ramp45 }};padding:6px;box-sizing:border-box;box-shadow:0 0 90px {{ tz.scheme.glow }}80">
+              <div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 40%,{{ tz.scheme.bg[0] }},{{ tz.scheme.bg[1] }} 70%)"></div></div>
+            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:400px;top:290px;width:400px;height:400px">
+            <div style="left:120px;top:850px;width:960px;height:220px;border-radius:28px;background:{{ tz.scheme.bg[1] }}d1"></div>
+            <div class="gn-city" style="top:885px;font-size:54px">{{ gn.city }}</div>
+            <div class="gn-rule" style="left:520px;top:962px;width:160px"></div>
+            <div class="gn-date" style="top:990px;font-size:28px">{{ gn.date }}</div>
+          {% else %}
+            {% for i in range(3) %}<div class="gn-ph" style="left:{{ i * 402 }}px;top:0;width:396px;height:1200px;background-image:url('{{ _ph[i] }}');filter:grayscale(.55) brightness(.5)"></div>{% endfor %}
+            <div style="inset:0;background:{{ tz.ramp }};mix-blend-mode:overlay;opacity:.45"></div>
+            <div style="inset:0;background:linear-gradient(180deg,{{ tz.scheme.bg[1] }}d9 0%,{{ tz.scheme.bg[1] }}26 30%,{{ tz.scheme.bg[1] }}59 55%,{{ tz.scheme.bg[1] }}f2 85%)"></div>
+            <div style="left:300px;top:250px;width:600px;height:600px;background:radial-gradient(circle,{{ tz.scheme.bg[1] }}d9 0,{{ tz.scheme.bg[1] }}80 45%,{{ tz.scheme.bg[1] }}00 70%)"></div>
+            <img class="gn-logo" src="{{ gn.logo }}" alt="" style="left:375px;top:250px;width:450px;height:450px">
+            <div class="gn-rule" style="left:500px;top:742px;width:200px"></div>
+            <div class="gn-city" style="top:778px;font-size:54px">{{ gn.city }}</div>
+            <div class="gn-date" style="top:860px;font-size:28px">{{ gn.date }}</div>
+            <div class="gn-foot" style="top:1110px">{{ gn.venue }}{% if gn.venue and gn.site %} &nbsp;·&nbsp; {% endif %}{{ gn.site }}</div>
+          {% endif %}
+          </div>
+        </div>
+        <a class="tz-dl gn-dl" href="#" title="Download the {{ d }} cover (PNG)" aria-label="Download the {{ d }} cover (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
+      </div>{% endfor %}
+    </div>{% endif %}<!--/gnsec-->
     <!--mxsec-->{% if teaser_talks and not teasers_expired %}<div id="mx-sec">
       <div class="mx-pick">
         <input class="tz-search" id="mx-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search the talks to pick">
@@ -478,6 +535,13 @@
         if (fitted[t]) return; fitted[t] = 1;
         if (t === 'th') { document.querySelectorAll('.th-card [data-thfit]').forEach(fitWord); return; }
         if (t === 'sp') { document.querySelectorAll('.sp-card [data-fit]').forEach(fitLines); return; }
+        if (t === 'gn') {                        // the city line shrinks until the text itself fits 1080 px
+          document.querySelectorAll('.gn-city').forEach(function (e) {
+            var w = document.createElement('span'); w.style.whiteSpace = 'nowrap'; while (e.firstChild) w.appendChild(e.firstChild); e.appendChild(w);
+            var px = parseFloat(e.style.fontSize); while (px > 18 && w.offsetWidth > 1080) { px -= 1; e.style.fontSize = px + 'px'; }
+          });
+          return;
+        }
         document.querySelectorAll('.tz-card [data-fit]').forEach(fitLines);
         document.querySelectorAll('.tz-talk[data-lines]').forEach(fitTitle);
       }
@@ -626,15 +690,17 @@
         document.body.classList.toggle('th-mode', t === 'th');
         document.body.classList.toggle('sp-mode', t === 'sp');
         document.body.classList.toggle('mx-mode', t === 'mx');
+        document.body.classList.toggle('gn-mode', t === 'gn');
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
+          : t === 'gn' ? 'Three covers for the whole event (1500 x 1500 PNG): its logo, city and date over the venue photos. Rendered here in your browser.'
           : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
         ready.then(function () { fitTab(t === 'mx' ? 'tz' : t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
-        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : location.pathname); });
+        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#generic' : location.pathname); });
       });
 
       // 4. downloads: the PNGs of the given cards that are shown, one after another (the browser asks once to allow it)
@@ -709,6 +775,16 @@
           var name = a.getAttribute('download').replace(/\.png$/, '') + ' - position ' + spPos + ' - vignette ' + spVig + '.png';
           pngOf(a.closest('.sp-slot').querySelector('.tz-card')).then(function (url) { savePng(url, name); })
             .catch(function (err) { alert('Could not render the PNG: ' + err); });
+        });
+      });
+      document.querySelectorAll('a.gn-dl').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          var card = a.closest('.gn-slot').querySelector('.gn-card');
+          a.setAttribute('aria-disabled', 'true');
+          pngOf(card).then(function (url) { savePng(url, card.dataset.file); })
+            .catch(function (err) { alert('Could not render the PNG: ' + err); })
+            .then(function () { a.removeAttribute('aria-disabled'); });
         });
       });
       if (document.querySelector('.sp-slot[data-host]')) pickHost();
@@ -875,7 +951,7 @@
         document.getElementById('mx-all').title = 'Every talk in website order: as many Trios as fit, the rest as Duos';
         mxDraw();
       }
-      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : 'tz'{% endif %});
+      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : location.hash === '#generic' && document.getElementById('gn-pool') ? 'gn' : 'tz'{% endif %});
     })();
   </script>
 </body>

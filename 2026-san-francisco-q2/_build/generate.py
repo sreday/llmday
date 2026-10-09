@@ -2053,6 +2053,20 @@ for _s in context.get('sponsors') or []:
         context['sp_groups'][_role].append({'name': _nm, 'role': _role, 'logo': '../sponsors/' + _logo, 'photo': '',
                                             'file': '%s - %s.png' % (_safe, _role)})
 context['sp_cards'] = context['sp_groups']['Host'] + context['sp_groups']['Sponsor'] + context['sp_groups']['Partner']
+# Generic covers (Marek 2026-10-08, the "Generic" tab): the event's own logo - drawn exactly as it is, never trimmed,
+# recoloured or glowing - big in the middle, then city and date, over the venue photos (the real ones; placeholders don't count)
+_GN_SITE = {'sreday': 'sreday.com', 'llmday': 'llmday.com', 'platformday': 'platformday.com', 'pec': 'promptengineering.rocks'}
+try:
+    _gn_day = datetime.datetime.fromisoformat(str(context.get('start_time') or ''))
+    _gn_date = '%s · %d %s %d' % (_gn_day.strftime('%A'), _gn_day.day, _gn_day.strftime('%B'), _gn_day.year)
+except ValueError:
+    _gn_date = str(context.get('date_string', ''))
+context['gn'] = {'photos': [('../' + p[3:]) if p.startswith('../') else p for p in _sp_photos],   # as seen from /<event>/teasers/
+                 'city': ' · '.join(x.strip() for x in str(context['tz'].get('place_full') or context['tz'].get('place') or context.get('location_string', '')).split(',') if x.strip()),
+                 'date': _gn_date, 'venue': context['tz'].get('venue', ''),
+                 # SREday: the clean square logo from Marek's picked covers (the card logo carries a grey backing); the file as it is
+                 'logo': '../../assets/images/sreday_square.png' if _tz_key == 'sreday' else _tz_logo,
+                 'site': _GN_SITE.get('pec' if _tz_key == 'prompt engineering conference' else _tz_key, '')}
 # the logos in sponsors/ sit in padded squares; the cards use copies trimmed to the logo itself (only empty or white margin
 # cut, nothing else touched) so the circle can max the logo out by its real shape. No Pillow: the padded files are used.
 _sp_trimmed = {}
