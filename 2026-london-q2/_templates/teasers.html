@@ -182,8 +182,8 @@
     .sp-dark input { width: 140px; accent-color: var(--brand); cursor: pointer; }
     .sp-dark output { min-width: 6.5em; color: #444; font-weight: 700; }
     /* ── Duo / Trio (fourth tab, Marek 2026-10-08): 2 or 3 talks picked on the page, one card, rendered and downloaded in the
-       browser. Two layouts, switchable: Columns (photos side by side, name, company, title under each) and List (the photos
-       overlapping beside an editable heading, then the talks numbered). The frame (logo, event line, ball, ticket) is the
+       browser. Two layouts, switchable: Columns (photos side by side, name, company, title under each) and Stack (a row per
+       talk: title, name and company, the photo on the right). The frame (logo, event line, ball, ticket) is the
        first talk card's, cloned, so it always matches the single teasers. ── */
     #mx-sec { display: none; }
     body.mx-mode #mx-sec { display: grid; }
@@ -207,9 +207,6 @@
     .mx-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 6px 5px 12px; border-radius: 999px; background: #fff; border: 1px solid #cfcfd6; font: 600 .85rem 'Montserrat', sans-serif; }
     .mx-chip button { width: 26px; height: 26px; border-radius: 50%; border: 0; background: #f3f2f6; cursor: pointer; font: 700 .85rem 'Montserrat', sans-serif; color: #444; }
     .mx-chip button:disabled { opacity: .35; cursor: default; }
-    .mx-head { display: grid; grid-template-columns: 1fr 1.4fr 1.6fr; gap: 8px; }
-    .mx-head[hidden] { display: none; }
-    .mx-head input { font: 400 .9rem 'Roboto', sans-serif; padding: 8px 12px; border: 1px solid #cfcfd6; border-radius: 8px; min-width: 0; }
     .mx-empty { color: #666; font-size: .95rem; padding: 24px 0; }
     #mx-sec .tz-frame[hidden] { display: none; }
     /* inside the 1200 px card */
@@ -228,22 +225,19 @@
     .mx-cols.n2 .mx-title { height: 140px; }
     .mx-cols.n2 .mx-name { font-size: 34px; }
     .mx-cols.n2 .mx-org { font-size: 24px; }
-    .mx-top { display: flex; align-items: center; gap: 26px; }
-    .mx-faces { display: flex; flex: 0 0 auto; }
-    .mx-faces img { width: 196px; height: 196px; object-fit: contain; }
-    .mx-faces img + img { margin-left: -58px; }
-    .mx-kicker { font-weight: 700; font-size: 24px; letter-spacing: .16em; color: var(--accent); text-transform: uppercase; white-space: nowrap; }
-    .mx-headline { font-weight: 900; line-height: 1; margin-top: 6px; white-space: nowrap; }
-    .mx-sub { font-weight: 600; font-size: 24px; color: rgba(255,255,255,.75); margin-top: 10px; white-space: nowrap; }
-    .mx-items { margin-top: 26px; }
-    /* plain elements only in here: html-to-image drew border-image as a full gradient fill and lost gradient-clipped text */
-    .mx-line { height: 2px; background: {{ tz.ramp }}; }
-    .mx-row { display: flex; gap: 22px; align-items: flex-start; height: 126px; box-sizing: border-box; padding-top: 14px; }
-    .mx-items.n2 .mx-row { height: 190px; padding-top: 20px; }
-    .mx-num { font-weight: 900; font-size: 44px; line-height: 1; width: 64px; flex: 0 0 auto; color: var(--accent); }
-    .mx-row .mx-title { font-weight: 900; line-height: 1.12; }
-    .mx-row .mx-who { font-weight: 700; font-size: 21px; margin-top: 8px; white-space: nowrap; overflow: hidden; }
-    .mx-row .mx-who span { color: var(--accent); font-weight: 600; }
+    /* Stack (Marek 2026-10-08, replaces the numbered List): a row per talk - title, then name and company - the photo on the
+       right, a gradient line between rows (a plain element: html-to-image drew border-image as a full fill) */
+    .mx-stack { display: flex; flex-direction: column; }
+    .mx-line { height: 2px; background: {{ tz.ramp }}; flex: 0 0 auto; }
+    .mx-srow { display: flex; align-items: center; gap: 28px; height: 203px; }
+    .mx-stack.n2 .mx-srow { height: 305px; }
+    .mx-stext { flex: 1 1 auto; min-width: 0; }
+    .mx-srow .mx-title { font-weight: 900; line-height: 1.1; text-wrap: balance; }
+    .mx-swho { display: flex; align-items: baseline; gap: 14px; margin-top: 12px; white-space: nowrap; overflow: hidden; }
+    .mx-swho .mx-name { font-weight: 800; }
+    .mx-swho .mx-org { font-weight: 600; color: var(--accent); }
+    .mx-srow .mx-photo { width: 184px; height: 184px; object-fit: contain; flex: 0 0 auto; }
+    .mx-stack.n2 .mx-photo { width: 250px; height: 250px; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
@@ -377,17 +371,12 @@
         <div class="mx-bar">
           <div class="tz-sort" role="group" aria-label="Layout">
             <button type="button" data-mx="cols" aria-pressed="true">Columns</button>
-            <button type="button" data-mx="list" aria-pressed="false">List</button>
+            <button type="button" data-mx="stack" aria-pressed="false">Stack</button>
           </div>
           <button class="tz-btn" id="mx-dl" type="button" disabled>Download PNG</button>
           <span class="tz-count" id="mx-count"></span>
         </div>
         <div class="mx-order" id="mx-order"></div>
-        <div class="mx-head" id="mx-head" hidden>
-          <input id="mx-kicker" type="text" maxlength="30" aria-label="Small line above the heading" placeholder="Small line">
-          <input id="mx-headline" type="text" maxlength="40" aria-label="Heading" placeholder="Heading">
-          <input id="mx-sub" type="text" maxlength="60" aria-label="Line under the heading" placeholder="Line under it">
-        </div>
         <p class="mx-empty" id="mx-empty">Pick 2 or 3 talks on the left.</p>
         <div class="tz-frame" id="mx-frame" hidden></div>
       </div>
@@ -621,7 +610,7 @@
         document.body.classList.toggle('mx-mode', t === 'mx');
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
-          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or List, in any order. Rendered here in your browser.'
+          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack, in any order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
         ready.then(function () { fitTab(t === 'mx' ? 'tz' : t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); scale(); });
@@ -713,7 +702,7 @@
 
       // 5. Duo / Trio (Marek 2026-10-08): 2-3 picked talks on one card, previewed live and turned into a PNG here in the
       // browser (html-to-image, loaded on the first download) - these combinations aren't known at build time
-      var mxSec = document.getElementById('mx-sec'), mxPicks = [], mxLayout = 'cols', mxTouched = false;
+      var mxSec = document.getElementById('mx-sec'), mxPicks = [], mxLayout = 'cols';
       function mxTitle(el) {                      // the single teaser's line break (<br class="sep">) becomes a space again
         var c = el.cloneNode(true); c.querySelectorAll('br').forEach(function (b) { b.replaceWith(' '); });
         return c.textContent.replace(/\s+/g, ' ').trim();
@@ -730,13 +719,6 @@
         el.style.fontSize = s + 'px';
         while (s > min && (el.scrollHeight > box + 1 || el.scrollWidth > el.clientWidth + 1)) { s -= 1; el.style.fontSize = s + 'px'; }
       }
-      function mxDefaults() {                     // the List heading until it is edited: a shared track names it
-        if (mxTouched) return;
-        var tr = mxPicks.length && mxPicks.every(function (p) { return p.track === mxPicks[0].track; }) ? mxPicks[0].track : '';
-        document.getElementById('mx-kicker').value = tr ? 'Track' : 'Line-up';
-        document.getElementById('mx-headline').value = tr ? (/^\d+$/.test(tr) ? 'Track ' + tr : tr) : "Don't miss";
-        document.getElementById('mx-sub').value = (mxPicks.length === 2 ? 'Two' : 'Three') + ' talks, one day';
-      }
       function mxMiddle() {
         var n = mxPicks.length, t;
         if (mxLayout === 'cols') {
@@ -747,24 +729,19 @@
               '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 44 : 34) + '" data-min="18">' + esc(p.title) + '</div></div>';
           }).join('') + '</div>';
         }
-        var head = ['mx-kicker', 'mx-headline', 'mx-sub'].map(function (id) { return esc(document.getElementById(id).value); });
-        return '<div class="mx-mid"><div class="mx-top"><div class="mx-faces">' +
-          mxPicks.map(function (p) { return p.photo ? '<img src="' + esc(p.photo) + '" alt="">' : ''; }).join('') + '</div>' +
-          '<div style="min-width:0;flex:1"><div class="mx-kicker mx-fit" data-max="24" data-min="14" data-box="34">' + head[0] + '</div>' +
-          '<div class="mx-headline mx-fit" data-max="62" data-min="30" data-box="70">' + head[1] + '</div>' +
-          '<div class="mx-sub mx-fit" data-max="24" data-min="14" data-box="34">' + head[2] + '</div></div></div>' +
-          '<div class="mx-items n' + n + '">' + mxPicks.map(function (p, i) {
-            return '<div class="mx-line"></div><div class="mx-row"><div class="mx-num">0' + (i + 1) + '</div><div style="min-width:0;flex:1">' +
-              '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 38 : 32) + '" data-min="20" data-box="' + (n === 2 ? 124 : 74) + '">' + esc(p.title) + '</div>' +
-              '<div class="mx-who">' + esc(p.name) + (p.org ? ' <span>· ' + esc(p.org) + '</span>' : '') + '</div></div></div>';
-          }).join('') + '</div></div>';
+        return '<div class="mx-mid mx-stack n' + n + '">' + mxPicks.map(function (p, i) {
+          return (i ? '<div class="mx-line"></div>' : '') + '<div class="mx-srow"><div class="mx-stext">' +
+            '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 50 : 40) + '" data-min="22" data-box="' + (n === 2 ? 200 : 134) + '">' + esc(p.title) + '</div>' +
+            '<div class="mx-swho"><span class="mx-name" style="font-size:' + (n === 2 ? 30 : 26) + 'px">' + esc(p.name) + '</span>' +
+            (p.org ? '<span class="mx-org" style="font-size:' + (n === 2 ? 25 : 22) + 'px">' + esc(p.org) + '</span>' : '') + '</div></div>' +
+            (p.photo ? '<img class="mx-photo" src="' + esc(p.photo) + '" alt="">' : '<div class="mx-photo"></div>') + '</div>';
+        }).join('') + '</div>';
       }
       function mxDraw() {
         var frame = document.getElementById('mx-frame'), n = mxPicks.length;
         document.getElementById('mx-count').textContent = n + ' of 3 picked';
         document.getElementById('mx-dl').disabled = n < 2;
         document.getElementById('mx-empty').hidden = n >= 2;
-        document.getElementById('mx-head').hidden = mxLayout !== 'list' || n < 2;
         frame.hidden = n < 2;
         document.querySelectorAll('.mx-item').forEach(function (it) {
           var on = mxPicks.indexOf(mxTalks[+it.dataset.k]) >= 0; it.querySelector('input').checked = on;
@@ -800,7 +777,7 @@
           it.querySelector('input').addEventListener('change', function (e) {
             var at = mxPicks.indexOf(p);
             if (e.target.checked && at < 0 && mxPicks.length < 3) mxPicks.push(p); else if (!e.target.checked && at >= 0) mxPicks.splice(at, 1);
-            mxDefaults(); mxDraw();
+            mxDraw();
           });
           mxList.appendChild(it);
         });
@@ -815,9 +792,6 @@
             document.querySelectorAll('[data-mx]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
             mxDraw();
           });
-        });
-        ['mx-kicker', 'mx-headline', 'mx-sub'].forEach(function (id) {
-          document.getElementById(id).addEventListener('input', function () { mxTouched = true; mxDraw(); });
         });
         document.getElementById('mx-dl').addEventListener('click', function () {
           var btn = this, card = document.querySelector('#mx-frame .tz-card'); if (!card) return;
