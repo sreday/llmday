@@ -10,6 +10,7 @@ date_string: "February 12, 2026"
 location_string: "CIC Warsaw, Poland"
 # get this from the event url
 luma_evt: evt-cQnhjDq1cPBdaJw
+luma_no_api: true   # run on someone else's Luma account (not Plus): no API access, so /status/ does not ask Luma about it
 cfp_url: https://cfp.ninja/e/llmday-2026-warsaw-q1
 
 # the number of tracks needs to be the same per day
