@@ -16,7 +16,7 @@ permissions:
 # Every run rebuilds the whole site, so only the newest one needs to finish
 concurrency:
   group: static-build
-  cancel-in-progress: true
+  cancel-in-progress: false   # queue, never cancel: a running deploy always lands; a newer push replaces the waiting one (Marek 2026-10-09)
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
