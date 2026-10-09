@@ -475,6 +475,9 @@ for i, talk in enumerate(talks_raw):
     talk["kind"] = talk_kind(talk.get("status"))
     talk["pill"], talk["title_display"] = talk_pill(talk)
     photo = talk.get("photo")
+    if photo and not os.path.isfile(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "speakers", photo)):
+        print("WARN: headshot %r for %s is not in speakers/ - no photo on the site or the cards" % (photo, talk.get("name")))
+        photo = None   # no headshot = no photo at all, never a broken placeholder (Marek 2026-10-09)
     if photo:
         talk["photo_url"] = "../speakers/" + photo
     else:
