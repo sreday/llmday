@@ -196,6 +196,9 @@
     .sp-slot[hidden] { display: none; }
     /* from here to the closing tools marker: the page's tools, drawn in the browser only - not in the build renderer's cache key */
     /*tools*/
+    /* zipping (Marek 2026-10-09): the faded button fills with its normal colour, left to right, as the cards are done; kept in the tools block so no picture is redrawn */
+    .tz-btn.tz-zipping:disabled { opacity: 1; background: linear-gradient(var(--brand), var(--brand)) left / var(--zp, 0%) 100% no-repeat,
+      color-mix(in srgb, var(--brand) 50%, #fff); transition: background-size .25s ease-out; }
     /* venue picture switcher on the host (Marek 2026-10-07): one host card, its venue photo 1 / 2 / 3 picked here */
     /* the host's adjustments (Marek 2026-10-09): a panel right of the host card, one control under the other */
     .sp-panel { align-self: start; display: flex; flex-direction: column; gap: 22px; padding: 22px 24px; border-radius: 14px; background: #fff; border: 1px solid #e3e2ea; max-width: 360px; }
@@ -866,7 +869,7 @@
         var cls = tab === 'th' ? 'a.th-dl' : tab === 'sp' ? 'a.sp-dl' : 'a.tz-dl:not(.th-dl)';
         var slots = list.filter(function (s) { return !s.hidden; }), files = [], skipped = [], keep = btn.textContent;
         if (!slots.length) return;
-        btn.disabled = true;
+        btn.disabled = true; btn.classList.add('tz-zipping'); btn.style.setProperty('--zp', '0%');
         slots.reduce(function (done, s, i) {
           return done.then(function () {
             btn.textContent = 'Zipping ' + (i + 1) + ' of ' + slots.length + '...';
@@ -880,7 +883,8 @@
             return get.catch(function () {
               var card = s.querySelector(tab === 'th' ? '.th-card' : '.tz-card');
               return (tab === 'th' ? pngOf(card, 1280, 720, 1) : pngOf(card)).then(function (u) { return fetch(u); }).then(function (r) { return r.arrayBuffer(); });
-            }).then(function (b) { files.push({ name: name, bytes: new Uint8Array(b) }); }, function () { skipped.push(name); });
+            }).then(function (b) { files.push({ name: name, bytes: new Uint8Array(b) }); }, function () { skipped.push(name); })
+              .then(function () { btn.style.setProperty('--zp', Math.round((i + 1) * 100 / slots.length) + '%'); });
           });
         }, Promise.resolve()).then(function () {
           if (skipped.length) alert(skipped.length + ' of ' + slots.length + ' pictures are not in the ZIP: their server pictures are still being made and this browser could not draw them with the slime. Try again in a few minutes.\n\n' + skipped.join('\n'));
@@ -889,7 +893,7 @@
           z.href = url; z.download = ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + kind + (label ? '-' + label : '')).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/-+/g, '-') + '.zip';
           document.body.appendChild(z); z.click(); z.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
         }).catch(function (err) { alert('Could not make the ZIP: ' + err); })
-          .then(function () { btn.disabled = false; btn.textContent = keep; });
+          .then(function () { btn.disabled = false; btn.textContent = keep; btn.classList.remove('tz-zipping'); btn.style.removeProperty('--zp'); });
       }
       // in-browser PNG of a 1200 px card (Duo / Trio, a re-framed host card): html-to-image, loaded on first use, with only
       // Montserrat's latin + latin-ext files embedded - every Google Fonts subset the page loads took ~1 minute (2026-10-08)
