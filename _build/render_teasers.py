@@ -21,6 +21,17 @@ hashes this script, Chrome's major version, the card's own HTML, the rest of the
 inputs, scripts; everything outside the card list) and the bytes of every local file either refers to.
 Only cards whose key is new are screenshotted; the rest are copied. Not in the key: remote resources
 (Google Fonts). CI keeps .cache/ between runs with actions/cache; --prune drops entries unused for 14 days.
+
+Fast deploys (Marek 2026-10-09: a deploy takes at most 5 minutes, and a picture without its slime is never published):
+  --cached-only   the deploy job: copy the PNGs whose key is cached, render nothing; a missing PNG is simply absent (the
+                  page then draws that card in the browser, slime-checked) - never a stale one
+  --jobs N        the render job after the deploy: N headless Chromes at once
+The key covers only what draws a card: the card's own HTML, the page's styles minus the tools' block (/*tools*/ ...
+/*/tools*/: Duo / Trio, Generic, Carousel, host panel - drawn in the browser, never here), the card script (/*render*/
+... /*/render*/: text fitting, sheet mode) and the files they use. Past events are frozen: a thumbnail's key is its
+own text (= its talks.csv row) plus its headshot's bytes, nothing else - design changes never redraw them.
+Slime check: in sheet mode the page hides a card whose slime is broken (its gradient or filter id missing or not
+unique); an all-black tile is rejected here, never cached and never written.
 """
 import glob
 import hashlib
@@ -30,6 +41,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
 try:
@@ -59,6 +71,7 @@ CACHE_DIR = os.path.join(os.environ.get("SITE_CACHE_DIR", ".cache"), "teasers")
 PRUNE_DAYS = 14      # --prune removes entries not used for this long
 with open(__file__, "rb") as _f:
     SCRIPT_HASH = hashlib.sha256(_f.read()).hexdigest()[:16]
+FROZEN = "frozen-v1"   # past events' thumbnail keys: text + headshot only (bump to redraw every past thumbnail once)
 REF_RE = re.compile(r'(?:src|href)="([^"]+)"|url\(\s*[\'"]?([^\'")]+)[\'"]?\s*\)')
 
 
@@ -131,11 +144,38 @@ def refs_digest(text, base_dir, h, outputs=()):
             h.update(b"missing")
 
 
-def card_keys(index_html, chrome_version, kind=KINDS[0]):
+def render_context(context):
+    """What of the page outside the cards can change a picture: its styles without the tools' block, its <link>s
+    (fonts) and the card script. None when the page has no /*render*/ markers (an old template: whole context)."""
+    script = re.search(r"/\*render\*/(.*?)/\*/render\*/", context, re.S)
+    if not script:
+        return None
+    styles = "".join(re.findall(r"<style[^>]*>(.*?)</style>", context, re.S))
+    styles = re.sub(r"/\*tools\*/.*?/\*/tools\*/", "", styles, flags=re.S)
+    links = "".join(re.findall(r"<link[^>]+>", context))
+    return styles + links + script.group(1)
+
+
+def frozen_key(card, base_dir, kind):
+    """A past event's picture: what its talks.csv row puts on it (visible text, the speaker it is named after) and its
+    headshot's bytes - nothing else. A thumbnail shows no text, so a title edit leaves it as it is (it would look the same)."""
+    h = hashlib.sha256(("%s|%s|%dx%d|" % (FROZEN, kind["name"], kind["w"], kind["h"])).encode())
+    text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(r"<(script|style)\b.*?</\1>", "", card, flags=re.S))).strip()
+    h.update(text.encode())
+    h.update("|".join(re.findall(r'data-file="([^"]+)"', card)).encode())   # the speaker it is named after (a thumbnail has no text)
+    shots = " ".join('src="%s"' % m for m in re.findall(r'src="([^"]*speakers/[^"]+)"', card))
+    refs_digest(shots, base_dir, h)
+    return h.hexdigest()
+
+
+def card_keys(index_html, chrome_version, kind=KINDS[0], frozen=False):
     context, cards = page_parts(index_html, kind.get("slot", "tz-slot"))
     cards = [re.sub(kind["strip"], "", c, flags=re.S) for c in cards]   # the other kind's markup does not change this picture
-    outputs = set().union(*(card_files(index_html, k) for k in KINDS))
     base_dir = os.path.dirname(index_html)
+    if frozen:
+        return [frozen_key(c, base_dir, kind) for c in cards]
+    outputs = set().union(*(card_files(index_html, k) for k in KINDS))
+    context = render_context(context) or context
     ctx = hashlib.sha256()
     ctx.update(("%s|%s|%s|%dx%d|%s|%d|" % (SCRIPT_HASH, chrome_version, kind["name"], kind["w"], kind["h"], kind["scale"], BUDGET_MS)).encode())
     ctx.update(context.encode())
@@ -210,6 +250,9 @@ def main():
     if "--root" in sys.argv:
         root = sys.argv[sys.argv.index("--root") + 1]
     render_all = "--all" in sys.argv
+    cached_only = "--cached-only" in sys.argv
+    jobs = int(sys.argv[sys.argv.index("--jobs") + 1]) if "--jobs" in sys.argv else 1
+    missing_total = 0
     chrome = find_chrome()
     if not chrome:
         print("WARN render_teasers: no Chrome/Chromium found, no PNGs rendered")
@@ -242,7 +285,7 @@ def main():
             if not files:
                 continue
             kw, kh = int(round(kind["w"] * kind["scale"])), int(round(kind["h"] * kind["scale"]))
-            keys = card_keys(page, chrome_version, kind)
+            keys = card_keys(page, chrome_version, kind, frozen=not upcoming)
             if len(keys) != len(files):  # page layout not understood: render everything, cache nothing
                 print("WARN render_teasers %s: %d %s pictures but %d slots, not caching" % (event, len(files), kind["name"], len(keys)))
                 keys = [None] * len(files)
@@ -258,12 +301,23 @@ def main():
                     done += 1
                 else:
                     missing.append(i)
+            if cached_only:          # the deploy: what is not cached yet stays absent, the render job draws it
+                missing_total += len(missing)
+                total += done
+                reused_total += reused
+                print("render_teasers %s: %d/%d %s pictures from cache, %d left for the render job" % (event, done, len(files), kind["name"], len(missing)))
+                continue
             with tempfile.TemporaryDirectory() as tmp:
-                for run in runs_of(missing):
+                runs = runs_of(missing)
+
+                def take(run):
+                    shot = os.path.join(tmp, "sheet-%d.png" % run[0])
+                    return run, shot, shoot(chrome, "%s#%s-%d-%d" % (url, kind["hash"], run[0], len(run)), kind["h"] * len(run), shot,
+                                            width=kind["w"], scale=kind["scale"])
+                with ThreadPoolExecutor(max_workers=max(1, jobs)) as pool:
+                    shots = list(pool.map(take, runs))
+                for run, shot, (ok, err) in shots:
                     start = run[0]
-                    shot = os.path.join(tmp, "sheet-%d.png" % start)
-                    ok, err = shoot(chrome, "%s#%s-%d-%d" % (url, kind["hash"], start, len(run)), kind["h"] * len(run), shot,
-                                    width=kind["w"], scale=kind["scale"])
                     if not ok:
                         print("WARN render_teasers %s: %s screenshot failed for %d-%d %s" % (event, kind["name"], start, run[-1], err))
                         continue
@@ -272,7 +326,11 @@ def main():
                         print("WARN render_teasers %s: screenshot %dx%d smaller than expected %dx%d" % (event, img.width, img.height, kw, kh * len(run)))
                     for j, i in enumerate(run):
                         out = os.path.join(out_dir, files[i])
-                        save_tile(img.crop((0, j * kh, kw, (j + 1) * kh)).convert("RGB"), out, kind)
+                        tile = img.crop((0, j * kh, kw, (j + 1) * kh)).convert("RGB")
+                        if tile.convert("L").getextrema()[1] < 12:   # the page blanked it: its slime is broken - never publish
+                            print("WARN render_teasers %s: %s %s failed the slime check, not published" % (event, kind["name"], files[i]))
+                            continue
+                        save_tile(tile, out, kind)
                         done += 1
                         if keys[i]:
                             os.makedirs(CACHE_DIR, exist_ok=True)
@@ -283,8 +341,11 @@ def main():
             print("render_teasers %s: %d/%d %s pictures (%d reused, %d rendered)" % (event, done, len(files), kind["name"], reused, done - reused))
         if os.path.basename(page) == HD_NAME:
             os.remove(page)
-    print("render_teasers: %d pictures in %d event(s), %d teaser page(s) found; %d reused from cache, %d rendered"
-          % (total, events, len(pages), reused_total, rendered_total))
+    print("render_teasers: %d pictures in %d event(s), %d teaser page(s) found; %d reused from cache, %d rendered%s"
+          % (total, events, len(pages), reused_total, rendered_total, ", %d left for the render job" % missing_total if cached_only else ""))
+    if os.environ.get("GITHUB_OUTPUT"):   # the render job queues one more deploy only when it drew something
+        with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+            f.write("rendered=%d\nmissing=%d\n" % (rendered_total, missing_total))
     if "--prune" in sys.argv and os.path.isdir(CACHE_DIR):
         # Drop entries unused for PRUNE_DAYS, not merely unused by this run: while GitHub rolls out a new
         # runner image, runs alternate between Chrome versions and both sets of entries must survive.

@@ -137,10 +137,14 @@
     .tz-day { font-weight: 900; font-size: 80px; line-height: 1; }
     .tz-mon { color: var(--accent); font-size: 26px; font-weight: 800; letter-spacing: .12em; }
     .tz-wday { font-weight: 600; font-size: 21px; color: rgba(255,255,255,.75); margin-top: 4px; }
-    /* host cards over a venue photo (Marek 2026-10-09): no notch dots biting into the ticket (they show as blobs on a light
-       photo) and the ticket's and the discount circle's dark side 80% transparent, so the picture shows through */
-    .sp-onphoto .tz-ticket-in { background: rgba(8,8,20,.2); }
-    .sp-onphoto .tz-ball-in { background: rgba(8,8,20,.2); }   /* the discount circle too (Marek 2026-10-09) */
+    /* host cards over a venue photo (Marek 2026-10-09): no solid notch dots (they show as blobs on a light photo) - the dents
+       are cut out instead, below and the ticket's and the discount circle's dark side 80% filled with a dash of transparency (Marek: "almost filled"), so a hint of the picture shows through */
+    .sp-onphoto .tz-ticket-in { background: rgba(8,8,20,.8); }
+    .sp-onphoto .tz-ball-in { background: rgba(8,8,20,.8); }   /* the discount circle too (Marek 2026-10-09) */
+    /* the ticket keeps its two dents (Marek 2026-10-09: "alpha instead of a solid"): real holes cut out of the ticket where the
+       notch dots sit (r 17 round x 398, y 985 / 1133 on the card = 334, 1 / 149 on the ticket), so the photo shows through them */
+    .sp-onphoto .tz-ticket { -webkit-mask: radial-gradient(circle at 334px 1px, transparent 17px, #000 17.5px), radial-gradient(circle at 334px 149px, transparent 17px, #000 17.5px);
+      -webkit-mask-composite: source-in; mask: radial-gradient(circle at 334px 1px, transparent 17px, #000 17.5px), radial-gradient(circle at 334px 149px, transparent 17px, #000 17.5px); mask-composite: intersect; }
     /* the gradient rim on its own (a masked ring), or the see-through middle would show the solid gradient behind it */
     .sp-onphoto .tz-ticket, .sp-onphoto .tz-ball { background: none; }
     .sp-onphoto .tz-ticket::before, .sp-onphoto .tz-ball::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: inherit; box-sizing: border-box;
@@ -190,6 +194,8 @@
     .sp-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
     .sp-sheet .tz-frame .tz-card { transform: none !important; }
     .sp-slot[hidden] { display: none; }
+    /* from here to the closing tools marker: the page's tools, drawn in the browser only - not in the build renderer's cache key */
+    /*tools*/
     /* venue picture switcher on the host (Marek 2026-10-07): one host card, its venue photo 1 / 2 / 3 picked here */
     /* the host's adjustments (Marek 2026-10-09): a panel right of the host card, one control under the other */
     .sp-panel { align-self: start; display: flex; flex-direction: column; gap: 22px; padding: 22px 24px; border-radius: 14px; background: #fff; border: 1px solid #e3e2ea; max-width: 360px; }
@@ -324,6 +330,7 @@
     .cr-title input { flex: 1; min-width: 0; font: 400 .9rem 'Roboto', sans-serif; padding: 8px 12px; border: 1px solid #cfcfd6; border-radius: 8px; }
     .cr-note { font-size: .8rem; color: #777; margin-top: 8px; line-height: 1.4; }
     .cr-step select { font: 600 .85rem 'Montserrat', sans-serif; padding: 6px 10px; border-radius: 999px; border: 1px solid #cfcfd6; background: #fff; }
+    /*/tools*/
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
@@ -550,6 +557,8 @@
 
   <script>
     (function () {
+      // from here to the closing render marker: what draws the cards - the build renderer's cache key covers only this part of the script
+      /*render*/
       var sheet = /^#sheet-(\d+)-(\d+)$/.exec(location.hash), thSheet = /^#thumbs-(\d+)-(\d+)$/.exec(location.hash),
         spSheet = /^#spcards-(\d+)-(\d+)$/.exec(location.hash);
       // sponsor logos: as big as their own shape allows inside the circle - the logo's corners on a circle 6% inside the rim
@@ -666,7 +675,24 @@
       var ready = (document.fonts && document.fonts.ready)
         ? Promise.all([document.fonts.ready{% if th.font %}, document.fonts.load({{ th.font|tojson }}).catch(function () {}){% endif %}]).then(function () { return document.fonts.ready; })
         : Promise.resolve();
-      if (sheet || thSheet || spSheet) ready.then(function () { fitTab(thSheet ? 'th' : spSheet ? 'sp' : 'tz'); });
+      // the slime check (Marek 2026-10-09: a picture without its slime is never published): every slime path's gradient
+      // and glow filter must exist exactly once in the page, or the card is blanked and the renderer rejects the black tile
+      function slimeIntact(card) {
+        var sw = card.querySelector('.tz-sw');
+        if (!sw || card.querySelector('.sp-photo')) return true;     // no slime on this card (thumbnails, host over a photo)
+        return [].every.call(sw.querySelectorAll('path'), function (p) {
+          return ['stroke', 'filter'].every(function (a) {
+            var m = /url\(#([^)]+)\)/.exec(p.getAttribute(a) || '');
+            if (!m) return a === 'filter';
+            var hits = document.querySelectorAll('[id="' + m[1] + '"]');
+            return hits.length === 1 && card.contains(hits[0]);
+          });
+        });
+      }
+      if (sheet || thSheet || spSheet) ready.then(function () {
+        fitTab(thSheet ? 'th' : spSheet ? 'sp' : 'tz');
+        document.querySelectorAll('.tz-card').forEach(function (c) { if (!slimeIntact(c)) c.style.visibility = 'hidden'; });
+      });
 
       // sheet mode for the build-time renderer: #sheet-<start>-<count> keeps only those cards, unscaled, in sheet order
       if (sheet) {
@@ -690,6 +716,7 @@
       window.addEventListener('resize', scale);
       if (window.ResizeObserver) { var ro = new ResizeObserver(scale); document.querySelectorAll('.tz-frame, .th-frame').forEach(function (f) { ro.observe(f); }); }
 
+      /*/render*/
       // 3. search + sorting: spreadsheet order (one grid) or by track (one grid per track, each with its download button)
       var pool = document.getElementById('tz-pool'), groups = document.getElementById('tz-groups');
       var slots = [].slice.call(pool.querySelectorAll('.tz-slot')), search = document.getElementById('tz-search');
@@ -841,7 +868,7 @@
       function download(list, btn, label) {
         var kind = tab === 'th' ? 'thumbnails' : tab === 'sp' ? 'sponsor-cards' : 'teasers';
         var cls = tab === 'th' ? 'a.th-dl' : tab === 'sp' ? 'a.sp-dl' : 'a.tz-dl:not(.th-dl)';
-        var slots = list.filter(function (s) { return !s.hidden; }), files = [], keep = btn.textContent;
+        var slots = list.filter(function (s) { return !s.hidden; }), files = [], skipped = [], keep = btn.textContent;
         if (!slots.length) return;
         btn.disabled = true;
         slots.reduce(function (done, s, i) {
@@ -857,9 +884,11 @@
             return get.catch(function () {
               var card = s.querySelector(tab === 'th' ? '.th-card' : '.tz-card');
               return (tab === 'th' ? pngOf(card, 1280, 720, 1) : pngOf(card)).then(function (u) { return fetch(u); }).then(function (r) { return r.arrayBuffer(); });
-            }).then(function (b) { files.push({ name: name, bytes: new Uint8Array(b) }); });
+            }).then(function (b) { files.push({ name: name, bytes: new Uint8Array(b) }); }, function () { skipped.push(name); });
           });
         }, Promise.resolve()).then(function () {
+          if (skipped.length) alert(skipped.length + ' of ' + slots.length + ' pictures are not in the ZIP: their server pictures are still being made and this browser could not draw them with the slime. Try again in a few minutes.\n\n' + skipped.join('\n'));
+          if (!files.length) return;
           var url = URL.createObjectURL(zipOf(files)), z = document.createElement('a');
           z.href = url; z.download = ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + kind + (label ? '-' + label : '')).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/-+/g, '-') + '.zip';
           document.body.appendChild(z); z.click(); z.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
@@ -869,7 +898,7 @@
       // in-browser PNG of a 1200 px card (Duo / Trio, a re-framed host card): html-to-image, loaded on first use, with only
       // Montserrat's latin + latin-ext files embedded - every Google Fonts subset the page loads took ~1 minute (2026-10-08)
       var pngLib = null, pngFonts = null;
-      function pngOf(card, w, h, ratio) {
+      function pngRaw(card, w, h, ratio) {
         pngLib = pngLib || new Promise(function (ok, fail) {
           var sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js';
           sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = fail; document.head.appendChild(sc);
@@ -887,6 +916,59 @@
           });
         return Promise.all([pngLib, pngFonts]).then(function (r) {
           return r[0].toPng(card, { width: w || 1200, height: h || 1200, pixelRatio: ratio || 1.25, style: { transform: 'none' }, fontEmbedCSS: r[1] });
+        });
+      }
+      // every PNG made here (Marek 2026-10-09): headshots from the full-size originals (the page's 400 px copies came out
+      // mushy at 1500 px), and the slime proven present - the card drawn again with its slime hidden must differ along the
+      // slime's path, or the picture is refused: a picture without its slime is never handed out
+      var hdRepo = { 'sreday.com': 'sreday/sreday', 'llmday.com': 'sreday/llmday', 'platformday.com': 'sreday/platformday',
+                     '2026.promptengineering.rocks': 'Prompt-Engineering-Conference/2026.promptengineering.rocks' }[location.hostname.replace(/^www\./, '')];
+      function withHd(card, job) {
+        var imgs = hdRepo ? [].filter.call(card.querySelectorAll('img'), function (i) { return /\/speakers\/[^/]+$/.test(i.src); }) : [], old = imgs.map(function (i) { return i.src; });
+        function swap(urls) {
+          return Promise.all(imgs.map(function (i, k) {
+            return new Promise(function (ok) { i.onload = i.onerror = function () { i.onload = i.onerror = null; ok(); }; i.crossOrigin = 'anonymous'; i.src = urls[k]; });
+          }));
+        }
+        var hd = old.map(function (u) { return 'https://raw.githubusercontent.com/' + hdRepo + '/main/speakers/' + u.split('/speakers/')[1]; });
+        return swap(hd).then(job).then(function (r) { return swap(old).then(function () { return r; }); },
+                                       function (e) { return swap(old).then(function () { throw e; }); });
+      }
+      function pixels(url, w, h) {
+        return new Promise(function (ok, fail) {
+          var im = new Image(); im.onload = function () {
+            var c = document.createElement('canvas'); c.width = w; c.height = h; var x = c.getContext('2d'); x.drawImage(im, 0, 0, w, h);
+            ok(x.getImageData(0, 0, w, h).data);
+          }; im.onerror = fail; im.src = url;
+        });
+      }
+      function pngOf(card, w, h, ratio) {
+        w = w || 1200; h = h || 1200; ratio = ratio || 1.25;
+        var sw = card.querySelector('.tz-sw'), checked = sw && !card.querySelector('.sp-photo') && getComputedStyle(sw).display !== 'none';
+        return withHd(card, function () {
+          return pngRaw(card, w, h, ratio).then(function (url) {
+            if (!checked) return url;
+            var probes = [];
+            [].forEach.call(sw.querySelectorAll('path:not([filter])'), function (p) {
+              var len = p.getTotalLength();
+              for (var k = 1; k < 16; k++) { var pt = p.getPointAtLength(len * k / 16); if (pt.x > 4 && pt.y > 4 && pt.x < w - 4 && pt.y < h - 4) probes.push(pt); }
+            });
+            if (!probes.length) return url;
+            sw.style.visibility = 'hidden';
+            var bare = pngRaw(card, w, h, ratio);
+            bare.then(function () { sw.style.visibility = ''; }, function () { sw.style.visibility = ''; });
+            return bare.then(function (bareUrl) {
+              var W = Math.round(w * ratio), H = Math.round(h * ratio);
+              return Promise.all([pixels(url, W, H), pixels(bareUrl, W, H)]).then(function (px) {
+                var seen = probes.filter(function (pt) {
+                  var o = (Math.round(pt.y * ratio) * W + Math.round(pt.x * ratio)) * 4;
+                  return Math.abs(px[0][o] - px[1][o]) + Math.abs(px[0][o + 1] - px[1][o + 1]) + Math.abs(px[0][o + 2] - px[1][o + 2]) > 30;
+                }).length;
+                if (seen < Math.min(3, probes.length)) throw new Error('the slime did not render - try Chrome, or wait a few minutes for the server picture');
+                return url;
+              });
+            });
+          });
         });
       }
       // a ZIP of files kept as they are (PNGs are already compressed): local headers, the data, the central directory
@@ -964,6 +1046,26 @@
           a.setAttribute('aria-disabled', 'true');
           pngOf(card).then(function (url) { savePng(url, card.dataset.file); })
             .catch(function (err) { alert('Could not render the PNG: ' + err); })
+            .then(function () { a.removeAttribute('aria-disabled'); });
+        });
+      });
+      // one picture (Marek 2026-10-09): the published PNG, or - while the render job is still making it after a deploy - the
+      // card drawn here, slime-checked; never a missing file and never a picture without its slime
+      document.querySelectorAll('.tz-slot a.tz-dl, .tz-slot a.th-dl, .sp-slot a.sp-dl').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          if (e.defaultPrevented) return;                     // the host card's own re-framed download
+          e.preventDefault();
+          var name = a.getAttribute('download'), th = a.classList.contains('th-dl');
+          if (a.getAttribute('aria-disabled')) return;
+          a.setAttribute('aria-disabled', 'true');
+          fetch(a.getAttribute('href')).then(function (r) {
+            if (!r.ok || !/image/.test(r.headers.get('content-type') || '')) throw new Error('not built');
+            return r.blob().then(function (b) { return URL.createObjectURL(b); });
+          }).catch(function () {
+            var card = a.closest(th ? '.tz-slot' : '.tz-slot, .sp-slot').querySelector(th ? '.th-card' : '.tz-card');
+            return th ? pngOf(card, 1280, 720, 1) : pngOf(card);
+          }).then(function (url) { savePng(url, name); })
+            .catch(function (err) { alert('Could not make the PNG: ' + (err && err.message || err)); })
             .then(function () { a.removeAttribute('aria-disabled'); });
         });
       });

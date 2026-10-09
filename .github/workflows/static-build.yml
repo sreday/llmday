@@ -13,7 +13,9 @@ on:
         default: false
 permissions:
   contents: write
-# Every run rebuilds the whole site, so only the newest one needs to finish
+  actions: write   # the render job queues one more deploy when it drew new pictures
+# Deploys queue (Marek 2026-10-09): the running one always lands, a newer push replaces the waiting one. A deploy stays under
+# 5 minutes: it never renders pictures - the render job after it does, and queues one more deploy when it drew any
 concurrency:
   group: static-build
   cancel-in-progress: false   # queue, never cancel: a running deploy always lands; a newer push replaces the waiting one (Marek 2026-10-09)
@@ -21,6 +23,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Start the clock
+        run: echo "T0=$(date +%s)" >> $GITHUB_ENV
+
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
 
@@ -39,7 +44,7 @@ jobs:
           COMMUNITYHERO_FEED: ${{ secrets.COMMUNITYHERO_FEED }}   # "Community hero" script exec URL + ?list=1&token=...; /status/ Heroes tab
         run: |
           make clean
-          make generate
+          make -j4 generate   # 4 events at a time (the runner has 4 cores); each builds in its own folder
 
       # Content-addressed cache of optimised images and teaser PNGs: an entry is reused only when
       # every input that produced it is byte-identical, so a cached result can never be stale.
@@ -51,11 +56,14 @@ jobs:
           key: site-cache-${{ github.run_id }}
           restore-keys: site-cache-
 
+      - name: Remember the cache as restored
+        run: mkdir -p .cache && touch .cache/.restored && find .cache -type f | sort > /tmp/cache-before.txt
+
       - name: Optimize Images
         run: python _build/optimize_images.py --prune
 
-      - name: Render teaser PNGs
-        run: python _build/render_teasers.py --prune   # headless Chrome (preinstalled on the runner); never fails the build
+      - name: Teaser PNGs from the cache
+        run: python _build/render_teasers.py --cached-only   # renders nothing: a picture not drawn yet stays absent (the page draws it, slime-checked)
 
       # every page's link preview: a <250 KB 1200 px JPEG per picture (static/og/<hash>.jpg), full og/twitter tag set,
       # fallback to the event/home picture, redirect stubs take their target's preview; never fails the build
@@ -71,8 +79,15 @@ jobs:
         continue-on-error: true   # report only: lists first-view/full-scroll bytes and any missing files
         run: python _build/page_weight.py static/index.html static/20*/index.html
 
-      - name: Save image and teaser cache
+      - name: Did the cache change
+        id: cache
         if: always()
+        run: |
+          find .cache -type f | sort > /tmp/cache-after.txt
+          if [ -n "$(find .cache -type f -newer .cache/.restored | head -1)" ] || ! cmp -s /tmp/cache-before.txt /tmp/cache-after.txt; then echo "changed=true" >> $GITHUB_OUTPUT; fi
+
+      - name: Save image and teaser cache
+        if: always() && steps.cache.outputs.changed == 'true'   # an unchanged cache is not uploaded again (it took ~1 min)
         uses: actions/cache/save@v4
         with:
           path: .cache
@@ -83,3 +98,62 @@ jobs:
         with:
           branch: gh-pages
           folder: static
+
+      - name: Build time
+        if: always()
+        run: |
+          t=$(( $(date +%s) - T0 )); m=$(( t / 60 )); sec=$(( t % 60 ))
+          if [ $t -gt 300 ]; then echo "::warning::Deploy took ${m}m${sec}s - over the 5-minute limit"; s="⚠️ over the 5-minute limit"; else s="✅ within 5 minutes"; fi
+          echo "### Deploy: ${m}m${sec}s $s" >> $GITHUB_STEP_SUMMARY
+
+  # the pictures, after the deploy (Marek 2026-10-09): real Chrome draws what the deploy did not have - new or changed cards
+  # only, 4 at a time, slime-checked - saves them to the cache and queues one more deploy to publish them; when it drew
+  # nothing (the usual case, and always after that extra deploy) it stops there
+  render-teasers:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    concurrency:
+      group: teaser-render
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      - name: Deps
+        run: make deps
+
+      - name: Build 🔧
+        env:
+          LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations
+          WAITLIST_FEED: ${{ secrets.WAITLIST_FEED }}   # "Speaker waitlist" script exec URL + ?list=1&token=...; /status/ Waitlist tab
+          COMMUNITYHERO_FEED: ${{ secrets.COMMUNITYHERO_FEED }}   # "Community hero" script exec URL + ?list=1&token=...; /status/ Heroes tab
+        run: |
+          make clean
+          make -j4 generate   # the same pages the deploy built, so the cache keys match
+
+      - name: Restore image and teaser cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache
+          key: site-cache-render-${{ github.run_id }}
+          restore-keys: site-cache-
+
+      - name: Optimize Images
+        run: python _build/optimize_images.py   # as in the deploy: the cards' keys hash the optimised files they use
+
+      - name: Render teaser PNGs
+        id: render
+        run: python _build/render_teasers.py --jobs 4 --prune   # headless Chrome (preinstalled on the runner); never fails
+
+      - name: Save image and teaser cache
+        if: always() && steps.render.outputs.rendered != '0'
+        uses: actions/cache/save@v4
+        with:
+          path: .cache
+          key: site-cache-render-${{ github.run_id }}
+
+      - name: Publish the new pictures
+        if: steps.render.outputs.rendered != '0' && steps.render.outputs.rendered != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run static-build.yml --ref ${{ github.ref_name }}
