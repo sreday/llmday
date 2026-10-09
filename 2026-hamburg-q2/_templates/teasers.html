@@ -180,6 +180,69 @@
     .sp-venues button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
     .sp-dark input { width: 140px; accent-color: var(--brand); cursor: pointer; }
     .sp-dark output { min-width: 6.5em; color: #444; font-weight: 700; }
+    /* ── Duo / Trio (fourth tab, Marek 2026-10-08): 2 or 3 talks picked on the page, one card, rendered and downloaded in the
+       browser. Two layouts, switchable: Columns (photos side by side, name, company, title under each) and List (the photos
+       overlapping beside an editable heading, then the talks numbered). The frame (logo, event line, ball, ticket) is the
+       first talk card's, cloned, so it always matches the single teasers. ── */
+    #mx-sec { display: none; }
+    body.mx-mode #mx-sec { display: grid; }
+    body.mx-mode #tz-pool, body.mx-mode #tz-groups, body.mx-mode .tz-controls, body.mx-mode #tz-none, body.mx-mode #sp-pool { display: none !important; }
+    #mx-sec { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 28px; align-items: start; }
+    @media (max-width: 900px) { #mx-sec { grid-template-columns: 1fr; } }
+    .mx-pick { background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.08); padding: 14px; max-height: 760px; display: flex; flex-direction: column; }
+    .mx-pick .tz-search { margin-bottom: 10px; flex: 0 0 auto; }
+    .mx-list { overflow-y: auto; flex: 1 1 auto; }
+    .mx-item { display: flex; align-items: center; gap: 12px; padding: 8px 6px; border-radius: 8px; cursor: pointer; }
+    .mx-item:hover { background: #f3f2f6; }
+    .mx-item[hidden] { display: none; }
+    .mx-item input { width: 18px; height: 18px; accent-color: var(--brand); flex: 0 0 auto; }
+    .mx-item img, .mx-item .mx-noimg { width: 44px; height: 44px; object-fit: contain; flex: 0 0 auto; }
+    .mx-item b { display: block; font: 700 .92rem 'Montserrat', sans-serif; }
+    .mx-item span { display: block; font-size: .82rem; color: #666; line-height: 1.3; }
+    .mx-item.mx-full { opacity: .45; cursor: default; }
+    .mx-side { display: flex; flex-direction: column; gap: 14px; }
+    .mx-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .mx-order { display: flex; flex-wrap: wrap; gap: 8px; }
+    .mx-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 6px 5px 12px; border-radius: 999px; background: #fff; border: 1px solid #cfcfd6; font: 600 .85rem 'Montserrat', sans-serif; }
+    .mx-chip button { width: 26px; height: 26px; border-radius: 50%; border: 0; background: #f3f2f6; cursor: pointer; font: 700 .85rem 'Montserrat', sans-serif; color: #444; }
+    .mx-chip button:disabled { opacity: .35; cursor: default; }
+    .mx-head { display: grid; grid-template-columns: 1fr 1.4fr 1.6fr; gap: 8px; }
+    .mx-head[hidden] { display: none; }
+    .mx-head input { font: 400 .9rem 'Roboto', sans-serif; padding: 8px 12px; border: 1px solid #cfcfd6; border-radius: 8px; min-width: 0; }
+    .mx-empty { color: #666; font-size: .95rem; padding: 24px 0; }
+    #mx-sec .tz-frame[hidden] { display: none; }
+    /* inside the 1200 px card */
+    .mx-mid { left: 72px; top: 336px; width: 1056px; height: 612px; }
+    .mx-mid * { position: static; }
+    .mx-fit { overflow: hidden; }
+    .mx-cols { display: flex; gap: 36px; }
+    .mx-col { width: 328px; display: flex; flex-direction: column; }
+    .mx-cols.n2 .mx-col { width: 510px; }
+    .mx-col .mx-photo { width: 300px; height: 300px; object-fit: contain; align-self: center; }
+    .mx-cols.n2 .mx-photo { width: 330px; height: 330px; }
+    .mx-col .mx-rule { width: 72px; height: 6px; background: {{ tz.ramp }}; margin: 14px 0; }
+    .mx-col .mx-name { font-weight: 800; font-size: 28px; line-height: 1.15; white-space: nowrap; }
+    .mx-col .mx-org { font-weight: 600; font-size: 21px; color: var(--accent); margin-top: 4px; white-space: nowrap; }
+    .mx-col .mx-title { font-weight: 900; line-height: 1.12; margin-top: 16px; height: 200px; text-wrap: balance; }
+    .mx-cols.n2 .mx-title { height: 140px; }
+    .mx-cols.n2 .mx-name { font-size: 34px; }
+    .mx-cols.n2 .mx-org { font-size: 24px; }
+    .mx-top { display: flex; align-items: center; gap: 26px; }
+    .mx-faces { display: flex; flex: 0 0 auto; }
+    .mx-faces img { width: 196px; height: 196px; object-fit: contain; }
+    .mx-faces img + img { margin-left: -58px; }
+    .mx-kicker { font-weight: 700; font-size: 24px; letter-spacing: .16em; color: var(--accent); text-transform: uppercase; white-space: nowrap; }
+    .mx-headline { font-weight: 900; line-height: 1; margin-top: 6px; white-space: nowrap; }
+    .mx-sub { font-weight: 600; font-size: 24px; color: rgba(255,255,255,.75); margin-top: 10px; white-space: nowrap; }
+    .mx-items { margin-top: 26px; }
+    /* plain elements only in here: html-to-image drew border-image as a full gradient fill and lost gradient-clipped text */
+    .mx-line { height: 2px; background: {{ tz.ramp }}; }
+    .mx-row { display: flex; gap: 22px; align-items: flex-start; height: 126px; box-sizing: border-box; padding-top: 14px; }
+    .mx-items.n2 .mx-row { height: 190px; padding-top: 20px; }
+    .mx-num { font-weight: 900; font-size: 44px; line-height: 1; width: 64px; flex: 0 0 auto; color: var(--accent); }
+    .mx-row .mx-title { font-weight: 900; line-height: 1.12; }
+    .mx-row .mx-who { font-weight: 700; font-size: 21px; margin-top: 8px; white-space: nowrap; overflow: hidden; }
+    .mx-row .mx-who span { color: var(--accent); font-weight: 600; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
     .th-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
@@ -203,6 +266,7 @@
       <button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>
       <button type="button" role="tab" data-tab="th" aria-selected="false">YouTube thumbnails</button>
       {% if sp_cards and not teasers_expired %}<button type="button" role="tab" data-tab="sp" aria-selected="false">Sponsor cards</button>{% endif %}
+      {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="mx" aria-selected="false">Duo / Trio</button>{% endif %}
     </div>
     <div class="tz-controls">
       <input class="tz-search" id="tz-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search speaker, company or talk title">
@@ -301,6 +365,30 @@
       </div>
       {% endfor %}{% endif %}{% endfor %}
     </div>{% endif %}<!--/spsec-->
+    <!--mxsec-->{% if teaser_talks and not teasers_expired %}<div id="mx-sec">
+      <div class="mx-pick">
+        <input class="tz-search" id="mx-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search the talks to pick">
+        <div class="mx-list" id="mx-list" role="group" aria-label="Pick 2 or 3 talks"></div>
+      </div>
+      <div class="mx-side">
+        <div class="mx-bar">
+          <div class="tz-sort" role="group" aria-label="Layout">
+            <button type="button" data-mx="cols" aria-pressed="true">Columns</button>
+            <button type="button" data-mx="list" aria-pressed="false">List</button>
+          </div>
+          <button class="tz-btn" id="mx-dl" type="button" disabled>Download PNG</button>
+          <span class="tz-count" id="mx-count"></span>
+        </div>
+        <div class="mx-order" id="mx-order"></div>
+        <div class="mx-head" id="mx-head" hidden>
+          <input id="mx-kicker" type="text" maxlength="30" aria-label="Small line above the heading" placeholder="Small line">
+          <input id="mx-headline" type="text" maxlength="40" aria-label="Heading" placeholder="Heading">
+          <input id="mx-sub" type="text" maxlength="60" aria-label="Line under the heading" placeholder="Line under it">
+        </div>
+        <p class="mx-empty" id="mx-empty">Pick 2 or 3 talks on the left.</p>
+        <div class="tz-frame" id="mx-frame" hidden></div>
+      </div>
+    </div>{% endif %}<!--/mxsec-->
     {% if not teaser_talks %}<p class="tz-empty">No confirmed sessions yet.</p>{% endif %}
     <p class="tz-empty" id="tz-none" hidden>Nothing matches that search.</p>
     {# the hint sits under the pictures (Marek 2026-10-07) #}
@@ -386,8 +474,8 @@
       // 2. scale every 1200px card into its preview frame
       function scale() {
         document.querySelectorAll('.tz-frame').forEach(function (f) {
-          var w = f.clientWidth; if (!w) return;
-          f.querySelector('.tz-card').style.transform = 'scale(' + (w / 1200) + ')';
+          var w = f.clientWidth, c = f.querySelector('.tz-card'); if (!w || !c) return;   // the Duo / Trio frame is empty until 2 are picked
+          c.style.transform = 'scale(' + (w / 1200) + ')';
         });
         document.querySelectorAll('.th-frame').forEach(function (f) {
           var w = f.clientWidth; if (!w) return;
@@ -527,14 +615,16 @@
         tab = t;
         document.body.classList.toggle('th-mode', t === 'th');
         document.body.classList.toggle('sp-mode', t === 'sp');
+        document.body.classList.toggle('mx-mode', t === 'mx');
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
+          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or List, in any order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
-        ready.then(function () { fitTab(t); scale(); });
+        ready.then(function () { fitTab(t === 'mx' ? 'tz' : t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
-        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : location.pathname); });
+        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : location.pathname); });
       });
 
       // 4. downloads: the PNGs of the given cards that are shown, one after another (the browser asks once to allow it)
@@ -560,7 +650,149 @@
       all.addEventListener('click', function () {   // in the order shown (website, names, tracks...)
         download([].slice.call(document.querySelectorAll(tab === 'sp' ? '#sp-pool .sp-slot' : '#tz-groups .tz-slot, #tz-pool .tz-slot')), all);
       });
-      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : 'tz'{% endif %});
+
+      // 5. Duo / Trio (Marek 2026-10-08): 2-3 picked talks on one card, previewed live and turned into a PNG here in the
+      // browser (html-to-image, loaded on the first download) - these combinations aren't known at build time
+      var mxSec = document.getElementById('mx-sec'), mxPicks = [], mxLayout = 'cols', mxTouched = false;
+      function mxTitle(el) {                      // the single teaser's line break (<br class="sep">) becomes a space again
+        var c = el.cloneNode(true); c.querySelectorAll('br').forEach(function (b) { b.replaceWith(' '); });
+        return c.textContent.replace(/\s+/g, ' ').trim();
+      }
+      function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+      var mxTalks = slots.filter(function (s) { return s.querySelector('.tz-card'); }).map(function (s) {
+        var names = [].map.call(s.querySelectorAll('.tz-name'), function (n) { return n.textContent.trim(); });
+        var org = s.querySelector('.tz-org'), photo = s.querySelector('.tz-photo');
+        return { slot: s, name: names.join(' & '), org: org ? org.textContent.trim() : '', track: s.dataset.track || '',
+                 title: mxTitle(s.querySelector('.tz-talk')), photo: photo ? photo.getAttribute('src') : '' };
+      });
+      function mxShrink(el) {                     // the largest size, data-max down to data-min, at which it fits its box
+        var s = +el.dataset.max, min = +el.dataset.min, box = +el.dataset.box || el.clientHeight;
+        el.style.fontSize = s + 'px';
+        while (s > min && (el.scrollHeight > box + 1 || el.scrollWidth > el.clientWidth + 1)) { s -= 1; el.style.fontSize = s + 'px'; }
+      }
+      function mxDefaults() {                     // the List heading until it is edited: a shared track names it
+        if (mxTouched) return;
+        var tr = mxPicks.length && mxPicks.every(function (p) { return p.track === mxPicks[0].track; }) ? mxPicks[0].track : '';
+        document.getElementById('mx-kicker').value = tr ? 'Track' : 'Line-up';
+        document.getElementById('mx-headline').value = tr ? (/^\d+$/.test(tr) ? 'Track ' + tr : tr) : "Don't miss";
+        document.getElementById('mx-sub').value = (mxPicks.length === 2 ? 'Two' : 'Three') + ' talks, one day';
+      }
+      function mxMiddle() {
+        var n = mxPicks.length, t;
+        if (mxLayout === 'cols') {
+          return '<div class="mx-mid mx-cols n' + n + '">' + mxPicks.map(function (p) {
+            return '<div class="mx-col">' + (p.photo ? '<img class="mx-photo" src="' + esc(p.photo) + '" alt="">' : '<div class="mx-photo"></div>') +
+              '<div class="mx-rule"></div><div class="mx-name mx-fit" data-max="' + (n === 2 ? 34 : 28) + '" data-min="16" data-box="44">' + esc(p.name) + '</div>' +
+              '<div class="mx-org mx-fit" data-max="' + (n === 2 ? 24 : 21) + '" data-min="14" data-box="32">' + esc(p.org) + '</div>' +
+              '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 44 : 34) + '" data-min="18">' + esc(p.title) + '</div></div>';
+          }).join('') + '</div>';
+        }
+        var head = ['mx-kicker', 'mx-headline', 'mx-sub'].map(function (id) { return esc(document.getElementById(id).value); });
+        return '<div class="mx-mid"><div class="mx-top"><div class="mx-faces">' +
+          mxPicks.map(function (p) { return p.photo ? '<img src="' + esc(p.photo) + '" alt="">' : ''; }).join('') + '</div>' +
+          '<div style="min-width:0;flex:1"><div class="mx-kicker mx-fit" data-max="24" data-min="14" data-box="34">' + head[0] + '</div>' +
+          '<div class="mx-headline mx-fit" data-max="62" data-min="30" data-box="70">' + head[1] + '</div>' +
+          '<div class="mx-sub mx-fit" data-max="24" data-min="14" data-box="34">' + head[2] + '</div></div></div>' +
+          '<div class="mx-items n' + n + '">' + mxPicks.map(function (p, i) {
+            return '<div class="mx-line"></div><div class="mx-row"><div class="mx-num">0' + (i + 1) + '</div><div style="min-width:0;flex:1">' +
+              '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 38 : 32) + '" data-min="20" data-box="' + (n === 2 ? 124 : 74) + '">' + esc(p.title) + '</div>' +
+              '<div class="mx-who">' + esc(p.name) + (p.org ? ' <span>· ' + esc(p.org) + '</span>' : '') + '</div></div></div>';
+          }).join('') + '</div></div>';
+      }
+      function mxDraw() {
+        var frame = document.getElementById('mx-frame'), n = mxPicks.length;
+        document.getElementById('mx-count').textContent = n + ' of 3 picked';
+        document.getElementById('mx-dl').disabled = n < 2;
+        document.getElementById('mx-empty').hidden = n >= 2;
+        document.getElementById('mx-head').hidden = mxLayout !== 'list' || n < 2;
+        frame.hidden = n < 2;
+        document.querySelectorAll('.mx-item').forEach(function (it) {
+          var on = mxPicks.indexOf(mxTalks[+it.dataset.k]) >= 0; it.querySelector('input').checked = on;
+          it.classList.toggle('mx-full', !on && n >= 3); it.querySelector('input').disabled = !on && n >= 3;
+        });
+        var order = document.getElementById('mx-order'); order.innerHTML = '';
+        mxPicks.forEach(function (p, i) {
+          var c = document.createElement('span'); c.className = 'mx-chip';
+          c.innerHTML = '<span></span><button type="button" aria-label="Move left">&larr;</button><button type="button" aria-label="Move right">&rarr;</button>';
+          c.firstChild.textContent = (i + 1) + '. ' + p.name;
+          var b = c.querySelectorAll('button'); b[0].disabled = i === 0; b[1].disabled = i === n - 1;
+          b[0].addEventListener('click', function () { mxPicks.splice(i - 1, 0, mxPicks.splice(i, 1)[0]); mxDraw(); });
+          b[1].addEventListener('click', function () { mxPicks.splice(i + 1, 0, mxPicks.splice(i, 1)[0]); mxDraw(); });
+          order.appendChild(c);
+        });
+        if (n < 2) { frame.innerHTML = ''; return; }
+        var card = mxTalks[0].slot.querySelector('.tz-card').cloneNode(true);   // the event's frame, from the first talk card
+        card.removeAttribute('id'); card.style.transform = '';
+        var mid = card.querySelector('.tz-mid'); mid.insertAdjacentHTML('afterend', mxMiddle()); mid.remove();
+        frame.innerHTML = ''; frame.appendChild(card);
+        card.querySelectorAll('[data-fit]').forEach(fitLines);
+        card.querySelectorAll('.mx-fit').forEach(mxShrink);
+        scale();
+      }
+      if (mxSec) {
+        var mxList = document.getElementById('mx-list');
+        mxTalks.forEach(function (p, k) {
+          var it = document.createElement('label'); it.className = 'mx-item'; it.dataset.k = k;
+          it.innerHTML = '<input type="checkbox">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="" loading="lazy">' : '<span class="mx-noimg"></span>') +
+            '<div><b></b><span></span></div>';
+          it.querySelector('b').textContent = p.name + (p.org ? ' · ' + p.org : '');
+          it.querySelector('div span').textContent = p.title;
+          it.querySelector('input').addEventListener('change', function (e) {
+            var at = mxPicks.indexOf(p);
+            if (e.target.checked && at < 0 && mxPicks.length < 3) mxPicks.push(p); else if (!e.target.checked && at >= 0) mxPicks.splice(at, 1);
+            mxDefaults(); mxDraw();
+          });
+          mxList.appendChild(it);
+        });
+        var mxSearch = document.getElementById('mx-search');
+        mxSearch.addEventListener('input', function () {
+          var q = mxSearch.value.trim().toLowerCase();
+          document.querySelectorAll('.mx-item').forEach(function (it) { it.hidden = !!q && !matches(mxTalks[+it.dataset.k].slot, q); });
+        });
+        document.querySelectorAll('[data-mx]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            mxLayout = b.dataset.mx;
+            document.querySelectorAll('[data-mx]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            mxDraw();
+          });
+        });
+        ['mx-kicker', 'mx-headline', 'mx-sub'].forEach(function (id) {
+          document.getElementById(id).addEventListener('input', function () { mxTouched = true; mxDraw(); });
+        });
+        var mxLib = null, mxFonts = null;
+        document.getElementById('mx-dl').addEventListener('click', function () {
+          var btn = this, card = document.querySelector('#mx-frame .tz-card'); if (!card) return;
+          btn.disabled = true; btn.textContent = 'Rendering...';
+          mxLib = mxLib || new Promise(function (ok, fail) {
+            var sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js';
+            sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = fail; document.head.appendChild(sc);
+          });
+          // the card uses only Montserrat; embedding every Google Fonts subset the page loads took ~1 minute, so only its
+          // latin + latin-ext files go in (one variable font file each, all weights), fetched once
+          mxFonts = mxFonts || fetch('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap')
+            .then(function (r) { return r.text(); })
+            .then(function (css) {
+              var blocks = css.split(/(?=\/\* [a-z-]+ \*\/)/).filter(function (b) { return /^\/\* latin(-ext)? \*\//.test(b); }).join('\n');
+              var urls = blocks.match(/url\([^)]+\)/g) || [], seen = {};
+              return Promise.all(urls.filter(function (u) { return !seen[u] && (seen[u] = 1); }).map(function (u) {
+                return fetch(u.slice(4, -1)).then(function (r) { return r.blob(); }).then(function (b) {
+                  return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok([u, fr.result]); }; fr.readAsDataURL(b); });
+                });
+              })).then(function (pairs) { pairs.forEach(function (p) { blocks = blocks.split(p[0]).join('url(' + p[1] + ')'); }); return blocks; });
+            });
+          Promise.all([mxLib, mxFonts]).then(function (r) {
+            return r[0].toPng(card, { width: 1200, height: 1200, pixelRatio: 1.25, style: { transform: 'none' }, fontEmbedCSS: r[1] });
+          }).then(function (url) {
+            var a = document.createElement('a'); a.href = url;
+            a.download = ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + (mxPicks.length === 2 ? 'duo' : 'trio') + '-' +
+              mxPicks.map(function (p) { return p.name.split(/\s+/).pop(); }).join('-')).toLowerCase().replace(/[^a-z0-9-]+/g, '') + '.png';
+            document.body.appendChild(a); a.click(); a.remove();
+          }).catch(function (e) { alert('Could not render the PNG: ' + e); })
+            .then(function () { btn.disabled = false; btn.textContent = 'Download PNG'; });
+        });
+        mxDraw();
+      }
+      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : 'tz'{% endif %});
     })();
   </script>
 </body>
