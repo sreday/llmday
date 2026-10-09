@@ -18,13 +18,14 @@ permissions:
   contents: write
   actions: write   # the render job queues one more deploy when it drew new pictures
 # Deploys queue (Marek 2026-10-09): the running one always lands, a newer push replaces the waiting one. A deploy stays under
-# 5 minutes: it never renders pictures - the render job after it does, and queues one more deploy when it drew any
-concurrency:
-  group: static-build
-  cancel-in-progress: false   # queue, never cancel: a running deploy always lands; a newer push replaces the waiting one (Marek 2026-10-09)
+# 5 minutes: it never renders pictures - the render job after it does, and queues one more deploy when it drew any.
+# The queue is per job, not per run: a deploy waits only for another deploy, never for a render job (up to 40 minutes)
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: static-build
+      cancel-in-progress: false   # queue, never cancel: a running deploy always lands; a newer push replaces the waiting one (Marek 2026-10-09)
     timeout-minutes: 15   # deploys queue now: a hung one must not hold the site for GitHub's default 6 hours
     steps:
       - name: Start the clock
