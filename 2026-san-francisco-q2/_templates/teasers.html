@@ -760,11 +760,13 @@
           s.addEventListener('transitionend', function done() { s.style.transition = ''; s.style.zIndex = ''; s.removeEventListener('transitionend', done); });
         });
       }
-      document.querySelectorAll('.tz-sort button').forEach(function (b) {
+      // only the sort buttons (Marek 2026-10-08): '.tz-sort button' also caught Columns / Stack and the Carousel's switches, so a
+      // click there unset "As website" (and set the sort to nothing) and un-highlighted the other groups
+      document.querySelectorAll('.tz-sort [data-sort]').forEach(function (b) {
         b.addEventListener('click', function () {
           if (mode === b.dataset.sort) return;
           mode = b.dataset.sort;
-          document.querySelectorAll('.tz-sort button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          document.querySelectorAll('.tz-sort [data-sort]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
           animated(render);
         });
       });
