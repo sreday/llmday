@@ -530,6 +530,7 @@
             <button type="button" data-mx="stack" aria-pressed="false">Stack</button>
           </div>
           <button class="tz-btn" id="mx-all" type="button">Auto-divide and download all</button>
+          <button class="tz-btn" id="mx-rand" type="button">Shuffle and download all</button>
           <span class="tz-count" id="mx-count"></span>
         </div>
         <p class="mx-empty" id="mx-empty">Pick 2 or 3 talks on the left.</p>
@@ -824,7 +825,7 @@
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
           : t === 'cr' ? 'A LinkedIn carousel (a square PDF for a document post): a cover, then talks as singles or Duos & Trios, within the recommended length.'
           : t === 'gn' ? (document.getElementById('gn-card-triptych') ? 'Two covers' : 'A cover') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only. Rendered here in your browser.'
-          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order. Rendered here in your browser.'
+          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order; Shuffle and download all does the same in a random order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
         moveInk(t); slideIn(prev, t);
@@ -1123,8 +1124,11 @@
         });
         // Download all (Marek 2026-10-08): every talk in website order, as many Trios as fit, the rest as Duos -
         // 3k talks: k Trios; 3k + 2: k Trios + 1 Duo; 3k + 1: k - 1 Trios + 2 Duos (no talk left on its own)
-        document.getElementById('mx-all').addEventListener('click', function () {
-          var btn = this, list = mxTalks.slice().sort(function (a, b) { return a.slot.dataset.web - b.slot.dataset.web; });
+        // Shuffle and download all (Marek 2026-10-09): the same, but every talk in a completely random order (a fresh
+        // shuffle on each click), so the speakers meet different partners than in website order
+        function mxAll(btn, shuffle) {
+          var label = btn.textContent, list = mxTalks.slice().sort(function (a, b) { return a.slot.dataset.web - b.slot.dataset.web; });
+          if (shuffle) for (var i = list.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = list[i]; list[i] = list[j]; list[j] = x; }
           var n = list.length, groups = [], at = 0;
           if (n < 2) return;
           var duos = n % 3 === 0 ? 0 : n % 3 === 2 ? 1 : 2, trios = (n - 2 * duos) / 3;
@@ -1133,7 +1137,7 @@
           var stage = document.createElement('div');            // laid out off screen at full size, so the text fits as in the preview
           stage.style.cssText = 'position:fixed;left:-13000px;top:0;width:1200px;height:1200px;overflow:hidden';
           document.body.appendChild(stage);
-          btn.disabled = true;
+          document.getElementById('mx-all').disabled = document.getElementById('mx-rand').disabled = true;
           var files = [];                          // one ZIP of all the cards (Marek 2026-10-08), not a burst of downloads
           groups.reduce(function (done, g, k) {
             return done.then(function () {
@@ -1143,12 +1147,15 @@
             });
           }, Promise.resolve()).then(function () {
             var url = URL.createObjectURL(zipOf(files)), a = document.createElement('a');
-            a.href = url; a.download = {{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-duos-trios.zip';
+            a.href = url; a.download = {{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + (shuffle ? '-duos-trios-shuffled.zip' : '-duos-trios.zip');
             document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
           }).catch(function (err) { alert('Could not render the PNGs: ' + err); })
-            .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Auto-divide and download all'; });
-        });
+            .then(function () { stage.remove(); document.getElementById('mx-all').disabled = document.getElementById('mx-rand').disabled = false; btn.textContent = label; });
+        }
+        document.getElementById('mx-all').addEventListener('click', function () { mxAll(this, false); });
+        document.getElementById('mx-rand').addEventListener('click', function () { mxAll(this, true); });
         document.getElementById('mx-all').title = 'Every talk in website order: as many Trios as fit, the rest as Duos';
+        document.getElementById('mx-rand').title = 'Every talk in a random order (new on each click): as many Trios as fit, the rest as Duos';
         mxDraw();
       }
 
