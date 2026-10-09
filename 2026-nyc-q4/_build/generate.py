@@ -1782,7 +1782,7 @@ print("Writing out communityhero/index.html (hidden, not in sitemap)")
 # 1200x1200 social card per confirmed session (exported as a 1500x1500 PNG by _build/render_teasers.py) in the order
 # of talks.csv, searchable by speaker, company and title, downloadable per sorting ("Download all" / "Download track N").
 # The card: the brand's square logo top left (never typed out), the discount ball top right (20% off 3+ weeks before
-# the event, 60% closer; SRE / LLM / PLAT / PEC + the percent; "FREE EVENT" for a free event), the conference name,
+# the event, 40% closer; SRE / LLM / PLAT / PEC + the percent; "FREE EVENT" for a free event), the conference name,
 # the title (size tier by length, a line budget, orphan-free breaks: _tz_title_html here + the fit script in
 # teasers.html), the headshot exactly as on the site, speaker + company (a panel of 3+ names drops the company and
 # shows every full name on two lines), and a ticket with the date and "venue / City, Country" (the community hero
@@ -1970,13 +1970,13 @@ def _tz_opposite(hexc):
     return '#%02x%02x%02x' % tuple(round(x * 255) for x in c)
 
 
-# the ball: a free event says FREE EVENT; otherwise 20% off 3+ weeks before the event (the day this build runs), 60% closer
+# the ball: a free event says FREE EVENT; otherwise 20% off 3+ weeks before the event (the day this build runs), 40% closer
 _tz_days = None
 try:
     _tz_days = (datetime.datetime.fromisoformat(str(context.get('start_time') or '')).date() - datetime.date.today()).days
 except ValueError:
     pass
-_tz_pct = 20 if _tz_days is None or _tz_days >= 21 else 60   # SRE60 / LLM60 / PLAT60 / PEC60 (Marek 2026-10-08)
+_tz_pct = 20 if _tz_days is None or _tz_days >= 21 else 40   # SRE40 / LLM40 / PLAT40 / PEC40 (Marek 2026-10-09, was 60)
 context['tz'] = {
     'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'sweeps_sunrise': _tz_sweeps_svg(_TZ_SUNRISE), 'sweeps_waves': _tz_sweeps_svg(_TZ_WAVES), 'sweeps_corners': _tz_sweeps_svg(_TZ_CORNERS), 'sweeps_halo': _tz_sweeps_svg(_TZ_HALO), 'logo': _tz_logo, 'logo_left': _tz_logo_left, 'blend': _tz_blend,
     'free': bool(context['hero_event'].get('is_free')) or _tz_key == 'platformday',   # PLATFORMday is always free (Marek's rule), whatever Luma says
