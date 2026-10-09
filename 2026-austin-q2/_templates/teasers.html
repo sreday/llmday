@@ -157,6 +157,7 @@
     .sp-head { grid-column: 1 / -1; font: 700 1.2rem 'Montserrat', sans-serif; margin: 14px 0 -8px; }
     .sp-sheet .sp-head { display: none !important; }
     .sp-photo { left: 0; top: 0; width: 1200px; height: 1200px; background-size: cover; background-position: center; filter: brightness(.85); }   /* venue 15% darker (Marek 2026-10-07) */
+    .sp-fv { opacity: 0; }   /* the vignette starts off: the page's slider goes 0% (none, the built PNG) to 100% (Marek 2026-10-08) */
     .sp-fv { left: 0; top: 0; width: 1200px; height: 1200px; background: radial-gradient(circle at 50% 50%, rgba(10,6,3,.2) 220px, rgba(10,6,3,.9) 820px),
       linear-gradient(180deg, rgba(10,6,3,.75) 0%, rgba(10,6,3,0) 30%, rgba(10,6,3,0) 62%, rgba(10,6,3,.88) 82%); }
     .sp-word { left: 72px; top: 566px; font-weight: 900; font-size: 100px; line-height: 1; letter-spacing: -.01em; color: #fff; white-space: nowrap;   /* white, centred on the circle's middle (Marek 2026-10-08) */
@@ -336,7 +337,9 @@
       {% for g in ['Host', 'Sponsor', 'Partner'] %}{% if sp_groups[g] %}
       <h2 class="sp-head">{{ g if g == 'Host' or sp_groups[g]|length == 1 else g ~ 's' }}{% if g == 'Host' and sp_host_photos > 1 %}
         <span class="sp-venues" role="group" aria-label="Venue picture">Venue picture{% for i in range(1, sp_host_photos + 1) %}<button type="button" data-v="{{ i }}" aria-pressed="{{ 'true' if i == 1 else 'false' }}">{{ i }}</button>{% endfor %}</span>{% endif %}{% if g == 'Host' and sp_host_photos %}
-        <label class="sp-venues sp-dark">Lighter / darker <input type="range" id="sp-dark" min="-50" max="80" step="10" value="0" aria-label="Lighten or darken the venue picture"><output id="sp-dark-out">0%</output></label>{% endif %}</h2>
+        <label class="sp-venues sp-dark">Lighter / darker <input type="range" id="sp-dark" min="-50" max="80" step="10" value="0" aria-label="Lighten or darken the venue picture"><output id="sp-dark-out">0%</output></label>
+        <label class="sp-venues sp-dark">Position <input type="range" id="sp-pos" min="0" max="100" step="1" value="50" aria-label="Move the venue picture inside the card"><output id="sp-pos-out">centre</output></label>
+        <label class="sp-venues sp-dark">Vignette <input type="range" id="sp-vig" min="0" max="100" step="5" value="0" aria-label="Vignette strength"><output id="sp-vig-out">0%</output></label>{% endif %}</h2>
       {% for c in sp_groups[g] %}
       <div class="sp-slot"{% if g == 'Host' and sp_host_photos %} data-host="{{ c.v }}" data-dark="{{ c.dark }}"{% endif %}>
         <div class="tz-frame">
@@ -635,17 +638,74 @@
         btn.disabled = true;
         links.forEach(function (a, i) { setTimeout(function () { a.click(); if (i === links.length - 1) btn.disabled = false; }, i * 400); });
       }
+      // in-browser PNG of a 1200 px card (Duo / Trio, a re-framed host card): html-to-image, loaded on first use, with only
+      // Montserrat's latin + latin-ext files embedded - every Google Fonts subset the page loads took ~1 minute (2026-10-08)
+      var pngLib = null, pngFonts = null;
+      function pngOf(card) {
+        pngLib = pngLib || new Promise(function (ok, fail) {
+          var sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js';
+          sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = fail; document.head.appendChild(sc);
+        });
+        pngFonts = pngFonts || fetch('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap')
+          .then(function (r) { return r.text(); })
+          .then(function (css) {
+            var blocks = css.split(/(?=\/\* [a-z-]+ \*\/)/).filter(function (b) { return /^\/\* latin(-ext)? \*\//.test(b); }).join('\n');
+            var urls = blocks.match(/url\([^)]+\)/g) || [], seen = {};
+            return Promise.all(urls.filter(function (u) { return !seen[u] && (seen[u] = 1); }).map(function (u) {
+              return fetch(u.slice(4, -1)).then(function (r) { return r.blob(); }).then(function (b) {
+                return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok([u, fr.result]); }; fr.readAsDataURL(b); });
+              });
+            })).then(function (pairs) { pairs.forEach(function (p) { blocks = blocks.split(p[0]).join('url(' + p[1] + ')'); }); return blocks; });
+          });
+        return Promise.all([pngLib, pngFonts]).then(function (r) {
+          return r[0].toPng(card, { width: 1200, height: 1200, pixelRatio: 1.25, style: { transform: 'none' }, fontEmbedCSS: r[1] });
+        });
+      }
+      function savePng(url, name) { var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
       // the host's venue picture: only the chosen version of the host card shows (and downloads); the renderer's sheet mode
       // returned above, so it still renders all three
       var spV = '1', spD = '0', spDark = document.getElementById('sp-dark');
       function pickHost() {                       // one host card shows: the chosen venue picture at the chosen darkness
         document.querySelectorAll('.sp-slot[data-host]').forEach(function (s) { s.hidden = !(s.dataset.host === spV && s.dataset.dark === spD); });
         document.querySelectorAll('.sp-venues button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === spV ? 'true' : 'false'); });
+        if (typeof hostLook === 'function' && spPosEl !== undefined) hostLook();
         requestAnimationFrame(scale);
       }
       document.querySelectorAll('.sp-venues button').forEach(function (b) { b.addEventListener('click', function () { spV = b.dataset.v; pickHost(); }); });
       if (spDark) spDark.addEventListener('input', function () { spD = spDark.value; document.getElementById('sp-dark-out').textContent = +spD > 0 ? spD + '% darker' : +spD < 0 ? -spD + '% lighter' : '0%'; pickHost(); });
+      // venue picture position + vignette (Marek 2026-10-08): live on the host cards; the slider moves the picture along the
+      // side it overflows (a landscape photo left / right, a portrait one up / down). Off the defaults (centre, 0%) the host
+      // card's download is rendered here in the browser instead of the built PNG.
+      var spPos = 50, spVig = 0, spPosEl = document.getElementById('sp-pos'), spVigEl = document.getElementById('sp-vig'), spAxis = {};
+      function hostLook() {
+        document.querySelectorAll('.sp-slot[data-host]').forEach(function (s) {
+          var ph = s.querySelector('.sp-photo'), fv = s.querySelector('.sp-fv');
+          if (fv) fv.style.opacity = spVig / 100;
+          if (!ph) return;
+          var src = (/url\(["']?([^"')]+)/.exec(ph.style.backgroundImage) || [])[1];
+          if (src && !(src in spAxis)) {
+            spAxis[src] = 'x';
+            var im = new Image(); im.onload = function () { spAxis[src] = im.naturalHeight > im.naturalWidth ? 'y' : 'x'; hostLook(); }; im.src = src;
+          }
+          ph.style.backgroundPosition = spAxis[src] === 'y' ? '50% ' + spPos + '%' : spPos + '% 50%';
+        });
+        var vis = document.querySelector('.sp-slot[data-host]:not([hidden]) .sp-photo'), y = vis && spAxis[(/url\(["']?([^"')]+)/.exec(vis.style.backgroundImage) || [])[1]] === 'y';
+        var out = document.getElementById('sp-pos-out');
+        if (out) out.textContent = spPos == 50 ? 'centre' : spPos < 50 ? (50 - spPos) * 2 + '% ' + (y ? 'up' : 'left') : (spPos - 50) * 2 + '% ' + (y ? 'down' : 'right');
+      }
+      if (spPosEl) spPosEl.addEventListener('input', function () { spPos = +spPosEl.value; hostLook(); });
+      if (spVigEl) spVigEl.addEventListener('input', function () { spVig = +spVigEl.value; document.getElementById('sp-vig-out').textContent = spVig + '%'; hostLook(); });
+      document.querySelectorAll('.sp-slot[data-host] a.sp-dl').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          if (spPos === 50 && spVig === 0) return;           // the defaults: the built PNG
+          e.preventDefault();
+          var name = a.getAttribute('download').replace(/\.png$/, '') + ' - position ' + spPos + ' - vignette ' + spVig + '.png';
+          pngOf(a.closest('.sp-slot').querySelector('.tz-card')).then(function (url) { savePng(url, name); })
+            .catch(function (err) { alert('Could not render the PNG: ' + err); });
+        });
+      });
       if (document.querySelector('.sp-slot[data-host]')) pickHost();
+      if (document.querySelector('.sp-slot[data-host]')) hostLook();
       var all = document.getElementById('tz-all');
       all.addEventListener('click', function () {   // in the order shown (website, names, tracks...)
         download([].slice.call(document.querySelectorAll(tab === 'sp' ? '#sp-pool .sp-slot' : '#tz-groups .tz-slot, #tz-pool .tz-slot')), all);
@@ -759,34 +819,12 @@
         ['mx-kicker', 'mx-headline', 'mx-sub'].forEach(function (id) {
           document.getElementById(id).addEventListener('input', function () { mxTouched = true; mxDraw(); });
         });
-        var mxLib = null, mxFonts = null;
         document.getElementById('mx-dl').addEventListener('click', function () {
           var btn = this, card = document.querySelector('#mx-frame .tz-card'); if (!card) return;
           btn.disabled = true; btn.textContent = 'Rendering...';
-          mxLib = mxLib || new Promise(function (ok, fail) {
-            var sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js';
-            sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = fail; document.head.appendChild(sc);
-          });
-          // the card uses only Montserrat; embedding every Google Fonts subset the page loads took ~1 minute, so only its
-          // latin + latin-ext files go in (one variable font file each, all weights), fetched once
-          mxFonts = mxFonts || fetch('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap')
-            .then(function (r) { return r.text(); })
-            .then(function (css) {
-              var blocks = css.split(/(?=\/\* [a-z-]+ \*\/)/).filter(function (b) { return /^\/\* latin(-ext)? \*\//.test(b); }).join('\n');
-              var urls = blocks.match(/url\([^)]+\)/g) || [], seen = {};
-              return Promise.all(urls.filter(function (u) { return !seen[u] && (seen[u] = 1); }).map(function (u) {
-                return fetch(u.slice(4, -1)).then(function (r) { return r.blob(); }).then(function (b) {
-                  return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok([u, fr.result]); }; fr.readAsDataURL(b); });
-                });
-              })).then(function (pairs) { pairs.forEach(function (p) { blocks = blocks.split(p[0]).join('url(' + p[1] + ')'); }); return blocks; });
-            });
-          Promise.all([mxLib, mxFonts]).then(function (r) {
-            return r[0].toPng(card, { width: 1200, height: 1200, pixelRatio: 1.25, style: { transform: 'none' }, fontEmbedCSS: r[1] });
-          }).then(function (url) {
-            var a = document.createElement('a'); a.href = url;
-            a.download = ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + (mxPicks.length === 2 ? 'duo' : 'trio') + '-' +
-              mxPicks.map(function (p) { return p.name.split(/\s+/).pop(); }).join('-')).toLowerCase().replace(/[^a-z0-9-]+/g, '') + '.png';
-            document.body.appendChild(a); a.click(); a.remove();
+          pngOf(card).then(function (url) {
+            savePng(url, ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + (mxPicks.length === 2 ? 'duo' : 'trio') + '-' +
+              mxPicks.map(function (p) { return p.name.split(/\s+/).pop(); }).join('-')).toLowerCase().replace(/[^a-z0-9-]+/g, '') + '.png');
           }).catch(function (e) { alert('Could not render the PNG: ' + e); })
             .then(function () { btn.disabled = false; btn.textContent = 'Download PNG'; });
         });
