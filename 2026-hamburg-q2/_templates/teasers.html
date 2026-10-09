@@ -196,17 +196,27 @@
     .mx-item { display: flex; align-items: center; gap: 12px; padding: 8px 6px; border-radius: 8px; cursor: pointer; }
     .mx-item:hover { background: #f3f2f6; }
     .mx-item[hidden] { display: none; }
-    .mx-item input { width: 18px; height: 18px; accent-color: var(--brand); flex: 0 0 auto; }
+    /* a drawn checkbox: the brand colour with a white tick on every brand (Marek 2026-10-08) */
+    .mx-item input { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; margin: 0; border: 2px solid #b9b8c4; border-radius: 5px;
+      background: #fff; flex: 0 0 auto; display: grid; place-content: center; cursor: pointer; }
+    .mx-item input:checked { background: var(--brand); border-color: var(--brand); }
+    .mx-item input:checked::after { content: ''; width: 10px; height: 5px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: translateY(-1px) rotate(-45deg); }
+    .mx-item input:disabled { cursor: default; }
     .mx-item img, .mx-item .mx-noimg { width: 44px; height: 44px; object-fit: contain; flex: 0 0 auto; }
     .mx-item b { display: block; font: 700 .92rem 'Montserrat', sans-serif; }
+    .mx-item b i { font-style: normal; font-weight: 400; }   /* the company, not bold */
     .mx-item span { display: block; font-size: .82rem; color: #666; line-height: 1.3; }
     .mx-item.mx-full { opacity: .45; cursor: default; }
     .mx-side { display: flex; flex-direction: column; gap: 14px; }
     .mx-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-    .mx-order { display: flex; flex-wrap: wrap; gap: 8px; }
-    .mx-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 6px 5px 12px; border-radius: 999px; background: #fff; border: 1px solid #cfcfd6; font: 600 .85rem 'Montserrat', sans-serif; }
-    .mx-chip button { width: 26px; height: 26px; border-radius: 50%; border: 0; background: #f3f2f6; cursor: pointer; font: 700 .85rem 'Montserrat', sans-serif; color: #444; }
-    .mx-chip button:disabled { opacity: .35; cursor: default; }
+    /* the order controls sit on the preview, by each speaker's name (outside the card, so never in the PNG) */
+    .mx-slot { position: relative; }
+    .mx-slot[hidden] { display: none; }
+    .mx-move { position: absolute; display: inline-flex; gap: 4px; padding: 3px; border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: 0 3px 10px rgba(0,0,0,.35); z-index: 2; }
+    .mx-move button { width: 26px; height: 26px; border-radius: 50%; border: 0; background: #f3f2f6; cursor: pointer; font: 700 .85rem 'Montserrat', sans-serif; color: #333; padding: 0; }
+    .mx-move button:hover:not(:disabled) { background: var(--brand); color: #fff; }
+    .mx-move button:disabled { opacity: .3; cursor: default; }
+    .mx-slot a.tz-dl[aria-disabled="true"] { opacity: .5; pointer-events: none; }
     .mx-empty { color: #666; font-size: .95rem; padding: 24px 0; }
     #mx-sec .tz-frame[hidden] { display: none; }
     /* inside the 1200 px card */
@@ -220,7 +230,7 @@
     .mx-cols.n2 .mx-photo { width: 330px; height: 330px; }
     .mx-col .mx-rule { width: 72px; height: 6px; background: {{ tz.ramp }}; margin: 14px 0; }
     .mx-col .mx-name { font-weight: 800; font-size: 28px; line-height: 1.15; white-space: nowrap; }
-    .mx-col .mx-org { font-weight: 600; font-size: 21px; line-height: 1.25; color: var(--accent); margin-top: 4px; }   /* a long company wraps instead of shrinking every company on the card */
+    .mx-col .mx-org { font-weight: 400; font-size: 21px; line-height: 1.25; color: var(--accent); margin-top: 4px; }   /* a long company wraps instead of shrinking every company on the card */
     .mx-col .mx-title { font-weight: 900; line-height: 1.12; margin-top: 16px; text-wrap: balance; }
     /* one size per role across the card (Marek 2026-10-08, "design lacking": each column fitted its own title, so
        "The Third Option" came out huge beside a long title), and the block centred between the event line and the ticket */
@@ -238,7 +248,7 @@
     .mx-srow .mx-title { font-weight: 900; line-height: 1.1; text-wrap: balance; }
     .mx-swho { display: flex; align-items: baseline; gap: 14px; margin-top: 12px; white-space: nowrap; overflow: hidden; }
     .mx-swho .mx-name { font-weight: 800; }
-    .mx-swho .mx-org { font-weight: 600; color: var(--accent); }
+    .mx-swho .mx-org { font-weight: 400; color: var(--accent); }
     .mx-srow .mx-photo { width: 184px; height: 184px; object-fit: contain; flex: 0 0 auto; }
     .mx-stack.n2 .mx-photo { width: 250px; height: 250px; }
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
@@ -341,7 +351,7 @@
       <div class="sp-slot"{% if g == 'Host' and sp_host_photos %} data-host="{{ c.v }}" data-dark="{{ c.dark }}"{% endif %}>
         <div class="tz-frame">
           <div class="tz-card sp-card" id="sp-card-{{ g|lower }}-{{ loop.index }}" data-file="{{ c.file }}">
-            {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps_sunrise|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
+            {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps_corners|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
             {% if c.photo %}<div class="sp-photo" style="background-image:url('{{ c.photo }}'){% if c.bright is defined %};filter:brightness({{ c.bright }}){% endif %}"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
             <div class="tz-conf">{{ tz.conf }}</div>
@@ -376,12 +386,15 @@
             <button type="button" data-mx="cols" aria-pressed="true">Columns</button>
             <button type="button" data-mx="stack" aria-pressed="false">Stack</button>
           </div>
-          <button class="tz-btn" id="mx-dl" type="button" disabled>Download PNG</button>
+          <button class="tz-btn" id="mx-all" type="button">Download all</button>
           <span class="tz-count" id="mx-count"></span>
         </div>
-        <div class="mx-order" id="mx-order"></div>
         <p class="mx-empty" id="mx-empty">Pick 2 or 3 talks on the left.</p>
-        <div class="tz-frame" id="mx-frame" hidden></div>
+        <div class="mx-slot" id="mx-slot" hidden>
+          <div class="tz-frame" id="mx-frame"></div>
+          <div id="mx-moves"></div>
+          <a class="tz-dl" id="mx-dl" href="#" title="Download this card (PNG)" aria-label="Download this card (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
+        </div>
       </div>
     </div>{% endif %}<!--/mxsec-->
     {% if not teaser_talks %}<p class="tz-empty">No confirmed sessions yet.</p>{% endif %}
@@ -613,7 +626,7 @@
         document.body.classList.toggle('mx-mode', t === 'mx');
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
-          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack, in any order. Rendered here in your browser.'
+          : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Download all makes every talk into Trios (and Duos for the rest), in website order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
         ready.then(function () { fitTab(t === 'mx' ? 'tz' : t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); scale(); });
@@ -722,17 +735,17 @@
         el.style.fontSize = s + 'px';
         while (s > min && (el.scrollHeight > box + 1 || el.scrollWidth > el.clientWidth + 1)) { s -= 1; el.style.fontSize = s + 'px'; }
       }
-      function mxMiddle() {
-        var n = mxPicks.length, t;
+      function mxMiddle(picks) {
+        var n = picks.length;
         if (mxLayout === 'cols') {
-          return '<div class="mx-mid mx-center"><div class="mx-cols n' + n + '">' + mxPicks.map(function (p) {
+          return '<div class="mx-mid mx-center"><div class="mx-cols n' + n + '">' + picks.map(function (p) {
             return '<div class="mx-col">' + (p.photo ? '<img class="mx-photo" src="' + esc(p.photo) + '" alt="">' : '<div class="mx-photo"></div>') +
               '<div class="mx-rule"></div><div class="mx-name mx-fit" data-max="' + (n === 2 ? 34 : 28) + '" data-min="16" data-box="44">' + esc(p.name) + '</div>' +
               '<div class="mx-org" style="font-size:' + (n === 2 ? 24 : 21) + 'px">' + esc(p.org) + '</div>' +
               '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 44 : 34) + '" data-min="18" data-box="' + (n === 2 ? 150 : 200) + '">' + esc(p.title) + '</div></div>';
           }).join('') + '</div></div>';
         }
-        return '<div class="mx-mid mx-stack n' + n + '">' + mxPicks.map(function (p, i) {
+        return '<div class="mx-mid mx-stack n' + n + '">' + picks.map(function (p, i) {
           return (i ? '<div class="mx-line"></div>' : '') + '<div class="mx-srow"><div class="mx-stext">' +
             '<div class="mx-title mx-fit" data-max="' + (n === 2 ? 50 : 40) + '" data-min="22" data-box="' + (n === 2 ? 200 : 134) + '">' + esc(p.title) + '</div>' +
             '<div class="mx-swho"><span class="mx-name" style="font-size:' + (n === 2 ? 30 : 26) + 'px">' + esc(p.name) + '</span>' +
@@ -740,34 +753,15 @@
             (p.photo ? '<img class="mx-photo" src="' + esc(p.photo) + '" alt="">' : '<div class="mx-photo"></div>') + '</div>';
         }).join('') + '</div>';
       }
-      function mxDraw() {
-        var frame = document.getElementById('mx-frame'), n = mxPicks.length;
-        document.getElementById('mx-count').textContent = n + ' of 3 picked';
-        document.getElementById('mx-dl').disabled = n < 2;
-        document.getElementById('mx-empty').hidden = n >= 2;
-        frame.hidden = n < 2;
-        document.querySelectorAll('.mx-item').forEach(function (it) {
-          var on = mxPicks.indexOf(mxTalks[+it.dataset.k]) >= 0; it.querySelector('input').checked = on;
-          it.classList.toggle('mx-full', !on && n >= 3); it.querySelector('input').disabled = !on && n >= 3;
-        });
-        var order = document.getElementById('mx-order'); order.innerHTML = '';
-        mxPicks.forEach(function (p, i) {
-          var c = document.createElement('span'); c.className = 'mx-chip';
-          c.innerHTML = '<span></span><button type="button" aria-label="Move left">&larr;</button><button type="button" aria-label="Move right">&rarr;</button>';
-          c.firstChild.textContent = (i + 1) + '. ' + p.name;
-          var b = c.querySelectorAll('button'); b[0].disabled = i === 0; b[1].disabled = i === n - 1;
-          b[0].addEventListener('click', function () { mxPicks.splice(i - 1, 0, mxPicks.splice(i, 1)[0]); mxDraw(); });
-          b[1].addEventListener('click', function () { mxPicks.splice(i + 1, 0, mxPicks.splice(i, 1)[0]); mxDraw(); });
-          order.appendChild(c);
-        });
-        if (n < 2) { frame.innerHTML = ''; return; }
-        var card = mxTalks[0].slot.querySelector('.tz-card').cloneNode(true);   // the event's frame, from the first talk card
+      // one card for 2 or 3 talks, built into host (it has to be laid out to fit its text)
+      function mxBuild(picks, host) {
+        var n = picks.length, card = mxTalks[0].slot.querySelector('.tz-card').cloneNode(true);   // the event's frame, from the first talk card
         card.removeAttribute('id'); card.style.transform = '';
-        var mid = card.querySelector('.tz-mid'); mid.insertAdjacentHTML('afterend', mxMiddle()); mid.remove();
+        var mid = card.querySelector('.tz-mid'); mid.insertAdjacentHTML('afterend', mxMiddle(picks)); mid.remove();
         // its own slimes (Marek 2026-10-08): "sunrise" behind a Duo, "waves" behind a Trio, with ids of their own
         var sw = card.querySelector('.tz-sw');
         if (sw) sw.outerHTML = (n === 2 ? {{ tz.sweeps_sunrise|tojson }} : {{ tz.sweeps_waves|tojson }}).replace(/tz([gf])/g, 'tz$1-mx-');
-        frame.innerHTML = ''; frame.appendChild(card);
+        host.innerHTML = ''; host.appendChild(card);
         card.querySelectorAll('[data-fit]').forEach(fitLines);
         card.querySelectorAll('.mx-fit').forEach(mxShrink);
         var orgs = [].slice.call(card.querySelectorAll('.mx-col .mx-org')), orgH = Math.max.apply(null, orgs.map(function (e) { return e.offsetHeight; }).concat(0));
@@ -777,7 +771,45 @@
           var min = Math.min.apply(null, els.map(function (e) { return parseFloat(e.style.fontSize); }));
           els.forEach(function (e) { e.style.fontSize = min + 'px'; });
         });
+        return card;
+      }
+      function mxName(picks) {
+        return ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + (picks.length === 2 ? 'duo' : 'trio') + '-' +
+          picks.map(function (p) { return p.name.split(/\s+/).pop(); }).join('-')).toLowerCase().replace(/[^a-z0-9-]+/g, '') + '.png';
+      }
+      function mxDraw() {
+        var frame = document.getElementById('mx-frame'), slot = document.getElementById('mx-slot'), moves = document.getElementById('mx-moves'), n = mxPicks.length;
+        document.getElementById('mx-count').textContent = n + ' of 3 picked';
+        document.getElementById('mx-empty').hidden = n >= 2;
+        slot.hidden = n < 2;
+        document.querySelectorAll('.mx-item').forEach(function (it) {
+          var on = mxPicks.indexOf(mxTalks[+it.dataset.k]) >= 0; it.querySelector('input').checked = on;
+          it.classList.toggle('mx-full', !on && n >= 3); it.querySelector('input').disabled = !on && n >= 3;
+        });
+        moves.innerHTML = '';
+        if (n < 2) { frame.innerHTML = ''; return; }
+        var card = mxBuild(mxPicks, frame);
         scale();
+        // the order controls, on the preview by each speaker's name (Marek 2026-10-08: "over the names, to save space")
+        var box = slot.getBoundingClientRect();
+        card.querySelectorAll('.mx-name').forEach(function (nm, i) {
+          var m = document.createElement('span'); m.className = 'mx-move';
+          m.innerHTML = '<button type="button" aria-label="Move earlier">&larr;</button><button type="button" aria-label="Move later">&rarr;</button>';
+          var b = m.querySelectorAll('button'); b[0].disabled = i === 0; b[1].disabled = i === n - 1;
+          b[0].addEventListener('click', function () { mxPicks.splice(i - 1, 0, mxPicks.splice(i, 1)[0]); mxDraw(); });
+          b[1].addEventListener('click', function () { mxPicks.splice(i + 1, 0, mxPicks.splice(i, 1)[0]); mxDraw(); });
+          moves.appendChild(m);
+          // Columns: on the empty strip right of the small rule above the name; Stack: just after the company
+          var col = nm.closest('.mx-col'), left, mid;
+          if (col) {
+            var c = col.getBoundingClientRect(), rule = col.querySelector('.mx-rule').getBoundingClientRect();
+            left = c.right - m.offsetWidth; mid = rule.top + rule.height / 2;
+          } else {
+            var who = nm.closest('.mx-swho'), last = who.lastElementChild.getBoundingClientRect(), txt = nm.closest('.mx-stext').getBoundingClientRect();
+            left = Math.min(last.right + 12, txt.right - m.offsetWidth); mid = last.top + last.height / 2;
+          }
+          m.style.left = Math.max(0, left - box.left) + 'px'; m.style.top = (mid - m.offsetHeight / 2 - box.top) + 'px';
+        });
       }
       if (mxSec) {
         var mxList = document.getElementById('mx-list');
@@ -785,7 +817,8 @@
           var it = document.createElement('label'); it.className = 'mx-item'; it.dataset.k = k;
           it.innerHTML = '<input type="checkbox">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="" loading="lazy">' : '<span class="mx-noimg"></span>') +
             '<div><b></b><span></span></div>';
-          it.querySelector('b').textContent = p.name + (p.org ? ' · ' + p.org : '');
+          it.querySelector('b').textContent = p.name;
+          if (p.org) { var co = document.createElement('i'); co.textContent = ' · ' + p.org; it.querySelector('b').appendChild(co); }
           it.querySelector('div span').textContent = p.title;
           it.querySelector('input').addEventListener('change', function (e) {
             var at = mxPicks.indexOf(p);
@@ -806,15 +839,36 @@
             mxDraw();
           });
         });
-        document.getElementById('mx-dl').addEventListener('click', function () {
-          var btn = this, card = document.querySelector('#mx-frame .tz-card'); if (!card) return;
-          btn.disabled = true; btn.textContent = 'Rendering...';
-          pngOf(card).then(function (url) {
-            savePng(url, ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + (mxPicks.length === 2 ? 'duo' : 'trio') + '-' +
-              mxPicks.map(function (p) { return p.name.split(/\s+/).pop(); }).join('-')).toLowerCase().replace(/[^a-z0-9-]+/g, '') + '.png');
-          }).catch(function (e) { alert('Could not render the PNG: ' + e); })
-            .then(function () { btn.disabled = false; btn.textContent = 'Download PNG'; });
+        document.getElementById('mx-dl').addEventListener('click', function (e) {
+          e.preventDefault();
+          var a = this, card = document.querySelector('#mx-frame .tz-card'); if (!card) return;
+          a.setAttribute('aria-disabled', 'true');
+          pngOf(card).then(function (url) { savePng(url, mxName(mxPicks)); })
+            .catch(function (err) { alert('Could not render the PNG: ' + err); })
+            .then(function () { a.removeAttribute('aria-disabled'); });
         });
+        // Download all (Marek 2026-10-08): every talk in website order, as many Trios as fit, the rest as Duos -
+        // 3k talks: k Trios; 3k + 2: k Trios + 1 Duo; 3k + 1: k - 1 Trios + 2 Duos (no talk left on its own)
+        document.getElementById('mx-all').addEventListener('click', function () {
+          var btn = this, list = mxTalks.slice().sort(function (a, b) { return a.slot.dataset.web - b.slot.dataset.web; });
+          var n = list.length, groups = [], at = 0;
+          if (n < 2) return;
+          var duos = n % 3 === 0 ? 0 : n % 3 === 2 ? 1 : 2, trios = (n - 2 * duos) / 3;
+          for (var t = 0; t < trios; t++) { groups.push(list.slice(at, at + 3)); at += 3; }
+          for (var d = 0; d < duos; d++) { groups.push(list.slice(at, at + 2)); at += 2; }
+          var stage = document.createElement('div');            // laid out off screen at full size, so the text fits as in the preview
+          stage.style.cssText = 'position:fixed;left:-13000px;top:0;width:1200px;height:1200px;overflow:hidden';
+          document.body.appendChild(stage);
+          btn.disabled = true;
+          groups.reduce(function (done, g, k) {
+            return done.then(function () {
+              btn.textContent = 'Rendering ' + (k + 1) + ' of ' + groups.length + '...';
+              return pngOf(mxBuild(g, stage)).then(function (url) { savePng(url, mxName(g)); return new Promise(function (ok) { setTimeout(ok, 400); }); });
+            });
+          }, Promise.resolve()).catch(function (err) { alert('Could not render the PNGs: ' + err); })
+            .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Download all'; });
+        });
+        document.getElementById('mx-all').title = 'Every talk in website order: as many Trios as fit, the rest as Duos';
         mxDraw();
       }
       setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : 'tz'{% endif %});
