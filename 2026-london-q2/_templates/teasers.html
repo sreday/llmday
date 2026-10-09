@@ -571,8 +571,23 @@
       // each also with its last two words tied (no stranded last word); long hyphenated words (Screenshot-First) may also split at
       // the hyphen, -8 px, used only when keeping them whole would cost more. Ties: the bigger size, then fewer lines, then the
       // first layout. text-wrap: balance does the rest.
+      // the title sits halfway between the event line above and the small dash over the name (Marek 2026-10-08), measured on
+      // the unscaled card; a hidden card measures nothing and is left as it is
+      function centreTitle(el) {
+        var card = el.closest('.tz-card'), conf = card && card.querySelector('.tz-conf'), bar = card && card.querySelector('.tz-bar');
+        if (!conf || !bar || !el.offsetHeight) return;
+        var k = card.getBoundingClientRect().width / 1200; if (!k) return;
+        var top = card.getBoundingClientRect().top, y = function (r) { return (r - top) / k; };
+        var c = conf.getBoundingClientRect(), b = bar.getBoundingClientRect(), t = el.getBoundingClientRect();
+        var target = (y(c.bottom) + y(b.top)) / 2, now = (y(t.top) + y(t.bottom)) / 2;
+        el.style.transform = 'translateY(' + Math.round(target - now) + 'px)';
+      }
       function fitTitle(el) {
-        var maxS = 64, minS = 28, maxH = 372;
+        // calmer long titles (Marek 2026-10-08, "less cluttered for long talk titles, while remaining perfectly readable"): the
+        // ceiling steps down with the length and the box is 300 px tall, not 372, so a long title no longer fills the column
+        var len = el.textContent.replace(/\s+/g, ' ').trim().length;
+        var maxS = len <= 30 ? 64 : len <= 50 ? 60 : len <= 70 ? 54 : 50, minS = 28, maxH = 300;
+        el.style.transform = '';
         var withBr = el.innerHTML, variants = [{ h: withBr, split: 0 }];
         if (withBr.indexOf('class="sep"') >= 0) variants.push({ h: withBr.replace(/<br class="sep">/, ' '), split: 0 });
         variants.forEach(function (v) {
@@ -607,6 +622,7 @@
         });
         if (!best) best = { h: variants[variants.length - 1].h, s: minS };
         el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
+        centreTitle(el);
       }
       function fitWord(el) {                    // thumbnail lettering: shrink until every line fits its 318 px box
         var s = parseFloat(getComputedStyle(el).fontSize), sp = el.firstElementChild;
