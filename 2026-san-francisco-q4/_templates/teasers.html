@@ -341,7 +341,7 @@
       <div class="sp-slot"{% if g == 'Host' and sp_host_photos %} data-host="{{ c.v }}" data-dark="{{ c.dark }}"{% endif %}>
         <div class="tz-frame">
           <div class="tz-card sp-card" id="sp-card-{{ g|lower }}-{{ loop.index }}" data-file="{{ c.file }}">
-            {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
+            {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps_sunrise|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
             {% if c.photo %}<div class="sp-photo" style="background-image:url('{{ c.photo }}'){% if c.bright is defined %};filter:brightness({{ c.bright }}){% endif %}"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
             <div class="tz-conf">{{ tz.conf }}</div>
@@ -764,6 +764,9 @@
         var card = mxTalks[0].slot.querySelector('.tz-card').cloneNode(true);   // the event's frame, from the first talk card
         card.removeAttribute('id'); card.style.transform = '';
         var mid = card.querySelector('.tz-mid'); mid.insertAdjacentHTML('afterend', mxMiddle()); mid.remove();
+        // its own slimes (Marek 2026-10-08): "sunrise" behind a Duo, "waves" behind a Trio, with ids of their own
+        var sw = card.querySelector('.tz-sw');
+        if (sw) sw.outerHTML = (n === 2 ? {{ tz.sweeps_sunrise|tojson }} : {{ tz.sweeps_waves|tojson }}).replace(/tz([gf])/g, 'tz$1-mx-');
         frame.innerHTML = ''; frame.appendChild(card);
         card.querySelectorAll('[data-fit]').forEach(fitLines);
         card.querySelectorAll('.mx-fit').forEach(mxShrink);

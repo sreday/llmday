@@ -1830,12 +1830,13 @@ def _tz_ramp(angle=90):
     return 'linear-gradient(%ddeg, %s)' % (angle, ', '.join(_tz_k['ramp']))
 
 
-def _tz_sweeps_svg():
-    """the hero backdrop's two glowing brand sweeps as one SVG (PEC: both carry the whole rainbow)"""
+def _tz_sweeps_svg(arcs=None):
+    """the hero backdrop's glowing brand sweeps as one SVG (PEC: each carries the whole rainbow); arcs = one of the placements
+    below (cx, cy, r, width, start / end angle, opacity, blur), the talk teasers' two sweeps by default"""
     defs, paths = [], []
-    for i, (cx, cy, r, w, a0, a1, alpha, blur) in enumerate([(1000, 560, 416, 112, -math.pi * .6, math.pi * .1, .4, 80),
-                                                             (160, 1120, 480, 96, -math.pi * .5, 0, .3, 64)]):
-        cols = _tz_k['ramp'] if _tz_k['sweeps'] is None else _tz_k['sweeps'][i]
+    for i, (cx, cy, r, w, a0, a1, alpha, blur) in enumerate(arcs or [(1000, 560, 416, 112, -math.pi * .6, math.pi * .1, .4, 80),
+                                                                     (160, 1120, 480, 96, -math.pi * .5, 0, .3, 64)]):
+        cols = _tz_k['ramp'] if _tz_k['sweeps'] is None else _tz_k['sweeps'][i % len(_tz_k['sweeps'])]
         reach = 1 if _tz_k['sweeps'] is None else .55
         stops = ''.join('<stop offset="%.2f" stop-color="%s"/>' % (j / (len(cols) - 1) * reach, c) for j, c in enumerate(cols))
         if _tz_k['sweeps'] is not None:
@@ -1849,6 +1850,13 @@ def _tz_sweeps_svg():
                      '<path d="%s" stroke="url(#tzg%d)" stroke-width="%d" fill="none" stroke-linecap="round" opacity="%.2f"/>'
                      % (d, i, w * 1.5, alpha, i, d, i, w, alpha * .9))
     return '<svg class="tz-sw" viewBox="0 0 1200 1200" aria-hidden="true"><defs>%s</defs>%s</svg>' % (''.join(defs), ''.join(paths))
+
+
+# slime placements Marek picked from 15 proposals (2026-10-08, Desktop "Slime placements 16"): "sunrise" (two arcs rising from
+# the bottom) for Duo cards and the sponsor / host cards, "waves" (three soft bands) for Trio cards; talk teasers keep the default
+_TZ_SUNRISE = [(600, 1250, 420, 100, -math.pi * .98, -math.pi * .02, .36, 84), (600, 1250, 600, 56, -math.pi * .95, -math.pi * .05, .2, 60)]
+_TZ_WAVES = [(600, -1650, 2050, 64, math.pi * .35, math.pi * .65, .3, 60), (600, -1450, 2050, 64, math.pi * .35, math.pi * .65, .24, 60),
+             (600, -1250, 2050, 64, math.pi * .35, math.pi * .65, .18, 60)]
 
 
 # ── title text rules (tuned on 100 real titles, Marek 2026-10-04) ──
@@ -1959,7 +1967,7 @@ except ValueError:
     pass
 _tz_pct = 20 if _tz_days is None or _tz_days >= 21 else 60   # SRE60 / LLM60 / PLAT60 / PEC60 (Marek 2026-10-08)
 context['tz'] = {
-    'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'logo': _tz_logo, 'logo_left': _tz_logo_left, 'blend': _tz_blend,
+    'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'sweeps_sunrise': _tz_sweeps_svg(_TZ_SUNRISE), 'sweeps_waves': _tz_sweeps_svg(_TZ_WAVES), 'logo': _tz_logo, 'logo_left': _tz_logo_left, 'blend': _tz_blend,
     'free': bool(context['hero_event'].get('is_free')),
     # Marek 2026-10-08: no ball at all unless the event is on Luma (and Luma answered) AND has a confirmed venue -
     # Tel Aviv (free, in10t registration) and Campinas (paid, venue TBC, no Luma yet) show no ball, never a code nobody can use
