@@ -181,12 +181,16 @@
     .sp-sheet .tz-frame .tz-card { transform: none !important; }
     .sp-slot[hidden] { display: none; }
     /* venue picture switcher on the host (Marek 2026-10-07): one host card, its venue photo 1 / 2 / 3 picked here */
-    .sp-venues { display: inline-flex; align-items: center; gap: 6px; margin-left: 14px; font: 600 .85rem 'Montserrat', sans-serif; color: #666; vertical-align: middle; }
+    /* the host's adjustments (Marek 2026-10-09): a panel right of the host card, one control under the other */
+    .sp-panel { align-self: start; display: flex; flex-direction: column; gap: 22px; padding: 22px 24px; border-radius: 14px; background: #fff; border: 1px solid #e3e2ea; max-width: 360px; }
+    .sp-sheet .sp-panel { display: none !important; }
+    .sp-venues { display: flex; flex-direction: column; gap: 10px; font: 600 .85rem 'Montserrat', sans-serif; color: #666; }
+    .sp-lab { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .sp-btns { display: flex; gap: 8px; }
     .sp-venues button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #cfcfd6; background: #fff; color: #444; font: 700 .9rem 'Montserrat', sans-serif; cursor: pointer; }
-    .sp-venues button:first-of-type { margin-left: 4px; }
     .sp-venues button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
-    .sp-dark input { width: 140px; accent-color: var(--brand); cursor: pointer; }
-    .sp-dark output { min-width: 6.5em; color: #444; font-weight: 700; }
+    .sp-dark input { width: 100%; margin: 0; accent-color: var(--brand); cursor: pointer; }
+    .sp-dark output { color: #444; font-weight: 700; }
     /* ── Duo / Trio (fourth tab, Marek 2026-10-08): 2 or 3 talks picked on the page, one card, rendered and downloaded in the
        browser. Two layouts, switchable: Columns (photos side by side, name, company, title under each) and Stack (a row per
        talk: title, name and company, the photo on the right). The frame (logo, event line, ball, ticket) is the
@@ -400,11 +404,7 @@
     </div>
     <!--spsec-->{% if sp_cards and not teasers_expired %}<div class="tz-grid" id="sp-pool">
       {% for g in ['Host', 'Sponsor', 'Partner'] %}{% if sp_groups[g] %}
-      <h2 class="sp-head">{{ g if g == 'Host' or sp_groups[g]|length == 1 else g ~ 's' }}{% if g == 'Host' and sp_host_photos > 1 %}
-        <span class="sp-venues" role="group" aria-label="Venue picture">Venue picture{% for i in range(1, sp_host_photos + 1) %}<button type="button" data-v="{{ i }}" aria-pressed="{{ 'true' if i == 1 else 'false' }}">{{ i }}</button>{% endfor %}</span>{% endif %}{% if g == 'Host' and sp_host_photos %}
-        <label class="sp-venues sp-dark">Lighter / darker <input type="range" id="sp-dark" min="-50" max="80" step="10" value="0" aria-label="Lighten or darken the venue picture"><output id="sp-dark-out">0%</output></label>
-        <label class="sp-venues sp-dark">Position <input type="range" id="sp-pos" min="0" max="100" step="1" value="50" aria-label="Move the venue picture inside the card"><output id="sp-pos-out">centre</output></label>
-        <label class="sp-venues sp-dark">Vignette <input type="range" id="sp-vig" min="0" max="100" step="5" value="0" aria-label="Vignette strength"><output id="sp-vig-out">0%</output></label>{% endif %}</h2>
+      <h2 class="sp-head">{{ g if g == 'Host' or sp_groups[g]|length == 1 else g ~ 's' }}</h2>
       {% for c in sp_groups[g] %}
       <div class="sp-slot"{% if g == 'Host' and sp_host_photos %} data-host="{{ c.v }}" data-dark="{{ c.dark }}"{% endif %}>
         <div class="tz-frame">
@@ -431,7 +431,13 @@
         </div>
         <a class="tz-dl sp-dl" href="./{{ c.file|urlencode }}" download="{{ c.file }}" title="Download the {{ c.role|lower }} card of {{ c.name }} (PNG)" aria-label="Download the {{ c.role|lower }} card of {{ c.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
       </div>
-      {% endfor %}{% endif %}{% endfor %}
+      {% endfor %}{% if g == 'Host' and sp_host_photos %}
+      <div class="sp-panel" aria-label="Host card adjustments">
+        {% if sp_host_photos > 1 %}<div class="sp-venues" role="group" aria-label="Venue picture"><span class="sp-lab">Venue picture</span><span class="sp-btns">{% for i in range(1, sp_host_photos + 1) %}<button type="button" data-v="{{ i }}" aria-pressed="{{ 'true' if i == 1 else 'false' }}">{{ i }}</button>{% endfor %}</span></div>{% endif %}
+        <label class="sp-venues sp-dark"><span class="sp-lab">Lighter / darker <output id="sp-dark-out">0%</output></span><input type="range" id="sp-dark" min="-50" max="80" step="10" value="0" aria-label="Lighten or darken the venue picture"></label>
+        <label class="sp-venues sp-dark"><span class="sp-lab">Position <output id="sp-pos-out">centre</output></span><input type="range" id="sp-pos" min="0" max="100" step="1" value="50" aria-label="Move the venue picture inside the card"></label>
+        <label class="sp-venues sp-dark"><span class="sp-lab">Vignette <output id="sp-vig-out">0%</output></span><input type="range" id="sp-vig" min="0" max="100" step="5" value="0" aria-label="Vignette strength"></label>
+      </div>{% endif %}{% endif %}{% endfor %}
     </div>{% endif %}<!--/spsec-->
     <!--crsec-->{% if teaser_talks and not teasers_expired %}<div id="cr-sec">
       <div>
