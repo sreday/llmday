@@ -137,6 +137,16 @@
     .tz-day { font-weight: 900; font-size: 80px; line-height: 1; }
     .tz-mon { color: var(--accent); font-size: 26px; font-weight: 800; letter-spacing: .12em; }
     .tz-wday { font-weight: 600; font-size: 21px; color: rgba(255,255,255,.75); margin-top: 4px; }
+    /* host cards over a venue photo (Marek 2026-10-09): no notch dots biting into the ticket (they show as blobs on a light
+       photo) and the ticket's and the discount circle's dark side 80% transparent, so the picture shows through */
+    .sp-onphoto .tz-ticket-in { background: rgba(8,8,20,.2); }
+    .sp-onphoto .tz-ball-in { background: rgba(8,8,20,.2); }   /* the discount circle too (Marek 2026-10-09) */
+    /* the gradient rim on its own (a masked ring), or the see-through middle would show the solid gradient behind it */
+    .sp-onphoto .tz-ticket, .sp-onphoto .tz-ball { background: none; }
+    .sp-onphoto .tz-ticket::before, .sp-onphoto .tz-ball::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: inherit; box-sizing: border-box;
+      background: {{ tz.ramp }}; -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
+    .sp-onphoto .tz-ticket-in, .sp-onphoto .tz-ball-in { position: relative; }
     .tz-perf { height: 100%; border-left: 4px dashed rgba(255,255,255,.28); }
     .tz-where { padding-left: 36px; display: flex; align-items: center; gap: 18px; }
     .tz-where svg { width: 53px; height: 53px; flex: 0 0 auto; stroke: var(--accent); fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
@@ -408,7 +418,7 @@
       {% for c in sp_groups[g] %}
       <div class="sp-slot"{% if g == 'Host' and sp_host_photos %} data-host="{{ c.v }}" data-dark="{{ c.dark }}"{% endif %}>
         <div class="tz-frame">
-          <div class="tz-card sp-card" id="sp-card-{{ g|lower }}-{{ loop.index }}" data-file="{{ c.file }}">
+          <div class="tz-card sp-card{% if c.photo %} sp-onphoto{% endif %}" id="sp-card-{{ g|lower }}-{{ loop.index }}" data-file="{{ c.file }}">
             {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps_corners|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
             {% if c.photo %}<div class="sp-photo" style="background-image:url('{{ c.photo }}'){% if c.bright is defined %};filter:brightness({{ c.bright }}){% endif %}"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
@@ -425,8 +435,8 @@
               <div class="tz-where"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-19-16-19-31a19 19 0 0 1 38 0c0 15-19 31-19 31z"/><circle cx="32" cy="27" r="7.5"/></svg>
                 <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18"{% if tz.place_full and tz.place_full != tz.place %} data-full="{{ tz.place_full }}"{% endif %}>{{ tz.place }}</div></div></div>
             </div></div>
-            <div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
-            <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>
+            {% if not c.photo %}<div class="tz-notch" style="top:968px;background:{{ tz.scheme.bg[1] }}"></div>
+            <div class="tz-notch" style="top:1116px;background:{{ tz.scheme.bg[2] }}"></div>{% endif %}
           </div>
         </div>
         <a class="tz-dl sp-dl" href="./{{ c.file|urlencode }}" download="{{ c.file }}" title="Download the {{ c.role|lower }} card of {{ c.name }} (PNG)" aria-label="Download the {{ c.role|lower }} card of {{ c.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>
