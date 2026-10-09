@@ -869,12 +869,16 @@
 
       // 4. downloads: every "Download all" is one ZIP (Marek 2026-10-08) of the shown cards' PNGs - the built files, or, where
       // there is none (a local build) or the host card has been re-framed, the card rendered here
+      // every ZIP / PDF button (Marek 2026-10-09): while it works, the faded button fills with its normal colour, left to right
+      function zpStart(btn) { btn.classList.add('tz-zipping'); btn.style.setProperty('--zp', '0%'); }
+      function zpStep(btn, done, total) { btn.style.setProperty('--zp', Math.round(done * 100 / total) + '%'); }
+      function zpEnd(btn) { btn.classList.remove('tz-zipping'); btn.style.removeProperty('--zp'); }
       function download(list, btn, label) {
         var kind = tab === 'th' ? 'thumbnails' : tab === 'sp' ? 'sponsor-cards' : 'teasers';
         var cls = tab === 'th' ? 'a.th-dl' : tab === 'sp' ? 'a.sp-dl' : 'a.tz-dl:not(.th-dl)';
         var slots = list.filter(function (s) { return !s.hidden && !s.classList.contains('tz-na'); }), files = [], skipped = [], keep = btn.textContent;
         if (!slots.length) return;
-        btn.disabled = true; btn.classList.add('tz-zipping'); btn.style.setProperty('--zp', '0%');
+        btn.disabled = true; zpStart(btn);
         slots.reduce(function (done, s, i) {
           return done.then(function () {
             btn.textContent = 'Zipping ' + (i + 1) + ' of ' + slots.length + '...';
@@ -889,7 +893,7 @@
               var card = s.querySelector(tab === 'th' ? '.th-card' : '.tz-card');
               return (tab === 'th' ? pngOf(card, 1280, 720, 1) : pngOf(card)).then(function (u) { return fetch(u); }).then(function (r) { return r.arrayBuffer(); });
             }).then(function (b) { files.push({ name: name, bytes: new Uint8Array(b) }); }, function () { skipped.push(name); })
-              .then(function () { btn.style.setProperty('--zp', Math.round((i + 1) * 100 / slots.length) + '%'); });
+              .then(function () { zpStep(btn, i + 1, slots.length); });
           });
         }, Promise.resolve()).then(function () {
           if (skipped.length) alert(skipped.length + ' of ' + slots.length + ' pictures are not in the ZIP: their server pictures are still being made and this browser could not draw them with the slime. Try again in a few minutes.\n\n' + skipped.join('\n'));
@@ -898,7 +902,7 @@
           z.href = url; z.download = ({{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + '-' + kind + (label ? '-' + label : '')).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/-+/g, '-') + '.zip';
           document.body.appendChild(z); z.click(); z.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
         }).catch(function (err) { alert('Could not make the ZIP: ' + err); })
-          .then(function () { btn.disabled = false; btn.textContent = keep; btn.classList.remove('tz-zipping'); btn.style.removeProperty('--zp'); });
+          .then(function () { btn.disabled = false; btn.textContent = keep; zpEnd(btn); });
       }
       // in-browser PNG of a 1200 px card (Duo / Trio, a re-framed host card): html-to-image, loaded on first use, with only
       // Montserrat's latin + latin-ext files embedded - every Google Fonts subset the page loads took ~1 minute (2026-10-08)
@@ -1260,20 +1264,20 @@
           var stage = document.createElement('div');            // laid out off screen at full size, so the text fits as in the preview
           stage.style.cssText = 'position:fixed;left:-13000px;top:0;width:1200px;height:1200px;overflow:hidden';
           document.body.appendChild(stage);
-          document.getElementById('mx-all').disabled = document.getElementById('mx-rand').disabled = true;
+          document.getElementById('mx-all').disabled = document.getElementById('mx-rand').disabled = true; zpStart(btn);
           var files = [];                          // one ZIP of all the cards (Marek 2026-10-08), not a burst of downloads
           groups.reduce(function (done, g, k) {
             return done.then(function () {
               btn.textContent = 'Rendering ' + (k + 1) + ' of ' + groups.length + '...';
               return pngOf(mxBuild(g, stage)).then(function (url) { return fetch(url); }).then(function (r) { return r.arrayBuffer(); })
-                .then(function (b) { files.push({ name: mxName(g), bytes: new Uint8Array(b) }); });
+                .then(function (b) { files.push({ name: mxName(g), bytes: new Uint8Array(b) }); zpStep(btn, k + 1, groups.length); });
             });
           }, Promise.resolve()).then(function () {
             var url = URL.createObjectURL(zipOf(files)), a = document.createElement('a');
             a.href = url; a.download = {{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + (shuffle ? '-duos-trios-shuffled.zip' : '-duos-trios.zip');
             document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
           }).catch(function (err) { alert('Could not render the PNGs: ' + err); })
-            .then(function () { stage.remove(); document.getElementById('mx-all').disabled = document.getElementById('mx-rand').disabled = false; btn.textContent = label; });
+            .then(function () { stage.remove(); document.getElementById('mx-all').disabled = document.getElementById('mx-rand').disabled = false; btn.textContent = label; zpEnd(btn); });
         }
         document.getElementById('mx-all').addEventListener('click', function () { mxAll(this, false); });
         document.getElementById('mx-rand').addEventListener('click', function () { mxAll(this, true); });
@@ -1484,15 +1488,15 @@
           var stage = document.createElement('div');
           stage.style.cssText = 'position:fixed;left:-13000px;top:0;width:1200px;height:1200px;overflow:hidden';
           document.body.appendChild(stage);
-          btn.disabled = true;
+          btn.disabled = true; zpStart(btn);
           slides.reduce(function (done, sl, i) {
-            return done.then(function () { btn.textContent = 'Rendering ' + (i + 1) + ' of ' + slides.length + '...'; return crJpeg(sl, stage).then(function (j) { jpegs.push(j); }); });
+            return done.then(function () { btn.textContent = 'Rendering ' + (i + 1) + ' of ' + slides.length + '...'; return crJpeg(sl, stage).then(function (j) { jpegs.push(j); zpStep(btn, i + 1, slides.length); }); });
           }, Promise.resolve()).then(function () {
             var url = URL.createObjectURL(crPdf(jpegs)), a = document.createElement('a');
             a.href = url; a.download = {{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-')|tojson }} + (crMode === 'sponsors' ? '-sponsors' : '') + '-carousel.pdf';
             document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
           }).catch(function (err) { alert('Could not build the PDF: ' + err); })
-            .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Download PDF'; });
+            .then(function () { stage.remove(); btn.disabled = false; btn.textContent = 'Download PDF'; zpEnd(btn); });
         });
         // the cover thumbnails, once the fonts are in
         ready.then(function () { document.querySelectorAll('.cr-cov[data-d]').forEach(function (el) { if (el.dataset.d !== 'none') crCard({ kind: 'cover', d: el.dataset.d }, el.querySelector('.tz-frame')); }); scale(); });
