@@ -200,6 +200,7 @@
     .tz-slot.tz-na .tz-frame, .tz-slot.tz-na .th-frame { filter: grayscale(1); opacity: .4; pointer-events: none; }
     .tz-na-note { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); padding: 6px 12px; border-radius: 999px;
       background: rgba(0,0,0,.72); color: #fff; font: 600 .8rem 'Montserrat', sans-serif; white-space: nowrap; z-index: 2; }
+    body.th-mode .tz-na-note { top: 50%; bottom: auto; transform: translate(-50%, -50%); }   /* thumbnails: in the middle, clear of the name */
     /* zipping (Marek 2026-10-09): the faded button fills with its normal colour, left to right, as the cards are done; kept in the tools block so no picture is redrawn */
     .tz-btn.tz-zipping:disabled { opacity: 1; background: linear-gradient(var(--brand), var(--brand)) left / var(--zp, 0%) 100% no-repeat,
       color-mix(in srgb, var(--brand) 50%, #fff); transition: background-size .25s ease-out; }
