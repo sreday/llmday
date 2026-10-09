@@ -918,15 +918,31 @@
       // mushy at 1500 px), and the slime proven present - the card drawn again with its slime hidden must differ along the
       // slime's path, or the picture is refused: a picture without its slime is never handed out
       var hdRepo = { 'sreday.com': 'sreday/sreday', 'llmday.com': 'sreday/llmday', 'platformday.com': 'sreday/platformday',
-                     '2026.promptengineering.rocks': 'Prompt-Engineering-Conference/2026.promptengineering.rocks' }[location.hostname.replace(/^www\./, '')];
+                     '2026.promptengineering.rocks': 'Prompt-Engineering-Conference/2026.promptengineering.rocks',
+                     'promptengineering.rocks': 'Prompt-Engineering-Conference/2026.promptengineering.rocks' }[location.hostname.replace(/^www\./, '')];
+      // no headshot = no photo at all, never a broken placeholder (Marek 2026-10-09); a photo being swapped for its original is left alone
+      function hideBroken(i) { if (i.tagName === 'IMG' && !i.dataset.swap && /\/speakers\//.test(i.src)) i.style.display = 'none'; }
+      document.addEventListener('error', function (e) { hideBroken(e.target); }, true);
+      [].forEach.call(document.querySelectorAll('img'), function (i) { if (i.complete && !i.naturalWidth) hideBroken(i); });
       function withHd(card, job) {
-        var imgs = hdRepo ? [].filter.call(card.querySelectorAll('img'), function (i) { return /\/speakers\/[^/]+$/.test(i.src); }) : [], old = imgs.map(function (i) { return i.src; });
-        function swap(urls) {
+        var imgs = hdRepo ? [].filter.call(card.querySelectorAll('img'), function (i) { return /\/speakers\/[^/]+$/.test(i.src) && i.style.display !== 'none'; }) : [], old = imgs.map(function (i) { return i.src; });
+        function swap(urls) {   // each image: the first of its urls that loads
           return Promise.all(imgs.map(function (i, k) {
-            return new Promise(function (ok) { i.onload = i.onerror = function () { i.onload = i.onerror = null; ok(); }; i.crossOrigin = 'anonymous'; i.src = urls[k]; });
+            var tries = [].concat(urls[k]);
+            return new Promise(function (ok) {
+              function done() { i.onload = i.onerror = null; delete i.dataset.swap; ok(); }
+              function next() { if (!tries.length) return done(); i.src = tries.shift(); }
+              i.dataset.swap = '1'; i.loading = 'eager'; i.crossOrigin = 'anonymous'; i.onload = done; i.onerror = next; next();
+            });
           }));
         }
-        var hd = old.map(function (u) { return 'https://raw.githubusercontent.com/' + hdRepo + '/main/speakers/' + u.split('/speakers/')[1]; });
+        // the page shows the light .webp copy (?v=hash); the repo keeps the .png / .jpg original it was made from (Marek 2026-10-09:
+        // asking GitHub for "Name.webp?v=..." 404'd, so every picture drawn here broke); none found = the page's own copy
+        var hd = old.map(function (u) {
+          var f = u.split('/speakers/')[1].split('?')[0], base = 'https://raw.githubusercontent.com/' + hdRepo + '/main/speakers/';
+          var names = /\.webp$/i.test(f) ? ['.png', '.jpg', '.jpeg'].map(function (x) { return f.replace(/\.webp$/i, x); }) : [f];
+          return names.map(function (n) { return base + n; }).concat([u]);
+        });
         return swap(hd).then(job).then(function (r) { return swap(old).then(function () { return r; }); },
                                        function (e) { return swap(old).then(function () { throw e; }); });
       }
