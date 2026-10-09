@@ -24,7 +24,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     concurrency:
-      group: static-build
+      group: deploy   # its own name: the old workflow-wide queue was also "static-build"
       cancel-in-progress: false   # queue, never cancel: a running deploy always lands; a newer push replaces the waiting one (Marek 2026-10-09)
     timeout-minutes: 15   # deploys queue now: a hung one must not hold the site for GitHub's default 6 hours
     steps:
