@@ -59,11 +59,16 @@
     @media (prefers-reduced-motion: reduce) { .tz-dl-arrow { animation: none; } }
     .tz-empty { color: #666; }
     /* tabs: talk teasers | YouTube thumbnails - the same talks, search, sorting and downloads, one picture per tab */
-    .tz-tabs { display: flex; gap: 6px; border-bottom: 2px solid #dcdbe3; margin: 0 0 20px; }
+    /* the tab row scrolls sideways when it doesn't fit; one underline glides to the chosen tab (Marek 2026-10-08) */
+    .tz-tabs { display: flex; gap: 6px; border-bottom: 2px solid #dcdbe3; margin: 0 0 20px; position: relative; overflow-x: auto; scrollbar-width: none; }
+    .tz-tabs::-webkit-scrollbar { display: none; }
     .tz-tabs[hidden] { display: none; }
-    .tz-tabs button { font: 700 .95rem 'Montserrat', sans-serif; padding: 10px 18px; border: 0; background: transparent; color: #666; cursor: pointer;
-      border-bottom: 3px solid transparent; margin-bottom: -2px; }
-    .tz-tabs button[aria-selected="true"] { color: var(--brand); border-bottom-color: var(--brand); }
+    .tz-tabs button { font: 700 .95rem 'Montserrat', sans-serif; padding: 10px 18px 12px; border: 0; background: transparent; color: #666; cursor: pointer;
+      white-space: nowrap; flex: 0 0 auto; transition: color .25s; }
+    .tz-tabs button[aria-selected="true"] { color: var(--brand); }
+    .tz-ink { position: absolute; bottom: 0; left: 0; height: 3px; width: 0; border-radius: 3px 3px 0 0; background: var(--brand); pointer-events: none;
+      transition: left .35s cubic-bezier(.22,.8,.24,1), width .35s cubic-bezier(.22,.8,.24,1); }
+    @media (prefers-reduced-motion: reduce) { .tz-ink { transition: none; } }
     .th-frame, a.th-dl { display: none; }
     body.th-mode .tz-frame, body.th-mode a.tz-dl:not(.th-dl) { display: none; }
     body.th-mode .th-frame { display: block; }
@@ -756,7 +761,29 @@
 
       // 3b. tabs: talk teasers (the 1500 px PNG cards) or YouTube thumbnails (1280 x 720 PNG); #thumbnails opens the second
       var tab = 'tz', sub = document.getElementById('tz-sub'), subTz = sub.textContent;
+      // tab switching animations (Marek 2026-10-08): the underline glides to the chosen tab and the page slides in from
+      // the side the tab sits on - from the right when moving right, from the left when moving back; none on first show
+      var tabsEl = document.querySelector('.tz-tabs'), ink = null, tabOrder = [].map.call(document.querySelectorAll('.tz-tabs button'), function (b) { return b.dataset.tab; });
+      if (tabsEl) { ink = document.createElement('span'); ink.className = 'tz-ink'; tabsEl.appendChild(ink); }
+      function moveInk(t) {
+        var b = tabsEl && tabsEl.querySelector('[data-tab="' + t + '"]'); if (!b || !ink) return;
+        ink.style.left = b.offsetLeft + 'px'; ink.style.width = b.offsetWidth + 'px';
+        if (b.offsetLeft < tabsEl.scrollLeft || b.offsetLeft + b.offsetWidth > tabsEl.scrollLeft + tabsEl.clientWidth)
+          tabsEl.scrollTo({ left: b.offsetLeft - 24, behavior: still ? 'auto' : 'smooth' });
+      }
+      window.addEventListener('resize', function () { moveInk(tab); });
+      function slideIn(from, to) {
+        if (still || !from || from === to || !document.body.animate) return;
+        var dx = tabOrder.indexOf(to) > tabOrder.indexOf(from) ? 48 : -48;
+        ['.tz-controls', '#tz-groups', '#tz-pool', '#mx-sec', '#gn-pool', '#cr-sec', '#sp-pool', '#tz-sub'].forEach(function (sel) {
+          var el = document.querySelector(sel);
+          if (el && el.offsetParent !== null) el.animate([{ transform: 'translateX(' + dx + 'px)', opacity: 0 }, { transform: 'none', opacity: 1 }],
+                                                         { duration: 320, easing: 'cubic-bezier(.22,.8,.24,1)' });
+        });
+      }
+      var tabShown = null;
       function setTab(t) {
+        var prev = tabShown; tabShown = t;
         tab = t;
         document.body.classList.toggle('th-mode', t === 'th');
         document.body.classList.toggle('sp-mode', t === 'sp');
@@ -770,7 +797,8 @@
           : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
-        ready.then(function () { fitTab(t === 'mx' || t === 'cr' ? 'tz' : t); if (t === 'cr') fitTab('gn'); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); if (t === 'cr' && typeof crDraw === 'function') crDraw(); scale(); });
+        moveInk(t); slideIn(prev, t);
+        ready.then(function () { moveInk(t); fitTab(t === 'mx' || t === 'cr' ? 'tz' : t); if (t === 'cr') fitTab('gn'); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); if (t === 'cr' && typeof crDraw === 'function') crDraw(); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
         b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#generic' : b.dataset.tab === 'cr' ? '#carousel' : location.pathname); });
