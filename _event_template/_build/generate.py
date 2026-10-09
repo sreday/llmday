@@ -1979,10 +1979,10 @@ except ValueError:
 _tz_pct = 20 if _tz_days is None or _tz_days >= 21 else 60   # SRE60 / LLM60 / PLAT60 / PEC60 (Marek 2026-10-08)
 context['tz'] = {
     'scheme': _tz_k, 'dl': _tz_opposite(context.get('brand_color') or '#333'), 'ramp': _tz_ramp(), 'ramp45': _tz_ramp(135), 'sweeps': _tz_sweeps_svg(), 'sweeps_sunrise': _tz_sweeps_svg(_TZ_SUNRISE), 'sweeps_waves': _tz_sweeps_svg(_TZ_WAVES), 'sweeps_corners': _tz_sweeps_svg(_TZ_CORNERS), 'sweeps_halo': _tz_sweeps_svg(_TZ_HALO), 'logo': _tz_logo, 'logo_left': _tz_logo_left, 'blend': _tz_blend,
-    'free': bool(context['hero_event'].get('is_free')),
+    'free': bool(context['hero_event'].get('is_free')) or _tz_key == 'platformday',   # PLATFORMday is always free (Marek's rule), whatever Luma says
     # Marek 2026-10-08: no ball at all unless the event is on Luma (and Luma answered) AND has a confirmed venue -
     # Tel Aviv (free, in10t registration) and Campinas (paid, venue TBC, no Luma yet) show no ball, never a code nobody can use
-    'show': bool(context.get('luma_connected')) and not context.get('venue_tbc'), 'pct': _tz_pct, 'code': '%s%d' % (_tz_prefix, _tz_pct),
+    'show': (bool(context.get('luma_connected')) or (_tz_key == 'platformday' and bool(context.get('luma_evt')))) and not context.get('venue_tbc'), 'pct': _tz_pct, 'code': '%s%d' % (_tz_prefix, _tz_pct),
     'conf': str(context['hero_event'].get('subtitle') or '').upper(),
     'day': context['hero_event'].get('day', ''), 'mon': str(context['hero_event'].get('month', ''))[:3].upper(),
     'weekday': context['hero_event'].get('weekday', ''),
