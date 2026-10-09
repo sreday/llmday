@@ -277,7 +277,7 @@
     .mx-srow .mx-photo { width: 184px; height: 184px; object-fit: contain; flex: 0 0 auto; }
     .mx-stack.n2 .mx-photo { width: 250px; height: 250px; }
     /* ── Generic covers (fifth tab, Marek 2026-10-08): only the event's logo big, the city, the country under it and the date,
-       no other text, laid out the same on both (Marek 2026-10-09) - "halo" (a slime ring round the logo, no photos) and "triptych" (the three venue photos, only when the event has
+       no other text, laid out the same on both (Marek 2026-10-09) - "halo" (a slime ring round the logo, no photos) and "triptych" (the three venue photos side by side) and "stack" (the same three one above the other, Marek 2026-10-09) - those two only when the event has
        real ones), Marek's picks from Desktop "Generic covers v2". The logo is drawn exactly as it is: never trimmed,
        recoloured or given a glow. ── */
     #gn-pool { display: none; }
@@ -495,7 +495,7 @@
     </div>{% endif %}<!--/crsec-->
     <!--gnsec-->{% if not teasers_expired %}{% set _ph = [gn.photos[0 % gn.photos|length], gn.photos[1 % gn.photos|length], gn.photos[2 % gn.photos|length]] if gn.photos else [] %}
     <div class="tz-grid" id="gn-pool">
-      {% for d in (['halo', 'triptych'] if gn.photos else ['halo']) %}
+      {% for d in (['halo', 'triptych', 'stack'] if gn.photos else ['halo']) %}
       <div class="gn-slot">
         <div class="tz-frame">
           <div class="tz-card gn-card" id="gn-card-{{ d }}" data-file="{{ (brand_name ~ '-' ~ tz.conf)|lower|replace(' ', '-') }}-cover-{{ d }}.png">
@@ -507,7 +507,7 @@
             {% if _cp|length > 1 %}<div class="gn-city" style="top:885px;font-size:50px;color:rgba(255,255,255,.85)">{{ _cp[1:]|join(' · ') }}</div>{% endif %}
             <div class="gn-date" style="top:{{ 975 if _cp|length > 1 else 900 }}px;font-size:42px">{{ gn.date }}</div>
           {% else %}
-            {% for i in range(3) %}<div class="gn-ph" style="left:{{ i * 402 }}px;top:0;width:396px;height:1200px;background-image:url('{{ _ph[i] }}');filter:grayscale(.4) brightness(.5)"></div>{% endfor %}
+            {% for i in range(3) %}{% if d == 'stack' %}<div class="gn-ph" style="left:0;top:{{ i * 402 }}px;width:1200px;height:396px;background-image:url('{{ _ph[i] }}');filter:grayscale(.4) brightness(.5)"></div>{% else %}<div class="gn-ph" style="left:{{ i * 402 }}px;top:0;width:396px;height:1200px;background-image:url('{{ _ph[i] }}');filter:grayscale(.4) brightness(.5)"></div>{% endif %}{% endfor %}
             <div style="inset:0;background:{{ tz.ramp }};mix-blend-mode:overlay;opacity:.4"></div>
             <div style="inset:0;background:linear-gradient(180deg,{{ tz.scheme.bg[1] }}cc 0%,{{ tz.scheme.bg[1] }}40 30%,{{ tz.scheme.bg[1] }}73 55%,{{ tz.scheme.bg[1] }}f2 100%)"></div>
             {% set _cp = gn.city.split(' · ') %}
@@ -825,7 +825,7 @@
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
           : t === 'cr' ? 'A LinkedIn carousel (a square PDF for a document post): a cover, then talks as singles or Duos & Trios, within the recommended length.'
-          : t === 'gn' ? (document.getElementById('gn-card-triptych') ? 'Two covers' : 'A cover') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only. Rendered here in your browser.'
+          : t === 'gn' ? (document.getElementById('gn-card-triptych') ? 'Three covers' : 'A cover') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only. Rendered here in your browser.'
           : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order; Shuffle and download all does the same in a random order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
@@ -1322,7 +1322,7 @@
       if (crSec) {
         var covers = document.getElementById('cr-covers');
         if (!document.getElementById('gn-pool')) document.getElementById('cr-cover-step').hidden = true;
-        else [['none', 'No cover'], ['halo', 'Halo'], ['triptych', 'Triptych']].filter(function (c) { return c[0] === 'none' || document.getElementById('gn-card-' + c[0]); }).forEach(function (c) {
+        else [['none', 'No cover'], ['halo', 'Halo'], ['triptych', 'Triptych'], ['stack', 'Stack']].filter(function (c) { return c[0] === 'none' || document.getElementById('gn-card-' + c[0]); }).forEach(function (c) {
           var el = document.createElement('div'); el.className = 'cr-cov'; el.dataset.d = c[0]; el.setAttribute('role', 'button'); el.tabIndex = 0;
           el.innerHTML = c[0] === 'none' ? '<div class="cr-none">No cover</div><b>No cover</b>' : '<div class="tz-frame"></div><b>' + c[1] + '</b>';
           covers.appendChild(el);
