@@ -990,6 +990,21 @@
             (p.photo ? '<img class="mx-photo" src="' + esc(p.photo) + '" alt="">' : '<div class="mx-photo"></div>') + '</div>';
         }).join('') + '</div>';
       }
+      // every copied card gets ids of its own (Marek 2026-10-08: slimes "unloaded" while clicking around). A slime's gradient and
+      // blur are looked up by id, and the browser takes the first element with that id: with copies sharing ids, a card lost
+      // its slimes whenever the first copy was hidden (another tab) or removed (a redraw). Ids and their url(#...) are renamed.
+      var uidN = 0;
+      function uniqIds(root) {
+        var map = {}, pre = 'u' + (++uidN) + '-';
+        root.querySelectorAll('[id]').forEach(function (e) { map[e.id] = pre + e.id; e.id = map[e.id]; });
+        if (!Object.keys(map).length) return root;
+        var fix = function (v) { return v.replace(/url\(\s*['"]?#([^'")\s]+)['"]?\s*\)/g, function (m, id) { return map[id] ? 'url(#' + map[id] + ')' : m; }); };
+        root.querySelectorAll('*').forEach(function (e) {
+          ['fill', 'stroke', 'filter', 'clip-path', 'mask', 'style'].forEach(function (a) { var v = e.getAttribute(a); if (v && v.indexOf('url(') >= 0) e.setAttribute(a, fix(v)); });
+          ['href', 'xlink:href'].forEach(function (a) { var v = e.getAttribute(a); if (v && v[0] === '#' && map[v.slice(1)]) e.setAttribute(a, '#' + map[v.slice(1)]); });
+        });
+        return root;
+      }
       // one card for 2 or 3 talks, built into host (it has to be laid out to fit its text)
       function mxBuild(picks, host) {
         var n = picks.length, card = mxTalks[0].slot.querySelector('.tz-card').cloneNode(true);   // the event's frame, from the first talk card
@@ -998,6 +1013,7 @@
         // its own slimes (Marek 2026-10-08): "waves" behind Duos and Trios alike, so a carousel of both looks like one set
         var sw = card.querySelector('.tz-sw');
         if (sw) sw.outerHTML = {{ tz.sweeps_waves|tojson }}.replace(/tz([gf])/g, 'tz$1-mx-');
+        uniqIds(card);
         host.innerHTML = ''; host.appendChild(card);
         card.querySelectorAll('[data-fit]').forEach(fitLines);
         card.querySelectorAll('.mx-fit').forEach(mxShrink);
@@ -1168,7 +1184,7 @@
         host.innerHTML = '';
         if (slide.kind === 'group') { var keep = mxLayout; mxLayout = crLayout; var c = mxBuild(slide.g, host); mxLayout = keep; return c; }
         var src = slide.kind === 'cover' ? document.getElementById('gn-card-' + slide.d) : slide.kind === 'sp' ? slide.slot.querySelector('.tz-card') : slide.p.slot.querySelector('.tz-card');
-        var card = src.cloneNode(true); card.removeAttribute('id'); card.style.transform = ''; host.appendChild(card);
+        var card = uniqIds(src.cloneNode(true)); card.removeAttribute('id'); card.style.transform = ''; host.appendChild(card);
         if (slide.kind === 'cover') crFitCity(card);
         else {
           card.querySelectorAll('[data-fit]').forEach(fitLines);
