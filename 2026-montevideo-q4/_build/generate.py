@@ -2120,7 +2120,7 @@ for _t in talks_raw:                                         # spreadsheet order
     # a card missing its photo or a real title is shown greyed out: no download, not in Download all / Duo / Trio /
     # Carousel, never rendered (Marek 2026-10-09)
     _missing = [_w for _w, _gone in (('title', _title.strip(' .').lower() in ('', 'tbd', 'tba', 'tbc', 'to be announced', 'to be confirmed', 'to be decided')),
-                                     ('photo', not _t.get('photo_url'))) if _gone]
+                                     ('headshot', not _t.get('photo_url'))) if _gone]
     _title = _title or 'TBD'
     _org = (_t.get('organization') or '').strip()
     _lines = _tz_name_lines(_name)
