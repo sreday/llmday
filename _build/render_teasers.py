@@ -113,6 +113,23 @@ def event_is_upcoming(event_dir):
         return True
 
 
+def card_slots(index_html, kind=KINDS[0]):
+    """Each picture's position among the page's slots, which is what the sheet hash counts (#sheet-/#thumbs-/#city-<start>-
+    <count> number every .tz-slot, a greyed-out one too). A greyed-out card has no picture, so after one the picture's own
+    index and its slot differ (2026-10-11: every card after "ING Keynote" was saved under the next speaker's name)."""
+    if kind.get("slot", "tz-slot") != "tz-slot":
+        return list(range(len(card_files(index_html, kind))))
+    with open(index_html, encoding="utf-8") as f:
+        html = re.sub(r"<!--spsec-->.*?<!--/spsec-->", "", f.read(), flags=re.S)
+    starts = [m for m in re.finditer(r'<div class="tz-slot( tz-na)?"[ >]', html)]
+    slots = []
+    for i, m in enumerate(starts):
+        end = starts[i + 1].start() if i + 1 < len(starts) else len(html)
+        if re.search(kind["card_re"], html[m.start():end]):
+            slots.append(i)
+    return slots
+
+
 def card_files(index_html, kind=KINDS[0]):
     with open(index_html, encoding="utf-8") as f:
         return re.findall(kind["card_re"], f.read())
@@ -155,7 +172,7 @@ def refs_digest(text, base_dir, h, outputs=()):
             h.update(b"missing")
 
 
-def render_context(context, city=False):
+def render_context(context, city=False, sponsor=False):
     """What of the page outside the cards can change a picture: its styles without the tools' block, its <link>s
     (fonts) and the card script. None when the page has no /*render*/ markers (an old template: whole context).
     The City view's own styles and script (/*city*/ blocks) count for the City view pictures only."""
@@ -166,6 +183,8 @@ def render_context(context, city=False):
     styles = re.sub(r"/\*tools\*/.*?/\*/tools\*/", "", styles, flags=re.S)
     links = "".join(re.findall(r"<link[^>]+>", context))
     out = styles + links + script.group(1)
+    if not sponsor:   # the sponsor / host cards' own styles (/*sp*/, 2026-10-11): theirs only
+        out = re.sub(r"[ \t]*/\*sp\*/.*?/\*/sp\*/\n?", "", out, flags=re.S)
     return out if city else re.sub(r"[ \t]*/\*city\*/.*?/\*/city\*/\n?", "", out, flags=re.S)
 
 
@@ -186,7 +205,8 @@ def card_keys(index_html, chrome_version, kind=KINDS[0], frozen=False):
     cards = [re.sub(kind["strip"], "", c, flags=re.S) for c in cards]   # the other kind's markup does not change this picture
     base_dir = os.path.dirname(index_html)
     if frozen:
-        return [frozen_key(c, base_dir, kind) for c in cards]
+        slots = card_slots(index_html, kind)
+        return [frozen_key(c, base_dir, kind) + ("-slot" if i < len(slots) and slots[i] != i else "") for i, c in enumerate(cards)]
     outputs = set().union(*(card_files(index_html, k) for k in KINDS))
     if kind["name"] == "youtube":
         # a thumbnail shows the brand lettering and the speaker's headshot, nothing of the talk's text (Marek 2026-10-09:
@@ -196,19 +216,23 @@ def card_keys(index_html, chrome_version, kind=KINDS[0], frozen=False):
         cards = [re.sub(r'^<div class="tz-slot"[^>]*>', "", c) for c in cards]
         styles = "".join(re.findall(r"<style[^>]*>(.*?)</style>", context, re.S))
         styles = re.sub(r"[ \t]*/\*city\*/.*?/\*/city\*/\n?", "", styles, flags=re.S)   # the City view's styles: not a thumbnail's
+        styles = re.sub(r"[ \t]*/\*sp\*/.*?/\*/sp\*/\n?", "", styles, flags=re.S)       # nor the sponsor cards' (2026-10-11)
         fit = re.search(r"function fitWord\(el\) \{.*?\n      \}", context, re.S)
         context = "\n".join(r for r in re.findall(r"[^{}]*\{[^{}]*\}", styles) if ".th-" in r or "th-sheet" in r) + (fit.group(0) if fit else context)
     else:
-        context = render_context(context, kind["name"] == "city") or context
+        context = render_context(context, kind["name"] == "city", kind["name"] == "sponsor") or context
     ctx = hashlib.sha256()
     ctx.update(("%s|%s|%s|%dx%d|%s|%d|" % (RENDERER, chrome_version, kind["name"], kind["w"], kind["h"], kind["scale"], BUDGET_MS)).encode())
     ctx.update(context.encode())
     refs_digest(context, base_dir, ctx, outputs)
     keys = []
-    for card in cards:
+    slots = card_slots(index_html, kind)
+    for i, card in enumerate(cards):
         h = ctx.copy()
         h.update(card.encode())
         refs_digest(card, base_dir, h, outputs)
+        if i < len(slots) and slots[i] != i:   # drawn at its own slot since 2026-10-11 (before: the next card's picture)
+            h.update(b"slot-fixed")
         keys.append(h.hexdigest())
     return keys
 
@@ -332,12 +356,19 @@ def main():
                 reused_total += reused
                 print("render_teasers %s: %d/%d %s pictures from cache, %d left for the render job" % (event, done, len(files), kind["name"], len(missing)))
                 continue
+            slots = card_slots(page, kind)
+            if len(slots) != len(files):
+                print("WARN render_teasers %s: %d %s pictures but %d slots found, not rendered" % (event, len(files), kind["name"], len(slots)))
+                continue
             with tempfile.TemporaryDirectory() as tmp:
-                runs = runs_of(missing)
+                # runs of consecutive SLOTS (a greyed-out card between two pictures ends the run), shot by slot number,
+                # each tile saved under its own picture's name
+                by_slot = {slots[i]: i for i in missing}
+                runs = [[by_slot[x] for x in r] for r in runs_of(sorted(by_slot))]
 
                 def take(run):
                     shot = os.path.join(tmp, "sheet-%d.png" % run[0])
-                    return run, shot, shoot(chrome, "%s#%s-%d-%d" % (url, kind["hash"], run[0], len(run)), kind["h"] * len(run), shot,
+                    return run, shot, shoot(chrome, "%s#%s-%d-%d" % (url, kind["hash"], slots[run[0]], len(run)), kind["h"] * len(run), shot,
                                             width=kind["w"], scale=kind["scale"])
                 with ThreadPoolExecutor(max_workers=max(1, jobs)) as pool:
                     shots = list(pool.map(take, runs))

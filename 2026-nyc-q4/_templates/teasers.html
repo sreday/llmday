@@ -194,6 +194,17 @@
     .sp-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
     .sp-sheet .tz-frame .tz-card { transform: none !important; }
     .sp-slot[hidden] { display: none; }
+    /*sp*/
+    /* to the closing sp marker: sponsor / host cards only (Marek 2026-10-11) - only the sponsor pictures' cache key covers it.
+       The venue photo darkened in the brand's colour, not black (its mid colour multiplied in, as dark as brightness .85 was),
+       the vignette in a deep shade of it, and HOST / SPONSOR / PARTNER centred between the card's left edge and the logo circle (622) */
+    .sp-onphoto .sp-photo { filter: none; }
+    .sp-onphoto .sp-photo::after { content: ''; position: absolute; inset: 0; background: {{ tz.tint }}; mix-blend-mode: multiply;
+      opacity: calc(var(--sp-dk, 0) * {{ tz.tint_k }}); }
+    .sp-onphoto .sp-fv { background: radial-gradient(circle at 50% 50%, {{ tz.tint_dark }}33 220px, {{ tz.tint_dark }}e6 820px),
+      linear-gradient(180deg, {{ tz.tint_dark }}bf 0%, {{ tz.tint_dark }}00 30%, {{ tz.tint_dark }}00 62%, {{ tz.tint_dark }}e0 82%); }
+    .sp-card .sp-word { left: 0; width: 622px; text-align: center; }
+    /*/sp*/
     /*city*/
     /* to the closing city marker: the City view card (Marek 2026-10-11) - the city's panorama (<repo>/panoramas/, tinted by
        generate.py) instead of the slimes, the headshot 760 px with its circle's bottom behind the ticket, the title centred
@@ -211,7 +222,7 @@
        ticket's width, its bottom (1024) 40 px under the ticket's top edge (984) */
     .cv-photo { left: 466px; top: 288px; width: 760px; height: 760px; object-fit: contain; display: block; }
     .cv-photo-na { left: 564px; top: 460px; width: 564px; height: 564px; border-radius: 50%; background: rgba(255,255,255,.12); }
-    .cv-talk { left: 72px; top: 336px; width: 460px; line-height: 1.12; }
+    .cv-talk { left: 72px; top: 336px; width: 748px; line-height: 1.12; text-wrap: pretty; }   /* lines stop at the outline (.cv-flow) */
     .cv-who { left: 72px; top: 800px; width: 460px; margin-top: 0; }
     .cv-who .tz-name { width: 460px; }
     .cv-who .cv-wrapped { white-space: normal; text-wrap: balance; line-height: 1.15; }
@@ -352,7 +363,7 @@
     .cr-step { background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.08); padding: 14px 16px; margin-bottom: 16px; }
     .cr-step h3 { font: 700 .95rem 'Montserrat', sans-serif; margin: 0 0 10px; }
     .cr-step h3 span { font-weight: 400; color: #777; font-size: .85rem; margin-left: 6px; }
-    .cr-covers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .cr-covers { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }   /* 4 or 5 covers (City view, 2026-10-11) */
     .cr-cov { position: relative; border-radius: 10px; cursor: pointer; outline: 3px solid transparent; outline-offset: 2px; }
     .cr-cov[aria-pressed="true"] { outline-color: var(--brand); }
     .cr-cov .tz-frame { border-radius: 8px; box-shadow: none; }
@@ -467,7 +478,7 @@
           </div>
         </div><!--/tz-->{% endif %}{% if tz.city_bg and not teasers_expired %}<!--cv--><div class="tz-frame cv-frame">
           {# the City view card (Marek 2026-10-11): one line of its own on the slot, so a page without a panorama is unchanged byte for byte #}
-          <div class="tz-card cv-card" id="cv-card-{{ loop.index }}" {% if t.missing %}data-na-file{% else %}data-file{% endif %}="{{ t.cv_file }}">
+          <div class="tz-card cv-card" id="cv-card-{{ loop.index }}" {% if t.missing %}data-na-file{% else %}data-file{% endif %}="{{ t.cv_file }}"{% if t.cv_edge %} data-edge="{{ t.cv_edge }}"{% endif %}>
             <img class="cv-bg" src="./{{ tz.city_bg }}" alt=""><div class="cv-shade"></div>
             {% if t.photo %}<img class="cv-photo" src="{{ t.photo }}" alt="">{% elif 'headshot' in t.missing %}<div class="cv-photo-na" data-na="headshot"></div>{% endif %}
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
@@ -513,7 +524,7 @@
         <div class="tz-frame">
           <div class="tz-card sp-card{% if c.photo %} sp-onphoto{% endif %}" id="sp-card-{{ g|lower }}-{{ loop.index }}" data-file="{{ c.file }}">
             {% set _k = 'sp-' ~ g|lower ~ '-' ~ loop.index %}{{ tz.sweeps_corners|replace('tzg', 'tzg-' ~ _k ~ '-')|replace('tzf', 'tzf-' ~ _k ~ '-')|safe }}
-            {% if c.photo %}<div class="sp-photo" style="background-image:url('{{ c.photo }}'){% if c.bright is defined %};filter:brightness({{ c.bright }}){% endif %}"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
+            {% if c.photo %}{% set _b = c.bright if c.bright is defined else 0.85 %}<div class="sp-photo" style="background-image:url('{{ c.photo }}');{% if _b < 1 %}--sp-dk:{{ (1 - _b)|round(3) }}{% else %}filter:brightness({{ _b }}){% endif %}"></div><div class="sp-fv"></div>{% endif %}<div class="tz-vig"></div>
             {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
             <div class="tz-conf">{{ tz.conf }}</div>
             {% if tz.show %}<div class="tz-ball"><div class="tz-ball-in">
@@ -771,10 +782,11 @@
         });
       }
       /*city*/
-      // City view (Marek 2026-10-11): its own fit - the title from 54 px down to 28 until it is no taller than 420 px and no word
-      // is wider than its 460 px column, with and without its phrase break (in a 460 px column "Tax:" / "Why" / "Your Token"
-      // reads choppy): the bigger size wins, then fewer lines, then the break; then centred between the event line and the
-      // dash like the Modern title (centreTitle)
+      // City view text (Marek 2026-10-11, "adjust the rules of text sizing and wrapping ... the text might come into the
+      // transparent part of the speaker image"): the title's lines run from x 72 up to the speaker's own outline (the
+      // headshot's opaque pixels - the circle and the head above it - measured per 8 px band by generate.py, data-edge),
+      // keeping 34 px clear of it and never past x 820; a right float shaped like that outline does it (shape-outside), so
+      // a line beside the transparent part next to the head runs longer than one beside the circle.
       // the speaker's name and company (Marek 2026-10-11, "Black Hole Sur" cut at the photo): shrunk to a readable floor
       // (name 34, company 22 px), then two balanced lines from their full size down - never clipped
       function cvWrap(el) {
@@ -791,29 +803,114 @@
         return document.fonts && document.fonts.load ? Promise.all(['600 30px Montserrat', '800 48px Montserrat', '900 54px Montserrat', '700 31px Montserrat']
           .map(function (f) { return document.fonts.load(f).catch(function () {}); })) : Promise.resolve();
       };
-      function cvFit() {
-        document.querySelectorAll('.cv-card [data-fit]').forEach(cvWrap);
-        // a name or company on two lines grows the block: it moves up to keep 20 px above the ticket (984), the title re-centres
-        document.querySelectorAll('.cv-who').forEach(function (w) {
-          w.style.top = '';
-          var over = w.offsetTop + w.offsetHeight - 964;
-          if (over > 0) w.style.top = (w.offsetTop - over) + 'px';
-        });
-        document.querySelectorAll('.cv-talk').forEach(function (el) {
-          el.style.transform = '';
-          var withBr = el.innerHTML, best = null;
-          [withBr, withBr.replace(/<br class="sep">/g, ' ')].forEach(function (h, vi) {
-            if (vi && h === withBr) return;
-            el.innerHTML = h;
-            var s = 54; el.style.fontSize = s + 'px';
-            while (s > 28 && (el.offsetHeight > 420 || el.scrollWidth > el.clientWidth)) { s -= 1; el.style.fontSize = s + 'px'; }
-            var n = Math.round(el.offsetHeight / (s * 1.12));
-            if (!best || s > best.s || (s === best.s && n < best.n)) best = { h: h, s: s, n: n };
-          });
-          el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
-          centreTitle(el);
-        });
+      var CV = { y0: 288, step: 8, gap: 34, cap: 820, left: 72 };
+      function cvEdges(card) {
+        if (card._cvEdges) return card._cvEdges;
+        var e = (card.getAttribute('data-edge') || '').split(',').filter(Boolean).map(Number);
+        if (!e.length) for (var y = CV.y0; y < CV.y0 + 760; y += CV.step) {   // no outline (no photo): the circle, r 282 round 846 / 742
+          var dy = Math.abs(y + CV.step / 2 - 742); e.push(dy < 282 ? Math.round(846 - Math.sqrt(282 * 282 - dy * dy)) : 1200);
+        }
+        return (card._cvEdges = e);
       }
+      function cvFreeX(edges, a, b) {          // how far right text may reach on card rows a..b: the outline less the gap, capped
+        var x = CV.cap;
+        for (var i = 0; i < edges.length; i++) { var y = CV.y0 + i * CV.step; if (y + CV.step > a - CV.gap && y < b + CV.gap) x = Math.min(x, edges[i] - CV.gap); }
+        return x;
+      }
+      function cvEdgeAt(edges, a, b) {         // the outline's leftmost x on card rows a..b (no margin)
+        var x = 1200;
+        for (var i = 0; i < edges.length; i++) { var y = CV.y0 + i * CV.step; if (y + CV.step > a && y < b) x = Math.min(x, edges[i]); }
+        return x;
+      }
+      function cvFlow(el, edges) {             // the shaped float, first in el, from el's top down
+        var old = el.querySelector(':scope > .cv-flow'); if (old) old.remove();
+        var top = el.offsetTop, W = CV.cap - CV.left, H = 760, pts = [W + 'px 0px'];
+        for (var y = 0; y < H; y += CV.step) {
+          var x = Math.max(360, Math.min(W, cvFreeX(edges, top + y, top + y + CV.step) - CV.left));
+          pts.push(x + 'px ' + y + 'px', x + 'px ' + (y + CV.step) + 'px');
+        }
+        pts.push(W + 'px ' + H + 'px');
+        var f = document.createElement('span'); f.className = 'cv-flow';
+        f.style.cssText = 'float:right;display:block;width:' + W + 'px;height:' + H + 'px;shape-outside:polygon(' + pts.join(',') + ')';
+        el.insertBefore(f, el.firstChild);
+      }
+      function cvLines(el, edges) {            // the title's lines as laid out: top, bottom, count, lone chunks, a last-line widow, a word over the outline
+        var ws = [].slice.call(el.querySelectorAll('.w')), rows = {}, room = {}, top = 1e9, bottom = 0, cross = false;
+        ws.forEach(function (w) {
+          var t = w.offsetTop; top = Math.min(top, t); bottom = Math.max(bottom, t + w.offsetHeight);
+          (rows[t] = rows[t] || []).push(w);
+          // a word past the outline: checked on its line box (the span's own box is taller) against the outline itself,
+          // half the gap kept - the float already keeps the full gap, this only catches a word pushed past it
+          var lh = parseFloat(el.style.fontSize) * 1.12, y = el.offsetTop + t + (w.offsetHeight - lh) / 2, right = el.offsetLeft + w.offsetLeft + w.offsetWidth;
+          if (right > Math.min(CV.cap, cvEdgeAt(edges, y, y + lh) - CV.gap / 2) + 2) cross = true;
+          room[t] = cvFreeX(edges, y, y + lh) - CV.left;     // that line's own width: beside the head a line is short anyway
+        });
+        var keys = Object.keys(rows).map(Number).sort(function (a, b) { return a - b; }), lone = 0, widow = 0, last = keys[keys.length - 1];
+        keys.forEach(function (k) {
+          var r = rows[k];
+          if (r.length === 1 && r[0].offsetWidth < room[k] / 2) { if (k !== last) lone++; else if (r[0].textContent.trim().split(/[\s\u00a0]+/).length === 1) widow = 1; }
+        });
+        return { top: top, bottom: bottom, h: bottom - top, n: keys.length, lone: ws.length === 1 ? 0 : lone, widow: ws.length === 1 ? 0 : widow, cross: cross };
+      }
+      // the title: the biggest size (58 px for a short one, down to 46 for a 100+ character one; 28 at the least) that fits
+      // the zone between the event line and the dash (30 / 34 px of air), with and without its phrase break and with its last
+      // two chunks tied; then centred in that zone. The name and company first: they set the dash.
+      function cvFitCard(card) {
+        var edges = cvEdges(card), who = card.querySelector('.cv-who');
+        if (who) {
+          who.style.top = '';
+          var ww = Math.max(420, Math.min(620, cvFreeX(edges, 800, 970) - CV.left));
+          who.style.width = ww + 'px';
+          who.querySelectorAll('.tz-name').forEach(function (n) { n.style.width = ww + 'px'; });
+          who.querySelectorAll('[data-fit]').forEach(cvWrap);
+          var over = who.offsetTop + who.offsetHeight - 964;   // a name or company on two lines: the block moves up, 20 px above the ticket
+          if (over > 0) who.style.top = (who.offsetTop - over) + 'px';
+        }
+        card.querySelectorAll('.tz-ball [data-fit], .tz-ticket [data-fit]').forEach(fitLines);
+        var el = card.querySelector('.cv-talk'), conf = card.querySelector('.tz-conf'), bar = who && who.querySelector('.tz-bar');
+        if (!el || !conf) return;
+        if (el.dataset.html === undefined) el.dataset.html = el.innerHTML;
+        var zTop = conf.offsetTop + conf.offsetHeight + 30, zBot = (who ? who.offsetTop + (bar ? bar.offsetTop : 0) : 800) - 34, zMid = (zTop + zBot) / 2;
+        var h0 = el.dataset.html, variants = [h0], h1 = h0.replace(/<br class="sep">/g, ' ');
+        if (h1 !== h0) variants.push(h1);
+        variants.slice().forEach(function (v) {   // the last two chunks as one: "Wrong Default", never "Default" alone
+          var t = v.replace(/<\/span> <span class="w">((?:(?!<span class="w">)[\s\S])*)$/, '\u00a0$1');
+          if (t !== v) variants.push(t);
+        });
+        var len = el.textContent.replace(/\s+/g, ' ').trim().length, maxS = len <= 40 ? 58 : len <= 70 ? 54 : len <= 100 ? 50 : 46, cands = [], top = 0;
+        function at(t) { el.style.top = Math.round(t) + 'px'; cvFlow(el, edges); return cvLines(el, edges); }
+        el.style.transform = '';
+        variants.forEach(function (h, vi) {
+          for (var sz = maxS; sz >= 28 && sz >= top - 6; sz--) {   // each size laid out from the top of the zone
+            el.innerHTML = h; el.style.fontSize = sz + 'px';
+            var m = at(zTop - 0);
+            m = at(zTop - m.top);
+            if (m.cross || el.offsetTop + m.bottom > zBot + 1) continue;
+            top = Math.max(top, sz);
+            cands.push({ h: h, s: sz, t: el.offsetTop, n: m.n, score: sz - 2 * m.lone - 4 * m.widow });
+          }
+        });
+        // the size comes first (Marek: "matching that new style flawlessly" - big type): only layouts within 6 px of the biggest
+        // that fits compete, and among those a lone short word costs 2 px, a one-word last line 4, then fewer lines
+        var best = null;
+        cands.filter(function (c) { return c.s >= top - 6; }).forEach(function (c) {
+          if (!best || c.score > best.score || (c.score === best.score && (c.s > best.s || (c.s === best.s && c.n < best.n)))) best = c;
+        });
+        if (!best) best = { h: variants[variants.length - 1], s: 28, t: zTop };
+        // then as near the middle of the zone as it goes: moved down 6 px at a time, a line beside the head may wrap again,
+        // so every position is laid out and the one whose block sits closest to the middle (still clear of everything) wins
+        el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
+        var pick = best.t, gap = 1e9;
+        for (var t = best.t; t <= zBot; t += 6) {
+          var m2 = at(t), y0 = t + m2.top, y1 = t + m2.bottom;
+          if (m2.cross || y1 > zBot + 1) break;
+          var d = Math.abs((y0 + y1) / 2 - zMid);
+          if (d < gap) { gap = d; pick = t; }
+          if ((y0 + y1) / 2 > zMid) break;
+        }
+        at(pick);
+      }
+      function cvFit() { document.querySelectorAll('.cv-card').forEach(cvFitCard); }
       // a City view picture is never published without its city: once the fonts are in, every panorama must have loaded, or
       // the card is blanked and the renderer drops the black tile (the slime check's counterpart)
       function cvLoaded() {
@@ -862,6 +959,25 @@
       if (window.ResizeObserver) { var ro = new ResizeObserver(scale); document.querySelectorAll('.tz-frame, .th-frame').forEach(function (f) { ro.observe(f); }); }
 
       /*/render*/
+      // the City view cover (Marek 2026-10-11, "a cover type - city view. Same layout for letters and logo, just city view as
+      // background"): the Halo cover's logo, city and date over the city's panorama, darkened in the brand's dark colour behind
+      // the letters. Made here from the Halo cover (no markup of its own: markup after the last talk card would count in that
+      // card's picture key); drawn in the browser like every cover
+      (function () {
+        var bg = document.querySelector('.cv-bg'), halo = document.getElementById('gn-card-halo');
+        if (!bg || !halo) return;
+        var slot = halo.closest('.gn-slot'), copy = slot.cloneNode(true), card = copy.querySelector('.gn-card');
+        card.id = 'gn-card-city';
+        card.setAttribute('data-file', halo.getAttribute('data-file').replace(/-cover-halo\.png$/, '-cover-city.png'));
+        var sw = card.querySelector('.tz-sw'); if (sw) sw.remove();
+        var dk = {{ tz.scheme.bg[1]|tojson }};
+        card.insertAdjacentHTML('afterbegin', '<img class="cv-bg" src="' + bg.getAttribute('src') + '" alt="" style="left:0;top:0;width:1200px;height:1200px;object-fit:cover">' +
+          '<div style="left:0;top:0;width:1200px;height:1200px;background:radial-gradient(circle at 50% 52%,' + dk + '40 0,' + dk + '8c 520px,' + dk + 'd9 900px),' +
+          'linear-gradient(180deg,' + dk + '66 0%,' + dk + '00 35%,' + dk + '00 60%,' + dk + 'b3 100%)"></div>');
+        var dl = copy.querySelector('.gn-dl');
+        if (dl) { dl.title = 'Download the City view cover (PNG)'; dl.setAttribute('aria-label', 'Download the City view cover (PNG)'); }
+        slot.parentNode.insertBefore(copy, slot.nextSibling);
+      })();
       // 3. search + sorting: spreadsheet order (one grid) or by track (one grid per track, each with its download button)
       var pool = document.getElementById('tz-pool'), groups = document.getElementById('tz-groups');
       var slots = [].slice.call(pool.querySelectorAll('.tz-slot')), search = document.getElementById('tz-search');
@@ -1087,7 +1203,7 @@
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
           : t === 'cr' ? 'A LinkedIn carousel (a square PDF for a document post): a cover, then talks as singles or Duos & Trios, within the recommended length.'
-          : t === 'gn' ? (document.getElementById('gn-card-triptych') ? 'Three covers' : 'A cover') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only. Rendered here in your browser.'
+          : t === 'gn' ? (['A cover', 'A cover', 'Two covers', 'Three covers', 'Four covers'][document.querySelectorAll('.gn-card').length] || 'Covers') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only. Rendered here in your browser.'
           : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order; Shuffle and download all does the same in a random order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
@@ -1611,26 +1727,9 @@
         }
         return card;
       }
-      // a solo talk in City view (Marek 2026-10-11, "pick between modern and city view in carousel build"): the copy fitted like
-      // the page's City view cards (cvFit, which fits them all at once on the page: same steps, on this one card)
-      function crFitCv(card) {
-        card.querySelectorAll('[data-fit]').forEach(cvWrap);
-        var w = card.querySelector('.cv-who');
-        if (w) { w.style.top = ''; var over = w.offsetTop + w.offsetHeight - 964; if (over > 0) w.style.top = (w.offsetTop - over) + 'px'; }
-        var el = card.querySelector('.cv-talk'); if (!el) return;
-        el.style.transform = '';
-        var withBr = el.innerHTML, best = null;
-        [withBr, withBr.replace(/<br class="sep">/g, ' ')].forEach(function (h, vi) {
-          if (vi && h === withBr) return;
-          el.innerHTML = h;
-          var sz = 54; el.style.fontSize = sz + 'px';
-          while (sz > 28 && (el.offsetHeight > 420 || el.scrollWidth > el.clientWidth)) { sz -= 1; el.style.fontSize = sz + 'px'; }
-          var n = Math.round(el.offsetHeight / (sz * 1.12));
-          if (!best || sz > best.s || (sz === best.s && n < best.n)) best = { h: h, s: sz, n: n };
-        });
-        el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
-        centreTitle(el);
-      }
+      // a solo talk in City view (Marek 2026-10-11, "pick between modern and city view in carousel build"): the copy fitted
+      // like the page's City view cards
+      function crFitCv(card) { cvFitCard(card); }
       function crDraw() {
         if (!crSec) return;
         if (crMode === 'sponsors' && crSpPicked === null) { crSpPicked = crSponsors().map(function (it) { return it.key; }); crAll = true; }   // all, the first time
@@ -1762,7 +1861,7 @@
       if (crSec) {
         var covers = document.getElementById('cr-covers');
         if (!document.getElementById('gn-pool')) document.getElementById('cr-cover-step').hidden = true;
-        else [['none', 'No cover'], ['halo', 'Halo'], ['triptych', 'Triptych'], ['stack', 'Stack']].filter(function (c) { return c[0] === 'none' || document.getElementById('gn-card-' + c[0]); }).forEach(function (c) {
+        else [['none', 'No cover'], ['halo', 'Halo'], ['city', 'City view'], ['triptych', 'Triptych'], ['stack', 'Stack']].filter(function (c) { return c[0] === 'none' || document.getElementById('gn-card-' + c[0]); }).forEach(function (c) {
           var el = document.createElement('div'); el.className = 'cr-cov'; el.dataset.d = c[0]; el.setAttribute('role', 'button'); el.tabIndex = 0;
           el.innerHTML = c[0] === 'none' ? '<div class="cr-none">No cover</div><b>No cover</b>' : '<div class="tz-frame"></div><b>' + c[1] + '</b>';
           covers.appendChild(el);
