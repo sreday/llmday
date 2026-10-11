@@ -558,10 +558,6 @@
               <button type="button" data-crl="cols" aria-pressed="true">Columns</button>
               <button type="button" data-crl="stack" aria-pressed="false">Stack</button>
             </div>
-            {% if tz.city_bg %}<div class="tz-sort" role="group" aria-label="Look" id="cr-look">
-              <button type="button" data-crv="modern" aria-pressed="true">Modern</button>
-              <button type="button" data-crv="city" aria-pressed="false">City view</button>
-            </div>{% endif %}
           </div>
         </div>
         <div class="cr-step cr-pick">
@@ -1793,7 +1789,15 @@
         });
         document.querySelectorAll('[data-cr]').forEach(function (b) { b.addEventListener('click', function () { if (crMode !== b.dataset.cr) crAll = false; crMode = b.dataset.cr; crDraw(); }); });
         document.querySelectorAll('[data-crl]').forEach(function (b) { b.addEventListener('click', function () { crLayout = b.dataset.crl; crDraw(); }); });
-        document.querySelectorAll('[data-crv]').forEach(function (b) { b.addEventListener('click', function () { crLook = b.dataset.crv; crDraw(); }); });
+        // Modern | City view for the solo slides, made here rather than in the markup: the renderer counts everything after the
+        // last talk slot up to the script as that card's own HTML, so new markup there would redraw one card per event
+        if (document.querySelector('.cv-card')) {
+          var crLookEl = document.createElement('div');
+          crLookEl.className = 'tz-sort'; crLookEl.id = 'cr-look'; crLookEl.setAttribute('role', 'group'); crLookEl.setAttribute('aria-label', 'Look');
+          crLookEl.innerHTML = '<button type="button" data-crv="modern" aria-pressed="true">Modern</button><button type="button" data-crv="city" aria-pressed="false">City view</button>';
+          document.getElementById('cr-layout').insertAdjacentElement('afterend', crLookEl);
+          crLookEl.querySelectorAll('[data-crv]').forEach(function (b) { b.addEventListener('click', function () { crLook = b.dataset.crv; crDraw(); }); });
+        }
         document.getElementById('cr-clear').addEventListener('click', function () { crAll = false; crSetPicked([]); crDraw(); });
         document.getElementById('cr-copy').addEventListener('click', function () {
           var b = this, v = document.getElementById('cr-ttl').value;
