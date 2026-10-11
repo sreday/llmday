@@ -339,7 +339,15 @@
     .cr-side { position: sticky; top: 16px; }
     .cr-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.08); padding: 12px; min-height: 120px; }
     .cr-tile { position: relative; }
-    .cr-tile .tz-frame { border-radius: 6px; box-shadow: none; }
+    .cr-tile .tz-frame { border-radius: 6px; box-shadow: none; pointer-events: none; }
+    /* every slide after the cover (Marek 2026-10-11, as on conf42): x drops it from the PDF, drag moves it */
+    .cr-tile[draggable="true"] { cursor: grab; }
+    .cr-tile.cr-drag { opacity: .35; }
+    .cr-x { position: absolute; right: -7px; top: -7px; z-index: 3;   /* on the tile's corner, clear of the card's logo disc */
+      width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.92); color: #333; font: 700 15px/1 'Montserrat', sans-serif;
+      box-shadow: 0 1px 4px rgba(0,0,0,.3); opacity: .85; transition: opacity .15s, transform .15s; }
+    .cr-x:hover { opacity: 1; transform: scale(1.12); color: var(--brand); }
     .cr-tile i { position: absolute; left: 5px; top: 5px; z-index: 2; font: 700 .7rem 'Montserrat', sans-serif; font-style: normal; background: rgba(255,255,255,.92); color: #333; border-radius: 999px; padding: 1px 7px; }
     .cr-meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin: 14px 0 10px; }
     .cr-title { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
@@ -510,7 +518,7 @@
           <button class="tz-btn" type="button" id="cr-dl" disabled>Download PDF</button>
         </div>
         <div class="cr-title"><input id="cr-ttl" type="text" value="{{ onboarding_event.event_name }}: speakers" aria-label="Document title for the LinkedIn post"><button class="tz-btn" type="button" id="cr-copy">Copy title</button></div>
-        <p class="cr-note">LinkedIn: post &rarr; <b>Add a document</b> &rarr; this PDF, and give it the title above. Square 1080 &times; 1080 pages, one picture each; keep the tab in front while it renders.</p>
+        <p class="cr-note">LinkedIn: post &rarr; <b>Add a document</b> &rarr; this PDF, and give it the title above. Square 1080 &times; 1080 pages, one picture each, in the order of the strip: drag a slide to move it, &times; to drop it (the cover stays first). Keep the tab in front while it renders.</p>
       </div>
     </div>{% endif %}<!--/crsec-->
     <!--gnsec-->{% if not teasers_expired %}{% set _ph = [gn.photos[0 % gn.photos|length], gn.photos[1 % gn.photos|length], gn.photos[2 % gn.photos|length]] if gn.photos else [] %}
@@ -1322,14 +1330,18 @@
       // or the sponsor cards. No slide limit (LinkedIn allows 300 pages / 100 MB). The PDF is written here by hand: every page
       // 810 x 810 pt (1080 px), one flattened image each.
       var crSec = document.getElementById('cr-sec'), crCover = document.getElementById('gn-pool') ? 'halo' : 'none',
-        crMode = 'single', crLayout = 'cols', crPicked = [], crSpPicked = null, crAll = false;   // crAll: Select all was the last choice
+        crMode = 'single', crLayout = 'cols', crPicked = [], crSpPicked = null, crAll = false,   // crAll: Select all was the last choice
+        crSizes = null;   // Duos & Trios: the group sizes in the order they were dragged to (used while they still add up)
       var crTalks = mxTalks.slice().sort(function (a, b) { return a.slot.dataset.web - b.slot.dataset.web; });
       function crGroups(list) {                  // the auto-divide rule: Trios, then Duos, never a talk on its own
-        var n = list.length, groups = [], at = 0;
+        var n = list.length, groups = [], at = 0, sizes = [];
         if (n < 2) return groups;
         var duos = n % 3 === 0 ? 0 : n % 3 === 2 ? 1 : 2, trios = (n - 2 * duos) / 3;
-        for (var t = 0; t < trios; t++) { groups.push(list.slice(at, at + 3)); at += 3; }
-        for (var d = 0; d < duos; d++) { groups.push(list.slice(at, at + 2)); at += 2; }
+        for (var t = 0; t < trios; t++) sizes.push(3);
+        for (var d = 0; d < duos; d++) sizes.push(2);
+        // groups dragged into another order keep it, as long as the same number of Trios and Duos still fits
+        if (crSizes && crSizes.length === sizes.length && crSizes.filter(function (k) { return k === 3; }).length === trios) sizes = crSizes;
+        sizes.forEach(function (k) { groups.push(list.slice(at, at + k)); at += k; });
         return groups;
       }
       // the sponsor cards: the host as it is set on the Sponsor cards tab (venue picture, darkness, position, vignette), then
@@ -1351,12 +1363,37 @@
       function crSlides() {                      // what the carousel holds, in order
         var out = [];
         if (crCover !== 'none') out.push({ kind: 'cover', d: crCover });
-        if (crMode === 'sponsors') { crSponsors().forEach(function (it) { if (crSpPicked.indexOf(it.key) >= 0) out.push({ kind: 'sp', slot: it.slot }); }); return out; }
-        var list = crTalks.filter(function (p) { return crPicked.indexOf(p) >= 0; });
-        if (crMode === 'single') list.forEach(function (p) { out.push({ kind: 'talk', p: p }); });
-        else crGroups(list).forEach(function (g) { out.push({ kind: 'group', g: g }); });
+        // in the order picked (Select all and the track chips: website order), then as dragged; u = its place among the
+        // slides after the cover, for x and drag
+        if (crMode === 'sponsors') {
+          var sps = crSponsors();
+          crSpKeys().forEach(function (k, u) { out.push({ kind: 'sp', slot: sps.filter(function (it) { return it.key === k; })[0].slot, u: u }); });
+          return out;
+        }
+        if (crMode === 'single') crPicked.forEach(function (p, u) { out.push({ kind: 'talk', p: p, u: u }); });
+        else crGroups(crPicked).forEach(function (g, u) { out.push({ kind: 'group', g: g, u: u }); });
         return out;
       }
+      function crSpKeys() {                      // the picked sponsor cards that are still there, in their order
+        var have = crSponsors().map(function (it) { return it.key; });
+        return crSpPicked.filter(function (k) { return have.indexOf(k) >= 0; });
+      }
+      function crReorder(order) {                // order: the slides' u in their new order
+        if (crMode === 'sponsors') { var keys = crSpKeys(); crSpPicked = order.map(function (u) { return keys[u]; }); }
+        else if (crMode === 'group') {
+          var gs = crGroups(crPicked); gs = order.map(function (u) { return gs[u]; });
+          crPicked = [].concat.apply([], gs); crSizes = gs.map(function (g) { return g.length; });
+        } else { var was = crPicked.slice(); crPicked = order.map(function (u) { return was[u]; }); }
+      }
+      function crRemove(u) {
+        if (crMode === 'sponsors') crSpPicked.splice(crSpPicked.indexOf(crSpKeys()[u]), 1);
+        else if (crMode === 'group') {           // the whole Duo / Trio goes; the rest keep their groups and order
+          var gs = crGroups(crPicked); gs.splice(u, 1);
+          crPicked = [].concat.apply([], gs); crSizes = gs.map(function (g) { return g.length; });
+        } else crPicked.splice(u, 1);
+        crAll = false; crDraw();
+      }
+      var crDragged = null;
       function crFitCity(card) {                 // the cover's city and date lines, fitted as on the Generic tab
         card.querySelectorAll('.gn-city, .gn-date').forEach(function (e) {
           var w = e.firstElementChild && e.firstElementChild.tagName === 'SPAN' ? e.firstElementChild : null;
@@ -1387,7 +1424,7 @@
         document.querySelectorAll('[data-crl]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.crl === crLayout ? 'true' : 'false'); });
         document.querySelectorAll('.cr-cov').forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.d === crCover ? 'true' : 'false'); });
         document.getElementById('cr-step3').textContent = crMode === 'sponsors' ? '3. Sponsors' : '3. Talks';
-        document.getElementById('cr-hint').textContent = crMode === 'group' ? 'grouped into Trios (and Duos for the rest), in website order' : '';
+        document.getElementById('cr-hint').textContent = crMode === 'group' ? 'grouped into Trios (and Duos for the rest), in the order of the strip' : '';
         document.getElementById('cr-list').hidden = crMode === 'sponsors'; document.getElementById('cr-splist').hidden = crMode !== 'sponsors';
         document.getElementById('cr-search').hidden = crMode === 'sponsors';
         // the sponsor list follows the host chosen on the Sponsor cards tab
@@ -1435,6 +1472,28 @@
         slides.forEach(function (sl, i) {
           var t = document.createElement('div'); t.className = 'cr-tile';
           t.innerHTML = '<i>' + (i + 1) + '</i><div class="tz-frame"></div>';
+          if (sl.kind !== 'cover') {               // the cover stays first: no x, no drag
+            var x = document.createElement('button'); x.type = 'button'; x.className = 'cr-x'; x.innerHTML = '&times;';
+            x.title = 'Remove from the PDF'; x.setAttribute('aria-label', 'Remove slide ' + (i + 1) + ' from the PDF');
+            x.addEventListener('click', function () { crRemove(sl.u); });
+            t.appendChild(x); t.dataset.u = sl.u; t.draggable = true;
+            // drag to reorder: the tiles move live under the pointer; the new order is kept when the drag ends
+            t.addEventListener('dragstart', function (e) { crDragged = t; t.classList.add('cr-drag'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(sl.u)); });
+            t.addEventListener('dragend', function () {
+              t.classList.remove('cr-drag'); crDragged = null;
+              var order = [].map.call(strip.querySelectorAll('.cr-tile[data-u]'), function (el) { return +el.dataset.u; });
+              if (order.some(function (u, k) { return u !== k; })) { crReorder(order); crDraw(); }
+            });
+            t.addEventListener('dragover', function (e) {
+              if (!crDragged) return;
+              e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+              if (crDragged === t) return;
+              var tiles = [].slice.call(strip.children);
+              strip.insertBefore(crDragged, tiles.indexOf(crDragged) < tiles.indexOf(t) ? t.nextSibling : t);
+              strip.querySelectorAll('.cr-tile > i').forEach(function (n, k) { n.textContent = k + 1; });
+            });
+            t.addEventListener('drop', function (e) { e.preventDefault(); });
+          }
           strip.appendChild(t);
           crCard(sl, t.querySelector('.tz-frame'));
         });
