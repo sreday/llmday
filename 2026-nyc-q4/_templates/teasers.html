@@ -214,6 +214,7 @@
     .cv-talk { left: 72px; top: 336px; width: 460px; line-height: 1.12; }
     .cv-who { left: 72px; top: 800px; width: 460px; margin-top: 0; }
     .cv-who .tz-name { width: 460px; }
+    .cv-who .cv-wrapped { white-space: normal; text-wrap: balance; line-height: 1.15; }
     body.cv-sheet { background: #000; }
     .cv-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
     .cv-sheet .tz-head, .cv-sheet .tz-tabs, .cv-sheet .tz-controls, .cv-sheet .tz-group-head, .cv-sheet .tz-dl, .cv-sheet .tz-slot.tz-off,
@@ -477,7 +478,7 @@
             <div class="tz-who cv-who">
               <div class="tz-bar"></div>
               {% if t.panel %}{% for l in t.name_lines %}<div class="tz-name tz-panel" data-fit="42" data-min="22">{{ l }}</div>{% endfor %}
-              {% else %}<div class="tz-name" data-fit="48" data-min="22">{{ t.name }}</div>{% if t.organization %}<div class="tz-org" data-fit="30" data-min="18">{{ t.organization }}</div>{% endif %}{% endif %}
+              {% else %}<div class="tz-name" data-fit="48" data-min="34" data-wrap="2">{{ t.name }}</div>{% if t.organization %}<div class="tz-org" data-fit="30" data-min="22" data-wrap="2">{{ t.organization }}</div>{% endif %}{% endif %}
             </div>
             <div class="tz-ticket"><div class="tz-ticket-in">
               <div class="tz-date"><div class="tz-day">{{ tz.day }}</div><div><div class="tz-mon">{{ tz.mon }}</div><div class="tz-wday">{{ tz.weekday }}</div></div></div>
@@ -772,8 +773,30 @@
       // is wider than its 460 px column, with and without its phrase break (in a 460 px column "Tax:" / "Why" / "Your Token"
       // reads choppy): the bigger size wins, then fewer lines, then the break; then centred between the event line and the
       // dash like the Modern title (centreTitle)
+      // the speaker's name and company (Marek 2026-10-11, "Black Hole Sur" cut at the photo): shrunk to a readable floor
+      // (name 34, company 22 px), then two balanced lines from their full size down - never clipped
+      function cvWrap(el) {
+        el.classList.remove('cv-wrapped');
+        fitLines(el);
+        if (!el.dataset.wrap || el.scrollWidth <= el.clientWidth + 1) return;
+        el.classList.add('cv-wrapped');
+        var s = +el.dataset.fit;
+        el.style.fontSize = s + 'px';
+        while (s > 16 && (el.scrollWidth > el.clientWidth + 1 || el.offsetHeight > s * 1.15 * 2 + 2)) { s -= 1; el.style.fontSize = s + 'px'; }
+      }
+      // measured only with the card's own Montserrat weights in: a fit made on the fallback font is too narrow
+      var cvFonts = function () {
+        return document.fonts && document.fonts.load ? Promise.all(['600 30px Montserrat', '800 48px Montserrat', '900 54px Montserrat', '700 31px Montserrat']
+          .map(function (f) { return document.fonts.load(f).catch(function () {}); })) : Promise.resolve();
+      };
       function cvFit() {
-        document.querySelectorAll('.cv-card [data-fit]').forEach(fitLines);
+        document.querySelectorAll('.cv-card [data-fit]').forEach(cvWrap);
+        // a name or company on two lines grows the block: it moves up to keep 20 px above the ticket (984), the title re-centres
+        document.querySelectorAll('.cv-who').forEach(function (w) {
+          w.style.top = '';
+          var over = w.offsetTop + w.offsetHeight - 964;
+          if (over > 0) w.style.top = (w.offsetTop - over) + 'px';
+        });
         document.querySelectorAll('.cv-talk').forEach(function (el) {
           el.style.transform = '';
           var withBr = el.innerHTML, best = null;
@@ -792,7 +815,7 @@
       // a City view picture is never published without its city: once the fonts are in, every panorama must have loaded, or
       // the card is blanked and the renderer drops the black tile (the slime check's counterpart)
       function cvLoaded() {
-        return ready.then(function () {
+        return ready.then(cvFonts).then(function () {
           return Promise.all([].map.call(document.querySelectorAll('.cv-bg'), function (b) { return b.decode ? b.decode().catch(function () {}) : null; }));
         });
       }
@@ -985,10 +1008,10 @@
       var tabShown = null;
       // City view (Marek 2026-10-11): "Modern | City view" on the Talk teasers tab, only where the city has a panorama; #city-view
       // opens it. The other tabs (Duo / Trio, Carousel...) keep the Modern cards
-      var cvView = document.querySelector('.cv-view'), cvOn = !!cvView && location.hash === '#city-view', cvFitted = false;
-      function cvShow() {
+      var cvView = document.querySelector('.cv-view'), cvOn = !!cvView && location.hash === '#city-view';
+      function cvShow() {   // fitted each time it is shown (cheap), on the laid-out cards, with their fonts in
         if (!cvOn || tab !== 'tz') return;
-        ready.then(function () { if (!cvFitted) { cvFitted = true; cvFit(); } scale(); if (naSlots.length) naMarks(); });
+        ready.then(cvFonts).then(function () { if (cvOn && tab === 'tz') { cvFit(); scale(); if (naSlots.length) naMarks(); } });
       }
       if (cvView) {
         cvView.querySelectorAll('[data-view]').forEach(function (b) {
