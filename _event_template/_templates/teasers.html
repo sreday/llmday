@@ -384,6 +384,8 @@
     .cr-title input { flex: 1; min-width: 0; font: 400 .9rem 'Roboto', sans-serif; padding: 8px 12px; border: 1px solid #cfcfd6; border-radius: 8px; }
     .cr-note { font-size: .8rem; color: #777; margin-top: 8px; line-height: 1.4; }
     .cr-step select { font: 600 .85rem 'Montserrat', sans-serif; padding: 6px 10px; border-radius: 999px; border: 1px solid #cfcfd6; background: #fff; }
+    /* City view, fitted out of sight before the cards turn to it (Marek 2026-10-11) */
+    body.cv-measure .tz-slot > .cv-frame { display: block !important; position: absolute; left: 0; top: 0; width: 100%; visibility: hidden; }
     /*/tools*/
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
@@ -1013,16 +1015,62 @@
         if (!cvOn || tab !== 'tz') return;
         ready.then(cvFonts).then(function () { if (cvOn && tab === 'tz') { cvFit(); scale(); if (naSlots.length) naMarks(); } });
       }
+      // the switch flips the cards (Marek 2026-10-11): to City view they turn left to right, back to Modern right to left - each
+      // card a beat after the one before, the new look coming round as the old one turns away. Only the cards on screen turn;
+      // the City view is fitted first, out of sight, so it arrives finished. No turn with reduced motion.
+      var cvBusy = false;
+      function cvFlip(on, done) {
+        var dir = on ? 1 : -1, k = 0;
+        var flips = [].filter.call(document.querySelectorAll('#tz-pool .tz-slot, #tz-groups .tz-slot'), function (s) {
+          if (s.hidden || s.offsetParent === null) return false;
+          var r = s.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight;
+        });
+        if (still || !document.body.animate || !flips.length) { done(); return; }
+        var P = 'perspective(1800px) rotateY(';
+        Promise.all(flips.map(function (s, i) {
+          var from = s.querySelector(on ? '.tz-frame:not(.cv-frame)' : '.cv-frame'), to = s.querySelector(on ? '.cv-frame' : '.tz-frame:not(.cv-frame)');
+          var dlFrom = s.querySelector(on ? 'a.tz-dl:not(.cv-dl):not(.th-dl)' : 'a.cv-dl'), dlTo = s.querySelector(on ? 'a.cv-dl' : 'a.tz-dl:not(.cv-dl):not(.th-dl)');
+          if (!from || !to) return null;
+          var delay = Math.min(i, 11) * 45;
+          return new Promise(function (ok) {
+            from.animate([{ transform: P + '0deg)' }, { transform: P + (90 * dir) + 'deg)' }], { duration: 230, delay: delay, easing: 'cubic-bezier(.55,0,.9,.45)', fill: 'forwards' })
+              .onfinish = function () {
+                from.style.display = 'none'; to.style.display = 'block';
+                if (dlFrom) dlFrom.style.display = 'none'; if (dlTo) dlTo.style.display = 'flex';
+                var c = to.querySelector('.tz-card'); if (c && to.clientWidth) c.style.transform = 'scale(' + (to.clientWidth / 1200) + ')';
+                to.animate([{ transform: P + (-90 * dir) + 'deg)' }, { transform: P + '0deg)' }], { duration: 300, easing: 'cubic-bezier(.15,.6,.3,1)' })
+                  .onfinish = function () { ok({ from: from, to: to, dl: [dlFrom, dlTo] }); };
+              };
+          });
+        })).then(function (list) {
+          done();
+          list.forEach(function (x) {   // back to the page's own rules (body.cv-mode)
+            if (!x) return;
+            x.from.getAnimations().forEach(function (a) { a.cancel(); });
+            x.from.style.display = ''; x.to.style.display = '';
+            x.dl.forEach(function (a) { if (a) a.style.display = ''; });
+          });
+        });
+      }
       if (cvView) {
         cvView.querySelectorAll('[data-view]').forEach(function (b) {
           b.setAttribute('aria-pressed', (b.dataset.view === 'city') === cvOn ? 'true' : 'false');
           b.addEventListener('click', function () {
-            if (cvOn === (b.dataset.view === 'city')) return;
+            if (cvBusy || cvOn === (b.dataset.view === 'city')) return;
+            cvBusy = true;
             cvOn = !cvOn;
             cvView.querySelectorAll('[data-view]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-            document.body.classList.toggle('cv-mode', cvOn && tab === 'tz');
             history.replaceState(null, '', cvOn ? '#city-view' : location.pathname);
-            cvShow(); scale();
+            var on = cvOn;
+            // the City view fitted out of sight before it turns in (a hidden card measures nothing)
+            (on ? ready.then(cvFonts).then(function () { document.body.classList.add('cv-measure'); cvFit(); document.body.classList.remove('cv-measure'); }) : Promise.resolve())
+              .then(function () {
+                cvFlip(on, function () {
+                  document.body.classList.toggle('cv-mode', on && tab === 'tz');
+                  scale(); if (naSlots.length) naMarks();
+                  cvBusy = false;
+                });
+              });
           });
         });
       }
