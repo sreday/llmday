@@ -250,7 +250,7 @@ function composeOnboarding(ev, brand) {
     "1. Laptop connection to present: wired or wireless. If it's wireless then Google Meet / ZOOM. If wired, then we'll have HDMI and USB-C connectors",
     '1. Travel / accommodation / speaker compensation - unfortunately, those are not covered',
     "1. Your company wants to sponsor the event? Here's the form: [" + ev.event_url + '#sponsors](' + ev.event_url + '#sponsors)',
-    "1. Speaker certificates: we'll send one after the conference to every speaker who delivers their session"
+    "1. We'll distribute speaker certificates for every successfully delivered session after the conference"
   ]));
   return {
     subject: ev.event_name + ' - ' + ev.month_day + ' - Info for speakers',
