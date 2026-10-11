@@ -32,6 +32,13 @@ The key covers only what draws a card: the card's own HTML, the page's styles mi
 own text (= its talks.csv row) plus its headshot's bytes, nothing else - design changes never redraw them.
 Slime check: in sheet mode the page hides a card whose slime is broken (its gradient or filter id missing or not
 unique); an all-black tile is rejected here, never cached and never written.
+
+City view (Marek 2026-10-11): the talk teasers' second look, where the event's city has a panorama (<repo>/panoramas/): one
+"<speaker>-<brand>-<event>-city.png" per talk (#city-<start>-<count>), upcoming events only. Its markup (<!--cv-->) and its
+styles / script (/*city*/ ... /*/city*/) are left out of the other kinds' keys, so adding or changing it redraws nothing else;
+the page blanks a City view card whose panorama did not load, and the black tile is rejected like a slime-less one.
+RENDERER is the version of this script in every key: bump it by hand when a change here alters how a picture comes out
+(it was a hash of this file, which redrew every picture on any edit - a comment or a new kind included).
 """
 import glob
 import hashlib
@@ -58,19 +65,21 @@ YT_MAX = 2 * 1024 * 1024   # YouTube's thumbnail size limit
 # markup (between these comment markers) that its cache key leaves out, and the output format
 KINDS = [
     {"name": "teaser", "card_re": r'class="tz-card" id="tz-card-\d+" data-file="([^"]+)"', "w": CARD, "h": CARD, "scale": SCALE,
-     "hash": "sheet", "strip": r"<!--th-->.*?<!--/th-->", "ext": ".png"},
+     "hash": "sheet", "strip": r"<!--th-->.*?<!--/th-->|<!--cv-->.*?<!--/cv-->", "ext": ".png"},
     {"name": "youtube", "card_re": r'class="th-card[^"]*" id="th-card-\d+" data-file="([^"]+)"', "w": 1280, "h": 720, "scale": 1,
-     "hash": "thumbs", "strip": r"<!--tz-->.*?<!--/tz-->", "ext": ".png", "max": YT_MAX},
+     "hash": "thumbs", "strip": r"<!--tz-->.*?<!--/tz-->|<!--cv-->.*?<!--/cv-->", "ext": ".png", "max": YT_MAX},
     # the sponsor cards (third tab, 2026-10-07): their own slots in their own section, upcoming events only like the teasers
     {"name": "sponsor", "card_re": r'class="tz-card sp-card[^"]*" id="sp-card-[a-z]+-\d+" data-file="([^"]+)"', "w": CARD, "h": CARD, "scale": SCALE,
      "hash": "spcards", "strip": r"(?!)", "ext": ".png", "slot": "sp-slot"},
+    # the City view cards (2026-10-11): in the talk slots next to the Modern ones, only where the city has a panorama
+    {"name": "city", "card_re": r'class="tz-card cv-card" id="cv-card-\d+" data-file="([^"]+)"', "w": CARD, "h": CARD, "scale": SCALE,
+     "hash": "city", "strip": r"<!--tz-->.*?<!--/tz-->|<!--th-->.*?<!--/th-->", "ext": ".png"},
 ]
 BUDGET_MS = 12000    # virtual time for fonts + images to settle before the screenshot
 
 CACHE_DIR = os.path.join(os.environ.get("SITE_CACHE_DIR", ".cache"), "teasers")
 PRUNE_DAYS = 14      # --prune removes entries not used for this long
-with open(__file__, "rb") as _f:
-    SCRIPT_HASH = hashlib.sha256(_f.read()).hexdigest()[:16]
+RENDERER = "ddd97ede17891c33"   # was this file's own hash on 2026-10-11 (the keys stay as they were); bump when pictures change
 FROZEN = "frozen-v1"   # past events' thumbnail keys: text + headshot only (bump to redraw every past thumbnail once)
 REF_RE = re.compile(r'(?:src|href)="([^"]+)"|url\(\s*[\'"]?([^\'")]+)[\'"]?\s*\)')
 
@@ -123,7 +132,7 @@ def page_parts(index_html, slot="tz-slot"):
     end = html.find("<!--/spsec-->" if slot == "sp-slot" else "<script", starts[-1])
     end = len(html) if end < 0 else end
     bounds = starts + [end]
-    cards = [re.sub(r' id="(?:t[zh]-card-\d+|sp-card-[a-z]+-\d+)"', "", html[bounds[i]:bounds[i + 1]]) for i in range(len(starts))]
+    cards = [re.sub(r' id="(?:t[zh]-card-\d+|sp-card-[a-z]+-\d+|cv-card-\d+)"', "", html[bounds[i]:bounds[i + 1]]) for i in range(len(starts))]
     # a greyed-out card (missing photo or title, Marek 2026-10-09) is never drawn: it ends the card before it and is dropped
     cards = [c for c in cards if not c.startswith('<div class="tz-slot tz-na"')]
     return html[:starts[0]] + html[end:], cards
@@ -146,16 +155,18 @@ def refs_digest(text, base_dir, h, outputs=()):
             h.update(b"missing")
 
 
-def render_context(context):
+def render_context(context, city=False):
     """What of the page outside the cards can change a picture: its styles without the tools' block, its <link>s
-    (fonts) and the card script. None when the page has no /*render*/ markers (an old template: whole context)."""
+    (fonts) and the card script. None when the page has no /*render*/ markers (an old template: whole context).
+    The City view's own styles and script (/*city*/ blocks) count for the City view pictures only."""
     script = re.search(r"/\*render\*/(.*?)/\*/render\*/", context, re.S)
     if not script:
         return None
     styles = "".join(re.findall(r"<style[^>]*>(.*?)</style>", context, re.S))
     styles = re.sub(r"/\*tools\*/.*?/\*/tools\*/", "", styles, flags=re.S)
     links = "".join(re.findall(r"<link[^>]+>", context))
-    return styles + links + script.group(1)
+    out = styles + links + script.group(1)
+    return out if city else re.sub(r"[ \t]*/\*city\*/.*?/\*/city\*/\n?", "", out, flags=re.S)
 
 
 def frozen_key(card, base_dir, kind):
@@ -184,12 +195,13 @@ def card_keys(index_html, chrome_version, kind=KINDS[0], frozen=False):
         # the thumbnail styles and the lettering fit, and the files it uses
         cards = [re.sub(r'^<div class="tz-slot"[^>]*>', "", c) for c in cards]
         styles = "".join(re.findall(r"<style[^>]*>(.*?)</style>", context, re.S))
+        styles = re.sub(r"[ \t]*/\*city\*/.*?/\*/city\*/\n?", "", styles, flags=re.S)   # the City view's styles: not a thumbnail's
         fit = re.search(r"function fitWord\(el\) \{.*?\n      \}", context, re.S)
         context = "\n".join(r for r in re.findall(r"[^{}]*\{[^{}]*\}", styles) if ".th-" in r or "th-sheet" in r) + (fit.group(0) if fit else context)
     else:
-        context = render_context(context) or context
+        context = render_context(context, kind["name"] == "city") or context
     ctx = hashlib.sha256()
-    ctx.update(("%s|%s|%s|%dx%d|%s|%d|" % (SCRIPT_HASH, chrome_version, kind["name"], kind["w"], kind["h"], kind["scale"], BUDGET_MS)).encode())
+    ctx.update(("%s|%s|%s|%dx%d|%s|%d|" % (RENDERER, chrome_version, kind["name"], kind["w"], kind["h"], kind["scale"], BUDGET_MS)).encode())
     ctx.update(context.encode())
     refs_digest(context, base_dir, ctx, outputs)
     keys = []

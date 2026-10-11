@@ -1992,6 +1992,43 @@ context['tz'] = {
     'venue': context['hero_event'].get('venue_short', ''), 'place': context['hero_event'].get('venue_line', ''),
     'place_full': context['hero_event'].get('venue_line_full', ''),
 }
+# City view (Marek 2026-10-11): the talk teasers' second look, "Modern | City view" on /<event>/teasers/ - the city's
+# panorama behind the card instead of the slimes. One picture per city in <repo>/panoramas/, named as the event's city_name
+# (Austin.png, NYC.png, San Francisco.png), shared by every edition in that city. Tinted here in the brand's colours (the soft
+# duotone Marek picked: the picture's light mapped dark -> mid brand colour, fading into the background towards the footer)
+# into teasers/city-<hash>.jpg; no picture for the city, or a past event, means no City view.
+_TZ_CITY = {'llmday': ('#020c09', '#598f76', '#062019'), 'sreday': ('#04020c', '#73669e', '#0b0620'),
+            'platformday': ('#0b0602', '#a07a3a', '#1f0c05'), 'pec': ('#04040f', '#66709c', '#0d1430')}
+_TZ_CITY['prompt engineering conference'] = _TZ_CITY['pec']
+context['tz']['city_bg'] = None
+_tz_city = str(context['hero_event'].get('city') or context.get('city_name') or '').strip().lower()
+if _tz_city and not _EVENT_ENDED and _os.path.isdir('../panoramas'):
+    _tz_pano = next((_f for _f in sorted(_os.listdir('../panoramas')) if _os.path.splitext(_f)[0].strip().lower() == _tz_city
+                     and _os.path.splitext(_f)[1].lower() in ('.png', '.jpg', '.jpeg', '.webp')), None)
+    if _tz_pano:
+        try:
+            import io as _tz_io, hashlib as _tz_hash
+            from PIL import Image as _TzImage, ImageOps as _TzOps
+            _lo, _hi, _bg = _TZ_CITY.get(_tz_key, (_tz_k['bg'][1], _tz_k['accent'], _tz_k['bg'][2]))
+            _im = _TzOps.fit(_TzImage.open('../panoramas/' + _tz_pano).convert('RGB'), (1200, 1200), _TzImage.LANCZOS)
+            _im = _TzOps.colorize(_im.convert('L'), black=_lo, white=_hi)
+            # towards the footer the picture fades into the background: 0 down to 70%, 15% at 70%, 60% at 90%, 80% at the bottom
+            def _tz_ramp_at(y, stops=((0, 0), (840, .15), (1080, .6), (1199, .8))):
+                for (y0, v0), (y1, v1) in zip(stops, stops[1:]):
+                    if y <= y1:
+                        return v0 + (v1 - v0) * (y - y0) / (y1 - y0)
+                return stops[-1][1]
+            _mask = _TzImage.new('L', (1, 1200)); _mask.putdata([round(255 * _tz_ramp_at(_y)) for _y in range(1200)])
+            _im = _TzImage.composite(_TzImage.new('RGB', (1200, 1200), _bg), _im, _mask.resize((1200, 1200)))
+            _buf = _tz_io.BytesIO(); _im.save(_buf, 'JPEG', quality=85, optimize=True)
+            _tz_name = 'city-%s.jpg' % _tz_hash.md5(_buf.getvalue()).hexdigest()[:10]
+            _os.makedirs(BASE_FOLDER + '/teasers', exist_ok=True)
+            with open(BASE_FOLDER + '/teasers/' + _tz_name, 'wb') as _f:
+                _f.write(_buf.getvalue())
+            context['tz']['city_bg'] = _tz_name
+            print('teasers: City view from panoramas/%s' % _tz_pano)
+        except Exception as _e:                                   # noqa: BLE001 - no City view, the page still builds
+            print('WARN teasers: panorama %s not used (%s: %s)' % (_tz_pano, type(_e).__name__, _e))
 # YouTube thumbnails (Marek 2026-10-07): the second tab of /<event>/teasers/, one 1280x720 image per talk (rendered to
 # PNG named after the speaker by _build/render_teasers.py, YouTube's size, under its 2 MB limit), after Marek's four samples: the brand name
 # split around the headshot (SRE | DAY, LLM | DAY, PLAT FORM | DAY), PEC: its logo left, the headshot right.
@@ -2146,6 +2183,8 @@ for _t in talks_raw:                                         # spreadsheet order
         while '%s-%d.png' % (_base, _n) in _tz_seen:
             _n += 1
         context['teaser_talks'][-1]['file'] = '%s-%d.png' % (_base, _n)
+for _x in context['teaser_talks']:
+    _x['cv_file'] = _x['file'][:-4] + '-city.png'          # its City view picture, next to it
 for _i, _x in enumerate(sorted(context['teaser_talks'], key=lambda x: x['_web'])):
     _x['web'] = _i                                            # position on the website (schedule order)
 _th_seen = set()

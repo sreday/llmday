@@ -194,6 +194,35 @@
     .sp-sheet .tz-frame { width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
     .sp-sheet .tz-frame .tz-card { transform: none !important; }
     .sp-slot[hidden] { display: none; }
+    /*city*/
+    /* to the closing city marker: the City view card (Marek 2026-10-11) - the city's panorama (<repo>/panoramas/, tinted by
+       generate.py) instead of the slimes, the headshot 760 px with its circle's bottom behind the ticket, the title centred
+       between the event line and the dash. Only the City view pictures' cache key covers this block (render_teasers.py) */
+    .cv-frame, a.cv-dl { display: none; }
+    body.cv-mode #tz-pool .tz-slot > .tz-frame:not(.cv-frame), body.cv-mode #tz-groups .tz-slot > .tz-frame:not(.cv-frame),
+    body.cv-mode .tz-slot > a.tz-dl:not(.cv-dl) { display: none; }   /* cv-mode is only ever on with the Talk teasers tab */
+    body.cv-mode .tz-slot > .cv-frame { display: block; }
+    body.cv-mode .tz-slot > a.cv-dl { display: flex; }
+    .cv-bg { left: 0; top: 0; width: 1200px; height: 1200px; object-fit: cover; display: block; }
+    .cv-shade { left: 0; top: 0; width: 1200px; height: 1200px;
+      background: linear-gradient(180deg, {{ tz.scheme.bg[1] }}8c 0, {{ tz.scheme.bg[1] }}00 30%),
+                  linear-gradient(90deg, {{ tz.scheme.bg[1] }}66 0, {{ tz.scheme.bg[1] }}33 45%, {{ tz.scheme.bg[1] }}00 70%); }
+    /* the headshot's circle (r 370.5 round 499.5 / 598.5 of the 1000 px file) drawn r 282 round 846 / 742: inside the card and the
+       ticket's width, its bottom (1024) 40 px under the ticket's top edge (984) */
+    .cv-photo { left: 466px; top: 288px; width: 760px; height: 760px; object-fit: contain; display: block; }
+    .cv-photo-na { left: 564px; top: 460px; width: 564px; height: 564px; border-radius: 50%; background: rgba(255,255,255,.12); }
+    .cv-talk { left: 72px; top: 336px; width: 460px; line-height: 1.12; }
+    .cv-who { left: 72px; top: 800px; width: 460px; margin-top: 0; }
+    .cv-who .tz-name { width: 460px; }
+    body.cv-sheet { background: #000; }
+    .cv-sheet .tz-page { max-width: none; padding: 0; margin: 0; }
+    .cv-sheet .tz-head, .cv-sheet .tz-tabs, .cv-sheet .tz-controls, .cv-sheet .tz-group-head, .cv-sheet .tz-dl, .cv-sheet .tz-slot.tz-off,
+    .cv-sheet .tz-empty, .cv-sheet .tz-hint, .cv-sheet #sp-pool, .cv-sheet .tz-slot > .tz-frame:not(.cv-frame), .cv-sheet .tz-na-note { display: none !important; }
+    .cv-sheet .tz-grid { display: block; }
+    .cv-sheet .tz-slot { gap: 0; }
+    .cv-sheet .cv-frame { display: block; width: 1200px; height: 1200px; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+    .cv-sheet .cv-frame .tz-card { transform: none !important; }
+    /*/city*/
     /* from here to the closing tools marker: the page's tools, drawn in the browser only - not in the build renderer's cache key */
     /*tools*/
     /* a card missing its photo or title (Marek 2026-10-09): greyed out, nothing to download */
@@ -390,6 +419,10 @@
         <button type="button" data-sort="last" aria-pressed="false">Last name</button>
         <button type="button" data-sort="track" aria-pressed="false">By track</button>
       </div>
+      {% if tz.city_bg and teaser_talks and not teasers_expired %}<div class="tz-sort cv-view" role="group" aria-label="Look">
+        <button type="button" data-view="modern" aria-pressed="true">Modern</button>
+        <button type="button" data-view="city" aria-pressed="false">City view</button>
+      </div>{% endif %}
       <button class="tz-btn" id="tz-all" type="button" data-dl="all">Download all</button>
       <span class="tz-count" id="tz-count"></span>
     </div>
@@ -429,7 +462,31 @@
                 <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18"{% if tz.place_full and tz.place_full != tz.place %} data-full="{{ tz.place_full }}"{% endif %}>{{ tz.place }}</div></div></div>
             </div></div>
           </div>
-        </div><!--/tz-->{% endif %}
+        </div><!--/tz-->{% endif %}{% if tz.city_bg and not teasers_expired %}<!--cv--><div class="tz-frame cv-frame">
+          {# the City view card (Marek 2026-10-11): one line of its own on the slot, so a page without a panorama is unchanged byte for byte #}
+          <div class="tz-card cv-card" id="cv-card-{{ loop.index }}" {% if t.missing %}data-na-file{% else %}data-file{% endif %}="{{ t.cv_file }}">
+            <img class="cv-bg" src="./{{ tz.city_bg }}" alt=""><div class="cv-shade"></div>
+            {% if t.photo %}<img class="cv-photo" src="{{ t.photo }}" alt="">{% elif 'headshot' in t.missing %}<div class="cv-photo-na" data-na="headshot"></div>{% endif %}
+            {% if tz.logo %}<img class="tz-logo" src="{{ tz.logo }}" alt="">{% endif %}
+            <div class="tz-conf">{{ tz.conf }}</div>
+            {% if tz.show %}<div class="tz-ball"><div class="tz-ball-in">
+              {% if tz.free %}<div class="tz-ball-line" data-fit="49" data-min="16" style="color:#fff">FREE</div><div class="tz-ball-line" data-fit="49" data-min="16" style="color:#fff;margin-top:8px">EVENT</div>
+              {% else %}<div class="tz-ball-line" data-fit="41" data-min="16">{{ tz.pct }}% OFF</div><div class="tz-ball-line" data-fit="48" data-min="16" style="color:var(--accent);letter-spacing:.04em;margin-top:10px">{{ tz.code }}</div>{% endif %}
+            </div></div>{% endif %}
+            <div class="tz-talk cv-talk"{% if 'title' in t.missing %} data-na="title"{% endif %}>{{ t.title_html|safe }}</div>
+            <div class="tz-who cv-who">
+              <div class="tz-bar"></div>
+              {% if t.panel %}{% for l in t.name_lines %}<div class="tz-name tz-panel" data-fit="42" data-min="22">{{ l }}</div>{% endfor %}
+              {% else %}<div class="tz-name" data-fit="48" data-min="22">{{ t.name }}</div>{% if t.organization %}<div class="tz-org" data-fit="30" data-min="18">{{ t.organization }}</div>{% endif %}{% endif %}
+            </div>
+            <div class="tz-ticket"><div class="tz-ticket-in">
+              <div class="tz-date"><div class="tz-day">{{ tz.day }}</div><div><div class="tz-mon">{{ tz.mon }}</div><div class="tz-wday">{{ tz.weekday }}</div></div></div>
+              <div class="tz-perf"></div>
+              <div class="tz-where"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58s-19-16-19-31a19 19 0 0 1 38 0c0 15-19 31-19 31z"/><circle cx="32" cy="27" r="7.5"/></svg>
+                <div style="width:600px"><div class="tz-venue" data-fit="35" data-min="22">{{ tz.venue }}</div><div class="tz-place" data-fit="26" data-min="18"{% if tz.place_full and tz.place_full != tz.place %} data-full="{{ tz.place_full }}"{% endif %}>{{ tz.place }}</div></div></div>
+            </div></div>
+          </div>
+        </div>{% if not t.missing %}<a class="tz-dl cv-dl" href="./{{ t.cv_file }}" download="{{ t.cv_file }}" title="Download {{ t.name }}, City view (PNG)" aria-label="Download the City view card of {{ t.name }} (PNG)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>{% endif %}<!--/cv-->{% endif %}
         <!--th--><div class="th-frame">
           <div class="th-card th-{{ 'logo-l' if th.layout == 'logo' else 'split' }}" id="th-card-{{ loop.index }}" {% if t.missing %}data-na-file{% else %}data-file{% endif %}="{{ t.thumb }}" style="background:{{ th.bg }}">
             {% if th.layout == 'logo' %}<img class="th-logo" src="{{ th.logo }}" alt="">
@@ -710,6 +767,48 @@
           });
         });
       }
+      /*city*/
+      // City view (Marek 2026-10-11): its own fit - the title from 54 px down to 28 until it is no taller than 420 px and no word
+      // is wider than its 460 px column, with and without its phrase break (in a 460 px column "Tax:" / "Why" / "Your Token"
+      // reads choppy): the bigger size wins, then fewer lines, then the break; then centred between the event line and the
+      // dash like the Modern title (centreTitle)
+      function cvFit() {
+        document.querySelectorAll('.cv-card [data-fit]').forEach(fitLines);
+        document.querySelectorAll('.cv-talk').forEach(function (el) {
+          el.style.transform = '';
+          var withBr = el.innerHTML, best = null;
+          [withBr, withBr.replace(/<br class="sep">/g, ' ')].forEach(function (h, vi) {
+            if (vi && h === withBr) return;
+            el.innerHTML = h;
+            var s = 54; el.style.fontSize = s + 'px';
+            while (s > 28 && (el.offsetHeight > 420 || el.scrollWidth > el.clientWidth)) { s -= 1; el.style.fontSize = s + 'px'; }
+            var n = Math.round(el.offsetHeight / (s * 1.12));
+            if (!best || s > best.s || (s === best.s && n < best.n)) best = { h: h, s: s, n: n };
+          });
+          el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
+          centreTitle(el);
+        });
+      }
+      // a City view picture is never published without its city: once the fonts are in, every panorama must have loaded, or
+      // the card is blanked and the renderer drops the black tile (the slime check's counterpart)
+      function cvLoaded() {
+        return ready.then(function () {
+          return Promise.all([].map.call(document.querySelectorAll('.cv-bg'), function (b) { return b.decode ? b.decode().catch(function () {}) : null; }));
+        });
+      }
+      // sheet mode for the build-time renderer: #city-<start>-<count> keeps only those City view cards, unscaled
+      var cvSheet = /^#city-(\d+)-(\d+)$/.exec(location.hash);
+      if (cvSheet) {
+        var cFrom = +cvSheet[1], cTo = cFrom + +cvSheet[2];
+        document.body.classList.add('cv-sheet');
+        document.querySelectorAll('.tz-slot').forEach(function (s, i) { if (i < cFrom || i >= cTo) s.classList.add('tz-off'); });
+        cvLoaded().then(function () {
+          cvFit();
+          document.querySelectorAll('.cv-card').forEach(function (c) { var b = c.querySelector('.cv-bg'); if (!b || !b.naturalWidth) c.style.visibility = 'hidden'; });
+        });
+        return;
+      }
+      /*/city*/
       if (sheet || thSheet || spSheet) ready.then(function () {
         fitTab(thSheet ? 'th' : spSheet ? 'sp' : 'tz');
         document.querySelectorAll('.tz-card').forEach(function (c) { if (!slimeIntact(c)) c.style.visibility = 'hidden'; });
@@ -884,6 +983,26 @@
         });
       }
       var tabShown = null;
+      // City view (Marek 2026-10-11): "Modern | City view" on the Talk teasers tab, only where the city has a panorama; #city-view
+      // opens it. The other tabs (Duo / Trio, Carousel...) keep the Modern cards
+      var cvView = document.querySelector('.cv-view'), cvOn = !!cvView && location.hash === '#city-view', cvFitted = false;
+      function cvShow() {
+        if (!cvOn || tab !== 'tz') return;
+        ready.then(function () { if (!cvFitted) { cvFitted = true; cvFit(); } scale(); if (naSlots.length) naMarks(); });
+      }
+      if (cvView) {
+        cvView.querySelectorAll('[data-view]').forEach(function (b) {
+          b.setAttribute('aria-pressed', (b.dataset.view === 'city') === cvOn ? 'true' : 'false');
+          b.addEventListener('click', function () {
+            if (cvOn === (b.dataset.view === 'city')) return;
+            cvOn = !cvOn;
+            cvView.querySelectorAll('[data-view]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            document.body.classList.toggle('cv-mode', cvOn && tab === 'tz');
+            history.replaceState(null, '', cvOn ? '#city-view' : location.pathname);
+            cvShow(); scale();
+          });
+        });
+      }
       function setTab(t) {
         var prev = tabShown; tabShown = t;
         tab = t;
@@ -892,6 +1011,8 @@
         document.body.classList.toggle('mx-mode', t === 'mx');
         document.body.classList.toggle('gn-mode', t === 'gn');
         document.body.classList.toggle('cr-mode', t === 'cr');
+        document.body.classList.toggle('cv-mode', cvOn && t === 'tz');
+        if (cvView) cvView.hidden = t !== 'tz';
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
           : t === 'cr' ? 'A LinkedIn carousel (a square PDF for a document post): a cover, then talks as singles or Duos & Trios, within the recommended length.'
@@ -900,6 +1021,7 @@
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
         moveInk(t); slideIn(prev, t);
+        cvShow();
         ready.then(function () { moveInk(t); fitTab(t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); if (t === 'cr' && typeof crDraw === 'function') crDraw(); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
@@ -913,8 +1035,9 @@
       function zpStep(btn, done, total) { btn.style.setProperty('--zp', Math.round(done * 100 / total) + '%'); }
       function zpEnd(btn) { btn.classList.remove('tz-zipping'); btn.style.removeProperty('--zp'); }
       function download(list, btn, label) {
-        var kind = tab === 'th' ? 'thumbnails' : tab === 'sp' ? 'sponsor-cards' : 'teasers';
-        var cls = tab === 'th' ? 'a.th-dl' : tab === 'sp' ? 'a.sp-dl' : 'a.tz-dl:not(.th-dl)';
+        var cv = tab === 'tz' && cvOn;
+        var kind = tab === 'th' ? 'thumbnails' : tab === 'sp' ? 'sponsor-cards' : cv ? 'city-view' : 'teasers';
+        var cls = tab === 'th' ? 'a.th-dl' : tab === 'sp' ? 'a.sp-dl' : cv ? 'a.cv-dl' : 'a.tz-dl:not(.th-dl):not(.cv-dl)';
         var slots = list.filter(function (s) { return !s.hidden && !s.classList.contains('tz-na'); }), files = [], skipped = [], keep = btn.textContent;
         if (!slots.length) return;
         btn.disabled = true; zpStart(btn);
@@ -929,7 +1052,7 @@
               return r.arrayBuffer();
             });
             return get.catch(function () {
-              var card = s.querySelector(tab === 'th' ? '.th-card' : '.tz-card');
+              var card = s.querySelector(tab === 'th' ? '.th-card' : cv ? '.cv-card' : '.tz-card');
               return (tab === 'th' ? pngOf(card, 1280, 720, 1) : pngOf(card)).then(function (u) { return fetch(u); }).then(function (r) { return r.arrayBuffer(); });
             }).then(function (b) { files.push({ name: name, bytes: new Uint8Array(b) }); }, function () { skipped.push(name); })
               .then(function () { zpStep(btn, i + 1, slots.length); });
@@ -1009,6 +1132,8 @@
       function pngOf(card, w, h, ratio) {
         w = w || 1200; h = h || 1200; ratio = ratio || 1.25;
         var sw = card.querySelector('.tz-sw'), checked = sw && !card.querySelector('.sp-photo') && getComputedStyle(sw).display !== 'none';
+        var cvBg = card.querySelector('.cv-bg');
+        if (cvBg && !cvBg.naturalWidth) return Promise.reject(new Error('the city picture did not load - reload the page and try again'));
         return withHd(card, function () {
           return pngRaw(card, w, h, ratio).then(function (url) {
             if (!checked) return url;
@@ -1126,7 +1251,7 @@
             if (!r.ok || !/image/.test(r.headers.get('content-type') || '')) throw new Error('not built');
             return r.blob().then(function (b) { return URL.createObjectURL(b); });
           }).catch(function () {
-            var card = a.closest(th ? '.tz-slot' : '.tz-slot, .sp-slot').querySelector(th ? '.th-card' : '.tz-card');
+            var card = a.closest(th ? '.tz-slot' : '.tz-slot, .sp-slot').querySelector(th ? '.th-card' : a.classList.contains('cv-dl') ? '.cv-card' : '.tz-card');
             return th ? pngOf(card, 1280, 720, 1) : pngOf(card);
           }).then(function (url) { savePng(url, name); })
             .catch(function (err) { alert('Could not make the PNG: ' + (err && err.message || err)); })
@@ -1510,7 +1635,7 @@
             }; im.onerror = fail; im.src = src;
           });
         }
-        var built = slide.kind === 'talk' && slide.p.slot.querySelector('a.tz-dl:not(.th-dl)');
+        var built = slide.kind === 'talk' && slide.p.slot.querySelector('a.tz-dl:not(.th-dl):not(.cv-dl)');
         var first = built ? fetch(built.getAttribute('href'), { cache: 'force-cache' }).then(function (r) {
           if (!r.ok || !/image/.test(r.headers.get('content-type') || '')) throw new Error('no built PNG');
           return r.blob();
