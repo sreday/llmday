@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>LLMday - page not found</title>
+	<!-- link previews: _build/og_images.py -->
+	<meta property="og:title" content="LLMday - page not found">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://llmday.com/404">
+	<meta property="og:site_name" content="LLMday">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta property="og:image:secure_url" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="800">
+	<meta property="og:image:alt" content="LLMday - page not found">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@llmday_com">
+	<meta name="twitter:creator" content="@llmday_com">
+	<meta name="twitter:title" content="LLMday - page not found">
+	<meta name="twitter:image" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta name="twitter:image:alt" content="LLMday - page not found">
+  <script>
+    (function () {
+      var map = [{"from": "2026-redwood-city-q4", "to": "2026-san-francisco-q4"}];
+      var p = location.pathname;
+      for (var i = 0; i < map.length; i++) {
+        var from = '/' + map[i].from + '/', to = '/' + map[i].to + '/';
+        if (p.indexOf(from) === 0) { location.replace(to + p.slice(from.length) + location.search + location.hash); return; }
+      }
+    })();
+  </script>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=67cb461a46">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700|Roboto:400&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent: #26986A; }
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; align-items: center; justify-content: center; background: #f4f4f6; color: #111; font-family: 'Roboto', Arial, sans-serif; }
+    main { width: 100%; max-width: 900px; padding: 40px 20px 60px; text-align: center; box-sizing: border-box; }
+    .mascot { display: block; width: min(320px, 70vw); height: auto; margin: 0 auto 38px; animation: lost 3.2s ease-in-out infinite; transform-origin: 50% 90%; }
+    @keyframes lost { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) translateY(-6px); } }
+    @media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
+    h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(.75rem, 3.6vw, 2rem); line-height: 1.2; white-space: nowrap; color: var(--accent); margin: 0 0 18px; }   /* punchline always on ONE line (Marek): the size follows the viewport instead of wrapping */
+    .hint { display: none; margin: 0 0 26px; color: #666; font-size: 1.08rem; line-height: 1.7; overflow-wrap: anywhere; }
+    .hint.on { display: block; }
+    .hint a { color: var(--accent); font-weight: 700; text-decoration: none; transition: opacity .15s; }
+    .hint a:hover { opacity: .65; }
+    .hint span { display: block; }
+    .back { display: inline-block; margin-top: 8px; padding: 13px 30px; border-radius: 999px; background: var(--accent); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .15s, box-shadow .15s; }
+    .back:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.24); }
+  </style>
+<meta name="build" content="ed065aec34-20261011T003334Z">
+</head>
+<body>
+  <main>
+    <img class="mascot" src="/assets/images/404.webp?v=eeaa0d896f" alt="" width="320">
+    <h1>404 - This page wandered off to graze.</h1>
+    <p class="hint" id="hint"></p>
+    <a class="back" href="/">Back to main page</a>
+  </main>
+  <script>
+  (function () {
+    if (!window.fetch) return;
+    function lev(a, b) {                               // Levenshtein distance, two rows
+      if (a === b) return 0; if (!a.length) return b.length; if (!b.length) return a.length;
+      var prev = [], cur = [], i, j;
+      for (j = 0; j <= b.length; j++) prev[j] = j;
+      for (i = 1; i <= a.length; i++) {
+        cur = [i];
+        for (j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
+        prev = cur;
+      }
+      return prev[b.length];
+    }
+    function clean(s) { try { s = decodeURIComponent(s); } catch (e) {} return s.toLowerCase().replace(/[\s_]+/g, '-'); }
+
+    fetch('/404-index.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (idx) {
+      if (!idx) return;
+      var events = idx.events || [], pages = idx.pages || {}, site = idx.site || [];
+      var typed = location.pathname;
+      var segs = typed.split('/').filter(function (s) { return s; });
+      if (!segs.length) return;
+      var folderTyped = clean(segs[0]), restTyped = segs.slice(1).join('/');
+      var bare = folderTyped.replace(/\.html?$/, '');                       // "/2026-nyc-q4.html"
+      var restBare = restTyped.replace(/^index\.html?$/i, '');
+
+      // (2) harmless slips: same page once case / slashes / .html / underscores are tidied -> go there
+      var exact = null, k;
+      for (k = 0; k < events.length; k++) if (events[k].folder === bare) exact = events[k];
+      if (exact) {
+        var target = null;
+        if (!restBare) target = exact.path;
+        else {
+          var list = pages[exact.folder] || [], want = restBare.toLowerCase().replace(/\.html?$/, '');
+          for (k = 0; k < list.length; k++) if (list[k].toLowerCase().replace(/\.html?$/, '') === want) target = exact.path + list[k];
+        }
+        if (target && target !== typed) { location.replace(target + location.search + location.hash); return; }
+      }
+      for (k = 0; k < site.length; k++) {
+        if (site[k] !== '/' && site[k].replace(/\//g, '') === bare && !restBare && site[k] !== typed) { location.replace(site[k]); return; }
+      }
+
+      // (3) suggestions: closest event folders (edit distance or cut-off address), upcoming first, newest first
+      var cands = [];
+      for (k = 0; k < events.length; k++) {
+        var f = events[k].folder, d = lev(bare, f);
+        var prefix = bare.length >= 6 && (f.indexOf(bare) === 0 || bare.indexOf(f) === 0);
+        if (d <= 3 || prefix) cands.push({ ev: events[k], d: prefix ? Math.min(d, 2) : d });
+      }
+      cands.sort(function (a, b) { return a.d - b.d || (b.ev.upcoming - a.ev.upcoming) || (a.ev.order - b.ev.order); });
+      cands = cands.slice(0, 1);                       // one hint only, the closest (Marek 2026-09-18)
+      var links = [];
+      for (k = 0; k < cands.length; k++) {
+        var ev = cands[k].ev, url = ev.path;
+        if (restBare) {                                                       // a talk page: closest page name in that event
+          var pl = pages[ev.folder] || [], w = restBare.toLowerCase().replace(/\.html?$/, ''), best = null, bd = 1e9;
+          for (var m = 0; m < pl.length; m++) {
+            var cand = pl[m].toLowerCase().replace(/\.html?$/, ''), dd = lev(w, cand);
+            if (dd < bd) { bd = dd; best = pl[m]; }
+          }
+          if (best && bd <= Math.max(3, Math.round(w.length * 0.15))) url = ev.path + best;
+        }
+        if (links.indexOf(url) === -1) links.push(url);
+      }
+      if (!links.length) {                                                    // site pages like /host/
+        for (k = 0; k < site.length; k++) {
+          var sp = site[k].replace(/\//g, '');
+          if (sp && lev(bare, sp) <= 2 && !links.length) links.push(site[k]);
+        }
+      }
+      if (!links.length) return;
+      var hint = document.getElementById('hint'), html = 'Did you mean: ';
+      for (k = 0; k < links.length; k++) {
+        var full = location.origin + links[k];
+        var a = '<a href="' + links[k].replace(/"/g, '%22') + '">' + full.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</a>';
+        html += links.length === 1 ? a + ' ?' : '<span>' + a + (k === links.length - 1 ? ' ?' : '') + '</span>';
+      }
+      hint.innerHTML = html; hint.className = 'hint on';
+    }).catch(function () {});
+  })();
+  </script>
+<script>/* rewrite_assets.py: reload when a newer build is out */(function(){var m=document.querySelector('meta[name="build"]');if(!m||!window.fetch)return;var mine=m.getAttribute('content'),busy=0,bar=null;function engaged(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;var f=document.querySelectorAll('input,textarea');for(var i=0;i<f.length;i++){var e=f[i];if(/^(checkbox|radio)$/.test(e.type)?e.checked!==e.defaultChecked:(e.type!=='hidden'&&e.value!==e.defaultValue))return true}return !!document.querySelector('.modal.show')}function offer(){if(bar||!document.body)return;bar=document.createElement('div');bar.setAttribute('role','status');bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2000;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#111;color:#fff;padding:10px 12px 10px 18px;border-radius:999px;font:600 14px/1.3 Montserrat,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)';var t=document.createElement('span');t.textContent='This page was just updated (schedule, speakers or sponsors)';bar.appendChild(t);var b=document.createElement('button');b.type='button';b.textContent='Refresh';b.style.cssText='border:0;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;background:#fff;color:#111';b.onclick=function(){location.reload()};bar.appendChild(b);document.body.appendChild(bar)}function check(auto){if(busy||document.visibilityState==='hidden')return;busy=1;fetch('/build.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!j.build||j.build===mine)return;var again=false;try{again=sessionStorage.getItem('fresh-reload')===j.build;sessionStorage.setItem('fresh-reload',j.build)}catch(e){}if(auto&&!again&&!engaged())location.reload();else offer()})['catch'](function(){busy=0})}check(true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')check(true)});addEventListener('pageshow',function(e){if(e.persisted)check(true)});setInterval(function(){check(false)},300000)})()</script>
+</body>
+</html>

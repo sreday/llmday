@@ -1,0 +1,82 @@
+base_path: "https://www.llmday.com/"
+base_folder: "static"
+# before - no schedule
+# active - schedule
+# after  - hide tickets
+event_state: active
+start_time: "2026-10-14T08:30:00-05:00"
+date_string: "October 14, 2026"
+location_string: "The Sunset Room, Austin, Texas, USA"
+
+cfp_url: https://cfp.ninja/e/llmday-2026-austin-q4
+twitter_url: https://twitter.com/llmday_com
+linkedin_url: https://www.linkedin.com/company/llmday/
+youtube_url: https://www.youtube.com/@llmday
+luma_evt: evt-BkgBHKV6Cghvmk3
+mailto: "mailto:hello@llmday.com"
+
+# the number of tracks needs to be the same per day
+# the tracks will be taken in the order they appear in the csv file and spread equally on both days
+days: 1
+attendees: 100
+speakers: 10+
+tracks: 1
+
+rooms:
+- main room
+
+breaks:
+- title: Coffee break
+  duration: 30
+  comment: Main lobby
+  # this decides how many talks in-between this and previous section
+  talks_before: 0
+- title: Lunch & networking
+  duration: 60
+  comment: Main lobby
+  talks_before: 5
+- title: Networking & sponsor crawl
+  duration: 30
+  comment: Main lobby
+  talks_before: 5
+
+sponsors:
+  - logo: harness.png
+    url: https://www.harness.io/
+  - logo: reliaburger.png
+    url: https://reliaburger.com/
+  - logo: hockeystick.png
+    url: https://www.hockeystick.show/
+  - logo: DevIT-usa.png
+    url: https://devitjobs.com/jobs/Machine-Learning/all/all 
+  - logo: ksug.ai.png
+    url: https://ksug.ai/?ref=sre
+
+
+# brand identity
+brand_name: "LLMday"
+brand_domain: "llmday.com"
+brand_description: "Conference on Large Language Models, Agents & AI Systems"
+brand_tagline: "Large Language Models, Agents & AI Systems"
+brand_og_pitch: "Probably the most awesome LLM conference in"
+brand_color: "#26986A"
+brand_twitter: "@llmday_com"
+brand_ga_id: "G-CQ2KV6LK8G"
+brand_gads_id: "AW-17496979257"
+brand_twt_pixel: "ofo1h"
+logo_image: ""
+
+# probably don't need changing
+hero_pictures:
+- ../photos/warsaw-2026-0.jpg
+- ../photos/warsaw-2026-1.jpg
+- ../photos/warsaw-2026-2.jpg
+- ../photos/warsaw-2026-3.jpg
+- ../photos/warsaw-2026-4.jpg
+- ../photos/warsaw-2026-5.jpg
+- ../photos/warsaw-2026-6.jpg
+
+venue_name: "The Sunset Room"
+calendly_sponsor_url: "https://calendly.com/sreday/30min"
+city_name: "Austin"
+youtube_playlist:

@@ -1,0 +1,933 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>LLMday headshots</title>
+	<!-- link previews: _build/og_images.py -->
+	<meta property="og:title" content="LLMday headshots">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://llmday.com/headshots/">
+	<meta property="og:site_name" content="LLMday">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta property="og:image:secure_url" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="800">
+	<meta property="og:image:alt" content="LLMday headshots">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@llmday_com">
+	<meta name="twitter:creator" content="@llmday_com">
+	<meta name="twitter:title" content="LLMday headshots">
+	<meta name="twitter:image" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta name="twitter:image:alt" content="LLMday headshots">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=67cb461a46">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:400,500,700&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent: #26986A; }
+    html, body { margin: 0; background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
+    /* one screen, no scrolling on a 16:9 display (Marek 2026-10-06): preview | layers + file | controls, all as tall as the preview */
+    :root { --pv: min(600px, calc(100vh - 142px)); }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 18px 20px 20px; }
+    .brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+    h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.5rem; margin: 0 0 14px; }
+    .sub { color: #666; font-size: .95rem; margin: 0 0 26px; max-width: 760px; line-height: 1.5; }
+    .grid { display: grid; grid-template-columns: calc(var(--pv) + 34px) minmax(280px, 1fr) minmax(280px, 1fr); gap: 18px; align-items: stretch; }
+    .grid > .card { height: calc(var(--pv) + 34px); box-sizing: border-box; overflow: auto; }
+    @media (max-width: 1240px) { .grid { grid-template-columns: calc(var(--pv) + 34px) minmax(300px, 1fr); } .grid > .card:last-child { grid-column: 1 / -1; height: auto; } }
+    @media (max-width: 900px) { :root { --pv: min(600px, calc(100vw - 74px)); } .grid { grid-template-columns: 1fr; } .grid > .card { height: auto; } }
+    .card { background: #fff; border: 1px solid #e6e6e6; border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,.06); padding: 16px 18px; }
+    .card.pv { padding: 16px; }
+    .card.pv .stage { width: var(--pv); height: var(--pv); }
+    /* the preview: the 1000x1000 canvas on a checkerboard so transparency shows; drag it to move the photo */
+    .stage { position: relative; border-radius: 12px; overflow: hidden; touch-action: none; cursor: grab;
+      background: #fff conic-gradient(#e9e9ee 25%, #fff 0 50%, #e9e9ee 0 75%, #fff 0) 0 0 / 28px 28px; }
+    .stage.dragging { cursor: grabbing; }
+    .stage canvas { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+    .empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; color: #777; font-size: .95rem; pointer-events: none; padding: 20px; }
+    .empty b { color: color-mix(in srgb, var(--accent) 80%, #000); font-size: 1.05rem; }
+    /* readable over the coloured circle (Marek 2026-10-06): a frosted white card behind the text */
+    .empty > div { background: rgba(255,255,255,.9); color: #333; padding: 14px 22px; border-radius: 16px; line-height: 1.5;
+      box-shadow: 0 8px 24px rgba(0,0,0,.18); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    .empty[hidden] { display: none; }
+    .stage.over { outline: 3px dashed var(--accent); outline-offset: -6px; }
+    .ctl + .ctl { margin-top: 14px; }
+    .ctl label, .lbl { display: flex; justify-content: space-between; font-weight: 600; font-size: .9rem; margin-bottom: 6px; }
+    .ctl label output { font-weight: 500; color: #777; font-variant-numeric: tabular-nums; }
+    .ctl input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    .ctl input[type=text] { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font: inherit; }
+    .drop { display: flex; align-items: center; gap: 12px; border: 2px dashed #ccc; border-radius: 12px; padding: 12px 14px; background: #fafafa; cursor: pointer; font-size: .9rem; color: #555; line-height: 1.4; }
+    .drop:hover, .drop.over { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, #fff); }
+    .drop b { color: var(--accent); }
+    .drop input { display: none; }
+    .hint { color: #888; font-size: .8rem; margin-top: 4px; }
+    .joy-row { display: flex; align-items: center; gap: 14px; }
+    .size-row { display: flex; align-items: center; gap: 16px; }
+    .size-col { flex: 1; min-width: 0; }
+    /* tone sliders in Lumetri Color units (Marek 2026-10-06), two per row to keep the page on one screen */
+    .tones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-top: 14px; }
+    .tones .ctl + .ctl { margin-top: 0; }
+    .tones .wide { grid-column: 1 / -1; }
+    .tones label { font-size: .85rem; }
+    .flt-ends { display: flex; justify-content: space-between; font-size: .72rem; color: #999; margin-top: -2px; }
+    .joy { position: relative; width: 76px; height: 76px; border-radius: 50%; flex: none; cursor: grab; touch-action: none;
+      background: radial-gradient(circle at 50% 40%, #fff, #ececec); border: 2px solid color-mix(in srgb, var(--accent) 35%, #ddd); box-shadow: inset 0 2px 6px rgba(0,0,0,.08); }
+    .joy:active { cursor: grabbing; }
+    .joy i { position: absolute; left: 50%; top: 50%; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 3px 8px rgba(0,0,0,.25), inset 0 2px 0 rgba(255,255,255,.35); }
+    .row { display: flex; gap: 10px; margin-top: 16px; }
+    .btn { flex: 1; border: 0; border-radius: 999px; padding: 12px 16px; font: 700 .95rem 'Montserrat', sans-serif; cursor: pointer; }
+    .btn-main { background: var(--accent); color: #fff; }
+    .btn-main:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-ghost { background: #f0f0f3; color: #333; }
+    /* layers (Marek 2026-10-06): up to 5 photos, front on top of the list; the selected one is the only one the controls move */
+    .layers { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .layer { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border: 2px solid #eee; border-radius: 12px; cursor: pointer; background: #fff; }
+    .layer:hover { border-color: color-mix(in srgb, var(--accent) 40%, #eee); }
+    .layer.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, #fff); }
+    .layer canvas { width: 40px; height: 40px; flex: none; border-radius: 8px; background: #fff conic-gradient(#e9e9ee 25%, #fff 0 50%, #e9e9ee 0 75%, #fff 0) 0 0 / 10px 10px; }
+    .layer .ln { flex: 1; min-width: 0; font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .layer .ln small { display: block; color: #999; font-size: .72rem; }
+    .layer button { border: 0; background: #f0f0f3; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font: 700 .85rem 'Montserrat', sans-serif; color: #444; flex: none; }
+    .layer button:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, #f0f0f3); }
+    .layer button:disabled { opacity: .3; cursor: default; }
+    .editing { font-size: .85rem; color: #777; margin: 18px 0 14px; padding-top: 14px; border-top: 1px solid #eee; }
+    .editing b { color: #333; }
+    .ctl input:disabled { opacity: .4; cursor: not-allowed; }
+    /* batch export window (Marek 2026-10-06) */
+    .bx { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(20,16,24,.35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .bx[hidden] { display: none; }
+    .bx-box { position: relative; width: min(720px, 100%); max-height: calc(100vh - 40px); overflow: auto; background: #fff; border-radius: 20px; padding: 22px 24px; box-shadow: 0 24px 60px rgba(0,0,0,.25); }
+    .bx-box h2 { font: 700 1.2rem 'Montserrat', sans-serif; margin: 0 0 6px; }
+    .bx-box > .hint { margin: 0 0 12px; }
+    .bx-x { position: absolute; top: 12px; right: 14px; border: 0; background: #f0f0f3; width: 34px; height: 34px; border-radius: 50%; font-size: 1.3rem; cursor: pointer; }
+    .bx-list { list-style: none; margin: 10px 0 0; padding: 0; font-size: .85rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+    .bx-list li { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; overflow: hidden; }
+    .bx-list li span { overflow: hidden; text-overflow: ellipsis; }
+    .bx-list li b { font-weight: 600; color: #777; } .bx-list li b.ok { color: #1a8a3a; } .bx-list li b.warn { color: #c0392b; }
+    /* GitHub push (Marek 2026-10-06): optional, through the images-only inbox repo */
+    .hs-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .gh-state { text-align: right; font-size: .85rem; padding-top: 4px; }
+    .gh-state a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    .gh-sub { display: block; color: #999; font-size: .75rem; }
+    .btn-push { background: #24292f; color: #fff; }
+    .btn-push[hidden] { display: none; }
+    .btn-push:disabled { opacity: .45; cursor: not-allowed; }
+    .gh-steps { font-size: .85rem; color: #444; padding-left: 20px; margin: 4px 0 12px; line-height: 1.6; }
+    #gh-token { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font: inherit; }
+    .gh-remember { display: block; font-size: .82rem; color: #555; margin-top: 8px; }
+    .ok-box { width: min(560px, 100%); }
+    .ok-imgs { display: flex; gap: 16px; justify-content: center; margin: 10px 0; }
+    .ok-imgs figure { margin: 0; text-align: center; font-size: .8rem; color: #555; }
+    .ok-imgs img { width: 200px; height: 200px; border-radius: 12px; background: #fff conic-gradient(#e9e9ee 25%, #fff 0 50%, #e9e9ee 0 75%, #fff 0) 0 0 / 14px 14px; }
+    .bx-new { flex: 0 0 54px; font-size: 1.35rem; line-height: 1; padding: 10px 0; }
+    .bx-new[hidden] { display: none; }
+    .bx-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px; }
+    .bx-thumbs figure { margin: 0; text-align: center; font-size: .7rem; color: #555; }
+    .bx-thumbs img { width: 100%; aspect-ratio: 1; border-radius: 10px; background: #fff conic-gradient(#e9e9ee 25%, #fff 0 50%, #e9e9ee 0 75%, #fff 0) 0 0 / 12px 12px; }
+    .bx-thumbs figure.warn img { outline: 3px solid #c0392b; }
+    .btn-auto { width: 100%; margin: 0 0 6px; background: color-mix(in srgb, var(--accent) 12%, #fff); color: color-mix(in srgb, var(--accent) 75%, #000); border: 2px solid var(--accent); }
+    .btn-auto:disabled { opacity: .45; cursor: not-allowed; }
+    .auto-msg { min-height: 1.2em; margin-bottom: 8px; }
+  </style>
+<meta name="build" content="ed065aec34-20261011T003334Z">
+</head>
+<body>
+<div class="wrap">
+  <div class="hs-top"><div><div class="brand">LLMday · tools</div><h1>Headshot maker</h1></div>
+    <div class="gh-state" id="gh-state"><a href="#" id="gh-link">Connect GitHub</a><span class="gh-sub">optional, to send headshots to the site</span></div></div>
+  <div class="grid">
+    <div class="card pv">
+      <div class="stage" id="stage"><canvas id="cv" width="1000" height="1000"></canvas><div class="empty" id="empty"><div><b>Drop transparent PNGs here</b><br>or add them on the right (up to 5)</div></div></div>
+    </div>
+    <div class="card">
+      <div class="ctl">
+        <span class="lbl">Layers <output id="count" style="font-weight:500;color:#777">0 / 5</output></span>
+        <ul class="layers" id="layers"></ul>
+        <label class="drop" id="drop"><input type="file" id="file" accept="image/png,image/webp,image/*" multiple><span id="drop-text"><b>Add photos</b> or drop keyed PNGs (up to 5)</span></label>
+        <div class="hint">Top = front. Click a layer to edit it.</div>
+      </div>
+      <div class="ctl">
+        <span class="lbl">File name</span>
+        <input type="text" id="name" placeholder="Speaker Name.png" spellcheck="false">
+        <div class="hint">Follows the layers, as in talks.csv.</div>
+      </div>
+      <div class="row"><button type="button" class="btn btn-main" id="dl" disabled>Download PNG</button><button type="button" class="btn btn-push" id="push" disabled hidden>Push to site</button></div>
+      <div class="hint" id="push-msg"></div>
+      <button type="button" class="btn btn-ghost" id="batch-open" style="width:100%;margin-top:10px">Batch export&hellip; <small style="font-weight:500;color:#777">(up to 10, Auto, zip)</small></button>
+    </div>
+    <div class="card">
+      <div class="editing" id="editing" style="margin-top:0;padding-top:0;border-top:0">Add a photo to start.</div>
+      <button type="button" class="btn btn-auto" id="auto" disabled>&#10024; Auto</button>
+      <div class="hint auto-msg" id="auto-msg">Framing and tones like the site.</div>
+      <div class="ctl size-row">
+        <div class="size-col"><label for="zoom">Size <output id="zoom-v">1.25x</output></label><input type="range" id="zoom" min="0.5" max="3" step="0.01" value="1.25" data-default="1.25"></div>
+        <div class="joy" id="joy" role="slider" aria-label="Photo position" title="Drag to move the photo (or drag the photo itself), double-click to centre"><i id="knob"></i></div>
+      </div>
+      <div class="tones">
+        <div class="ctl"><label for="exp">Exposure <output id="exp-v">0.0</output></label><input type="range" id="exp" min="-2" max="2" step="0.05" value="0" data-default="0"></div>
+        <div class="ctl"><label for="con">Contrast <output id="con-v">0</output></label><input type="range" id="con" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="hil">Highlights <output id="hil-v">0</output></label><input type="range" id="hil" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="sha">Shadows <output id="sha-v">0</output></label><input type="range" id="sha" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="wht">Whites <output id="wht-v">0</output></label><input type="range" id="wht" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl"><label for="blk">Blacks <output id="blk-v">0</output></label><input type="range" id="blk" min="-100" max="100" step="1" value="0" data-default="0"></div>
+        <div class="ctl wide"><label for="flt">Colour filter <output id="flt-v">none</output></label><input type="range" id="flt" min="-100" max="100" step="1" value="0" data-default="0"><div class="flt-ends"><span>cool</span><span>warm</span></div></div>
+      </div>
+      <div class="hint">Lumetri Color units. Double-click to reset. Blue line = eye level (preview only).</div>
+      <div class="row"><button type="button" class="btn btn-ghost" id="reset">Reset layer</button></div>
+    </div>
+  </div>
+</div>
+<div class="bx" id="bx" hidden>
+  <div class="bx-box" role="dialog" aria-label="Batch export">
+    <button type="button" class="bx-x" id="bx-x" aria-label="Close">&times;</button>
+    <h2>Batch export</h2>
+    <p class="hint">Up to 10 keyed PNGs, one speaker each. Every photo gets Auto (framing and tones) and is exported under its own name into one zip. No preview; check the results below after the export.</p>
+    <label class="drop" id="bx-drop"><input type="file" id="bx-file" accept="image/png,image/webp,image/*" multiple><span id="bx-text"><b>Choose photos</b> or drop them here (up to 10)</span></label>
+    <ul class="bx-list" id="bx-list"></ul>
+    <div class="row"><button type="button" class="btn btn-main" id="bx-go" disabled>Export zip</button><button type="button" class="btn btn-push" id="bx-send" disabled hidden>Send all to site</button><button type="button" class="btn btn-ghost bx-new" id="bx-new" title="Start a new batch" aria-label="Start a new batch" hidden>&#8635;</button></div>
+    <div class="hint" id="bx-msg"></div>
+    <div class="bx-thumbs" id="bx-thumbs"></div>
+  </div>
+</div>
+<div class="bx" id="gh" hidden>
+  <div class="bx-box" role="dialog" aria-label="Connect GitHub">
+    <button type="button" class="bx-x" id="gh-x" aria-label="Close">&times;</button>
+    <h2>Connect GitHub</h2>
+    <p class="hint">"Push to site" sends the finished PNG to <a href="https://github.com/sreday/headshots-inbox" target="_blank" rel="noopener">sreday/headshots-inbox</a>; the site picks it up from there within about 15 minutes (only valid 1000&times;1000 headshots are accepted). The token below can only reach that inbox, never the site itself.</p>
+    <ol class="gh-steps">
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub &rarr; new fine-grained token</a>.</li>
+      <li>Resource owner: <b>sreday</b>. Repository access: <b>Only select repositories</b> &rarr; <b>headshots-inbox</b>.</li>
+      <li>Permissions &rarr; Repository &rarr; <b>Contents: Read and write</b> (nothing else). Expiration: 90 days.</li>
+      <li>Generate, copy, paste here.</li>
+    </ol>
+    <input type="password" id="gh-token" placeholder="github_pat_..." autocomplete="off" spellcheck="false">
+    <label class="gh-remember"><input type="checkbox" id="gh-remember"> Remember on this computer (otherwise it is forgotten when the tab closes)</label>
+    <div class="row"><button type="button" class="btn btn-main" id="gh-save">Connect</button><button type="button" class="btn btn-ghost" id="gh-out" hidden>Disconnect</button></div>
+    <div class="hint" id="gh-msg"></div>
+  </div>
+</div>
+<div class="bx" id="ok" hidden>
+  <div class="bx-box ok-box" role="dialog" aria-label="Replace">
+    <h2 id="ok-title">Replace the current headshot?</h2>
+    <div class="ok-imgs" id="ok-imgs"></div>
+    <div class="row" id="ok-btns"></div>
+  </div>
+</div>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var SIZE = 1000, WORK_MAX = 2000, MAX_LAYERS = 5;
+  var cv = $('cv'), ctx = cv.getContext('2d');
+  var circle = new Image(), C = { x: 499.5, y: 598.5, r: 370.5 };      // replaced by the measured circle once it loads
+  var JOY_R = 23, PAN_RANGE = 370;
+  var zoom = $('zoom'), TONE_KEYS = ['exp', 'con', 'hil', 'sha', 'wht', 'blk', 'flt'];
+  var tones = {}; TONE_KEYS.forEach(function (k) { tones[k] = $(k); });
+  var sliders = [zoom].concat(TONE_KEYS.map(function (k) { return tones[k]; }));
+  // layers[0] is the back, the last one the front. Each keeps its own photo and settings (Marek 2026-10-06):
+  //   { name, src (full size), gray (grey working copy pixels), tone (toned working copy), headTop, zoom, pan, exp, sha, hil }
+  var layers = [], active = -1, nameTouched = false;
+  function cur() { return layers[active] || null; }
+
+  // ── the circle: centre and radius from its own transparency (any brand's circle PNG works) ──
+  circle.onload = function () {
+    var c = document.createElement('canvas'); c.width = circle.width; c.height = circle.height;
+    var g = c.getContext('2d'); g.drawImage(circle, 0, 0);
+    var d = g.getImageData(0, 0, c.width, c.height).data, x0 = c.width, x1 = -1, y0 = c.height, y1 = -1;
+    for (var y = 0; y < c.height; y++) for (var x = 0; x < c.width; x++) {
+      if (d[(y * c.width + x) * 4 + 3] > 128) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    }
+    if (x1 > x0) { var k = SIZE / c.width; C = { x: (x0 + x1) / 2 * k, y: (y0 + y1) / 2 * k, r: (x1 - x0) / 2 * k }; }
+    draw();
+  };
+  circle.src = '/assets/images/headshot-circle.png';
+
+  // ── adding photos: each becomes a layer in front, with default settings, and is selected ──
+  function addFiles(files) {
+    var list = [].slice.call(files || []).filter(function (f) { return /^image\//.test(f.type); });
+    if (!list.length) { $('drop-text').textContent = 'That is not an image file. PNGs, please.'; return; }
+    var room = MAX_LAYERS - layers.length;
+    if (room <= 0) { $('drop-text').textContent = 'Five layers already: remove one to add another.'; return; }
+    if (list.length > room) $('drop-text').textContent = 'Only ' + room + ' more fit (5 at most); the rest were skipped.';
+    // one at a time, in the order given, so the layer order follows the files (the first is the back)
+    (function next(i) { if (i < Math.min(list.length, room)) load(list[i], function () { next(i + 1); }); else commit(); })(0);
+  }
+  function load(file, done) {
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onerror = function () { $('drop-text').textContent = 'One image could not be read. Try a PNG.'; if (done) done(); };
+    img.onload = function () {
+      if (layers.length >= MAX_LAYERS) { if (done) done(); return; }
+      var L = makeLayer(img, file.name);
+      layers.push(L);
+      select(layers.length - 1);
+      if (done) done();
+    };
+    img.src = url;
+  }
+  function makeLayer(img, name) {                                        // a photo with default settings (not yet in the list)
+    var s = Math.min(1, WORK_MAX / Math.max(img.width, img.height));
+    var work = document.createElement('canvas'); work.width = Math.round(img.width * s); work.height = Math.round(img.height * s);
+    var w = work.getContext('2d'); w.drawImage(img, 0, 0, work.width, work.height);
+    var colour = w.getImageData(0, 0, work.width, work.height), gray = toGray(colour, 0);
+    var tone = document.createElement('canvas'); tone.width = work.width; tone.height = work.height;
+    var L = { name: name, src: img, colour: colour, gray: gray, grayFlt: 0, tone: tone, headTop: findHeadTop(gray), zoom: 1.25, pan: { x: 0, y: 0 } };
+    TONE_KEYS.forEach(function (k) { L[k] = 0; });
+    tone.getContext('2d').putImageData(applyTone(gray, lut(L)), 0, 0);
+    return L;
+  }
+  function findHeadTop(id) {                                            // the first row where the person starts (0.5% of the row opaque)
+    var d = id.data, w = id.width, need = Math.max(2, w * 0.005);
+    for (var y = 0; y < id.height; y++) { var n = 0; for (var x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 128 && ++n >= need) return y / id.height; }
+    return 0;
+  }
+  // black and white: Rec.709 luminance, shifted by the colour filter like a coloured lens on b&w film (warm = red/orange:
+  // skin lighter, blues darker; cool = blue: the opposite). Returns a new grey copy, alpha kept.
+  function filterWeights(flt) {
+    var f = flt / 100, r = Math.max(0, 0.2126 + 0.30 * f), g = Math.max(0, 0.7152 - 0.10 * f), b = Math.max(0, 0.0722 - 0.20 * f), t = r + g + b;
+    return [r / t, g / t, b / t];
+  }
+  function toGray(id, flt) {
+    var o = new ImageData(new Uint8ClampedArray(id.data), id.width, id.height), d = o.data, w = filterWeights(flt || 0);
+    for (var i = 0; i < d.length; i += 4) { var l = w[0] * d[i] + w[1] * d[i + 1] + w[2] * d[i + 2]; d[i] = d[i + 1] = d[i + 2] = l; }
+    return o;
+  }
+
+  // ── tone: exposure, shadows and highlights of one layer as one 256-entry curve on the grey values ──
+  // The sliders use Lumetri Color's numbers. Calibrated on Poone Mokari (raw in Dropbox, finished on sreday.com), made in
+  // After Effects with Lumetri Exposure 0.7 and Shadows 80: this curve reproduces it with 0.25 x Exposure stops and
+  // 0.009 x Shadows (rmse 1.8 grey levels on the face). Highlights use the same scale as Shadows; Contrast, Whites and
+  // Blacks follow Lumetri's behaviour (not calibrated): contrast pivots on mid-grey, whites / blacks move the end points.
+  function toneValue(v, T) {
+    var l = Math.min(1, (v / 255) * Math.pow(2, T.exp * 0.25));
+    l = 0.5 + (l - 0.5) * (1 + T.con / 100 * 0.6);                            // contrast around mid-grey
+    l = Math.max(0, Math.min(1, l));
+    var sh = T.sha * 0.009, hi = T.hil * 0.009;
+    l += sh * 0.5 * Math.pow(1 - l, 2) * l * 4 * (sh > 0 ? 1 : l + 0.25);     // lift / deepen the darks, endpoints stay put
+    l += hi * 0.5 * Math.pow(l, 2) * (1 - l) * 4;                              // brighten / pull down the lights
+    l += T.wht / 100 * 0.35 * l * l;                                           // white point
+    l += T.blk / 100 * 0.35 * (1 - l) * (1 - l);                               // black point (negative = deeper blacks)
+    return Math.max(0, Math.min(1, l)) * 255;
+  }
+  function lut(L) {
+    var t = new Uint8ClampedArray(256);
+    for (var v = 0; v < 256; v++) t[v] = Math.round(toneValue(v, L));
+    return t;
+  }
+  function applyTone(id, t) {
+    var o = new ImageData(new Uint8ClampedArray(id.data), id.width, id.height), d = o.data;
+    for (var i = 0; i < d.length; i += 4) { var g = t[d[i]]; d[i] = d[i + 1] = d[i + 2] = g; }
+    return o;
+  }
+  function regray(L) { if (L.grayFlt !== L.flt) { L.gray = toGray(L.colour, L.flt); L.grayFlt = L.flt; } }
+  var pending = false;
+  function retone() {                                                     // only the selected layer is re-toned
+    if (pending) return; pending = true;
+    requestAnimationFrame(function () {
+      pending = false; var L = cur();
+      if (L) { regray(L); L.tone.getContext('2d').putImageData(applyTone(L.gray, lut(L)), 0, 0); thumb(L); }
+      draw();
+    });
+  }
+
+  // ── compose: circle in colour, every layer (back to front) clipped to the circle plus everything above the cutoff ──
+  // default framing as in the After Effects files (e.g. Wassim Melakhessou): at zoom 1.25 the photo is 1.25x the circle's
+  // width, centred, with the top of the head 0.2 r above the circle (y 154 on the 1000 px canvas)
+  function placement(L, img) {
+    var w = 2 * C.r * L.zoom, h = img.height * (w / img.width), top = C.y - C.r * 1.2;
+    return { x: C.x - w / 2 + L.pan.x * PAN_RANGE, y: top - L.headTop * h + L.pan.y * PAN_RANGE, w: w, h: h };
+  }
+  // Pixel-exact edges (Marek 2026-10-06): the people are masked with the circle PNG's OWN alpha (plus everything above the
+  // cutoff line), and the circle is erased wherever a person is, so on the anti-aliased rim the colour comes from the
+  // people only - no orange line between a speaker and the transparent background.
+  // a speaker may leave the circle only above this line: 20% of the circle's height above its centre (Marek 2026-10-06)
+  var CUT = 0.2;
+  function layer(size) { var c = document.createElement('canvas'); c.width = c.height = size; return c; }
+  function compose(g, size, imgs, list) {                                 // imgs[i] = the picture to draw for list[i] (default: the layers)
+    list = list || layers;
+    var k = size / SIZE, hasCircle = circle.complete && circle.naturalWidth;
+    g.clearRect(0, 0, size, size);
+    if (!list.length) { if (hasCircle) g.drawImage(circle, 0, 0, size, size); return; }
+    var P = layer(size), pg = P.getContext('2d');                       // all people, placed, back to front
+    pg.imageSmoothingQuality = 'high';
+    list.forEach(function (L, i) { var im = imgs[i], p = placement(L, im); pg.drawImage(im, p.x * k, p.y * k, p.w * k, p.h * k); });
+    var Cc = layer(size), cg = Cc.getContext('2d');                     // the circle with the people cut out of it
+    if (hasCircle) cg.drawImage(circle, 0, 0, size, size);
+    cg.globalCompositeOperation = 'destination-out'; cg.drawImage(P, 0, 0);
+    var M = layer(size), mg = M.getContext('2d');                       // mask: circle alpha + above the cutoff line
+    if (hasCircle) mg.drawImage(circle, 0, 0, size, size); else { mg.beginPath(); mg.arc(C.x * k, C.y * k, C.r * k, 0, Math.PI * 2); mg.fill(); }
+    mg.fillStyle = '#000'; mg.fillRect(0, 0, size, Math.round((C.y - CUT * 2 * C.r) * k));
+    pg.globalCompositeOperation = 'destination-in'; pg.drawImage(M, 0, 0);
+    g.drawImage(Cc, 0, 0); g.drawImage(P, 0, 0);
+  }
+  // eye-level guide, preview only (never in the download): a blue line across the whole image 0.668 r above the circle's
+  // centre (the After Effects guide's y 350-352 on the PLATFORMday circle), labelled EYE LEVEL on the right (Marek 2026-10-06)
+  var EYE = 0.668;
+  function guide(g) {
+    var y = Math.round(C.y - EYE * C.r);
+    g.save();
+    g.globalAlpha = 0.75; g.fillStyle = '#1e7bff'; g.fillRect(0, y - 1, SIZE, 2);
+    g.globalAlpha = 0.9; g.font = '700 22px Montserrat, Arial, sans-serif'; g.textAlign = 'right'; g.textBaseline = 'bottom';
+    g.lineWidth = 4; g.strokeStyle = 'rgba(255,255,255,.85)'; g.strokeText('EYE LEVEL', SIZE - 16, y - 6);
+    g.fillText('EYE LEVEL', SIZE - 16, y - 6);
+    g.restore();
+  }
+  function draw() { compose(ctx, SIZE, layers.map(function (L) { return L.tone; })); guide(ctx); }
+
+  // ── download: every layer drawn again from its full-size source so it stays sharp ──
+  function fullTone(L) {
+    var full = document.createElement('canvas'); full.width = L.src.width; full.height = L.src.height;
+    var f = full.getContext('2d'); f.drawImage(L.src, 0, 0);
+    f.putImageData(applyTone(toGray(f.getImageData(0, 0, full.width, full.height), L.flt), lut(L)), 0, 0);
+    return full;
+  }
+  function render(size, list) { list = list || layers; var out = layer(size); compose(out.getContext('2d'), size, list.map(fullTone), list); return out; }
+  $('dl').addEventListener('click', function () {
+    if (!layers.length) return;
+    render(SIZE).toBlob(function (b) {
+      var a = document.createElement('a'), name = ($('name').value.trim() || 'headshot').replace(/\.png$/i, '') + '.png';
+      a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+    }, 'image/png');
+  });
+  // the file name follows the layers (Marek 2026-10-06): back to front = left to right after Auto, "A", "A & B",
+  // "A, B & C"; it updates on every add, remove and reorder until the name is typed by hand (emptying it hands it back)
+  function autoName() {
+    if (nameTouched) return;
+    var n = layers.map(function (L) { return L.name.replace(/\.[^.]+$/, ''); });
+    $('name').value = n.length ? (n.length === 1 ? n[0] : n.slice(0, -1).join(', ') + ' & ' + n[n.length - 1]) + '.png' : '';
+  }
+  $('name').addEventListener('input', function () { nameTouched = this.value.trim() !== ''; if (!nameTouched) autoName(); });
+  $('name').addEventListener('change', function () { commit(); });
+
+  // ── Auto (Marek 2026-10-06): frame the face and set the tones like the headshots already on the site ──
+  // Calibrated on the 14 PLATFORMday speakers that have both the raw photo (Dropbox) and the finished After Effects
+  // headshot (speakers/*.png, 1000 px canvas, circle centre 499.5/598.5, r 370.5), comparing them with the same face model:
+  // - size: the whole head, top of the hair to the chin, is 430 px in the finished files; it predicts the real scale within
+  //   7% for all 14 (face width / eye distance were off by up to 29%, e.g. Daniel Hudsky)
+  // - position: eye line at y 347 (13 of 14 within 345-353), face centred at x 507
+  // - tones: one gentle house look (exposure +0.05, shadows +20, highlights +5) came closest to the finished files (typical
+  //   error 9.7 grey levels against 17.8 untouched); matching every face to one brightness pushed the sliders to their ends.
+  // Stored relative to the circle so another brand's circle keeps the same proportions.
+  // house look in Lumetri units: exposure +0.2, shadows +20, highlights +5 (= the calibrated +0.05 stop / 0.20 / 0.05 curve)
+  var AUTO = { headChin: 1.160, faceH: 0.850, eyeY: 0.678, faceDX: 0.0213, look: { exp: 0.2, con: 0, hil: 5, sha: 20, wht: 0, blk: 0, flt: 0 } };
+  var MP = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1';
+  var MODEL = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+  var landmarker = null;
+  function getLandmarker() {                                              // loaded on the first Auto only (~4 MB, then cached)
+    if (!landmarker) landmarker = import(MP + '/vision_bundle.mjs').then(function (m) {
+      return m.FilesetResolver.forVisionTasks(MP + '/wasm').then(function (fs) {
+        return m.FaceLandmarker.createFromOptions(fs, { baseOptions: { modelAssetPath: MODEL }, runningMode: 'IMAGE', numFaces: 3 });
+      });
+    });
+    landmarker.catch(function () { landmarker = null; });
+    return landmarker;
+  }
+  function findFace(fl, L) {                                              // the biggest face in the photo, in 0..1 of the photo
+    var c = document.createElement('canvas'), s = Math.min(1, 1024 / Math.max(L.src.width, L.src.height));
+    c.width = Math.round(L.src.width * s); c.height = Math.round(L.src.height * s);
+    var g = c.getContext('2d'); g.fillStyle = '#808080'; g.fillRect(0, 0, c.width, c.height); g.drawImage(L.src, 0, 0, c.width, c.height);
+    var res = fl.detect(c), best = null;
+    (res.faceLandmarks || []).forEach(function (lm) {
+      var w = Math.abs(lm[454].x - lm[234].x);
+      if (!best || w > best.w) best = { lm: lm, w: w };
+    });
+    if (!best) return null;
+    var lm = best.lm;
+    return { ey: (lm[468].y + lm[473].y) / 2, fx: (lm[234].x + lm[454].x) / 2, chin: lm[152].y, brow: lm[10].y, l: lm[234], r: lm[454], mouth: lm[13] };
+  }
+  // darker skin needs more light (Marek 2026-10-06): the median grey of the cheeks and nose (between the eyes and the
+  // mouth, middle half of the face) on the untoned photo; below 145 every grey level adds 0.016 Lumetri exposure, capped at
+  // +1.3 in total. In the calibration set Kishore Pulagam (skin 88) was brightened by about +1.0, Manu Gurudatha and Thomas
+  // Cameron (around 120) by about +0.4, light skin by the house +0.2.
+  // measured on the photo's colour (brightest of R/G/B), not the grey value: warm light skin turns darker in black and white
+  // and was mistaken for dark skin (Wojciech Strzalkowski got +0.95). Kishore Pulagam (128) gets about +1.1, Manu
+  // Gurudatha (157) +0.55, from Sergey Sergeev (175) up only the house +0.2.
+  var SKIN_REF = 175, SKIN_GAIN = 0.019, EXP_MAX = 1.3;
+  function skinMedian(L, f) {
+    var g = L.gray, W = g.width, H = g.height, d = g.data, vals = [];
+    var x0 = Math.min(f.l.x, f.r.x) + Math.abs(f.r.x - f.l.x) * .25, x1 = Math.max(f.l.x, f.r.x) - Math.abs(f.r.x - f.l.x) * .25;
+    var y0 = f.ey + (f.mouth.y - f.ey) * .25, y1 = f.mouth.y - (f.mouth.y - f.ey) * .1;
+    for (var y = Math.round(y0 * H); y < y1 * H; y++) for (var x = Math.round(x0 * W); x < x1 * W; x++) {
+      var i = (y * W + x) * 4; if (d[i + 3] >= 250) vals.push(d[i]);
+    }
+    if (vals.length < 50) return null;
+    vals.sort(function (a, b) { return a - b; });
+    return vals[Math.floor(vals.length / 2)];
+  }
+  // Size from head AND body (Marek 2026-10-06, "take body proportions into account"): 60% the head (top of the hair to the
+  // chin) and 40% the shoulders (width of the body around the face's centre line, 1.2 face heights below the chin). On the
+  // 14 calibration speakers this blend matched the real scale better than the head alone (typical error 2.6% vs 3.1%).
+  // Both targets are set a little smaller than the old After Effects files (head x0.96, shoulders x0.86: the chest now
+  // just spans the circle instead of overflowing it): on average 0.1 smaller on the Size slider, broad shoulders up to
+  // 0.2 smaller (Thomas Cameron), narrow ones barely (Jay Paulson -0.02).
+  // Marek 2026-10-06: Auto headshots came out smaller than the current trend on the site, so the final Auto size is
+  // scaled up by 8% (head + shoulders blend, head-only fallback and group slots alike); the eye line stays put.
+  // 20% (2026-10-06) was too big (Marek 2026-10-07).
+  var BODY = { head: 1.160 * 0.96, shoulders: 2.270 * 0.86, w: 0.4, below: 1.2, headOnly: 0.925, size: 1.08 };
+  // Several people (measured on Marek's group headshots: 100 duos, 7 trios, 3 quads, 2 pentas): staggered depth rows,
+  // never one flat row. Per slot, back (= first layer) to front (= last layer): face centre x and eye line height in r from
+  // the circle centre, head size relative to a single headshot.
+  var GROUP = {
+    2: [{ x: -0.45, up: 0.68, h: 0.94 }, { x: 0.44, up: 0.66, h: 0.93 }],                                   // side by side, overlapping, front a touch lower
+    3: [{ x: -0.62, up: 0.65, h: 0.79 }, { x: 0.61, up: 0.65, h: 0.79 }, { x: 0.01, up: 0.07, h: 0.91 }],  // two back, one front-centre (5 of 7 files)
+    4: [{ x: -0.32, up: 1.08, h: 0.62 }, { x: 0.37, up: 1.03, h: 0.64 },                                    // two high at the back,
+        { x: -0.60, up: 0.27, h: 0.72 }, { x: 0.60, up: 0.25, h: 0.74 }],                                   // two lower at the sides
+    5: [{ x: -0.30, up: 1.10, h: 0.54 }, { x: 0.38, up: 1.03, h: 0.55 },                                    // two at the back,
+        { x: -0.62, up: 0.42, h: 0.64 }, { x: 0.58, up: 0.30, h: 0.69 }, { x: -0.05, up: 0.05, h: 0.75 }]   // two at the sides, one in front
+  };
+  function shoulderWidth(L, f) {                                          // 0..1 of the photo width, or null
+    var g = L.gray, W = g.width, H = g.height, d = g.data;
+    var y = Math.round((f.chin + BODY.below * (f.chin - f.brow)) * H), x = Math.round(f.fx * W);
+    if (y >= H || x < 0 || x >= W || d[(y * W + x) * 4 + 3] < 128) return null;
+    var l = x, r = x;
+    while (l > 0 && d[(y * W + l - 1) * 4 + 3] >= 128) l--;
+    while (r < W - 1 && d[(y * W + r + 1) * 4 + 3] >= 128) r++;
+    return (r - l) / W;
+  }
+  // Auto levels (Marek 2026-10-06, Wojciech Strzalkowski came out milky): after exposure, Blacks and Whites bring the
+  // person's darkest 1% to near-black and brightest 1% near white, only as far as needed - a dim, flat photo gets real
+  // blacks back; a well spread one (Zoe Yan) is left as it is.
+  var LEVELS = { lo: 12, hi: 238 };
+  function personLevels(L) {                                             // p1 / p99 of the person's grey values (sampled)
+    var d = L.gray.data, v = [];
+    for (var i = 0; i < d.length; i += 4 * 5) if (d[i + 3] >= 250) v.push(d[i]);
+    if (v.length < 200) return null;
+    v.sort(function (a, b) { return a - b; });
+    return { p1: v[Math.floor(.01 * (v.length - 1))], p99: v[Math.floor(.99 * (v.length - 1))] };
+  }
+  function autoLevels(L) {
+    var lv = personLevels(L); if (!lv) return;
+    var best = null, T = {}; TONE_KEYS.forEach(function (k) { T[k] = L[k]; });
+    for (var blk = -30; blk <= 0; blk += 5) for (var wht = -20; wht <= 40; wht += 5) {   // blacks capped at -30: harder crushes noisy hair
+      T.blk = blk; T.wht = wht;
+      var lo = toneValue(lv.p1, T), hi = toneValue(lv.p99, T);
+      var cost = Math.pow(Math.max(0, lo - LEVELS.lo), 2) + Math.pow(Math.max(0, LEVELS.lo - 4 - lo), 2) * 0.5
+               + Math.pow(Math.max(0, LEVELS.hi - hi), 2) + Math.pow(Math.max(0, hi - 250), 2) * 2
+               + 0.4 * (blk * blk + wht * wht) / 25;                         // only as far as needed
+      if (!best || cost < best.c) best = { c: cost, blk: blk, wht: wht };
+    }
+    L.blk = best.blk; L.wht = best.wht;
+  }
+  function skinBright(L, f) {                                             // median of the brightest channel (R/G/B) on the cheeks and nose
+    var c = L.colour, W = c.width, H = c.height, d = c.data, vals = [];
+    var x0 = Math.min(f.l.x, f.r.x) + Math.abs(f.r.x - f.l.x) * .25, x1 = Math.max(f.l.x, f.r.x) - Math.abs(f.r.x - f.l.x) * .25;
+    var y0 = f.ey + (f.mouth.y - f.ey) * .25, y1 = f.mouth.y - (f.mouth.y - f.ey) * .1;
+    for (var y = Math.round(y0 * H); y < y1 * H; y++) for (var x = Math.round(x0 * W); x < x1 * W; x++) {
+      var i = (y * W + x) * 4; if (d[i + 3] >= 250) vals.push(Math.max(d[i], d[i + 1], d[i + 2]));
+    }
+    if (vals.length < 50) return null;
+    vals.sort(function (a, b) { return a - b; });
+    return vals[Math.floor(vals.length / 2)];
+  }
+  function autoLayer(L, f, i, n) {
+    var slot = n > 1 && GROUP[Math.min(n, 5)] ? GROUP[Math.min(n, 5)][Math.min(i, Math.min(n, 5) - 1)] : null, k = slot ? slot.h : 1;
+    var top = C.y - C.r * 1.2, aspect = L.tone.height / L.tone.width, h;
+    var headN = f.chin - L.headTop, sw = shoulderWidth(L, f);
+    var hHead = headN > 0.05 ? BODY.head * C.r * k / headN                 // photo height that gives the target head size
+                             : AUTO.faceH * C.r * k * 0.96 / Math.max(0.02, f.chin - f.brow);   // no clear hair line: face height
+    if (sw && sw > 0.05) h = Math.exp((1 - BODY.w) * Math.log(hHead) + BODY.w * Math.log(BODY.shoulders * C.r * k / sw * aspect));
+    else h = hHead * BODY.headOnly / 0.96;                                // no measurable shoulders: head only, a bit smaller
+    h *= BODY.size;
+    var w = h / aspect;
+    L.zoom = Math.max(0.5, Math.min(3, w / (2 * C.r))); w = 2 * C.r * L.zoom; h = L.tone.height * (w / L.tone.width);
+    var tx = slot ? C.x + slot.x * C.r : C.x + AUTO.faceDX * C.r, ty = C.y - (slot ? slot.up : AUTO.eyeY) * C.r;
+    L.pan = { x: (tx - C.x + w / 2 - f.fx * w) / PAN_RANGE, y: (ty - top + L.headTop * h - f.ey * h) / PAN_RANGE };
+    TONE_KEYS.forEach(function (k2) { L[k2] = AUTO.look[k2]; }); regray(L);
+    var skin = skinBright(L, f);
+    if (skin !== null && skin < SKIN_REF) L.exp = Math.min(EXP_MAX, Math.round((AUTO.look.exp + (SKIN_REF - skin) * SKIN_GAIN) * 20) / 20);
+    autoLevels(L);
+    L.tone.getContext('2d').putImageData(applyTone(L.gray, lut(L)), 0, 0); thumb(L);
+  }
+  $('auto').addEventListener('click', function () {
+    if (!layers.length) return;
+    var btn = $('auto'), msg = $('auto-msg'); btn.disabled = true;
+    msg.textContent = landmarker ? 'Finding faces...' : 'Loading the face finder (first time only)...';
+    getLandmarker().then(function (fl) {
+      var missed = [];
+      layers.forEach(function (L, i) { var f = findFace(fl, L); if (f) autoLayer(L, f, i, layers.length); else missed.push(L.name); });
+      select(active);
+      commit();
+      msg.textContent = missed.length ? 'No face found in ' + missed.join(', ') + '; adjust that one by hand.' : (layers.length > 1 ? 'All layers framed and toned. Fine-tune any layer if needed.' : 'Framed and toned. Fine-tune if needed.');
+    }).catch(function (e) {
+      msg.textContent = 'The face finder could not load (' + (e && e.message ? e.message : e) + '). Check the connection and try again.';
+    }).then(function () { btn.disabled = !layers.length; });
+  });
+
+  // ── batch export (Marek 2026-10-06): up to 10 photos, Auto on each, one zip, no preview ──
+  var BATCH_MAX = 10, batch = [];
+  function crcTable() { var t = [], c; for (var n = 0; n < 256; n++) { c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; }
+  var CRC = crcTable();
+  function crc32(u8) { var c = 0xFFFFFFFF; for (var i = 0; i < u8.length; i++) c = CRC[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function makeZip(files) {                                               // stored (PNG does not compress further), UTF-8 names
+    var enc = new TextEncoder(), parts = [], central = [], off = 0, now = new Date();
+    var dt = ((now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1)) & 0xFFFF,
+        dd = (((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate()) & 0xFFFF;
+    files.forEach(function (f) {
+      var name = enc.encode(f.name), crc = crc32(f.data), h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+      h.setUint16(10, dt, true); h.setUint16(12, dd, true); h.setUint32(14, crc, true); h.setUint32(18, f.data.length, true);
+      h.setUint32(22, f.data.length, true); h.setUint16(26, name.length, true); h.setUint16(28, 0, true);
+      parts.push(new Uint8Array(h.buffer), name, f.data);
+      var c = new DataView(new ArrayBuffer(46));
+      c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(10, 0, true);
+      c.setUint16(12, dt, true); c.setUint16(14, dd, true); c.setUint32(16, crc, true); c.setUint32(20, f.data.length, true); c.setUint32(24, f.data.length, true);
+      c.setUint16(28, name.length, true); c.setUint32(42, off, true);
+      central.push(new Uint8Array(c.buffer), name);
+      off += 30 + name.length + f.data.length;
+    });
+    var csize = central.reduce(function (a, b) { return a + b.length; }, 0), e = new DataView(new ArrayBuffer(22));
+    e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, csize, true); e.setUint32(16, off, true);
+    return new Blob(parts.concat(central, [new Uint8Array(e.buffer)]), { type: 'application/zip' });
+  }
+  function loadImg(file) { return new Promise(function (ok, bad) { var im = new Image(); im.onload = function () { ok(im); }; im.onerror = bad; im.src = URL.createObjectURL(file); }); }
+  function blobOf(canvas) { return new Promise(function (ok) { canvas.toBlob(function (b) { b.arrayBuffer().then(function (a) { ok(new Uint8Array(a)); }); }, 'image/png'); }); }
+  function batchList() {
+    $('bx-list').innerHTML = '';
+    batch.forEach(function (b) {
+      var li = document.createElement('li'), n = document.createElement('span'), st = document.createElement('b');
+      n.textContent = b.file.name; st.textContent = b.state || 'ready'; st.className = b.cls || ''; li.appendChild(n); li.appendChild(st); $('bx-list').appendChild(li);
+    });
+    $('bx-go').disabled = !batch.length; $('bx-send').disabled = !batch.length || !ghToken();
+  }
+  function batchAdd(files) {
+    var list = [].slice.call(files || []).filter(function (f) { return /^image\//.test(f.type); });
+    var room = BATCH_MAX - batch.length;
+    $('bx-msg').textContent = list.length > room ? 'Only ' + room + ' more fit (10 at most); the rest were skipped.' : '';
+    list.slice(0, Math.max(0, room)).forEach(function (f) { batch.push({ file: f }); });
+    $('bx-thumbs').innerHTML = ''; batchList();
+  }
+  async function batchRun(mode) {                                       // mode 'zip' (download) or 'send' (to the site via the inbox)
+    var go = $('bx-go'), msg = $('bx-msg'), out = [], report = [], used = {};
+    go.disabled = true; $('bx-send').disabled = true; $('bx-new').hidden = true; $('bx-thumbs').innerHTML = '';
+    var fl = null;
+    try { msg.textContent = landmarker ? 'Starting...' : 'Loading the face finder (first time only)...'; fl = await getLandmarker(); }
+    catch (e) { msg.textContent = 'The face finder could not load, so every photo gets the default framing. '; }
+    for (var i = 0; i < batch.length; i++) {
+      var b = batch[i]; b.state = 'working...'; b.cls = ''; batchList(); msg.textContent = 'Photo ' + (i + 1) + ' of ' + batch.length + '...';
+      try {
+        var img = await loadImg(b.file), L = makeLayer(img, b.file.name), f = fl ? findFace(fl, L) : null;
+        if (f) autoLayer(L, f, 0, 1);
+        else { TONE_KEYS.forEach(function (k) { L[k] = AUTO.look[k]; }); }               // no face: default framing, house tones
+        var base = b.file.name.replace(/\.[^.]+$/, ''), name = base + '.png', n = 2;
+        while (used[name.toLowerCase()]) name = base + ' (' + (n++) + ').png';
+        used[name.toLowerCase()] = true;
+        var full = render(SIZE, [L]); out.push({ name: name, data: await blobOf(full) });
+        var th = document.createElement('figure'), ti = document.createElement('img'), cap = document.createElement('figcaption');
+        ti.src = render(200, [L]).toDataURL('image/png'); cap.textContent = base; th.appendChild(ti); th.appendChild(cap);
+        if (!f) th.className = 'warn';
+        $('bx-thumbs').appendChild(th);
+        b.state = f ? 'done' : 'no face: default framing'; b.cls = f ? 'ok' : 'warn';
+        report.push((f ? 'OK       ' : 'NO FACE  ') + name + (f ? '  (size ' + L.zoom.toFixed(2) + 'x, exposure ' + (L.exp > 0 ? '+' : '') + L.exp.toFixed(2) + ')' : '  - default framing, adjust by hand'));
+        URL.revokeObjectURL(img.src);
+      } catch (e) {
+        b.state = 'could not be read'; b.cls = 'warn'; report.push('ERROR    ' + b.file.name + '  - could not be read');
+      }
+      batchList();
+      await new Promise(function (r) { setTimeout(r, 0); });                         // let the page breathe between photos
+    }
+    var nd = new Date(), pad = function (v) { return (v < 10 ? '0' : '') + v; };
+    var stamp = nd.getFullYear() + '-' + pad(nd.getMonth() + 1) + '-' + pad(nd.getDate());
+    var head = 'LLMday headshots, batch export ' + stamp + ' ' + pad(nd.getHours()) + ':' + pad(nd.getMinutes()) + '\n\n';
+    if (mode === 'send') {
+      var sent = await sendFiles(out, msg);
+      go.disabled = false; $('bx-send').disabled = !ghToken(); $('bx-new').hidden = false;
+      return sent;
+    }
+    out.push({ name: '_report.txt', data: new TextEncoder().encode(head + report.join('\n') + '\n') });
+    var zip = makeZip(out), a = document.createElement('a');
+    a.href = URL.createObjectURL(zip); a.download = 'headshots-llmday-' + stamp + '.zip';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
+    var bad = report.filter(function (r) { return r.indexOf('OK') !== 0; }).length;
+    msg.textContent = (out.length - 1) + ' headshot' + (out.length === 2 ? '' : 's') + ' in the zip' + (bad ? '; ' + bad + ' need a look (red below, listed in _report.txt).' : '. All framed by Auto.');
+    go.disabled = false; $('bx-send').disabled = !ghToken(); $('bx-new').hidden = false;   // offer a fresh start
+  }
+  $('batch-open').addEventListener('click', function () { $('bx').hidden = false; });
+  $('bx-x').addEventListener('click', function () { $('bx').hidden = true; });
+  $('bx').addEventListener('click', function (e) { if (e.target === this) this.hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('bx').hidden = true; $('gh').hidden = true; } });
+  $('bx-file').addEventListener('change', function () { batchAdd(this.files); this.value = ''; });
+  var bxd = $('bx-drop');
+  ['dragenter', 'dragover'].forEach(function (ev) { bxd.addEventListener(ev, function (e) { e.preventDefault(); bxd.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { bxd.addEventListener(ev, function (e) { e.preventDefault(); bxd.classList.remove('over'); }); });
+  bxd.addEventListener('drop', function (e) { if (e.dataTransfer.files) batchAdd(e.dataTransfer.files); });
+  $('bx-go').addEventListener('click', function () { batchRun('zip'); });
+  $('bx-send').addEventListener('click', function () { batchRun('send'); });
+  $('bx-new').addEventListener('click', function () {                     // start a new batch: empty list, no results
+    batch = []; $('bx-thumbs').innerHTML = ''; $('bx-msg').textContent = ''; this.hidden = true; batchList();
+  });
+
+  // ── GitHub (Marek 2026-10-06): optional "Push to site" through sreday/headshots-inbox ──
+  // The token only reaches the inbox repo; each site imports valid 1000x1000 PNGs from its folder there (workflow
+  // import-headshots.yml) every 15 minutes. Kept in sessionStorage, or localStorage when "Remember" is ticked; it is only
+  // ever sent to api.github.com. Download stays available either way.
+  // GH_ENABLED: the whole GitHub connection is hidden for now (Marek 2026-10-06); set to true to bring it back
+  var GH_ENABLED = false;
+  var SITE_KEY = 'llmday', INBOX = 'sreday/headshots-inbox', GH_KEY = 'hs-gh-token';
+  function ghToken() { if (!GH_ENABLED) return ''; try { return sessionStorage.getItem(GH_KEY) || localStorage.getItem(GH_KEY) || ''; } catch (e) { return ''; } }
+  function ghSet(t, remember) {
+    try { sessionStorage.removeItem(GH_KEY); localStorage.removeItem(GH_KEY); if (t) (remember ? localStorage : sessionStorage).setItem(GH_KEY, t); } catch (e) {}
+  }
+  function ghApi(path, opts) {
+    opts = opts || {};
+    return fetch('https://api.github.com' + path, { method: opts.method || 'GET', body: opts.body ? JSON.stringify(opts.body) : undefined,
+      headers: { 'Authorization': 'Bearer ' + ghToken(), 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j.message || ('GitHub said ' + r.status)); e.status = r.status; throw e; } return j; }); });
+  }
+  function b64(u8) { var s = '', CH = 0x8000; for (var i = 0; i < u8.length; i += CH) s += String.fromCharCode.apply(null, u8.subarray(i, i + CH)); return btoa(s); }
+  async function commitFiles(files, message) {                            // one commit on the inbox's main, retried once if main moved
+    for (var attempt = 0; attempt < 2; attempt++) {
+      var ref = await ghApi('/repos/' + INBOX + '/git/ref/heads/main'), base = ref.object.sha;
+      var baseCommit = await ghApi('/repos/' + INBOX + '/git/commits/' + base), tree = [];
+      for (var i = 0; i < files.length; i++) {
+        var blob = await ghApi('/repos/' + INBOX + '/git/blobs', { method: 'POST', body: { content: b64(files[i].data), encoding: 'base64' } });
+        tree.push({ path: SITE_KEY + '/' + files[i].name, mode: '100644', type: 'blob', sha: blob.sha });
+      }
+      var t = await ghApi('/repos/' + INBOX + '/git/trees', { method: 'POST', body: { base_tree: baseCommit.tree.sha, tree: tree } });
+      var c = await ghApi('/repos/' + INBOX + '/git/commits', { method: 'POST', body: { message: message, tree: t.sha, parents: [base] } });
+      try { await ghApi('/repos/' + INBOX + '/git/refs/heads/main', { method: 'PATCH', body: { sha: c.sha } }); return c.html_url || ('https://github.com/' + INBOX + '/commit/' + c.sha); }
+      catch (e) { if (attempt === 1 || (e.status !== 422 && e.status !== 409)) throw e; }
+    }
+  }
+  function exists(name) {                                                 // is this speaker already on the live site?
+    return fetch('/speakers/' + encodeURIComponent(name), { method: 'HEAD', cache: 'no-store' }).then(function (r) { return r.ok; }).catch(function () { return false; });
+  }
+  function ask(title, imgs, buttons) {                                    // small dialog: thumbnails + buttons, resolves with the chosen value
+    return new Promise(function (done) {
+      $('ok-title').textContent = title; $('ok-imgs').innerHTML = ''; $('ok-btns').innerHTML = '';
+      imgs.forEach(function (im) { var f = document.createElement('figure'), i = document.createElement('img'), c = document.createElement('figcaption'); i.src = im[0]; c.textContent = im[1]; f.appendChild(i); f.appendChild(c); $('ok-imgs').appendChild(f); });
+      buttons.forEach(function (b) { var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'btn ' + (b[2] || 'btn-ghost'); bt.textContent = b[0];
+        bt.addEventListener('click', function () { $('ok').hidden = true; done(b[1]); }); $('ok-btns').appendChild(bt); });
+      $('ok').hidden = false;
+    });
+  }
+  function ghError(e) {
+    if (e && (e.status === 401 || e.status === 403)) return 'GitHub refused the token (expired, or no write access to ' + INBOX + '). Reconnect with a new one.';
+    return 'Could not send: ' + (e && e.message ? e.message : e) + '. Download still works.';
+  }
+  async function sendFiles(files, msgEl) {                                // [{name, data}] -> one inbox commit; asks before replacing
+    if (!ghToken()) { msgEl.textContent = 'Connect GitHub first.'; return false; }
+    var list = files.filter(function (f) { return /\.png$/i.test(f.name); });
+    msgEl.textContent = 'Checking which speakers are already on the site...';
+    var already = [];
+    for (var i = 0; i < list.length; i++) if (await exists(list[i].name)) already.push(list[i]);
+    if (already.length) {
+      var choice = list.length === 1
+        ? await ask('Replace the current headshot of ' + list[0].name.replace(/\.png$/i, '') + '?',
+                    [['/speakers/' + encodeURIComponent(list[0].name) + '?t=' + Date.now(), 'on the site now'], [URL.createObjectURL(new Blob([list[0].data], { type: 'image/png' })), 'new']],
+                    [['Cancel', 'cancel'], ['Replace', 'all', 'btn-main']])
+        : await ask(already.length + ' of ' + list.length + ' are already on the site: ' + already.map(function (f) { return f.name.replace(/\.png$/i, ''); }).join(', '), [],
+                    [['Cancel', 'cancel'], ['Skip those', 'skip'], ['Replace them', 'all', 'btn-main']]);
+      if (choice === 'cancel') { msgEl.textContent = 'Not sent.'; return false; }
+      if (choice === 'skip') list = list.filter(function (f) { return already.indexOf(f) < 0; });
+    }
+    if (!list.length) { msgEl.textContent = 'Nothing new to send.'; return false; }
+    msgEl.textContent = 'Sending ' + list.length + ' headshot' + (list.length > 1 ? 's' : '') + '...';
+    try {
+      var url = await commitFiles(list, SITE_KEY + ': ' + list.map(function (f) { return f.name.replace(/\.png$/i, ''); }).join(', '));
+      msgEl.innerHTML = 'Sent. It appears on the site within about 15 minutes. <a target="_blank" rel="noopener"></a>';
+      var a = msgEl.querySelector('a'); a.href = url; a.textContent = 'See the commit';
+      return true;
+    } catch (e) { msgEl.textContent = ghError(e); return false; }
+  }
+  function ghRefresh(login) {
+    if (!GH_ENABLED) { $('gh-state').hidden = true; $('push').hidden = true; $('bx-send').hidden = true; return; }
+    var on = !!ghToken();
+    $('push').hidden = !on; $('bx-send').hidden = !on; $('push').disabled = !on || !layers.length; $('bx-send').disabled = !on || !batch.length;
+    $('gh-out').hidden = !on;
+    $('gh-state').innerHTML = on ? 'GitHub: <b></b> &middot; <a href="#" id="gh-link">settings</a>' : '<a href="#" id="gh-link">Connect GitHub</a><span class="gh-sub">optional, to send headshots to the site</span>';
+    if (on) $('gh-state').querySelector('b').textContent = login ? '@' + login : 'connected';
+    $('gh-link').addEventListener('click', function (e) { e.preventDefault(); $('gh-msg').textContent = ''; $('gh').hidden = false; });
+  }
+  $('gh-x').addEventListener('click', function () { $('gh').hidden = true; });
+  $('gh').addEventListener('click', function (e) { if (e.target === this) this.hidden = true; });
+  $('gh-save').addEventListener('click', async function () {
+    var t = $('gh-token').value.trim(); if (!t) { $('gh-msg').textContent = 'Paste the token first.'; return; }
+    ghSet(t, $('gh-remember').checked); $('gh-msg').textContent = 'Checking...';
+    try {
+      var repo = await ghApi('/repos/' + INBOX);
+      if (!repo.permissions || !repo.permissions.push) throw Object.assign(new Error('the token has no write access to ' + INBOX), { status: 403 });
+      var me = await ghApi('/user').catch(function () { return {}; });
+      $('gh-token').value = ''; $('gh-msg').textContent = 'Connected.'; ghRefresh(me.login); setTimeout(function () { $('gh').hidden = true; }, 700);
+    } catch (e) { ghSet('', false); ghRefresh(); $('gh-msg').textContent = ghError(e); }
+  });
+  $('gh-out').addEventListener('click', function () { ghSet('', false); ghRefresh(); $('gh-msg').textContent = 'Disconnected; the token is forgotten on this computer.'; });
+  $('push').addEventListener('click', async function () {
+    if (!layers.length) return;
+    var btn = this; btn.disabled = true;
+    var name = ($('name').value.trim() || 'headshot').replace(/\.png$/i, '') + '.png';
+    await sendFiles([{ name: name, data: await blobOf(render(SIZE)) }], $('push-msg'));
+    btn.disabled = !layers.length;
+  });
+
+  // ── the layer list: front on top; select, move forward / back, remove ──
+  function thumb(L) {
+    if (!L.thumbCanvas) return;
+    var t = L.thumbCanvas.getContext('2d'), s = Math.min(80 / L.tone.width, 80 / L.tone.height);
+    t.clearRect(0, 0, 80, 80); t.drawImage(L.tone, (80 - L.tone.width * s) / 2, (80 - L.tone.height * s) / 2, L.tone.width * s, L.tone.height * s);
+  }
+  function renderList(animate) {
+    var ul = $('layers'), before = new Map();                           // FLIP: where each layer's row was before
+    if (animate) layers.forEach(function (L) { if (L.li) before.set(L, L.li.getBoundingClientRect().top); });
+    ul.innerHTML = '';
+    for (var i = layers.length - 1; i >= 0; i--) (function (i) {
+      var L = layers[i], li = document.createElement('li');
+      li.className = 'layer' + (i === active ? ' on' : '');
+      L.thumbCanvas = document.createElement('canvas'); L.thumbCanvas.width = L.thumbCanvas.height = 80; li.appendChild(L.thumbCanvas); thumb(L);
+      var ln = document.createElement('span'); ln.className = 'ln'; ln.textContent = L.name;
+      var pos = document.createElement('small'); pos.textContent = i === layers.length - 1 ? (layers.length > 1 ? 'front' : 'only layer') : (i === 0 ? 'back' : 'layer ' + (i + 1)); ln.appendChild(pos);
+      li.appendChild(ln);
+      [['↑', 'Bring forward', i === layers.length - 1, function () { move(i, 1); }],
+       ['↓', 'Send backward', i === 0, function () { move(i, -1); }],
+       ['×', 'Remove this layer', false, function () { remove(i); }]].forEach(function (b) {
+        var bt = document.createElement('button'); bt.type = 'button'; bt.textContent = b[0]; bt.title = b[1]; bt.disabled = b[2];
+        bt.addEventListener('click', function (e) { e.stopPropagation(); b[3](); }); li.appendChild(bt);
+      });
+      li.addEventListener('click', function () { select(i); });
+      L.li = li; ul.appendChild(li);
+    })(i);
+    if (animate && li_animate) layers.forEach(function (L) {           // rows slide from their old place to the new one
+      if (!before.has(L)) return;
+      var dy = before.get(L) - L.li.getBoundingClientRect().top;
+      if (dy) L.li.animate([{ transform: 'translateY(' + dy + 'px)' }, { transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    });
+    $('count').textContent = layers.length + ' / ' + MAX_LAYERS; autoName();
+    $('empty').hidden = layers.length > 0; $('dl').disabled = !layers.length; $('push').disabled = !layers.length || !ghToken();
+    sliders.forEach(function (r) { r.disabled = !layers.length; }); $('reset').disabled = !layers.length; $('auto').disabled = !layers.length;
+    $('auto').innerHTML = layers.length > 1 ? '&#10024; Auto (all layers)' : '&#10024; Auto';
+    $('drop').style.display = layers.length >= MAX_LAYERS ? 'none' : '';
+  }
+  var li_animate = typeof Element !== 'undefined' && !!Element.prototype.animate &&
+                   !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function select(i, animate) {                                           // the controls now read and move this layer only
+    active = i; var L = cur();
+    if (L) { zoom.value = L.zoom; TONE_KEYS.forEach(function (k) { tones[k].value = L[k]; }); knobAt(L.pan); }
+    $('editing').innerHTML = L ? 'Editing <b></b>' : 'Add a photo to start.'; if (L) $('editing').querySelector('b').textContent = L.name;
+    readouts(); renderList(animate); draw();
+  }
+  function move(i, dir) {
+    var j = i + dir; if (j < 0 || j >= layers.length) return;
+    var t = layers[i]; layers[i] = layers[j]; layers[j] = t;
+    if (active === i) active = j; else if (active === j) active = i;
+    var old = layer(SIZE); old.getContext('2d').drawImage(cv, 0, 0);       // the preview before the swap, to cross-fade from
+    select(active, true);
+    if (li_animate) fadeFrom(old);
+    commit();
+  }
+  function fadeFrom(old) {                                                // 250 ms cross-fade from the old stacking to the new one
+    var t0 = performance.now();
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / 250);
+      draw(); if (k < 1) { ctx.save(); ctx.globalAlpha = 1 - k; ctx.drawImage(old, 0, 0); ctx.restore(); requestAnimationFrame(step); }
+    })(t0);
+  }
+  function remove(i) {
+    layers.splice(i, 1);
+    if (!layers.length) active = -1;
+    else if (active >= layers.length || active > i) active = Math.max(0, active - 1);
+    else if (active === i) active = Math.min(i, layers.length - 1);
+    select(active);
+    commit();
+  }
+
+  // ── controls (all write to the selected layer) ──
+  function readouts() {
+    $('zoom-v').textContent = parseFloat(zoom.value).toFixed(2) + 'x';
+    var sg = function (v, d) { v = parseFloat(v); return (v > 0 ? '+' : '') + (d ? v.toFixed(d) : String(Math.round(v))); };
+    $('exp-v').textContent = sg(tones.exp.value, 2);
+    ['con', 'hil', 'sha', 'wht', 'blk'].forEach(function (k) { $(k + '-v').textContent = sg(tones[k].value); });
+    var f = parseFloat(tones.flt.value); $('flt-v').textContent = f === 0 ? 'none' : (f > 0 ? 'warm ' : 'cool ') + Math.abs(f);
+  }
+  function fromSliders() { var L = cur(); if (!L) return; L.zoom = parseFloat(zoom.value); TONE_KEYS.forEach(function (k) { L[k] = parseFloat(tones[k].value); }); }
+  sliders.forEach(function (r) {
+    r.addEventListener('input', function () { fromSliders(); readouts(); if (r === zoom) draw(); else retone(); });
+    r.addEventListener('dblclick', function () { r.value = r.dataset.default; fromSliders(); readouts(); if (r === zoom) draw(); else retone(); commit(); });
+    r.addEventListener('change', commit);                                  // a slider released = one undo step
+  });
+  $('reset').addEventListener('click', function () {
+    var L = cur(); if (!L) return;
+    sliders.forEach(function (r) { r.value = r.dataset.default; }); fromSliders(); L.pan = { x: 0, y: 0 }; knobAt(L.pan); readouts(); retone(); commit();
+  });
+
+  // joystick (as on the community hero page): the knob's place is the selected layer's offset, -1..1 = ±370 px
+  var joy = $('joy'), knob = $('knob');
+  function knobAt(p) { var d = Math.max(1, Math.sqrt(p.x * p.x + p.y * p.y)); knob.style.transform = 'translate(' + (p.x / d * JOY_R) + 'px,' + (p.y / d * JOY_R) + 'px)'; }
+  function setPan(x, y) {
+    var L = cur(); if (!L) return;
+    var d = Math.sqrt(x * x + y * y); if (d > 1) { x /= d; y /= d; }
+    L.pan = { x: x, y: y }; knobAt(L.pan); draw();
+  }
+  function joyAt(e) { var b = joy.getBoundingClientRect(); setPan((e.clientX - b.left - b.width / 2) / JOY_R, (e.clientY - b.top - b.height / 2) / JOY_R); }
+  joy.addEventListener('pointerdown', function (e) { if (!cur()) return; e.preventDefault(); joy.setPointerCapture(e.pointerId); joyAt(e); });
+  joy.addEventListener('pointermove', function (e) { if (joy.hasPointerCapture(e.pointerId)) joyAt(e); });
+  joy.addEventListener('dblclick', function () { setPan(0, 0); commit(); });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { joy.addEventListener(ev, function () { if (cur()) commit(); }); });
+
+  // drag the selected photo itself on the preview (moves it 1:1 with the pointer); the other layers stay put
+  var stage = $('stage'), last = null;
+  stage.addEventListener('pointerdown', function (e) { if (!cur()) return; stage.setPointerCapture(e.pointerId); stage.classList.add('dragging'); last = { x: e.clientX, y: e.clientY }; });
+  stage.addEventListener('pointermove', function (e) {
+    var L = cur(); if (!last || !L || !stage.hasPointerCapture(e.pointerId)) return;
+    var k = SIZE / stage.getBoundingClientRect().width;
+    setPan(L.pan.x + (e.clientX - last.x) * k / PAN_RANGE, L.pan.y + (e.clientY - last.y) * k / PAN_RANGE); last = { x: e.clientX, y: e.clientY };
+  });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { stage.addEventListener(ev, function () { var moved = !!last; last = null; stage.classList.remove('dragging'); if (moved) commit(); }); });
+
+  // file input + drag and drop (on the picker and on the preview), several files at once
+  $('file').addEventListener('change', function () { addFiles(this.files); this.value = ''; });
+  [$('drop'), stage].forEach(function (el) {
+    ['dragenter', 'dragover'].forEach(function (ev) { el.addEventListener(ev, function (e) { e.preventDefault(); el.classList.add('over'); }); });
+    ['dragleave', 'drop'].forEach(function (ev) { el.addEventListener(ev, function (e) { e.preventDefault(); el.classList.remove('over'); }); });
+    el.addEventListener('drop', function (e) { if (e.dataTransfer.files) addFiles(e.dataTransfer.files); });
+  });
+  // ── undo / redo (Marek 2026-10-06): Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z (and Ctrl+Y). Every finished change is one step: a slider
+  // released or reset, a joystick or photo drag, Auto, Reset layer, photos added, a layer removed or moved, the file name.
+  // A step remembers which layers are in which order and every layer's settings (not the pictures themselves).
+  var hist = [], hpos = -1, HMAX = 100, restoring = false;
+  function settingsOf(L) { var o = { zoom: L.zoom, pan: { x: L.pan.x, y: L.pan.y } }; TONE_KEYS.forEach(function (k) { o[k] = L[k]; }); return o; }
+  function snap() { return { list: layers.map(function (L) { return { L: L, s: settingsOf(L) }; }), active: active, name: $('name').value, nameTouched: nameTouched }; }
+  function sameSnap(a, b) {
+    if (!a || !b || a.list.length !== b.list.length || a.name !== b.name) return false;
+    for (var i = 0; i < a.list.length; i++) if (a.list[i].L !== b.list[i].L || JSON.stringify(a.list[i].s) !== JSON.stringify(b.list[i].s)) return false;
+    return true;
+  }
+  function commit() {
+    if (restoring) return;
+    var st = snap(); if (hpos >= 0 && sameSnap(hist[hpos], st)) return;
+    hist = hist.slice(0, hpos + 1); hist.push(st); if (hist.length > HMAX) hist.shift(); hpos = hist.length - 1;
+  }
+  function restore(st) {
+    restoring = true;
+    layers.length = 0;
+    st.list.forEach(function (e) {
+      var L = e.L, before = JSON.stringify(TONE_KEYS.map(function (k) { return L[k]; }));
+      L.zoom = e.s.zoom; L.pan = { x: e.s.pan.x, y: e.s.pan.y }; TONE_KEYS.forEach(function (k) { L[k] = e.s[k]; });
+      if (JSON.stringify(TONE_KEYS.map(function (k) { return L[k]; })) !== before) { regray(L); L.tone.getContext('2d').putImageData(applyTone(L.gray, lut(L)), 0, 0); }
+      layers.push(L);
+    });
+    nameTouched = st.nameTouched; $('name').value = st.name;
+    select(Math.min(st.active, layers.length - 1));
+    $('name').value = st.name;                                            // renderList's auto-name must not override the step
+    restoring = false;
+  }
+  function undo() { if (hpos > 0) { hpos--; restore(hist[hpos]); } }
+  function redo() { if (hpos < hist.length - 1) { hpos++; restore(hist[hpos]); } }
+  document.addEventListener('keydown', function (e) {
+    if (!(e.metaKey || e.ctrlKey) || e.altKey) return;
+    var k = e.key.toLowerCase(), t = e.target;
+    if (k !== 'z' && k !== 'y') return;
+    if (t && (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && /^(text|search|email|url)$/i.test(t.type)))) return;   // the field's own text undo
+    if (!$('bx').hidden || !$('gh').hidden || !$('ok').hidden) return;    // not while a window is open
+    e.preventDefault();
+    if (k === 'y' || e.shiftKey) redo(); else undo();
+  });
+
+  select(-1); commit(); ghRefresh();
+  window.__headshot = { sendFiles: sendFiles, ghSet: ghSet, findFace: findFace, skinMedian: skinMedian, skinBright: skinBright, undo: undo, redo: redo, commit: commit, batchAdd: batchAdd, batchRun: batchRun, makeZip: makeZip, getLandmarker: getLandmarker, load: load, addFiles: addFiles, select: select, move: move, remove: remove, setPan: setPan, render: render, layers: layers };   // for automated checks
+})();
+</script>
+<script>/* rewrite_assets.py: reload when a newer build is out */(function(){var m=document.querySelector('meta[name="build"]');if(!m||!window.fetch)return;var mine=m.getAttribute('content'),busy=0,bar=null;function engaged(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;var f=document.querySelectorAll('input,textarea');for(var i=0;i<f.length;i++){var e=f[i];if(/^(checkbox|radio)$/.test(e.type)?e.checked!==e.defaultChecked:(e.type!=='hidden'&&e.value!==e.defaultValue))return true}return !!document.querySelector('.modal.show')}function offer(){if(bar||!document.body)return;bar=document.createElement('div');bar.setAttribute('role','status');bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2000;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#111;color:#fff;padding:10px 12px 10px 18px;border-radius:999px;font:600 14px/1.3 Montserrat,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)';var t=document.createElement('span');t.textContent='This page was just updated (schedule, speakers or sponsors)';bar.appendChild(t);var b=document.createElement('button');b.type='button';b.textContent='Refresh';b.style.cssText='border:0;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;background:#fff;color:#111';b.onclick=function(){location.reload()};bar.appendChild(b);document.body.appendChild(bar)}function check(auto){if(busy||document.visibilityState==='hidden')return;busy=1;fetch('/build.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!j.build||j.build===mine)return;var again=false;try{again=sessionStorage.getItem('fresh-reload')===j.build;sessionStorage.setItem('fresh-reload',j.build)}catch(e){}if(auto&&!again&&!engaged())location.reload();else offer()})['catch'](function(){busy=0})}check(true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')check(true)});addEventListener('pageshow',function(e){if(e.persisted)check(true)});setInterval(function(){check(false)},300000)})()</script>
+</body>
+</html>

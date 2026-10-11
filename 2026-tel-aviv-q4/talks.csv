@@ -1,0 +1,72 @@
+YouTube,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
+,talk,Sharone Revah Zitzman,1,1,RTFM Please LTD,Sharone Revah Zitzman.png,https://www.linkedin.com/in/sharonez/,,,,MC & Opening Words,"We're bringing LLMDay + Data to Tel Aviv for the first time ever in partnership with Microsoft and TeraSky to focus on the intersection between LLMs, AI and Big Data Engineering. Expect excellent talks on everything from LLMs to data engineering, analytics and how all of this powers what's coming next with AI.
+Join us at the Microsoft Reactor, in Midtown Tel Aviv with 200 data and LLM enthusiasts - and get your talks submitted, CFP is open until October 17th!",,"Sharone Zitzman, is a developer relations professional and an open source community builder, who likes to work with engineering teams that are building products that developers love. Having built both the DevOps Israel and Cloud Native & OSS Israel communities from the ground up, today she spends her time at her company RTFM Please, building dev-first adoption strategies to bring excellent technology and people together. You can find her at rtfmplease.dev, or on Twitter & Github as @shar1z."
+,workshop,Haggai Zohar,1,1,TeraSky,Haggai Zohar.png,https://www.linkedin.com/in/haggai-zohar-3a9611/,,,,Company Brain with Fabric and Claude,"Most enterprise knowledge doesn't answer questions — it sits locked in
+semantic models, dashboards, and databases, waiting for someone who
+knows DAX or SQL to ask. This workshop shows you how to connect
+Claude AI to a Microsoft Fabric semantic layer using the Model Context
+Protocol (MCP), turning your organization's data into a conversational
+Company Brain that any business user can talk to.
+We'll build an end-to-end agentic RAG architecture on Azure: indexing your
+Fabric schema into Azure AI Search, generating embeddings with Azure
+OpenAI, and deploying a Remote MCP Server on Azure Container Apps
+that exposes structured tools — schema retrieval, DAX execution, and
+dataset discovery — to Claude. You'll see how a business user can ask
+""what were our top products by revenue last quarter?"" in plain English and
+get an accurate, governed answer in seconds, with no DAX knowledge
+required.
+
+We'll also cover the security layer: OAuth 2.0 with Azure Entra ID, On-
+Behalf-Of token flow, and automatic row-level security — so your
+
+Company Brain respects the same governance policies as your Fabric
+workspace. You'll leave with a working architecture pattern you can adapt
+
+to your own data models, and a clear understanding of when RAG-over-
+schema beats fine-tuning or search-only approaches.",,"Haggai Zohar is a Data Tech Lead at TeraSky, where he designs cloud data platforms and the AI systems built on top of them. A Technion graduate (cum laude), he holds AWS Machine Learning Specialty and AWS Solutions Architect certifications and works across AWS, Azure and Microsoft Fabric. He recently spoke on ""RAG on Your Data Lake"" at TLV Community's AWS DevOps 2026 conference, and he loves turning messy company data into something an LLM can actually use."
+,workshop,Haggai Zohar,1,1,TeraSky,Haggai Zohar.png,https://www.linkedin.com/in/haggai-zohar-3a9611/,,,,Company Brain with Fabric and Claude,"Most enterprise knowledge doesn't answer questions — it sits locked in
+semantic models, dashboards, and databases, waiting for someone who
+knows DAX or SQL to ask. This workshop shows you how to connect
+Claude AI to a Microsoft Fabric semantic layer using the Model Context
+Protocol (MCP), turning your organization's data into a conversational
+Company Brain that any business user can talk to.
+We'll build an end-to-end agentic RAG architecture on Azure: indexing your
+Fabric schema into Azure AI Search, generating embeddings with Azure
+OpenAI, and deploying a Remote MCP Server on Azure Container Apps
+that exposes structured tools — schema retrieval, DAX execution, and
+dataset discovery — to Claude. You'll see how a business user can ask
+""what were our top products by revenue last quarter?"" in plain English and
+get an accurate, governed answer in seconds, with no DAX knowledge
+required.
+
+We'll also cover the security layer: OAuth 2.0 with Azure Entra ID, On-
+Behalf-Of token flow, and automatic row-level security — so your
+
+Company Brain respects the same governance policies as your Fabric
+workspace. You'll leave with a working architecture pattern you can adapt
+
+to your own data models, and a clear understanding of when RAG-over-
+schema beats fine-tuning or search-only approaches.",,"Haggai Zohar is a Data Tech Lead at TeraSky, where he designs cloud data platforms and the AI systems built on top of them. A Technion graduate (cum laude), he holds AWS Machine Learning Specialty and AWS Solutions Architect certifications and works across AWS, Azure and Microsoft Fabric. He recently spoke on ""RAG on Your Data Lake"" at TLV Community's AWS DevOps 2026 conference, and he loves turning messy company data into something an LLM can actually use."
+,workshop,Haggai Zohar,1,1,TeraSky,Haggai Zohar.png,https://www.linkedin.com/in/haggai-zohar-3a9611/,,,,Company Brain with Fabric and Claude,"Most enterprise knowledge doesn't answer questions — it sits locked in
+semantic models, dashboards, and databases, waiting for someone who
+knows DAX or SQL to ask. This workshop shows you how to connect
+Claude AI to a Microsoft Fabric semantic layer using the Model Context
+Protocol (MCP), turning your organization's data into a conversational
+Company Brain that any business user can talk to.
+We'll build an end-to-end agentic RAG architecture on Azure: indexing your
+Fabric schema into Azure AI Search, generating embeddings with Azure
+OpenAI, and deploying a Remote MCP Server on Azure Container Apps
+that exposes structured tools — schema retrieval, DAX execution, and
+dataset discovery — to Claude. You'll see how a business user can ask
+""what were our top products by revenue last quarter?"" in plain English and
+get an accurate, governed answer in seconds, with no DAX knowledge
+required.
+
+We'll also cover the security layer: OAuth 2.0 with Azure Entra ID, On-
+Behalf-Of token flow, and automatic row-level security — so your
+
+Company Brain respects the same governance policies as your Fabric
+workspace. You'll leave with a working architecture pattern you can adapt
+
+to your own data models, and a clear understanding of when RAG-over-
+schema beats fine-tuning or search-only approaches.",,"Haggai Zohar is a Data Tech Lead at TeraSky, where he designs cloud data platforms and the AI systems built on top of them. A Technion graduate (cum laude), he holds AWS Machine Learning Specialty and AWS Solutions Architect certifications and works across AWS, Azure and Microsoft Fabric. He recently spoke on ""RAG on Your Data Lake"" at TLV Community's AWS DevOps 2026 conference, and he loves turning messy company data into something an LLM can actually use."
