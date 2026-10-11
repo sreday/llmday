@@ -29,6 +29,8 @@
  *   Re-deploy after editing: Deploy -> Manage deployments -> edit -> new version (the URL stays the same).
  *   v10 (2026-09-22): version bump only, so the /onboarding/ pages can tell a fresh deployment from the stale v9 one.
  *   v11 (2026-09-22): the sent thread is archived (labelled, read) instead of pulled into the Inbox.
+ *   v12 (2026-10-11): FAQ gains the promo cards link (<event>/teasers/) and speaker certificates; the visa letter
+ *   point is gone (Marek: "it's being misunderstood too often").
  */
 
 var BRANDS = {
@@ -50,7 +52,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 11 });   // v11: sent mail stays out of the inbox
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 12 });   // v12: promo cards + certificates in the FAQ, no visa point
 }
 
 function doPost(e) {
@@ -237,6 +239,7 @@ function composeOnboarding(ev, brand) {
     '1. Expected attendance - around ' + (ev.attendees || 100) + ' people',
     '1. There will be WiFi access in the venue',
     '1. Previous ' + ev.brand_name + ' talks: ' + (ev.youtube_url ? '[' + ev.youtube_url + '](' + ev.youtube_url + ')' : 'on our YouTube channel'),
+    '1. Promo cards: [' + ev.event_url + 'teasers/](' + ev.event_url + 'teasers/). You can post about your session straight away!',
   ].concat(ev.is_free ? [
     '1. The event is free to attend - feel free to invite your team and friends: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
   ] : [
@@ -247,7 +250,7 @@ function composeOnboarding(ev, brand) {
     "1. Laptop connection to present: wired or wireless. If it's wireless then Google Meet / ZOOM. If wired, then we'll have HDMI and USB-C connectors",
     '1. Travel / accommodation / speaker compensation - unfortunately, those are not covered',
     "1. Your company wants to sponsor the event? Here's the form: [" + ev.event_url + '#sponsors](' + ev.event_url + '#sponsors)',
-    '1. Visa support letter is available on request'
+    "1. Speaker certificates: we'll send one after the conference to every speaker who delivers their session"
   ]));
   return {
     subject: ev.event_name + ' - ' + ev.month_day + ' - Info for speakers',
