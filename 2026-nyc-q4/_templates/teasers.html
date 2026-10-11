@@ -558,6 +558,10 @@
               <button type="button" data-crl="cols" aria-pressed="true">Columns</button>
               <button type="button" data-crl="stack" aria-pressed="false">Stack</button>
             </div>
+            {% if tz.city_bg %}<div class="tz-sort" role="group" aria-label="Look" id="cr-look">
+              <button type="button" data-crv="modern" aria-pressed="true">Modern</button>
+              <button type="button" data-crv="city" aria-pressed="false">City view</button>
+            </div>{% endif %}
           </div>
         </div>
         <div class="cr-step cr-pick">
@@ -1526,7 +1530,7 @@
       // or the sponsor cards. No slide limit (LinkedIn allows 300 pages / 100 MB). The PDF is written here by hand: every page
       // 810 x 810 pt (1080 px), one flattened image each.
       var crSec = document.getElementById('cr-sec'), crCover = document.getElementById('gn-pool') ? 'halo' : 'none',
-        crMode = 'single', crLayout = 'cols', crPicked = [], crSpPicked = null, crAll = false,   // crAll: Select all was the last choice
+        crMode = 'single', crLayout = 'cols', crLook = 'modern', crPicked = [], crSpPicked = null, crAll = false,   // crAll: Select all was the last choice
         crSizes = null;   // Duos & Trios: the group sizes in the order they were dragged to (used while they still add up)
       var crTalks = mxTalks.slice().sort(function (a, b) { return a.slot.dataset.web - b.slot.dataset.web; });
       function crGroups(list) {                  // the auto-divide rule: Trios, then Duos, never a talk on its own
@@ -1600,14 +1604,36 @@
       function crCard(slide, host) {             // the slide's 1200 px card, built into host and fitted there
         host.innerHTML = '';
         if (slide.kind === 'group') { var keep = mxLayout; mxLayout = crLayout; var c = mxBuild(slide.g, host); mxLayout = keep; return c; }
-        var src = slide.kind === 'cover' ? document.getElementById('gn-card-' + slide.d) : slide.kind === 'sp' ? slide.slot.querySelector('.tz-card') : slide.p.slot.querySelector('.tz-card');
+        var city = slide.kind === 'talk' && crLook === 'city' && slide.p.slot.querySelector('.cv-card');
+        var src = slide.kind === 'cover' ? document.getElementById('gn-card-' + slide.d) : slide.kind === 'sp' ? slide.slot.querySelector('.tz-card') : city || slide.p.slot.querySelector('.tz-card');
         var card = uniqIds(src.cloneNode(true)); card.removeAttribute('id'); card.style.transform = ''; host.appendChild(card);
         if (slide.kind === 'cover') crFitCity(card);
+        else if (city) crFitCv(card);
         else {
           card.querySelectorAll('[data-fit]').forEach(fitLines);
           card.querySelectorAll('.tz-talk[data-lines]').forEach(fitTitle);   // the copy is fitted itself, laid out or not elsewhere
         }
         return card;
+      }
+      // a solo talk in City view (Marek 2026-10-11, "pick between modern and city view in carousel build"): the copy fitted like
+      // the page's City view cards (cvFit, which fits them all at once on the page: same steps, on this one card)
+      function crFitCv(card) {
+        card.querySelectorAll('[data-fit]').forEach(cvWrap);
+        var w = card.querySelector('.cv-who');
+        if (w) { w.style.top = ''; var over = w.offsetTop + w.offsetHeight - 964; if (over > 0) w.style.top = (w.offsetTop - over) + 'px'; }
+        var el = card.querySelector('.cv-talk'); if (!el) return;
+        el.style.transform = '';
+        var withBr = el.innerHTML, best = null;
+        [withBr, withBr.replace(/<br class="sep">/g, ' ')].forEach(function (h, vi) {
+          if (vi && h === withBr) return;
+          el.innerHTML = h;
+          var sz = 54; el.style.fontSize = sz + 'px';
+          while (sz > 28 && (el.offsetHeight > 420 || el.scrollWidth > el.clientWidth)) { sz -= 1; el.style.fontSize = sz + 'px'; }
+          var n = Math.round(el.offsetHeight / (sz * 1.12));
+          if (!best || sz > best.s || (sz === best.s && n < best.n)) best = { h: h, s: sz, n: n };
+        });
+        el.innerHTML = best.h; el.style.fontSize = best.s + 'px';
+        centreTitle(el);
       }
       function crDraw() {
         if (!crSec) return;
@@ -1616,6 +1642,8 @@
         if (crMode === 'sponsors' && ttl.value === ttlTalks) ttl.value = ttlSp; else if (crMode !== 'sponsors' && ttl.value === ttlSp) ttl.value = ttlTalks;   // unless edited
         var slides = crSlides(), items = crItems();
         document.getElementById('cr-layout').hidden = crMode !== 'group';
+        var look = document.getElementById('cr-look');   // Duos & Trios and sponsor cards have no City view
+        if (look) { look.hidden = crMode !== 'single'; look.querySelectorAll('[data-crv]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.crv === crLook ? 'true' : 'false'); }); }
         document.querySelectorAll('[data-cr]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cr === crMode ? 'true' : 'false'); });
         document.querySelectorAll('[data-crl]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.crl === crLayout ? 'true' : 'false'); });
         document.querySelectorAll('.cr-cov').forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.d === crCover ? 'true' : 'false'); });
@@ -1706,12 +1734,15 @@
             }; im.onerror = fail; im.src = src;
           });
         }
-        var built = slide.kind === 'talk' && slide.p.slot.querySelector('a.tz-dl:not(.th-dl):not(.cv-dl)');
+        var built = slide.kind === 'talk' && slide.p.slot.querySelector(crLook === 'city' && slide.p.slot.querySelector('a.cv-dl') ? 'a.cv-dl' : 'a.tz-dl:not(.th-dl):not(.cv-dl)');
         var first = built ? fetch(built.getAttribute('href'), { cache: 'force-cache' }).then(function (r) {
           if (!r.ok || !/image/.test(r.headers.get('content-type') || '')) throw new Error('no built PNG');
           return r.blob();
         }).then(function (b) { return toJpeg(URL.createObjectURL(b)); }) : Promise.reject();
-        return first.catch(function () { return pngOf(crCard(slide, stage)).then(toJpeg); });
+        return first.catch(function () {
+          var card = crCard(slide, stage), bg = card.querySelector('.cv-bg');   // a City view copy: its panorama decoded first
+          return (bg && bg.decode ? bg.decode().catch(function () {}) : Promise.resolve()).then(function () { return pngOf(card); }).then(toJpeg);
+        });
       }
       function crPdf(jpegs) {                    // a minimal PDF 1.4: catalog, pages, then per slide a page, its content, its image
         var enc = new TextEncoder(), parts = [], off = 0, xref = [], n = jpegs.length;
@@ -1762,6 +1793,7 @@
         });
         document.querySelectorAll('[data-cr]').forEach(function (b) { b.addEventListener('click', function () { if (crMode !== b.dataset.cr) crAll = false; crMode = b.dataset.cr; crDraw(); }); });
         document.querySelectorAll('[data-crl]').forEach(function (b) { b.addEventListener('click', function () { crLayout = b.dataset.crl; crDraw(); }); });
+        document.querySelectorAll('[data-crv]').forEach(function (b) { b.addEventListener('click', function () { crLook = b.dataset.crv; crDraw(); }); });
         document.getElementById('cr-clear').addEventListener('click', function () { crAll = false; crSetPicked([]); crDraw(); });
         document.getElementById('cr-copy').addEventListener('click', function () {
           var b = this, v = document.getElementById('cr-ttl').value;
