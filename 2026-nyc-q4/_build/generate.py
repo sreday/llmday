@@ -2001,6 +2001,15 @@ _TZ_CITY = {'llmday': ('#020c09', '#598f76', '#062019'), 'sreday': ('#04020c', '
             'platformday': ('#0b0602', '#a07a3a', '#1f0c05'), 'pec': ('#04040f', '#66709c', '#0d1430')}
 _TZ_CITY['prompt engineering conference'] = _TZ_CITY['pec']
 context['tz']['city_bg'] = None
+# the host cards' venue photo and vignette (Marek 2026-10-11, "darken with dark {brand color} instead of just black"): the
+# brand's mid colour (the City view's) multiplied over the photo at the share that darkens it as much as before, and a deep
+# shade of it for the vignette
+_tz_tint = _TZ_CITY.get(_tz_key, (None, _tz_k['accent'], None))[1]
+_tz_rgb = [int(_tz_tint[i:i + 2], 16) for i in (1, 3, 5)]
+_tz_lum = (.299 * _tz_rgb[0] + .587 * _tz_rgb[1] + .114 * _tz_rgb[2]) / 255
+context['tz']['tint'] = _tz_tint
+context['tz']['tint_k'] = round(1 / max(.2, 1 - _tz_lum), 3)            # multiply share per unit of darkening
+context['tz']['tint_dark'] = '#%02x%02x%02x' % tuple(round(c * .28) for c in _tz_rgb)
 _tz_city = str(context['hero_event'].get('city') or context.get('city_name') or '').strip().lower()
 if _tz_city and not _EVENT_ENDED and _os.path.isdir('../panoramas'):
     _tz_pano = next((_f for _f in sorted(_os.listdir('../panoramas')) if _os.path.splitext(_f)[0].strip().lower() == _tz_city
@@ -2185,6 +2194,24 @@ for _t in talks_raw:                                         # spreadsheet order
         context['teaser_talks'][-1]['file'] = '%s-%d.png' % (_base, _n)
 for _x in context['teaser_talks']:
     _x['cv_file'] = _x['file'][:-4] + '-city.png'          # its City view picture, next to it
+# City view text around the speaker (Marek 2026-10-11, "the text might come into the transparent part of the speaker
+# image"): the headshot (circle + head above it) drawn 760 px at 466 / 288 on the card - per 8 px band of card rows,
+# from y 288, the leftmost x the picture is opaque at (1200: nothing there). The page flows the title round it.
+if context['tz'].get('city_bg'):
+    try:
+        from PIL import Image as _TzImage
+        _cv_edges = {}
+        for _x in context['teaser_talks']:
+            _f = '../speakers/' + _os.path.basename(str(_x.get('photo') or ''))
+            if not _x.get('photo') or not _os.path.isfile(_f):
+                continue
+            if _f not in _cv_edges:
+                _m = _TzImage.open(_f).convert('RGBA').getchannel('A').resize((760, 760), _TzImage.BILINEAR).point(lambda v: 255 if v > 48 else 0)
+                _cv_edges[_f] = ','.join(str(466 + _bb[0] if _bb else 1200)
+                                         for _bb in (_m.crop((0, _y, 760, _y + 8)).getbbox() for _y in range(0, 760, 8)))
+            _x['cv_edge'] = _cv_edges[_f]
+    except Exception as _e:                                       # noqa: BLE001 - the title keeps its plain column
+        print('WARN teasers: City view outlines not measured (%s: %s)' % (type(_e).__name__, _e))
 for _i, _x in enumerate(sorted(context['teaser_talks'], key=lambda x: x['_web'])):
     _x['web'] = _i                                            # position on the website (schedule order)
 _th_seen = set()
