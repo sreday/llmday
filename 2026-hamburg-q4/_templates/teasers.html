@@ -1476,7 +1476,7 @@
       }
       function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
       var mxTalks = slots.filter(function (s) { return s.querySelector('.tz-card') && !s.classList.contains('tz-na'); }).map(function (s) {
-        var names = [].map.call(s.querySelectorAll('.tz-name'), function (n) { return n.textContent.trim(); });
+        var names = [].map.call(s.querySelectorAll('.tz-card:not(.cv-card) .tz-name'), function (n) { return n.textContent.trim(); });   // the Modern card's only: the City view card repeats them
         var org = s.querySelector('.tz-org'), photo = s.querySelector('.tz-photo');
         return { slot: s, name: names.join(' & '), org: org ? org.textContent.trim() : '', track: s.dataset.track || '',
                  title: mxTitle(s.querySelector('.tz-talk')), photo: photo ? photo.getAttribute('src') : '' };
