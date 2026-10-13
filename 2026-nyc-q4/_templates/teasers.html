@@ -408,6 +408,10 @@
     .cr-step select { font: 600 .85rem 'Montserrat', sans-serif; padding: 6px 10px; border-radius: 999px; border: 1px solid #cfcfd6; background: #fff; }
     /* City view, fitted out of sight before the cards turn to it (Marek 2026-10-11) */
     body.cv-measure .tz-slot > .cv-frame { display: block !important; position: absolute; left: 0; top: 0; width: 100%; visibility: hidden; }
+    /* the event's artwork from the website, last in the Generic tab (Marek 2026-10-12): the file as it is, downloaded as is */
+    .gn-art { align-self: start; }
+    .gn-art img { display: block; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.14); background: #f3f3f6; }
+    .gn-art .gn-art-cap { margin-bottom: 10px; font: 600 .85rem 'Montserrat', sans-serif; color: #555; }
     /*/tools*/
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
@@ -993,6 +997,20 @@
         var dl = copy.querySelector('.gn-dl');
         if (dl) { dl.title = 'Download the City view cover (PNG)'; dl.setAttribute('aria-label', 'Download the City view cover (PNG)'); }
         slot.parentNode.insertBefore(copy, slot.nextSibling);
+      })();
+      // the event's artwork from the website (Marek 2026-10-12): the banner as it is on the home page, downloadable as is,
+      // after the covers. Added here, not in the markup: markup after the last talk card would count in that card's picture key
+      (function () {
+        var gp = document.getElementById('gn-pool'), src = {{ (hero_event.banner or '')|tojson }};
+        if (!gp || !src) return;
+        var ext = src.split('.').pop(), file = {{ (hero_event.event_name or brand_name)|tojson }} + '.' + ext, el = document.createElement('div');
+        el.className = 'gn-slot gn-art';
+        el.innerHTML = '<div class="gn-art-cap">Event artwork from the website</div><img src="' + src + '" alt="" loading="lazy">' +
+          '<a class="tz-dl" href="' + src + '" title="Download the event artwork (' + ext.toUpperCase() + ')" aria-label="Download the event artwork (' + ext.toUpperCase() + ')">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>';
+        el.querySelector('a').setAttribute('download', file);
+        el.querySelector('img').alt = file.replace(/\.[a-z]+$/i, '') + ' artwork';
+        gp.appendChild(el);
       })();
       // 3. search + sorting: spreadsheet order (one grid) or by track (one grid per track, each with its download button)
       var pool = document.getElementById('tz-pool'), groups = document.getElementById('tz-groups');
