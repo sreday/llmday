@@ -1,7 +1,7 @@
 {# ── Community Hero (hidden page, /<event>/communityhero/). Standalone: does NOT extend _base.html.
      One-stop shop for people who applied for a Community Hero ticket (a free seat in exchange for telling
      their friends): 1. their details incl. a photo, 2. a 1500x1500 share card drawn in the browser (brand wordmark + their photo),
-     3. the event art from the home page, 4. two ready-made posts (Personal / Professional) and 5. three message drafts
+     3. a pointer to the event's /teasers/ page (its tabs, incl. the event art), 4. two ready-made posts (Personal / Professional) and 5. three message drafts
      (Coworker / Friend / Group), all fed by the event facts + the About panel, 6. a report of what they did with links and screenshots, posted as base64 JSON to
      communityhero_form_url (home/metadata.yml; backend llmday/_build/communityhero-form.gs = "Community hero"),
      which emails Anna From the brand alias with the hero in Cc: "<Name> - Community Hero - <Event>".
@@ -96,6 +96,14 @@
     .btn-ch:active { transform: scale(.97); }
     .btn-ch[disabled] { opacity: .55; cursor: default; }
     .btn-ch.ghost { background: color-mix(in srgb, var(--ch-accent) 12%, #fff); color: var(--ch-accent); border: 1px solid color-mix(in srgb, var(--ch-accent) 45%, #fff); }
+    /* step 3: the teasers page, one tile per tab (Marek 2026-10-12) */
+    .ch-tz-lead { margin: 0 0 14px; color: #444; line-height: 1.5; }
+    .ch-tz-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .ch-tz-links a { display: block; padding: 14px 16px; border-radius: 12px; text-decoration: none; color: #444; font-size: .88rem; line-height: 1.4;
+      background: color-mix(in srgb, var(--ch-accent) 7%, #fff); border: 1px solid color-mix(in srgb, var(--ch-accent) 30%, #fff); transition: border-color .2s, transform .2s; }
+    .ch-tz-links a:hover { border-color: var(--ch-accent); transform: translateY(-2px); }
+    .ch-tz-links b { display: block; font: 700 .95rem 'Montserrat', sans-serif; color: var(--ch-accent); margin-bottom: 2px; }
+    @media (max-width: 575.98px) { .ch-tz-links { grid-template-columns: 1fr; } }
     /* variant tabs */
     .ch-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
     .ch-tabs button { border: 1px solid #ddd; background: #fff; border-radius: 999px; padding: 7px 16px; font: inherit; font-size: .9rem; font-weight: 600; color: #444; cursor: pointer; }
@@ -185,13 +193,20 @@
     </div>
 
     {% set ch_n = namespace(i=2) %}
-    {% if hero_event.banner %}{% set ch_n.i = ch_n.i + 1 %}
+    {# the teasers page instead of the event art alone (Marek 2026-10-12): the artwork now sits in its Generic tab, next to
+       every talk's card, Duo / Trio cards, covers and a LinkedIn carousel - all free to post #}
+    {% set ch_n.i = ch_n.i + 1 %}
     <div class="ch-card">
-      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>Event art from the website</h2><small>if you prefer to post something more generic</small></div>
-      <div class="ch-canvas-wrap"><img src="{{ hero_event.banner }}" alt="{{ hero_event.event_name }}"></div>
-      <div class="ch-row"><a class="btn-ch" href="{{ hero_event.banner }}" download="{{ hero_event.event_name }}.{{ hero_event.banner.split('.')[-1] }}">Download the artwork</a><span class="ch-hint">Use it next to your card, or on its own.</span></div>
+      <div class="ch-step"><i>{{ ch_n.i }}</i><h2>More pictures to post</h2><small>ready-made, free to use</small></div>
+      <p class="ch-tz-lead">The <b>{{ hero_event.event_name }}</b> teasers page has pictures ready for your posts. Use them next to your card, or on their own:</p>
+      <div class="ch-tz-links">
+        <a href="../teasers/"><b>Talk teasers</b><span>a card for every talk, to share the ones you're looking forward to</span></a>
+        <a href="../teasers/#duo-trio"><b>Duo / Trio</b><span>two or three talks you pick, in one picture</span></a>
+        <a href="../teasers/#generic"><b>Generic</b><span>covers with the city and date, and the event artwork from the website</span></a>
+        <a href="../teasers/#carousel"><b>Carousel</b><span>a LinkedIn document post, the talks slide by slide</span></a>
+      </div>
+      <div class="ch-row"><a class="btn-ch" href="../teasers/">Explore the teasers</a><span class="ch-hint">Download whatever you like, as many as you like.</span></div>
     </div>
-    {% endif %}
 
     {% if not hero_event.is_free %}
     <div class="ch-card" id="ch-code-card">{% set ch_n.i = ch_n.i + 1 %}
@@ -734,9 +749,18 @@ function drawCard() {
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
   // venue bar: pin, venue + street on the left, the hero ticket code (own line) and what it gives on the right
   var y = 1210, h = 190, hc = E.is_free ? ['FREE', 'Register now'] : heroCode(), code = hc[0], codeW = 0;
+  if (code) { ctx.font = '900 60px Montserrat, Arial, sans-serif'; codeW = ctx.measureText(code).width;
+    ctx.font = '600 34px Montserrat, Arial, sans-serif'; codeW = Math.max(codeW, ctx.measureText(hc[1]).width); }
+  // a ticket's tear line between the place and the code (Marek 2026-10-12, as on the teaser tickets): two half-circle
+  // notches punched out of the bar and a dashed line between them
+  var px = 1360 - codeW - 60, nr = 26;
+  if (code) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.moveTo(px + nr, y); ctx.arc(px, y, nr, 0, Math.PI * 2);
+    ctx.moveTo(px + nr, y + h); ctx.arc(px, y + h, nr, 0, Math.PI * 2); ctx.clip('evenodd'); }
   glass(90, y, 1320, h, 40, 'rgba(255,255,255,.18)');
-  if (code) { ctx.font = '900 60px Montserrat, Arial, sans-serif'; codeW = ctx.measureText(code).width; }
-  var textMax = 1360 - 260 - (code ? codeW + 50 : 0);
+  if (code) { ctx.restore();
+    ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,.28)'; ctx.lineWidth = 4; ctx.setLineDash([16, 11]);
+    ctx.beginPath(); ctx.moveTo(px, y + nr + 10); ctx.lineTo(px, y + h - nr - 10); ctx.stroke(); ctx.restore(); }
+  var textMax = code ? px - 50 - 260 : 1360 - 260;
   pinIcon(190, y + h / 2, 84, K.accent); ctx.textAlign = 'left';
   ctx.fillStyle = '#fff'; fitText(E.venue_short || E.city || '', textMax, 56, '800'); ctx.fillText(E.venue_short || E.city || '', 260, y + h / 2 - 26);
   ctx.fillStyle = 'rgba(255,255,255,.7)';
