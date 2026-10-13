@@ -44,9 +44,8 @@
     .bar > .plus s { display: block; width: 8px; height: 8px; border-radius: 50%; text-decoration: none; background: #fff; filter: drop-shadow(0 0 1px rgba(0,0,0,.18)); }
     .pct { font-size: .82rem; color: #555; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
-    /* Free-to-attend events (Marek 2026-09-19): a small grey pill right after the event name */
-    .free-pill { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: #c4c9cf; color: #fff; font-size: .66rem; font-weight: 700; letter-spacing: .06em; line-height: 1.5; vertical-align: 2px; white-space: nowrap; }
-    .reg-head .free-pill { margin-left: -4px; align-self: center; }   /* .reg-head already has a 12px flex gap */
+    /* Free-to-attend events (Marek 2026-10-12): a small outlined tag leading the grey meta line, so it always sits in the same spot instead of wrapping after names of varying length */
+    .free-tag { display: inline-block; margin-right: 6px; padding: 0 5px; border: 1px solid #c4c9cf; border-radius: 4px; color: #8a9099; font-size: .62rem; font-weight: 700; letter-spacing: .06em; line-height: 1.5; vertical-align: 1px; white-space: nowrap; }
     td.hours { white-space: nowrap; font: inherit; }
     td.hours.na { color: #aaa; }
     /* Schedule still not announced with the event a month out (Marek 2026-09-27): a red nudge, not a grey shrug */
@@ -397,7 +396,7 @@
         {% set fill = [r.pct, 100] | min %}
         {% set over = r.pct > 100 %}
         <tr>
-          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a>{% if r.is_free %}<span class="free-pill" title="Free to attend">FREE</span>{% endif %}<small>{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}</small></td>
+          <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{% if r.is_free %}<span class="free-tag" title="Free to attend">FREE</span>{% endif %}{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}</small></td>
           <td class="num trk" data-unit="{{ 'track' if r.tracks | int == 1 else 'tracks' }}">{{ r.tracks }}</td>
           <td class="num tlk" data-unit="talks"><strong>{{ r.confirmed }}</strong>{% if r.drafts %} <span class="draft" title="status draft in talks.csv: waiting for confirmation, not on the site">+ {{ r.drafts }} draft</span>{% endif %} / {{ r.available }}</td>
           <td class="prog">
@@ -478,13 +477,13 @@
       </div>
       <div class="reg-body">
       <div class="reg-head">
-        <a href="{{ r.url }}">{{ r.name }}</a>{% if r.is_free %}<span class="free-pill" title="Free to attend">FREE</span>{% endif %}
+        <a href="{{ r.url }}">{{ r.name }}</a>
         {% if r.luma %}
         {% if r.luma.capacity or r.luma.approved_api != r.luma.total %}<span class="reg-total">{% if r.luma.capacity %}<em class="na">(Luma capacity {{ r.luma.capacity }})</em>{% endif %}{% if r.luma.approved_api != r.luma.total %} <em class="na">(Luma counts {{ r.luma.approved_api }} approved)</em>{% endif %}</span>{% endif %}
         <span class="spacer"></span>
-        <small>+{{ r.luma.last7 }} in 7 days{% if r.luma.pending or r.luma.waitlist %} · {{ r.luma.pending }} pending{% if r.luma.waitlist %}, {{ r.luma.waitlist }} waitlisted{% endif %}{% endif %}{% if r.luma.checked_in %} · {{ r.luma.checked_in }} checked in{% endif %}{% if not r.luma.open %} · registration closed{% endif %}{% if r.luma.url %} · <a href="{{ r.luma.url }}">Luma</a>{% endif %}</small>
+        <small>{% if r.is_free %}<span class="free-tag" title="Free to attend">FREE</span>{% endif %}+{{ r.luma.last7 }} in 7 days{% if r.luma.pending or r.luma.waitlist %} · {{ r.luma.pending }} pending{% if r.luma.waitlist %}, {{ r.luma.waitlist }} waitlisted{% endif %}{% endif %}{% if r.luma.checked_in %} · {{ r.luma.checked_in }} checked in{% endif %}{% if not r.luma.open %} · registration closed{% endif %}{% if r.luma.url %} · <a href="{{ r.luma.url }}">Luma</a>{% endif %}</small>
         {% else %}
-        <span class="spacer"></span><small class="na">{{ r.luma_note }}</small>
+        <span class="spacer"></span><small>{% if r.is_free %}<span class="free-tag" title="Free to attend">FREE</span>{% endif %}<span class="na">{{ r.luma_note }}</span></small>
         {% endif %}
       </div>
       {% if r.luma %}
