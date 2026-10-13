@@ -1001,12 +1001,13 @@
       // the event's artwork from the website (Marek 2026-10-12): the banner as it is on the home page, downloadable as is,
       // after the covers. Added here, not in the markup: markup after the last talk card would count in that card's picture key
       (function () {
-        var gp = document.getElementById('gn-pool'), src = {{ (hero_event.banner or '')|tojson }};
-        if (!gp || !src) return;
-        var ext = src.split('.').pop(), file = {{ (hero_event.event_name or brand_name)|tojson }} + '.' + ext, el = document.createElement('div');
+        // "art", not "src": the deploy's asset rewriter would turn a ' src = "..."' into the .webp?v= copy (the download is the original)
+        var gp = document.getElementById('gn-pool'), art = {{ (hero_event.banner or '')|tojson }};
+        if (!gp || !art) return;
+        var ext = art.split('.').pop(), file = {{ (hero_event.event_name or brand_name)|tojson }} + '.' + ext, el = document.createElement('div');
         el.className = 'gn-slot gn-art';
-        el.innerHTML = '<div class="gn-art-cap">Event artwork from the website</div><img src="' + src + '" alt="" loading="lazy">' +
-          '<a class="tz-dl" href="' + src + '" title="Download the event artwork (' + ext.toUpperCase() + ')" aria-label="Download the event artwork (' + ext.toUpperCase() + ')">' +
+        el.innerHTML = '<div class="gn-art-cap">Event artwork from the website</div><img src="' + art + '" alt="" loading="lazy">' +
+          '<a class="tz-dl" href="' + art + '" title="Download the event artwork (' + ext.toUpperCase() + ')" aria-label="Download the event artwork (' + ext.toUpperCase() + ')">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="tz-dl-arrow" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M5 19h14"/></svg></a>';
         el.querySelector('a').setAttribute('download', file);
         el.querySelector('img').alt = file.replace(/\.[a-z]+$/i, '') + ' artwork';
