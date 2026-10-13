@@ -109,9 +109,10 @@
 		--brand-darker: color-mix(in srgb, {{ brand_color }} 100%, black 35%);
 	}
 	.header {
-		background: rgba(20, 28, 37, 0.55) !important;
-		backdrop-filter: blur(12px);
-		-webkit-backdrop-filter: blur(12px);
+		/* a heavier frost (Marek 2026-10-13): at 12px, headings scrolling under the bar showed as a dark smudge */
+		background: rgba(20, 28, 37, 0.62) !important;
+		backdrop-filter: blur(30px) saturate(140%);
+		-webkit-backdrop-filter: blur(30px) saturate(140%);
 		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	}
 </style>
