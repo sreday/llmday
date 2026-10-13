@@ -15,7 +15,9 @@
   #tickets { position: relative; overflow: hidden; }
   .luma-col { position: relative; width: 80%; max-width: 912px; margin: 0 auto; text-align: center; }
   .luma-glow { position: absolute; left: 50%; top: 50%; width: 110%; height: 95%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--brand) 70%, transparent), transparent); filter: blur(30px); }
+    /* soft by its own stops: a filter: blur() here made a layer whose bounds showed as a grey box through the frosted
+       navbar when scrolled under it (Marek 2026-10-13) */
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--brand) 62%, transparent), color-mix(in srgb, var(--brand) 26%, transparent) 55%, transparent); }
   .luma-shard { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; padding: 12px; border-radius: 26px;
     background: linear-gradient(160deg, color-mix(in srgb, var(--brand) 22%, rgba(255,255,255,.5)), color-mix(in srgb, var(--brand) 8%, rgba(255,255,255,.25)));
     -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
