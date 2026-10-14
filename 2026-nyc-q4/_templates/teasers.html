@@ -985,14 +985,15 @@
       // the letters. Made here from the Halo cover (no markup of its own: markup after the last talk card would count in that
       // card's picture key); drawn in the browser like every cover
       (function () {
-        var bg = document.querySelector('.cv-bg'), halo = document.getElementById('gn-card-halo');
-        if (!bg || !halo) return;
+        // the panorama comes from the build, not from a talk card: an event with no talks yet gets its City view cover too
+        var cityBg = {{ tz.city_bg|tojson }}, halo = document.getElementById('gn-card-halo');
+        if (!cityBg || !halo) return;
         var slot = halo.closest('.gn-slot'), copy = slot.cloneNode(true), card = copy.querySelector('.gn-card');
         card.id = 'gn-card-city';
         card.setAttribute('data-file', halo.getAttribute('data-file').replace(/-cover-halo\.png$/, '-cover-city.png'));
         var sw = card.querySelector('.tz-sw'); if (sw) sw.remove();
         var dk = {{ tz.scheme.bg[1]|tojson }};
-        card.insertAdjacentHTML('afterbegin', '<img class="cv-bg" src="' + bg.getAttribute('src') + '" alt="" style="left:0;top:0;width:1200px;height:1200px;object-fit:cover">' +
+        card.insertAdjacentHTML('afterbegin', '<img class="cv-bg" src="./' + cityBg + '" alt="" style="left:0;top:0;width:1200px;height:1200px;object-fit:cover">' +
           '<div style="left:0;top:0;width:1200px;height:1200px;background:radial-gradient(circle at 50% 52%,' + dk + '40 0,' + dk + '8c 520px,' + dk + 'd9 900px),' +
           'linear-gradient(180deg,' + dk + '66 0%,' + dk + '00 35%,' + dk + '00 60%,' + dk + 'b3 100%)"></div>');
         var dl = copy.querySelector('.gn-dl');
