@@ -2001,6 +2001,7 @@ _TZ_CITY = {'llmday': ('#020c09', '#598f76', '#062019'), 'sreday': ('#04020c', '
             'platformday': ('#0b0602', '#a07a3a', '#1f0c05'), 'pec': ('#04040f', '#66709c', '#0d1430')}
 _TZ_CITY['prompt engineering conference'] = _TZ_CITY['pec']
 context['tz']['city_bg'] = None
+context['tz']['city_deep'] = _TZ_CITY.get(_tz_key, (None, None, _tz_k['bg'][2]))[2]   # the brand's deep shade (City view's left tint)
 context['tz']['city_grey'] = None
 # the host cards' venue photo and vignette (Marek 2026-10-11, "darken with dark {brand color} instead of just black"): the
 # brand's mid colour (the City view's) multiplied over the photo at the share that darkens it as much as before, and a deep
