@@ -1000,6 +1000,110 @@
         if (dl) { dl.title = 'Download the City view cover (PNG)'; dl.setAttribute('aria-label', 'Download the City view cover (PNG)'); }
         slot.parentNode.insertBefore(copy, slot.nextSibling);
       })();
+      // the Flag covers (Marek 2026-10-13, for Luma): only the logo, big, over the city's panorama tinted in the country's
+      // flag colours - five looks Marek picked from Desktop "flag-tone-luma-covers-2026-10-13-darker-more-colour": Tritone,
+      // Flag bands, Light leaks, Colour field, Duotone. The grey panorama comes from the build (tz.city_grey, 1500 px); the
+      // tint is drawn here on a canvas, darkened and with more colour so the logo pops, a soft shade behind the logo and a
+      // little film grain (seeded: the same picture every time). Made from the Halo cover, like the City view cover
+      (function () {
+        var grey = {{ tz.city_grey|tojson }}, flag = {{ gn.flag|tojson }}, halo = document.getElementById('gn-card-halo');
+        if (!grey || !flag || !halo) return;
+        var N = 1500, after = (document.getElementById('gn-card-city') || halo).closest('.gn-slot');
+        function hx(h) { return [parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255]; }
+        function lum(c) { return .299 * c[0] + .587 * c[1] + .114 * c[2]; }
+        function mix(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
+        function mul(a, k) { return [a[0] * k, a[1] * k, a[2] * k]; }
+        function cl(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+        function gmap(g, st) {                         // grey -> colour along the stops
+          for (var i = 1; i < st.length; i++) if (g <= st[i][0]) return mix(st[i - 1][1], st[i][1], (g - st[i - 1][0]) / (st[i][0] - st[i - 1][0]));
+          return st[st.length - 1][1];
+        }
+        function blob(x, y, cx, cy, r) { var d = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)) / r; d = cl(1 - d); return d * d; }
+        function vig(c, x, y, dark, s) { var d = Math.sqrt((x - .5) * (x - .5) + (y - .5) * (y - .5)) / .7071; return mix(c, dark, cl(d - .25) / .75 * s); }
+        function screen(a, l, k) { return [1 - (1 - a[0]) * (1 - cl(l[0] * k)), 1 - (1 - a[1]) * (1 - cl(l[1] * k)), 1 - (1 - a[2]) * (1 - cl(l[2] * k))]; }
+        var F = flag.map(hx), W = [1, 1, 1], G5 = [.5, .5, .5];
+        var byL = F.slice().sort(function (a, b) { return lum(a) - lum(b); }), dark = byL[0], mid = byL[1], light = byL[2];
+        var others = F.filter(function (c) { return c !== light; });   // Light leaks: the two glows, in flag order
+        var looks = [
+          ['tritone', 'Tritone', function (g, x, y) {
+            var a = gmap(g, [[0, mul(dark, .3)], [.5, mul(mix(dark, mid, .5), .5)], [.85, mul(mix(mid, G5, .35), .7)], [1, mul(mix(light, W, .45), .8)]]);
+            a = mix(a, [g * .55, g * .55, g * .55], .3);
+            var sky = Math.pow(cl(1 - y / .55), 1.5) * .7, t = mix(W, mul(dark, 2.2), .6);
+            a = mix(a, [a[0] * t[0], a[1] * t[1], a[2] * t[2]], sky);
+            return vig(mul(a, .8), x, y, mul(dark, .15), .55);
+          }],
+          ['bands', 'Flag bands', function (g, x, y) {
+            var b = gmap(g, [[0, [.03, .035, .06]], [1, [.62, .64, .7]]]);
+            var band = y < .5 ? mix(F[0], F[1], cl((y - .18) / .32)) : mix(F[1], F[2], cl((y - .5) / .32)), m = mix(W, band, .75);
+            var a = [b[0] * m[0] * 1.15, b[1] * m[1] * 1.15, b[2] * m[2] * 1.15];
+            a = mix(a, mul(band, g), .18);
+            return vig(mul([cl(a[0]), cl(a[1]), cl(a[2])], .85), x, y, mul(dark, .15), .55);
+          }],
+          ['leaks', 'Light leaks', function (g, x, y) {
+            var a = gmap(g, [[0, [.02, .02, .04]], [1, [.42, .42, .48]]]);
+            var b1 = blob(x, y, .05, .1, .95) * 1.1, b2 = blob(x, y, 1, .95, 1.05) * 2.2, b3 = blob(x, y, .6, .3, .55) * .22, c2 = mix(others[1], light, .35);
+            var l = [others[0][0] * b1 + c2[0] * b2 + light[0] * b3, others[0][1] * b1 + c2[1] * b2 + light[1] * b3, others[0][2] * b1 + c2[2] * b2 + light[2] * b3];
+            a = screen(a, l, .35 + .9 * g);
+            return vig(mul(a, .85), x, y, mul(dark, .1), .5);
+          }],
+          ['field', 'Colour field', function (g, x, y) {
+            var t = cl((x * .55 + y * .45 - .1) / .8), m = mul(F[1], .8);
+            var f = t < .5 ? mix(F[0], m, t * 2) : mix(m, mix(F[2], W, .1), (t - .5) * 2), l = Math.pow(g, 1.1);
+            var a = mix([.02, .02, .02], f, l * .8);
+            a = mix(a, [l * .55, l * .55, l * .55], .25);
+            return vig(a, x, y, mul(dark, .5), .5);
+          }],
+          ['duotone', 'Duotone', function (g, x, y) {
+            var a = mul(gmap(g, [[0, mul(dark, .22)], [.55, mul(dark, .75)], [1, mix(light, dark, .2)]]), .72);
+            a = screen(a, mid, blob(x, y, .5, 1.05, .85) * (.5 + 1.2 * g));
+            return vig(a, x, y, mul(dark, .1), .45);
+          }]
+        ];
+        // one card per look, the Halo cover's logo made big (62% of the side, centred), its city and date left out
+        var cards = looks.map(function (lk) {
+          var slot = halo.closest('.gn-slot').cloneNode(true), card = slot.querySelector('.gn-card');
+          card.id = 'gn-card-flag-' + lk[0];
+          card.setAttribute('data-file', halo.getAttribute('data-file').replace(/-cover-halo\.png$/, '-cover-flag-' + lk[0] + '.png'));
+          card.dataset.pending = '1';
+          [].forEach.call(card.querySelectorAll('.tz-sw, .gn-city, .gn-date'), function (e) { e.remove(); });
+          var logo = card.querySelector('.gn-logo');
+          if (logo) logo.setAttribute('style', 'left:228px;top:228px;width:744px;height:744px');
+          card.insertAdjacentHTML('afterbegin', '<img class="gn-flag-bg" alt="" style="left:0;top:0;width:1200px;height:1200px">');
+          var dl = slot.querySelector('.gn-dl');
+          if (dl) { dl.title = 'Download the Flag cover: ' + lk[1] + ' (PNG)'; dl.setAttribute('aria-label', dl.title); }
+          after.parentNode.insertBefore(slot, after.nextSibling); after = slot;
+          return card;
+        });
+        var img = new Image();
+        img.onload = function () {
+          var cv = document.createElement('canvas'); cv.width = cv.height = N;
+          var cx = cv.getContext('2d'); cx.drawImage(img, 0, 0, N, N);
+          var src = cx.getImageData(0, 0, N, N).data, k = 0;
+          (function next() {                            // one look per tick, so the page stays responsive
+            if (k >= looks.length) return;
+            var look = looks[k][2], out = cx.createImageData(N, N), d = out.data, seed = 7;
+            function rnd() { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+            for (var py = 0, o = 0; py < N; py++) {
+              var y = py / (N - 1);
+              for (var px = 0; px < N; px++, o += 4) {
+                var x = px / (N - 1), c = look(src[o] / 255, x, y), L = lum(c);
+                var dc = Math.sqrt((x - .5) * (x - .5) + (y - .5) * (y - .5)), sh = (1 - .45 * Math.pow(cl(1 - dc / .42), 1.5)) * .52;
+                var u = rnd() || 1e-9, gr = Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2831853 * rnd()) * .018;
+                d[o] = 255 * cl(cl(L + (c[0] - L) * 2.3) * sh + gr);
+                d[o + 1] = 255 * cl(cl(L + (c[1] - L) * 2.3) * sh + gr);
+                d[o + 2] = 255 * cl(cl(L + (c[2] - L) * 2.3) * sh + gr);
+                d[o + 3] = 255;
+              }
+            }
+            cx.putImageData(out, 0, 0);
+            var card = cards[k];
+            card.querySelector('.gn-flag-bg').src = cv.toDataURL('image/jpeg', .92);
+            delete card.dataset.pending;
+            k++; setTimeout(next, 0);
+          })();
+        };
+        img.src = './' + grey;
+      })();
       // the event's artwork from the website (Marek 2026-10-12): the banner as it is on the home page, downloadable as is,
       // after the covers. Added here, not in the markup: markup after the last talk card would count in that card's picture key
       (function () {
@@ -1240,7 +1344,7 @@
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
           : t === 'cr' ? 'A LinkedIn carousel (a square PDF for a document post): a cover, then talks as singles or Duos & Trios, within the recommended length.'
-          : t === 'gn' ? (['A cover', 'A cover', 'Two covers', 'Three covers', 'Four covers'][document.querySelectorAll('.gn-card').length] || 'Covers') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only. Rendered here in your browser.'
+          : t === 'gn' ? (['A cover', 'A cover', 'Two covers', 'Three covers', 'Four covers'][document.querySelectorAll('.gn-card').length] || 'Covers') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only' + (document.querySelector('.gn-flag-bg') ? '; the Flag covers (for Luma) the logo alone, over the city in the flag\'s colours' : '') + '. Rendered here in your browser.'
           : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order; Shuffle and download all does the same in a random order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
         render();
@@ -1376,6 +1480,7 @@
         w = w || 1200; h = h || 1200; ratio = ratio || 1.25;
         var sw = card.querySelector('.tz-sw'), checked = sw && !card.querySelector('.sp-photo') && getComputedStyle(sw).display !== 'none';
         var cvBg = card.querySelector('.cv-bg');
+        if (card.dataset.pending) return Promise.reject(new Error('the Flag cover is still being drawn - try again in a second'));
         if (cvBg && !cvBg.naturalWidth) return Promise.reject(new Error('the city picture did not load - reload the page and try again'));
         return withHd(card, function () {
           return pngRaw(card, w, h, ratio).then(function (url) {

@@ -2001,6 +2001,7 @@ _TZ_CITY = {'llmday': ('#020c09', '#598f76', '#062019'), 'sreday': ('#04020c', '
             'platformday': ('#0b0602', '#a07a3a', '#1f0c05'), 'pec': ('#04040f', '#66709c', '#0d1430')}
 _TZ_CITY['prompt engineering conference'] = _TZ_CITY['pec']
 context['tz']['city_bg'] = None
+context['tz']['city_grey'] = None
 # the host cards' venue photo and vignette (Marek 2026-10-11, "darken with dark {brand color} instead of just black"): the
 # brand's mid colour (the City view's) multiplied over the photo at the share that darkens it as much as before, and a deep
 # shade of it for the vignette
@@ -2035,6 +2036,14 @@ if _tz_city and not _EVENT_ENDED and _os.path.isdir('../panoramas'):
             with open(BASE_FOLDER + '/teasers/' + _tz_name, 'wb') as _f:
                 _f.write(_buf.getvalue())
             context['tz']['city_bg'] = _tz_name
+            # the Flag covers (Marek 2026-10-13): the same panorama in plain grey at the PNG's own 1500 px, tinted in the
+            # country's flag colours by the page script - one small file per event, no per-card work here
+            _gr = _TzOps.autocontrast(_TzOps.fit(_TzImage.open('../panoramas/' + _tz_pano).convert('L'), (1500, 1500), _TzImage.LANCZOS), cutoff=1)
+            _buf = _tz_io.BytesIO(); _gr.save(_buf, 'JPEG', quality=85, optimize=True)
+            _tz_grey = 'city-grey-%s.jpg' % _tz_hash.md5(_buf.getvalue()).hexdigest()[:10]
+            with open(BASE_FOLDER + '/teasers/' + _tz_grey, 'wb') as _f:
+                _f.write(_buf.getvalue())
+            context['tz']['city_grey'] = _tz_grey
             print('teasers: City view from panoramas/%s' % _tz_pano)
         except Exception as _e:                                   # noqa: BLE001 - no City view, the page still builds
             print('WARN teasers: panorama %s not used (%s: %s)' % (_tz_pano, type(_e).__name__, _e))
@@ -2125,12 +2134,33 @@ try:
     _gn_date = '%s · %d %s %d' % (_gn_day.strftime('%A'), _gn_day.day, _gn_day.strftime('%B'), _gn_day.year)
 except ValueError:
     _gn_date = str(context.get('date_string', ''))
+# Flag covers (Marek 2026-10-13, "the duo/trio-tone that corresponds with national colors of the country"): each country's
+# three main colours in flag order (top to bottom, left to right). Two-colour flags get a deep shade of their main colour as
+# the third; black is lifted a touch and white warmed, so they tint the city rather than paint it. No country here = no Flag covers.
+_GN_FLAGS = {
+    'united states': ['#B31942', '#F3EEE4', '#0A3161'], 'united kingdom': ['#C8102E', '#F4F1EA', '#012169'],
+    'netherlands': ['#AE1C28', '#F4F1EA', '#21468B'], 'poland': ['#F4F1EA', '#DC143C', '#5C0A1C'],
+    'germany': ['#1A1414', '#DD0000', '#FFCE00'], 'france': ['#002654', '#F4F1EA', '#ED2939'],
+    'spain': ['#AA151B', '#F1BF00', '#6D0D12'], 'portugal': ['#046A38', '#DA291C', '#FFE900'],
+    'italy': ['#008C45', '#F4F1EA', '#CD212A'], 'ireland': ['#169B62', '#F4F1EA', '#FF883E'],
+    'belgium': ['#1A1414', '#FDDA24', '#EF3340'], 'brazil': ['#009C3B', '#FFDF00', '#002776'],
+    'uruguay': ['#0038A8', '#F4F1EA', '#FCD116'], 'india': ['#FF9933', '#F4F1EA', '#138808'],
+    'israel': ['#F4F1EA', '#0038B8', '#001A5C'], 'canada': ['#D80621', '#F4F1EA', '#7A0313'],
+    'switzerland': ['#DA291C', '#F4F1EA', '#6E0F0A'], 'austria': ['#C8102E', '#F4F1EA', '#650816'],
+    'sweden': ['#006AA7', '#FECC00', '#003A5C'], 'denmark': ['#C8102E', '#F4F1EA', '#650816'],
+    'norway': ['#BA0C2F', '#F4F1EA', '#00205B'], 'finland': ['#F4F1EA', '#002F6C', '#001536'],
+    'czechia': ['#F4F1EA', '#D7141A', '#11457E'], 'czech republic': ['#F4F1EA', '#D7141A', '#11457E'],
+    'singapore': ['#EF3340', '#F4F1EA', '#7A1018'], 'australia': ['#00008B', '#F4F1EA', '#E4002B'],
+    'mexico': ['#006847', '#F4F1EA', '#CE1126'],
+}
 context['gn'] = {'photos': [('../' + p[3:]) if p.startswith('../') else p for p in _sp_photos],   # as seen from /<event>/teasers/
                  'city': ' · '.join(x.strip() for x in str(context['tz'].get('place_full') or context['tz'].get('place') or context.get('location_string', '')).split(',') if x.strip()),
                  'date': _gn_date, 'venue': context['tz'].get('venue', ''),
                  # SREday: the clean square logo from Marek's picked covers (the card logo carries a grey backing); the file as it is
                  'logo': '../../assets/images/sreday_square.png' if _tz_key == 'sreday' else _tz_logo,
+                 'flag': None,
                  'site': _GN_SITE.get('pec' if _tz_key == 'prompt engineering conference' else _tz_key, '')}
+context['gn']['flag'] = _GN_FLAGS.get(context['gn']['city'].split(' · ')[-1].strip().lower()) if ' · ' in context['gn']['city'] else None
 # the logos in sponsors/ sit in padded squares; the cards use copies trimmed to the logo itself (only empty or white margin
 # cut, nothing else touched) so the circle can max the logo out by its real shape. No Pillow: the padded files are used.
 _sp_trimmed = {}
