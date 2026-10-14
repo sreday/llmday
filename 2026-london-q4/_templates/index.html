@@ -215,7 +215,7 @@
     .countdown-box .unit { color: rgba(255,255,255,.7); }
     @media (max-width: 575px) {
       .countdown-box { padding: 8px 14px; }
-      .countdown-box span { min-width: 62px; padding: .5rem .25rem; }
+      .countdown-box span { min-width: 56px; padding: .5rem .25rem; }  /* 4 units still fit a 320px screen */
     }
   </style>
   <script>
@@ -915,6 +915,12 @@
     line-height: 1.75;
     color: #444;
     font-size: 0.95rem;
+  }
+  /* Phones: justified text in a narrow column leaves big gaps between words */
+  @media (max-width: 767.98px) {
+    .modal-speaker .desc p,
+    .modal-speaker .desc li,
+    .schedule-abstract { text-align: left; }
   }
   .modal-speaker .modal-close-btn {
     position: absolute;
