@@ -226,8 +226,11 @@
     body.cv-mode .tz-slot > .cv-frame { display: block; }
     body.cv-mode .tz-slot > a.cv-dl { display: flex; }
     .cv-bg { left: 0; top: 0; width: 1200px; height: 1200px; object-fit: cover; display: block; }
+    /* the text side tinted in the brand's deep shade (Marek 2026-10-13, 40% at the left edge - v1 "side fade" of the three on
+       Desktop "city-view-left-tint-2026-10-13", then "increase by 10%" - fading very softly by three quarters across) */
     .cv-shade { left: 0; top: 0; width: 1200px; height: 1200px;
-      background: linear-gradient(180deg, {{ tz.scheme.bg[1] }}8c 0, {{ tz.scheme.bg[1] }}00 30%),
+      background: linear-gradient(90deg, {{ tz.city_deep }}66 0%, {{ tz.city_deep }}63 22%, {{ tz.city_deep }}55 34%, {{ tz.city_deep }}3d 44%, {{ tz.city_deep }}25 52%, {{ tz.city_deep }}11 60%, {{ tz.city_deep }}05 68%, {{ tz.city_deep }}00 75%),
+                  linear-gradient(180deg, {{ tz.scheme.bg[1] }}8c 0, {{ tz.scheme.bg[1] }}00 30%),
                   linear-gradient(90deg, {{ tz.scheme.bg[1] }}66 0, {{ tz.scheme.bg[1] }}33 45%, {{ tz.scheme.bg[1] }}00 70%); }
     /* the headshot's circle (r 370.5 round 499.5 / 598.5 of the 1000 px file) drawn r 282 round 846 / 742: inside the card and the
        ticket's width, its bottom (1024) 40 px under the ticket's top edge (984) */
