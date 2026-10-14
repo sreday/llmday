@@ -393,6 +393,11 @@
 .sp-cur-sym.sp-sym-out  { transform: translateY(-10px); opacity: 0; }
 .sp-cur-sym.sp-sym-prep { transition: none; transform: translateY(10px); opacity: 0; }
 .sp-num { display: inline-block; }
+.sp-amt { white-space: nowrap; }  /* keeps "£15pp" together: the symbol and number are separate inline-blocks */
+/* Tablets: three tier cards a row are too narrow for 2.2rem prices ("20% Discount" spilled out of its card) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .sp-tier-price, .sp-tier-price .sp-discount-toggle-label { font-size: 1.5rem; }
+}
 
 /* ── Discount toggle switch ────────────────────────── */
 .sp-discount-toggle-label {
@@ -724,15 +729,26 @@
   function spRenderStructure(el, text) {
     var tokens = spTokenize(text);
     el.textContent = '';
+    // Each run without spaces ("£1000", "£15pp") goes in a no-wrap .sp-amt, so a line only breaks at a space
+    var amt = null;
+    var put = function (node) {
+      if (!amt) { amt = document.createElement('span'); amt.className = 'sp-amt'; el.appendChild(amt); }
+      amt.appendChild(node);
+    };
     for (var i = 0; i < tokens.length; i++) {
       var tk = tokens[i];
       if (tk.t === 'txt') {
-        el.appendChild(document.createTextNode(tk.v));
+        var parts = tk.v.split(/(\s+)/);
+        for (var j = 0; j < parts.length; j++) {
+          if (!parts[j]) continue;
+          if (/^\s+$/.test(parts[j])) { el.appendChild(document.createTextNode(parts[j])); amt = null; }
+          else put(document.createTextNode(parts[j]));
+        }
       } else {
         var s = document.createElement('span');
         s.className = tk.t === 'sym' ? 'sp-cur-sym' : 'sp-num';
         s.textContent = tk.v;
-        el.appendChild(s);
+        put(s);
       }
     }
   }
