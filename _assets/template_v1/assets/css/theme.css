@@ -92,3 +92,8 @@ html #about, html #stats, html #faq, html #sisters, html .track-section-header[i
 /* Schedule meta pills (2026-09-29): wrap on phones instead of overflowing; meta-v2 added by timeline_refresh() */
 .schedule-meta.meta-v2{flex-wrap:wrap;row-gap:.5rem}
 @media (max-width:575px){.schedule-meta.meta-v2{font-size:.95rem;gap:.4rem}.schedule-meta.meta-v2 .schedule-meta-divider{display:none}.schedule-meta.meta-v2 .schedule-meta-item{padding:.35rem .7rem}}
+/* Phones: sponsor logo files are square with their empty space baked in; logo_trim() in generate.py measures each
+   logo's empty top/bottom margin (files untouched) and it is pulled in here, so rows sit closer and nothing is cropped */
+@media (max-width:575.98px){.logo-item img[style*="--trim"]{margin:calc(var(--trim) * -1) 0}}
+/* Home: gx-md-5 rows are 12px wider than their container on each side (empty gutter); clip it so tablets can't pan sideways */
+.container:has(> .row.gx-md-5){overflow-x:clip}
