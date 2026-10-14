@@ -1000,11 +1000,12 @@
         if (dl) { dl.title = 'Download the City view cover (PNG)'; dl.setAttribute('aria-label', 'Download the City view cover (PNG)'); }
         slot.parentNode.insertBefore(copy, slot.nextSibling);
       })();
-      // the Flag covers (Marek 2026-10-13, for Luma): only the logo, big, over the city's panorama tinted in the country's
-      // flag colours - five looks Marek picked from Desktop "flag-tone-luma-covers-2026-10-13-darker-more-colour": Tritone,
-      // Flag bands, Light leaks, Colour field, Duotone. The grey panorama comes from the build (tz.city_grey, 1500 px); the
-      // tint is drawn here on a canvas, darkened and with more colour so the logo pops, a soft shade behind the logo and a
-      // little film grain (seeded: the same picture every time). Made from the Halo cover, like the City view cover
+      // the Flag covers (Marek 2026-10-13, for Luma): only the logo, big, over the city's panorama in the country's flag colours -
+      // "Colour field" (a diagonal field of the colours) and "Tritone" (shadows, mid-tones and highlights each in one of them),
+      // Marek's two picks of five from Desktop "flag-tone-luma-covers-2026-10-13-darker-more-colour".
+      // The grey panorama comes from the build (tz.city_grey, 1500 px), the colours from _GN_FLAGS (no black or white); the tint
+      // is drawn here on a canvas, darkened and with more colour so the logo pops, a soft shade behind the logo and a little
+      // film grain (seeded: the same picture every time). Made from the Halo cover, like the City view cover
       (function () {
         var grey = {{ tz.city_grey|tojson }}, flag = {{ gn.flag|tojson }}, halo = document.getElementById('gn-card-halo');
         if (!grey || !flag || !halo) return;
@@ -1018,34 +1019,10 @@
           for (var i = 1; i < st.length; i++) if (g <= st[i][0]) return mix(st[i - 1][1], st[i][1], (g - st[i - 1][0]) / (st[i][0] - st[i - 1][0]));
           return st[st.length - 1][1];
         }
-        function blob(x, y, cx, cy, r) { var d = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)) / r; d = cl(1 - d); return d * d; }
         function vig(c, x, y, dark, s) { var d = Math.sqrt((x - .5) * (x - .5) + (y - .5) * (y - .5)) / .7071; return mix(c, dark, cl(d - .25) / .75 * s); }
-        function screen(a, l, k) { return [1 - (1 - a[0]) * (1 - cl(l[0] * k)), 1 - (1 - a[1]) * (1 - cl(l[1] * k)), 1 - (1 - a[2]) * (1 - cl(l[2] * k))]; }
         var F = flag.map(hx), W = [1, 1, 1], G5 = [.5, .5, .5];
         var byL = F.slice().sort(function (a, b) { return lum(a) - lum(b); }), dark = byL[0], mid = byL[1], light = byL[2];
-        var others = F.filter(function (c) { return c !== light; });   // Light leaks: the two glows, in flag order
         var looks = [
-          ['tritone', 'Tritone', function (g, x, y) {
-            var a = gmap(g, [[0, mul(dark, .3)], [.5, mul(mix(dark, mid, .5), .5)], [.85, mul(mix(mid, G5, .35), .7)], [1, mul(mix(light, W, .45), .8)]]);
-            a = mix(a, [g * .55, g * .55, g * .55], .3);
-            var sky = Math.pow(cl(1 - y / .55), 1.5) * .7, t = mix(W, mul(dark, 2.2), .6);
-            a = mix(a, [a[0] * t[0], a[1] * t[1], a[2] * t[2]], sky);
-            return vig(mul(a, .8), x, y, mul(dark, .15), .55);
-          }],
-          ['bands', 'Flag bands', function (g, x, y) {
-            var b = gmap(g, [[0, [.03, .035, .06]], [1, [.62, .64, .7]]]);
-            var band = y < .5 ? mix(F[0], F[1], cl((y - .18) / .32)) : mix(F[1], F[2], cl((y - .5) / .32)), m = mix(W, band, .75);
-            var a = [b[0] * m[0] * 1.15, b[1] * m[1] * 1.15, b[2] * m[2] * 1.15];
-            a = mix(a, mul(band, g), .18);
-            return vig(mul([cl(a[0]), cl(a[1]), cl(a[2])], .85), x, y, mul(dark, .15), .55);
-          }],
-          ['leaks', 'Light leaks', function (g, x, y) {
-            var a = gmap(g, [[0, [.02, .02, .04]], [1, [.42, .42, .48]]]);
-            var b1 = blob(x, y, .05, .1, .95) * 1.1, b2 = blob(x, y, 1, .95, 1.05) * 2.2, b3 = blob(x, y, .6, .3, .55) * .22, c2 = mix(others[1], light, .35);
-            var l = [others[0][0] * b1 + c2[0] * b2 + light[0] * b3, others[0][1] * b1 + c2[1] * b2 + light[1] * b3, others[0][2] * b1 + c2[2] * b2 + light[2] * b3];
-            a = screen(a, l, .35 + .9 * g);
-            return vig(mul(a, .85), x, y, mul(dark, .1), .5);
-          }],
           ['field', 'Colour field', function (g, x, y) {
             var t = cl((x * .55 + y * .45 - .1) / .8), m = mul(F[1], .8);
             var f = t < .5 ? mix(F[0], m, t * 2) : mix(m, mix(F[2], W, .1), (t - .5) * 2), l = Math.pow(g, 1.1);
@@ -1053,10 +1030,12 @@
             a = mix(a, [l * .55, l * .55, l * .55], .25);
             return vig(a, x, y, mul(dark, .5), .5);
           }],
-          ['duotone', 'Duotone', function (g, x, y) {
-            var a = mul(gmap(g, [[0, mul(dark, .22)], [.55, mul(dark, .75)], [1, mix(light, dark, .2)]]), .72);
-            a = screen(a, mid, blob(x, y, .5, 1.05, .85) * (.5 + 1.2 * g));
-            return vig(a, x, y, mul(dark, .1), .45);
+          ['tritone', 'Tritone', function (g, x, y) {
+            var a = gmap(g, [[0, mul(dark, .3)], [.5, mul(mix(dark, mid, .5), .5)], [.85, mul(mix(mid, G5, .35), .7)], [1, mul(mix(light, W, .45), .8)]]);
+            a = mix(a, [g * .55, g * .55, g * .55], .3);
+            var sky = Math.pow(cl(1 - y / .55), 1.5) * .7, t = mix(W, mul(dark, 2.2), .6);
+            a = mix(a, [a[0] * t[0], a[1] * t[1], a[2] * t[2]], sky);
+            return vig(mul(a, .8), x, y, mul(dark, .15), .55);
           }]
         ];
         // one card per look, the Halo cover's logo made big (62% of the side, centred), its city and date left out
@@ -1079,7 +1058,7 @@
           var cv = document.createElement('canvas'); cv.width = cv.height = N;
           var cx = cv.getContext('2d'); cx.drawImage(img, 0, 0, N, N);
           var src = cx.getImageData(0, 0, N, N).data, k = 0;
-          (function next() {                            // one look per tick, so the page stays responsive
+          (function next() {                            // a look per tick, so the page stays responsive
             if (k >= looks.length) return;
             var look = looks[k][2], out = cx.createImageData(N, N), d = out.data, seed = 7;
             function rnd() { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
