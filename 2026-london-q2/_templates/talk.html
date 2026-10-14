@@ -13,6 +13,12 @@
   .talk-content .desc {
     padding-bottom: 0.25rem;
   }
+  /* Phones: speaker card and abstract stack full width; justified text leaves rivers in a narrow column */
+  @media (max-width: 767.98px) {
+    .talk-content .desc p,
+    .talk-content .desc li { text-align: left; }
+    .talk-speaker .card-img-top { max-width: 320px; margin: 0 auto; }
+  }
   /* Keynote / Workshop pill before the title, same as the schedule (index.html) */
   .kn-pill { display: inline-block; background: var(--brand); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .45em; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-right: 10px; vertical-align: middle; line-height: 1.4; }
 </style>
@@ -22,8 +28,8 @@
     <h1 class="section-heading text-center mb-3">{% if talk.pill %}<span class="kn-pill">{{ talk.pill }}</span>{{ talk.title_display }}{% else %}{{ talk.title }}{% endif %}</h1>
     <div class="row">
 
-      <div class="col-6 col-lg-3 mb-4" style="align-self:start;">
-        <div class="card rounded-0">
+      <div class="col-12 col-md-4 col-lg-3 mb-4" style="align-self:start;">
+        <div class="card rounded-0 talk-speaker">
           <img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt="">
           <div class="card-body">
             <h5 class="card-title mb-2">{{ talk.name }}</h5>
@@ -42,7 +48,7 @@
         </div><!--//card-->
       </div><!--//col-->
 
-      <div class="col-6 col-lg-9 mb-4">
+      <div class="col-12 col-md-8 col-lg-9 mb-4">
         <div class="card rounded-0 talk-content">
           <div class="card-body">
 

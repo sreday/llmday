@@ -313,15 +313,14 @@
   }
   .event-card-buttons {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 6px;
     margin-top: auto;
     width: 100%;
   }
   .speakers-section .event-card-buttons a {
-    flex: 0 1 50%;
+    flex: 0 0 auto;  /* natural width: a 50% cap let "Read more" spill out of its box on narrow cards */
     text-align: center;
-    min-width: 0;
     display: block;
   }
   .event-read-more-btn {
