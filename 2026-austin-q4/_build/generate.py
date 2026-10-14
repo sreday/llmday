@@ -2135,24 +2135,48 @@ try:
 except ValueError:
     _gn_date = str(context.get('date_string', ''))
 # Flag covers (Marek 2026-10-13, "the duo/trio-tone that corresponds with national colors of the country"): each country's
-# three main colours in flag order (top to bottom, left to right). Two-colour flags get a deep shade of their main colour as
-# the third; black is lifted a touch and white warmed, so they tint the city rather than paint it. No country here = no Flag covers.
+# flag colours in flag order (top to bottom, left to right), as they are. Black and white are left out ("if the flag has black
+# or white, ignore those colors"); the covers take three colours, so a two-colour result gets a dark blend of its two in the
+# middle and a single colour a light tint and a deep shade of itself (_gn_flag_tones). No country here = no Flag covers.
 _GN_FLAGS = {
-    'united states': ['#B31942', '#F3EEE4', '#0A3161'], 'united kingdom': ['#C8102E', '#F4F1EA', '#012169'],
-    'netherlands': ['#AE1C28', '#F4F1EA', '#21468B'], 'poland': ['#F4F1EA', '#DC143C', '#5C0A1C'],
-    'germany': ['#1A1414', '#DD0000', '#FFCE00'], 'france': ['#002654', '#F4F1EA', '#ED2939'],
-    'spain': ['#AA151B', '#F1BF00', '#6D0D12'], 'portugal': ['#046A38', '#DA291C', '#FFE900'],
-    'italy': ['#008C45', '#F4F1EA', '#CD212A'], 'ireland': ['#169B62', '#F4F1EA', '#FF883E'],
-    'belgium': ['#1A1414', '#FDDA24', '#EF3340'], 'brazil': ['#009C3B', '#FFDF00', '#002776'],
-    'uruguay': ['#0038A8', '#F4F1EA', '#FCD116'], 'india': ['#FF9933', '#F4F1EA', '#138808'],
-    'israel': ['#F4F1EA', '#0038B8', '#001A5C'], 'canada': ['#D80621', '#F4F1EA', '#7A0313'],
-    'switzerland': ['#DA291C', '#F4F1EA', '#6E0F0A'], 'austria': ['#C8102E', '#F4F1EA', '#650816'],
-    'sweden': ['#006AA7', '#FECC00', '#003A5C'], 'denmark': ['#C8102E', '#F4F1EA', '#650816'],
-    'norway': ['#BA0C2F', '#F4F1EA', '#00205B'], 'finland': ['#F4F1EA', '#002F6C', '#001536'],
-    'czechia': ['#F4F1EA', '#D7141A', '#11457E'], 'czech republic': ['#F4F1EA', '#D7141A', '#11457E'],
-    'singapore': ['#EF3340', '#F4F1EA', '#7A1018'], 'australia': ['#00008B', '#F4F1EA', '#E4002B'],
-    'mexico': ['#006847', '#F4F1EA', '#CE1126'],
+    'united states': ['#B31942', '#FFFFFF', '#0A3161'], 'united kingdom': ['#C8102E', '#FFFFFF', '#012169'],
+    'netherlands': ['#AE1C28', '#FFFFFF', '#21468B'], 'poland': ['#FFFFFF', '#DC143C'],
+    'germany': ['#000000', '#DD0000', '#FFCE00'], 'france': ['#002654', '#FFFFFF', '#ED2939'],
+    'spain': ['#AA151B', '#F1BF00', '#AA151B'], 'portugal': ['#046A38', '#DA291C', '#FFE900'],
+    'italy': ['#008C45', '#FFFFFF', '#CD212A'], 'ireland': ['#169B62', '#FFFFFF', '#FF883E'],
+    'belgium': ['#000000', '#FDDA24', '#EF3340'], 'brazil': ['#009C3B', '#FFDF00', '#002776'],
+    'uruguay': ['#0038A8', '#FFFFFF', '#FCD116'], 'india': ['#FF9933', '#FFFFFF', '#138808'],
+    'israel': ['#FFFFFF', '#0038B8'], 'canada': ['#D80621', '#FFFFFF'],
+    'switzerland': ['#DA291C', '#FFFFFF'], 'austria': ['#C8102E', '#FFFFFF', '#C8102E'],
+    'sweden': ['#006AA7', '#FECC00'], 'denmark': ['#C8102E', '#FFFFFF'],
+    'norway': ['#BA0C2F', '#FFFFFF', '#00205B'], 'finland': ['#FFFFFF', '#002F6C'],
+    'czechia': ['#FFFFFF', '#D7141A', '#11457E'], 'czech republic': ['#FFFFFF', '#D7141A', '#11457E'],
+    'singapore': ['#EF3340', '#FFFFFF'], 'australia': ['#00008B', '#FFFFFF', '#E4002B'],
+    'mexico': ['#006847', '#FFFFFF', '#CE1126'],
 }
+
+
+def _gn_flag_tones(flag):
+    """the flag's colours without black and white (and without repeats: Spain's red-yellow-red is two colours), made up to three"""
+    def rgb(h): return [int(h[i:i + 2], 16) for i in (1, 3, 5)]
+    def hexs(c): return '#%02X%02X%02X' % tuple(max(0, min(255, round(v))) for v in c)
+    cols = []
+    for h in flag or []:
+        c = rgb(h); lum = (.299 * c[0] + .587 * c[1] + .114 * c[2]) / 255; sat = (max(c) - min(c)) / 255
+        if sat < .15 and (lum < .2 or lum > .85) or h.upper() in cols:   # black or white (navy blues stay: they are saturated)
+            continue
+        cols.append(h.upper())
+    if not cols:
+        return None
+    if len(cols) == 1:
+        c = rgb(cols[0])
+        return [hexs([v + (255 - v) * .35 for v in c]), cols[0], hexs([v * .4 for v in c])]
+    if len(cols) == 2:
+        a, b = rgb(cols[0]), rgb(cols[1])
+        return [cols[0], hexs([(x + y) / 2 * .35 for x, y in zip(a, b)]), cols[1]]
+    return cols[:3]
+
+
 context['gn'] = {'photos': [('../' + p[3:]) if p.startswith('../') else p for p in _sp_photos],   # as seen from /<event>/teasers/
                  'city': ' · '.join(x.strip() for x in str(context['tz'].get('place_full') or context['tz'].get('place') or context.get('location_string', '')).split(',') if x.strip()),
                  'date': _gn_date, 'venue': context['tz'].get('venue', ''),
@@ -2160,7 +2184,7 @@ context['gn'] = {'photos': [('../' + p[3:]) if p.startswith('../') else p for p 
                  'logo': '../../assets/images/sreday_square.png' if _tz_key == 'sreday' else _tz_logo,
                  'flag': None,
                  'site': _GN_SITE.get('pec' if _tz_key == 'prompt engineering conference' else _tz_key, '')}
-context['gn']['flag'] = _GN_FLAGS.get(context['gn']['city'].split(' · ')[-1].strip().lower()) if ' · ' in context['gn']['city'] else None
+context['gn']['flag'] = _gn_flag_tones(_GN_FLAGS.get(context['gn']['city'].split(' · ')[-1].strip().lower())) if ' · ' in context['gn']['city'] else None
 # the logos in sponsors/ sit in padded squares; the cards use copies trimmed to the logo itself (only empty or white margin
 # cut, nothing else touched) so the circle can max the logo out by its real shape. No Pillow: the padded files are used.
 _sp_trimmed = {}
