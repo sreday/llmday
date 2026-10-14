@@ -31,7 +31,9 @@ SITEMAP_URLS = []
 file_loader = FileSystemLoader("_templates")
 env = Environment(loader=file_loader)
 env.add_extension(MarkdownExtension)
-env.filters["markdown"] = lambda x: markdown.markdown(x)
+# "[site.io](site.io)" (no https://) would link to a path on our own site and 404
+_MD_BARE_HREF = re.compile(r'href="(?![a-zA-Z][a-zA-Z0-9+.-]*:|[/#.?])([^"\s/]+\.[a-zA-Z]{2,}(?:[/?#][^"]*)?)"')
+env.filters["markdown"] = lambda x: _MD_BARE_HREF.sub(r'href="https://\1"', markdown.markdown(x))
 
 # load the context from the metadata file
 print(DIVIDER)

@@ -192,6 +192,10 @@ env.add_extension(MarkdownExtension)
 env.filters["short_url"] = generate_short_url
 _MD_INLINE_BULLET = re.compile(r'\s+\*\s+(?=[A-Z0-9"“(])')
 _MD_LIST_ITEM = re.compile(r'^(?:[*+-]|\d+[.)])\s+\S')
+# "[site.io](site.io)" in a bio (no https://) would link to /<event>/site.io and 404 on our own site
+_MD_BARE_HREF = re.compile(r'href="(?![a-zA-Z][a-zA-Z0-9+.-]*:|[/#.?])([^"\s/]+\.[a-zA-Z]{2,}(?:[/?#][^"]*)?)"')
+def _md_fix_bare_links(html):
+    return _MD_BARE_HREF.sub(r'href="https://\1"', html)
 def _markdown_no_headers(text):
     lines = []
     for line in text.split('\n'):
@@ -216,7 +220,7 @@ def _markdown_no_headers(text):
             cleaned.append('**%s**' % heading_text)
         else:
             cleaned.append(line)
-    return markdown.markdown('\n'.join(cleaned))
+    return _md_fix_bare_links(markdown.markdown('\n'.join(cleaned)))
 env.filters["markdown"] = _markdown_no_headers
 env.filters["plain"] = md_plain
 def dedupe(items):
@@ -229,6 +233,23 @@ def dedupe(items):
              present.add(name)
      return output
 env.filters["dedupe"] = dedupe
+# Sponsor logos are square files with their empty space baked in. On phones the grid pulls each logo's own empty
+# top/bottom margin in (theme.css, --trim), so the rows sit closer; the files are never touched and nothing is cropped.
+_LOGO_TRIM = {}
+def logo_trim(logo):
+    if logo not in _LOGO_TRIM:
+        try:
+            from PIL import Image as _LtImage, ImageChops as _LtChops
+            _im = _LtImage.open("../sponsors/" + logo).convert("RGBA")
+            _ink = _LtChops.multiply(_im.getchannel("A"), _im.convert("L").point(lambda v: 0 if v > 245 else 255))   # near-white counts as empty
+            _box = _ink.point(lambda v: 255 if v > 20 else 0).getbbox()
+            _w, _h = _im.size
+            _free = min(_box[1], _h - _box[3]) / _w if _box else 0   # CSS % margins are relative to the width
+            _LOGO_TRIM[logo] = max(0, int(_free * 100) - 3)           # keep a little air
+        except Exception:
+            _LOGO_TRIM[logo] = 0
+    return _LOGO_TRIM[logo]
+env.filters["logo_trim"] = logo_trim
 
 # load the context from the metadata file
 print(DIVIDER)
