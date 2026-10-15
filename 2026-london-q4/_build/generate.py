@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import datetime
 import math
 import re
@@ -276,6 +277,11 @@ def luma_is_free(evt_id):
             print("WARN: Luma pricing not readable at %s (%s)" % (url.split('?')[0], e))
             continue
         _m = re.search(r'"is_free"\s*:\s*(true|false)', body)
+        try:                                       # ticket types on sale: the embed grows by one row each (luma_fit in tickets.html)
+            context["luma_tickets"] = len([t for t in json.loads(body).get("ticket_types") or []
+                                           if not t.get("is_hidden") and not t.get("is_disabled")])
+        except Exception:                          # noqa: BLE001 - the embed page, not the JSON API: no count, default heights
+            pass
         if _m:
             context["luma_connected"] = True   # Luma answered: only then may a teaser show a code ball (Marek 2026-10-08)
             return _m.group(1) == "true"

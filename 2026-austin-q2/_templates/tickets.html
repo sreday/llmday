@@ -9,6 +9,14 @@
 </div>
 {% else %}
 {% set embed_height = 700 if luma_is_free else 1000 %}
+{# The embed's real height (Marek 2026-10-14: a tall empty gradient under "View Full Event Page"). Luma sends no height,
+   so it is worked out here: Luma lays the embed out side by side from ~700 px wide (cover left, ~435 px tall when free)
+   and stacked below that (~740 px free); a paid event adds a ticket row each (~110 px wide, ~115 px stacked). Measured
+   2026-10-14 on SREday Warsaw (free) and LLMday London (2 tickets). Ticket count unknown = the old fixed heights. #}
+{% set _lt = luma_tickets if luma_tickets is defined and luma_tickets is not none else -1 %}
+{% if _lt < 0 %}{% set fit_wide = embed_height %}{% set fit_narrow = embed_height %}
+{% elif luma_is_free %}{% set fit_wide = 490 %}{% set fit_narrow = 800 %}
+{% else %}{% set fit_wide = 420 + 110 * [_lt, 1]|max %}{% set fit_narrow = 740 + 115 * [_lt, 1]|max %}{% endif %}
 {# "Tinted shard" (Marek 2026-10-12, luma-glass-minimal option 2): the embed and "Register on Luma" inside one piece of
    glass washed in the brand colour, a soft brand glow behind it, 20% narrower than the container (full width on phones). #}
 <style>
@@ -39,7 +47,8 @@
       src="https://lu.ma/embed/event/{{ luma_evt }}/simple"
       width="100%"
       frameborder="0"
-      style="height: {{ embed_height }}px; min-height: {{ embed_height }}px;"
+      style="height: {{ fit_narrow }}px;"
+      data-fit-wide="{{ fit_wide }}" data-fit-narrow="{{ fit_narrow }}"
       allowfullscreen=""
       aria-hidden="false"
       tabindex="0"
@@ -58,6 +67,15 @@
   (function() {
     var params = window.location.search;
     var iframe = document.getElementById('luma-tickets-iframe');
+
+    // fit the box to Luma's layout at this width (see the note at the top), again whenever the window is resized
+    function lumaFit() {
+      if (!iframe) return;
+      var wide = iframe.clientWidth >= 700;
+      iframe.style.height = iframe.getAttribute(wide ? 'data-fit-wide' : 'data-fit-narrow') + 'px';
+    }
+    lumaFit();
+    window.addEventListener('resize', lumaFit);
 
     // Append query params to iframe src
     if (iframe && params) {
