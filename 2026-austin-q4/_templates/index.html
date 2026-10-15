@@ -846,7 +846,8 @@
 
 
 {% if talks or keynotes %}
-<section id="speakers" class="speakers-section section">
+<section id="speakers" class="speakers-section section spk-glass">
+  <div class="spk-aurora" aria-hidden="true"></div>
   <div class="container">
     <h3 class="section-heading text-center mb-3">Speakers</h3>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5">
@@ -854,7 +855,7 @@
       {% for talk in (talks + keynotes)|sort(attribute='name')|dedupe %}
 
       <div class="col mb-4">
-        <div class="card rounded">
+        <div class="card">
           <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt=""></a>
           <div class="card-body">
             <h5 class="card-title mb-2">{{ talk.display_name }}</h5>

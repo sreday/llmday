@@ -115,6 +115,33 @@
 		-webkit-backdrop-filter: blur(30px) saturate(140%);
 		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	}
+  /* speaker cards and the talk page's speaker / abstract boxes as frosted grey glass panes over a soft aurora (Marek
+     2026-10-14, option A of Desktop "speaker-glass-shards-2026-10-14"; buttons and icons keep their old design).
+     Opt-in: the section gets .spk-glass and a <div class="spk-aurora">. Phones skip the blur (dozens of blurred cards are
+     heavy there) and use a slightly more opaque grey, which reads the same over the already-blurred aurora. */
+  .spk-glass { position: relative; isolation: isolate; overflow: clip; }
+  .spk-aurora { position: absolute; inset: 0; z-index: -1; pointer-events: none; filter: blur(60px);
+    background: radial-gradient(40% 30% at 10% 12%, color-mix(in srgb, var(--brand) 40%, transparent), transparent 70%),
+      radial-gradient(35% 28% at 88% 10%, rgba(245,158,11,.30), transparent 70%),
+      radial-gradient(40% 30% at 72% 52%, rgba(20,184,166,.20), transparent 70%),
+      radial-gradient(42% 30% at 18% 62%, color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 30%, transparent), transparent 70%),
+      radial-gradient(40% 28% at 85% 90%, color-mix(in srgb, var(--brand) 30%, transparent), transparent 70%); }
+  .spk-glass .card { background: rgba(226,227,232,.5); border: 1px solid rgba(255,255,255,.72); border-radius: 26px; overflow: hidden;
+    -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%);
+    box-shadow: 0 18px 44px rgba(30,15,40,.14), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); }
+  .spk-glass .card-img-top { background: transparent; padding: 12px 12px 0; }
+  .spk-glass .card-footer { background: transparent; border-top: 0; }
+  /* readability first (Marek 2026-10-14): long text sits on a near-white pane, like the speaker pop-up's reading area,
+     and the company line goes darker than Bootstrap's muted grey */
+  .spk-glass .talk-content { background: rgba(247,247,250,.86); }
+  .spk-glass .card .meta { color: #3d3a40; }
+  .spk-glass .social-list a { color: #0a66c2; }   /* LinkedIn's own blue: the lighter theme blue is 2.5:1 on the glass */
+  @media (max-width: 767.98px) {
+    .spk-glass .card { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(232,233,238,.66); border-radius: 20px;
+      box-shadow: 0 10px 26px rgba(30,15,40,.12), inset 0 1px 0 rgba(255,255,255,.9); }
+    .spk-glass .card-img-top { padding: 8px 8px 0; }
+    .spk-glass .talk-content { background: rgba(248,248,250,.92); }
+  }
 </style>
 
 
