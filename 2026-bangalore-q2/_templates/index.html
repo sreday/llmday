@@ -593,6 +593,14 @@
     -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
     box-shadow: 0 10px 30px rgba(60,20,50,.12), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.25); }
   .schedule-meta-item { padding: .6rem 1.3rem; border-radius: 999px; color: #1d1b20; }
+  /* the room buttons as glass pills like the View switch above them (Marek 2026-10-14), filled in the brand colour on hover */
+  .track-nav-links a { padding: .5rem 1.25rem; border-radius: 999px; color: var(--brand); font-weight: 700;
+    background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.75);
+    -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+    box-shadow: 0 10px 30px rgba(60,20,50,.12), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.25);
+    transition: background .2s, color .2s, box-shadow .2s, transform .2s; }
+  .track-nav-links a:hover, .track-nav-links a:focus-visible { background: var(--brand); color: #fff; border-color: transparent;
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--brand) 35%, transparent); transform: translateY(-1px); }
   /* Track section header */
   .track-section-header {
     background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
