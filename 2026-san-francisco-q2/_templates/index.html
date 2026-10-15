@@ -593,6 +593,11 @@
     -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
     box-shadow: 0 10px 30px rgba(60,20,50,.12), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.25); }
   .schedule-meta-item { padding: .6rem 1.3rem; border-radius: 999px; color: #1d1b20; }
+  /* phones: the four pills as a 2 x 2 grid of equal width (Marek 2026-10-14), not a ragged wrap */
+  @media (max-width: 575.98px) {
+    .schedule-section .schedule-meta { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; gap: .55rem; width: 100%; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .schedule-section .schedule-meta .schedule-meta-item { justify-content: center; text-align: center; padding: .55rem .5rem; font-size: .92rem; line-height: 1.25; min-width: 0; }
+  }
   /* the room buttons as glass pills like the View switch above them (Marek 2026-10-14), filled in the brand colour on hover */
   .track-nav-links a { padding: .5rem 1.25rem; border-radius: 999px; color: var(--brand); font-weight: 700;
     background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.75);
@@ -631,7 +636,7 @@
       <span class="schedule-meta-divider">•</span>
       <span class="schedule-meta-item">{{ schedule_time_bracket }}</span>
       <span class="schedule-meta-divider">•</span>
-      <span class="schedule-meta-item">{{ city_name }}, in-person</span>
+      <span class="schedule-meta-item">{{ city_name }}, in&#8209;person</span>
     </div>
 
     <div class="sched-glass">{# the whole schedule on one frosted glass sheet (Marek 2026-10-06) #}
