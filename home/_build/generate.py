@@ -1895,6 +1895,32 @@ except OSError:
     pass
 print("Writing out status/index.html (hidden, not in sitemap)")
 
+# FACTORY (hidden, /factory/ - Marek 2026-10-16): the LIVE talk factory's page, identical on sreday, llmday and
+# platformday. Manual tab (default): live-factory/MANUAL.md - in the sreday repo; the other brands fetch it from GitHub
+# at build time. Factory tab: filled live in the browser from the factory's status.json on GitHub (pushed by the
+# computer that runs the factory), this brand's events first. noindex, never in the sitemap.
+# The team password's SHA-256 (the same on sreday, llmday, platformday and conf42.com/factory); "" = no gate.
+_FACTORY_GATE_SHA256 = ""
+_fm_text = None
+_fm_local = os.path.join("..", "live-factory", "MANUAL.md")
+if os.path.exists(_fm_local):
+    with open(_fm_local, encoding="utf-8") as _fm_f:
+        _fm_text = _fm_f.read()
+else:
+    try:
+        import urllib.request as _fm_req
+        with _fm_req.urlopen("https://raw.githubusercontent.com/sreday/sreday/main/live-factory/MANUAL.md", timeout=20) as _fm_r:
+            _fm_text = _fm_r.read().decode("utf-8")
+    except Exception as _fm_e:                                    # noqa: BLE001 - the page still builds, pointing at sreday
+        print("WARN factory: the manual was not fetched (%s)" % _fm_e)
+        _fm_text = "# LIVE talk factory\n\nThe manual is at [sreday.com/factory](https://sreday.com/factory/)."
+_fm_html = markdown.markdown(_fm_text, extensions=["tables", "pymdownx.superfences", "toc", "sane_lists"])
+os.makedirs(BASE_FOLDER + "/factory", exist_ok=True)
+with open(BASE_FOLDER + "/factory/index.html", "w", encoding="utf-8") as f:
+    f.write(env.get_template("factory.html").render(factory_manual=_fm_html, factory_brand=_me or "SREday",
+                                                    factory_gate=_FACTORY_GATE_SHA256, **context))
+print("Writing out factory/index.html (hidden, not in sitemap)")
+
 # MEETUPS
 print(DIVIDER)
 meetups = (context.get("meetups") or []) + (context.get("meetups_past") or [])
