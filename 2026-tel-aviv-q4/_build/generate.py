@@ -482,7 +482,7 @@ if _event_over() and str(context.get('event_state') or '').strip() != 'after':
 # panels split into their members, somebody with two talks counted once), exact. Attendees = Luma "Going" (approved
 # guests, not check-ins), rounded half up to the nearest 10 (174 -> 170, 175 -> 180; not round(), which takes 165 to
 # 160), and never below 50: under that the page says "50". attendees_final in metadata.yml wins over Luma (events on
-# someone else's Luma or on in10t). No number (no key, Luma down) = the estimate stays; 0 going shows 50. Before / active
+# someone else's Luma or on in10t). Unknown (no key, Luma down, 0 going: Marek 2026-10-16) = the estimate, as is. Before / active
 # events keep the estimates. The Luma count is cached in ../.cache/luma-stats/ (kept by actions/cache): a finished
 # event is asked once, never again.
 _STATS_CACHE = os.path.join('..', '.cache', 'luma-stats')
@@ -559,8 +559,8 @@ def _final_attendees(folder, meta, fetch):
 
 
 def _attendees_shown(n):
-    """174 -> '170', 175 -> '180'; under 50 (0 too) -> '50'; None -> None (keep the estimate)."""
-    if n is None:
+    """174 -> '170', 175 -> '180'; under 50 -> '50'; None / 0 = unknown -> None (the estimate)."""
+    if not n:
         return None
     r = (int(n) + 5) // 10 * 10
     return str(max(r, 50))
@@ -577,12 +577,14 @@ if context['event_state'] == 'after':
             if _fs_part.strip():
                 _fs_names.add(' '.join(_fs_part.casefold().split()))
     _fs_folder = os.path.basename(os.path.abspath('.'))
-    _fs_att = _attendees_shown(_final_attendees(_fs_folder, context, fetch=True))
+    _fs_raw = _final_attendees(_fs_folder, context, fetch=True)
+    _fs_att = _attendees_shown(_fs_raw)
     context['speakers_display'] = len(_fs_names) or context.get('speakers')
     context['attendees_display'] = _fs_att or ('%s+' % str(context.get('attendees') or '').rstrip('+'))
     context['stats_final'] = True
-    print("Final stats: %s speakers (estimate %s), %s attendees (estimate %s)" % (
-        context['speakers_display'], context.get('speakers'), context['attendees_display'], context.get('attendees')))
+    print("Final stats: %s speakers (estimate %s), %s attendees (estimate %s, going %s)" % (
+        context['speakers_display'], context.get('speakers'), context['attendees_display'], context.get('attendees'),
+        'unknown' if _fs_raw is None else _fs_raw))
 
 _ob_date = str(context.get('date_string', ''))
 context['onboarding_event'] = {
