@@ -481,7 +481,7 @@ if _event_over() and str(context.get('event_state') or '').strip() != 'after':
 # speakers, "100+" attendees). Speakers = the people on the talks.csv lineup (live rows; co-presented sessions and
 # panels split into their members, somebody with two talks counted once), exact. Attendees = Luma "Going" (approved
 # guests, not check-ins), rounded half up to the nearest 10 (174 -> 170, 175 -> 180; not round(), which takes 165 to
-# 160), and never below 50: under that the page says "50+". attendees_final in metadata.yml wins over Luma (events on
+# 160), and never below 50: under that the page says "50". attendees_final in metadata.yml wins over Luma (events on
 # someone else's Luma or on in10t). No number (no key, Luma down, 0 guests) = the estimate stays. Before / active
 # events keep the estimates. The Luma count is cached in ../.cache/luma-stats/ (kept by actions/cache): a finished
 # event is asked once, never again.
@@ -559,11 +559,11 @@ def _final_attendees(folder, meta, fetch):
 
 
 def _attendees_shown(n):
-    """174 -> '170', 175 -> '180'; under 50 -> '50+'; None / 0 -> None (keep the estimate)."""
+    """174 -> '170', 175 -> '180'; under 50 -> '50'; None / 0 -> None (keep the estimate)."""
     if not n:
         return None
     r = (int(n) + 5) // 10 * 10
-    return str(r) if r >= 50 else '50+'
+    return str(max(r, 50))
 
 
 context['stats_final'] = False
