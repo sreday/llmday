@@ -1900,7 +1900,7 @@ print("Writing out status/index.html (hidden, not in sitemap)")
 # at build time. Factory tab: filled live in the browser from the factory's status.json on GitHub (pushed by the
 # computer that runs the factory), this brand's events first. noindex, never in the sitemap.
 # The team password's SHA-256 (the same on sreday, llmday, platformday and conf42.com/factory); "" = no gate.
-_FACTORY_GATE_SHA256 = "cd08c4c4316df20d9c30450fe776dcde4810029e641cde526c5bbffec1f770a3"
+_FACTORY_GATE_SHA256 = "54b6ca6e5c7e0eb7e2e0cfdda988cb822dcbb539661d3359c1ac12398061d267"
 _fm_text = None
 _fm_local = os.path.join("..", "live-factory", "MANUAL.md")
 if os.path.exists(_fm_local):
