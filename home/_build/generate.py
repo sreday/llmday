@@ -42,6 +42,35 @@ with open('metadata.yml') as f:
     context = yaml.load(f, Loader=yaml.FullLoader)
     BASE_FOLDER = "./" + context.get("base_folder")
 
+
+# OVER EVENTS MOVE TO PAST (Marek 2026-10-15): an upcoming event whose folder says event_state: after, or whose last
+# day ended a full 24 h ago (in its own timezone), is built as the first past event. In memory only, metadata.yml is
+# never written; the daily scheduled build picks that moment up. Same rule as _event_over in the event generator.
+def _folder_over(folder):
+    try:
+        with open("../" + folder + "/metadata.yml", encoding="utf-8") as _f:
+            m = yaml.load(_f, Loader=yaml.FullLoader) or {}
+    except (OSError, yaml.YAMLError):
+        return False
+    if str(m.get("event_state") or "").strip() == "after":
+        return True
+    try:
+        start = datetime.datetime.fromisoformat(str(m.get("start_time") or ""))
+    except ValueError:
+        return False
+    tz = start.tzinfo or datetime.timezone.utc
+    days = max(1, int(m.get("days") or 1))
+    ends = datetime.datetime.combine(start.date() + datetime.timedelta(days=days), datetime.time(0, 0), tz)
+    return datetime.datetime.now(tz) >= ends + datetime.timedelta(hours=24)
+
+
+_now_past = [e for e in (context.get("events") or [])
+             if str((e or {}).get("url") or "").startswith("./") and _folder_over(str(e["url"]).strip("./").rstrip("/"))]
+if _now_past:
+    context["events"] = [e for e in context["events"] if e not in _now_past]
+    context["events_past"] = list(reversed(_now_past)) + (context.get("events_past") or [])   # latest first
+    print("Over, moved to past events: %s" % ", ".join(str(e.get("name")) for e in _now_past))
+
 # read the csv
 context["testimonials"] = read_csv("./_db/testimonials.csv")
 context["ambassadors"] = read_csv("./_db/ambassadors.csv")
