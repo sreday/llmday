@@ -263,8 +263,15 @@
         el._rollId = requestAnimationFrame(step);
       };
 
+      // the event has started (Marek 2026-10-16): no "0 0 0 0" pill, the whole countdown section goes the moment it hits zero
+      var timer = null;
       var tick = function () {
         var seconds_left = Math.max(0, (target_date - new Date().getTime()) / 1000);
+        if (seconds_left < 1) {
+          document.getElementById("countdown").style.display = "none";
+          if (timer) clearInterval(timer);
+          return;
+        }
         setNum(days_el, parseInt(seconds_left / 86400));
         seconds_left = seconds_left % 86400;
         setNum(hours_el, parseInt(seconds_left / 3600));
@@ -273,7 +280,7 @@
         setNum(secs_el, parseInt(seconds_left % 60));
       };
       tick();
-      setInterval(tick, 1000);
+      timer = setInterval(tick, 1000);
     }
     </script>
 </section>
