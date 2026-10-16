@@ -1,0 +1,171 @@
+{# ── /factory/ (hidden, team-facing): the LIVE talk factory - the same file on sreday, llmday and platformday.
+     Two tabs. Manual (default): live-factory/MANUAL.md, rendered at build time (home/_build/generate.py, FACTORY block).
+     Factory: filled live in the browser - every minute - from the factory's status.json on GitHub, which the computer
+     running the factory pushes (live-factory/live_factory/publish.py); this site's brand first, the others on request.
+     noindex, never in the sitemap. ── #}
+{% set fb = (factory_brand or "SREday") %}
+{% set fcol = {"sreday": "#713660", "llmday": "#26986A", "platformday": "#E2971D"}.get(fb | lower, "#713660") %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{ fb }} - LIVE talk factory</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
+  <style>
+    :root { --brand: {{ fcol }}; --head: {{ fcol }}; --ink: #1d1d1f; --mute: #6b6b70; --line: #e6e2e6; --bg: #f7f5f7; --card: #fff; --code: #f2eef2;
+            --ok: #2e7d32; --okbg: #e3f3e5; --run: #1565c0; --runbg: #e3eefc; --wait: #8a5a00; --waitbg: #fff1d6; --bad: #b3261e; --badbg: #fde5e3; --todo: #eeeaee; }
+    @media (prefers-color-scheme: dark) { :root { --ink: #ececee; --mute: #a3a0a6; --line: #333036; --bg: #151316; --card: #1e1b1f; --code: #2a262b;
+            --ok: #7fd085; --okbg: #1f3322; --run: #8ab8ff; --runbg: #1b2a40; --wait: #ffc56b; --waitbg: #3a2c12; --bad: #ff8a80; --badbg: #3d1d1b; --todo: #2a262b; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 Roboto, Arial, sans-serif; }
+    header { background: var(--head); color: #fff; padding: 16px 16px 0; }
+    header .in { max-width: 1000px; margin: 0 auto; }
+    header .t { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+    header b { font-family: Montserrat, sans-serif; font-size: 20px; } header span { opacity: .85; font-size: 14px; }
+    nav { display: flex; gap: 4px; margin-top: 12px; }
+    nav a { color: #fff; opacity: .8; text-decoration: none; padding: 8px 16px; border-radius: 8px 8px 0 0; font-family: Montserrat, sans-serif; font-size: 15px; }
+    nav a.on { background: var(--bg); color: var(--ink); opacity: 1; }
+    main { max-width: 1000px; margin: 0 auto 60px; padding: 18px 16px; }
+    .card { background: var(--card); border-radius: 12px; padding: 8px 28px 30px; }
+    @media (max-width: 600px) { .card { padding: 4px 14px 20px; } }
+    .tab { display: none; } .tab.on { display: block; }
+    h1, h2, h3 { font-family: Montserrat, sans-serif; line-height: 1.3; }
+    h1 { font-size: 28px; margin: 22px 0 8px; } h2 { font-size: 22px; margin: 38px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+    h3 { font-size: 18px; margin: 28px 0 6px; color: var(--brand); }
+    a { color: var(--brand); }
+    code { background: var(--code); padding: 1px 5px; border-radius: 4px; font-size: .88em; }
+    pre { background: #26222a; color: #f3eef3; padding: 14px 16px; border-radius: 10px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: inherit; }
+    blockquote { margin: 14px 0; padding: 8px 16px; background: var(--code); border-left: 3px solid var(--brand); border-radius: 6px; color: var(--mute); }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 14px; display: block; overflow-x: auto; }
+    th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-family: Montserrat, sans-serif; font-size: 13px; }
+    hr { border: 0; } li { margin: 3px 0; }
+    .ev h2 { border: 0; margin-top: 26px; padding-top: 0; } .meta { color: var(--mute); font-size: 14px; margin: -4px 0 8px; }
+    .p { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12px; white-space: nowrap; background: var(--todo); color: var(--mute); }
+    .p.done { background: var(--okbg); color: var(--ok); } .p.running { background: var(--runbg); color: var(--run); }
+    .p.waiting { background: var(--waitbg); color: var(--wait); } .p.failed { background: var(--badbg); color: var(--bad); }
+    .flag { color: var(--bad); font-size: 13px; } .small { color: var(--mute); font-size: 13px; }
+    .live { color: var(--run); font-weight: 600; } .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); margin-right: 6px; }
+    .bar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 6px 0 4px; }
+    #gate { display: none; position: fixed; inset: 0; background: var(--gbg, #151316); z-index: 50; align-items: center; justify-content: center; }
+    body.locked #gate { display: flex; } body.locked header, body.locked main { display: none; }
+    #gate form { background: #fff; color: #1d1d1f; padding: 26px 28px; border-radius: 12px; width: min(340px, 90vw); font-family: Arial, sans-serif; }
+    #gate h2 { margin: 0 0 6px; font-size: 20px; border: 0; padding: 0; } #gate p { margin: 0 0 14px; color: #6b6b70; font-size: 14px; }
+    #gate input { width: 100%; padding: 9px 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; }
+    #gate button { margin-top: 10px; width: 100%; padding: 9px; font-size: 15px; border: 0; border-radius: 8px; background: var(--gbtn, {{ fcol }}); color: #fff; cursor: pointer; }
+    #gate .err { color: #b3261e; font-size: 13px; min-height: 18px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+{% if factory_gate %}<div id="gate"><form onsubmit="return enterFactory(event)">
+  <h2>The factory</h2><p>Team only - enter the factory password.</p>
+  <input type="password" id="gate-pw" autocomplete="current-password" autofocus>
+  <button type="submit">Enter</button><div class="err" id="gate-err"></div></form></div>
+<script>
+  // a soft gate for the team (Marek 2026-10-16): the password's SHA-256 is compared in the browser and remembered on
+  // this device. It keeps casual visitors out; it is not encryption - the sources of this page are in a public repo.
+  const GATE = {{ factory_gate | tojson }};
+  if (localStorage.getItem('factory-gate') !== GATE) document.body.classList.add('locked');
+  async function enterFactory(ev) {
+    ev.preventDefault();
+    const pw = document.getElementById('gate-pw').value.trim();
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+    const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    if (hex === GATE) { try { localStorage.setItem('factory-gate', GATE); } catch (e) {} document.body.classList.remove('locked'); }
+    else document.getElementById('gate-err').textContent = 'Not that one.';
+    return false;
+  }
+</script>{% endif %}
+<header><div class="in">
+  <div class="t"><b>{{ fb }} · LIVE talk factory</b><span>turns the recordings of a live event into a clean video per talk</span></div>
+  <nav><a href="#manual" data-tab="manual" class="on">Manual</a><a href="#factory" data-tab="factory">Factory</a></nav>
+</div></header>
+<main>
+  <section class="tab on card" id="tab-manual">{{ factory_manual | safe }}</section>
+
+  <section class="tab card" id="tab-factory">
+    <h1>Factory</h1>
+    <p class="small">What the factory has done for {{ fb }} events, as the computer that runs it publishes it: at the end of
+      every job, and during a run whenever a talk is ready for review or finished. This page checks for news every minute.</p>
+    <div class="bar"><span id="fs-live" class="small"></span>
+      <label class="small"><input type="checkbox" id="fs-all"> show the other brands' events too</label></div>
+    <div id="fs-body"><p class="small">Loading…</p></div>
+    <noscript><p>This tab needs JavaScript.</p></noscript>
+  </section>
+</main>
+<script>
+  // tabs: Manual by default; #factory opens the Factory tab (the address stays shareable)
+  function show(name) {
+    if (name !== 'factory') name = 'manual';
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name));
+    document.querySelectorAll('nav a').forEach(a => a.classList.toggle('on', a.dataset.tab === name));
+  }
+  window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+  show(location.hash.slice(1));
+
+  // the Factory tab, live: the factory's status.json straight from GitHub (no rebuild needed), every minute
+  const SRC = 'https://raw.githubusercontent.com/sreday/sreday/main/live-factory/status.json';
+  const BRAND = {{ (fb | lower) | tojson }};
+  const SITES = {sreday: 'https://sreday.com/factory/#factory', llmday: 'https://llmday.com/factory/#factory', platformday: 'https://platformday.com/factory/#factory'};
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const when = iso => { if (!iso) return ''; const m = Math.round((Date.now() - new Date(iso)) / 60000);
+    return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : iso.slice(0, 16).replace('T', ' '); };
+  const pill = s => `<span class="p ${esc(s)}">${esc(s || '-')}</span>`;
+  let DATA = null;
+  function render() {
+    if (!DATA) return;
+    const all = document.getElementById('fs-all').checked;
+    const evs = (DATA.events || []).filter(e => all || e.id.split('-')[0] === BRAND);
+    const others = (DATA.events || []).filter(e => e.id.split('-')[0] !== BRAND);
+    let h = '';
+    if (!evs.length) h = `<p>No ${esc({{ fb | tojson }})} events published yet.</p>`;
+    for (const e of evs) {
+      h += `<div class="ev"><h2>${esc(e.title)}</h2><div class="meta">${esc(e.date)} · ${e.finished} of ${e.approved} talks finished` +
+        (e.review ? ` · <b>${e.review} waiting for review in Descript</b>` : '') +
+        ` · ${e.recordings} recording${e.recordings === 1 ? '' : 's'} (${e.hours} h), ${e.talk_hours} h of talks sent to Descript` +
+        ` · on ${esc(e.machine)}` + (e.running ? ` · <span class="live">${esc(e.job || 'job')} running</span>` : '') +
+        ` · updated ${when(e.updated)}</div>`;
+      if (e.talks && e.talks.length) {
+        h += '<table><thead><tr><th>Talk</th><th>Cut</th><th>Descript edit</th><th>Review</th><th>Export</th><th>Result</th></tr></thead><tbody>';
+        for (const t of e.talks) {
+          h += `<tr><td><b>${esc(t.talk)}</b><br><span class="small">${esc(t.title)}</span></td>` +
+            [t.cut, t.descript, t.review, t.export].map(s => `<td>${pill(s)}</td>`).join('') +
+            `<td>${t.finished ? pill('done').replace('>done<', '>finished<') + ' ' : ''}${t.minutes} min` +
+            (t.flags || []).map(f => `<div class="flag">${esc(f)}</div>`).join('') +
+            (t.error ? '<div class="flag">needs a retry</div>' : '') + (t.redo ? '<div class="flag">flagged for a redo</div>' : '') + '</td></tr>';
+        }
+        h += '</tbody></table>';
+      } else {
+        h += `<p class="small">${e.analysed} of ${e.recordings} recordings analysed - the cuts are not approved yet.</p>`;
+      }
+      if ((e.not_recorded || []).length) h += `<p class="small">Not recorded: ${e.not_recorded.map(n => esc(n.talk) + (n.why ? ` (${esc(n.why)})` : '')).join(', ')}</p>`;
+      h += '</div>';
+    }
+    if (!all && others.length) {
+      const brands = [...new Set(others.map(e => e.id.split('-')[0]))];
+      h += `<p class="small">Also on the factory: ${brands.map(b => SITES[b] ? `<a href="${SITES[b]}">${esc(b)}</a>` : esc(b)).join(', ')} events.</p>`;
+    }
+    document.getElementById('fs-body').innerHTML = h;
+  }
+  async function load() {
+    try {
+      const r = await fetch(SRC + '?t=' + Math.floor(Date.now() / 60000), {cache: 'no-store'});
+      if (!r.ok) throw new Error(r.status === 404 ? 'nothing published yet' : 'HTTP ' + r.status);
+      DATA = await r.json();
+      document.getElementById('fs-live').innerHTML = `<span class="dot"></span>live · factory last published ${when(DATA.updated)}`;
+      render();
+    } catch (err) {
+      document.getElementById('fs-live').textContent = 'could not load the factory status (' + err.message + ') - trying again in a minute';
+      if (!DATA) document.getElementById('fs-body').innerHTML = '';
+    }
+  }
+  document.getElementById('fs-all').addEventListener('change', render);
+  load();
+  setInterval(load, 60000);
+</script>
+</body>
+</html>
