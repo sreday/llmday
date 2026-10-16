@@ -660,7 +660,15 @@
     <!-- Timeline View (default) -->
     <div id="timeline-view-{{ day }}" class="schedule-timeline-view">
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
-      <div class="track-section-header" id="track-{{ day }}-{{ loop.index }}">Track {{ track }} &bull; {{ rooms[loop.index0] }}</div>
+{# one track (Marek 2026-10-16): no "Track 1" anywhere, just the room (no header at all without one) #}
+{% set _room = rooms[loop.index0] or '' %}
+{% if (tracks|length) // days > 1 %}
+      <div class="track-section-header" id="track-{{ day }}-{{ loop.index }}">Track {{ track }} &bull; {{ _room }}</div>
+{% elif _room %}
+      <div class="track-section-header" id="track-{{ day }}-{{ loop.index }}">{{ _room[:1]|upper }}{{ _room[1:] }}</div>
+{% else %}
+      <div id="track-{{ day }}-{{ loop.index }}"></div>
+{% endif %}
       <div class="schedule-tab-content">
         <div class="tab-pane active">
 {% for talk in talks_by_tracks[track] %}
@@ -696,7 +704,7 @@
 {% for track in tracks[(tracks|length)//days*(day):(tracks|length)//days*(day+1)] %}
 {% set _room = rooms[loop.index0] or '' %}
       <div class="sc-track sc-t{{ loop.index }}" id="track-c-{{ day }}-{{ loop.index }}">
-        <div class="sc-head"><span class="sc-badge">Track {{ track }}</span><span class="sc-room">{{ _room[:1]|upper }}{{ _room[1:] }}</span></div>
+        <div class="sc-head">{% if (tracks|length) // days > 1 %}<span class="sc-badge">Track {{ track }}</span>{% endif %}<span class="sc-room">{{ _room[:1]|upper }}{{ _room[1:] }}</span></div>
         <ol class="sc-list">
 {% for talk in talks_by_tracks[track] %}
           <li class="sc-row{% if not talk.name %} sc-break{% endif %}">

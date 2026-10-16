@@ -1284,7 +1284,7 @@
       }
       function crItems() {                       // what step 3 lists, with the group each belongs to
         if (crMode === 'sponsors') return crSponsors();
-        return crTalks.map(function (p) { return { key: p, p: p, group: p.slot.dataset.track ? trackLabel(p.slot) : '' }; });
+        return crTalks.map(function (p) { return { key: p, p: p, group: p.slot.dataset.track && Object.keys(trackSet).length > 1 ? trackLabel(p.slot) : '' }; });   // one track: no "Track 1" chip
       }
       function crIsPicked(it) { return crMode === 'sponsors' ? crSpPicked.indexOf(it.key) >= 0 : crPicked.indexOf(it.p) >= 0; }
       function crSetPicked(keys) { if (crMode === 'sponsors') crSpPicked = keys; else crPicked = keys; }
