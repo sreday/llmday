@@ -249,8 +249,10 @@
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
 					<div class="item">
-						<div class="number">{{ speakers }}</div>
-						<div class="unit">{{ "Speaker" if speakers == 1 else "Speakers" }}</div>
+						{# past event: the real lineup count (FINAL STATS in _build/generate.py), else the metadata estimate #}
+						{% set _spk = speakers_display if stats_final else speakers %}
+						<div class="number">{{ _spk }}</div>
+						<div class="unit">{{ "Speaker" if _spk == 1 else "Speakers" }}</div>
 					</div><!--//item-->
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
@@ -261,7 +263,7 @@
 				</div><!--//col-->
 				<div class="col-6 col-md-3">
 					<div class="item">
-						<div class="number">{{ attendees }}{% if '+' not in attendees|string %}+{% endif %}</div>
+						<div class="number">{% if stats_final %}{{ attendees_display }}{% else %}{{ attendees }}{% if '+' not in attendees|string %}+{% endif %}{% endif %}</div>
 						<div class="unit">{{ "Attendee" if attendees == 1 else "Attendees" }}</div>
 					</div><!--//item-->
 				</div><!--//col-->

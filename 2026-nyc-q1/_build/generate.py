@@ -450,6 +450,134 @@ if str(context.get("event_state") or "").strip() == "before":
     else:
         print("Schedule not published yet: %d/%d talks (%d%%, publishes at %d%%)%s" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK, _auto_pct, SCHEDULE_AUTO_PCT, "" if _auto_venue else ", and no confirmed venue"))
 
+# EVENT OVER -> "after" (Marek 2026-10-15): over = metadata says event_state: after, OR a full 24 h have passed since
+# the event ended (end of its last day, `days` long, in the event's own timezone). Then the build treats the event as
+# event_state "after" whatever metadata.yml says (like the auto-publish above: in memory only, the yml is never
+# written); the daily scheduled build picks that moment up. Same rule in home/_build/generate.py (_folder_over).
+def _event_over():
+    if str(context.get('event_state') or '').strip() == 'after':
+        return True
+    try:
+        start = datetime.datetime.fromisoformat(str(context.get('start_time') or ''))
+    except ValueError:
+        return False
+    tz = start.tzinfo or datetime.timezone.utc
+    days = max(1, int(context.get('days') or 1))
+    ends = datetime.datetime.combine(start.date() + datetime.timedelta(days=days), datetime.time(0, 0), tz)
+    return datetime.datetime.now(tz) >= ends + datetime.timedelta(hours=24)
+
+
+if _event_over() and str(context.get('event_state') or '').strip() != 'after':
+    print("Event over (24 h past its last day): event_state %s -> after" % context.get('event_state'))
+    context['event_state'] = 'after'
+
+# FINAL STATS (Marek 2026-10-15): a past event shows its real numbers instead of the metadata estimates ("10+"
+# speakers, "100+" attendees). Speakers = the people on the talks.csv lineup (live rows; co-presented sessions and
+# panels split into their members, somebody with two talks counted once), exact. Attendees = Luma "Going" (approved
+# guests, not check-ins), rounded half up to the nearest 10 (174 -> 170, 175 -> 180; not round(), which takes 165 to
+# 160), and never below 50: under that the page says "50+". attendees_final in metadata.yml wins over Luma (events on
+# someone else's Luma or on in10t). No number (no key, Luma down, 0 guests) = the estimate stays. Before / active
+# events keep the estimates. The Luma count is cached in ../.cache/luma-stats/ (kept by actions/cache): a finished
+# event is asked once, never again.
+_STATS_CACHE = os.path.join('..', '.cache', 'luma-stats')
+
+
+def _stats_cache_path(folder, evt):
+    return os.path.join(_STATS_CACHE, '%s-%s.json' % (folder, evt))
+
+
+def _luma_going(evt):
+    """Luma's own approved ("Going") count for the event, or None. One /v1/events/get per key until one manages it."""
+    import json, urllib.request as _ur, urllib.parse as _up, urllib.error as _ue, time as _time
+    base = os.environ.get('LUMA_API_BASE') or 'https://public-api.luma.com'
+    keys = [k.strip() for k in os.environ.get('LUMA_API_KEYS', '').split(',') if k.strip()]
+    if not keys:
+        print("Final stats: no LUMA_API_KEYS, attendees stay the estimate")
+        return None
+    url = base + '/v1/events/get?' + _up.urlencode({'event_id': evt})
+    for key in keys:
+        for attempt in (1, 2):
+            # Luma's edge blocks Python's default User-Agent: identify as a browser (as home's _luma_get)
+            req = _ur.Request(url, headers={'x-luma-api-key': key, 'accept': 'application/json',
+                                            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36'})
+            try:
+                with _ur.urlopen(req, timeout=20) as resp:
+                    ev = json.loads(resp.read().decode('utf-8'))
+            except _ue.HTTPError as e:
+                if e.code == 429 and attempt == 1:
+                    wait = e.headers.get('Retry-After') or ''
+                    _time.sleep(min(60, int(wait)) if wait.isdigit() else 10)
+                    continue
+                print("Final stats: Luma HTTP %d for %s" % (e.code, evt))
+                break
+            except Exception as e:                     # DNS, timeout, bad JSON: reason only, never the URL/key
+                print("Final stats: Luma unreachable for %s (%s)" % (evt, type(e).__name__))
+                break
+            if (ev or {}).get('access') != 'manage':
+                break                                  # next key
+            try:
+                return int((((ev.get('guest_counts') or {}).get('approved') or {}).get('guests')) or 0)
+            except (TypeError, ValueError):
+                return None
+    print("Final stats: no key manages %s, attendees stay the estimate" % evt)
+    return None
+
+
+def _final_attendees(folder, meta, fetch):
+    """Raw final attendee count of an event folder (metadata attendees_final, else cached / fetched Luma Going), or
+    None. fetch=False only reads the cache (the timeline, about other events)."""
+    import json
+    manual = re.sub(r'[^\d]', '', str(meta.get('attendees_final') or ''))
+    if manual:
+        return int(manual)
+    evt = str(meta.get('luma_evt') or '').strip()
+    if not evt.startswith('evt-') or 'PLACEHOLDER' in evt or meta.get('luma_no_api') or meta.get('in10t_event'):
+        return None
+    path = _stats_cache_path(folder, evt)
+    try:
+        with open(path, encoding='utf-8') as f:
+            return int(json.load(f)['going'])
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    if not fetch:
+        return None
+    going = _luma_going(evt)
+    if going:                                          # never cache a 0 / failure: the next build asks again
+        try:
+            os.makedirs(_STATS_CACHE, exist_ok=True)
+            with open(path, 'w', encoding='utf-8') as f:
+                json.dump({'going': going, 'fetched': datetime.datetime.now(datetime.timezone.utc).isoformat()}, f)
+        except OSError:
+            pass
+    return going
+
+
+def _attendees_shown(n):
+    """174 -> '170', 175 -> '180'; under 50 -> '50+'; None / 0 -> None (keep the estimate)."""
+    if not n:
+        return None
+    r = (int(n) + 5) // 10 * 10
+    return str(r) if r >= 50 else '50+'
+
+
+context['stats_final'] = False
+if context['event_state'] == 'after':
+    _fs_names = set()
+    for _fs_t in talks_raw:
+        _fs_n = str(_fs_t.get('name') or '').strip()
+        if not _fs_n or _fs_n.startswith('_') or talk_kind(_fs_t.get('status')) not in LIVE_KINDS:
+            continue
+        for _fs_part in re.split(r'\s*(?:&|,|\band\b)\s*', _fs_n):
+            if _fs_part.strip():
+                _fs_names.add(' '.join(_fs_part.casefold().split()))
+    _fs_folder = os.path.basename(os.path.abspath('.'))
+    _fs_att = _attendees_shown(_final_attendees(_fs_folder, context, fetch=True))
+    context['speakers_display'] = len(_fs_names) or context.get('speakers')
+    context['attendees_display'] = _fs_att or ('%s+' % str(context.get('attendees') or '').rstrip('+'))
+    context['stats_final'] = True
+    print("Final stats: %s speakers (estimate %s), %s attendees (estimate %s)" % (
+        context['speakers_display'], context.get('speakers'), context['attendees_display'], context.get('attendees')))
+
 _ob_date = str(context.get('date_string', ''))
 context['onboarding_event'] = {
     'brand':         str(context.get('brand_key') or context.get('brand_name', '')).lower(),   # brand_key: short form-backend key where the brand name is several words (PEC: pec)
@@ -1124,7 +1252,7 @@ if _os.path.exists(_home_meta_path):
             'city':        _hem.get('city_name', ''),
             'country':     _country,
             'date_string': _hem.get('date_string', ''),
-            'attendees':   (str(_hem.get('attendees', '')).rstrip('+') + '+') if _hem.get('attendees') else '',
+            'attendees':   _attendees_shown(_final_attendees(_he_folder, _hem, fetch=False)) or ((str(_hem.get('attendees', '')).rstrip('+') + '+') if _hem.get('attendees') else ''),   # past: the real number once known
             'url':         f'../{_he_folder}/',
             'state':       ('after' if _hem['start_time'] < _today_iso else 'before') if _hem.get('start_time') else _hem.get('event_state', 'before'),
             'flag':        _flag,
@@ -1520,24 +1648,9 @@ print("Sponsor onboarding: %s | %d opportunities | size %s" % (
     context['sponsor_onboarding_event']['event_name'], len(context['sponsor_onboarding_event']['items']), _event_size))
 # ── END SPONSOR ONBOARDING ──────────────────────────────────────────────────
 
-# PAST EVENTS (Marek 2026-10-04): once the event is over, the onboarding, fasttrack, teasers, communityhero,
-# invitation and onboardsponsor pages are written as "This event has ended" (ended.html) so a past event's forms,
-# cards and ticket codes can no longer be used. The waitlist stays live. Over = metadata says event_state: after, OR a
-# full 24 h have passed since the event ended (end of its last day, `days` long, in the event's own timezone), so a
-# forgotten flag does not leave the pages up; the daily scheduled build picks that moment up.
-def _event_over():
-    if str(context.get('event_state') or '').strip() == 'after':
-        return True
-    try:
-        start = datetime.datetime.fromisoformat(str(context.get('start_time') or ''))
-    except ValueError:
-        return False
-    tz = start.tzinfo or datetime.timezone.utc
-    days = max(1, int(context.get('days') or 1))
-    ends = datetime.datetime.combine(start.date() + datetime.timedelta(days=days), datetime.time(0, 0), tz)
-    return datetime.datetime.now(tz) >= ends + datetime.timedelta(hours=24)
-
-
+# PAST EVENTS (Marek 2026-10-04): once the event is over (_event_over, defined with the final stats above), the
+# onboarding, fasttrack, teasers, communityhero, invitation and onboardsponsor pages are written as "This event has
+# ended" (ended.html) so a past event's forms, cards and ticket codes can no longer be used. The waitlist stays live.
 _EVENT_ENDED = _event_over()
 
 
