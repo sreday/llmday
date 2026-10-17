@@ -5,6 +5,7 @@
     generate.py (talk_pill: status keynote or a legacy "Keynote:" title prefix, status workshop) -#}
 {% macro kn(t) -%}{% if t.pill %}<span class="kn-pill">{{ t.pill }}</span>{{ t.title_display }}{% else %}{{ t.title }}{% endif %}{%- endmacro %}
 
+<div class="glass-run">
 <!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────────── -->
 {% if about_blurb %}
 <section id="about" class="section pt-5 pb-0">
@@ -151,30 +152,19 @@
 <!-- ── END ABOUT THE CONFERENCE ────────────────────────────────────── -->
 
 <style>
-  /* About + Tickets in the schedule's liquid glass (Marek 2026-10-17): the same soft aurora in the brand colour behind
-     the section, fading out below; "About the conference" is a brand-tinted glass pill and opens into a big rounded
-     glass card; the tickets' tinted shard (tickets.html) now floats on the aurora too */
-  #about, #tickets { position: relative; isolation: isolate; overflow-x: clip; }
-  #about::before, #tickets::before { content: ""; position: absolute; left: -5%; right: -5%; top: 0; height: 360px; z-index: -1;
+  /* About + countdown + Tickets in the schedule's liquid glass (Marek 2026-10-17): ONE soft aurora in the brand colour
+     runs behind all three (no per-section edges), strongest under the stats band and fading to white before the
+     schedule, whose own aurora now fades in from white; About opens into a big rounded glass card, the countdown is a
+     glass pill, and the tickets' tinted shard (tickets.html) floats on the wash */
+  .glass-run { position: relative; isolation: isolate; overflow: clip; }
+  .glass-run::before { content: ""; position: absolute; left: -5%; right: -5%; top: -80px; bottom: 0; z-index: -1;
     pointer-events: none;
-    background: linear-gradient(120deg, color-mix(in srgb, var(--brand) 62%, transparent),
+    background: linear-gradient(110deg, color-mix(in srgb, var(--brand) 62%, transparent),
       color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 45%, transparent),
       rgba(245,158,11,.42), rgba(20,184,166,.32));
     filter: blur(40px); opacity: .6;
-    -webkit-mask-image: linear-gradient(#000 35%, transparent); mask-image: linear-gradient(#000 35%, transparent); }
-  .btn-about-conf, .btn-about-conf:hover, .btn-about-conf:focus, .btn-about-conf:active, .btn-about-conf[aria-expanded="true"] {
-    color: var(--brand-dark); }
-  .btn-about-conf {
-    background: linear-gradient(160deg, color-mix(in srgb, var(--brand) 20%, rgba(255,255,255,.6)),
-      color-mix(in srgb, var(--brand) 7%, rgba(255,255,255,.32)));
-    border: 1px solid rgba(255,255,255,.8);
-    -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
-    box-shadow: 0 10px 30px rgba(60,20,50,.14), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.25);
-    transition: background .25s, box-shadow .25s, transform .2s; }
-  .btn-about-conf:hover, .btn-about-conf[aria-expanded="true"] {
-    background: linear-gradient(160deg, color-mix(in srgb, var(--brand) 30%, rgba(255,255,255,.6)),
-      color-mix(in srgb, var(--brand) 12%, rgba(255,255,255,.32)));
-    box-shadow: 0 14px 34px color-mix(in srgb, var(--brand) 28%, transparent), inset 0 1px 0 rgba(255,255,255,.9); }
+    -webkit-mask-image: linear-gradient(#000, rgba(0,0,0,.75) 240px, rgba(0,0,0,.35) 55%, transparent 92%);
+    mask-image: linear-gradient(#000, rgba(0,0,0,.75) 240px, rgba(0,0,0,.35) 55%, transparent 92%); }
   .ac-panel { padding: 0 14px; }                  /* room for the card's shadow inside the clipped, animated panel */
   .ac-panel-inner { margin: 20px 0 34px; padding: 26px 34px 18px; border-radius: 36px;
     background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.8);
@@ -236,15 +226,17 @@
   </div>
   <style>
     /* ======= Countdown pill ========= */
-    .countdown-box {
+    .countdown-box {                                /* a frosted glass pill on the aurora (Marek 2026-10-17), was dark #2f2f2f */
       display: inline-flex;
-      background: #2f2f2f;
+      background: rgba(255,255,255,.42);
+      border: 1px solid rgba(255,255,255,.8);
+      -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
       border-radius: 999px;
       padding: 10px 30px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.18);
+      box-shadow: 0 10px 30px rgba(60,20,50,.12), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.25);
     }
-    .countdown-box .number { color: #fff; }
-    .countdown-box .unit { color: rgba(255,255,255,.7); }
+    .countdown-box .number { color: var(--brand-dark); }
+    .countdown-box .unit { color: #5b5560; }
     @media (max-width: 575px) {
       .countdown-box { padding: 8px 14px; }
       .countdown-box span { min-width: 56px; padding: .5rem .25rem; }  /* 4 units still fit a 320px screen */
@@ -333,6 +325,7 @@
   </div>
 </section>
 {% endif %}
+</div><!--//glass-run-->
 
 <style>
   .speakers-section .card {
@@ -624,7 +617,9 @@
     background: linear-gradient(120deg, color-mix(in srgb, var(--brand) 62%, transparent),
       color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 45%, transparent),
       rgba(245,158,11,.42), rgba(20,184,166,.32));
-    filter: blur(40px); -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
+    filter: blur(40px); -webkit-mask-image: linear-gradient(transparent, #000 45%, transparent); mask-image: linear-gradient(transparent, #000 45%, transparent); }
+  /* the schedule starts white and turns mint (Marek 2026-10-17), so it meets the white end of the About/Tickets wash without an edge */
+  .schedule-section.theme-bg-light { background-image: linear-gradient(#fff, #f0faf5 260px); }
   .schedule-meta { flex-wrap: wrap; gap: .75rem; }
   .schedule-meta-divider { display: none; }
   .schedule-meta-item, .sv-toggle {
