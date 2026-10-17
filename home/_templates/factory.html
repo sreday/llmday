@@ -83,14 +83,37 @@
   // a soft gate for the team (Marek 2026-10-16): the password's SHA-256 is compared in the browser and remembered on
   // this device. It keeps casual visitors out; it is not encryption - the sources of this page are in a public repo.
   const GATE = {{ factory_gate | tojson }};
-  if (localStorage.getItem('factory-gate') !== GATE) document.body.classList.add('locked');
+  // 5 wrong passwords lock this browser out for 24 h (Marek 2026-10-16) - kept in this browser's storage, so like the
+  // gate itself it stops casual guessing, not a determined person
+  const TRIES = 5, LOCK_MS = 24 * 3600 * 1000;
+  const store = {get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                 set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+                 del: k => { try { localStorage.removeItem(k); } catch (e) {} }};
+  function lockedUntil() { const u = +(store.get('factory-gate-lock') || 0); return u > Date.now() ? u : 0; }
+  function showLock() {
+    const u = lockedUntil(); if (!u) return false;
+    const when = new Date(u).toLocaleString([], {weekday: 'short', hour: '2-digit', minute: '2-digit'});
+    document.getElementById('gate-pw').disabled = true;
+    document.querySelector('#gate button').disabled = true;
+    document.getElementById('gate-err').textContent = 'Too many wrong passwords - the factory is closed on this browser until ' + when + '.';
+    return true;
+  }
+  if (store.get('factory-gate') !== GATE) { document.body.classList.add('locked'); showLock(); }
   async function enterFactory(ev) {
     ev.preventDefault();
+    if (showLock()) return false;
     const pw = document.getElementById('gate-pw').value.trim();
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
     const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
-    if (hex === GATE) { try { localStorage.setItem('factory-gate', GATE); } catch (e) {} document.body.classList.remove('locked'); }
-    else document.getElementById('gate-err').textContent = 'Not that one.';
+    if (hex === GATE) {
+      store.set('factory-gate', GATE); store.del('factory-gate-fails'); store.del('factory-gate-lock');
+      document.body.classList.remove('locked');
+    } else {
+      const n = +(store.get('factory-gate-fails') || 0) + 1;
+      if (n >= TRIES) { store.set('factory-gate-lock', String(Date.now() + LOCK_MS)); store.del('factory-gate-fails'); showLock(); }
+      else { store.set('factory-gate-fails', String(n));
+             document.getElementById('gate-err').textContent = 'Not that one. ' + (TRIES - n) + (TRIES - n === 1 ? ' try' : ' tries') + ' left before a 24-hour lock.'; }
+    }
     return false;
   }
 </script>{% endif %}
