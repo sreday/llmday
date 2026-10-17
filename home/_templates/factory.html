@@ -1,7 +1,7 @@
 {# ── /factory/ (hidden, team-facing): the LIVE talk factory - the same file on sreday, llmday and platformday.
-     Three tabs. Manual (default): live-factory/MANUAL.md, rendered at build time (home/_build/generate.py, FACTORY block).
-     With Claude: live-factory/MANUAL-CLAUDE.md, the same way.
-     Factory: filled live in the browser - every minute - from the factory's status.json on GitHub, which the computer
+     Three tabs (Marek 2026-10-16): "Run with Claude" (default) - live-factory/MANUAL-CLAUDE.md; "No Claude, manual" -
+     live-factory/MANUAL.md; both rendered at build time (home/_build/generate.py, FACTORY block).
+     "Factory logs": filled live in the browser - every minute - from the factory's status.json on GitHub, which the computer
      running the factory pushes (live-factory/live_factory/publish.py); this site's brand first, the others on request.
      noindex, never in the sitemap. ── #}
 {% set fb = (factory_brand or "SREday") %}
@@ -83,14 +83,14 @@
 </script>{% endif %}
 <header><div class="in">
   <div class="t"><b>{{ fb }} · LIVE talk factory</b><span>turns the recordings of a live event into a clean video per talk</span></div>
-  <nav><a href="#manual" data-tab="manual" class="on">Manual</a>{% if factory_manual_claude %}<a href="#claude" data-tab="claude">With Claude</a>{% endif %}<a href="#factory" data-tab="factory">Factory</a></nav>
+  <nav>{% if factory_manual_claude %}<a href="#claude" data-tab="claude" class="on">Run with Claude</a>{% endif %}<a href="#manual" data-tab="manual"{% if not factory_manual_claude %} class="on"{% endif %}>No Claude, manual</a><a href="#factory" data-tab="factory">Factory logs</a></nav>
 </div></header>
 <main>
-  <section class="tab on card" id="tab-manual">{{ factory_manual | safe }}</section>
-  {% if factory_manual_claude %}<section class="tab card" id="tab-claude">{{ factory_manual_claude | safe }}</section>{% endif %}
+  {% if factory_manual_claude %}<section class="tab on card" id="tab-claude">{{ factory_manual_claude | safe }}</section>{% endif %}
+  <section class="tab{% if not factory_manual_claude %} on{% endif %} card" id="tab-manual">{{ factory_manual | safe }}</section>
 
   <section class="tab card" id="tab-factory">
-    <h1>Factory</h1>
+    <h1>Factory logs</h1>
     <p class="small">What the factory has done for {{ fb }} events, as the computer that runs it publishes it: at the end of
       every job, and during a run whenever a talk is ready for review or finished. This page checks for news every minute.</p>
     <div class="bar"><span id="fs-live" class="small"></span>
@@ -100,9 +100,9 @@
   </section>
 </main>
 <script>
-  // tabs: Manual by default; #claude / #factory open the others (the address stays shareable)
+  // tabs: "Run with Claude" by default; #manual / #factory open the others (the address stays shareable)
   function show(name) {
-    if (!document.getElementById('tab-' + name)) name = 'manual';
+    if (!document.getElementById('tab-' + name)) name = document.getElementById('tab-claude') ? 'claude' : 'manual';
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name));
     document.querySelectorAll('nav a').forEach(a => a.classList.toggle('on', a.dataset.tab === name));
   }
