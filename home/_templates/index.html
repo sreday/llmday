@@ -6,7 +6,7 @@
 <section id="events" class="sponsors-section section theme-bg-light text-white">
   <div class="container">
     {% if events %}
-    <h3 class="section-heading text-center mb-3">Upcoming conferences</h3>
+    <h3 class="section-heading text-center mb-3">Upcoming conference{{ "s" if events|length != 1 }}</h3>
     <div class="row gx-md-5">
 
       {% for event in events %}
@@ -47,7 +47,7 @@
     {% endif %}
     {% endif %}
     {% if meetups %}
-    <h3 class="section-heading text-center mb-3">Upcoming meetups</h3>
+    <h3 class="section-heading text-center mb-3">Upcoming meetup{{ "s" if meetups|length != 1 }}</h3>
     <div class="row gx-md-5">
 
       {% for event in meetups %}
@@ -175,7 +175,7 @@ function toggleNote(id) {
 <section id="past-events" class="sponsors-section section theme-bg-primary text-white">
   <div class="container">
     {% if events_past %}
-    <h3 class="section-heading text-center mb-3 text-white">Past conferences</h3>
+    <h3 class="section-heading text-center mb-3 text-white">Past conference{{ "s" if events_past|length != 1 }}</h3>
     <div class="row gx-md-5">
 
       {% for event in events_past %}
@@ -211,7 +211,7 @@ function toggleNote(id) {
     {% endif %}
     {% endif %}
     {% if meetups_past %}
-    <h3 class="section-heading text-center mb-3 text-white">Past meetups</h3>
+    <h3 class="section-heading text-center mb-3 text-white">Past meetup{{ "s" if meetups_past|length != 1 }}</h3>
     <div class="row gx-md-5">
 
       {% for event in meetups_past %}
