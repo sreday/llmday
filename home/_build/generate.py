@@ -1915,9 +1915,23 @@ else:
         print("WARN factory: the manual was not fetched (%s)" % _fm_e)
         _fm_text = "# LIVE talk factory\n\nThe manual is at [sreday.com/factory](https://sreday.com/factory/)."
 _fm_html = markdown.markdown(_fm_text, extensions=["tables", "pymdownx.superfences", "toc", "sane_lists"])
+# the "With Claude" tab: live-factory/MANUAL-CLAUDE.md, the same way (local, else from GitHub)
+_fmc_text = ""
+_fmc_local = os.path.join("..", "live-factory", "MANUAL-CLAUDE.md")
+if os.path.exists(_fmc_local):
+    with open(_fmc_local, encoding="utf-8") as _fm_f:
+        _fmc_text = _fm_f.read()
+else:
+    try:
+        import urllib.request as _fm_req
+        with _fm_req.urlopen("https://raw.githubusercontent.com/sreday/sreday/main/live-factory/MANUAL-CLAUDE.md", timeout=20) as _fm_r:
+            _fmc_text = _fm_r.read().decode("utf-8")
+    except Exception as _fm_e:                                    # noqa: BLE001 - the tab is left out
+        print("WARN factory: the with-Claude manual was not fetched (%s)" % _fm_e)
+_fmc_html = markdown.markdown(_fmc_text, extensions=["tables", "pymdownx.superfences", "toc", "sane_lists"]) if _fmc_text else ""
 os.makedirs(BASE_FOLDER + "/factory", exist_ok=True)
 with open(BASE_FOLDER + "/factory/index.html", "w", encoding="utf-8") as f:
-    f.write(env.get_template("factory.html").render(factory_manual=_fm_html, factory_brand=_me or "SREday",
+    f.write(env.get_template("factory.html").render(factory_manual=_fm_html, factory_manual_claude=_fmc_html, factory_brand=_me or "SREday",
                                                     factory_gate=_FACTORY_GATE_SHA256, **context))
 print("Writing out factory/index.html (hidden, not in sitemap)")
 
