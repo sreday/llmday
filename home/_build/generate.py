@@ -441,7 +441,7 @@ _LINT_PLACEHOLDER = re.compile(r"\b(tbd|tba|tbc|lorem ipsum|placeholder|xxx+|tes
 _LINT_MOJIBAKE = re.compile(chr(0xE2) + chr(0x20AC) + "|" + chr(0xC3) + "[" + chr(0x80) + "-" + chr(0xBF) + "]|" + chr(0xFFFD))  # mojibake markers, built with chr() on purpose
 _LINT_MAX_PER_EVENT = 40
 _LINT_CORE_COLUMNS = {"status", "name", "track", "day", "organization", "photo", "linkedin", "title", "abstract", "bio"}
-_LINT_REPO = os.path.basename(os.path.abspath(".."))      # sreday / llmday / platformday (checkout dir in CI too)
+_LINT_REPO = os.path.basename(os.path.dirname(os.path.realpath("../.git")))   # sreday / llmday / platformday (checkout dir in CI too); .git is linked into .build/
 
 
 def _lint_talk_url(folder, row):
@@ -482,11 +482,19 @@ def _lint_image(path):
     return (None, (_w, _h))
 
 
+# finished events live in past/<folder>/ in the repo (the root Makefile's stage step lists them; URLs are unchanged)
+try:
+    with open("../.past-events", encoding="utf-8") as _pf:
+        _PAST_EVENTS = set(_pf.read().split())
+except OSError:
+    _PAST_EVENTS = set()
+
+
 def _status_lint(folder, meta, tracks, past=False):
     """past=True: skip structural checks (rooms/tracks, keynote prefix) that only matter before the event."""
     issues = []
 
-    gh = "https://github.com/sreday/%s/blob/main/%s/" % (_LINT_REPO, folder)
+    gh = "https://github.com/sreday/%s/blob/main/%s%s/" % (_LINT_REPO, "past/" if folder in _PAST_EVENTS else "", folder)
     url = gh + "metadata.yml"                        # default link: the file on GitHub
 
     def add(sev, where, msg):

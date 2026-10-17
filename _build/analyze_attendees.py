@@ -372,7 +372,7 @@ def classify_seniority(raw_title):
 
 def extract_topics(repo_root):
     """Score topics from all talks.csv files found under repo_root."""
-    talks_files = glob.glob(str(repo_root / '20*' / '_db' / 'talks.csv'))
+    talks_files = glob.glob(str(repo_root / '20*' / '_db' / 'talks.csv') + glob.glob(str(repo_root / 'past' / '20*' / '_db' / 'talks.csv'))
     if not talks_files:
         return [], []
 

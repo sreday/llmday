@@ -2,6 +2,13 @@
 
 In-person conferences for Large Language Models, Agents & AI Systems.
 
+## Where the events are
+
+- Upcoming and running events are the dated folders at the top.
+- Finished events are in `past/`, e.g. `past/<event>/`. They keep every feature: edit them there (talks.csv, videos, metadata toggles), and they are rebuilt on every deploy. Their URLs don't change (`llmday.com/<event>/`).
+- `make archive` moves events that ended more than 24 h ago into `past/` (`make archive DRY=1` only lists them). Commit and push after.
+- An upload into an event's old top-level folder after it moved stops the build with a message saying which files to move into `past/`.
+
 
 ## Running locally
 
