@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 # Cache of optimised images and teaser PNGs (see _build/optimize_images.py)
 .cache/
+# flat build copy of all events (root Makefile "stage")
+.build/
