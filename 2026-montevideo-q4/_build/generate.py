@@ -932,6 +932,8 @@ for track in tracks:
 covered_slots = {track: set() for track in tracks}
 _days = int(context.get("days") or 1)
 _per_day = max(len(tracks_ordered) // _days, 1)
+# one track a day: the schedule has no Table view (Marek 2026-10-17: "Normal and compact are enough")
+context["tracks_per_day"] = _planned_tracks or _per_day
 for _day in range(_days):
     _day_tracks = tracks_ordered[_per_day * _day:_per_day * (_day + 1)]
     _times = sorted({t["start_time"].strftime('%H:%M') for tr in _day_tracks for t in tracks[tr]})

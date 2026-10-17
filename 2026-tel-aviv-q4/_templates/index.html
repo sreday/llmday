@@ -662,7 +662,7 @@
 {% endfor %}
         </div>
 {% endif %}
-        <span class="sv-toggle" role="group" aria-label="Schedule view"><span class="sv-slider"></span><span class="sv-label">View</span><button type="button" class="sv-btn active" data-view="normal" onclick="setScheduleView('normal')">Normal</button><button type="button" class="sv-btn" data-view="compact" onclick="setScheduleView('compact')">Compact</button><button type="button" class="sv-btn" data-view="table" onclick="setScheduleView('table')">Table</button></span>
+        <span class="sv-toggle" role="group" aria-label="Schedule view"><span class="sv-slider"></span><span class="sv-label">View</span><button type="button" class="sv-btn active" data-view="normal" onclick="setScheduleView('normal')">Normal</button><button type="button" class="sv-btn" data-view="compact" onclick="setScheduleView('compact')">Compact</button>{% if tracks_per_day > 1 %}<button type="button" class="sv-btn" data-view="table" onclick="setScheduleView('table')">Table</button>{% endif %}</span>
       </div>
     </div>
 
@@ -734,6 +734,7 @@
 {% endfor %}
     </div>
 
+{% if tracks_per_day > 1 %}
     <!-- Table View -->
     <div id="table-view-{{ day }}" class="schedule-table-view{% if (tracks|length) // days == 1 %} single-track{% endif %}">
       <table class="schedule-grid-table">
@@ -806,6 +807,7 @@
         </tbody>
       </table>
     </div>
+{% endif %}
 
 {% endfor %}
     </div><!-- /.sched-glass -->
@@ -823,7 +825,9 @@
       }
       function svAll() { document.querySelectorAll('.sv-toggle').forEach(svMove); }
       window.setScheduleView = function (v) {
-        if (['normal', 'compact', 'table'].indexOf(v) < 0) v = 'normal';
+        // only the views this page offers (a one-track event has no Table): a remembered "table" falls back to normal
+        var offered = Array.prototype.map.call(document.querySelectorAll('.sv-btn'), function (b) { return b.getAttribute('data-view'); });
+        if (offered.indexOf(v) < 0) v = 'normal';
         for (var d = 0; ; d++) {
           var tl = document.getElementById('timeline-view-' + d);
           if (!tl) break;
