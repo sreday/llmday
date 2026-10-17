@@ -150,6 +150,38 @@
 {% endif %}
 <!-- ── END ABOUT THE CONFERENCE ────────────────────────────────────── -->
 
+<style>
+  /* About + Tickets in the schedule's liquid glass (Marek 2026-10-17): the same soft aurora in the brand colour behind
+     the section, fading out below; "About the conference" is a brand-tinted glass pill and opens into a big rounded
+     glass card; the tickets' tinted shard (tickets.html) now floats on the aurora too */
+  #about, #tickets { position: relative; isolation: isolate; overflow-x: clip; }
+  #about::before, #tickets::before { content: ""; position: absolute; left: -5%; right: -5%; top: 0; height: 360px; z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(120deg, color-mix(in srgb, var(--brand) 62%, transparent),
+      color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 45%, transparent),
+      rgba(245,158,11,.42), rgba(20,184,166,.32));
+    filter: blur(40px); opacity: .6;
+    -webkit-mask-image: linear-gradient(#000 35%, transparent); mask-image: linear-gradient(#000 35%, transparent); }
+  .btn-about-conf, .btn-about-conf:hover, .btn-about-conf:focus, .btn-about-conf:active, .btn-about-conf[aria-expanded="true"] {
+    color: var(--brand-dark); }
+  .btn-about-conf {
+    background: linear-gradient(160deg, color-mix(in srgb, var(--brand) 20%, rgba(255,255,255,.6)),
+      color-mix(in srgb, var(--brand) 7%, rgba(255,255,255,.32)));
+    border: 1px solid rgba(255,255,255,.8);
+    -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+    box-shadow: 0 10px 30px rgba(60,20,50,.14), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.25);
+    transition: background .25s, box-shadow .25s, transform .2s; }
+  .btn-about-conf:hover, .btn-about-conf[aria-expanded="true"] {
+    background: linear-gradient(160deg, color-mix(in srgb, var(--brand) 30%, rgba(255,255,255,.6)),
+      color-mix(in srgb, var(--brand) 12%, rgba(255,255,255,.32)));
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--brand) 28%, transparent), inset 0 1px 0 rgba(255,255,255,.9); }
+  .ac-panel { padding: 0 14px; }                  /* room for the card's shadow inside the clipped, animated panel */
+  .ac-panel-inner { margin: 20px 0 34px; padding: 26px 34px 18px; border-radius: 36px;
+    background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.8);
+    -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%);
+    box-shadow: 0 24px 60px rgba(30,20,40,.12), inset 0 1px 0 rgba(255,255,255,.9); }
+  @media (max-width: 767.98px) { .ac-panel { padding: 0 4px; } .ac-panel-inner { padding: 18px 18px 12px; border-radius: 24px; } }
+</style>
 <section id="countdown" class="about-section section">
 
   <div class="container">
