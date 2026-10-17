@@ -34,10 +34,15 @@
     nav { display: flex; gap: 4px; margin-top: 12px; }
     nav a { color: var(--headink); opacity: .85; text-decoration: none; padding: 8px 16px; border-radius: 8px 8px 0 0; font-family: Montserrat, sans-serif; font-size: 15px; }
     nav a.on { background: var(--bg); color: var(--ink); opacity: 1; }
+    nav a { transition: background-color .22s ease, color .22s ease, opacity .22s ease; } nav a:hover { opacity: 1; }
     main { max-width: 1000px; margin: 0 auto 60px; padding: 18px 16px; }
     .card { background: var(--card); border-radius: 12px; padding: 8px 28px 30px; }
     @media (max-width: 600px) { .card { padding: 4px 14px 20px; } }
     .tab { display: none; } .tab.on { display: block; }
+    /* tab change (Marek 2026-10-16): the new tab fades in and rises a few pixels; the highlight eases over */
+    .tab.on { animation: tab-in .28s cubic-bezier(.2,.7,.3,1); }
+    @keyframes tab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .tab.on { animation: none; } nav a, nav.tabs a { transition: none; } }
     h1, h2, h3 { font-family: Montserrat, sans-serif; line-height: 1.3; }
     h1 { font-size: 28px; margin: 22px 0 8px; } h2 { font-size: 22px; margin: 38px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
     h3 { font-size: 18px; margin: 28px 0 6px; color: var(--brand); }
