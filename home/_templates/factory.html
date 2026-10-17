@@ -41,8 +41,16 @@
     .tab { display: none; } .tab.on { display: block; }
     /* tab change (Marek 2026-10-16): the new tab fades in and rises a few pixels; the highlight eases over */
     .tab.on { animation: tab-in .28s cubic-bezier(.2,.7,.3,1); }
+    .tab.on.from-right { animation: slide-from-right .34s cubic-bezier(.2,.7,.3,1); }
+    .tab.on.from-left { animation: slide-from-left .34s cubic-bezier(.2,.7,.3,1); }
     @keyframes tab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-    @media (prefers-reduced-motion: reduce) { .tab.on { animation: none; } nav a, nav.tabs a { transition: none; } }
+    @keyframes slide-from-right { from { opacity: 0; transform: translateX(48px); } to { opacity: 1; transform: none; } }
+    @keyframes slide-from-left { from { opacity: 0; transform: translateX(-48px); } to { opacity: 1; transform: none; } }
+    nav { position: relative; } nav a { position: relative; z-index: 1; }
+    nav a.on { background: transparent; }
+    nav .slider { position: absolute; z-index: 0; top: 0; bottom: 0; left: 0; width: 0; background: var(--bg);
+      border-radius: 8px 8px 0 0; transition: left .34s cubic-bezier(.2,.7,.3,1), width .34s cubic-bezier(.2,.7,.3,1); }
+    @media (prefers-reduced-motion: reduce) { .tab.on, .tab.on.from-right, .tab.on.from-left { animation: none; } nav a, nav.tabs a, nav .slider, nav.tabs .slider { transition: none; } }
     h1, h2, h3 { font-family: Montserrat, sans-serif; line-height: 1.3; }
     h1 { font-size: 28px; margin: 22px 0 8px; } h2 { font-size: 22px; margin: 38px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
     h3 { font-size: 18px; margin: 28px 0 6px; color: var(--brand); }
@@ -108,6 +116,7 @@
     if (hex === GATE) {
       store.set('factory-gate', GATE); store.del('factory-gate-fails'); store.del('factory-gate-lock');
       document.body.classList.remove('locked');
+      window.dispatchEvent(new Event('factory-unlocked'));   // the tabs place their highlight now that they are visible
     } else {
       const n = +(store.get('factory-gate-fails') || 0) + 1;
       if (n >= TRIES) { store.set('factory-gate-lock', String(Date.now() + LOCK_MS)); store.del('factory-gate-fails'); showLock(); }
@@ -137,12 +146,29 @@
 </main>
 <script>
   // tabs: "Run with Claude" by default; #manual / #factory open the others (the address stays shareable)
+  // sliding tabs (Marek 2026-10-16): the highlight glides to the chosen tab and the page slides in from that side
+  const NAV = document.querySelector('nav');
+  const slider = document.createElement('span'); slider.className = 'slider'; NAV.prepend(slider);
+  let current = null;
+  function place(a, instant) {
+    if (!a) return;
+    if (instant) slider.style.transition = 'none';
+    slider.style.left = a.offsetLeft + 'px'; slider.style.width = a.offsetWidth + 'px';
+    if (instant) { slider.offsetWidth; slider.style.transition = ''; }
+  }
   function show(name) {
     if (!document.getElementById('tab-' + name)) name = document.getElementById('tab-claude') ? 'claude' : 'manual';
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name));
-    document.querySelectorAll('nav a').forEach(a => a.classList.toggle('on', a.dataset.tab === name));
+    const links = [...NAV.querySelectorAll('a')], order = links.map(a => a.dataset.tab);
+    const dir = current === null ? '' : order.indexOf(name) > order.indexOf(current) ? 'from-right' : order.indexOf(name) < order.indexOf(current) ? 'from-left' : '';
+    document.querySelectorAll('.tab').forEach(t => { t.classList.remove('on', 'from-right', 'from-left');
+      if (t.id === 'tab-' + name) { if (dir) t.classList.add(dir); void t.offsetWidth; t.classList.add('on'); } });
+    links.forEach(a => a.classList.toggle('on', a.dataset.tab === name));
+    place(links.find(a => a.dataset.tab === name), current === null);
+    current = name;
   }
   window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+  window.addEventListener('resize', () => place(NAV.querySelector('a.on'), true));
+  window.addEventListener('factory-unlocked', () => place(NAV.querySelector('a.on'), true));
   show(location.hash.slice(1));
 
   // the Factory tab, live: the factory's status.json straight from GitHub (no rebuild needed), every minute
