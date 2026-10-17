@@ -456,6 +456,17 @@ if str(context.get("event_state") or "").strip() == "before":
     else:
         print("Schedule not published yet: %d/%d talks (%d%%, publishes at %d%%)%s" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK, _auto_pct, SCHEDULE_AUTO_PCT, "" if _auto_venue else ", and no confirmed venue"))
 
+# SCHEDULE HEADING (Marek 2026-10-17): "Schedule - work in progress" until 80% of the talk slots are filled - the same
+# count as above, live talks.csv rows against 12 slots per track - then just "Schedule". An event that is over always
+# says "Schedule" (see EVENT OVER below).
+SCHEDULE_FULL_PCT = 80
+_sh_tracks = int(re.sub(r"[^\d]", "", str(context.get("tracks") or "1")) or 1)
+_sh_live = sum(1 for t in talks_raw if talk_kind(t.get("status")) in LIVE_KINDS)
+context["schedule_fill_pct"] = round(100.0 * _sh_live / (_sh_tracks * SLOTS_PER_TRACK))
+context["schedule_wip"] = context["schedule_fill_pct"] < SCHEDULE_FULL_PCT
+print("Schedule heading: %d/%d talks (%d%%)%s" % (_sh_live, _sh_tracks * SLOTS_PER_TRACK, context["schedule_fill_pct"],
+                                                  " - work in progress" if context["schedule_wip"] else ""))
+
 # EVENT OVER -> "after" (Marek 2026-10-15): over = metadata says event_state: after, OR a full 24 h have passed since
 # the event ended (end of its last day, `days` long, in the event's own timezone). Then the build treats the event as
 # event_state "after" whatever metadata.yml says (like the auto-publish above: in memory only, the yml is never
@@ -1663,6 +1674,8 @@ print("Sponsor onboarding: %s | %d opportunities | size %s" % (
 # onboarding, fasttrack, teasers, communityhero, invitation and onboardsponsor pages are written as "This event has
 # ended" (ended.html) so a past event's forms, cards and ticket codes can no longer be used. The waitlist stays live.
 _EVENT_ENDED = _event_over()
+if _EVENT_ENDED:
+    context["schedule_wip"] = False                 # a past event's schedule is what happened: no "work in progress"
 
 
 def _next_sponsorship_url():
