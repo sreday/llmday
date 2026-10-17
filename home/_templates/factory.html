@@ -169,6 +169,12 @@
   window.addEventListener('hashchange', () => show(location.hash.slice(1)));
   window.addEventListener('resize', () => place(NAV.querySelector('a.on'), true));
   window.addEventListener('factory-unlocked', () => place(NAV.querySelector('a.on'), true));
+  // the tabs change size when the web font arrives after the first paint (the highlight was measured with the fallback
+  // font and came out too narrow after a refresh): follow their real size whenever it changes
+  const follow = () => place(NAV.querySelector('a.on'), true);
+  if (window.ResizeObserver) { const ro = new ResizeObserver(follow); NAV.querySelectorAll('a').forEach(a => ro.observe(a, {box: 'border-box'})); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(follow);
+  window.addEventListener('load', follow);
   show(location.hash.slice(1));
 
   // the Factory tab, live: the factory's status.json straight from GitHub (no rebuild needed), every minute
@@ -209,10 +215,14 @@
       if ((e.not_recorded || []).length) h += `<p class="small">Not recorded: ${e.not_recorded.map(n => esc(n.talk) + (n.why ? ` (${esc(n.why)})` : '')).join(', ')}</p>`;
       h += '</div>';
     }
-    if (!all && others.length) {
-      const brands = [...new Set(others.map(e => e.id.split('-')[0]))];
-      h += `<p class="small">Also on the factory: ${brands.map(b => SITES[b] ? `<a href="${SITES[b]}">${esc(b)}</a>` : esc(b)).join(', ')} events.</p>`;
-    }
+    // the other LIVE brands' factory pages, always (Marek 2026-10-17: LLMday's page didn't list SREday while SREday had
+    // nothing published), with how many events each has on the factory
+    const NAMES = {sreday: 'SREday', llmday: 'LLMday', platformday: 'PLATFORMday'};
+    const sisters = Object.keys(SITES).filter(b => b !== BRAND).map(b => {
+      const n = (DATA.events || []).filter(e => e.id.split('-')[0] === b).length;
+      return `<a href="${SITES[b]}">${NAMES[b]}</a>` + (n ? ` (${n} event${n === 1 ? '' : 's'})` : '');
+    });
+    h += `<p class="small">The other factories: ${sisters.join(' · ')}</p>`;
     document.getElementById('fs-body').innerHTML = h;
   }
   async function load() {
