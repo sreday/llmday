@@ -5,7 +5,12 @@
      running the factory pushes (live-factory/live_factory/publish.py); this site's brand first, the others on request.
      noindex, never in the sitemap. ── #}
 {% set fb = (factory_brand or "SREday") %}
-{% set fcol = {"sreday": "#713660", "llmday": "#26986A", "platformday": "#E2971D"}.get(fb | lower, "#713660") %}
+{# per brand (2026-10-16 contrast check, all >= 4.5:1): header band + its text, accent (links, h3) in light and dark mode #}
+{% set pal = {"sreday":      {"head": "#713660", "headink": "#ffffff", "light": "#713660", "dark": "#e3a6d6"},
+              "llmday":      {"head": "#16734d", "headink": "#ffffff", "light": "#16734d", "dark": "#5fd3a3"},
+              "platformday": {"head": "#E2971D", "headink": "#1f1300", "light": "#8f5400", "dark": "#f2b14e"}}.get(fb | lower) or
+             {"head": "#713660", "headink": "#ffffff", "light": "#713660", "dark": "#e3a6d6"} %}
+{% set fcol = pal.head %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,18 +21,18 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
   <style>
-    :root { --brand: {{ fcol }}; --head: {{ fcol }}; --ink: #1d1d1f; --mute: #6b6b70; --line: #e6e2e6; --bg: #f7f5f7; --card: #fff; --code: #f2eef2;
+    :root { --brand: {{ pal.light }}; --head: {{ pal.head }}; --headink: {{ pal.headink }}; --ink: #1d1d1f; --mute: #6b6b70; --line: #e6e2e6; --bg: #f7f5f7; --card: #fff; --code: #f2eef2;
             --ok: #2e7d32; --okbg: #e3f3e5; --run: #1565c0; --runbg: #e3eefc; --wait: #8a5a00; --waitbg: #fff1d6; --bad: #b3261e; --badbg: #fde5e3; --todo: #eeeaee; }
-    @media (prefers-color-scheme: dark) { :root { --ink: #ececee; --mute: #a3a0a6; --line: #333036; --bg: #151316; --card: #1e1b1f; --code: #2a262b;
+    @media (prefers-color-scheme: dark) { :root { --brand: {{ pal.dark }}; --ink: #ececee; --mute: #a3a0a6; --line: #333036; --bg: #151316; --card: #1e1b1f; --code: #2a262b;
             --ok: #7fd085; --okbg: #1f3322; --run: #8ab8ff; --runbg: #1b2a40; --wait: #ffc56b; --waitbg: #3a2c12; --bad: #ff8a80; --badbg: #3d1d1b; --todo: #2a262b; } }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 Roboto, Arial, sans-serif; }
-    header { background: var(--head); color: #fff; padding: 16px 16px 0; }
+    header { background: var(--head); color: var(--headink); padding: 16px 16px 0; }
     header .in { max-width: 1000px; margin: 0 auto; }
     header .t { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
     header b { font-family: Montserrat, sans-serif; font-size: 20px; } header span { opacity: .85; font-size: 14px; }
     nav { display: flex; gap: 4px; margin-top: 12px; }
-    nav a { color: #fff; opacity: .8; text-decoration: none; padding: 8px 16px; border-radius: 8px 8px 0 0; font-family: Montserrat, sans-serif; font-size: 15px; }
+    nav a { color: var(--headink); opacity: .85; text-decoration: none; padding: 8px 16px; border-radius: 8px 8px 0 0; font-family: Montserrat, sans-serif; font-size: 15px; }
     nav a.on { background: var(--bg); color: var(--ink); opacity: 1; }
     main { max-width: 1000px; margin: 0 auto 60px; padding: 18px 16px; }
     .card { background: var(--card); border-radius: 12px; padding: 8px 28px 30px; }
@@ -57,7 +62,7 @@
     #gate form { background: #fff; color: #1d1d1f; padding: 26px 28px; border-radius: 12px; width: min(340px, 90vw); font-family: Arial, sans-serif; }
     #gate h2 { margin: 0 0 6px; font-size: 20px; border: 0; padding: 0; } #gate p { margin: 0 0 14px; color: #6b6b70; font-size: 14px; }
     #gate input { width: 100%; padding: 9px 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; }
-    #gate button { margin-top: 10px; width: 100%; padding: 9px; font-size: 15px; border: 0; border-radius: 8px; background: var(--gbtn, {{ fcol }}); color: #fff; cursor: pointer; }
+    #gate button { margin-top: 10px; width: 100%; padding: 9px; font-size: 15px; border: 0; border-radius: 8px; background: var(--gbtn, {{ pal.head }}); color: var(--headink); cursor: pointer; }
     #gate .err { color: #b3261e; font-size: 13px; min-height: 18px; margin-top: 6px; }
   </style>
 </head>
