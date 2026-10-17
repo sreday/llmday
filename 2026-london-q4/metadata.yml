@@ -1,0 +1,111 @@
+# TODO - change these
+
+# start time includes timezone at the end relative to UTC
+start_time: "2026-11-26T09:00:00+00:00"
+# before - no schedule
+# active - schedule
+# after  - hide ticket sales
+event_state: before
+date_string: "November 26, 2026"
+location_string: "Everyman Canary Wharf, London, UK"
+# get this from the event url
+luma_evt: evt-plTUz2bsyWurucv
+cfp_url: https://cfp.ninja/e/llmday-2026-london-q4
+
+# the number of tracks needs to be the same per day
+# the tracks will be taken in the order they appear in the CSV file
+days: 1
+attendees: 150
+speakers: 30+
+tracks: 3
+
+rooms:
+- screen 1
+- screen 2
+- screen 3
+
+breaks:
+- title: Coffee break
+  duration: 30
+  comment: Main lobby
+  # this decides how many talks in-between this and previous section
+  talks_before: 0
+- title: Lunch & networking
+  duration: 60
+  comment: Main lobby
+  talks_before: 5
+
+sponsors:
+  - logo: harness.png
+    url: https://www.harness.io/
+  - logo: aiproductivityhub.png
+    url: https://www.skool.com/ai-productivity-hub/about
+  - logo: prompt-hub.png
+    url: https://www.prompthub.us/
+  - logo: packt.png
+    url: https://packtpub.com/
+  - logo: reliaburger.png
+    url: https://reliaburger.com/
+  - logo: hockeystick.png
+    url: https://www.hockeystick.show
+  - logo: pe-norway-full.png
+    url: https://www.meetup.com/promptengineering-community/
+  - logo: gdg_london.png
+    name: GDG London
+    url: https://www.meetup.com/gdglondon/
+  - logo: london-agentic-ai-meetup.png
+    url: https://www.meetup.com/london-agentic-ai/
+  - logo: it-schulungen.png
+    url: https://www.it-schulungen.com/
+  - logo: pec.png
+    url: https://www.pec.asia/2025/conference
+  - logo: cubixai.png
+    url: https://cubixai.com/
+  - logo: angular-london.png
+    url: https://www.meetup.com/angular-london/
+  - logo: freecodecamp-london.png
+    url: https://www.meetup.com/freecodecamp-london/
+  - logo: london-pytorch.png
+    url: https://www.meetup.com/london-pytorch-meetup/
+  - logo: techleadconf.png
+    url: https://techleadconf.com/
+  - logo: gitnation.png
+    url: https://gitnation.com/
+  - logo: city-js.png
+    url: https://cityjsconf.org/
+
+# these get displayed at the top
+hero_pictures:
+- ../photos/warsaw-2026-0.jpg
+- ../photos/warsaw-2026-1.jpg
+- ../photos/warsaw-2026-2.jpg
+- ../photos/warsaw-2026-3.jpg
+- ../photos/warsaw-2026-4.jpg
+- ../photos/warsaw-2026-5.jpg
+- ../photos/warsaw-2026-6.jpg
+
+# brand identity
+brand_name: "LLMday"
+brand_domain: "llmday.com"
+brand_description: "Conference on Large Language Models, Agents & AI Systems"
+brand_tagline: "Large Language Models, Agents & AI Systems"
+brand_og_pitch: "Probably the most awesome LLM conference in"
+brand_color: "#26986A"
+brand_twitter: "@llmday_com"
+brand_ga_id: "G-CQ2KV6LK8G"
+brand_gads_id: "AW-17496979257"
+brand_twt_pixel: "ofo1h"
+logo_image: ""
+
+# probably don't need changing
+base_path: "https://www.llmday.com/"
+base_folder: "static"
+twitter_url: https://twitter.com/llmday_com
+linkedin_url: https://www.linkedin.com/company/llmday/
+youtube_url: https://www.youtube.com/@llmday
+mailto: "mailto:hello@llmday.com"
+
+venue_name: "Everyman Canary Wharf"
+calendly_sponsor_url: "https://calendly.com/sreday/30min"
+city_name: "London"
+youtube_playlist:

@@ -1,0 +1,13 @@
+YouTube,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
+,talk,Marcel Koert,1,1,MeloMar-IT,Marcel Koert.png,https://www.linkedin.com/in/melomar/?isSelfProfile=true,,,,The Code Was the Easy Part: Building Spaghetti Code Foundry,"# The Code Was the Easy Part
+## Building Spaghetti Code Foundry
+We started building [Spaghetti Code Foundry](https://github.com/MeloMar-IT/spaghetti-code-foundry) with a simple vision: place a label on a GitHub issue and let AI agents plan the work, write the code, run the tests, review the result and prepare it for delivery.
+The first design treated the factory as a pipeline for producing code. We quickly discovered that writing code was the easy part.
+The real engineering challenges lived around the pipeline. Stories had to be clear and small enough to build. Parallel agents needed coordination. Approvals became queues. Status information had to remain trustworthy after partial failures. Retry loops needed brakes. Test suites became production bottlenecks. The factory needed monitoring, recovery procedures, capacity limits and an operating model of its own.
+At one point, the Foundry became so effective at improving itself that it stopped delivering work for the product it was supposed to support.
+This talk shares eleven practical lessons learned while building and operating an open-source AI software factory. It covers the failures that changed the architecture, the features those failures produced and the trade-offs involved in moving from assisted coding toward autonomous software delivery.
+Along the way, we will look at how Spaghetti Code Foundry turns issues into coordinated flows of questions, planning, implementation, testing and review—and why increasing autonomy makes visibility, governance and operational discipline more important rather than less.
+The central lesson is simple:
+> **A software factory is a coordination and trust problem with a coding step in the middle.**
+The talk is intended for software engineers, platform teams, SREs, engineering leaders and anyone experimenting with AI agents in real software-delivery workflows.",,"I am a Site Reliability Engineer, Platform Engineer, author and speaker with more than 25 years of experience in IT.
+My work sits at the intersection of reliability, automation, cloud platforms, observability and operational leadership. I have spent much of my career helping organisations build, run and improve critical systems where downtime matters, incidents are expensive, and vague ownership quickly becomes a real business risk."
