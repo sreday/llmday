@@ -1,5 +1,6 @@
 {# ── /factory/ (hidden, team-facing): the LIVE talk factory - the same file on sreday, llmday and platformday.
-     Two tabs. Manual (default): live-factory/MANUAL.md, rendered at build time (home/_build/generate.py, FACTORY block).
+     Three tabs. Manual (default): live-factory/MANUAL.md, rendered at build time (home/_build/generate.py, FACTORY block).
+     With Claude: live-factory/MANUAL-CLAUDE.md, the same way.
      Factory: filled live in the browser - every minute - from the factory's status.json on GitHub, which the computer
      running the factory pushes (live-factory/live_factory/publish.py); this site's brand first, the others on request.
      noindex, never in the sitemap. ── #}
@@ -82,10 +83,11 @@
 </script>{% endif %}
 <header><div class="in">
   <div class="t"><b>{{ fb }} · LIVE talk factory</b><span>turns the recordings of a live event into a clean video per talk</span></div>
-  <nav><a href="#manual" data-tab="manual" class="on">Manual</a><a href="#factory" data-tab="factory">Factory</a></nav>
+  <nav><a href="#manual" data-tab="manual" class="on">Manual</a>{% if factory_manual_claude %}<a href="#claude" data-tab="claude">With Claude</a>{% endif %}<a href="#factory" data-tab="factory">Factory</a></nav>
 </div></header>
 <main>
   <section class="tab on card" id="tab-manual">{{ factory_manual | safe }}</section>
+  {% if factory_manual_claude %}<section class="tab card" id="tab-claude">{{ factory_manual_claude | safe }}</section>{% endif %}
 
   <section class="tab card" id="tab-factory">
     <h1>Factory</h1>
@@ -98,9 +100,9 @@
   </section>
 </main>
 <script>
-  // tabs: Manual by default; #factory opens the Factory tab (the address stays shareable)
+  // tabs: Manual by default; #claude / #factory open the others (the address stays shareable)
   function show(name) {
-    if (name !== 'factory') name = 'manual';
+    if (!document.getElementById('tab-' + name)) name = 'manual';
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name));
     document.querySelectorAll('nav a').forEach(a => a.classList.toggle('on', a.dataset.tab === name));
   }
