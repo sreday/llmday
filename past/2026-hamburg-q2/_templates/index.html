@@ -5,6 +5,7 @@
     generate.py (talk_pill: status keynote or a legacy "Keynote:" title prefix, status workshop) -#}
 {% macro kn(t) -%}{% if t.pill %}<span class="kn-pill">{{ t.pill }}</span>{{ t.title_display }}{% else %}{{ t.title }}{% endif %}{%- endmacro %}
 
+<div class="glass-run">
 <!-- ── ABOUT THE CONFERENCE (expandable) ─────────────────────────────────── -->
 {% if about_blurb %}
 <section id="about" class="section pt-5 pb-0">
@@ -150,6 +151,27 @@
 {% endif %}
 <!-- ── END ABOUT THE CONFERENCE ────────────────────────────────────── -->
 
+<style>
+  /* About + countdown + Tickets in the schedule's liquid glass (Marek 2026-10-17): ONE soft aurora in the brand colour
+     runs behind all three (no per-section edges), strongest under the stats band and fading to white before the
+     schedule, whose own aurora now fades in from white; About opens into a big rounded glass card, the countdown is a
+     glass pill, and the tickets' tinted shard (tickets.html) floats on the wash */
+  .glass-run { position: relative; isolation: isolate; overflow: clip; }
+  .glass-run::before { content: ""; position: absolute; left: -5%; right: -5%; top: -80px; bottom: 0; z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(110deg, color-mix(in srgb, var(--brand) 62%, transparent),
+      color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 45%, transparent),
+      rgba(245,158,11,.42), rgba(20,184,166,.32));
+    filter: blur(40px); opacity: .6;
+    -webkit-mask-image: linear-gradient(#000, rgba(0,0,0,.75) 240px, rgba(0,0,0,.35) 55%, transparent 92%);
+    mask-image: linear-gradient(#000, rgba(0,0,0,.75) 240px, rgba(0,0,0,.35) 55%, transparent 92%); }
+  .ac-panel { padding: 0 14px; }                  /* room for the card's shadow inside the clipped, animated panel */
+  .ac-panel-inner { margin: 20px 0 34px; padding: 26px 34px 18px; border-radius: 36px;
+    background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.8);
+    -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%);
+    box-shadow: 0 24px 60px rgba(30,20,40,.12), inset 0 1px 0 rgba(255,255,255,.9); }
+  @media (max-width: 767.98px) { .ac-panel { padding: 0 4px; } .ac-panel-inner { padding: 18px 18px 12px; border-radius: 24px; } }
+</style>
 <section id="countdown" class="about-section section">
 
   <div class="container">
@@ -161,22 +183,54 @@
       <h4 class="countdown-intro mb-2 text-center mb-3">This is a past event, what's next?</h4>
       {% if timeline_events %}
       <style>
-        .idx-tl { position: relative; padding: 20px 0 8px; margin-bottom: 8px; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .idx-tl-line { position: absolute; top: 26px; left: 0; right: 0; height: 2px; background: var(--brand-lighter); z-index: 0; }
-        .idx-tl-events { display: flex; justify-content: space-between; position: relative; gap: 8px; overflow-x: auto; padding-bottom: 8px; align-items: stretch; }
-        .idx-tl-event { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
-        .idx-tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); border: 2px solid #fff; outline: 2px solid var(--brand); margin-bottom: 10px; flex-shrink: 0; z-index: 1; }
-        .idx-tl-dot.past { background: #999; outline-color: #999; }
-        .idx-tl-chip { background: var(--brand-lightest); border: 1px solid var(--brand-lighter); border-radius: 8px; padding: 8px 10px; text-align: center; text-decoration: none; width: 100%; transition: background .15s; flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark); overflow-wrap: break-word; word-break: break-word; }
-        .idx-tl-chip:hover { background: var(--brand-pale); text-decoration: none; }
-        .idx-tl-chip.past { background: #e8e8e8; border-color: #ccc; }
-        .idx-tl-chip.past:hover { background: #d8d8d8; }
-        .idx-tl-chip.past .idx-tl-city { color: #555; }
-        .idx-tl-date { font-size: .75rem; color: var(--brand-light); margin-top: 2px; }
-        .idx-tl-chip.past .idx-tl-date { color: #777; }
-        .idx-tl-pin-event { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        .idx-tl-pin { font-size: 2.25rem; line-height: 1; color: var(--brand-dark); margin-bottom: 10px; position: relative; top: -4px; }
+        /* What's next, in the page's liquid glass (Marek 2026-10-17): frosted cards on the aurora, the upcoming ones
+           brand-tinted, the past ones quieter; a "Today" pill where we are. Phones get a vertical timeline (one card
+           per row) instead of nine squeezed columns */
+        .idx-tl { position: relative; max-width: 980px; margin: 6px auto 10px; padding: 18px 0 6px; }
+        .idx-tl-line { position: absolute; top: 24px; left: 2%; right: 2%; height: 2px; z-index: 0;
+          background: linear-gradient(90deg, rgba(120,110,130,.25), color-mix(in srgb, var(--brand) 55%, transparent)); }
+        .idx-tl-events { display: flex; gap: 12px; position: relative; align-items: stretch; }
+        .idx-tl-event { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+        .idx-tl-dot { width: 14px; height: 14px; border-radius: 50%; margin-bottom: 12px; flex-shrink: 0; z-index: 1;
+          background: var(--brand); box-shadow: 0 0 0 3px rgba(255,255,255,.85), 0 0 14px color-mix(in srgb, var(--brand) 55%, transparent); }
+        .idx-tl-dot.past { background: #a39ba8; box-shadow: 0 0 0 3px rgba(255,255,255,.85); }
+        .idx-tl-chip { flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: center; gap: 2px;
+          padding: 12px 6px; border-radius: 18px; text-align: center; text-decoration: none;
+          background: color-mix(in srgb, var(--brand) 12%, rgba(255,255,255,.55)); border: 1px solid rgba(255,255,255,.85);
+          -webkit-backdrop-filter: blur(18px) saturate(170%); backdrop-filter: blur(18px) saturate(170%);
+          box-shadow: 0 12px 30px rgba(40,20,50,.12), inset 0 1px 0 rgba(255,255,255,.9);
+          transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
+        .idx-tl-chip:hover { text-decoration: none; transform: translateY(-3px);
+          background: color-mix(in srgb, var(--brand) 18%, rgba(255,255,255,.6)); box-shadow: 0 18px 38px rgba(40,20,50,.18), inset 0 1px 0 #fff; }
+        .idx-tl-chip.past { background: rgba(255,255,255,.38); box-shadow: 0 8px 22px rgba(40,20,50,.07), inset 0 1px 0 rgba(255,255,255,.8); }
+        .idx-tl-chip.past:hover { background: rgba(255,255,255,.55); }
+        .idx-tl-city { font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700; color: var(--brand-dark);
+          word-break: normal; overflow-wrap: normal; hyphens: manual; }
+        .idx-tl-country, .idx-tl-date { font-size: .72rem; line-height: 1.35; color: #5b5560; }
+        .idx-tl-date { font-weight: 600; color: color-mix(in srgb, var(--brand-dark) 80%, #555); }
+        .idx-tl-chip.past .idx-tl-city { color: #5b5560; }
+        .idx-tl-chip.past .idx-tl-country, .idx-tl-chip.past .idx-tl-date { color: #8a8390; font-weight: 400; }
+        .idx-tl-now { flex: 0 0 auto; display: flex; align-items: flex-start; z-index: 1; }
+        .idx-tl-pin { margin-top: -4px; padding: 3px 10px; border-radius: 999px; font: 700 .68rem 'Montserrat', sans-serif;
+          letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--brand-dark);
+          box-shadow: 0 6px 16px color-mix(in srgb, var(--brand) 40%, transparent); white-space: nowrap; }
+        @media (max-width: 767.98px) {
+          /* phones: a vertical timeline - the line and dots on the left, a full-width card per event */
+          .idx-tl { max-width: 440px; padding: 4px 0 0 0; }
+          .idx-tl-line { top: 8px; bottom: 8px; left: 11px; right: auto; width: 2px; height: auto;
+            background: linear-gradient(180deg, rgba(120,110,130,.25), color-mix(in srgb, var(--brand) 55%, transparent)); }
+          .idx-tl-events { flex-direction: column; gap: 10px; }
+          .idx-tl-event { flex-direction: row; align-items: center; gap: 14px; }
+          .idx-tl-dot { margin: 0 0 0 5px; }
+          .idx-tl-chip { flex-direction: row; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+            column-gap: 10px; padding: 10px 16px; border-radius: 16px; text-align: left; }
+          .idx-tl-chip:hover { transform: translateX(3px); }
+          .idx-tl-city { font-size: .95rem; }
+          .idx-tl-country { order: 3; flex-basis: 100%; }
+          .idx-tl-date { order: 2; }
+          .idx-tl-now { padding-left: 0; }
+          .idx-tl-pin { margin: 0; }
+        }
       </style>
       <div class="idx-tl">
         <div class="idx-tl-line"></div>
@@ -185,14 +239,14 @@
           {% for ev in timeline_events %}
           {% if not ns.pin_shown and ev.state != 'past' and ev.state != 'after' %}
           {% set ns.pin_shown = true %}
-          <div class="idx-tl-pin-event"><div class="idx-tl-pin">▼</div></div>
+          <div class="idx-tl-now"><span class="idx-tl-pin">Today</span></div>
           {% endif %}
           <div class="idx-tl-event">
-            <div class="idx-tl-dot {% if ev.state == 'past' or ev.state == 'after' %}past{% endif %}"></div>
+            <div class="idx-tl-dot{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}"></div>
             <a href="{{ ev.url }}" class="idx-tl-chip{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}">
-              <div class="idx-tl-city">{{ ev.city }}</div>
-              <div class="idx-tl-date" style="font-style:normal;">{{ ev.country }}</div>
-              <div class="idx-tl-date">{{ ev.date_string }}</div>
+              <span class="idx-tl-city">{{ ev.city }}</span>
+              <span class="idx-tl-country">{{ ev.country }}</span>
+              <span class="idx-tl-date">{{ ev.date_string }}</span>
             </a>
           </div>
           {% endfor %}
@@ -301,6 +355,7 @@
   </div>
 </section>
 {% endif %}
+</div><!--//glass-run-->
 
 <style>
   .speakers-section .card {
@@ -592,7 +647,9 @@
     background: linear-gradient(120deg, color-mix(in srgb, var(--brand) 62%, transparent),
       color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 45%, transparent),
       rgba(245,158,11,.42), rgba(20,184,166,.32));
-    filter: blur(40px); -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
+    filter: blur(40px); -webkit-mask-image: linear-gradient(transparent, #000 45%, transparent); mask-image: linear-gradient(transparent, #000 45%, transparent); }
+  /* the schedule starts white and turns mint (Marek 2026-10-17), so it meets the white end of the About/Tickets wash without an edge */
+  .schedule-section.theme-bg-light { background-image: linear-gradient(#fff, #f0faf5 260px); }
   .schedule-meta { flex-wrap: wrap; gap: .75rem; }
   .schedule-meta-divider { display: none; }
   .schedule-meta-item, .sv-toggle {
