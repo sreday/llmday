@@ -39,7 +39,7 @@ _JT_ROLE_NOUNS = {
     'contractor', 'principal', 'intern', 'owner', 'strategist', 'practitioner', 'expert', 'coach',
     'trainer', 'programmer', 'administrator', 'technologist', 'executive', 'officer', 'president',
     'speaker', 'blogger', 'investor', 'mentor', 'fellow', 'phd', 'entrepreneur', 'designer',
-    'writer', 'hacker', 'tester', 'freelancer',
+    'writer', 'hacker', 'tester', 'freelancer', 'auditor', 'operator', 'educator', 'instructor',
 }
 # words that only ever appear in titles, never as the distinctive part of a company name
 _JT_VOCAB = {
@@ -89,9 +89,35 @@ def looks_like_job_title(org):
     return all(_jt_part_is_title(p) for p in org.split('&'))
 
 
+# Marek 2026-10-17: a super focused list. Legal suffixes go ("Mirror Panel Inc." -> "Mirror Panel"), and so do
+# "(ex-Google)" / "formerly Meta" asides and job titles sitting next to the company ("Acme, Independent Researcher").
+_JT_LEGAL = _jt_re.compile(
+    r'(?:[\s,]+(?:inc|incorporated|llc|l\.l\.c|ltd|limited|gmbh|ag|plc|corp|corporation|co|company|s\.?a|'
+    r'b\.?v|n\.?v|s\.?r\.?l|s\.?a\.?s|oy|ab|pty(?:\s+ltd)?|pvt(?:\s+ltd)?|private\s+limited|'
+    r'sp\.?\s*z\s*o\.?\s*o|kg|ug|sarl|s\.?p\.?a|lp|llp)\.?)+\s*$', _jt_re.I)
+_JT_ASIDE = _jt_re.compile(r'\(\s*(?:ex|former|formerly|previously|prev)\b[^)]*\)', _jt_re.I)
+
+
+def _org_clean(part):
+    """One company part without legal suffixes or stray punctuation."""
+    p = _jt_re.sub(r'\s+', ' ', part).strip(' ,;|/-')
+    for _ in range(3):
+        q = _JT_LEGAL.sub('', p).strip(' ,;|/-')
+        if q == p or not q:
+            break
+        p = q
+    return p
+
+
 def company_parts(org):
-    """The parts of an organization value that are real companies (titles removed)."""
-    parts = [p.strip() for p in org.split('&')]
+    """The parts of an organization value that are real companies (titles, ex-employers and legal suffixes removed)."""
+    org = _JT_ASIDE.sub(' ', str(org or ''))
+    # "&" splits only with spaces around it, so "AT&T" stays whole
+    parts = [_org_clean(p) for p in _jt_re.split(r'\s+&\s+|\s*[;|,]\s*|\s+/\s+', org.strip())]
+    parts = [p for p in parts if p and not _JT_LEGAL.fullmatch(' ' + p)
+             and not _jt_re.match(r'(?:ex|former|formerly|previously)\b', p, _jt_re.I)]
+    if not parts:
+        return []
     flags = [_jt_part_is_title(p) for p in parts]
     if any(flags):
         # sibling rule: "Azure Cloud & AI Architect and Advisor" -> "Azure Cloud" is a title fragment
@@ -757,16 +783,15 @@ if len(_about_talks) >= 3:
     for _t in _about_talks:
         _raw = (_t.get("organization") or "")
         _kept = company_parts(_raw)
-        for _p in (p.strip() for p in _raw.split('&')):
-            if _p and _p not in _kept and _p not in _about_dropped:
-                _about_dropped.append(_p)
+        if _raw.strip() and _kept != [_raw.strip()] and _raw.strip() not in _about_dropped:
+            _about_dropped.append(_raw.strip())
         for _org in _kept:
             _org_l = _org.lower()
             if 'university' not in _org_l and _org_l not in _about_seen_orgs:
                 _about_seen_orgs.add(_org_l)
                 _about_companies.append(_org)
     if _about_dropped:
-        print("About panel: dropped job-title organizations: " + "; ".join(_about_dropped))
+        print("About panel: cleaned organizations (titles, ex-employers, legal suffixes): " + "; ".join(_about_dropped))
     _about_companies.sort(key=lambda s: s.lower())
 context["about_companies"] = _about_companies
 # "more talks soon" shows while confirmed talks are below 60% of the event's
