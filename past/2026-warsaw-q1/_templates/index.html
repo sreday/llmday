@@ -163,8 +163,8 @@
       color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 45%, transparent),
       rgba(245,158,11,.42), rgba(20,184,166,.32));
     filter: blur(40px); opacity: .6;
-    -webkit-mask-image: linear-gradient(#000, rgba(0,0,0,.75) 240px, rgba(0,0,0,.35) 55%, transparent 92%);
-    mask-image: linear-gradient(#000, rgba(0,0,0,.75) 240px, rgba(0,0,0,.35) 55%, transparent 92%); }
+    -webkit-mask-image: linear-gradient(#000, rgba(0,0,0,.8) 30%, rgba(0,0,0,.4) 65%, transparent);
+    mask-image: linear-gradient(#000, rgba(0,0,0,.8) 30%, rgba(0,0,0,.4) 65%, transparent); }
   .ac-panel { padding: 0 14px; }                  /* room for the card's shadow inside the clipped, animated panel */
   .ac-panel-inner { margin: 20px 0 34px; padding: 26px 34px 18px; border-radius: 36px;
     background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.8);
@@ -211,9 +211,10 @@
         .idx-tl-chip.past .idx-tl-city { color: #5b5560; }
         .idx-tl-chip.past .idx-tl-country, .idx-tl-chip.past .idx-tl-date { color: #8a8390; font-weight: 400; }
         .idx-tl-now { flex: 0 0 auto; display: flex; align-items: flex-start; z-index: 1; }
-        .idx-tl-pin { margin-top: -4px; padding: 3px 10px; border-radius: 999px; font: 700 .68rem 'Montserrat', sans-serif;
-          letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--brand-dark);
-          box-shadow: 0 6px 16px color-mix(in srgb, var(--brand) 40%, transparent); white-space: nowrap; }
+        /* "we are here": the triangular pin on the line (Marek 2026-10-17, not a "Today" label) */
+        .idx-tl-pin { display: block; width: 0; height: 0; margin-top: 10px;
+          border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 22px solid var(--brand-dark);
+          filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--brand) 45%, transparent)); }
         @media (max-width: 767.98px) {
           /* phones: a vertical timeline - the line and dots on the left, a full-width card per event */
           .idx-tl { max-width: 440px; padding: 4px 0 0 0; }
@@ -228,8 +229,9 @@
           .idx-tl-city { font-size: .95rem; }
           .idx-tl-country { order: 3; flex-basis: 100%; }
           .idx-tl-date { order: 2; }
-          .idx-tl-now { padding-left: 0; }
-          .idx-tl-pin { margin: 0; }
+          .idx-tl-now { padding-left: 2px; }
+          .idx-tl-pin { margin: 0; border-top: 11px solid transparent; border-bottom: 11px solid transparent;
+            border-left: 20px solid var(--brand-dark); border-right: 0; }   /* points right at the cards on the vertical line */
         }
       </style>
       <div class="idx-tl">
@@ -239,7 +241,7 @@
           {% for ev in timeline_events %}
           {% if not ns.pin_shown and ev.state != 'past' and ev.state != 'after' %}
           {% set ns.pin_shown = true %}
-          <div class="idx-tl-now"><span class="idx-tl-pin">Today</span></div>
+          <div class="idx-tl-now" title="Today"><span class="idx-tl-pin" aria-label="Today"></span></div>
           {% endif %}
           <div class="idx-tl-event">
             <div class="idx-tl-dot{% if ev.state == 'past' or ev.state == 'after' %} past{% endif %}"></div>
@@ -717,7 +719,7 @@
 {% endfor %}
         </div>
 {% endif %}
-        <span class="sv-toggle" role="group" aria-label="Schedule view"><span class="sv-slider"></span><span class="sv-label">View</span><button type="button" class="sv-btn active" data-view="normal" onclick="setScheduleView('normal')">Normal</button><button type="button" class="sv-btn" data-view="compact" onclick="setScheduleView('compact')">Compact</button><button type="button" class="sv-btn" data-view="table" onclick="setScheduleView('table')">Table</button></span>
+        <span class="sv-toggle" role="group" aria-label="Schedule view"><span class="sv-slider"></span><span class="sv-label">View</span><button type="button" class="sv-btn active" data-view="normal" onclick="setScheduleView('normal')">Normal</button><button type="button" class="sv-btn" data-view="compact" onclick="setScheduleView('compact')">Compact</button>{% if tracks_per_day > 1 %}<button type="button" class="sv-btn" data-view="table" onclick="setScheduleView('table')">Table</button>{% endif %}</span>
       </div>
     </div>
 
@@ -789,6 +791,7 @@
 {% endfor %}
     </div>
 
+{% if tracks_per_day > 1 %}
     <!-- Table View -->
     <div id="table-view-{{ day }}" class="schedule-table-view{% if (tracks|length) // days == 1 %} single-track{% endif %}">
       <table class="schedule-grid-table">
@@ -861,6 +864,7 @@
         </tbody>
       </table>
     </div>
+{% endif %}
 
 {% endfor %}
     </div><!-- /.sched-glass -->
@@ -878,7 +882,9 @@
       }
       function svAll() { document.querySelectorAll('.sv-toggle').forEach(svMove); }
       window.setScheduleView = function (v) {
-        if (['normal', 'compact', 'table'].indexOf(v) < 0) v = 'normal';
+        // only the views this page offers (a one-track event has no Table): a remembered "table" falls back to normal
+        var offered = Array.prototype.map.call(document.querySelectorAll('.sv-btn'), function (b) { return b.getAttribute('data-view'); });
+        if (offered.indexOf(v) < 0) v = 'normal';
         for (var d = 0; ; d++) {
           var tl = document.getElementById('timeline-view-' + d);
           if (!tl) break;
