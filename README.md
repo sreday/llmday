@@ -192,7 +192,8 @@ Open it on the presenting laptop, press **Fullscreen** (or `F`), then use a clic
 Slides: Hello <city> (logo, the site's 404 mascot, QR to the event page, WhatsApp + LinkedIn QRs, the city panorama, the
 site's Montserrat/Roboto), Meet our team, Share the love, Sponsors & partners (`sponsors:` in metadata.yml, in that order,
 a pill sized to its logos), Other brands (Conf42 last), Open source (cfp.ninja, Reliaburger), each sister brand's upcoming
-events on a dotted world map in its own colours (not PEC: `tour: false`), then this brand's mascot sticker + logo + its upcoming events, big.
+events on a dotted world map in its own colours (not PEC: `tour: false`), then this brand's own roadmap
+(with its mascot sticker), and last its QR code with the splash cards (`photo_url`) of its next 3-5 events.
 
 - Built by `_event_template/_build/hello.py` + `_templates/hello.html` (identical in sreday, llmday, platformday, PEC).
   The QR codes are inline SVG made at build time; nothing per event to type.
