@@ -189,9 +189,10 @@ posted as JSON to `fasttrack_form_url`.
 Every event gets `/<event>/hello/`: the opening slides for the venue screen (after the PLATFORMday Austin 2026 deck).
 Open it on the presenting laptop, press **Fullscreen** (or `F`), then use a clicker, the arrow keys, PageUp/PageDown or a click.
 
-Slides: Hello <city> (logo, mascot, QR to the event page, WhatsApp + LinkedIn QRs, the city panorama), Meet our team,
-Share the love, Our partners (`sponsors:` in metadata.yml, in that order), the other conferences, cfp.ninja, each sister
-brand's upcoming events in its own colours, then this brand with its upcoming event cards (`photo_url`).
+Slides: Hello <city> (logo, the site's 404 mascot, QR to the event page, WhatsApp + LinkedIn QRs, the city panorama, the
+site's Montserrat/Roboto), Meet our team, Share the love, Sponsors & partners (`sponsors:` in metadata.yml, in that order),
+the other conferences (Conf42 last), Open source (cfp.ninja, certified.fyi, Reliaburger), each sister brand's upcoming
+events in its own colours (not PEC: `tour: false`), then this brand's mascot sticker + logo + its upcoming events, big.
 
 - Built by `_event_template/_build/hello.py` + `_templates/hello.html` (identical in sreday, llmday, platformday, PEC).
   The QR codes are inline SVG made at build time; nothing per event to type.

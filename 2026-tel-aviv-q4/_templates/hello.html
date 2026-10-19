@@ -16,7 +16,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Oswald:wght@500;600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/fonts.css">{# the site's own Montserrat + Roboto (slide 1) #}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Oswald:wght@500;600&display=swap">
   <style>
     :root {
       --bg: {{ t.bg or '#222' }}; --bg2: {{ t.bg2 or t.bg or '#333' }}; --deep: {{ t.deep or '#000' }};
@@ -59,6 +60,8 @@
     .s-hello .mascot { height: 320px; width: auto; filter: drop-shadow(0 12px 30px rgba(0,0,0,.35)); }
     .s-hello .hello { font-size: 120px; margin-top: 20px; text-align: center; white-space: nowrap; }
     .s-hello .hello span { display: block; }
+    .s-hello .glow { font-family: 'Montserrat', sans-serif; font-weight: 800; letter-spacing: .03em; }
+    .s-hello .cap, .s-hello .when { font-family: 'Roboto', sans-serif; }
     .s-hello .when { position: absolute; right: 70px; bottom: 70px; text-align: right; font-size: 38px; font-weight: 500; letter-spacing: .04em;
                      text-shadow: 0 2px 12px rgba(0,0,0,.4); }
     .s-hello .when b { display: block; font-weight: 600; font-size: 46px; }
@@ -96,9 +99,10 @@
     .family.four .logo { width: 280px; height: 280px; }
     .family.four .qr-box { width: 320px; }
 
-    /* 6 - cfp.ninja */
-    .s-cfp .logo { width: 560px; height: 530px; }
-    .s-cfp .qr-box { width: 380px; margin-top: 40px; }
+    /* 6 - open source */
+    .s-oss h2 { margin-bottom: 60px; }
+    .family.oss .logo { width: 340px; height: 300px; }
+    .family.oss .qr-box { width: 320px; }
 
     /* tours - the sister brands' upcoming events */
     .s-tour { background: radial-gradient(1200px 700px at 75% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
@@ -121,22 +125,19 @@
     .s-tour .mascot { position: absolute; right: 40px; bottom: 20px; height: 330px; }
     .s-tour .home-qr { position: absolute; left: 70px; bottom: 60px; width: 190px; }
 
-    /* own brand */
-    .s-brand { flex-direction: row; justify-content: space-around; padding: 0 80px; }
-    .s-brand .mascot { height: 560px; }
-    .s-brand .logo { width: 560px; height: 560px; }
-    .s-brand .qr-box { width: 420px; }
-    .s-own { flex-direction: row; justify-content: flex-start; padding: 0 80px; gap: 80px; }
-    .s-own .logo { width: 400px; height: 400px; flex: none; }
-    .cards { display: grid; grid-template-columns: repeat(2, 620px); gap: 40px; }
-    .cards.one { grid-template-columns: 900px; }
-    .card { position: relative; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, var(--bg), var(--bg2));
-            aspect-ratio: 2 / 1; box-shadow: 0 16px 50px rgba(0,0,0,.5); }
-    .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .card .txt { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-    .card .txt b { font-size: 54px; text-transform: uppercase; }
-    .card .txt em { font-style: normal; font-size: 34px; }
-    .card.here { outline: 6px solid #fff; outline-offset: -6px; }
+    /* own brand: sticker + logo + upcoming events */
+    .s-own { flex-direction: row; justify-content: center; gap: 110px; padding: 0 90px; }
+    .s-own .sticker { height: 920px; width: auto; max-width: 820px; object-fit: contain; flex: none; }
+    .own-right { display: flex; flex-direction: column; align-items: flex-start; }
+    .own-right .logo { width: 300px; height: 230px; object-position: left center; }
+    .own-right .glow { font-size: 64px; margin: 40px 0 26px; }
+    .own-list { list-style: none; margin: 0; padding: 0; }
+    .own-list li { display: flex; align-items: baseline; gap: 34px; padding: 10px 0; position: relative; }
+    .own-list b { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 84px; text-transform: uppercase; line-height: 1; }
+    .own-list em { font-style: normal; font-weight: 500; font-size: 52px; color: var(--accent); text-shadow: 0 0 14px var(--accent); }
+    .own-list li.here b { text-shadow: 0 0 18px var(--glow); }
+    .own-list li.here::before { content: ''; position: absolute; left: -48px; top: 50%; width: 22px; height: 22px; margin-top: -11px;
+                                border-radius: 50%; background: var(--accent); box-shadow: 0 0 20px var(--accent); }
 
     /* controls */
     .ui { position: fixed; z-index: 10; transition: opacity .3s; font-family: system-ui, -apple-system, sans-serif; }
@@ -161,11 +162,11 @@
     {% if deck.city_bg %}<img class="city-bg" src="{{ deck.city_bg }}" alt="" loading="eager"><div class="veil"></div>{% endif %}
     {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
     <div class="main-qr"><div class="qr-box">{{ deck.event_qr }}</div><div class="cap">Schedule &amp; talks</div></div>
-    <div class="center"{% if not deck.brand.mascot_src %} style="top: 300px"{% endif %}>
-      {% if deck.brand.mascot_src %}<img class="mascot" src="{{ deck.brand.mascot_src }}" alt="" loading="eager">{% endif %}
+    <div class="center"{% if not deck.brand.hello_src %} style="top: 300px"{% endif %}>
+      {% if deck.brand.hello_src %}<img class="mascot" src="{{ deck.brand.hello_src }}" alt="" loading="eager">{% endif %}
       {%- set cn = deck.city|length -%}
-      {#- Orbitron caps + letter-spacing ~ 0.95em a letter: long names shrink to fit the 1500 px between the corner blocks -#}
-      <h1 class="glow hello">Hello<span style="font-size: {{ [120, (1500 / (cn * 0.95))|int]|min }}px">{{ deck.city|e }}</span></h1>
+      {#- Montserrat 800 caps ~ 0.8em a letter: long names shrink to fit the 1500 px between the corner blocks -#}
+      <h1 class="glow hello">Hello<span style="font-size: {{ [120, (1500 / (cn * 0.8))|int]|min }}px">{{ deck.city|e }}</span></h1>
     </div>
     <div class="socials">
       {% if deck.whatsapp_qr %}<div><div class="qr-box">{{ deck.whatsapp_qr }}</div>{{ wa_icon() }}</div>{% endif %}
@@ -198,7 +199,7 @@
   {% if deck.sponsors %}
   <section class="slide s-partners">
     {% if deck.city_bg %}<img class="city-bg" src="{{ deck.city_bg }}" alt="" loading="eager"><div class="veil"></div>{% endif %}
-    <h2 class="glow h1">Our<br>partners</h2>
+    <h2 class="glow h1">Sponsors &amp;<br>partners</h2>
     <div class="partners{% if deck.sponsors|length > 5 %} many{% endif %}">
       {% for s in deck.sponsors %}<img src="{{ s.src }}" alt="{{ s.name }}" loading="eager">{% endfor %}
     </div>
@@ -214,11 +215,13 @@
   </section>
   {% endif %}
 
-  {# 6 - cfp.ninja #}
-  {% if deck.cfp.qr %}
-  <section class="slide s-cfp">
-    {% if deck.cfp.logo_src %}<img class="logo" src="{{ deck.cfp.logo_src }}" alt="cfp.ninja" loading="eager">{% endif %}
-    <div class="qr-box">{{ deck.cfp.qr }}</div>
+  {# 6 - our open-source projects (hello.yaml open_source) #}
+  {% if deck.open_source %}
+  <section class="slide s-oss">
+    <h2 class="glow h1">Open source</h2>
+    <div class="family oss">
+      {% for o in deck.open_source %}<div><img class="logo" src="{{ o.logo_src }}" alt="{{ o.name }}" loading="eager"><div class="qr-box">{{ o.qr }}</div></div>{% endfor %}
+    </div>
   </section>
   {% endif %}
 
@@ -244,25 +247,19 @@
   </section>
   {% endfor %}
 
-  {# this brand: logo + QR, then its upcoming events #}
-  <section class="slide dark s-brand">
-    {% if deck.brand.mascot_src %}<img class="mascot" src="{{ deck.brand.mascot_src }}" alt="" loading="eager">{% endif %}
-    {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
-    <div class="qr-box">{{ deck.home_qr }}</div>
-  </section>
-  {% if deck.own_events %}
+  {# this brand: the mascot sticker, the logo and its upcoming events, big #}
   <section class="slide dark s-own">
-    {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
-    <div class="cards{% if deck.own_events|length == 1 %} one{% endif %}">
-      {% for e in deck.own_events %}
-      <div class="card{% if e.folder == deck.slug %} here{% endif %}">
-        <div class="txt"><b>{{ e.city|e }}</b><em>{{ e.date }}</em></div>
-        {% if e.card %}<img src="{{ e.card }}" alt="{{ brand_name }} {{ e.city|e }} {{ e.date }}" loading="eager" onerror="this.remove()">{% endif %}
-      </div>
-      {% endfor %}
+    {% if deck.brand.sticker_src %}<img class="sticker" src="{{ deck.brand.sticker_src }}" alt="" loading="eager">{% endif %}
+    <div class="own-right">
+      {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
+      {% if deck.own_events %}
+      <h2 class="glow">Upcoming events</h2>
+      <ul class="own-list">
+        {% for e in deck.own_events %}<li{% if e.folder == deck.slug %} class="here"{% endif %}><b>{{ e.city|e }}</b><em>{{ e.date }}</em></li>{% endfor %}
+      </ul>
+      {% endif %}
     </div>
   </section>
-  {% endif %}
 </div>
 
 <button class="ui" id="fs" type="button" title="Fullscreen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Fullscreen</button>
