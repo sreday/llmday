@@ -122,6 +122,17 @@
     .s-tour .pin b { display: block; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 50px; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; }
     .s-tour .pin em { display: block; font-style: normal; font-weight: 600; font-size: 34px; color: var(--accent); text-shadow: 0 0 12px var(--accent); }
     .s-tour .pin small { display: block; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+    .s-tour .route path.grey { stroke: #8b8b95; filter: none; }
+    .s-tour .pin.tbc i, .s-tour .pin.more i { background: #9a9aa3; box-shadow: 0 0 0 8px rgba(154,154,163,.25); }
+    .s-tour .pin.more i { background: transparent; border: 5px solid #9a9aa3; }
+    .s-tour .pin.tbc b, .s-tour .pin.more b { color: #b4b4bc; }
+    .s-tour .pin.tbc em, .s-tour .pin.more em { color: #9a9aa3; text-shadow: none; }
+    .s-tour .pin.more em { font-size: 28px; }
+    .s-tour .pin.dense b { font-size: 40px; }
+    .s-tour .pin.dense em { font-size: 28px; }
+    .s-tour .pin.dense small { font-size: 18px; }
+    .s-tour .pin.dense2 b { font-size: 34px; }
+    .s-tour .pin.dense2 em { font-size: 24px; }
     .s-tour .mascot { position: absolute; right: 40px; bottom: 20px; height: 330px; }
     .s-tour .home-qr { position: absolute; left: 70px; bottom: 60px; width: 190px; }
 
@@ -135,6 +146,12 @@
     .own-list li { display: flex; align-items: baseline; gap: 34px; padding: 10px 0; position: relative; }
     .own-list b { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 84px; text-transform: uppercase; line-height: 1; }
     .own-list em { font-style: normal; font-weight: 500; font-size: 52px; color: var(--accent); text-shadow: 0 0 14px var(--accent); }
+    .own-list li.tbc b, .own-list li.more b { color: #b4b4bc; }
+    .own-list li.tbc em, .own-list li.more em { color: #9a9aa3; text-shadow: none; }
+    .own-list li.more b, .own-list li.more em { font-size: 44px; }
+    .own-list.long b { font-size: 66px; }
+    .own-list.long em { font-size: 42px; }
+    .own-list.long li { padding: 6px 0; }
     .own-list li.here b { text-shadow: 0 0 18px var(--glow); }
     .own-list li.here::before { content: ''; position: absolute; left: -48px; top: 50%; width: 22px; height: 22px; margin-top: -11px;
                                 border-radius: 50%; background: var(--accent); box-shadow: 0 0 20px var(--accent); }
@@ -232,14 +249,23 @@
   <section class="slide s-tour" style="--bg: {{ bt.bg }}; --bg2: {{ bt.bg2 }}; --deep: {{ bt.deep }}; --accent: {{ bt.accent }}; --glow: {{ bt.glow }};">
     <img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager">
     <div class="head"><h2 class="glow">Upcoming events</h2>{% if b.span %}<div class="span">{{ b.span }}</div>{% endif %}</div>
-    {%- set xs = [] -%}
-    {%- for e in b.events -%}{%- set _ = xs.append(330 + (1220 * loop.index0 / (n - 1) if n > 1 else 610)) -%}{%- endfor -%}
+    {#- the published events, then the tentative ones (grey, month only), then a grey "many more" dot; at most 300 px
+        apart so a short list sits together in the middle (between the QR and the mascot) -#}
+    {%- set pts = b.events + [{'more': True}] -%}
+    {%- set n = pts|length -%}
+    {%- set step = [1220 / (n - 1), 300]|min -%}
+    {%- set x0 = 940 - step * (n - 1) / 2 -%}
+    {%- set ys = [230, 330] -%}
     <svg class="route" viewBox="0 0 1920 560" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M{% for x in xs %}{{ x|round(1) }} {{ 330 if loop.index0 % 2 else 230 }}{% if not loop.last %} C{{ (x + (xs[loop.index] - x) / 2)|round(1) }} {{ 330 if loop.index0 % 2 else 230 }} {{ (x + (xs[loop.index] - x) / 2)|round(1) }} {{ 230 if loop.index0 % 2 else 330 }} {% endif %}{% endfor %}"/>
+      {%- for i in range(1, n) %}{% set p = pts[i] %}
+      {%- set xa, xb = x0 + step * (i - 1), x0 + step * i %}
+      {%- set ya, yb = ys[(i - 1) % 2], ys[i % 2] %}
+      <path class="{{ 'grey' if p.more or p.tentative else '' }}" d="M{{ xa|round(1) }} {{ ya }} C{{ ((xa + xb) / 2)|round(1) }} {{ ya }} {{ ((xa + xb) / 2)|round(1) }} {{ yb }} {{ xb|round(1) }} {{ yb }}"/>
+      {%- endfor %}
     </svg>
-    {% for e in b.events %}
-    <div class="pin {{ 'down' if loop.index0 % 2 else 'up' }}" style="left: {{ xs[loop.index0]|round(1) }}px; top: {{ 380 + (330 if loop.index0 % 2 else 230) }}px;">
-      <i></i><div><b>{{ e.city|e }}</b><em>{{ e.date }}</em>{% if e.country %}<small>{{ e.country|e }}</small>{% endif %}</div>
+    {% for e in pts %}
+    <div class="pin {{ 'down' if loop.index0 % 2 else 'up' }}{% if n > 8 %} dense{% endif %}{% if n > 10 %} dense2{% endif %}{% if e.tentative %} tbc{% endif %}{% if e.more %} more{% endif %}" style="left: {{ (x0 + step * loop.index0)|round(1) }}px; top: {{ 380 + ys[loop.index0 % 2] }}px;">
+      <i></i><div>{% if e.more %}<b>Many more</b><em>to be announced soon!</em>{% else %}<b>{{ e.city|e }}</b><em>{{ e.date }}</em>{% if e.country %}<small>{{ e.country|e }}</small>{% endif %}{% endif %}</div>
     </div>
     {% endfor %}
     <div class="home-qr qr-box">{{ b.qr }}</div>
@@ -254,8 +280,9 @@
       {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
       {% if deck.own_events %}
       <h2 class="glow">Upcoming events</h2>
-      <ul class="own-list">
-        {% for e in deck.own_events %}<li{% if e.folder == deck.slug %} class="here"{% endif %}><b>{{ e.city|e }}</b><em>{{ e.date }}</em></li>{% endfor %}
+      <ul class="own-list{% if deck.own_events|length > 4 %} long{% endif %}">
+        {% for e in deck.own_events %}<li class="{{ 'here' if e.folder == deck.slug }}{{ ' tbc' if e.tentative }}"><b>{{ e.city|e }}</b><em>{{ e.date }}</em></li>{% endfor %}
+        <li class="more"><b>Many more</b><em>to be announced soon!</em></li>
       </ul>
       {% endif %}
     </div>
