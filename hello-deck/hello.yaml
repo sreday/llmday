@@ -1,0 +1,58 @@
+# /<event>/hello/ - the opening deck on the venue screen (built by _event_template/_build/hello.py; identical
+# hello-deck/ folder in sreday, llmday, platformday and PEC - change it in all four).
+# Everything event-specific (city, partners, dates, LinkedIn, colours) comes from metadata.yml, not from here.
+
+whatsapp_url: https://chat.whatsapp.com/KS1ce0jAHmNGAiOAoZG6zo
+
+# "Meet our team": first two on the top row, the rest below; photos are 400x400 squares in hello-deck/team/
+team:
+  - {name: Mark, photo: team/mark.jpg}
+  - {name: Miko, photo: team/miko.jpg}
+  - {name: Aleksandra, photo: team/aleksandra.jpg}
+  - {name: Anna, photo: team/anna.jpg}
+  - {name: Petras, photo: team/petras.jpg}
+  - {name: Magda, photo: team/magda.jpg}
+  - {name: Emilia, photo: team/emilia.jpg}
+
+cfp_ninja:
+  url: https://cfp.ninja
+  logo: brands/cfpninja.png
+
+# Every brand of the family. key = the event's brand (brand_key, or brand_name lowercased).
+#   family: false  = left off the "our other conferences" QR slide
+#   site           = where its published metadata.yml lives: its upcoming events get their own slide in the other decks
+#   theme          = the deck colours when this brand is the host (bg/bg2 slide gradient, deep = dark slides,
+#                    accent + glow = headings, pano_lo/pano_hi = the city panorama's duotone)
+brands:
+  - key: conf42
+    name: Conf42
+    url: https://www.conf42.com
+    logo: brands/conf42.png
+  - key: sreday
+    name: SREday
+    url: https://www.sreday.com
+    site: https://sreday.com/
+    logo: brands/sreday.png
+    mascot: brands/mascot-sreday.png
+    theme: {bg: '#2b2160', bg2: '#5e2a5e', deep: '#0b0620', accent: '#9d8cff', glow: '#d9d0ff', pano_lo: '#0b0620', pano_hi: '#8a7cc0'}
+  - key: llmday
+    name: LLMday
+    url: https://www.llmday.com
+    site: https://llmday.com/
+    logo: brands/llmday.png
+    mascot: brands/mascot-llmday.png
+    theme: {bg: '#06140e', bg2: '#0e3322', deep: '#020c09', accent: '#3fcf8e', glow: '#b9ffd9', pano_lo: '#020c09', pano_hi: '#5f9a7e'}
+  - key: platformday
+    name: PLATFORMday
+    url: https://www.platformday.com
+    site: https://platformday.com/
+    logo: brands/platformday.png
+    mascot: brands/mascot-platformday.png
+    theme: {bg: '#c8923a', bg2: '#b07a26', deep: '#120a02', accent: '#E2971D', glow: '#fff1d0', pano_lo: '#4a2f08', pano_hi: '#e8b865'}
+  - key: pec
+    name: Prompt Engineering Conference
+    url: https://promptengineering.rocks
+    site: https://promptengineering.rocks/
+    logo: brands/pec.png
+    family: false
+    theme: {bg: '#1d1250', bg2: '#4b26a8', deep: '#07051a', accent: '#8b6cff', glow: '#e2d9ff', pano_lo: '#07051a', pano_hi: '#7c6fd0'}
