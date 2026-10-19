@@ -1,0 +1,317 @@
+{# ── /<event>/hello/ - the opening deck on the venue screen (hidden page, noindex, not in the sitemap).
+     Built by _build/hello.py from metadata.yml, home/metadata.yml, hello-deck/hello.yaml and the sister sites; the
+     slides follow Marek's PLATFORMday Austin deck. Standalone: does NOT extend _base.html. One 1920x1080 stage scaled
+     to the window; Fullscreen button (or F), arrows / PageUp / PageDown / space (presentation clickers), click or swipe.
+     Identical in sreday, llmday, platformday and PEC: the colours come from deck.theme. ── #}
+{%- set t = deck.theme -%}
+{%- macro wa_icon() -%}<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#25D366"/><path transform="translate(3.6 3.6) scale(.7)" fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>{%- endmacro -%}
+{%- macro li_icon() -%}<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path fill="#fff" d="M5.3 9.4h2.8V19H5.3zM6.7 5a1.6 1.6 0 110 3.2 1.6 1.6 0 010-3.2zM9.9 9.4h2.7v1.3c.4-.7 1.3-1.5 2.7-1.5 2.9 0 3.4 1.9 3.4 4.3V19h-2.8v-4.9c0-1.2 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5v5H9.9z"/></svg>{%- endmacro -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Hello {{ deck.city }} - {{ deck.event_name }}</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Oswald:wght@500;600&display=block" rel="stylesheet">
+  <style>
+    :root {
+      --bg: {{ t.bg or '#222' }}; --bg2: {{ t.bg2 or t.bg or '#333' }}; --deep: {{ t.deep or '#000' }};
+      --accent: {{ t.accent or brand_color }}; --glow: {{ t.glow or '#fff' }};
+      --k: 1;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+    body { font-family: 'Oswald', 'Arial Narrow', sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+    .stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform: translate(-50%, -50%) scale(var(--k));
+             transform-origin: center; overflow: hidden; background: var(--deep); }
+    .slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .45s ease, visibility 0s linear .45s;
+             background: linear-gradient(135deg, var(--bg) 0%, var(--bg2) 100%); display: flex; flex-direction: column;
+             align-items: center; justify-content: center; }
+    .slide.on { opacity: 1; visibility: visible; transition: opacity .45s ease; }
+    .slide.dark { background: var(--deep); }
+    .slide .city-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .slide .city-bg + .veil { position: absolute; inset: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 35%, transparent) 0%,
+             color-mix(in srgb, var(--bg) 55%, transparent) 100%); }
+    .slide > * { position: relative; }
+    .slide > .city-bg, .slide > .veil { position: absolute; }
+
+    .glow { font-family: 'Orbitron', sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #fff;
+            text-shadow: 0 0 6px rgba(255,255,255,.85), 0 0 22px var(--glow), 0 0 48px var(--accent); line-height: 1.1; margin: 0; }
+    .h1 { font-size: 92px; }
+    .qr { display: block; width: 100%; height: auto; }
+    .qr-box { background: #fff; padding: 10px; border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+    .ico { width: 84px; height: 84px; display: block; }
+    .cap { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 40px; text-align: center; color: #fff;
+           text-shadow: 0 0 14px var(--glow); margin-top: 14px; }
+    img.logo { display: block; object-fit: contain; }
+
+    /* 1 - hello */
+    .s-hello .logo { position: absolute; left: 70px; top: 50px; width: 330px; height: 330px; }
+    .s-hello .main-qr { position: absolute; right: 70px; top: 50px; width: 340px; }
+    .s-hello .main-qr .cap { font-size: 34px; }
+    .s-hello .socials { position: absolute; left: 70px; bottom: 60px; display: flex; gap: 40px; }
+    .s-hello .socials > div { width: 190px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .s-hello .center { position: absolute; left: 450px; right: 450px; top: 40px; display: flex; flex-direction: column; align-items: center; }
+    .s-hello .mascot { height: 320px; width: auto; filter: drop-shadow(0 12px 30px rgba(0,0,0,.35)); }
+    .s-hello .hello { font-size: 120px; margin-top: 20px; text-align: center; white-space: nowrap; }
+    .s-hello .hello span { display: block; }
+    .s-hello .when { position: absolute; right: 70px; bottom: 70px; text-align: right; font-size: 38px; font-weight: 500; letter-spacing: .04em;
+                     text-shadow: 0 2px 12px rgba(0,0,0,.4); }
+    .s-hello .when b { display: block; font-weight: 600; font-size: 46px; }
+
+    /* 2 - team */
+    .s-team h2 { margin-bottom: 70px; }
+    .team-row { display: flex; justify-content: center; gap: 90px; }
+    .team-row + .team-row { margin-top: 56px; gap: 70px; }
+    .person { display: flex; flex-direction: column; align-items: center; width: 270px; }
+    .person img { width: 250px; height: 250px; border-radius: 50%; object-fit: cover; border: 6px solid #fff;
+                  box-shadow: 0 0 0 4px var(--accent), 0 14px 40px rgba(0,0,0,.35); }
+    .person span { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 40px; letter-spacing: .08em; text-transform: uppercase;
+                   margin-top: 24px; text-shadow: 0 0 14px var(--glow); white-space: nowrap; }
+
+    /* 3 - share the love */
+    .share { display: flex; gap: 220px; margin-top: 80px; }
+    .share > div { display: flex; flex-direction: column; align-items: center; width: 440px; }
+    .share .qr-box { width: 440px; }
+    .share .ico { width: 120px; height: 120px; margin-top: 26px; }
+
+    /* 4 - partners */
+    .partners { margin-top: 60px; background: #fff; border-radius: 18px; padding: 56px 70px; width: 1560px; min-height: 380px;
+                display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 50px 80px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+    .partners { gap: 30px 40px; padding: 40px 50px; }
+    .partners img { width: 240px; height: 240px; object-fit: contain; }   /* the sponsor files are padded squares: shown whole */
+    .partners.many img { width: 175px; height: 175px; }
+
+    /* 5 - family */
+    .family { display: flex; gap: 110px; align-items: flex-end; }
+    .family > div { display: flex; flex-direction: column; align-items: center; width: 400px; }
+    .family .logo { width: 330px; height: 330px; margin-bottom: 40px; }
+    .family .qr-box { width: 360px; }
+    .family.four { gap: 60px; }
+    .family.four > div { width: 380px; }
+    .family.four .logo { width: 280px; height: 280px; }
+    .family.four .qr-box { width: 320px; }
+
+    /* 6 - cfp.ninja */
+    .s-cfp .logo { width: 560px; height: 530px; }
+    .s-cfp .qr-box { width: 380px; margin-top: 40px; }
+
+    /* tours - the sister brands' upcoming events */
+    .s-tour { background: radial-gradient(1200px 700px at 75% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+                          radial-gradient(900px 600px at 10% 100%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%), var(--deep); }
+    .s-tour .logo { position: absolute; left: 70px; top: 60px; width: 320px; height: 260px; object-position: left center; }
+    .s-tour .head { position: absolute; left: 400px; right: 70px; top: 80px; text-align: center; }
+    .s-tour .head .glow { font-size: 84px; }
+    .s-tour .head .span { font-family: 'Orbitron', sans-serif; font-weight: 600; font-size: 56px; margin-top: 18px; letter-spacing: .06em; }
+    .s-tour .route { position: absolute; left: 0; top: 380px; width: 1920px; height: 560px; }
+    .s-tour .route path { fill: none; stroke: var(--accent); stroke-width: 4; filter: drop-shadow(0 0 10px var(--accent)); stroke-dasharray: 2 16; stroke-linecap: round; }
+    .s-tour .pin { position: absolute; width: 0; height: 0; }
+    .s-tour .pin i { position: absolute; left: -16px; top: -16px; width: 32px; height: 32px; border-radius: 50%; background: #fff;
+                     box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 45%, transparent), 0 0 30px 8px var(--accent); }
+    .s-tour .pin div { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; white-space: nowrap; }
+    .s-tour .pin.up div { bottom: 40px; }
+    .s-tour .pin.down div { top: 40px; }
+    .s-tour .pin b { display: block; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 50px; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; }
+    .s-tour .pin em { display: block; font-style: normal; font-weight: 600; font-size: 34px; color: var(--accent); text-shadow: 0 0 12px var(--accent); }
+    .s-tour .pin small { display: block; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+    .s-tour .mascot { position: absolute; right: 40px; bottom: 20px; height: 330px; }
+    .s-tour .home-qr { position: absolute; left: 70px; bottom: 60px; width: 190px; }
+
+    /* own brand */
+    .s-brand { flex-direction: row; justify-content: space-around; padding: 0 80px; }
+    .s-brand .mascot { height: 560px; }
+    .s-brand .logo { width: 560px; height: 560px; }
+    .s-brand .qr-box { width: 420px; }
+    .s-own { flex-direction: row; justify-content: flex-start; padding: 0 80px; gap: 80px; }
+    .s-own .logo { width: 400px; height: 400px; flex: none; }
+    .cards { display: grid; grid-template-columns: repeat(2, 620px); gap: 40px; }
+    .cards.one { grid-template-columns: 900px; }
+    .card { position: relative; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, var(--bg), var(--bg2));
+            aspect-ratio: 2 / 1; box-shadow: 0 16px 50px rgba(0,0,0,.5); }
+    .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .card .txt { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .card .txt b { font-size: 54px; text-transform: uppercase; }
+    .card .txt em { font-style: normal; font-size: 34px; }
+    .card.here { outline: 6px solid #fff; outline-offset: -6px; }
+
+    /* controls */
+    .ui { position: fixed; z-index: 10; transition: opacity .3s; font-family: system-ui, -apple-system, sans-serif; }
+    .idle .ui { opacity: 0; pointer-events: none; }
+    .idle { cursor: none; }
+    #fs { top: 16px; right: 16px; border: 0; border-radius: 999px; padding: 12px 22px; font-size: 16px; font-weight: 700; cursor: pointer;
+          background: #fff; color: #111; box-shadow: 0 6px 24px rgba(0,0,0,.4); display: flex; gap: 10px; align-items: center; }
+    #fs svg { width: 18px; height: 18px; }
+    #bar { left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,.6);
+           border-radius: 999px; padding: 6px; color: #fff; font-size: 14px; backdrop-filter: blur(6px); }
+    #bar button { border: 0; background: transparent; color: #fff; font-size: 20px; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; }
+    #bar button:hover { background: rgba(255,255,255,.15); }
+    #bar span { min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
+    :fullscreen #fs { display: none; }
+  </style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+  {# 1 - Hello <city> #}
+  <section class="slide s-hello">
+    {% if deck.city_bg %}<img class="city-bg" src="{{ deck.city_bg }}" alt="" loading="eager"><div class="veil"></div>{% endif %}
+    {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
+    <div class="main-qr"><div class="qr-box">{{ deck.event_qr }}</div><div class="cap">Schedule &amp; talks</div></div>
+    <div class="center"{% if not deck.brand.mascot_src %} style="top: 300px"{% endif %}>
+      {% if deck.brand.mascot_src %}<img class="mascot" src="{{ deck.brand.mascot_src }}" alt="" loading="eager">{% endif %}
+      {%- set cn = deck.city|length -%}
+      {#- Orbitron caps + letter-spacing ~ 0.95em a letter: long names shrink to fit the 1500 px between the corner blocks -#}
+      <h1 class="glow hello">Hello<span style="font-size: {{ [120, (1500 / (cn * 0.95))|int]|min }}px">{{ deck.city|e }}</span></h1>
+    </div>
+    <div class="socials">
+      {% if deck.whatsapp_qr %}<div><div class="qr-box">{{ deck.whatsapp_qr }}</div>{{ wa_icon() }}</div>{% endif %}
+      {% if deck.linkedin_qr %}<div><div class="qr-box">{{ deck.linkedin_qr }}</div>{{ li_icon() }}</div>{% endif %}
+    </div>
+    <div class="when"><b>{{ deck.date }}</b>{{ brand_name }} {{ deck.city|e }}</div>
+  </section>
+
+  {# 2 - the team #}
+  {% if deck.team %}
+  <section class="slide s-team">
+    <h2 class="glow h1">Meet our team</h2>
+    <div class="team-row">{% for p in deck.team[:2] %}<div class="person"><img src="{{ p.src }}" alt="{{ p.name }}" loading="eager"><span>{{ p.name }}</span></div>{% endfor %}</div>
+    {% if deck.team|length > 2 %}<div class="team-row">{% for p in deck.team[2:] %}<div class="person"><img src="{{ p.src }}" alt="{{ p.name }}" loading="eager"><span>{{ p.name }}</span></div>{% endfor %}</div>{% endif %}
+  </section>
+  {% endif %}
+
+  {# 3 - share the love #}
+  {% if deck.whatsapp_qr or deck.linkedin_qr %}
+  <section class="slide s-share">
+    <h2 class="glow h1">Share the love</h2>
+    <div class="share">
+      {% if deck.whatsapp_qr %}<div><div class="qr-box">{{ deck.whatsapp_qr }}</div><div class="cap">WhatsApp</div>{{ wa_icon() }}</div>{% endif %}
+      {% if deck.linkedin_qr %}<div><div class="qr-box">{{ deck.linkedin_qr }}</div><div class="cap">{{ brand_name }}</div>{{ li_icon() }}</div>{% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  {# 4 - this event's partners (metadata.yml sponsors, in their order) #}
+  {% if deck.sponsors %}
+  <section class="slide s-partners">
+    {% if deck.city_bg %}<img class="city-bg" src="{{ deck.city_bg }}" alt="" loading="eager"><div class="veil"></div>{% endif %}
+    <h2 class="glow h1">Our<br>partners</h2>
+    <div class="partners{% if deck.sponsors|length > 5 %} many{% endif %}">
+      {% for s in deck.sponsors %}<img src="{{ s.src }}" alt="{{ s.name }}" loading="eager">{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {# 5 - the family of conferences #}
+  {% if deck.family %}
+  <section class="slide s-family">
+    <div class="family{% if deck.family|length > 3 %} four{% endif %}">
+      {% for b in deck.family %}<div><img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager"><div class="qr-box">{{ b.qr }}</div></div>{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {# 6 - cfp.ninja #}
+  {% if deck.cfp.qr %}
+  <section class="slide s-cfp">
+    {% if deck.cfp.logo_src %}<img class="logo" src="{{ deck.cfp.logo_src }}" alt="cfp.ninja" loading="eager">{% endif %}
+    <div class="qr-box">{{ deck.cfp.qr }}</div>
+  </section>
+  {% endif %}
+
+  {# the sister brands' upcoming events, in their own colours #}
+  {% for b in deck.tours %}
+  {%- set bt = b.theme -%}
+  {%- set n = b.events|length -%}
+  <section class="slide s-tour" style="--bg: {{ bt.bg }}; --bg2: {{ bt.bg2 }}; --deep: {{ bt.deep }}; --accent: {{ bt.accent }}; --glow: {{ bt.glow }};">
+    <img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager">
+    <div class="head"><h2 class="glow">Upcoming events</h2>{% if b.span %}<div class="span">{{ b.span }}</div>{% endif %}</div>
+    {%- set xs = [] -%}
+    {%- for e in b.events -%}{%- set _ = xs.append(330 + (1220 * loop.index0 / (n - 1) if n > 1 else 610)) -%}{%- endfor -%}
+    <svg class="route" viewBox="0 0 1920 560" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M{% for x in xs %}{{ x|round(1) }} {{ 330 if loop.index0 % 2 else 230 }}{% if not loop.last %} C{{ (x + (xs[loop.index] - x) / 2)|round(1) }} {{ 330 if loop.index0 % 2 else 230 }} {{ (x + (xs[loop.index] - x) / 2)|round(1) }} {{ 230 if loop.index0 % 2 else 330 }} {% endif %}{% endfor %}"/>
+    </svg>
+    {% for e in b.events %}
+    <div class="pin {{ 'down' if loop.index0 % 2 else 'up' }}" style="left: {{ xs[loop.index0]|round(1) }}px; top: {{ 380 + (330 if loop.index0 % 2 else 230) }}px;">
+      <i></i><div><b>{{ e.city|e }}</b><em>{{ e.date }}</em>{% if e.country %}<small>{{ e.country|e }}</small>{% endif %}</div>
+    </div>
+    {% endfor %}
+    <div class="home-qr qr-box">{{ b.qr }}</div>
+    {% if b.mascot_src %}<img class="mascot" src="{{ b.mascot_src }}" alt="" loading="eager">{% endif %}
+  </section>
+  {% endfor %}
+
+  {# this brand: logo + QR, then its upcoming events #}
+  <section class="slide dark s-brand">
+    {% if deck.brand.mascot_src %}<img class="mascot" src="{{ deck.brand.mascot_src }}" alt="" loading="eager">{% endif %}
+    {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
+    <div class="qr-box">{{ deck.home_qr }}</div>
+  </section>
+  {% if deck.own_events %}
+  <section class="slide dark s-own">
+    {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
+    <div class="cards{% if deck.own_events|length == 1 %} one{% endif %}">
+      {% for e in deck.own_events %}
+      <div class="card{% if e.folder == deck.slug %} here{% endif %}">
+        <div class="txt"><b>{{ e.city|e }}</b><em>{{ e.date }}</em></div>
+        {% if e.card %}<img src="{{ e.card }}" alt="{{ brand_name }} {{ e.city|e }} {{ e.date }}" loading="eager" onerror="this.remove()">{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+
+<button class="ui" id="fs" type="button" title="Fullscreen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Fullscreen</button>
+<div class="ui" id="bar"><button type="button" id="prev" title="Previous (Left)">&#8249;</button><span id="count"></span><button type="button" id="next" title="Next (Right)">&#8250;</button></div>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage'), slides = [].slice.call(stage.querySelectorAll('.slide')),
+      count = document.getElementById('count'), cur = 0, idleT;
+  function fit() { stage.style.setProperty('--k', Math.min(innerWidth / 1920, innerHeight / 1080)); }
+  function go(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function (s, j) { s.classList.toggle('on', j === cur); });
+    count.textContent = (cur + 1) + ' / ' + slides.length;
+    history.replaceState(null, '', '#' + (cur + 1));
+  }
+  function fullscreen() {
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) { (d.exitFullscreen || d.webkitExitFullscreen).call(d); }
+    else { (el.requestFullscreen || el.webkitRequestFullscreen).call(el); }
+  }
+  function wake() {
+    document.body.classList.remove('idle'); clearTimeout(idleT);
+    idleT = setTimeout(function () { document.body.classList.add('idle'); }, 2500);
+  }
+  addEventListener('resize', fit);
+  addEventListener('mousemove', wake);
+  addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ' || k === 'Enter') go(cur + 1);
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') go(cur - 1);
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+    else if (k === 'f' || k === 'F') fullscreen();
+    else return;
+    e.preventDefault();
+  });
+  stage.addEventListener('click', function (e) { go(e.clientX < innerWidth / 3 ? cur - 1 : cur + 1); });
+  var x0 = null;
+  addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', function (e) {
+    if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+  });
+  document.getElementById('fs').addEventListener('click', fullscreen);
+  document.getElementById('prev').addEventListener('click', function () { go(cur - 1); });
+  document.getElementById('next').addEventListener('click', function () { go(cur + 1); });
+  fit(); go((parseInt(location.hash.slice(1), 10) || 1) - 1); wake();
+})();
+</script>
+</body>
+</html>

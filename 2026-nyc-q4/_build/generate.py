@@ -2501,6 +2501,11 @@ with open(BASE_FOLDER + "/onboardsponsor/index.html", "w", encoding="utf-8") as 
                          ended_cta_label="Sponsor our next event", ended_note="Looking to sponsor? Have a look at our next event."))
 print("Writing out onboardsponsor/index.html (hidden, not in sitemap)")
 
+# HIDDEN PAGE: /<event>/hello/ (the opening deck on the venue screen: Hello <city>, team, partners, sister brands,
+# upcoming events; full-screen button). Built by _build/hello.py from hello-deck/hello.yaml + metadata; never breaks the build.
+import hello as _hello
+_hello.build(context, env, BASE_FOLDER)
+
 # SITEMAP
 print(DIVIDER)
 print("Generating sitemap.xml with %d items" % len(SITEMAP_URLS))

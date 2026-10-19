@@ -183,3 +183,20 @@ posted as JSON to `fasttrack_form_url`.
   edit distance) lives in the `.gs`; the page fetches it for the live hint. Body format mirrors Anna's outreach
   mails: red heading, invited-by line with the form URL, then a Name/Email/Organization/LinkedIn/Talk Title/Talk Abstract/Bio table. Subject `<Name> - Fast Track - <Event>`. Headshot optional.
 - Guards: honeypot, 30 submissions/day, 5 MB per attachment, LinkedIn host check, links pinned to the brand domain.
+
+## Hello deck (hidden page)
+
+Every event gets `/<event>/hello/`: the opening slides for the venue screen (after the PLATFORMday Austin 2026 deck).
+Open it on the presenting laptop, press **Fullscreen** (or `F`), then use a clicker, the arrow keys, PageUp/PageDown or a click.
+
+Slides: Hello <city> (logo, mascot, QR to the event page, WhatsApp + LinkedIn QRs, the city panorama), Meet our team,
+Share the love, Our partners (`sponsors:` in metadata.yml, in that order), the other conferences, cfp.ninja, each sister
+brand's upcoming events in its own colours, then this brand with its upcoming event cards (`photo_url`).
+
+- Built by `_event_template/_build/hello.py` + `_templates/hello.html` (identical in sreday, llmday, platformday, PEC).
+  The QR codes are inline SVG made at build time; nothing per event to type.
+- `hello-deck/` at the repo root (identical in the four repos): `hello.yaml` (team, WhatsApp link, brands with logo,
+  mascot, colours and site), team photos and brand images. Change it in all four repos.
+- The sister brands' events come from their published `metadata.yml` (cached 30 min in `.cache/hello-sisters.json`;
+  `SKIP_HELLO_FETCH=1` or `SKIP_CFP_CHECK=1` builds offline from the cache). An event only shows once its date is today or later.
+- noindex, not in the sitemap; a failure prints `WARN hello` and never stops the build.
