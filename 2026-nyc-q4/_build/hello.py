@@ -276,6 +276,25 @@ def _span(rows):
     return a if a == b else ('Q%d & Q%d %d' % (qs[0][1], qs[-1][1], qs[0][0]) if qs[0][0] == qs[-1][0] else a + ' - ' + b)
 
 
+def _tentative(brand, rows, today):
+    """hello.yaml `tentative` entries as grey rows, minus those a published event already covers (same city + month)"""
+    have = {(r['city'].lower(), r['start'][:7]) for r in rows}
+    out = []
+    for t in brand.get('tentative') or []:
+        m, city = str(t.get('month') or ''), str(t.get('city') or '').strip()
+        if not re.match(r'^\d{4}-\d{2}$', m) or not city or m < today[:7] or (city.lower(), m) in have:
+            continue
+        out.append({'folder': '', 'start': m + '-01', 'city': city, 'country': str(t.get('country') or ''), 'url': '', 'card': '',
+                    'date': '%s %s' % (_MONTHS[int(m[5:]) - 1][:3].upper(), m[:4]), 'tentative': True})
+    return out
+
+
+def _with_tentative(brand, rows, today, cap):
+    """published events first in line, then the tentative ones fill up to `cap`, all in date order"""
+    rows = rows[:cap]
+    return sorted(rows + _tentative(brand, rows, today)[:max(0, cap - len(rows))], key=lambda r: r['start'])
+
+
 def _upcoming(rows, today):
     rows = [r for r in rows if r['start'] and r['start'] >= today and r['city']]
     return sorted(rows, key=lambda r: r['start'])
@@ -449,7 +468,7 @@ def _build(context, env, base_folder):
     sisters = _sister_events([b for b in brands if b['key'] != key and b.get('tour', True)])
     tours = []
     for b in brands:
-        rows = _upcoming(sisters.get(b['key']) or [], today)[:7]
+        rows = _with_tentative(b, _upcoming(sisters.get(b['key']) or [], today), today, 10)
         if b['key'] != key and b.get('tour', True) and rows:
             tours.append(dict(b, events=rows, span=_span(rows)))
 
@@ -473,7 +492,7 @@ def _build(context, env, base_folder):
         'family': [b for b in brands if b['key'] != key and b.get('family', True)],
         'open_source': [dict(o, logo_src=asset(o.get('logo')), qr=qr_svg(o['url'])) for o in cfg.get('open_source') or [] if o.get('url')],
         'tours': tours,
-        'own_events': own[:5],
+        'own_events': _with_tentative(me, own, today, 6),
         'icons': {k: asset(v) for k, v in (cfg.get('icons') or {}).items()},
     }
     html = env.get_template('hello.html').render(page='hello.html', deck=deck, **context)

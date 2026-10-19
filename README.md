@@ -200,4 +200,7 @@ events in its own colours (not PEC: `tour: false`), then this brand's mascot sti
   mascot, colours and site), team photos and brand images. Change it in all four repos.
 - The sister brands' events come from their published `metadata.yml` (cached 30 min in `.cache/hello-sisters.json`;
   `SKIP_HELLO_FETCH=1` or `SKIP_CFP_CHECK=1` builds offline from the cache). An event only shows once its date is today or later.
+- Tentative events (planned, not on the sites yet) are `tentative:` entries per brand in `hello.yaml` (city + month): grey
+  dots with the month only, dropped once a published event has the same city and month. Every timeline ends with a grey
+  "Many more - to be announced soon!" dot; few events sit close together (at most 300 px apart).
 - noindex, not in the sitemap; a failure prints `WARN hello` and never stops the build.
