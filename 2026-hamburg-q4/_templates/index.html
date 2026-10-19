@@ -622,6 +622,30 @@
   /* a 60/90/120-minute session: one cell spanning its time rows, with its length */
   .schedule-grid-table td.double-cell { vertical-align: middle; box-shadow: inset 0 0 0 2px var(--brand-lighter); } /* a thicker outline marks a longer session (Marek 2026-09-30) */
   .slot-badge { display: inline-block; margin-top: 0.4rem; padding: 1px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; color: var(--brand-dark); background: var(--brand-lightest); border: 1px solid var(--brand-lighter); }
+  /* Table view on phones (Marek 2026-10-18: "super tall rows" with 3 tracks): the tracks were ~50px of text each, one
+     word per line. Now every track gets a readable 210px column and the table scrolls sideways, the time column stays
+     pinned on the left, rows spanning all tracks keep their text on screen, and the cells are tighter */
+  .sgt-hint { display: none; }
+  @media (max-width: 767.98px) {
+    .sgt-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; overscroll-behavior-x: contain;
+      margin-top: .5rem; border-radius: 14px; }
+    .sgt-scroll .schedule-grid-table { width: calc(52px + var(--sgt-n) * 210px); min-width: 100%; margin-top: 0; }
+    .sgt-scroll .schedule-grid-table th:first-child { width: 52px; }
+    .sgt-scroll .schedule-grid-table th:not(:first-child) { width: 210px !important; }
+    .sgt-scroll .schedule-grid-table th, .sgt-scroll .schedule-grid-table td { padding: .55rem .65rem; }
+    .sgt-scroll .schedule-grid-table .talk-cell a { font-size: .9rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden; }   /* long titles stop at 3 lines; a tap opens the full talk */
+    .sgt-scroll .schedule-grid-table .speaker-info { font-size: .78rem; }
+    .sgt-scroll .schedule-grid-table td.talk-cell { scroll-snap-align: start; scroll-margin-left: 52px; }
+    .sgt-scroll .schedule-grid-table th:first-child, .sgt-scroll .schedule-grid-table .time-cell {
+      position: sticky; left: 0; z-index: 2; font-size: .82rem; box-shadow: 1px 0 0 var(--brand-lightest); }
+    .sgt-scroll .schedule-grid-table th:first-child { background: var(--brand-dark); }
+    .sgt-scroll .schedule-grid-table .time-cell { background: #fff; }
+    .sgt-scroll .schedule-grid-table .time-cell.merged-cell { background: var(--brand-lightest); }
+    .sgt-pin { position: sticky; left: 64px; display: inline-block; max-width: calc(100vw - 150px); text-align: left; }
+    .sgt-scroll .schedule-grid-table td[colspan] { text-align: left; }
+    .sgt-hint { display: block; margin: .75rem 0 0; font-size: .8rem; font-weight: 600; color: var(--brand-dark); opacity: .75; text-align: right; }
+  }
   .schedule-meta {
     display: flex;
     align-items: center;
@@ -798,6 +822,8 @@
 {% if tracks_per_day > 1 %}
     <!-- Table View -->
     <div id="table-view-{{ day }}" class="schedule-table-view{% if (tracks|length) // days == 1 %} single-track{% endif %}">
+      <div class="sgt-hint">Swipe sideways for every track &rarr;</div>
+      <div class="sgt-scroll" style="--sgt-n: {{ (tracks|length) // days }}">
       <table class="schedule-grid-table">
         <thead>
           <tr>
@@ -832,12 +858,14 @@
           <tr>
             <td class="time-cell{% if not ns.talks_at_time[0].name %} merged-cell{% endif %}">{{ time }}</td>
             <td class="talk-cell{% if not ns.talks_at_time[0].name %} merged-cell{% endif %}" colspan="{{ (tracks|length) // days }}">
+              <div class="sgt-pin">
 {% if ns.talks_at_time[0].name %}
               <a href="#modal-speaker-{{ ns.talks_at_time[0].id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ ns.talks_at_time[0].id }}">{{ ns.titles[0] }}</a>
               <div class="speaker-info">{{ ns.talks_at_time[0].name }}{% if ns.talks_at_time[0].organization %} <span class="affiliation">• {{ ns.talks_at_time[0].organization }}</span>{% endif %}</div>
 {% else %}
               {{ ns.titles[0] }}
 {% endif %}
+              </div>
             </td>
           </tr>
 {% else %}
@@ -867,6 +895,7 @@
 {% endfor %}
         </tbody>
       </table>
+      </div>
     </div>
 {% endif %}
 
