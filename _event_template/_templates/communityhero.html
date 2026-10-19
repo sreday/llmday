@@ -542,8 +542,17 @@ document.querySelectorAll('[data-copy]').forEach(function (b) {
   b.addEventListener('click', function () {
     var box = $(b.getAttribute('data-copy')), out = $(b.getAttribute('data-copy') + '-copied');
     var done = function () { out.textContent = 'Copied.'; setTimeout(function () { out.textContent = ''; }, 2500); };
-    if (navigator.clipboard) navigator.clipboard.writeText(box.value).then(done, function () { box.select(); document.execCommand('copy'); done(); });
-    else { box.select(); document.execCommand('copy'); done(); }
+    // LinkedIn's composer drops empty lines on paste, squashing the post into one block (Marek 2026-10-18): each blank
+    // line between paragraphs gets an invisible U+2800 (braille blank), which LinkedIn keeps as a real empty line.
+    // Only the copied text changes, the box keeps the plain text. The DM goes out as is.
+    var text = box.id === 'ch-post' ? box.value.replace(/\n[ \t]*\n/g, '\n\u2800\n') : box.value;
+    var legacy = function () {
+      var t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', '');
+      t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t);
+      t.select(); document.execCommand('copy'); document.body.removeChild(t); done();
+    };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, legacy);
+    else legacy();
   });
 });
 
