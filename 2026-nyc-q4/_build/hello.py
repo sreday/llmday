@@ -371,6 +371,7 @@ def _sister_events(brands):
 # 1920x1080 slide at MAP_X/MAP_Y. Change both together.
 MAP = {'lon0': -130.0, 'lon1': 110.0, 'lat0': -38.0, 'lat1': 64.0, 'w': 1600}
 MAP_X, MAP_Y = 160, 306
+MAP_PAD = (160, 160, 150, 10)   # left, right, top, bottom: the PNG runs on to the slide's edges, feathered out (PAD_* there)
 _KEEP_OUT = [(40, 810, 290, 1060), (1540, 690, 1920, 1080), (0, 0, 1920, 290), (600, 1010, 1320, 1080)]   # QR, mascot, heading, "many more"
 
 
@@ -587,7 +588,8 @@ def _build(context, env, base_folder):
         'own_cards': [r for r in own if r['card']][:5],
         'icons': {k: asset(v) for k, v in (cfg.get('icons') or {}).items()},
         'map_src': asset('brands/world-dots.png') if tours or own_rows else '',
-        'map_box': {'x': MAP_X, 'y': MAP_Y, 'w': MAP['w'], 'h': _map_h()},
+        'map_box': {'x': MAP_X - MAP_PAD[0], 'y': MAP_Y - MAP_PAD[2],
+                    'w': MAP['w'] + MAP_PAD[0] + MAP_PAD[1], 'h': _map_h() + MAP_PAD[2] + MAP_PAD[3]},
     }
     html = env.get_template('hello.html').render(page='hello.html', deck=deck, **context)
     with open(os.path.join(out, 'index.html'), 'w', encoding='utf-8') as f:
