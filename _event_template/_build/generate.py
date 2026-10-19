@@ -98,6 +98,9 @@ _JT_LEGAL = _jt_re.compile(
 _JT_ASIDE = _jt_re.compile(r'\(\s*(?:ex|former|formerly|previously|prev)\b[^)]*\)', _jt_re.I)
 
 
+_JT_OURS = _jt_re.compile(r'\b(?:sre\s*day|llm\s*day|platform\s*day|conf\s*42|prompt\s+engineering\s+conference|devops\s+not\s+dead)\b', _jt_re.I)
+
+
 def _org_clean(part):
     """One company part without legal suffixes or stray punctuation."""
     p = _jt_re.sub(r'\s+', ' ', part).strip(' ,;|/-')
@@ -125,7 +128,8 @@ def company_parts(org):
             toks = _jt_tokens(p)
             if not flags[i] and 0 < len(toks) <= 2 and all(t in _JT_GENERIC for t in toks):
                 flags[i] = True
-    return [p for p, f in zip(parts, flags) if p and not f]
+    # our own brands aren't presenting companies (Marek 2026-10-19: "SREday Team" in the list); Reliaburger stays
+    return [p for p, f in zip(parts, flags) if p and not f and not _JT_OURS.search(p)]
 # ─────────────────────────────────────────────────────────────────────────────
 
 DIVIDER = "#"*80
