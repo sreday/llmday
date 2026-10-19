@@ -1,6 +1,7 @@
 """/<event>/hello/ - the opening deck shown on the venue screen before the first talk (Marek 2026-10-19, after the
 PLATFORMday Austin deck): Hello <city>, the team, WhatsApp + LinkedIn, the event's partners, the sister brands,
-cfp.ninja, the sister brands' upcoming events, then this brand's own. Full-screen button + clicker keys in the page.
+the open-source projects (cfp.ninja, certified.fyi,
+Reliaburger), the sister brands' upcoming events, then this brand's mascot sticker with its upcoming events. Full-screen button + clicker keys in the page.
 
 Everything comes from data, nothing is typed per event:
   - this event's metadata.yml (city, sponsors, brand colour, LinkedIn) and the folder name
@@ -426,11 +427,14 @@ def _build(context, env, base_folder):
     for b in brands:
         b['logo_src'] = asset(b.get('logo'))
         b['mascot_src'] = asset(b.get('mascot'))
+        if b['key'] == key:                                  # the host's Hello mascot (404 one) and closing sticker
+            b['hello_src'] = asset(b.get('hello_mascot')) or b['mascot_src']
+            b['sticker_src'] = asset(b.get('sticker')) or b['mascot_src']
         b['qr'] = qr_svg(b['url']) if b.get('url') else ''
         b['theme'] = dict(cfg.get('default_theme') or {}, **(b.get('theme') or {}))
     me = next((b for b in brands if b['key'] == key), me)
-    me.setdefault('logo_src', '')
-    me.setdefault('mascot_src', '')
+    for k in ('logo_src', 'mascot_src', 'hello_src', 'sticker_src'):
+        me.setdefault(k, '')
 
     # this brand's upcoming events (this one included) from the repo; the sisters' from their sites
     home = {}
@@ -442,11 +446,11 @@ def _build(context, env, base_folder):
         own.insert(0, _event_row(context, None, slug, base))
     for r in own:
         r['card'] = '/' + r['card'][2:] if r['card'].startswith('./') else r['card']
-    sisters = _sister_events([b for b in brands if b['key'] != key])
+    sisters = _sister_events([b for b in brands if b['key'] != key and b.get('tour', True)])
     tours = []
     for b in brands:
         rows = _upcoming(sisters.get(b['key']) or [], today)[:7]
-        if b['key'] != key and rows:
+        if b['key'] != key and b.get('tour', True) and rows:
             tours.append(dict(b, events=rows, span=_span(rows)))
 
     sponsors = []
@@ -467,14 +471,11 @@ def _build(context, env, base_folder):
         'team': [dict(t, src=asset(t.get('photo'))) for t in cfg.get('team') or []],
         'sponsors': sponsors,
         'family': [b for b in brands if b['key'] != key and b.get('family', True)],
-        'cfp': dict(cfg.get('cfp_ninja') or {}),
+        'open_source': [dict(o, logo_src=asset(o.get('logo')), qr=qr_svg(o['url'])) for o in cfg.get('open_source') or [] if o.get('url')],
         'tours': tours,
-        'own_events': own[:4],
+        'own_events': own[:5],
         'icons': {k: asset(v) for k, v in (cfg.get('icons') or {}).items()},
     }
-    if deck['cfp'].get('url'):
-        deck['cfp']['qr'] = qr_svg(deck['cfp']['url'])
-        deck['cfp']['logo_src'] = asset(deck['cfp'].get('logo'))
     html = env.get_template('hello.html').render(page='hello.html', deck=deck, **context)
     with open(os.path.join(out, 'index.html'), 'w', encoding='utf-8') as f:
         f.write(html)
