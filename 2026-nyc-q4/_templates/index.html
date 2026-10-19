@@ -961,14 +961,16 @@
 {% endif %}
 
 
-{% if talks or keynotes %}
+{# a speaker without a headshot gets no card here (Marek 2026-10-19); their talk stays in the schedule #}
+{% set speakers_shown = (talks + keynotes)|sort(attribute='name')|dedupe|selectattr('photo_url')|list %}
+{% if speakers_shown %}
 <section id="speakers" class="speakers-section section spk-glass">
   <div class="spk-aurora" aria-hidden="true"></div>
   <div class="container">
     <h3 class="section-heading text-center mb-3">Speakers</h3>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5">
 
-      {% for talk in (talks + keynotes)|sort(attribute='name')|dedupe %}
+      {% for talk in speakers_shown %}
 
       <div class="col mb-4">
         <div class="card">
