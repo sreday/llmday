@@ -112,7 +112,7 @@
     .s-tour .logo { position: absolute; left: 70px; top: 60px; width: 320px; height: 260px; object-position: left center; }
     .s-tour .head { position: absolute; left: 400px; right: 70px; top: 80px; text-align: center; }
     .s-tour .head .glow { font-size: 84px; }
-    .s-tour .head .span { font-family: 'Orbitron', sans-serif; font-weight: 600; font-size: 56px; margin-top: 18px; letter-spacing: .06em; }
+    .s-tour .head .span { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 60px; margin-top: 14px; letter-spacing: .02em; }
     .s-tour .map { position: absolute; background: var(--accent); opacity: .42; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
     .s-tour .arcs { position: absolute; inset: 0; width: 1920px; height: 1080px; }
     .s-tour .arcs path { fill: none; stroke: var(--glow); stroke-width: 3.5; filter: drop-shadow(0 0 8px var(--accent)); opacity: .9; }
@@ -134,25 +134,19 @@
     .s-tour .mascot { position: absolute; right: 40px; bottom: 20px; height: 330px; }
     .s-tour .home-qr { position: absolute; left: 70px; bottom: 60px; width: 190px; }
 
-    /* own brand: sticker + logo + upcoming events */
-    .s-own { flex-direction: row; justify-content: center; gap: 110px; padding: 0 90px; }
-    .s-own .sticker { height: 920px; width: auto; max-width: 820px; object-fit: contain; flex: none; }
-    .own-right { display: flex; flex-direction: column; align-items: flex-start; }
-    .own-right .logo { width: 300px; height: 230px; object-position: left center; }
-    .own-right .glow { font-size: 64px; margin: 40px 0 26px; }
-    .own-list { list-style: none; margin: 0; padding: 0; }
-    .own-list li { display: flex; align-items: baseline; gap: 34px; padding: 10px 0; position: relative; }
-    .own-list b { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 84px; text-transform: uppercase; line-height: 1; }
-    .own-list em { font-style: normal; font-weight: 500; font-size: 52px; color: var(--accent); text-shadow: 0 0 14px var(--accent); }
-    .own-list li.tbc b, .own-list li.more b { color: #b4b4bc; }
-    .own-list li.tbc em, .own-list li.more em { color: #9a9aa3; text-shadow: none; }
-    .own-list li.more b, .own-list li.more em { font-size: 44px; }
-    .own-list.long b { font-size: 66px; }
-    .own-list.long em { font-size: 42px; }
-    .own-list.long li { padding: 6px 0; }
-    .own-list li.here b { text-shadow: 0 0 18px var(--glow); }
-    .own-list li.here::before { content: ''; position: absolute; left: -48px; top: 50%; width: 22px; height: 22px; margin-top: -11px;
-                                border-radius: 50%; background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+    /* last: QR + splash cards (2:1 images) */
+    .s-cards { flex-direction: row; justify-content: center; align-items: center; gap: 80px; padding: 0 70px; }
+    .cards-side { display: flex; flex-direction: column; align-items: center; gap: 50px; flex: none; }
+    .cards-side .logo { width: 300px; height: 300px; }
+    .cards-side .qr-box { width: 360px; }
+    .splash { display: flex; flex-wrap: wrap; justify-content: center; gap: 34px; flex: none; }   /* 3 = 2 + 1, 5 = 3 + 2, centred */
+    .splash .card { flex: none; width: 600px; }
+    .splash.n1 { width: 1100px; } .splash.n1 .card { width: 1100px; }
+    .splash.n2, .splash.n3, .splash.n4 { width: 1234px; }
+    .splash.n5 { width: 1360px; } .splash.n5 .card { width: 430px; }
+    .splash .card { border-radius: 18px; overflow: hidden; aspect-ratio: 2 / 1; box-shadow: 0 18px 50px rgba(0,0,0,.55); }
+    .splash .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .splash .card.here { outline: 6px solid #fff; outline-offset: -6px; }
 
     /* controls */
     .ui { position: fixed; z-index: 10; transition: opacity .3s; font-family: system-ui, -apple-system, sans-serif; }
@@ -245,7 +239,7 @@
   </section>
   {% endif %}
 
-  {# the sister brands' upcoming events, in their own colours #}
+  {# the roadmaps: the sister brands' in their own colours, then this brand's (hello.py appends it last) #}
   {% for b in deck.tours %}
   {%- set bt = b.theme -%}
   {%- set n = b.events|length -%}
@@ -272,19 +266,18 @@
   </section>
   {% endfor %}
 
-  {# this brand: the mascot sticker, the logo and its upcoming events, big #}
-  <section class="slide dark s-own">
-    {% if deck.brand.sticker_src %}<img class="sticker" src="{{ deck.brand.sticker_src }}" alt="" loading="eager">{% endif %}
-    <div class="own-right">
+  {# last: this brand's QR and the splash cards of its next 3-5 events (the home page cards, photo_url) #}
+  <section class="slide dark s-cards">
+    <div class="cards-side">
       {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
-      {% if deck.own_events %}
-      <h2 class="glow">Upcoming events</h2>
-      <ul class="own-list{% if deck.own_events|length > 4 %} long{% endif %}">
-        {% for e in deck.own_events %}<li class="{{ 'here' if e.folder == deck.slug }}{{ ' tbc' if e.tentative }}"><b>{{ e.city|e }}</b><em>{{ e.date }}</em></li>{% endfor %}
-        <li class="more"><b>Many more</b><em>to be announced soon!</em></li>
-      </ul>
-      {% endif %}
+      <div class="qr-box">{{ deck.home_qr }}</div>
     </div>
+    {% if deck.own_cards %}
+    {%- set nc = deck.own_cards|length -%}
+    <div class="splash n{{ nc }}">
+      {% for e in deck.own_cards %}<div class="card{% if e.folder == deck.slug %} here{% endif %}"><img src="{{ e.card }}" alt="{{ brand_name }} {{ e.city|e }} {{ e.date }}" loading="eager"></div>{% endfor %}
+    </div>
+    {% endif %}
   </section>
 </div>
 

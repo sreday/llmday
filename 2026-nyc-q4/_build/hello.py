@@ -567,6 +567,7 @@ def _build(context, env, base_folder):
         if logo:
             sponsors.append({'src': '../sponsors/' + logo, 'name': os.path.splitext(logo)[0]})
 
+    own_rows = _with_tentative(me, own, today, 10)
     deck = {
         'key': key, 'brand': me, 'theme': theme, 'city': city or slug, 'slug': slug,
         'event_name': (context.get('onboarding_event') or {}).get('event_name') or '%s %s' % (context.get('brand_name', ''), city),
@@ -580,10 +581,12 @@ def _build(context, env, base_folder):
         'sponsors': sponsors,
         'family': [b for b in brands if b['key'] != key and b.get('family', True)],
         'open_source': [dict(o, logo_src=asset(o.get('logo')), qr=qr_svg(o['url'])) for o in cfg.get('open_source') or [] if o.get('url')],
-        'tours': tours,
-        'own_events': _with_tentative(me, own, today, 6),
+        # the sister brands' roadmaps, then this brand's own (with its mascot sticker); then its splash cards + QR
+        'tours': tours + ([dict(me, events=own_rows, span=_span(own_rows), map=_map_layout(own_rows, cfg.get('cities'), key),
+                                mascot_src=me.get('sticker_src') or me.get('mascot_src'))] if own_rows else []),
+        'own_cards': [r for r in own if r['card']][:5],
         'icons': {k: asset(v) for k, v in (cfg.get('icons') or {}).items()},
-        'map_src': asset('brands/world-dots.png') if tours else '',
+        'map_src': asset('brands/world-dots.png') if tours or own_rows else '',
         'map_box': {'x': MAP_X, 'y': MAP_Y, 'w': MAP['w'], 'h': _map_h()},
     }
     html = env.get_template('hello.html').render(page='hello.html', deck=deck, **context)
