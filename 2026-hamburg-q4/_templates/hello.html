@@ -83,13 +83,15 @@
     .share .ico { width: 120px; height: 120px; margin-top: 26px; }
 
     /* 4 - partners */
-    .partners { margin-top: 60px; background: #fff; border-radius: 18px; padding: 56px 70px; width: 1560px; min-height: 380px;
+    /* a pill as wide as its logos (wraps into rows past ~6) */
+    .partners { margin-top: 60px; background: #fff; border-radius: 170px; padding: 50px 110px; width: fit-content; max-width: 1720px; min-height: 0;
                 display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 50px 80px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
-    .partners { gap: 30px 40px; padding: 40px 50px; }
+    .partners { gap: 30px 40px; }
     .partners img { width: 240px; height: 240px; object-fit: contain; }   /* the sponsor files are padded squares: shown whole */
     .partners.many img { width: 175px; height: 175px; }
 
-    /* 5 - family */
+    /* 5 - other brands */
+    .s-family h2 { margin-bottom: 60px; }
     .family { display: flex; gap: 110px; align-items: flex-end; }
     .family > div { display: flex; flex-direction: column; align-items: center; width: 400px; }
     .family .logo { width: 330px; height: 330px; margin-bottom: 40px; }
@@ -111,28 +113,24 @@
     .s-tour .head { position: absolute; left: 400px; right: 70px; top: 80px; text-align: center; }
     .s-tour .head .glow { font-size: 84px; }
     .s-tour .head .span { font-family: 'Orbitron', sans-serif; font-weight: 600; font-size: 56px; margin-top: 18px; letter-spacing: .06em; }
-    .s-tour .route { position: absolute; left: 0; top: 380px; width: 1920px; height: 560px; }
-    .s-tour .route path { fill: none; stroke: var(--accent); stroke-width: 4; filter: drop-shadow(0 0 10px var(--accent)); stroke-dasharray: 2 16; stroke-linecap: round; }
-    .s-tour .pin { position: absolute; width: 0; height: 0; }
-    .s-tour .pin i { position: absolute; left: -16px; top: -16px; width: 32px; height: 32px; border-radius: 50%; background: #fff;
-                     box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 45%, transparent), 0 0 30px 8px var(--accent); }
-    .s-tour .pin div { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; white-space: nowrap; }
-    .s-tour .pin.up div { bottom: 40px; }
-    .s-tour .pin.down div { top: 40px; }
-    .s-tour .pin b { display: block; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 50px; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; }
-    .s-tour .pin em { display: block; font-style: normal; font-weight: 600; font-size: 34px; color: var(--accent); text-shadow: 0 0 12px var(--accent); }
-    .s-tour .pin small { display: block; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
-    .s-tour .route path.grey { stroke: #8b8b95; filter: none; }
-    .s-tour .pin.tbc i, .s-tour .pin.more i { background: #9a9aa3; box-shadow: 0 0 0 8px rgba(154,154,163,.25); }
-    .s-tour .pin.more i { background: transparent; border: 5px solid #9a9aa3; }
-    .s-tour .pin.tbc b, .s-tour .pin.more b { color: #b4b4bc; }
-    .s-tour .pin.tbc em, .s-tour .pin.more em { color: #9a9aa3; text-shadow: none; }
-    .s-tour .pin.more em { font-size: 28px; }
-    .s-tour .pin.dense b { font-size: 40px; }
-    .s-tour .pin.dense em { font-size: 28px; }
-    .s-tour .pin.dense small { font-size: 18px; }
-    .s-tour .pin.dense2 b { font-size: 34px; }
-    .s-tour .pin.dense2 em { font-size: 24px; }
+    .s-tour .map { position: absolute; background: var(--accent); opacity: .42; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+    .s-tour .arcs { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    .s-tour .arcs path { fill: none; stroke: var(--glow); stroke-width: 3.5; filter: drop-shadow(0 0 8px var(--accent)); opacity: .9; }
+    .s-tour .arcs path.grey { stroke: #9a9aa3; filter: none; stroke-dasharray: 3 12; stroke-linecap: round; opacity: .8; }
+    .s-tour .arcs line { stroke: rgba(255,255,255,.45); stroke-width: 2; }
+    .s-tour .dot { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: #fff;
+                   box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 50%, transparent), 0 0 28px 8px var(--accent); }
+    .s-tour .dot.tbc { background: #a6a6ae; box-shadow: 0 0 0 6px rgba(166,166,174,.25); }
+    .s-tour .lbl { position: absolute; line-height: 1.05; text-shadow: 0 2px 10px rgba(0,0,0,.85); }
+    .s-tour .lbl.left { text-align: right; }
+    .s-tour .lbl.mid { text-align: center; }
+    .s-tour .lbl b { display: block; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 44px; text-transform: uppercase; white-space: nowrap; }
+    .s-tour .lbl em { display: block; font-style: normal; font-weight: 600; font-size: 32px; color: var(--accent);
+                      text-shadow: 0 0 12px var(--accent), 0 2px 10px rgba(0,0,0,.85); white-space: nowrap; }
+    .s-tour .lbl .tbc { color: #a6a6ae; text-shadow: 0 2px 10px rgba(0,0,0,.85); }
+    .s-tour .more-note { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px;
+                         font-size: 30px; font-weight: 500; color: #b4b4bc; letter-spacing: .02em; white-space: nowrap; }
+    .s-tour .more-note i { width: 22px; height: 22px; border-radius: 50%; border: 4px solid #9a9aa3; }
     .s-tour .mascot { position: absolute; right: 40px; bottom: 20px; height: 330px; }
     .s-tour .home-qr { position: absolute; left: 70px; bottom: 60px; width: 190px; }
 
@@ -217,7 +215,11 @@
   <section class="slide s-partners">
     {% if deck.city_bg %}<img class="city-bg" src="{{ deck.city_bg }}" alt="" loading="eager"><div class="veil"></div>{% endif %}
     <h2 class="glow h1">Sponsors &amp;<br>partners</h2>
-    <div class="partners{% if deck.sponsors|length > 5 %} many{% endif %}">
+    {#- rows of equal length (8 logos = 4 + 4, not 7 + 1): the pill is as wide as one row -#}
+    {%- set sn = deck.sponsors|length -%}
+    {%- set lw = 175 if sn > 5 else 240 -%}
+    {%- set per = ((sn / ((sn / 7)|round(0, 'ceil')))|round(0, 'ceil'))|int -%}
+    <div class="partners{% if sn > 5 %} many{% endif %}" style="max-width: {{ per * lw + (per - 1) * 40 + 220 }}px;">
       {% for s in deck.sponsors %}<img src="{{ s.src }}" alt="{{ s.name }}" loading="eager">{% endfor %}
     </div>
   </section>
@@ -226,6 +228,7 @@
   {# 5 - the family of conferences #}
   {% if deck.family %}
   <section class="slide s-family">
+    <h2 class="glow h1">Other brands</h2>
     <div class="family{% if deck.family|length > 3 %} four{% endif %}">
       {% for b in deck.family %}<div><img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager"><div class="qr-box">{{ b.qr }}</div></div>{% endfor %}
     </div>
@@ -249,25 +252,21 @@
   <section class="slide s-tour" style="--bg: {{ bt.bg }}; --bg2: {{ bt.bg2 }}; --deep: {{ bt.deep }}; --accent: {{ bt.accent }}; --glow: {{ bt.glow }};">
     <img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager">
     <div class="head"><h2 class="glow">Upcoming events</h2>{% if b.span %}<div class="span">{{ b.span }}</div>{% endif %}</div>
-    {#- the published events, then the tentative ones (grey, month only), then a grey "many more" dot; at most 300 px
-        apart so a short list sits together in the middle (between the QR and the mascot) -#}
-    {%- set pts = b.events + [{'more': True}] -%}
-    {%- set n = pts|length -%}
-    {%- set step = [1220 / (n - 1), 300]|min -%}
-    {%- set x0 = 940 - step * (n - 1) / 2 -%}
-    {%- set ys = [230, 330] -%}
-    <svg class="route" viewBox="0 0 1920 560" preserveAspectRatio="none" aria-hidden="true">
-      {%- for i in range(1, n) %}{% set p = pts[i] %}
-      {%- set xa, xb = x0 + step * (i - 1), x0 + step * i %}
-      {%- set ya, yb = ys[(i - 1) % 2], ys[i % 2] %}
-      <path class="{{ 'grey' if p.more or p.tentative else '' }}" d="M{{ xa|round(1) }} {{ ya }} C{{ ((xa + xb) / 2)|round(1) }} {{ ya }} {{ ((xa + xb) / 2)|round(1) }} {{ yb }} {{ xb|round(1) }} {{ yb }}"/>
-      {%- endfor %}
+    {#- the world tour: the dotted map in this brand's colour, an arc from stop to stop in date order (grey towards a
+        tentative stop), one pin per city with all its dates (tentative ones grey, month only), labels placed in hello.py -#}
+    {%- set mb = deck.map_box -%}
+    <div class="map" style="left: {{ mb.x }}px; top: {{ mb.y }}px; width: {{ mb.w }}px; height: {{ mb.h }}px; -webkit-mask-image: url({{ deck.map_src }}); mask-image: url({{ deck.map_src }});"></div>
+    <svg class="arcs" viewBox="0 0 1920 1080" aria-hidden="true">
+      {% for a in b.map.arcs %}<path class="{{ 'grey' if a.grey }}" d="{{ a.d }}"/>{% endfor %}
+      {% for p in b.map.stops if p.leader %}<line x1="{{ p.x }}" y1="{{ p.y }}" x2="{{ p.tx }}" y2="{{ p.ty }}"/>{% endfor %}
     </svg>
-    {% for e in pts %}
-    <div class="pin {{ 'down' if loop.index0 % 2 else 'up' }}{% if n > 8 %} dense{% endif %}{% if n > 10 %} dense2{% endif %}{% if e.tentative %} tbc{% endif %}{% if e.more %} more{% endif %}" style="left: {{ (x0 + step * loop.index0)|round(1) }}px; top: {{ 380 + ys[loop.index0 % 2] }}px;">
-      <i></i><div>{% if e.more %}<b>Many more</b><em>to be announced soon!</em>{% else %}<b>{{ e.city|e }}</b><em>{{ e.date }}</em>{% if e.country %}<small>{{ e.country|e }}</small>{% endif %}{% endif %}</div>
+    {% for p in b.map.stops %}
+    <i class="dot{% if p.tentative %} tbc{% endif %}" style="left: {{ p.x }}px; top: {{ p.y }}px;"></i>
+    <div class="lbl {{ 'left' if p.side == 'l' else ('mid' if p.side in 'ab' else '') }}" style="left: {{ p.lx }}px; top: {{ p.ly }}px; width: {{ p.w }}px;">
+      <b class="{{ 'tbc' if p.tentative }}">{{ p.city|e }}</b>{% for d in p.dates %}<em class="{{ 'tbc' if d.tentative }}">{{ d.date }}</em>{% endfor %}
     </div>
     {% endfor %}
+    <div class="more-note"><i></i>Many more to be announced soon!</div>
     <div class="home-qr qr-box">{{ b.qr }}</div>
     {% if b.mascot_src %}<img class="mascot" src="{{ b.mascot_src }}" alt="" loading="eager">{% endif %}
   </section>

@@ -190,9 +190,9 @@ Every event gets `/<event>/hello/`: the opening slides for the venue screen (aft
 Open it on the presenting laptop, press **Fullscreen** (or `F`), then use a clicker, the arrow keys, PageUp/PageDown or a click.
 
 Slides: Hello <city> (logo, the site's 404 mascot, QR to the event page, WhatsApp + LinkedIn QRs, the city panorama, the
-site's Montserrat/Roboto), Meet our team, Share the love, Sponsors & partners (`sponsors:` in metadata.yml, in that order),
-the other conferences (Conf42 last), Open source (cfp.ninja, certified.fyi, Reliaburger), each sister brand's upcoming
-events in its own colours (not PEC: `tour: false`), then this brand's mascot sticker + logo + its upcoming events, big.
+site's Montserrat/Roboto), Meet our team, Share the love, Sponsors & partners (`sponsors:` in metadata.yml, in that order,
+a pill sized to its logos), Other brands (Conf42 last), Open source (cfp.ninja, Reliaburger), each sister brand's upcoming
+events on a dotted world map in its own colours (not PEC: `tour: false`), then this brand's mascot sticker + logo + its upcoming events, big.
 
 - Built by `_event_template/_build/hello.py` + `_templates/hello.html` (identical in sreday, llmday, platformday, PEC).
   The QR codes are inline SVG made at build time; nothing per event to type.
@@ -201,6 +201,7 @@ events in its own colours (not PEC: `tour: false`), then this brand's mascot sti
 - The sister brands' events come from their published `metadata.yml` (cached 30 min in `.cache/hello-sisters.json`;
   `SKIP_HELLO_FETCH=1` or `SKIP_CFP_CHECK=1` builds offline from the cache). An event only shows once its date is today or later.
 - Tentative events (planned, not on the sites yet) are `tentative:` entries per brand in `hello.yaml` (city + month): grey
-  dots with the month only, dropped once a published event has the same city and month. Every timeline ends with a grey
-  "Many more - to be announced soon!" dot; few events sit close together (at most 300 px apart).
+  dots with the month only, dropped once a published event has the same city and month. The map (`hello-deck/brands/world-dots.png`, drawn by
+  `hello-deck/tools/make_world_dots.py`) places each city from `cities:` in `hello.yaml` - a new city needs its coordinates
+  there (the build warns). One pin per city with all its dates; arcs in date order; "Many more to be announced soon!" below.
 - noindex, not in the sitemap; a failure prints `WARN hello` and never stops the build.

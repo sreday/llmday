@@ -366,6 +366,95 @@ def _sister_events(brands):
     return out
 
 
+# ── the upcoming-events map ───────────────────────────────────────────────────────────────────────────────────────
+# hello-deck/brands/world-dots.png (hello-deck/tools/make_world_dots.py): Miller projection of this box, placed on the
+# 1920x1080 slide at MAP_X/MAP_Y. Change both together.
+MAP = {'lon0': -130.0, 'lon1': 110.0, 'lat0': -38.0, 'lat1': 64.0, 'w': 1600}
+MAP_X, MAP_Y = 160, 306
+_KEEP_OUT = [(40, 810, 290, 1060), (1540, 690, 1920, 1080), (0, 0, 1920, 290), (600, 1010, 1320, 1080)]   # QR, mascot, heading, "many more"
+
+
+def _miller(lat):
+    import math
+    return 1.25 * math.log(math.tan(math.pi / 4 + 0.4 * math.radians(lat)))
+
+
+def _map_h():
+    import math
+    return round(MAP['w'] * (_miller(MAP['lat1']) - _miller(MAP['lat0'])) / math.radians(MAP['lon1'] - MAP['lon0']))
+
+
+def _map_xy(lat, lon):
+    x = (lon - MAP['lon0']) / (MAP['lon1'] - MAP['lon0']) * MAP['w']
+    y = (_miller(MAP['lat1']) - _miller(lat)) / (_miller(MAP['lat1']) - _miller(MAP['lat0'])) * _map_h()
+    return MAP_X + x, MAP_Y + y
+
+
+def _overlap(a, b):
+    return max(0, min(a[2], b[2]) - max(a[0], b[0])) * max(0, min(a[3], b[3]) - max(a[1], b[1]))
+
+
+def _map_layout(rows, cities, brand):
+    """rows (date order) -> {'stops': pins with their label boxes, 'arcs': route segments}; a city appears once with all
+    its dates. Labels are placed greedily, most crowded pin first, next to the pin or further out with a leader line."""
+    known = {str(k).lower(): v for k, v in (cities or {}).items()}
+    stops, order = {}, []
+    for r in rows:
+        k = r['city'].lower()
+        if k not in known:
+            print('WARN hello: no map position for %s (%s) - add it under cities: in hello-deck/hello.yaml' % (r['city'], brand))
+            continue
+        if k not in stops:
+            x, y = _map_xy(*known[k])
+            stops[k] = {'city': r['city'], 'x': x, 'y': y, 'dates': [], 'tentative': True}
+        stops[k]['dates'].append({'date': r['date'], 'tentative': bool(r.get('tentative'))})
+        stops[k]['tentative'] = stops[k]['tentative'] and bool(r.get('tentative'))
+        order.append((k, bool(r.get('tentative'))))
+    pins = list(stops.values())
+    for p in pins:
+        p['w'] = max(len(p['city']) * 25, max(len(d['date']) for d in p['dates']) * 19) + 12
+        p['h'] = 48 + 38 * len(p['dates'])
+    placed = []
+    crowd = lambda p: -sum(1 for q in pins if q is not p and abs(q['x'] - p['x']) < 260 and abs(q['y'] - p['y']) < 200)  # noqa: E731
+    for p in sorted(pins, key=crowd):
+        x, y, w, h = p['x'], p['y'], p['w'], p['h']
+        best = None
+        for dist in (30, 75, 130, 200):
+            d2 = dist * .7
+            for side, bx, by in (('r', x + dist, y - h / 2), ('l', x - dist - w, y - h / 2), ('a', x - w / 2, y - dist - h),
+                                 ('b', x - w / 2, y + dist), ('r', x + d2, y - d2 - h), ('l', x - d2 - w, y - d2 - h),
+                                 ('r', x + d2, y + d2), ('l', x - d2 - w, y + d2)):
+                box = (bx, by, bx + w, by + h)
+                score = dist * 3 + (0 if side == 'r' else 8)
+                score += sum(_overlap(box, q) for q in placed) * 20
+                score += sum(_overlap(box, (q['x'] - 22, q['y'] - 22, q['x'] + 22, q['y'] + 22)) for q in pins) * 40
+                score += sum(_overlap(box, k) for k in _KEEP_OUT) * 30
+                if bx < 10 or by < 10 or bx + w > 1910 or by + h > 1070:
+                    score += 1e7
+                if best is None or score < best[0]:
+                    best = (score, box, side, dist)
+        _, box, side, dist = best
+        placed.append(box)
+        p.update(lx=round(box[0]), ly=round(box[1]), side=side, leader=dist > 30)
+        if p['leader']:                                      # line from the pin to the nearest point of the label
+            p['tx'] = round(min(max(x, box[0]), box[2]))
+            p['ty'] = round(min(max(y, box[1]), box[3]))
+    arcs = []
+    for (a, _), (b, tb) in zip(order, order[1:]):
+        if a == b:
+            continue
+        pa, pb = stops[a], stops[b]
+        mx, my = (pa['x'] + pb['x']) / 2, (pa['y'] + pb['y']) / 2
+        dx, dy = pb['x'] - pa['x'], pb['y'] - pa['y']
+        nx, ny = -dy * .28, dx * .28                         # bow the arc sideways, towards the top of the map
+        if ny > 0:
+            nx, ny = -nx, -ny
+        arcs.append({'d': 'M%.1f %.1f Q%.1f %.1f %.1f %.1f' % (pa['x'], pa['y'], mx + nx, my + ny, pb['x'], pb['y']), 'grey': tb})
+    for p in pins:
+        p['x'], p['y'] = round(p['x']), round(p['y'])
+    return {'stops': pins, 'arcs': arcs}
+
+
 # ── images: copied/derived into <event>/hello/img/ under content-hashed names ───────────────────────────────────
 class _Img:
     def __init__(self, out):
@@ -470,7 +559,7 @@ def _build(context, env, base_folder):
     for b in brands:
         rows = _with_tentative(b, _upcoming(sisters.get(b['key']) or [], today), today, 10)
         if b['key'] != key and b.get('tour', True) and rows:
-            tours.append(dict(b, events=rows, span=_span(rows)))
+            tours.append(dict(b, events=rows, span=_span(rows), map=_map_layout(rows, cfg.get('cities'), b['key'])))
 
     sponsors = []
     for s in context.get('sponsors') or []:
@@ -494,6 +583,8 @@ def _build(context, env, base_folder):
         'tours': tours,
         'own_events': _with_tentative(me, own, today, 6),
         'icons': {k: asset(v) for k, v in (cfg.get('icons') or {}).items()},
+        'map_src': asset('brands/world-dots.png') if tours else '',
+        'map_box': {'x': MAP_X, 'y': MAP_Y, 'w': MAP['w'], 'h': _map_h()},
     }
     html = env.get_template('hello.html').render(page='hello.html', deck=deck, **context)
     with open(os.path.join(out, 'index.html'), 'w', encoding='utf-8') as f:
