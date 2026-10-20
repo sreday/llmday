@@ -26,8 +26,9 @@ var BRANDS = {
 };
 var ALLOWED_INTERESTS = ['Sponsor', 'Host', 'Partner'];
 var ALLOWED_BRANDS = ['LLMday', 'SREday', 'PLATFORMday', 'Prompt Engineering Conference'];
-var ALLOWED_REGIONS = ['US', 'EU', 'ASIA', 'LATAM'];
-var ALLOWED_BUDGETS = ['No budget', '$1K-5K', '$5K-10K', '$10K+'];
+var ALLOWED_REGIONS = ['US', 'UK', 'EU', 'ASIA', 'Middle East & Africa', 'LATAM'];
+var ALLOWED_BUDGETS = ['No budget', 'Under $1K', '$1K-5K', '$5K-10K', '$10K-25K', '$25K+',
+                       '$10K+'];   // $10K+ = the old top chip, still accepted from pages opened before the split
 var INTEREST_WORDS = { Sponsor: 'Sponsoring', Host: 'Hosting', Partner: 'Partnering' };
 var CALENDLY_URL = 'https://calendly.com/sreday/30min';
 var SENDER_NAME = 'Mark Pawlikowski';

@@ -43,9 +43,22 @@
       </div>
       <div class="lead-group" data-group="regions">
         <div class="lead-group-label">Regions <em>(one or more)</em></div>
+        {#- this event's region is pre-picked, from the country at the end of location_string (none if unknown) -#}
+        {%- set _lead_country = (location_string | default('', true)).split(',')[-1] | trim | lower -%}
+        {%- set _lead_regions = {
+              'US': ['usa', 'us', 'united states', 'united states of america'],
+              'UK': ['uk', 'united kingdom', 'england', 'scotland', 'wales', 'northern ireland'],
+              'EU': ['netherlands', 'germany', 'poland', 'france', 'spain', 'portugal', 'italy', 'belgium', 'ireland', 'austria',
+                     'switzerland', 'sweden', 'denmark', 'norway', 'finland', 'czechia', 'czech republic', 'estonia', 'latvia',
+                     'lithuania', 'greece', 'romania', 'hungary', 'croatia', 'slovakia', 'slovenia', 'bulgaria', 'luxembourg'],
+              'ASIA': ['india', 'singapore', 'japan', 'china', 'south korea', 'korea', 'vietnam', 'indonesia', 'malaysia',
+                       'thailand', 'philippines', 'taiwan', 'hong kong', 'australia', 'new zealand'],
+              'Middle East & Africa': ['israel', 'uae', 'united arab emirates', 'saudi arabia', 'qatar', 'turkey', 'egypt',
+                                       'south africa', 'nigeria', 'kenya', 'morocco'],
+              'LATAM': ['brazil', 'uruguay', 'argentina', 'mexico', 'chile', 'colombia', 'peru', 'costa rica'] } -%}
         <div class="lead-chips">
-          {% for r in ['US', 'EU', 'ASIA', 'LATAM'] %}
-          <label class="lead-chip"><input type="checkbox" name="regions" value="{{ r }}"><span>{{ r }}</span></label>
+          {% for r in ['US', 'UK', 'EU', 'ASIA', 'Middle East & Africa', 'LATAM'] %}
+          <label class="lead-chip"><input type="checkbox" name="regions" value="{{ r }}"{% if _lead_country in _lead_regions[r] %} checked{% endif %}><span>{{ r }}</span></label>
           {% endfor %}
         </div>
         <div class="lead-group-hint">Pick at least one</div>
@@ -53,7 +66,7 @@
       <div class="lead-group" data-group="budget">
         <div class="lead-group-label">Budget</div>
         <div class="lead-chips">
-          {% for m in ['No budget', '$1K-5K', '$5K-10K', '$10K+'] %}
+          {% for m in ['No budget', 'Under $1K', '$1K-5K', '$5K-10K', '$10K-25K', '$25K+'] %}
           <label class="lead-chip"><input type="radio" name="budget" value="{{ m }}"><span>{{ m }}</span></label>
           {% endfor %}
         </div>
