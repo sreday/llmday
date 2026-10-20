@@ -32,7 +32,7 @@
               <div class="lead-group" data-group="regions">
                 <div class="lead-group-label">Regions <em>(one or more)</em></div>
                 <div class="lead-chips">
-                  {% for r in ['US', 'EU', 'ASIA', 'LATAM'] %}
+                  {% for r in ['US', 'UK', 'EU', 'ASIA', 'Middle East & Africa', 'LATAM'] %}
                   <label class="lead-chip"><input type="checkbox" name="regions" value="{{ r }}"><span>{{ r }}</span></label>
                   {% endfor %}
                 </div>
@@ -41,7 +41,7 @@
               <div class="lead-group" data-group="budget">
                 <div class="lead-group-label">Budget</div>
                 <div class="lead-chips">
-                  {% for m in ['No budget', '$1K-5K', '$5K-10K', '$10K+'] %}
+                  {% for m in ['No budget', 'Under $1K', '$1K-5K', '$5K-10K', '$10K-25K', '$25K+'] %}
                   <label class="lead-chip"><input type="radio" name="budget" value="{{ m }}"><span>{{ m }}</span></label>
                   {% endfor %}
                 </div>
