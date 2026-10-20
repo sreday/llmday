@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="../assets/css/fonts.css">{# the site's own Montserrat + Roboto (slide 1); Oswald for the date comes from Google Fonts #}
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Oswald:wght@500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&display=swap">
   <style>
     :root {
       --bg: {{ t.bg or '#222' }}; --bg2: {{ t.bg2 or t.bg or '#333' }}; --deep: {{ t.deep or '#000' }};
@@ -40,7 +40,7 @@
     .slide > * { position: relative; }
     .slide > .city-bg, .slide > .veil { position: absolute; }
 
-    .glow { font-family: 'Orbitron', sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #fff;
+    .glow { font-family: 'Montserrat', sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; color: #fff;
             text-shadow: 0 0 6px rgba(255,255,255,.85), 0 0 22px var(--glow), 0 0 48px var(--accent); line-height: 1.1; margin: 0; }
     .h1 { font-size: 92px; }
     .qr { display: block; width: 100%; height: auto; }
@@ -60,7 +60,6 @@
     .s-hello .mascot { height: 320px; width: auto; filter: drop-shadow(0 12px 30px rgba(0,0,0,.35)); }
     .s-hello .hello { font-size: 120px; margin-top: 20px; text-align: center; white-space: nowrap; }
     .s-hello .hello span { display: block; }
-    .s-hello .glow { font-family: 'Montserrat', sans-serif; font-weight: 800; letter-spacing: .03em; }
     .s-hello .cap { font-family: 'Roboto', sans-serif; }
     .s-hello .when { position: absolute; right: 70px; bottom: 64px; text-align: right; font-family: 'Oswald', sans-serif; font-size: 40px;
                      font-weight: 400; letter-spacing: .04em; line-height: 1.15; text-shadow: 0 2px 14px rgba(0,0,0,.45); }
@@ -73,7 +72,7 @@
     .person { display: flex; flex-direction: column; align-items: center; width: 270px; }
     .person img { width: 250px; height: 250px; border-radius: 50%; object-fit: cover; border: 6px solid #fff;
                   box-shadow: 0 0 0 4px var(--accent), 0 14px 40px rgba(0,0,0,.35); }
-    .person span { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 40px; letter-spacing: .08em; text-transform: uppercase;
+    .person span { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 40px; letter-spacing: .03em; text-transform: uppercase;
                    margin-top: 24px; text-shadow: 0 0 14px var(--glow); white-space: nowrap; }
 
     /* 3 - share the love */
@@ -116,7 +115,6 @@
     .s-tour .map { position: absolute; background: var(--accent); opacity: .42; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
     .s-tour .arcs { position: absolute; inset: 0; width: 1920px; height: 1080px; }
     .s-tour .arcs path { fill: none; stroke: var(--glow); stroke-width: 3.5; filter: drop-shadow(0 0 8px var(--accent)); opacity: .9; }
-    .s-tour .arcs path.grey { stroke: #9a9aa3; filter: none; stroke-dasharray: 3 12; stroke-linecap: round; opacity: .8; }
     .s-tour .arcs line { stroke: rgba(255,255,255,.45); stroke-width: 2; }
     .s-tour .dot { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: #fff;
                    box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 50%, transparent), 0 0 28px 8px var(--accent); }
@@ -135,15 +133,16 @@
     .s-tour .home-qr { position: absolute; left: 70px; bottom: 60px; width: 190px; }
 
     /* last: QR + splash cards (2:1 images) */
-    .s-cards { flex-direction: row; justify-content: center; align-items: center; gap: 80px; padding: 0 70px; }
+    .s-cards { flex-direction: row; justify-content: center; align-items: center; gap: 70px; padding: 0 60px; }
     .cards-side { display: flex; flex-direction: column; align-items: center; gap: 50px; flex: none; }
-    .cards-side .logo { width: 300px; height: 300px; }
-    .cards-side .qr-box { width: 360px; }
-    .splash { display: flex; flex-wrap: wrap; justify-content: center; gap: 34px; flex: none; }   /* 3 = 2 + 1, 5 = 3 + 2, centred */
-    .splash .card { flex: none; width: 600px; }
-    .splash.n1 { width: 1100px; } .splash.n1 .card { width: 1100px; }
-    .splash.n2, .splash.n3, .splash.n4 { width: 1234px; }
-    .splash.n5 { width: 1360px; } .splash.n5 .card { width: 430px; }
+    .cards-side .logo { width: 260px; height: 260px; }
+    .cards-side .qr-box { width: 300px; }
+    /* the cards fill the ~1430 x 960 px right of the QR: two columns (5 = 2 + 2 + 1, 3 = 2 + 1, centred), 2 stacked, 1 big */
+    .splash { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 44px 40px; flex: none; width: 1430px; }
+    .splash .card { flex: none; width: 695px; }
+    .splash.n5 .card { width: 584px; }
+    .splash.n2 .card { width: 900px; }
+    .splash.n1 .card { width: 1300px; }
     .splash .card { border-radius: 18px; overflow: hidden; aspect-ratio: 2 / 1; box-shadow: 0 18px 50px rgba(0,0,0,.55); }
     .splash .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .splash .card.here { outline: 6px solid #fff; outline-offset: -6px; }
@@ -246,12 +245,12 @@
   <section class="slide s-tour" style="--bg: {{ bt.bg }}; --bg2: {{ bt.bg2 }}; --deep: {{ bt.deep }}; --accent: {{ bt.accent }}; --glow: {{ bt.glow }};">
     <img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager">
     <div class="head"><h2 class="glow">Upcoming events</h2>{% if b.span %}<div class="span">{{ b.span }}</div>{% endif %}</div>
-    {#- the world tour: the dotted map in this brand's colour, an arc from stop to stop in date order (grey towards a
-        tentative stop), one pin per city with all its dates (tentative ones grey, month only), labels placed in hello.py -#}
+    {#- the world tour: the dotted map in this brand's colour, an arc from stop to stop in date order (confirmed
+        stops only), one pin per city with all its dates (tentative ones grey, month only), labels placed in hello.py -#}
     {%- set mb = deck.map_box -%}
     <div class="map" style="left: {{ mb.x }}px; top: {{ mb.y }}px; width: {{ mb.w }}px; height: {{ mb.h }}px; -webkit-mask-image: url({{ deck.map_src }}); mask-image: url({{ deck.map_src }});"></div>
     <svg class="arcs" viewBox="0 0 1920 1080" aria-hidden="true">
-      {% for a in b.map.arcs %}<path class="{{ 'grey' if a.grey }}" d="{{ a.d }}"/>{% endfor %}
+      {% for a in b.map.arcs %}<path d="{{ a.d }}"/>{% endfor %}
       {% for p in b.map.stops if p.leader %}<line x1="{{ p.x }}" y1="{{ p.y }}" x2="{{ p.tx }}" y2="{{ p.ty }}"/>{% endfor %}
     </svg>
     {% for p in b.map.stops %}

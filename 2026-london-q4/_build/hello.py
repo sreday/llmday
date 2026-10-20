@@ -440,8 +440,9 @@ def _map_layout(rows, cities, brand):
         if p['leader']:                                      # line from the pin to the nearest point of the label
             p['tx'] = round(min(max(x, box[0]), box[2]))
             p['ty'] = round(min(max(y, box[1]), box[3]))
-    arcs = []
-    for (a, _), (b, tb) in zip(order, order[1:]):
+    arcs = []                                                # confirmed stops only: tentative ones are just a grey pin
+    route = [a for a, tent in order if not tent]
+    for a, b in zip(route, route[1:]):
         if a == b:
             continue
         pa, pb = stops[a], stops[b]
@@ -450,7 +451,7 @@ def _map_layout(rows, cities, brand):
         nx, ny = -dy * .28, dx * .28                         # bow the arc sideways, towards the top of the map
         if ny > 0:
             nx, ny = -nx, -ny
-        arcs.append({'d': 'M%.1f %.1f Q%.1f %.1f %.1f %.1f' % (pa['x'], pa['y'], mx + nx, my + ny, pb['x'], pb['y']), 'grey': tb})
+        arcs.append({'d': 'M%.1f %.1f Q%.1f %.1f %.1f %.1f' % (pa['x'], pa['y'], mx + nx, my + ny, pb['x'], pb['y'])})
     for p in pins:
         p['x'], p['y'] = round(p['x']), round(p['y'])
     return {'stops': pins, 'arcs': arcs}
