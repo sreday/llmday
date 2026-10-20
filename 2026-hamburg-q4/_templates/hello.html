@@ -266,7 +266,7 @@
   {% endfor %}
 
   {# last: this brand's QR and the splash cards of its next 3-5 events (the home page cards, photo_url) #}
-  <section class="slide dark s-cards">
+  <section class="slide s-cards">
     <div class="cards-side">
       {% if deck.brand.logo_src %}<img class="logo" src="{{ deck.brand.logo_src }}" alt="{{ brand_name }}" loading="eager">{% endif %}
       <div class="qr-box">{{ deck.home_qr }}</div>
