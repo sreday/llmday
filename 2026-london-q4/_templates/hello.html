@@ -98,9 +98,9 @@
     .partners img { width: 240px; height: 240px; object-fit: contain; }   /* the sponsor files are padded squares: shown whole */
     .partners.many img { width: 175px; height: 175px; }
 
-    /* 5 - other brands, 6 - open source, 7 - spotlight: the heading sits at the same height on all three */
-    .s-family, .s-oss, .s-spot { justify-content: flex-start; padding-top: 120px; }
-    .s-family h2, .s-oss h2, .s-spot h2 { margin-bottom: 60px; }
+    /* 5 - other brands, 6 - community tools: the heading sits at the same height on both */
+    .s-family, .s-oss { justify-content: flex-start; padding-top: 120px; }
+    .s-family h2, .s-oss h2 { margin-bottom: 60px; }
     .family { display: flex; gap: 110px; align-items: flex-end; }
     .family > div { display: flex; flex-direction: column; align-items: center; width: 400px; }
     .family .logo { width: 330px; height: 330px; margin-bottom: 40px; }
@@ -110,25 +110,25 @@
     .family.four .logo { width: 280px; height: 280px; }
     .family.four .qr-box { width: 320px; }
 
-    /* 6 - open source: the same logo + QR sizes as "Other brands", so both slides line up */
+    /* 6 - community tools: the same logo + QR sizes as "Other brands", so both slides line up */
 
-    /* 7 - spotlight: an open-source project's looping art + its site's current catchphrase (read at build time).
-       light = a white slide in the project's own colours (Reliaburger: reliaburger.com's ink + rust accent) */
-    .spot { display: flex; gap: 110px; align-items: center; }
-    .spot-art { width: 520px; height: 644px; flex: none; }
-    .spot-art video, .spot-art img { width: 100%; height: 100%; object-fit: contain; display: block; mix-blend-mode: multiply; }
-    .spot-main { width: 1020px; display: flex; flex-direction: column; gap: 44px; }
-    .spot-main .eyebrow { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: .12em; color: var(--accent); }
-    .spot-main .pitch { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 76px; line-height: 1.12; letter-spacing: -.01em; margin: -20px 0 0;
-                        text-shadow: 0 0 18px var(--glow); }
+    /* 7 - spotlight: an open-source project's own site hero on a slide (Reliaburger: reliaburger.com's paper, ink and rust,
+       its system-ui headline + monospace wordmark and eyebrow, no web fonts). The eyebrow (version) and headline are read
+       from the site at build time and again in the page (data-pitch, below), so a release shows up without a rebuild. */
+    .s-spot { background: var(--paper); color: var(--ink); align-items: stretch; justify-content: center; padding: 0 0 0 110px; }
+    .spot { display: grid; grid-template-columns: 1090px 1fr; align-items: center; height: 100%; }
+    .spot-main { display: flex; flex-direction: column; }
+    .spot-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 96px; }
+    .spot-word { display: inline-flex; align-items: center; gap: 44px; font: 700 72px var(--mono); letter-spacing: -.06em; }
+    .spot-word .mark { display: inline-grid; place-items: center; width: 132px; height: 132px; background: var(--ink); color: var(--mark);
+                       border-radius: 12px; letter-spacing: -.08em; }
+    .spot-top .qr-box { width: 400px; flex: none; padding: 0; box-shadow: none; background: transparent; border-radius: 0; mix-blend-mode: multiply; }
+    .spot-main .eyebrow { font: 500 24px var(--mono); letter-spacing: .07em; color: var(--accent); margin-bottom: 44px; }
+    .spot-main .pitch { font: 650 100px/1.12 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                        letter-spacing: -.055em; margin: 0; }
     .spot-main .pitch span { display: block; }
-    .spot-main .pitch span + span { color: var(--accent); }
-    .spot-link { display: flex; align-items: center; gap: 34px; }
-    .spot-link .qr-box { width: 230px; flex: none; }
-    .spot-link b { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 52px; }
-    .s-spot.light { background: #fff; color: var(--ink); }
-    .s-spot.light .glow, .s-spot.light .pitch { color: var(--ink); text-shadow: none; }
-    .s-spot.light .qr-box { box-shadow: none; border: 2px solid var(--line); }
+    .spot-art { height: 100%; display: flex; align-items: center; justify-content: center; }
+    .spot-art video, .spot-art img { width: 100%; height: 960px; object-fit: contain; display: block; mix-blend-mode: multiply; }
 
     /* tours - the sister brands' upcoming events */
     .s-tour { background: radial-gradient(1200px 700px at 75% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
@@ -257,22 +257,31 @@
   </section>
   {% endif %}
 
-  {# 6 - our open-source projects (hello.yaml open_source) #}
-  {% if deck.open_source %}
+  {# 6 - community tools (hello.yaml open_source without spotlight: cfp.ninja); the spotlit ones get slide 7 instead #}
+  {%- set tools = deck.open_source|rejectattr('spotlight')|list %}
+  {% if tools %}
   <section class="slide s-oss">
-    <h2 class="glow h1">Open source</h2>
+    <h2 class="glow h1">Community tool{% if tools|length > 1 %}s{% endif %}</h2>
     <div class="family oss">
-      {% for o in deck.open_source %}<div><img class="logo" src="{{ o.logo_src }}" alt="{{ o.name }}" loading="eager"><div class="qr-box">{{ o.qr }}</div></div>{% endfor %}
+      {% for o in tools %}<div><img class="logo" src="{{ o.logo_src }}" alt="{{ o.name }}" loading="eager"><div class="qr-box">{{ o.qr }}</div></div>{% endfor %}
     </div>
   </section>
   {% endif %}
 
-  {# 7 - open-source spotlight (hello.yaml open_source with spotlight): its looping art + its site's catchphrase #}
+  {# 7 - open-source spotlight (hello.yaml open_source with spotlight): the project's site hero - wordmark, QR, eyebrow,
+     headline and its looping art, in the site's own colours (hello.yaml `light`) #}
   {% for o in deck.spotlights %}
   {%- set lt = o.light or {} -%}
-  <section class="slide s-spot{% if o.light %} light{% endif %}"{% if o.light %} style="--ink: {{ lt.ink or '#111' }}; --accent: {{ lt.accent or '#111' }}; --line: {{ lt.line or '#ddd' }};"{% endif %}>
-    <h2 class="glow h1">{{ o.name }}</h2>
+  <section class="slide s-spot" data-pitch="{{ o.url }}" style="--paper: {{ lt.paper or '#fff' }}; --ink: {{ lt.ink or '#111' }}; --accent: {{ lt.accent or '#111' }}; --mark: {{ lt.mark or lt.accent or '#fff' }}; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;">
     <div class="spot">
+      <div class="spot-main">
+        <div class="spot-top">
+          <div class="spot-word" aria-label="{{ o.name }}">{% if o.pitch.mark %}<span class="mark" aria-hidden="true">{{ o.pitch.mark }}</span>{% endif %}{{ o.pitch.word or o.name|lower }}</div>
+          <div class="qr-box">{{ o.qr }}</div>
+        </div>
+        <div class="eyebrow" data-pitch-eyebrow>{{ o.pitch.eyebrow }}</div>
+        <p class="pitch" data-pitch-lines>{% for line in o.pitch.lines %}<span>{{ line }}</span>{% endfor %}</p>
+      </div>
       <div class="spot-art">
         {%- if o.loop %}
         {#- <source> children, not <video src>: rewrite_assets.py leaves it eager (its lazy rule is for <video src>) -#}
@@ -280,11 +289,6 @@
           {% for src, type in o.loop %}<source src="{{ src }}" type="{{ type }}">{% endfor %}
         </video>
         {%- elif o.logo_src %}<img src="{{ o.logo_src }}" alt="{{ o.name }}" loading="eager">{% endif %}
-      </div>
-      <div class="spot-main">
-        {% if o.pitch.eyebrow %}<div class="eyebrow">{{ o.pitch.eyebrow }}</div>{% endif %}
-        <p class="pitch">{% for line in o.pitch.lines %}<span>{{ line }}</span>{% endfor %}</p>
-        <div class="spot-link"><div class="qr-box">{{ o.qr }}</div><b>{{ o.url.split('//')[-1].rstrip('/') }}</b></div>
       </div>
     </div>
   </section>
@@ -407,6 +411,30 @@
     if (m && !masks[m[1]]) { masks[m[1]] = 1; var p = new Image(); p.src = m[1]; track(p); }
   });
   show();
+
+  // the spotlight's version + headline straight from the project's site (CORS open on GitHub Pages), now and every 15 min
+  // while the deck runs: a release lands on the screen without a rebuild. Offline / blocked = the build-time copy stays.
+  [].forEach.call(stage.querySelectorAll('[data-pitch]'), function (sl) {
+    var url = sl.getAttribute('data-pitch'), eb = sl.querySelector('[data-pitch-eyebrow]'), h = sl.querySelector('[data-pitch-lines]');
+    function pull() {
+      if (!window.fetch || !window.DOMParser) return;
+      var ac = window.AbortController ? new AbortController() : null;
+      if (ac) setTimeout(function () { ac.abort(); }, 8000);
+      fetch(url, { cache: 'no-store', signal: ac && ac.signal }).then(function (r) { return r.ok ? r.text() : ''; }).then(function (t) {
+        if (!t) return;
+        var doc = new DOMParser().parseFromString(t, 'text/html'), e = doc.querySelector('.eyebrow'), h1 = doc.querySelector('h1');
+        if (e && e.textContent.trim()) eb.textContent = e.textContent.trim();
+        if (!h1) return;
+        var lines = h1.innerHTML.split(/<br\s*\/?>/i).map(function (x) {
+          var d = doc.createElement('div'); d.innerHTML = x; return d.textContent.trim();   // the inert parsed doc: nothing in it runs
+        }).filter(Boolean);
+        if (!lines.length) return;
+        h.textContent = '';
+        lines.forEach(function (x) { var s = document.createElement('span'); s.textContent = x; h.appendChild(s); });
+      }).catch(function () {});
+    }
+    pull(); setInterval(pull, 15 * 60 * 1000);
+  });
   fit(); go((parseInt(location.hash.slice(1), 10) || 1) - 1); wake();
 })();
 </script>
