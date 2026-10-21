@@ -197,6 +197,40 @@ window.addEventListener('load', glowIntensity);
 document.addEventListener('DOMContentLoaded', updateDeckButtons);
 window.addEventListener('resize', function () { clearTimeout(window.__deckT); window.__deckT = setTimeout(function () { updateDeckButtons(); glowIntensity(); }, 150); });
 </script>
+<script>
+/* Shards lean up to 1 degree towards the cursor - desktop mouse only, off for reduced motion */
+(function shardTilt() {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var SEL = '#events .card, #past-events .card, .amb', MAX = 1;
+  var active = null, st = null, raf = 0;
+  function frame() {
+    raf = 0;
+    if (!st) return;
+    st.rx += (st.tx - st.rx) * .14; st.ry += (st.ty - st.ry) * .14;
+    st.card.style.transform = 'perspective(900px) rotateX(' + st.rx.toFixed(3) + 'deg) rotateY(' + st.ry.toFixed(3) + 'deg)';
+    if (Math.abs(st.tx - st.rx) + Math.abs(st.ty - st.ry) > .005) raf = requestAnimationFrame(frame);
+    else if (!st.on) { st.card.style.transform = ''; st = null; }
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+  function release() { if (st) { st.on = false; st.tx = st.ty = 0; kick(); } active = null; }
+  document.addEventListener('pointermove', function (e) {
+    if (e.pointerType !== 'mouse') return;
+    var card = e.target.closest ? e.target.closest(SEL) : null;
+    if (card && card.classList.contains('deck-deal')) card = null;   /* never fight the deal-in animation */
+    if (card !== active) {
+      release();
+      active = card;
+      if (card) st = { card: card, rx: 0, ry: 0, tx: 0, ty: 0, on: true };
+    }
+    if (!st || !active) return;
+    var r = active.getBoundingClientRect();
+    st.tx = -((e.clientY - r.top) / r.height - .5) * MAX * 2;
+    st.ty = ((e.clientX - r.left) / r.width - .5) * MAX * 2;
+    kick();
+  }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', release);
+})();
+</script>
 
 {% if events_past or meetups_past %}
 <section id="past-events" class="sponsors-section section theme-bg-primary text-white">
