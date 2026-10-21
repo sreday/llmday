@@ -933,6 +933,16 @@
   /* schedule -> speakers without an edge (Marek 2026-10-20): the schedule fades back to white at its foot and the
      speakers' aurora fades in from white at its head, so the two washes meet on white */
   .schedule-section.theme-bg-light { background-image: linear-gradient(#fff, #f0faf5 260px, #f0faf5 calc(100% - 320px), #fff); }
+  /* LinkedIn as a bubble on the headshot's circle, like the ambassadors (Marek 2026-10-21): one at the lower right,
+     two on both sides; the photos are circles filling ~74% of the square, so the bubbles sit at 24% / 76% */
+  .spk-pic { position: relative; margin: 12px 12px 0; }
+  .spk-glass .spk-pic .card-img-top { padding: 0; }
+  .spk-li { position: absolute; left: 76%; top: 76%; transform: translate(-50%, -50%); width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; color: rgba(10,102,194,.75); background: #dbe8f5;
+    border: 3px solid rgba(255,255,255,.9); text-decoration: none; transition: background .2s, color .2s; }
+  .spk-li.spk-li-left { left: 24%; }
+  .spk-li:hover, .spk-li:focus { background: #c6dbf0; color: #0a66c2; }
+  @media (max-width: 767.98px) { .spk-pic { margin: 8px 8px 0; } .spk-li { width: 32px; height: 32px; } }
   #speakers .spk-aurora { -webkit-mask-image: linear-gradient(transparent, #000 360px); mask-image: linear-gradient(transparent, #000 360px); }
 </style>
 <section id="speakers" class="speakers-section section spk-glass">
@@ -945,7 +955,7 @@
 
       <div class="col mb-4">
         <div class="card">
-          <a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt=""></a>
+          <div class="spk-pic"><a href="#modal-speaker-{{ talk.id }}" data-bs-toggle="modal" data-bs-target="#modal-speaker-{{ talk.id }}"><img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt=""></a>{% if talk.linkedin %}<a class="spk-li{% if talk.linkedin2 %} spk-li-left{% endif %}" target="_blank" rel="noopener" href="{{ talk.linkedin }}" aria-label="{{ talk.name }} on LinkedIn"><i class="fab fa-linkedin-in"></i></a>{% endif %}{% if talk.linkedin2 %}<a class="spk-li" target="_blank" rel="noopener" href="{{ talk.linkedin2 }}" aria-label="{{ talk.name }} on LinkedIn"><i class="fab fa-linkedin-in"></i></a>{% endif %}</div>
           <div class="card-body">
             <h5 class="card-title mb-2">{{ talk.display_name }}</h5>
             <div class="card-text mb-3">
@@ -956,14 +966,12 @@
               {% if talk.YouTube %}<a class="event-watch-btn" href="{{ talk.YouTube }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="white" style="vertical-align:middle;margin-right:4px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Watch</a>{% endif %}
             </div>
           </div><!--//card-->
-          <div class="card-footer text-muted">
+          {% if talk.twitter or talk.twitter2 %}<div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               {% if talk.twitter %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
-              {% if talk.linkedin %}<li class="list-inline-item"><a  href="{{ talk.linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
               {% if talk.twitter2 %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
-              {% if talk.linkedin2 %}<li class="list-inline-item"><a  href="{{ talk.linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
             </ul><!--//social-list-->
-          </div>
+          </div>{% endif %}
         </div><!--//card-->
       </div><!--//col-->
 
