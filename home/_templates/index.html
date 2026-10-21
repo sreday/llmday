@@ -330,7 +330,6 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
 .card { transition: box-shadow .4s ease, border-color .4s ease; border: 1px solid transparent; }
 #past-events .card:hover { border-color: rgba(255,255,255,.25); box-shadow: 0 0 20px rgba(255,255,255,.12), 0 0 48px rgba(255,255,255,.05); }
 #ambassadors img.rounded-circle { transition: filter .2s ease; }
-#ambassadors img.rounded-circle:hover { filter: brightness(1.1) contrast(0.9); }
 #events .card-img-top, #past-events .card-img-top { transition: filter .2s ease; }
 #events .card:hover .card-img-top, #past-events .card:hover .card-img-top { filter: brightness(1.1) contrast(0.9); }
 /* the whole card is the link: the splash image's link stretches over the card; buttons and title links stay on top */
@@ -375,7 +374,6 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
 .amb-head { display: flex; flex-direction: column; align-items: center; }
 .amb-pic { position: relative; display: inline-block; width: 180px; height: 180px; }
 .amb-pic img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; display: block; color: transparent; transition: filter .2s ease; }
-.amb-pic img:hover { filter: brightness(1.1) contrast(0.9); }
 .amb-li { position: absolute; right: 8px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
   color: rgba(10,102,194,.75); background: #dbe8f5; border: 3px solid rgba(255,255,255,.9); transition: background .2s, color .2s; text-decoration: none; }
 .amb-li:hover, .amb-li:focus { background: #c6dbf0; color: #0a66c2; }
@@ -384,6 +382,10 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
 .amb-co { font-size: .86rem; color: #4b5a6b; line-height: 1.35; margin-top: .1rem; }
 .amb-aff { display: inline-flex; align-items: center; gap: .3rem; margin-top: .7rem; padding: .25rem .7rem; border-radius: 999px; font-size: .74rem; font-weight: 700; color: #fff; background: #098dcf; }
 .amb-gap { height: 1rem; flex: none; }
+/* destination pill sits on the bottom with Story, so pills in one row line up (heads are equalised per row) */
+.amb-head > :has(+ .amb-aff) { margin-bottom: .7rem; }
+.amb-head > .amb-aff { margin-top: auto; }
+.amb-aff ~ .amb-story { margin-top: 0; }
 .amb-story { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding: 6px 13px; min-height: 31px; line-height: 19px; font-size: .8rem; border: 0; cursor: pointer; border-radius: 5px; }
 .amb-story svg { transition: transform .3s; }
 .amb.open .amb-story svg { transform: rotate(180deg); }

@@ -218,9 +218,6 @@
 	
 	.card-img-top {
 		transition: filter .2s ease;
-		&:hover {
-			filter: brightness(1.1) contrast(0.9);
-		}
 	}
 
 	.card-footer {
