@@ -100,6 +100,7 @@
     .partners { gap: 30px 40px; }
     .partners img { width: 240px; height: 240px; object-fit: contain; }   /* the sponsor files are padded squares: shown whole */
     .partners.many img { width: 175px; height: 175px; }
+    .s-partners .city-bg { filter: brightness(.8); }   /* the venue photo 20% darker under the veil */
     .s-partners .city-bg + .veil { background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 55%, transparent) 0%,
              color-mix(in srgb, var(--bg) 75%, transparent) 100%); }
 
@@ -225,7 +226,7 @@
   <section class="slide s-share">
     <h2 class="glow h1">Share the love</h2>
     <div class="share">
-      {% if deck.whatsapp_qr %}<div><div class="qr-box">{{ deck.whatsapp_qr }}</div><div class="cap">WhatsApp</div>{{ wa_icon() }}</div>{% endif %}
+      {% if deck.whatsapp_qr %}<div><div class="qr-box">{{ deck.whatsapp_qr }}</div><div class="cap">Community WhatsApp</div>{{ wa_icon() }}</div>{% endif %}
       {% if deck.linkedin_qr %}<div><div class="qr-box">{{ deck.linkedin_qr }}</div><div class="cap">{{ brand_name }}</div>{{ li_icon() }}</div>{% endif %}
     </div>
   </section>
