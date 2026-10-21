@@ -1,6 +1,6 @@
 """/<event>/hello/ - the opening deck shown on the venue screen before the first talk (Marek 2026-10-19, after the
 PLATFORMday Austin deck): Hello <city>, the team, WhatsApp + LinkedIn, the event's partners, the sister brands,
-the open-source projects (cfp.ninja, Reliaburger) and a Reliaburger slide with reliaburger.com's catchphrase, the sister
+the community tools (cfp.ninja) and a Reliaburger slide drawn like reliaburger.com's hero (live version + catchphrase), the sister
 brands' upcoming events, then this brand's mascot sticker with its upcoming events. Full-screen button + clicker keys in the page.
 
 Everything comes from data, nothing is typed per event:
@@ -11,8 +11,8 @@ Everything comes from data, nothing is typed per event:
     fetched once per build run and cached 30 min in ../.cache/hello-sisters.json (stale copy if the fetch fails;
     SKIP_CFP_CHECK=1 or SKIP_HELLO_FETCH=1 = offline build, cache only)
   - panoramas/<city_name>.jpg tinted in the brand's colours (the City view picture) behind slides 1 and 4
-  - the open_source entries with `spotlight`: their site's <h1> + eyebrow line (cached 30 min in ../.cache/hello-pitch.json,
-    same offline rules)
+  - the open_source entries with `spotlight`: their site's <h1>, eyebrow line and wordmark (cached 30 min in
+    ../.cache/hello-pitch.json, same offline rules); the page re-reads the <h1> + eyebrow itself every 15 min
 Not built for past/ events (../.past-events, written by make stage).
 
 Built for bad venue wifi (2026-10-20): the QR codes are inline SVG (qr_svg below), the pictures are sized WebPs (_Img),
@@ -565,14 +565,19 @@ def _text(fragment):
 
 
 def _site_pitch(url):
-    """the site's current catchphrase: its <h1> (one line per <br>) and the small line above it (.eyebrow)"""
+    """the site's current catchphrase: its <h1> (one line per <br>), the small line above it (.eyebrow, with the version)
+    and its masthead wordmark (.wordmark = .mark tile + name)"""
     req = urllib.request.Request(url, headers={'User-Agent': 'hello-deck-build'})
     with urllib.request.urlopen(req, timeout=8) as r:
         page = r.read().decode('utf-8', 'replace')
     h1 = re.search(r'<h1\b[^>]*>(.*?)</h1>', page, re.S | re.I)
     lines = [_text(x) for x in re.split(r'<br\s*/?>', h1.group(1), flags=re.I)] if h1 else []
     eyebrow = re.search(r'class="[^"]*\beyebrow\b[^"]*"[^>]*>(.*?)</', page, re.S | re.I)
-    return {'lines': [x for x in lines if x], 'eyebrow': _text(eyebrow.group(1)) if eyebrow else ''}
+    word = re.search(r'<a\b[^>]*class="[^"]*\bwordmark\b[^"]*"[^>]*>(.*?)</a>', page, re.S | re.I)   # <span class="mark">r/</span>reliaburger
+    mark = re.search(r'class="[^"]*\bmark\b[^"]*"[^>]*>(.*?)</span>', word.group(1), re.S | re.I) if word else None
+    return {'lines': [x for x in lines if x], 'eyebrow': _text(eyebrow.group(1)) if eyebrow else '',
+            'mark': _text(mark.group(1)) if mark else '',
+            'word': _text(word.group(1)[mark.end():] if mark else word.group(1)) if word else ''}
 
 
 def _pitches(projects):
