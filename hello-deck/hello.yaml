@@ -18,7 +18,7 @@ team:
 #   without spotlight = on the "COMMUNITY TOOL" slide (logo + QR)
 #   spotlight = its own slide instead, drawn like the project's site hero: its wordmark, QR, eyebrow line (version) and
 #   <h1> catchphrase, read from the site on every build and again by the page every 15 min (tagline = fallback when the
-#   site is down and nothing is cached), the looping video (loop + poster); light = the site's paper, ink, accent and
+#   site is down and nothing is cached; mark = the wordmark tile, same), the looping video (loop + poster); light = the site's paper, ink, accent and
 #   wordmark tile colours (reliaburger.com style.css :root + .mark)
 open_source:
   - {name: cfp.ninja, url: https://cfp.ninja, logo: brands/cfpninja.png}
@@ -27,6 +27,7 @@ open_source:
     logo: brands/reliaburger.png
     spotlight: true
     tagline: A container platform with nothing to assemble.
+    mark: r/
     loop: [brands/reliaburger-loop.webm, brands/reliaburger-loop.mp4]
     poster: brands/reliaburger-still.webp
     light: {paper: '#fafbf9', ink: '#181b19', accent: '#a83b15', mark: '#f49463', line: '#d6ddd6'}
