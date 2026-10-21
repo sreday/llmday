@@ -66,6 +66,7 @@ jobs:
           LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations
           WAITLIST_FEED: ${{ secrets.WAITLIST_FEED }}   # "Speaker waitlist" script exec URL + ?list=1&token=...; /status/ Waitlist tab
           COMMUNITYHERO_FEED: ${{ secrets.COMMUNITYHERO_FEED }}   # "Community hero" script exec URL + ?list=1&token=...; /status/ Heroes tab
+          GITHUB_TOKEN: ${{ github.token }}   # hello deck: Reliaburger numbers from the GitHub API (no anonymous rate limit)
         run: |
           make clean
           make -j4 generate   # 4 events at a time (the runner has 4 cores); each builds in its own folder
@@ -153,6 +154,7 @@ jobs:
           LUMA_API_KEYS: ${{ secrets.LUMA_API_KEYS }}   # one or more Luma calendar keys, comma-separated; /status/ registrations
           WAITLIST_FEED: ${{ secrets.WAITLIST_FEED }}   # "Speaker waitlist" script exec URL + ?list=1&token=...; /status/ Waitlist tab
           COMMUNITYHERO_FEED: ${{ secrets.COMMUNITYHERO_FEED }}   # "Community hero" script exec URL + ?list=1&token=...; /status/ Heroes tab
+          GITHUB_TOKEN: ${{ github.token }}   # hello deck: Reliaburger numbers from the GitHub API (no anonymous rate limit)
         run: |
           make clean
           make -j4 generate   # the same pages the deploy built, so the cache keys match
