@@ -332,7 +332,11 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
 #ambassadors img.rounded-circle { transition: filter .2s ease; }
 #ambassadors img.rounded-circle:hover { filter: brightness(1.1) contrast(0.9); }
 #events .card-img-top, #past-events .card-img-top { transition: filter .2s ease; }
-#events .card-img-top:hover, #past-events .card-img-top:hover { filter: brightness(1.1) contrast(0.9); }
+#events .card:hover .card-img-top, #past-events .card:hover .card-img-top { filter: brightness(1.1) contrast(0.9); }
+/* the whole card is the link: the splash image's link stretches over the card; buttons and title links stay on top */
+#events .card, #past-events .card { position: relative; }
+#events .card > a:first-child::before, #past-events .card > a:first-child::before { content: ""; position: absolute; inset: 0; z-index: 1; }
+#events .card-body a, #past-events .card-body a { position: relative; z-index: 3; }
 /* ---- Glow-up: liquid glass on an ink-sweep band (upcoming + ambassadors), shards on past events ---- */
 .glow-band { --glow-accent: #26986A; --glow-accent-rgb: 38,152,106; position: relative; isolation: isolate; overflow: hidden; background-color: #f0f6fa; }
 .glow-band > .section { background: transparent !important; }
