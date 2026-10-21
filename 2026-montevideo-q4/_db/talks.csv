@@ -20,41 +20,31 @@ may be more appropriate.
 The goal is not to predict the future of AI security, but to provide a way to reason about security decisions as LLMs and agentic systems become part of the enterprise technology landscape.",,"Federico Novelli is the Head of Information Security & Technology Operations at Protect Group, where he oversees global security policy enforcement, technology infrastructure, and cross-functional operations. An Industrial Engineer currently finishing an MBA; Federico specializes in bridging the gap between technical cybersecurity operations, risk management, and high-level strategy. He is also a Professor at the Faculty of Engineering at Universidad de Montevideo and holds a Postgraduate degree in Project
 Management, bringing a practical, multidisciplinary perspective to security, risk quantification, and organizational governance."
 ,confirmed,Gorka Ludlow,1,1,Karma Digital,Gorka Ludlow.png,https://www.linkedin.com/in/gorka-ludlow/,,,,"Apps, not chats. Shipping macOS products that run AI models on-device","Most people meet AI as a chat box. But the models can run as real software on your own machine, doing a job inside an app instead of answering prompts in a thread. This talk walks through shipping macOS products that do exactly that, with the models running entirely on-device: transcription and speaker diarization, screen understanding through an MCP server, voice cloning that reads text in your own voice, and an augmented-reality assistant. Running locally reduces per-inference cost, works offline, and can keep your data private, in exchange for fighting model size, memory, latency, and macOS packaging. We share the honest engineering behind products already in users' hands: which models we chose and why, what worked, what broke, and when local is the wrong call. Apps, not chats.",,"Gorka Ludlow is co-founder of Karma Digital, where he builds and ships macOS AI apps that run models on-device, and does AI consulting."
-,confirmed,Marcos Novelli Harispe,1,1,Fullstack Engineer,Marcos Novelli Harispe.png,https://www.linkedin.com/in/marcos-novelli-harispe-a6339a129/,,,,"Put Down the Prompt: Set Up, Test, and Break a Production Cluster in Seconds with
-Reliaburger","Disclaimer: This is a non-LLM break. Take a deep breath and get a taste of a talk you can
-usually experience at an SREday Conference.
-I have never run a Kubernetes cluster. Yes, I said it. Are you still with me? Cool! Over the
-past five years I talked to thousands of SREs and platform engineers at the conferences I
-run with my team: SREday, LLMday, PLATFORMday and Conf42. The same story keeps
-coming back. Before the first container hits production you step into the world of Kubernetes,
-and then you need to build a whole team just to keep it running. A killjoy for many smaller
-teams. We started talking with my brother, Miko Pawlikowski, how we could help the
-community ease some of these pains. Miko has been running platform teams on Kubernetes
-for 10+ years, leading him to start writing Reliaburger: one Rust binary with the scheduler,
-gossip, Raft, eBPF service discovery, ingress, mTLS, registry, metrics, logs, GitOps and
-chaos testing inside, driven by TOML (don&#39;t worry if those terms sound like alien tech - we&#39;ll
-unpack them together from scratch during the session, it will be fun!). An app with health
-checks, ingress and autoscaling is twelve lines. He wrote the software. I am here to hand it
-to the community and see what you do with it.
-This is a hands-on session, so bring a laptop (macOS on Apple silicon or Linux; Windows is
-not supported yet). In 30 minutes you will:
-1. Install Reliaburger with one command and start a node on your laptop. No container
-runtime, no root, no VMs: the built-in process runtime runs plain binaries.
-2. Deploy an app from a twelve-line TOML file and watch it in the terminal dashboard
-and the web UI.
-3. Ship a deliberately sick version and watch the health checker restart it, then roll back
-with one command.
-4. Break it on purpose with the built-in fault injector: kill an instance, freeze another, and
-let relish wtf explain what just happened.
-5. Read the manual and the source code from inside the binary, so you can keep going
-after the session.
-6. Tell us what broke and what you liked. Reliaburger is free and open source (Apache
-2.0), and it is version 0.1, so it will break. That is where you come in. We are looking
-for helpers, burger ambassadors and contributors: people who will run it, break it, file
-the issues, write the docs and tell their teams. There are millions of practitioners
-running parts of Kubernetes they do not need, with more people than they should
-need to run it. We want this to become a community-driven project, just as our
-conferences are.",,"Marcos Novelli Harispe is a Fullstack Engineer and ORT University Lecturer focused on scalable AWS cloud systems. He specializes in event-driven architectures, Data Lakes, and infrastructure as code (Terraform), with extensive experience migrating production microservices to serverless. Equal parts hands-on engineer and educator, Marcos is passionate about reliability, observability, and mentoring the next generation of tech talent."
+,workshop,Mark Pawlikowski,1,1,Reliaburger,Mark Pawlikowski.png,https://www.linkedin.com/in/marek-pawlikowski/,,,,"Put Down the Prompt: Set Up, Test, and Break a Production Cluster in Seconds with
+Reliaburger","Disclaimer: This is a non-LLM break. Take a deep breath and get a taste of a talk you can usually experience at an [SREday](https://sreday.com/) Conference.
+
+I have never run a Kubernetes cluster. Yes, I said it.
+
+Are you still with me? Cool!
+
+Over the past five years I talked to thousands of SREs and platform engineers at the conferences I run with my team: [SREday](https://sreday.com/), [LLMday](https://llmday.com/), [PLATFORMday](https://platformday.com/) and [Conf42](https://www.conf42.com/).
+
+The same story keeps coming back. Before the first container hits production you step into the world of Kubernetes, and then you need to build a whole team just to keep it running. A killjoy for many smaller teams. We started talking with my brother, [Miko Pawlikowski](https://www.linkedin.com/in/mikolajpawlikowski/), how we could help the community ease some of these pains.
+
+Miko has been running platform teams on Kubernetes for 10+ years, leading him to start writing Reliaburger: one Rust binary with the scheduler, gossip, Raft, eBPF service discovery, ingress, mTLS, registry, metrics, logs, GitOps and chaos testing inside, driven by TOML (don't worry if those terms sound like alien tech - we'll unpack them together from scratch during the session, it will be fun!). An app with health checks, ingress and autoscaling is twelve lines. He wrote the software. I am here to hand it to the community and see what you do with it.
+
+This is a hands-on session, so bring a laptop (macOS on Apple silicon or Linux; Windows is not supported yet).
+
+In 30 minutes you will:
+
+1. Install Reliaburger with one command and start a node on your laptop. No container runtime, no root, no VMs: the built-in process runtime runs plain binaries.
+2. Deploy an app from a twelve-line TOML file and watch it in the terminal dashboard and the web UI.
+3. Ship a deliberately sick version and watch the health checker restart it, then roll back with one command.
+4. Break it on purpose with the built-in fault injector: kill an instance, freeze another, and let `relish wtf` explain what just happened.
+5. Read the manual and the source code from inside the binary, so you can keep going after the session.
+6. Tell us what broke and what you liked.
+
+Reliaburger is free and open source (Apache 2.0), and it is version 0.1, so it will break. That is where you come in. We are looking for helpers, burger ambassadors and contributors: people who will run it, break it, file the issues, write the docs and tell their teams. There are millions of practitioners running parts of Kubernetes they do not need, with more people than they should need to run it. We want this to become a community-driven project, just as our conferences are.",,"Mark Pawlikowski runs SREday, LLMday and PLATFORMday, in-person conferences for the people who keep production up, and Conf42 online. He is not an engineer. He has spent the last five years listening to SREs and platform engineers describe what their work is actually like, and now brings Reliaburger, his brother Miko's batteries-included container orchestrator, to that community to play with, break and build on."
 ,confirmed,Carla Marcela Florida Roman,1,1,Bee Zero,Carla Marcela Florida Roman.png,https://www.linkedin.com/in/carlicode/,,,,Science at Scale: AWS Infrastructure for Reproducible Scientific Experimentation,"Validating a scientific hypothesis is not just a matter of ideas. It also requires infrastructure capable of running experiments in parallel while ensuring traceability, reproducibility, and cost efficiency. In this talk, we present how we designed an experimental platform on AWS to support real-world academic research at scale. The system enables thousands of experiments to run across multiple datasets, algorithms, and experimental conditions, using elastic compute with AWS Batch, structured storage in Amazon S3, a vector database to organize experimental results, and a centralized dashboard to explore and compare experimental behavior. The scientific use case behind this infrastructure is part of a research effort developed in collaboration with Eduardo Di Santi at the University of Colorado Boulder, exploring the relationship between the geometric structure of data and learning efficiency. The platform was designed to evaluate these types of hypotheses empirically at scale. This talk does not replace the formal academic presentation of the scientific findings, which are currently being reserved for publication. The session focuses on the architecture, design decisions, experimental automation, reproducibility, scalability, and lessons learned from using cloud infrastructure to support advanced scientific research. If you work in research, MLOps, data science, or cloud infrastructure, this talk presents a real-world case study of how AWS can transform a complex scientific question into a robust, scalable, and reproducible experimental platform.",,"Carla Florida is the CTO of BeeZero, an AWS Community Builder, and the creator of CarliCode, a community where she shares content about technology, programming, and artificial intelligence. Passionate about AI and Generative AI, she develops AI-powered solutions while helping make these technologies more accessible to people across Latin America. She is a former Platzi instructor and an active member of the tech community, combining her technical expertise with her passion for teaching, creating, and sharing knowledge."
 ,confirmed,Joaquin Bonifacino,1,1,Zyte,Joaquin Bonifacino.png,https://www.linkedin.com/in/joaquin-bonifacino/,,,,Long Running Agents: The Harness Is the Product,"Most agent demos run for thirty seconds. Production agents run for hours, and almost everything that breaks at that timescale has nothing to do with the model. Drawn from building an agentic data-QA engine running at 20B+ tokens per week in production.
 Why long-running agents fail: context degradation, silent tool failure, unrecoverable state, cost drift, and why demos never catch them.
