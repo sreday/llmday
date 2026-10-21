@@ -178,6 +178,42 @@ if (pageNavWrapper) {
 	} catch (e) {}
 })();
 
+/* ===== Venue photos: shards lean towards the cursor (no zoom) - desktop mouse only, off for reduced motion ===== */
+/* same feel as the home page shards; the scroll-in animation uses translate/scale so transform is free for the tilt */
+(function venueTilt() {
+	try {
+		if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		var SEL = '.venue-v2 .figures-holder .figure', MAX = 1;
+		var active = null, st = null, raf = 0;
+		function frame() {
+			raf = 0;
+			if (!st) return;
+			st.rx += (st.tx - st.rx) * .14; st.ry += (st.ty - st.ry) * .14;
+			st.card.style.transform = 'perspective(900px) rotateX(' + st.rx.toFixed(3) + 'deg) rotateY(' + st.ry.toFixed(3) + 'deg)';
+			if (Math.abs(st.tx - st.rx) + Math.abs(st.ty - st.ry) > .005) raf = requestAnimationFrame(frame);
+			else if (!st.on) { st.card.style.transform = ''; st = null; }
+		}
+		function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+		function release() { if (st) { st.on = false; st.tx = st.ty = 0; kick(); } active = null; }
+		document.addEventListener('pointermove', function (e) {
+			if (e.pointerType !== 'mouse') return;
+			var card = e.target.closest ? e.target.closest(SEL) : null;
+			if (card !== active) {
+				release();
+				active = card;
+				if (card) st = { card: card, rx: 0, ry: 0, tx: 0, ty: 0, on: true };
+			}
+			if (!st || !active) return;
+			var r = active.getBoundingClientRect();
+			var m = Math.min(3, MAX * Math.max(1, 600 / r.width));   /* narrow shards lean further, like the home cards */
+			st.tx = -((e.clientY - r.top) / r.height - .5) * m * 2;
+			st.ty = ((e.clientX - r.left) / r.width - .5) * m * 2;
+			kick();
+		}, { passive: true });
+		document.documentElement.addEventListener('pointerleave', release);
+	} catch (e) {}
+})();
+
 /* ===== Gumshoe SrollSpy ===== */
 /* Ref: https://github.com/cferdinandi/gumshoe  */
 // Get the sticky header
