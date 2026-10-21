@@ -112,42 +112,23 @@
 
     /* 6 - open source: the same logo + QR sizes as "Other brands", so both slides line up */
 
-    /* 7 - spotlight: an open-source project with its GitHub numbers from the build. light = a white slide in the
-       project's own colours (Reliaburger: reliaburger.com's ink + rust accent) with its looping burger video */
-    .spot { display: flex; gap: 90px; align-items: center; }
-    .spot-art { width: 470px; height: 582px; flex: none; display: flex; align-items: center; justify-content: center; }
+    /* 7 - spotlight: an open-source project's looping art + its site's current catchphrase (read at build time).
+       light = a white slide in the project's own colours (Reliaburger: reliaburger.com's ink + rust accent) */
+    .spot { display: flex; gap: 110px; align-items: center; }
+    .spot-art { width: 520px; height: 644px; flex: none; }
     .spot-art video, .spot-art img { width: 100%; height: 100%; object-fit: contain; display: block; mix-blend-mode: multiply; }
-    .spot-main { width: 1160px; display: flex; flex-direction: column; gap: 34px; }
-    .spot-main .tagline { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 62px; line-height: 1.1; text-shadow: 0 0 18px var(--glow); }
-    .chips { display: flex; flex-wrap: wrap; gap: 14px; }
-    .chips span { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: .04em; text-transform: uppercase;
-                  padding: 11px 22px; border-radius: 999px; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.22); }
-    .chips span.rel { background: #fff; color: var(--deep); border-color: #fff; }
-    .tiles { display: flex; gap: 22px; }
-    .tile { flex: 1; padding: 24px 16px 22px; border-radius: 22px; background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.18);
-            text-align: center; }
-    .tile b { display: block; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 88px; line-height: 1; color: #fff;
-              text-shadow: 0 0 14px var(--glow), 0 0 34px var(--accent); }
-    .tile span { display: block; margin-top: 12px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: .05em;
-                 text-transform: uppercase; opacity: .85; }
-    .spot-foot { display: flex; align-items: center; gap: 30px; }
-    .install { flex: 1; min-width: 0; font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 26px; padding: 22px 26px;
-               border-radius: 16px; background: rgba(0,0,0,.45); color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .install i { font-style: normal; color: var(--accent); margin-right: 14px; }
-    .spot-qr { width: 200px; flex: none; text-align: center; }
-    .spot-qr .cap { font-size: 26px; margin-top: 8px; }
+    .spot-main { width: 1020px; display: flex; flex-direction: column; gap: 44px; }
+    .spot-main .eyebrow { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: .12em; color: var(--accent); }
+    .spot-main .pitch { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 76px; line-height: 1.12; letter-spacing: -.01em; margin: -20px 0 0;
+                        text-shadow: 0 0 18px var(--glow); }
+    .spot-main .pitch span { display: block; }
+    .spot-main .pitch span + span { color: var(--accent); }
+    .spot-link { display: flex; align-items: center; gap: 34px; }
+    .spot-link .qr-box { width: 230px; flex: none; }
+    .spot-link b { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 52px; }
     .s-spot.light { background: #fff; color: var(--ink); }
-    .s-spot.light .glow { color: var(--ink); text-shadow: none; }
-    .s-spot.light .tagline { text-shadow: none; }
-    .s-spot.light .chips span { background: #fff; border-color: var(--ink); color: var(--ink); }
-    .s-spot.light .chips span.rel { background: var(--ink); color: #fff; }
-    .s-spot.light .tile { background: #fff; border-color: var(--line); box-shadow: 0 10px 30px rgba(24,27,25,.08); }
-    .s-spot.light .tile b { color: var(--accent); text-shadow: none; }
-    .s-spot.light .tile span { color: var(--ink); opacity: .7; }
-    .s-spot.light .install { background: var(--ink); }
-    .s-spot.light .install i { color: var(--prompt); }
+    .s-spot.light .glow, .s-spot.light .pitch { color: var(--ink); text-shadow: none; }
     .s-spot.light .qr-box { box-shadow: none; border: 2px solid var(--line); }
-    .s-spot.light .cap { color: var(--ink); text-shadow: none; }
 
     /* tours - the sister brands' upcoming events */
     .s-tour { background: radial-gradient(1200px 700px at 75% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
@@ -286,11 +267,10 @@
   </section>
   {% endif %}
 
-  {# 7 - open-source spotlight (hello.yaml open_source with github + spotlight): numbers from GitHub at build time #}
+  {# 7 - open-source spotlight (hello.yaml open_source with spotlight): its looping art + its site's catchphrase #}
   {% for o in deck.spotlights %}
-  {%- set st = o.stats -%}
   {%- set lt = o.light or {} -%}
-  <section class="slide s-spot{% if o.light %} light{% endif %}"{% if o.light %} style="--ink: {{ lt.ink or '#111' }}; --accent: {{ lt.accent or '#111' }}; --line: {{ lt.line or '#ddd' }}; --prompt: {{ lt.prompt or lt.accent or '#111' }};"{% endif %}>
+  <section class="slide s-spot{% if o.light %} light{% endif %}"{% if o.light %} style="--ink: {{ lt.ink or '#111' }}; --accent: {{ lt.accent or '#111' }}; --line: {{ lt.line or '#ddd' }};"{% endif %}>
     <h2 class="glow h1">{{ o.name }}</h2>
     <div class="spot">
       <div class="spot-art">
@@ -302,21 +282,9 @@
         {%- elif o.logo_src %}<img src="{{ o.logo_src }}" alt="{{ o.name }}" loading="eager">{% endif %}
       </div>
       <div class="spot-main">
-        {% if st.tagline %}<div class="tagline">{{ st.tagline }}</div>{% endif %}
-        <div class="chips">
-          {% if st.version %}<span class="rel">Latest release {{ st.version }}{% if st.released %} &middot; {{ st.released }}{% endif %}</span>{% endif %}
-          {% if st.language %}<span>{{ st.language }}</span>{% endif %}
-          {% if st.license and st.license != 'NOASSERTION' %}<span>{{ st.license }}</span>{% endif %}
-        </div>
-        <div class="tiles">
-          {% for k, label in (('commits', 'commits'), ('prs', 'PRs merged'), ('issues', 'issues closed'), ('commits_30d', 'commits, 30 days')) %}
-          {% if st[k] is number %}<div class="tile"><b>{{ '{:,}'.format(st[k]) }}</b><span>{{ label }}</span></div>{% endif %}
-          {% endfor %}
-        </div>
-        <div class="spot-foot">
-          {% if o.install %}<div class="install"><i>$</i>{{ o.install }}</div>{% endif %}
-          <div class="spot-qr"><div class="qr-box">{{ o.repo_qr }}</div><div class="cap">GitHub</div></div>
-        </div>
+        {% if o.pitch.eyebrow %}<div class="eyebrow">{{ o.pitch.eyebrow }}</div>{% endif %}
+        <p class="pitch">{% for line in o.pitch.lines %}<span>{{ line }}</span>{% endfor %}</p>
+        <div class="spot-link"><div class="qr-box">{{ o.qr }}</div><b>{{ o.url.split('//')[-1].rstrip('/') }}</b></div>
       </div>
     </div>
   </section>
