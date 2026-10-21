@@ -2,12 +2,14 @@
 
 {% block content %}
 
+<div class="glow-band">
+<div class="glow-bg" aria-hidden="true"></div>
 {% if events or meetups %}
 <section id="events" class="sponsors-section section theme-bg-light text-white">
   <div class="container">
     {% if events %}
     <h3 class="section-heading text-center mb-3">Upcoming conference{{ "s" if events|length != 1 }}</h3>
-    <div class="row gx-md-5">
+    <div class="row gx-md-4">
 
       {% for event in events %}
 
@@ -36,7 +38,7 @@
 
       {% endfor %}
     </div>
-    <div class="text-center mt-4">
+    <div class="text-center mt-5">
       <a class="btn-secondary btn btn-lg" href="https://luma.com/sre" target="_blank">Subscribe to our LUMA calendar</a>
     </div>
     {% if hero_video %}
@@ -48,7 +50,7 @@
     {% endif %}
     {% if meetups %}
     <h3 class="section-heading text-center mb-3">Upcoming meetup{{ "s" if meetups|length != 1 }}</h3>
-    <div class="row gx-md-5">
+    <div class="row gx-md-4">
 
       {% for event in meetups %}
 
@@ -99,84 +101,70 @@
     <div class="container">
         <h2 class="section-heading text-center mb-3">{{ brand_name }} Ambassadors</h2>
         <div class="section-intro text-center single-col-max mx-auto mb-5">
-            Our ambassadors are key community members who help us bring {{ brand_name }} to cities around the world.
-            Know someone who should be an ambassador? <a href="{{ mailto }}?subject=Ambassador%20nomination">Nominate them here!</a>
+            Ambassadors are key community members who help us make {{ brand_name }} amazing and bring it to cities around the world.
+            <a href="{{ mailto }}?subject=Ambassador%20nomination">Nominate {{ brand_name }} Ambassador!</a>
         </div>
 
-        <div class="row">
+        <div class="amb-grid">
             {% for ambassador in ambassadors %}
-            <div class="col-12 col-md-6 col-lg-4 mb-4{% if loop.index > 9 %} amb-extra{% endif %}{% if loop.index > 2 %} amb-extra-m{% endif %}">
-                <div class="card rounded h-100 shadow-sm border-0">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <img src="./ambassadors/{{ ambassador.Headshot }}" loading="lazy" decoding="async"
-                                 class="rounded-circle img-fluid shadow-sm"
-                                 style="width: 150px; height: 150px; object-fit: cover;"
-                                 alt="{{ ambassador.Name }}">
-                        </div>
-                        <h4 class="card-title mb-1">
-                            {{ ambassador.Name }}
-                            {% if ambassador.Linkedin %}
-                            <a target="_blank" href="{{ ambassador.Linkedin }}" class="text-primary ms-1" style="font-size: 0.9rem;"><i class="fab fa-linkedin-in fa-fw"></i></a>
-                            {% endif %}
-                        </h4>
-                        <div class="text-muted mb-3">
-                            <div class="fw-bold">{{ ambassador.Job }}</div>
-                            {% if ambassador.Company %}
-                            <div class="small">{{ ambassador.Company }}</div>
-                            {% endif %}
-                            {% if ambassador.Event %}
-                            <div class="badge bg-primary mt-2">{{ ambassador.Event }}</div>
-                            {% endif %}
-                        </div>
-
-                        <div class="card-text text-start">
-                            {% if ambassador.Note|length > 100 %}
-                                <span id="short-note-{{ loop.index }}">{{ ambassador.Note[:100] }}...</span>
-                                <span id="long-note-{{ loop.index }}" style="display: none;">{{ ambassador.Note }}</span>
-                                <a href="javascript:void(0);" id="link-{{ loop.index }}" class="ms-1 fw-bold note-toggle" onclick="toggleNote({{ loop.index }})">Read more</a>
-                            {% else %}
-                                {{ ambassador.Note }}
-                            {% endif %}
-                        </div>
+            <article class="amb lg-glass{% if loop.index > 16 %} amb-extra{% endif %}{% if loop.index > 2 %} amb-extra-m{% endif %}">
+                <div class="amb-head">
+                    <div class="amb-pic">
+                        <img src="./ambassadors/{{ ambassador.Headshot }}" loading="lazy" decoding="async" width="180" height="180" alt="{{ ambassador.Name }}">
+                        {% if ambassador.Linkedin %}<a class="amb-li" target="_blank" rel="noopener" href="{{ ambassador.Linkedin }}" aria-label="{{ ambassador.Name }} on LinkedIn"><i class="fab fa-linkedin-in"></i></a>{% endif %}
                     </div>
+                    <div class="amb-name">{{ ambassador.Name }}</div>
+                    {% if ambassador.Job %}<div class="amb-job">{{ ambassador.Job }}</div>{% endif %}
+                    {% if ambassador.Company %}<div class="amb-co">{{ ambassador.Company }}</div>{% endif %}
+                    {% if ambassador.Event %}<span class="amb-aff"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>{{ ambassador.Event }}</span>{% endif %}
+                    <div class="amb-gap"></div>
+                    {% if ambassador.Note %}<button type="button" class="event-read-more-btn amb-story" aria-expanded="false" onclick="toggleStory(this)"><span>Read story</span><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg></button>{% endif %}
                 </div>
-            </div>
+                {% if ambassador.Note %}<div class="amb-more"><div><p class="amb-note">{{ ambassador.Note }}</p></div></div>{% endif %}
+            </article>
             {% endfor %}
         </div>
         {% if ambassadors|length > 2 %}
-        <div class="text-center mt-2 mb-4">
-          <a href="javascript:void(0);" id="show-more-amb" class="btn btn-outline-secondary show-more-btn{% if ambassadors|length <= 9 %} d-md-none{% endif %}" data-total="{{ ambassadors|length }}" data-desktop="9" data-mobile="2" onclick="showMoreAmb()">Show {{ ambassadors|length - 9 }} more</a>
+        <div class="text-center mt-4 mb-4">
+          <a href="javascript:void(0);" id="show-more-amb" class="btn btn-outline-secondary show-more-btn{% if ambassadors|length <= 16 %} d-md-none{% endif %}" data-total="{{ ambassadors|length }}" data-desktop="16" data-mobile="2" onclick="showMoreAmb()">Show {{ ambassadors|length - 16 }} more</a>
         </div>
         {% endif %}
     </div>
 </section>
 
 <script>
-function toggleNote(id) {
-    var short = document.getElementById('short-note-' + id);
-    var long = document.getElementById('long-note-' + id);
-    var link = document.getElementById('link-' + id);
-
-    if (short.style.display === 'none') {
-        short.style.display = 'inline';
-        long.style.display = 'none';
-        link.innerText = 'Read more';
-    } else {
-        short.style.display = 'none';
-        long.style.display = 'inline';
-        link.innerText = 'Show less';
-    }
+/* Ambassador story opens underneath, inside the same card */
+function toggleStory(btn) {
+  var open = btn.closest('.amb').classList.toggle('open');
+  btn.setAttribute('aria-expanded', open);
+  btn.querySelector('span').textContent = open ? 'Close story' : 'Read story';
 }
+/* Every card in a row gets the row's tallest head, so closed cards line up */
+function equalizeAmb() {
+  var heads = [].slice.call(document.querySelectorAll('.amb')).filter(function (c) { return c.offsetParent; })
+    .map(function (c) { return c.querySelector('.amb-head'); });
+  heads.forEach(function (h) { h.style.minHeight = ''; });
+  var rows = {};
+  heads.forEach(function (h) { var k = h.parentNode.offsetTop; (rows[k] = rows[k] || []).push(h); });
+  Object.keys(rows).forEach(function (k) {
+    var m = Math.max.apply(null, rows[k].map(function (h) { return h.offsetHeight; }));
+    rows[k].forEach(function (h) { h.style.minHeight = m + 'px'; });
+  });
+}
+document.addEventListener('DOMContentLoaded', equalizeAmb);
+window.addEventListener('load', equalizeAmb);
+if (document.fonts) document.fonts.ready.then(equalizeAmb);
+window.addEventListener('resize', function () { clearTimeout(window.__ambEqT); window.__ambEqT = setTimeout(equalizeAmb, 150); });
 </script>
 {% endif %}
+</div>
 
 {% if events_past or meetups_past %}
 <section id="past-events" class="sponsors-section section theme-bg-primary text-white">
   <div class="container">
     {% if events_past %}
     <h3 class="section-heading text-center mb-3 text-white">Past conference{{ "s" if events_past|length != 1 }}</h3>
-    <div class="row gx-md-5">
+    <div class="row gx-md-4">
 
       {% for event in events_past %}
 
@@ -212,7 +200,7 @@ function toggleNote(id) {
     {% endif %}
     {% if meetups_past %}
     <h3 class="section-heading text-center mb-3 text-white">Past meetup{{ "s" if meetups_past|length != 1 }}</h3>
-    <div class="row gx-md-5">
+    <div class="row gx-md-4">
 
       {% for event in meetups_past %}
 
@@ -266,12 +254,73 @@ function toggleNote(id) {
 .event-cfp-btn { display: inline-block; margin-left: 12px; padding: 10px 18px; min-height: 44px; line-height: 24px; background: #098dcf; color: #fff; border-radius: 6px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 700; transition: background 0.2s ease; }
 .event-cfp-btn:hover, .event-cfp-btn:focus { background: #2e9ed6; color: #fff; text-decoration: none; }
 .card { transition: box-shadow .4s ease, border-color .4s ease; border: 1px solid transparent; }
-#events .card:hover { border-color: rgba(60,180,130,.35); box-shadow: 0 0 20px rgba(60,180,130,.18), 0 0 48px rgba(60,180,130,.07); }
 #past-events .card:hover { border-color: rgba(255,255,255,.25); box-shadow: 0 0 20px rgba(255,255,255,.12), 0 0 48px rgba(255,255,255,.05); }
 #ambassadors img.rounded-circle { transition: filter .2s ease; }
 #ambassadors img.rounded-circle:hover { filter: brightness(1.1) contrast(0.9); }
 #events .card-img-top, #past-events .card-img-top { transition: filter .2s ease; }
 #events .card-img-top:hover, #past-events .card-img-top:hover { filter: brightness(1.1) contrast(0.9); }
+/* ---- Glow-up: liquid glass on an ink-sweep band (upcoming + ambassadors), shards on past events ---- */
+.glow-band { --glow-accent: #26986A; --glow-accent-rgb: 38,152,106; position: relative; isolation: isolate; overflow: hidden; }
+.glow-band > .section { background: transparent !important; }
+.glow-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; background:
+  linear-gradient(115deg, transparent 4%, color-mix(in srgb, #26986A 38%, transparent) 14%, transparent 26%),
+  linear-gradient(115deg, transparent 30%, color-mix(in srgb, #098dcf 34%, transparent) 42%, transparent 54%),
+  linear-gradient(115deg, transparent 56%, color-mix(in srgb, #8fdc6a 40%, transparent) 68%, transparent 80%),
+  linear-gradient(115deg, transparent 80%, color-mix(in srgb, #2ec4b6 30%, transparent) 92%, transparent 100%),
+  #f0f6fa; }
+.glow-bg::after { content: ""; position: absolute; inset: 0; opacity: .12;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.lg-glass, #events .card { position: relative; border-radius: 24px !important;
+  background: linear-gradient(140deg, rgba(255,255,255,.62) 0%, rgba(255,255,255,.28) 45%, rgba(255,255,255,.42) 100%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255,255,255,.7) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(20,28,37,.06), 0 12px 32px -8px rgba(var(--glow-accent-rgb),.22);
+  transition: box-shadow .35s ease; }
+.lg-glass::after, #events .card::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; padding: 1px; z-index: 2;
+  background: linear-gradient(160deg, rgba(255,255,255,.95), rgba(255,255,255,0) 35%, rgba(var(--glow-accent-rgb),.35) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.lg-glass:hover, #events .card:hover { border-color: rgba(255,255,255,.7) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.25), 0 2px 4px rgba(20,28,37,.06), 0 22px 48px -10px rgba(var(--glow-accent-rgb),.38); }
+#events .card { overflow: hidden; }
+#events .card-img-top { border-radius: 0 !important; display: block; width: 100%; height: auto; }
+#events .card-body { padding: 1.25rem 1.5rem 1.5rem; }
+#ambassadors .section-intro a { color: var(--glow-accent); font-weight: 700; text-decoration: none; transition: color .2s ease; }
+#ambassadors .section-intro a:hover, #ambassadors .section-intro a:focus { color: color-mix(in srgb, var(--glow-accent) 72%, #fff); text-decoration: none; }
+.amb-grid { display: grid; grid-template-columns: 1fr; gap: 18px; align-items: start; }
+@media (min-width: 576px) { .amb-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 768px) { .amb-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1100px) { .amb-grid { grid-template-columns: repeat(4, 1fr); } }
+.amb { padding: 22px 16px 20px; text-align: center; }
+.amb-head { display: flex; flex-direction: column; align-items: center; }
+.amb-pic { position: relative; display: inline-block; width: 180px; height: 180px; }
+.amb-pic img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; display: block; transition: filter .2s ease; }
+.amb-pic img:hover { filter: brightness(1.1) contrast(0.9); }
+.amb-li { position: absolute; right: 8px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  color: rgba(10,102,194,.75); background: #dbe8f5; border: 3px solid rgba(255,255,255,.9); transition: background .2s, color .2s; text-decoration: none; }
+.amb-li:hover, .amb-li:focus { background: #c6dbf0; color: #0a66c2; }
+.amb-name { font-weight: 700; font-size: 1.15rem; margin: .9rem 0 .2rem; line-height: 1.25; color: #141c25; }
+.amb-job { font-weight: 600; font-size: .86rem; color: #2a3644; line-height: 1.35; }
+.amb-co { font-size: .86rem; color: #4b5a6b; line-height: 1.35; margin-top: .1rem; }
+.amb-aff { display: inline-flex; align-items: center; gap: .3rem; margin-top: .7rem; padding: .25rem .7rem; border-radius: 999px; font-size: .74rem; font-weight: 700; color: #fff; background: #098dcf; }
+.amb-gap { height: 1rem; flex: none; }
+.amb-story { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding: 6px 13px; min-height: 31px; line-height: 19px; font-size: .8rem; border: 0; cursor: pointer; border-radius: 5px; }
+.amb-story svg { transition: transform .3s; }
+.amb.open .amb-story svg { transform: rotate(180deg); }
+.amb-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1); }
+.amb-more > div { overflow: hidden; }
+.amb.open .amb-more { grid-template-rows: 1fr; }
+.amb-note { font-size: .9rem; line-height: 1.6; color: #2a3644; text-align: left; margin: 1rem 0 0; }
+#past-events { background: #26986A !important; }
+#past-events .card, #past-events .card.rounded { border-radius: 24px !important; overflow: hidden; color: #141c25;
+  background: linear-gradient(140deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.76) 50%, rgba(255,255,255,.80) 100%) !important;
+  border: 1px solid rgba(255,255,255,.9) !important;
+  box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 rgba(255,255,255,.15), 0 14px 34px -12px rgba(0,0,0,.35); }
+#past-events .card:hover { border-color: rgba(255,255,255,.75) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 20px 44px -12px rgba(0,0,0,.42); }
+#past-events .card-img-top { border-radius: 0 !important; width: 100%; height: auto; }
+#past-events .card-body { padding: 1.25rem 1.5rem 1.5rem; }
+#past-events .card-title, #past-events .card-title a, #past-events .meta { color: #141c25; }
+#past-events .card-body > a:not([class]) { color: #26986A; font-weight: 700; text-decoration: none; }
+#past-events .btn-past-more, #past-events .btn-past-more:hover, #past-events .btn-past-more:focus { color: #26986A; font-weight: 700; }
 </style>
 <script>
 /* Show-more lists: desktop hides items past the desktop limit (.x-extra),
@@ -284,7 +333,7 @@ function showMoreList(cls, btnId) {
   var b = document.getElementById(btnId);
   if (b) { b.dataset.expanded = '1'; b.style.display = 'none'; }
 }
-function showMoreAmb()        { showMoreList('amb-extra', 'show-more-amb'); }
+function showMoreAmb()        { showMoreList('amb-extra', 'show-more-amb'); if (typeof equalizeAmb === 'function') equalizeAmb(); }
 function showMorePastConf()   { showMoreList('past-conf-extra', 'show-more-past-conf'); }
 function showMorePastMeetup() { showMoreList('past-meetup-extra', 'show-more-past-meetup'); }
 var mobileMQ = window.matchMedia('(max-width: 767.98px)');
