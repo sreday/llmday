@@ -851,12 +851,25 @@ context["about_topics"] = _about_topics
 tracks_ordered = []
 # all talks sorted in tracks (every sheet row: see LONGER SESSIONS)
 tracks = dict()
+# multi-day events (Marek 2026-10-20, Campinas 2026: one track over two days, "track" 1 on both days, "day" 1 / 2):
+# the schedule splits days by track order (tracks / days per day), so a track value used on several days becomes one
+# track per day, "1 (day 2)" etc., in day order. Track values that differ per day (Paris "day1" / "day2") are untouched.
+_tk_days = max(1, int(context.get("days") or 1))
+_tk_seen = {}
+for talk in _talk_rows:
+    _tk_seen.setdefault(talk.get("track"), set()).add(str(talk.get("day") or "").strip())
+_tk_split = _tk_days > 1 and any(len(v) > 1 for v in _tk_seen.values())
 for talk in _talk_rows:
     track = talk.get("track")
+    if _tk_split and len(_tk_seen[track]) > 1:
+        track = "%s (day %s)" % (track, str(talk.get("day") or "").strip() or "1")
     if track not in tracks:
         tracks[track] = []
         tracks_ordered.append(track)
     tracks[track].append(talk)
+if _tk_split:
+    _tk_day = lambda k: int(str(tracks[k][0].get("day") or "1").strip() or 1) if str(tracks[k][0].get("day") or "1").strip().isdigit() else 1
+    tracks_ordered.sort(key=_tk_day)
 # metadata.yml may declare the planned track count ("tracks: N") - that wins
 # for display so pages show the plan before talks are announced
 _planned_tracks = context.get("tracks") if isinstance(context.get("tracks"), int) else None
