@@ -38,6 +38,7 @@
     /* drafts (status "draft" in talks.csv): a faded segment behind the confirmed fill, never part of the % */
     .bar > i.draft { opacity: .3; }
     .tlk .draft, .pct .draft { color: #888; font-weight: 400; white-space: nowrap; }
+    .trk .days { color: #888; font-weight: 400; font-size: .85em; white-space: nowrap; }
     /* Talks over the limit (Marek 2026-09-19): one white dot per extra talk, stacked from the right end of the full bar
        towards the left (max 7 drawn, the text below still gives the real number). Replaces the old 100% tick. */
     .bar > .plus { position: absolute; right: 5px; top: 0; bottom: 0; display: flex; flex-direction: row-reverse; align-items: center; gap: 4px; }
@@ -307,7 +308,7 @@
       .card > table .pct { margin-top: 3px; }
       .card > table td.tlk, .card > table td.trk, .card > table td.hours { font-size: .88rem; }
       .card > table td.tlk::after, .card > table td.trk::after { content: " " attr(data-unit); color: #777; }
-      .card > table td.trk { color: #777; } .card > table td.trk::before { content: "· "; }
+      .card > table td.trk { color: #777; } .card > table td.trk::before { content: "· "; } .card > table td.trk .days { display: none; }
       .card > table td.cfp .frog { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
     }
     @media (max-width: 720px) {
@@ -335,7 +336,7 @@
       .reg-cats > span { white-space: nowrap; }
     }
     /* very narrow phones (after the 720px block so it wins) */
-    @media (max-width: 380px) { .card > table td.trk { display: none; } .reg-cats { gap: 4px 10px; font-size: .77rem; } .reg-cats b { margin-right: 4px; } }
+    @media (max-width: 380px) { .card > table td.trk:not(.multiday) { display: none; } .reg-cats { gap: 4px 10px; font-size: .77rem; } .reg-cats b { margin-right: 4px; } }
     /* Red flag bar (2026-09-21): a push swapped a whole lineup = wrong talks.csv in the wrong folder (_build/redflag.py).
        Full width, above everything, sticky so it stays in sight on every tab until the lineup is fixed. */
     .redflag-bar { position: sticky; top: 0; z-index: 60; background: var(--critical); color: #fff; box-shadow: 0 4px 18px rgba(214,48,49,.35); }
@@ -368,7 +369,7 @@
   <img class="mascot" src="/assets/images/404.png" alt="" aria-hidden="true">
   <div class="brand">{{ brand_name }} · status</div>
   <h1>Upcoming conferences</h1>
-  <div class="sub">Confirmed talks, standardized {{ status_slots }} talks per track. Check start/end time to decide if we should accept more.</div>
+  <div class="sub">Confirmed talks, standardized {{ status_slots }} talks per track per day. Check start/end time to decide if we should accept more.</div>
   <div class="legend">
     <span style="--c: var(--critical)">Critical</span>
     <span style="--c: var(--bad)">Bad</span>
@@ -397,7 +398,9 @@
         {% set over = r.pct > 100 %}
         <tr>
           <td class="ev"><a href="{{ r.url }}">{{ r.name }}</a><small>{% if r.is_free %}<span class="free-tag" title="Free to attend">FREE</span>{% endif %}{{ r.date }}{% if r.days_left < 9999 %} · {% if r.days_left > 0 %}in {{ r.days_left }} days{% elif r.days_left == 0 %}today{% else %}{{ -r.days_left }} days ago{% endif %}{% endif %}</small></td>
-          <td class="num trk" data-unit="{{ 'track' if r.tracks | int == 1 else 'tracks' }}">{{ r.tracks }}</td>
+          {# 2-day events (rare): the days ride along in the Tracks cell instead of a column of 1s #}
+          {% if r.days > 1 %}<td class="num trk multiday" data-unit="{{ 'track' if r.tracks | int == 1 else 'tracks' }} × {{ r.days }} days" title="{{ r.tracks }} {{ 'track' if r.tracks | int == 1 else 'tracks' }} × {{ r.days }} days × {{ status_slots }} talks = {{ r.available }} slots">{{ r.tracks }}<span class="days"> × {{ r.days }} days</span></td>
+          {% else %}<td class="num trk" data-unit="{{ 'track' if r.tracks | int == 1 else 'tracks' }}">{{ r.tracks }}</td>{% endif %}
           <td class="num tlk" data-unit="talks"><strong>{{ r.confirmed }}</strong>{% if r.drafts %} <span class="draft" title="status draft in talks.csv: waiting for confirmation, not on the site">+ {{ r.drafts }} draft</span>{% endif %} / {{ r.available }}</td>
           <td class="prog">
             <div class="bar" title="{{ r.pct }}%{% if r.drafts %} + {{ r.draft_pct }}% draft{% endif %}">
