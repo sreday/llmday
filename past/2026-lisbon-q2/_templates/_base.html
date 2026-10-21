@@ -330,8 +330,9 @@
     }
     if (!st || !active) return;
     var r = active.getBoundingClientRect();
-    st.tx = -((e.clientY - r.top) / r.height - .5) * MAX * 2;
-    st.ty = ((e.clientX - r.left) / r.width - .5) * MAX * 2;
+    var m = Math.min(3, MAX * Math.max(1, 600 / r.width));   /* narrow cards lean further, so every card reads like a 1 degree event card */
+    st.tx = -((e.clientY - r.top) / r.height - .5) * m * 2;
+    st.ty = ((e.clientX - r.left) / r.width - .5) * m * 2;
     kick();
   }, { passive: true });
   document.documentElement.addEventListener('pointerleave', release);
