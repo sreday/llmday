@@ -105,9 +105,9 @@
             <a href="{{ mailto }}?subject=Ambassador%20nomination">Nominate {{ brand_name }} Ambassador!</a>
         </div>
 
-        <div class="amb-grid">
+        <div class="amb-grid deck deck-closed" id="deck-amb">
             {% for ambassador in ambassadors %}
-            <article class="amb lg-glass{% if loop.index > 16 %} amb-extra{% endif %}{% if loop.index > 2 %} amb-extra-m{% endif %}">
+            <article class="amb lg-glass">
                 <div class="amb-head">
                     <div class="amb-pic">
                         <img src="./ambassadors/{{ ambassador.Headshot }}" loading="lazy" decoding="async" width="180" height="180" alt="{{ ambassador.Name }}">
@@ -124,9 +124,9 @@
             </article>
             {% endfor %}
         </div>
-        {% if ambassadors|length > 2 %}
+        {% if ambassadors|length > 1 %}
         <div class="text-center mt-4 mb-4">
-          <a href="javascript:void(0);" id="show-more-amb" class="btn btn-outline-secondary show-more-btn{% if ambassadors|length <= 16 %} d-md-none{% endif %}" data-total="{{ ambassadors|length }}" data-desktop="16" data-mobile="2" onclick="showMoreAmb()">Show {{ ambassadors|length - 16 }} more</a>
+          <a href="javascript:void(0);" id="show-more-amb" class="btn btn-outline-secondary deck-more" data-deck="deck-amb" onclick="openDeck(this)">Show more</a>
         </div>
         {% endif %}
     </div>
@@ -141,11 +141,11 @@ function toggleStory(btn) {
 }
 /* Every card in a row gets the row's tallest head, so closed cards line up */
 function equalizeAmb() {
-  var heads = [].slice.call(document.querySelectorAll('.amb')).filter(function (c) { return c.offsetParent; })
+  var heads = [].slice.call(document.querySelectorAll('.amb')).filter(function (c) { return c.offsetParent && !c.classList.contains('open'); })
     .map(function (c) { return c.querySelector('.amb-head'); });
   heads.forEach(function (h) { h.style.minHeight = ''; });
   var rows = {};
-  heads.forEach(function (h) { var k = h.parentNode.offsetTop; (rows[k] = rows[k] || []).push(h); });
+  heads.forEach(function (h) { var k = Math.round(h.parentNode.getBoundingClientRect().top + window.scrollY); (rows[k] = rows[k] || []).push(h); });
   Object.keys(rows).forEach(function (k) {
     var m = Math.max.apply(null, rows[k].map(function (h) { return h.offsetHeight; }));
     rows[k].forEach(function (h) { h.style.minHeight = m + 'px'; });
@@ -156,6 +156,34 @@ window.addEventListener('load', equalizeAmb);
 if (document.fonts) document.fonts.ready.then(equalizeAmb);
 window.addEventListener('resize', function () { clearTimeout(window.__ambEqT); window.__ambEqT = setTimeout(equalizeAmb, 150); });
 </script>
+<script>
+/* Decks: "Show N more" counts the cards hidden at the current width; opening deals them in */
+function deckHidden(deck) { return [].filter.call(deck.children, function (c) { return !c.offsetParent; }); }
+function updateDeckButtons() {
+  document.querySelectorAll('.deck-more').forEach(function (b) {
+    var deck = document.getElementById(b.dataset.deck);
+    if (!deck || b.dataset.done) return;
+    var n = deckHidden(deck).length;
+    b.textContent = 'Show ' + n + ' more';
+    b.parentNode.style.display = n ? '' : 'none';
+  });
+}
+function openDeck(b) {
+  var deck = document.getElementById(b.dataset.deck), dealt = deckHidden(deck);
+  deck.classList.remove('deck-closed');
+  b.dataset.done = '1';
+  b.parentNode.style.display = 'none';
+  dealt.forEach(function (c, i) {
+    c.style.animationDelay = Math.min(i, 14) * 55 + 'ms';
+    c.classList.add('deck-deal');
+    c.addEventListener('animationend', function () { c.classList.remove('deck-deal'); c.style.animationDelay = ''; }, { once: true });
+  });
+  if (typeof equalizeAmb === 'function') equalizeAmb();
+  if (typeof hideShortReadMore === 'function') hideShortReadMore();
+}
+document.addEventListener('DOMContentLoaded', updateDeckButtons);
+window.addEventListener('resize', function () { clearTimeout(window.__deckT); window.__deckT = setTimeout(updateDeckButtons, 150); });
+</script>
 {% endif %}
 </div>
 
@@ -164,11 +192,11 @@ window.addEventListener('resize', function () { clearTimeout(window.__ambEqT); w
   <div class="container">
     {% if events_past %}
     <h3 class="section-heading text-center mb-3 text-white">Past conference{{ "s" if events_past|length != 1 }}</h3>
-    <div class="row gx-md-4">
+    <div class="row gx-md-4 deck deck-closed" id="deck-past-conf">
 
       {% for event in events_past %}
 
-      <div class="col-12 col-lg-6 mb-4{% if loop.index > 10 %} past-conf-extra{% endif %}{% if loop.index > 2 %} past-conf-extra-m{% endif %}">
+      <div class="col-12 col-lg-6 mb-4">
         <div class="card rounded">
           <a href="{{ event.url }}">
             <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="" loading="lazy" decoding="async">
@@ -192,19 +220,19 @@ window.addEventListener('resize', function () { clearTimeout(window.__ambEqT); w
 
       {% endfor %}
     </div>
-    {% if events_past|length > 2 %}
+    {% if events_past|length > 1 %}
     <div class="text-center mt-2 mb-4">
-      <a href="javascript:void(0);" id="show-more-past-conf" class="btn btn-past-more show-more-btn{% if events_past|length <= 10 %} d-md-none{% endif %}" data-total="{{ events_past|length }}" data-desktop="10" data-mobile="2" onclick="showMorePastConf()">Show {{ events_past|length - 10 }} more</a>
+      <a href="javascript:void(0);" id="show-more-past-conf" class="btn btn-past-more deck-more" data-deck="deck-past-conf" onclick="openDeck(this)">Show more</a>
     </div>
     {% endif %}
     {% endif %}
     {% if meetups_past %}
     <h3 class="section-heading text-center mb-3 text-white">Past meetup{{ "s" if meetups_past|length != 1 }}</h3>
-    <div class="row gx-md-4">
+    <div class="row gx-md-4 deck deck-closed" id="deck-past-meetup">
 
       {% for event in meetups_past %}
 
-      <div class="col-12 col-lg-6 mb-4{% if loop.index > 10 %} past-meetup-extra{% endif %}{% if loop.index > 2 %} past-meetup-extra-m{% endif %}">
+      <div class="col-12 col-lg-6 mb-4">
         <div class="card rounded">
           <a href="./{{ event.url }}">
             <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="" loading="lazy" decoding="async">
@@ -225,9 +253,9 @@ window.addEventListener('resize', function () { clearTimeout(window.__ambEqT); w
 
       {% endfor %}
     </div>
-    {% if meetups_past|length > 2 %}
+    {% if meetups_past|length > 1 %}
     <div class="text-center mt-2">
-      <a href="javascript:void(0);" id="show-more-past-meetup" class="btn btn-past-more show-more-btn{% if meetups_past|length <= 10 %} d-md-none{% endif %}" data-total="{{ meetups_past|length }}" data-desktop="10" data-mobile="2" onclick="showMorePastMeetup()">Show {{ meetups_past|length - 10 }} more</a>
+      <a href="javascript:void(0);" id="show-more-past-meetup" class="btn btn-past-more deck-more" data-deck="deck-past-meetup" onclick="openDeck(this)">Show more</a>
     </div>
     {% endif %}
     {% endif %}
@@ -293,7 +321,7 @@ window.addEventListener('resize', function () { clearTimeout(window.__ambEqT); w
 .amb { padding: 22px 16px 20px; text-align: center; }
 .amb-head { display: flex; flex-direction: column; align-items: center; }
 .amb-pic { position: relative; display: inline-block; width: 180px; height: 180px; }
-.amb-pic img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; display: block; transition: filter .2s ease; }
+.amb-pic img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; display: block; color: transparent; transition: filter .2s ease; }
 .amb-pic img:hover { filter: brightness(1.1) contrast(0.9); }
 .amb-li { position: absolute; right: 8px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
   color: rgba(10,102,194,.75); background: #dbe8f5; border: 3px solid rgba(255,255,255,.9); transition: background .2s, color .2s; text-decoration: none; }
@@ -321,6 +349,32 @@ window.addEventListener('resize', function () { clearTimeout(window.__ambEqT); w
 #past-events .card-title, #past-events .card-title a, #past-events .meta { color: #141c25; }
 #past-events .card-body > a:not([class]) { color: #26986A; font-weight: 700; text-decoration: none; }
 #past-events .btn-past-more, #past-events .btn-past-more:hover, #past-events .btn-past-more:focus { color: #26986A; font-weight: 700; }
+/* ---- Decks: grids open with "Show more"; while closed they show a fixed number of rows per breakpoint ---- */
+#deck-amb.deck-closed > :nth-child(n+13) { display: none; }
+#deck-testimonials.deck-closed > :nth-child(n+9) { display: none; }
+#deck-past-conf.deck-closed > :nth-child(n+7), #deck-past-meetup.deck-closed > :nth-child(n+7) { display: none; }
+@media (max-width: 1099.98px) {
+  #deck-amb.deck-closed > :nth-child(n+10) { display: none; }
+  #deck-testimonials.deck-closed > :nth-child(n+7) { display: none; }
+}
+@media (max-width: 991.98px) {
+  #deck-past-conf.deck-closed > :nth-child(n+4), #deck-past-meetup.deck-closed > :nth-child(n+4) { display: none; }
+}
+@media (max-width: 767.98px) {
+  #deck-amb.deck-closed > :nth-child(n+3), #deck-testimonials.deck-closed > :nth-child(n+3) { display: none; }
+  #deck-past-conf.deck-closed > :nth-child(n+2), #deck-past-meetup.deck-closed > :nth-child(n+2) { display: none; }
+}
+@media (max-width: 575.98px) {
+  #deck-amb.deck-closed > :nth-child(n+2), #deck-testimonials.deck-closed > :nth-child(n+2) { display: none; }
+}
+.glow-link { color: var(--glow-accent); font-weight: 700; text-decoration: none; transition: color .2s ease; }
+.glow-link:hover, .glow-link:focus { color: color-mix(in srgb, var(--glow-accent) 72%, #fff); text-decoration: none; }
+/* the rest slide down one after another, like cards dealt from a deck */
+@keyframes deck-deal { from { opacity: 0; transform: translateY(-32px) scale(.97); } to { opacity: 1; transform: none; } }
+.deck-deal { animation: deck-deal .5s cubic-bezier(.2,.8,.2,1) both; }
+.deck-deal.lg-glass, .deck-deal .card { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+@media (prefers-reduced-motion: reduce) { .deck-deal { animation: none; } }
+@media (max-width: 575.98px) { .amb { padding: 18px 14px 18px; } }
 </style>
 <script>
 /* Show-more lists: desktop hides items past the desktop limit (.x-extra),
@@ -352,72 +406,55 @@ window.addEventListener('resize', function () { clearTimeout(window.__showMoreT)
 
 
 {% if testimonials %}
+<div class="glow-band">
+<div class="glow-bg" aria-hidden="true"></div>
 <section id="testimonials" class="sponsors-section section">
-  <div class="container speakers-section">
+  <div class="container">
     <h3 class="section-heading text-center mb-3">What others say about LLMday</h3>
-    <div class="row">
-
+    <div class="amb-grid deck deck-closed mt-4" id="deck-testimonials">
       {% for testimonial in testimonials %}
-
-      <div class="col-12 col-md-6 col-lg mb-4 testimonial-col{% if loop.index > 10 %} testimonial-extra{% endif %}{% if loop.index > 2 %} testimonial-extra-m{% endif %}">
-        <div class="card rounded">
-          <img src="./assets/images/profiles/{{ testimonial.Headshot }}" class="card-img-top rounded-0" alt="" loading="lazy" decoding="async">
-          <div class="card-body">
-            <h5 class="card-title mb-2">{{ testimonial.Name }}</h5>
-            <div class="card-text mb-3 text-muted">
-              <div class="meta">{{ testimonial.Job }}</div>
-              {% if testimonial.Company %}
-              <b class="meta">{{ testimonial.Company }}</b>
-              {% endif %}
-            </div>
-            <div class="card-text mb-3 testimonial-body" id="tbody-{{ loop.index0 }}">
-              <div class="testimonial-text">{{ testimonial.Testimonial }}</div>
-              <a href="javascript:void(0);" class="testimonial-readmore" onclick="toggleTestimonialBody({{ loop.index0 }}, this)">Read more</a>
-            </div>
+      <article class="amb tst lg-glass">
+        <div class="amb-head">
+          <div class="amb-pic">
+            <img src="./assets/images/profiles/{{ testimonial.Headshot }}" loading="lazy" decoding="async" width="180" height="180" alt="{{ testimonial.Name }}">
+            {% if testimonial.Linkedin %}<a class="amb-li" target="_blank" rel="noopener" href="{{ testimonial.Linkedin }}" aria-label="{{ testimonial.Name }} on LinkedIn"><i class="fab fa-linkedin-in"></i></a>{% elif testimonial.Twitter %}<a class="amb-li" target="_blank" rel="noopener" href="https://twitter.com/{{ testimonial.Twitter }}" aria-label="{{ testimonial.Name }} on X"><i class="fab fa-twitter"></i></a>{% endif %}
           </div>
-          <div class="card-footer text-muted">
-            <ul class="social-list list-inline mb-0">
-              {% if testimonial.Twitter %}<li class="list-inline-item"><a target="_blank" href="https://twitter.com/{{ testimonial.Twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
-              {% if testimonial.Linkedin %}<li class="list-inline-item"><a target="_blank" href="{{ testimonial.Linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
-              {% if testimonial.Twitter2 %}<li class="list-inline-item"><a target="_blank" href="https://twitter.com/{{ testimonial.Twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
-              {% if testimonial.Linkedin2 %}<li class="list-inline-item"><a target="_blank" href="{{ testimonial.Linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
-            </ul>
+          <div class="amb-name">{{ testimonial.Name }}</div>
+          {% if testimonial.Job %}<div class="amb-job">{{ testimonial.Job }}</div>{% endif %}
+          {% if testimonial.Company %}<div class="amb-co">{{ testimonial.Company }}</div>{% endif %}
+          <div class="testimonial-body" id="tbody-{{ loop.index0 }}">
+            <div class="testimonial-text">{{ testimonial.Testimonial }}</div>
           </div>
+          <div class="amb-gap"></div>
+          <button type="button" class="event-read-more-btn amb-story testimonial-readmore" aria-expanded="false" onclick="toggleTestimonialBody({{ loop.index0 }}, this)"><span>Read more</span><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg></button>
         </div>
-      </div>
-
+      </article>
       {% endfor %}
     </div>
-    {% if testimonials|length > 2 %}
-    <div class="text-center mt-2 mb-4">
-      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-outline-secondary show-more-btn{% if testimonials|length <= 10 %} d-md-none{% endif %}" data-total="{{ testimonials|length }}" data-desktop="10" data-mobile="2" onclick="showMoreTestimonials()">Show {{ testimonials|length - 10 }} more</a>
+    {% if testimonials|length > 1 %}
+    <div class="text-center mt-4 mb-4">
+      <a href="javascript:void(0);" id="show-more-testimonials" class="btn btn-outline-secondary deck-more" data-deck="deck-testimonials" onclick="openDeck(this)">Show more</a>
     </div>
     {% endif %}
   </div>
 </section>
+</div>
 <style>
-@media (min-width: 992px) { .testimonial-col { flex: 0 0 20%; max-width: 20%; } }
-.testimonial-extra { display: none; }
-.testimonial-body { line-height: 1.6em; }
-.testimonial-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
-.testimonial-body.expanded .testimonial-text { display: block; -webkit-line-clamp: unset; overflow: visible; }
-.testimonial-readmore { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .25rem; font-size: .9em; font-weight: 600; text-decoration: none; }
-.testimonial-readmore:hover, .testimonial-readmore:focus { text-decoration: none; }
+#testimonials .testimonial-body { margin-top: .9rem; text-align: left; font-size: .9rem; line-height: 1.6; color: #2a3644; }
+#testimonials .testimonial-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+#testimonials .amb.open .testimonial-text { display: block; -webkit-line-clamp: unset; overflow: visible; }
 </style>
 <script>
-function showMoreTestimonials() {
-  showMoreList('testimonial-extra', 'show-more-testimonials');
-  hideShortReadMore();
+function toggleTestimonialBody(idx, btn) {
+  var open = btn.closest('.amb').classList.toggle('open');
+  btn.setAttribute('aria-expanded', open);
+  btn.querySelector('span').textContent = open ? 'Show less' : 'Read more';
 }
-function toggleTestimonialBody(idx, link) {
-  var el = document.getElementById('tbody-' + idx);
-  var open = el.classList.toggle('expanded');
-  link.textContent = open ? 'Show less' : 'Read more';
-}
+/* Short quotes that fit in three lines need no "Read more" */
 function hideShortReadMore() {
-  document.querySelectorAll('.testimonial-body:not(.expanded)').forEach(function (el) {
-    var t = el.querySelector('.testimonial-text'), link = el.querySelector('.testimonial-readmore');
-    if (t && link && t.offsetHeight > 0 && t.scrollHeight <= t.clientHeight + 1) link.style.display = 'none';
+  document.querySelectorAll('#testimonials .amb:not(.open)').forEach(function (card) {
+    var t = card.querySelector('.testimonial-text'), btn = card.querySelector('.testimonial-readmore');
+    if (t && btn && t.offsetHeight > 0) btn.style.display = t.scrollHeight <= t.clientHeight + 1 ? 'none' : '';
   });
 }
 document.addEventListener('DOMContentLoaded', hideShortReadMore);
@@ -539,6 +576,8 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
   </div>
 </section>
 
+<div class="glow-band">
+<div class="glow-bg" aria-hidden="true"></div>
 <section id="partner" class="sponsors-section section theme-bg-light">
   <div class="container">
     <div class="row gx-md-5">
@@ -546,7 +585,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         <h3 class="section-heading text-center mb-3">Partner</h3>
 
         {% if partner_logos %}
-        <div class="partner-carousel-wrap" style="background:#fff;border-radius:999px;box-shadow:0 4px 20px rgba(0,0,0,.07);padding:28px 0;margin:1.95rem auto 1.5rem;overflow:hidden;width:100%;">
+        <div class="partner-carousel-wrap" style="background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.85);border-radius:999px;box-shadow:inset 0 1px 0 #fff,0 12px 32px -10px rgba(var(--glow-accent-rgb),.25);padding:28px 0;margin:1.95rem auto 1.5rem;overflow:hidden;width:100%;">
           <div class="partner-carousel-track">
             {% for logo in partner_logos %}
             <div class="partner-carousel-item"><img src="./sponsors/{{ logo }}" alt="{{ logo.split('.')[0] }}" decoding="async"></div>
@@ -606,12 +645,13 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
         {% endif %}
 
         <div class="section-intro text-center single-col-max mx-auto">
-          Interested in bringing LLMday to your city? Fill the <a href="#sponsor" style="color:inherit;text-decoration:underline;">"Email us"</a> form above!
+          Interested in bringing LLMday to your city? Fill the <a href="#sponsor" class="glow-link">"Email us"</a> form above!
         </div>
       </div>
     </div>
   </div>
 </section>
+</div>
 
 
 {% endblock %}
