@@ -40,6 +40,8 @@ breaks:
   talks_before: 4
 
 sponsors:
+  - logo: rebelnuts.png
+    url: https://www.rebelnuts.uy/
   - logo: owu.png
     url: https://www.owu.uy/
   - logo: dougbr.png
