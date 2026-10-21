@@ -929,6 +929,12 @@
 
 
 {% if talks or keynotes %}
+<style>
+  /* schedule -> speakers without an edge (Marek 2026-10-20): the schedule fades back to white at its foot and the
+     speakers' aurora fades in from white at its head, so the two washes meet on white */
+  .schedule-section.theme-bg-light { background-image: linear-gradient(#fff, #f0faf5 260px, #f0faf5 calc(100% - 320px), #fff); }
+  #speakers .spk-aurora { -webkit-mask-image: linear-gradient(transparent, #000 360px); mask-image: linear-gradient(transparent, #000 360px); }
+</style>
 <section id="speakers" class="speakers-section section spk-glass">
   <div class="spk-aurora" aria-hidden="true"></div>
   <div class="container">
