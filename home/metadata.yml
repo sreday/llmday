@@ -65,7 +65,7 @@ events:
     location: Microsoft Reactor, Tel Aviv, Israel
     photo_url: ./assets/images/events/llmday-2026-tel-aviv-q4.png
     url: ./2026-tel-aviv-q4/
-    size: small
+    size: medium
     youtube_playlist:
 
   - name: LLMday Hamburg 2026 Q4
