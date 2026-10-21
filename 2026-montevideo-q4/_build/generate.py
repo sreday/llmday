@@ -474,8 +474,10 @@ _ob_vname, _ob_vaddr = (_VENUE_TBC, str(context.get('location_string', ''))) if 
 # Same numbers as _SLOTS_PER_TRACK / SCHEDULE_AUTO_PCT in home/_build/generate.py.
 SCHEDULE_AUTO_PCT = 70
 SLOTS_PER_TRACK = 12
+# 2-day events (Marek 2026-10-20, Campinas 2026): 12 slots per track PER DAY, so the slot counts below use tracks x days
+SLOT_DAYS = int(re.sub(r"[^\d]", "", str(context.get("days") or "1")) or 1)
 if str(context.get("event_state") or "").strip() == "before":
-    _auto_tracks = int(re.sub(r"[^\d]", "", str(context.get("tracks") or "1")) or 1)
+    _auto_tracks = int(re.sub(r"[^\d]", "", str(context.get("tracks") or "1")) or 1) * SLOT_DAYS
     _auto_live = sum(1 for t in talks_raw if talk_kind(t.get("status")) in LIVE_KINDS)
     _auto_pct = round(100.0 * _auto_live / (_auto_tracks * SLOTS_PER_TRACK))
     _auto_venue = not context.get("venue_tbc") and bool(_ob_vname) \
@@ -490,7 +492,7 @@ if str(context.get("event_state") or "").strip() == "before":
 # count as above, live talks.csv rows against 12 slots per track - then just "Schedule". An event that is over always
 # says "Schedule" (see EVENT OVER below).
 SCHEDULE_FULL_PCT = 80
-_sh_tracks = int(re.sub(r"[^\d]", "", str(context.get("tracks") or "1")) or 1)
+_sh_tracks = int(re.sub(r"[^\d]", "", str(context.get("tracks") or "1")) or 1) * SLOT_DAYS
 _sh_live = sum(1 for t in talks_raw if talk_kind(t.get("status")) in LIVE_KINDS)
 context["schedule_fill_pct"] = round(100.0 * _sh_live / (_sh_tracks * SLOTS_PER_TRACK))
 context["schedule_wip"] = context["schedule_fill_pct"] < SCHEDULE_FULL_PCT
@@ -1629,7 +1631,7 @@ def _inv_host_company(sponsors):
 
 _inv_rows = _inv_confirmed(talks_raw)
 _inv_tracks = int(context.get('tracks_display') or 1)
-_inv_target = _INV_SLOTS_PER_TRACK * _inv_tracks
+_inv_target = _INV_SLOTS_PER_TRACK * _inv_tracks * SLOT_DAYS
 _inv_pct = int(round(100.0 * len(_inv_rows) / _inv_target)) if _inv_target else 0
 _inv_tier = 'strong' if _inv_pct >= 50 else ('building' if _inv_pct >= 25 else 'early')
 _inv_src = context['onboarding_event']

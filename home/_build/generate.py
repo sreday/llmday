@@ -651,6 +651,8 @@ for _ev in (context.get("events") or []):
     except Exception:
         _em = {}
     _tracks = int(re.sub(r"[^\d]", "", str(_em.get("tracks") or "1")) or 1)
+    # 2-day events (Marek 2026-10-20, Campinas 2026: 2 tracks x 2 days): slots are per track per day
+    _days = int(re.sub(r"[^\d]", "", str(_em.get("days") or "1")) or 1)
     _confirmed = 0
     _drafts = 0
     try:
@@ -667,7 +669,7 @@ for _ev in (context.get("events") or []):
                  and str(s.get("logo") or "").strip()
                  and str(s.get("logo")).strip().lower() not in _sp_exclude_logos
                  and str(s.get("logo")).strip().lower() not in _sp_hidden]
-    _available = _tracks * _SLOTS_PER_TRACK
+    _available = _tracks * _days * _SLOTS_PER_TRACK
     _pct = round(100.0 * _confirmed / _available) if _available else 0
     _days_left = _status_days_left(_em.get("start_time"))
     # "Current start / end": the time bracket the event page itself renders in its schedule meta line
@@ -703,7 +705,7 @@ for _ev in (context.get("events") or []):
         "errors": _n_err, "warnings": len(_issues) - _n_err,
         "name": _ev.get("name") or _folder, "folder": _folder, "url": "/" + _folder + "/",
         "date": str(_em.get("date_string") or ""), "state": _state,
-        "tracks": _tracks, "confirmed": _confirmed, "available": _available, "pct": _pct,
+        "tracks": _tracks, "days": _days, "confirmed": _confirmed, "available": _available, "pct": _pct,
         # drafts (Marek 2026-10-03): shown after the confirmed count and as a faded bar segment; never in pct/health
         "drafts": _drafts, "draft_pct": round(100.0 * _drafts / _available) if _available else 0,
         "health": _key, "health_label": _label, "sponsors": len(_sponsors), "days_left": _days_left, "hours": _hours,
@@ -716,7 +718,7 @@ for _ev in (context.get("events") or []):
                          for s in _sponsors],
         "expected": int(re.sub(r"[^\d]", "", str(_em.get("attendees") or "0")) or 0),    # "N attendees" as the event page shows it
     })
-    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks + {_drafts} draft ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings, cfp {_cfp or 'n/a'}")
+    print(f"  status: {_ev.get('name')}: {_confirmed}/{_available} talks{' (%d days)' % _days if _days > 1 else ''} + {_drafts} draft ({_pct}%, {_label}, T-{_days_left}d), {len(_sponsors)} sponsors, {_n_err} errors / {len(_issues) - _n_err} warnings, cfp {_cfp or 'n/a'}")
 _me = str(context.get("brand_name") or "")
 
 # Past events (Marek 2026-09-13: "can it analyse also past events? excluding 2022-2024 sreday of course"):
