@@ -1,6 +1,6 @@
 """/<event>/hello/ - the opening deck shown on the venue screen before the first talk (Marek 2026-10-19, after the
 PLATFORMday Austin deck): Hello <city>, the team, WhatsApp + LinkedIn, the event's partners, the sister brands,
-the open-source projects (cfp.ninja, Reliaburger) and a Reliaburger slide with its live GitHub numbers, the sister
+the open-source projects (cfp.ninja, Reliaburger) and a Reliaburger slide with reliaburger.com's catchphrase, the sister
 brands' upcoming events, then this brand's mascot sticker with its upcoming events. Full-screen button + clicker keys in the page.
 
 Everything comes from data, nothing is typed per event:
@@ -11,8 +11,9 @@ Everything comes from data, nothing is typed per event:
     fetched once per build run and cached 30 min in ../.cache/hello-sisters.json (stale copy if the fetch fails;
     SKIP_CFP_CHECK=1 or SKIP_HELLO_FETCH=1 = offline build, cache only)
   - panoramas/<city_name>.jpg tinted in the brand's colours (the City view picture) behind slides 1 and 4
-  - GitHub's API for the open_source entries with `spotlight` (cached 30 min in ../.cache/hello-github.json, same
-    offline rules; GITHUB_TOKEN is used when set)
+  - the open_source entries with `spotlight`: their site's <h1> + eyebrow line (cached 30 min in ../.cache/hello-pitch.json,
+    same offline rules)
+Not built for past/ events (../.past-events, written by make stage).
 
 Built for bad venue wifi (2026-10-20): the QR codes are inline SVG (qr_svg below), the pictures are sized WebPs (_Img),
 Oswald is self-hosted (hello-deck/fonts), nothing comes from another site; the page shows its loading progress. Identical file in sreday, llmday, platformday and PEC; called near the end of generate.py, never
@@ -554,84 +555,54 @@ class _Img:
         return self._write('city', 'webp', buf.getvalue())
 
 
-# ── an open-source project's numbers from GitHub (the spotlight slide) ──────────────────────────────────────────
-GH_CACHE = '../.cache/hello-github.json'
+# ── an open-source project's pitch from its own website (the spotlight slide) ───────────────────────────────────
+PITCH_CACHE = '../.cache/hello-pitch.json'
 
 
-def _gh(path, want_link=False):
-    headers = {'User-Agent': 'hello-deck-build', 'Accept': 'application/vnd.github+json'}
-    token = os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN')
-    if token:                                                # CI runners share IPs: 60 anonymous calls an hour is not enough
-        headers['Authorization'] = 'Bearer ' + token
-    req = urllib.request.Request('https://api.github.com/' + path, headers=headers)
+def _text(fragment):
+    import html as _html
+    return _html.unescape(re.sub(r'<[^>]+>', '', fragment)).strip()
+
+
+def _site_pitch(url):
+    """the site's current catchphrase: its <h1> (one line per <br>) and the small line above it (.eyebrow)"""
+    req = urllib.request.Request(url, headers={'User-Agent': 'hello-deck-build'})
     with urllib.request.urlopen(req, timeout=8) as r:
-        body = json.loads(r.read().decode('utf-8'))
-        return (body, r.headers.get('Link') or '') if want_link else body
+        page = r.read().decode('utf-8', 'replace')
+    h1 = re.search(r'<h1\b[^>]*>(.*?)</h1>', page, re.S | re.I)
+    lines = [_text(x) for x in re.split(r'<br\s*/?>', h1.group(1), flags=re.I)] if h1 else []
+    eyebrow = re.search(r'class="[^"]*\beyebrow\b[^"]*"[^>]*>(.*?)</', page, re.S | re.I)
+    return {'lines': [x for x in lines if x], 'eyebrow': _text(eyebrow.group(1)) if eyebrow else ''}
 
 
-def _gh_count(path):
-    """a list endpoint's length from per_page=1 + the rel="last" page number"""
-    body, link = _gh(path + ('&' if '?' in path else '?') + 'per_page=1', want_link=True)
-    m = re.search(r'[?&]page=(\d+)>; rel="last"', link)
-    return int(m.group(1)) if m else len(body)
-
-
-def _github_stats(repo):
-    since = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=30)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    info = _gh('repos/' + repo)
-    out = {'tagline': info.get('description') or '', 'language': info.get('language') or '',
-           'license': (info.get('license') or {}).get('spdx_id') or '', 'stars': info.get('stargazers_count'),
-           'url': info.get('html_url') or 'https://github.com/' + repo}
-    calls = {
-        'release': lambda: _gh('repos/%s/releases/latest' % repo),     # latest = not a draft, not a pre-release
-        'commits': lambda: _gh_count('repos/%s/commits' % repo),
-        'commits_30d': lambda: _gh_count('repos/%s/commits?since=%s' % (repo, since)),
-        'prs': lambda: _gh('search/issues?q=repo:%s+is:pr+is:merged&per_page=1' % repo)['total_count'],
-        'issues': lambda: _gh('search/issues?q=repo:%s+is:issue+is:closed&per_page=1' % repo)['total_count'],
-    }
-    with ThreadPoolExecutor(5) as ex:
-        futs = {k: ex.submit(f) for k, f in calls.items()}
-        for k, fu in futs.items():
-            try:
-                out[k] = fu.result()
-            except Exception as e:                           # noqa: BLE001 - a missing number drops its tile, not the slide
-                print('WARN hello: github %s %s (%s)' % (repo, k, e))
-    rel = out.pop('release', None) or {}
-    if rel.get('tag_name'):
-        out['version'] = rel['tag_name']
-        d = datetime.date.fromisoformat(rel['published_at'][:10])
-        out['released'] = '%s %d, %d' % (_MONTHS[d.month - 1][:3].upper(), d.day, d.year)   # no %-d: Windows builds too
-    return out
-
-
-def _spotlights(projects):
-    """{repo: stats} for the open_source entries with github + spotlight, cached 30 min like the sister sites"""
-    repos = sorted({p['github'] for p in projects if p.get('github') and p.get('spotlight')})
-    if not repos:
+def _pitches(projects):
+    """{url: pitch} for the open_source entries with `spotlight`, cached 30 min like the sister sites (stale when offline)"""
+    urls = sorted({p['url'] for p in projects if p.get('spotlight')})
+    if not urls:
         return {}
     cached = {}
     try:
-        with open(GH_CACHE, encoding='utf-8') as f:
+        with open(PITCH_CACHE, encoding='utf-8') as f:
             cached = json.load(f)
     except (OSError, ValueError):
         pass
-    if sorted(cached.get('repos') or []) == repos and time.time() - cached.get('at', 0) < CACHE_TTL:
-        return cached['stats']
+    if cached.get('urls') == urls and time.time() - cached.get('at', 0) < CACHE_TTL:
+        return cached['pitches']
     if os.environ.get('SKIP_CFP_CHECK') or os.environ.get('SKIP_HELLO_FETCH'):
-        return cached.get('stats') or {}
+        return cached.get('pitches') or {}
     out = {}
-    for repo in repos:
+    for url in urls:
         try:
-            out[repo] = _github_stats(repo)
+            out[url] = _site_pitch(url)
         except Exception as e:                               # noqa: BLE001
-            print('WARN hello: github %s unreachable (%s), using the cached numbers' % (repo, e))
-            out[repo] = (cached.get('stats') or {}).get(repo) or {}
+            print('WARN hello: %s unreachable (%s), using the cached catchphrase' % (url, e))
+            out[url] = (cached.get('pitches') or {}).get(url) or {}
     try:
-        os.makedirs(os.path.dirname(GH_CACHE), exist_ok=True)
-        tmp = '%s.%d.tmp' % (GH_CACHE, os.getpid())
+        os.makedirs(os.path.dirname(PITCH_CACHE), exist_ok=True)
+        tmp = '%s.%d.tmp' % (PITCH_CACHE, os.getpid())
         with open(tmp, 'w', encoding='utf-8') as f:
-            json.dump({'at': time.time(), 'repos': repos, 'stats': out}, f)
-        os.replace(tmp, GH_CACHE)
+            json.dump({'at': time.time(), 'urls': urls, 'pitches': out}, f)
+        os.replace(tmp, PITCH_CACHE)
     except OSError:
         pass
     return out
@@ -659,6 +630,13 @@ def _build(context, env, base_folder):
         return
     with open(cfg_path, encoding='utf-8') as f:
         cfg = yaml.safe_load(f) or {}
+    slug = os.path.basename(os.getcwd())
+    try:                                                     # past/ events (make stage lists them): no deck, it's over
+        with open('../.past-events', encoding='utf-8') as f:
+            if slug in f.read().split():
+                return
+    except OSError:
+        pass
     key = _brand_key(context)
     brands = [dict(b) for b in cfg.get('brands') or []]
     me = next((b for b in brands if b['key'] == key), None) or {'key': key, 'name': context.get('brand_name', ''), 'theme': {}}
@@ -669,7 +647,6 @@ def _build(context, env, base_folder):
     img = _Img(os.path.join(out, 'img'))
     asset = lambda p, box=None: img.picture(os.path.join(DECK_DIR, p), box) if p else ''   # noqa: E731
 
-    slug = os.path.basename(os.getcwd())
     base = str(context.get('base_path') or 'https://%s/' % context.get('brand_domain', ''))
     city = str(context.get('city_name') or '').strip()
     event_url = base + slug + '/'
@@ -714,15 +691,16 @@ def _build(context, env, base_folder):
 
     own_rows = _with_tentative(me, own, today, 10)
     projects = [dict(o, logo_src=asset(o.get('logo'), BOX_LOGO), qr=qr_svg(o['url'])) for o in cfg.get('open_source') or [] if o.get('url')]
-    stats = _spotlights(projects)
+    pitches = _pitches(projects)
     spotlights = []
-    for o in projects:                                       # a slide only with real numbers (no cache + offline = no slide)
-        st = stats.get(o.get('github') or '') or {}
-        if o.get('spotlight') and (st.get('version') or st.get('commits')):
+    for o in projects:                                       # catchphrase from the site, else hello.yaml `tagline`
+        pitch = dict(pitches.get(o['url']) or {})
+        if not pitch.get('lines') and o.get('tagline'):
+            pitch['lines'] = [o['tagline']]
+        if o.get('spotlight') and pitch.get('lines'):
             loop = [(img.copy(os.path.join(DECK_DIR, v)), 'video/' + os.path.splitext(v)[1].lstrip('.').lower())   # webm first, mp4 for Safari
                     for v in o.get('loop') or []]
-            spotlights.append(dict(o, stats=st, repo_qr=qr_svg(st.get('url') or 'https://github.com/' + o['github']),
-                                   loop=[v for v in loop if v[0]], poster_src=asset(o.get('poster'), (460, 570))))
+            spotlights.append(dict(o, pitch=pitch, loop=[v for v in loop if v[0]], poster_src=asset(o.get('poster'), (460, 570))))
     fonts = {f: img.copy(os.path.join(DECK_DIR, 'fonts', 'oswald-%s.woff2' % f)) for f in ('latin', 'latin-ext')}
     deck = {
         'key': key, 'brand': me, 'theme': theme, 'city': city or slug, 'slug': slug,

@@ -15,22 +15,19 @@ team:
   - {name: Emilia, photo: team/emilia.jpg}
 
 # "OPEN SOURCE" slide, in this order.
-#   github + spotlight = its own slide right after "Open source", with the project's numbers fetched from GitHub on every
-#   build (latest release, commits, merged PRs, closed issues, commits in the last 30 days); tagline = the repo
-#   description; install = the one-liner shown on the slide; loop + poster = the looping video in place of the logo
-#   (white background, from reliaburger.com: docs/website/assets/burger-loop.*); light = white slide in the project's
-#   own ink + accent colours
+#   spotlight = its own slide right after "Open source": the looping video (loop + poster) and the project's current
+#   catchphrase, read from its site's <h1> and .eyebrow line on every build (tagline = fallback when the site is down
+#   and nothing is cached); light = white slide in the project's own ink + accent colours
 open_source:
   - {name: cfp.ninja, url: https://cfp.ninja, logo: brands/cfpninja.png}
   - name: Reliaburger
     url: https://reliaburger.com
     logo: brands/reliaburger.png
-    github: reliaburger/reliaburger
     spotlight: true
-    install: curl -fsSL https://reliaburger.com/install.sh | sh
+    tagline: A container platform with nothing to assemble.
     loop: [brands/reliaburger-loop.webm, brands/reliaburger-loop.mp4]
     poster: brands/reliaburger-still.webp
-    light: {ink: '#181b19', accent: '#a83b15', line: '#d6ddd6', prompt: '#f49463'}
+    light: {ink: '#181b19', accent: '#a83b15', line: '#d6ddd6'}
 
 # Every brand of the family. key = the event's brand (brand_key, or brand_name lowercased).
 # The order is the order on the "our other conferences" QR slide (Conf42 always last).
