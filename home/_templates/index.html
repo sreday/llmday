@@ -101,7 +101,7 @@
     <div class="container">
         <h2 class="section-heading text-center mb-3">{{ brand_name }} Ambassadors</h2>
         <div class="section-intro text-center single-col-max mx-auto mb-5">
-            Ambassadors are key community members who help us make {{ brand_name }} amazing and bring it to cities around the world.
+            Ambassadors are key community members who help us make {{ brand_name }} amazing<br class="d-none d-md-inline"> and bring it to cities around the world.
             <a href="{{ mailto }}?subject=Ambassador%20nomination">Nominate {{ brand_name }} Ambassador!</a>
         </div>
 
@@ -118,7 +118,7 @@
                     {% if ambassador.Company %}<div class="amb-co">{{ ambassador.Company }}</div>{% endif %}
                     {% if ambassador.Event %}<span class="amb-aff"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>{{ ambassador.Event }}</span>{% endif %}
                     <div class="amb-gap"></div>
-                    {% if ambassador.Note %}<button type="button" class="event-read-more-btn amb-story" aria-expanded="false" onclick="toggleStory(this)"><span>Read story</span><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg></button>{% endif %}
+                    {% if ambassador.Note %}<button type="button" class="event-read-more-btn amb-story" aria-expanded="false" onclick="toggleStory(this)"><span>Story</span><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg></button>{% endif %}
                 </div>
                 {% if ambassador.Note %}<div class="amb-more"><div><p class="amb-note">{{ ambassador.Note }}</p></div></div>{% endif %}
             </article>
@@ -137,15 +137,14 @@
 function toggleStory(btn) {
   var open = btn.closest('.amb').classList.toggle('open');
   btn.setAttribute('aria-expanded', open);
-  btn.querySelector('span').textContent = open ? 'Close story' : 'Read story';
-}
+  }
 /* Every card in a row gets the row's tallest head, so closed cards line up */
 function equalizeAmb() {
   var heads = [].slice.call(document.querySelectorAll('.amb')).filter(function (c) { return c.offsetParent && !c.classList.contains('open'); })
     .map(function (c) { return c.querySelector('.amb-head'); });
   heads.forEach(function (h) { h.style.minHeight = ''; });
   var rows = {};
-  heads.forEach(function (h) { var k = Math.round(h.parentNode.getBoundingClientRect().top + window.scrollY); (rows[k] = rows[k] || []).push(h); });
+  heads.forEach(function (h) { var k = 0; for (var e = h.parentNode; e; e = e.offsetParent) k += e.offsetTop; (rows[k] = rows[k] || []).push(h); });
   Object.keys(rows).forEach(function (k) {
     var m = Math.max.apply(null, rows[k].map(function (h) { return h.offsetHeight; }));
     rows[k].forEach(function (h) { h.style.minHeight = m + 'px'; });
@@ -176,7 +175,10 @@ function openDeck(b) {
   dealt.forEach(function (c, i) {
     c.style.animationDelay = Math.min(i, 14) * 55 + 'ms';
     c.classList.add('deck-deal');
-    c.addEventListener('animationend', function () { c.classList.remove('deck-deal'); c.style.animationDelay = ''; }, { once: true });
+    c.addEventListener('animationend', function () {
+      c.classList.remove('deck-deal'); c.style.animationDelay = '';
+      if (i === dealt.length - 1 && typeof equalizeAmb === 'function') equalizeAmb();
+    }, { once: true });
   });
   if (typeof equalizeAmb === 'function') equalizeAmb();
   if (typeof hideShortReadMore === 'function') hideShortReadMore();
@@ -296,6 +298,8 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
   linear-gradient(115deg, transparent 56%, color-mix(in srgb, #8fdc6a 40%, transparent) 68%, transparent 80%),
   linear-gradient(115deg, transparent 80%, color-mix(in srgb, #2ec4b6 30%, transparent) 92%, transparent 100%),
   #f0f6fa; }
+/* short bands (Partner): stretch the sweep so it doesn't bunch up */
+.glow-band-short > .glow-bg { background-size: 220% 100%; background-position: 30% 0; }
 .glow-bg::after { content: ""; position: absolute; inset: 0; opacity: .12;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 .lg-glass, #events .card { position: relative; border-radius: 24px !important;
@@ -337,7 +341,7 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
 .amb-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1); }
 .amb-more > div { overflow: hidden; }
 .amb.open .amb-more { grid-template-rows: 1fr; }
-.amb-note { font-size: .9rem; line-height: 1.6; color: #2a3644; text-align: left; margin: 1rem 0 0; }
+.amb-note { font-size: .9rem; line-height: 1.6; color: #2a3644; text-align: justify; -webkit-hyphens: auto; hyphens: auto; margin: 1rem 0 0; }
 #past-events { background: #26986A !important; }
 #past-events .card, #past-events .card.rounded { border-radius: 24px !important; overflow: hidden; color: #141c25;
   background: linear-gradient(140deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.76) 50%, rgba(255,255,255,.80) 100%) !important;
@@ -456,6 +460,7 @@ function hideShortReadMore() {
     var t = card.querySelector('.testimonial-text'), btn = card.querySelector('.testimonial-readmore');
     if (t && btn && t.offsetHeight > 0) btn.style.display = t.scrollHeight <= t.clientHeight + 1 ? 'none' : '';
   });
+  if (typeof equalizeAmb === 'function') equalizeAmb();
 }
 document.addEventListener('DOMContentLoaded', hideShortReadMore);
 </script>
@@ -576,7 +581,7 @@ document.addEventListener('DOMContentLoaded', hideShortReadMore);
   </div>
 </section>
 
-<div class="glow-band">
+<div class="glow-band glow-band-short">
 <div class="glow-bg" aria-hidden="true"></div>
 <section id="partner" class="sponsors-section section theme-bg-light">
   <div class="container">
