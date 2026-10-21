@@ -742,7 +742,9 @@ def _build(context, env, base_folder):
         # the sister brands' roadmaps, then this brand's own (with its mascot sticker); then its splash cards + QR
         'tours': tours + ([dict(me, events=own_rows, span=_span(own_rows), map=_map_layout(own_rows, cfg.get('cities'), key),
                                 mascot_src=me.get('sticker_src') or me.get('mascot_src'))] if own_rows else []),
-        'own_cards': [r for r in own if r['card']][:5],
+        # the home page cards are lossless WebPs (~400 KB each, 5 on the slide): the deck gets its own q90 copies (~70 KB)
+        'own_cards': [dict(r, card=img.picture(os.path.join('../home', r['card'].lstrip('/')), (650, 325)) or r['card'])
+                      for r in own if r['card']][:5],
         'icons': {k: asset(v, BOX_LOGO) for k, v in (cfg.get('icons') or {}).items()},
         'map_src': asset('brands/world-dots.png') if tours or own_rows else '',
         'map_box': {'x': MAP_X - MAP_PAD[0], 'y': MAP_Y - MAP_PAD[2],
