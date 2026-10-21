@@ -558,6 +558,7 @@ class _Img:
 
 # ── an open-source project's pitch from its own website (the spotlight slide) ───────────────────────────────────
 PITCH_CACHE = '../.cache/hello-pitch.json'
+PITCH_VERSION = 2                                            # bump when _site_pitch reads more: older caches are refetched
 
 
 def _text(fragment):
@@ -592,6 +593,8 @@ def _pitches(projects):
             cached = json.load(f)
     except (OSError, ValueError):
         pass
+    if cached.get('v') != PITCH_VERSION:                     # CI keeps ../.cache: a copy from before the wordmark lacks it
+        cached = {'pitches': cached.get('pitches')}
     if cached.get('urls') == urls and time.time() - cached.get('at', 0) < CACHE_TTL:
         return cached['pitches']
     if os.environ.get('SKIP_CFP_CHECK') or os.environ.get('SKIP_HELLO_FETCH'):
@@ -607,7 +610,7 @@ def _pitches(projects):
         os.makedirs(os.path.dirname(PITCH_CACHE), exist_ok=True)
         tmp = '%s.%d.tmp' % (PITCH_CACHE, os.getpid())
         with open(tmp, 'w', encoding='utf-8') as f:
-            json.dump({'at': time.time(), 'urls': urls, 'pitches': out}, f)
+            json.dump({'v': PITCH_VERSION, 'at': time.time(), 'urls': urls, 'pitches': out}, f)
         os.replace(tmp, PITCH_CACHE)
     except OSError:
         pass
@@ -703,6 +706,8 @@ def _build(context, env, base_folder):
         pitch = dict(pitches.get(o['url']) or {})
         if not pitch.get('lines') and o.get('tagline'):
             pitch['lines'] = [o['tagline']]
+        if not pitch.get('mark') and o.get('mark'):          # the wordmark tile (r/), when the site gave none
+            pitch['mark'] = o['mark']
         if o.get('spotlight') and pitch.get('lines'):
             loop = [(img.copy(os.path.join(DECK_DIR, v)), 'video/' + os.path.splitext(v)[1].lstrip('.').lower())   # webm first, mp4 for Safari
                     for v in o.get('loop') or []]
