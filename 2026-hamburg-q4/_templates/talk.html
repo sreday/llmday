@@ -17,7 +17,7 @@
   @media (max-width: 767.98px) {
     .talk-content .desc p,
     .talk-content .desc li { text-align: left; }
-    .talk-speaker .card-img-top { max-width: 320px; margin: 0 auto; }
+    .talk-speaker .spk-pic { max-width: 320px; margin: 8px auto 0; }
   }
   /* Keynote / Workshop pill before the title, same as the schedule (index.html) */
   .kn-pill { display: inline-block; background: var(--brand); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .45em; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-right: 10px; vertical-align: middle; line-height: 1.4; }
@@ -31,21 +31,19 @@
 
       <div class="col-12 col-md-4 col-lg-3 mb-4" style="align-self:start;">
         <div class="card talk-speaker">
-          <img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt="">
+          <div class="spk-pic"><img src="{{ talk.photo_url }}" class="card-img-top rounded-0" alt="">{% if talk.linkedin %}<a class="spk-li{% if talk.linkedin2 %} spk-li-left{% endif %}" target="_blank" rel="noopener" href="{{ talk.linkedin }}" aria-label="{{ talk.name }} on LinkedIn"><i class="fab fa-linkedin-in"></i></a>{% endif %}{% if talk.linkedin2 %}<a class="spk-li" target="_blank" rel="noopener" href="{{ talk.linkedin2 }}" aria-label="{{ talk.name }} on LinkedIn"><i class="fab fa-linkedin-in"></i></a>{% endif %}</div>
           <div class="card-body">
             <h5 class="card-title mb-2">{{ talk.name }}</h5>
             <div class="card-text mb-3">
               <div class="meta">{{ talk.organization }}</div>
             </div><!--//card-text-->
           </div><!--//card-->
-          <div class="card-footer text-muted">
+          {% if talk.twitter or talk.twitter2 %}<div class="card-footer text-muted">
             <ul class="social-list list-inline mb-0">
               {% if talk.twitter %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
-              {% if talk.linkedin %}<li class="list-inline-item"><a  href="{{ talk.linkedin }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
               {% if talk.twitter2 %}<li class="list-inline-item"><a  href="https://twitter.com/{{ talk.twitter2 }}"><i class="fab fa-twitter fa-fw"></i></a></li>{% endif %}
-              {% if talk.linkedin2 %}<li class="list-inline-item"><a  href="{{ talk.linkedin2 }}"><i class="fab fa-linkedin-in fa-fw"></i></a></li>{% endif %}
             </ul><!--//social-list-->
-          </div>
+          </div>{% endif %}
         </div><!--//card-->
       </div><!--//col-->
 
