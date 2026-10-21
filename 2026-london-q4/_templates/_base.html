@@ -136,6 +136,19 @@
   .spk-glass .talk-content { background: rgba(247,247,250,.86); }
   .spk-glass .card .meta { color: #3d3a40; }
   .spk-glass .social-list a { color: #0a66c2; }   /* LinkedIn's own blue: the lighter theme blue is 2.5:1 on the glass */
+  /* LinkedIn as a frosted bubble on the headshot's rim (Marek 2026-10-20), on the event page's speaker cards and on the
+     talk pages. The headshot disks sit low in the square (centre 50% / 60%, radius ~36.5%), so 75% / 88% is the rim at
+     about five o'clock. Two LinkedIns: side by side, both lower right. Frosted white, the "in" in the brand colour. */
+  .spk-pic { position: relative; margin: 12px 12px 0; }
+  .spk-glass .spk-pic .card-img-top { padding: 0; }
+  .spk-li { position: absolute; left: 75%; top: 88%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; color: var(--brand); font-size: 1.05rem; text-decoration: none;
+    background: rgba(255,255,255,.62); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    border: 2px solid rgba(255,255,255,.95); box-shadow: 0 2px 10px rgba(0,0,0,.08); transition: background .2s; }
+  .spk-li.spk-li-left { transform: translate(calc(-100% - 3px), -50%); }
+  .spk-li-left + .spk-li { transform: translate(3px, -50%); }
+  .spk-li:hover, .spk-li:focus { background: rgba(255,255,255,.9); color: var(--brand); }
+  @media (max-width: 767.98px) { .spk-pic { margin: 8px 8px 0; } .spk-li { width: 34px; height: 34px; font-size: .92rem; } }
   @media (max-width: 767.98px) {
     .spk-glass .card { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(232,233,238,.66); border-radius: 20px;
       box-shadow: 0 10px 26px rgba(30,15,40,.12), inset 0 1px 0 rgba(255,255,255,.9); }
