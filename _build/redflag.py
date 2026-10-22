@@ -89,8 +89,9 @@ def live(status):
 
 
 def parked(status):
-    """Row is in the file but not on the site and was not turned down on purpose: draft, empty or unknown status."""
-    return not live(status) and not re.search(r"declin|reject|cancel|withdr", str(status or "").lower())
+    """Row is in the file but not on the site and was not turned down on purpose: draft, empty or unknown status.
+    A noshow row (the speaker did not turn up, Marek 2026-10-22) is hidden on purpose too."""
+    return not live(status) and not re.search(r"declin|reject|cancel|withdr|no[\s_-]*show", str(status or "").lower())
 
 
 def parse(text):
