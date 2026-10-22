@@ -331,6 +331,9 @@ SCHEDULE_AUTO_PCT = 70
 # talks.csv "status" column (Marek 2026-10-03): talk / keynote / workshop / draft, legacy "confirmed" = talk.
 # Same rules as talk_kind() in _event_template/_build/generate.py and live() in ../_build/redflag.py.
 _LIVE_KINDS = ("talk", "keynote", "workshop")
+# status "noshow" (also "no show" / "no-show", Marek 2026-10-22): the speaker did not turn up and did not tell us. Hidden on
+# the site like any other non-live status, listed on the No-shows tab of /status/ (see NO-SHOWS below).
+_NOSHOW_RE = re.compile(r"^\s*no[\s_-]*show\b", re.I)
 
 
 def _talk_kind(status):
@@ -553,8 +556,8 @@ def _status_lint(folder, meta, tracks, past=False):
         st = g("status").lower()
         kind = _talk_kind(st)
         url = gh + "_db/talks.csv"
-        if st and kind is None:
-            add("warn", "row %d" % i, "unknown status '%s' (row stays hidden; use talk, keynote, workshop or draft)" % g("status")[:40])
+        if st and kind is None and not _NOSHOW_RE.match(st):
+            add("warn", "row %d" % i, "unknown status '%s' (row stays hidden; use talk, keynote, workshop, draft or noshow)" % g("status")[:40])
         if kind is None:
             continue                                # hidden rows are not linted further
         name = g("name")
@@ -1510,6 +1513,65 @@ print("Waitlist: %s" % (_wl_note or "%d waiting, %d placed" % (_wl_waiting, _wl_
 # ── END WAITLIST ─────────────────────────────────────────────────────────────
 
 
+# ── NO-SHOWS (Marek 2026-10-22): talks.csv rows with the status "noshow" = speakers who did not make it to the conference
+# and did not let us know. Not a ban list (the word blacklist is never used): the tab is there so they get a second look
+# before we accept them again. Every event of this repo, top level and past/ (the build stages both in ../), newest event
+# first; a co-presented row ("A & B") gives one entry per person, paired with linkedin / linkedin2. Name, LinkedIn and
+# the event only. Someone listed more than once (same LinkedIn, else same name) gets the count on every entry.
+def _noshow_build():
+    names_by_folder = {}
+    for key in ("events", "events_past"):
+        for ev in (context.get(key) or []):
+            u = str((ev or {}).get("url") or "")
+            if u.startswith("./"):
+                names_by_folder[u[2:].rstrip("/")] = str(ev.get("name") or "")
+    out = []
+    for folder in sorted(_wl_glob.glob("../20*")):
+        fname = os.path.basename(folder)
+        talks_p = os.path.join(folder, "_db", "talks.csv")
+        if not os.path.exists(talks_p):
+            continue
+        start = None
+        try:
+            with open(os.path.join(folder, "metadata.yml"), encoding="utf-8") as f:
+                start = _wl_parse_ts(yaml.load(f, Loader=yaml.FullLoader).get("start_time"))
+        except Exception:
+            pass
+        try:
+            with open(talks_p, encoding="utf-8-sig", errors="replace", newline="") as f:
+                rows = [r for r in _wl_csv.DictReader(line.replace("\0", "") for line in f) if _NOSHOW_RE.match(str(r.get("status") or ""))]
+        except Exception:
+            continue
+        for r in rows:
+            parts = [p.strip() for p in _wl_re.split(r"\s*&\s*|\s+and\s+", str(r.get("name") or "")) if p.strip()]
+            links = [str(r.get(k) or "").strip() for k in ("linkedin", "linkedin2")]
+            for i, name in enumerate(parts):
+                li = links[i] if i < len(links) else ""
+                if li and not _wl_re.match(r"^https?://", li):
+                    li = "https://" + li.lstrip("/")
+                out.append({
+                    "name": name, "linkedin": li, "organization": str(r.get("organization") or "").strip(),
+                    "title": str(r.get("title") or "").strip(),
+                    "event": names_by_folder.get(fname) or fname, "event_url": _site_root + fname + "/",
+                    "date": (start.strftime("%-d %b %Y") if os.name != "nt" else start.strftime("%d %b %Y").lstrip("0")) if start else "",
+                    "start": start or datetime.datetime.min.replace(tzinfo=datetime.timezone.utc),
+                    "key": _wl_slug(li) or _wl_norm(name),
+                })
+    counts = {}
+    for x in out:
+        counts[x["key"]] = counts.get(x["key"], 0) + 1
+    for x in out:
+        x["times"] = counts[x["key"]]
+        x["search"] = " ".join(v for v in (x["name"], x["organization"], x["event"], x["date"], x["title"]) if v).lower()
+    out.sort(key=lambda x: (x["start"], x["name"].lower()), reverse=True)
+    return out, len(counts)
+
+
+_ns_rows, _ns_people = _noshow_build()
+print("No-shows: %d entries, %d people" % (len(_ns_rows), _ns_people))
+# ── END NO-SHOWS ─────────────────────────────────────────────────────────────
+
+
 # ── COMMUNITY HEROES (Marek 2026-09-22, reworked 2026-10-03) ──────────────────────────────────────────────────────
 # Two measurable tracks per hero, nothing about the conversations between Anna and the hero:
 #   Ticket (Luma): a "Community Hero" ticket pending / waitlist = Ticket requested, approved = Ticket granted.
@@ -1887,7 +1949,7 @@ with open(BASE_FOLDER + "/status/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("status.html").render(
         status_rows=_status_rows, status_slots=_SLOTS_PER_TRACK, status_announce_days=_ANNOUNCE_DAYS, status_past=_status_past, status_past_dirty=_status_past_dirty,
         status_added_days=_added_days, status_added_n=_ADDED_DAYS, status_added_max=_ADDED_DAYS_MAX, status_flap_days=_ADDED_FLAP_DAYS, status_added_window=_added_window, status_added_tz=_added_window.rsplit(", ", 1)[-1],
-        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed, status_heroes=_hero_rows, status_heroes_note=_hero_note, status_hero_counts=_hero_counts, status_hero_past=_hero_past, status_hero_fallen=_hero_fallen, hero_sleep_hours=_HERO_SLEEP_HOURS,
+        status_redflags=_redflags, status_added_error=_added_error, status_added_warnings=_added_warnings, status_luma_note=_luma_note, status_luma_keys=_luma_key_notes, status_waitlist=_wl_rows, status_waitlist_note=_wl_note, status_waitlist_waiting=_wl_waiting, status_waitlist_placed=_wl_placed, status_noshows=_ns_rows, status_noshow_people=_ns_people, status_heroes=_hero_rows, status_heroes_note=_hero_note, status_hero_counts=_hero_counts, status_hero_past=_hero_past, status_hero_fallen=_hero_fallen, hero_sleep_hours=_HERO_SLEEP_HOURS,
         status_luma_overall=_luma_overall, status_generated_iso=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         status_color=next((c for b, u, c in _STATUS_BRANDS if b.lower() == _me.lower()), "#333"),
         status_sisters=[{"name": b, "url": u, "color": c} for b, u, c in _STATUS_BRANDS if b.lower() != _me.lower()],

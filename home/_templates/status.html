@@ -205,9 +205,9 @@
     @keyframes tab-squash { 0% { scale: 1 1; } 30% { scale: 1.06 .86; } 62% { scale: .97 1.06; } 82% { scale: 1.01 .98; } 100% { scale: 1 1; } }
     .tabs.has-pill button.is-active, .tabs.has-pill button.is-active:hover { background: #f1f2f4; color: #333; box-shadow: none; }
     @media (prefers-reduced-motion: reduce) { .tab-pill.squash { animation: none; } }
-    html.tabbed .regs, html.tabbed .added, html.tabbed .spons, html.tabbed .checks, html.tabbed .waitlist, html.tabbed .heroes { display: none; margin-top: 22px; }
-    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active, html.tabbed .heroes.is-active { display: block; }
-    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .spons h2, html.tabbed .checks h2, html.tabbed .waitlist h2, html.tabbed .heroes h2 { display: none; }
+    html.tabbed .regs, html.tabbed .added, html.tabbed .spons, html.tabbed .checks, html.tabbed .waitlist, html.tabbed .heroes, html.tabbed .noshow { display: none; margin-top: 22px; }
+    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active, html.tabbed .heroes.is-active, html.tabbed .noshow.is-active { display: block; }
+    html.tabbed .regs h2, html.tabbed .added h2, html.tabbed .spons h2, html.tabbed .checks h2, html.tabbed .waitlist h2, html.tabbed .heroes h2, html.tabbed .noshow h2 { display: none; }
     /* Heroes tab (Marek 2026-09-22): Community Hero reports with completion marks; shares the .wl table look */
     .hr-marks { display: flex; flex-wrap: wrap; gap: 4px; }
     .hr-marks span { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700; letter-spacing: .02em; background: #eef0f3; color: #aab0b8; }
@@ -246,7 +246,7 @@
     .hr-hist-toggle { display: block; margin-top: 10px; font-size: .82rem; color: #777; cursor: pointer; }
     /* A short tab (an empty waitlist, two sponsors) must not shrink the page and yank the scroll position back up (Marek
        2026-09-22): every panel keeps at least the height of a well-filled Speakers list */
-    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active, html.tabbed .heroes.is-active { min-height: 640px; }
+    html.tabbed .regs.is-active, html.tabbed .added.is-active, html.tabbed .spons.is-active, html.tabbed .checks.is-active, html.tabbed .waitlist.is-active, html.tabbed .heroes.is-active, html.tabbed .noshow.is-active { min-height: 640px; }
     /* Waitlist tab (Marek 2026-09-22): speakers who applied after a lineup was full; search + a show-placed toggle */
     .wl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 12px; }
     .wl-search { flex: 1 1 260px; max-width: 420px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 999px; font: inherit; font-size: .95rem; outline: none; background: #fff; }
@@ -262,6 +262,10 @@
     .wl tr.placed { display: none; }
     .wl.show-placed tr.placed { display: table-row; opacity: .55; }
     .wl tr.hidden { display: none !important; }
+    /* No-shows tab (Marek 2026-10-22): someone listed more than once gets the count next to the name */
+    .ns-times { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; background: #fdecea; color: #b3261e; font-size: .74rem; font-weight: 700; vertical-align: 1px; }
+    .wl .ns-li a { color: #555; font-size: .86rem; text-decoration: none; word-break: break-all; }
+    .wl .ns-li a:hover { color: var(--accent); text-decoration: underline; }
     .wl-placed { display: block; margin-top: 4px; font-size: .78rem; color: var(--good); }
     .wl-placed a { color: inherit; }
     .wl-empty { padding: 18px 16px; color: #888; }
@@ -449,6 +453,7 @@
     <button type="button" data-tab="heroes" aria-selected="false">Heroes</button>
     <button type="button" data-tab="sponsors" aria-selected="false">Sponsors</button>
     <button type="button" data-tab="checks" aria-selected="false">Data checks</button>
+    <button type="button" data-tab="noshow" aria-selected="false">No-shows</button>
   </nav>
 
   <section class="regs">
@@ -600,6 +605,31 @@
     {% endif %}
     {% endfor %}
   </section>
+  <section class="noshow">
+    <h2>No-shows</h2>
+    <div class="sub">Speakers who did not make it to the conference and did not let us know: talks.csv rows with the status <strong>noshow</strong>, which the website leaves out like any row that is not talk / keynote / workshop / draft. Every event of this site, newest first{% if status_noshows %}: <strong>{{ status_noshows | length }}</strong> no-show{{ '' if status_noshows | length == 1 else 's' }}, {{ status_noshow_people }} {{ 'person' if status_noshow_people == 1 else 'people' }}{% endif %}. Not a ban: a reminder to double-check them before accepting another talk.</div>
+    {% if status_noshows %}
+    <div class="wl-tools">
+      <input type="search" class="wl-search" id="ns-search" placeholder="Search name, company, conference" autocomplete="off">
+      <span class="wl-count" id="ns-count"></span>
+    </div>
+    <div class="wl" id="ns">
+      <table>
+        <thead><tr><th>Speaker</th><th>LinkedIn</th><th>Missed</th></tr></thead>
+        <tbody>
+        {% for n in status_noshows %}
+        <tr class="wl-row" data-s="{{ n.search }}">
+          <td class="wl-who"><strong>{{ n.name }}</strong>{% if n.times > 1 %}<span class="ns-times" title="listed {{ n.times }} times on this tab">{{ n.times }} no-shows</span>{% endif %}{% if n.organization %}<small>{{ n.organization }}</small>{% endif %}</td>
+          <td class="ns-li">{% if n.linkedin %}<a href="{{ n.linkedin }}" target="_blank" rel="noopener noreferrer">{{ n.linkedin | replace('https://', '') | replace('www.', '') }}</a>{% else %}<span class="hr-mute">-</span>{% endif %}</td>
+          <td class="wl-for"><a href="{{ n.event_url }}">{{ n.event }}</a>{% if n.date %}<small>{{ n.date }}</small>{% endif %}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <div class="wl-empty" id="ns-empty" hidden>Nobody matches that.</div>
+    </div>
+    {% else %}<div class="allclear"><span class="count ok">No no-shows &#128077;</span></div>{% endif %}
+  </section>
   <section class="spons">
     <h2>Sponsors</h2>
     <div class="sub">Confirmed sponsors added to the website{% if status_rows %}: <strong>{{ status_rows | sum(attribute='sponsors') }}</strong> across {{ status_rows | length }} upcoming events{% endif %}.</div>
@@ -670,7 +700,7 @@
 <script>
 (function () {                                     // Registrations / Speakers / Sponsors / Data checks as tabs (Marek 2026-09-17)
   var tabs = document.querySelectorAll('.tabs button'); if (!tabs.length) return;
-  var secs = { regs: document.querySelector('section.regs'), speakers: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks'), waitlist: document.querySelector('section.waitlist'), heroes: document.querySelector('section.heroes') };
+  var secs = { regs: document.querySelector('section.regs'), speakers: document.querySelector('section.added'), sponsors: document.querySelector('section.spons'), checks: document.querySelector('section.checks'), waitlist: document.querySelector('section.waitlist'), heroes: document.querySelector('section.heroes'), noshow: document.querySelector('section.noshow') };
   document.documentElement.classList.add('tabbed');
   var nav = document.querySelector('.tabs'), pill = document.createElement('span');   // bouncing pill (Marek 2026-09-18)
   pill.className = 'tab-pill'; pill.setAttribute('aria-hidden', 'true');
@@ -869,6 +899,7 @@ function tableSearch(boxId, wrapId, countId, emptyId, toggleId) {   // Waitlist 
   apply();
 }
 tableSearch('wl-search', 'wl', 'wl-count', 'wl-empty', 'wl-show-placed');
+tableSearch('ns-search', 'ns', 'ns-count', 'ns-empty');
 (function () {                                     // Heroes (Marek 2026-10-03): stages from the viewer's clock, Sleeping Heroes on top
   var wrap = document.getElementById('hr'); if (!wrap) return;
   var tbody = wrap.querySelector('tbody'), rows = [].slice.call(tbody.querySelectorAll('tr.hr-row')),
