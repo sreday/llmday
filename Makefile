@@ -48,7 +48,9 @@ static/20%/index.html: .build/20%/static/index.html
 	cp .build/20$*/metadata.yml static/20$*
 	cp .build/20$*/_db/talks.csv static/20$*
 
-static/index.html: .build/home/**/*
+# Home (and its /status/ page) reads the upcoming events' built pages (the schedule's start / end hours), so with make -j
+# it must wait for them; without this it raced them and saw no page = "no schedule yet" (PLATFORMday, 2026-10-22).
+static/index.html: .build/home/**/* $(addprefix .build/,$(addsuffix /static/index.html,$(wildcard 20*)))
 	cd .build/home && \
 		make clean && \
 		make generate && \
