@@ -95,7 +95,16 @@ jobs:
         if: always()
         run: |
           find .cache -type f | sort > /tmp/cache-after.txt
-          if [ -n "$(find .cache -type f -newer .cache/.restored | head -1)" ] || ! cmp -s /tmp/cache-before.txt /tmp/cache-after.txt; then echo "changed=true" >> $GITHUB_OUTPUT; fi
+          # A cache hit only refreshes its entry's last-used time (os.utime, for --prune), so "anything newer than the restore"
+          # was true on every push and the ~5 GB cache went up again each time (~40-60 s). Entries are content-addressed, so a
+          # real change adds or removes files; the only in-place rewrite is a finished event's Luma hero rows. Last-used times
+          # still reach the cache at least every 3 days (.saved), well inside the 14-day prune window.
+          if ! cmp -s /tmp/cache-before.txt /tmp/cache-after.txt \
+             || [ -n "$(find .cache/luma-heroes -type f -newer .cache/.restored 2>/dev/null | head -1)" ] \
+             || [ -z "$(find .cache/.saved -mtime -3 2>/dev/null)" ]; then
+            touch .cache/.saved
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Save image and teaser cache
         if: always() && steps.cache.outputs.changed == 'true'   # an unchanged cache is not uploaded again (it took ~1 min)
