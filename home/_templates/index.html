@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<script>document.documentElement.classList.add('splash-js')</script>
 <div class="glow-band">
 <div class="glow-bg" aria-hidden="true"></div>
 {% if events or meetups %}
@@ -15,8 +16,8 @@
 
       <div class="col-12 col-lg-6 mb-4">
         <div class="card rounded">
-          <a href="{{ event.url }}">
-            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
+          <a href="{{ event.url }}" class="card-splash">
+            <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt=""{% if loop.index <= 2 %} fetchpriority="high"{% endif %}>
           </a>
           <div class="card-body">
             <h5 class="card-title mb-2">{{ event.name }}</h5>
@@ -56,7 +57,7 @@
 
       <div class="col-12 col-lg-6 mb-4">
         <div class="card rounded">
-          <a href="./{{ event.url }}">
+          <a href="./{{ event.url }}" class="card-splash">
             <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="">
           </a>
           <div class="card-body">
@@ -177,7 +178,7 @@ function openDeck(b) {
     c.style.animationDelay = Math.min(i, 14) * 55 + 'ms';
     c.classList.add('deck-deal');
     c.addEventListener('animationend', function () {
-      c.classList.remove('deck-deal'); c.style.animationDelay = '';
+      c.classList.remove('deck-deal'); c.style.animationDelay = ''; if (window.splashQueue) splashQueue.kick();
       if (i === dealt.length - 1 && typeof equalizeAmb === 'function') equalizeAmb();
     }, { once: true });
   });
@@ -244,7 +245,7 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
 
       <div class="col-12 col-lg-6 mb-4">
         <div class="card rounded">
-          <a href="{{ event.url }}">
+          <a href="{{ event.url }}" class="card-splash">
             <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="" loading="lazy" decoding="async">
           </a>
           <div class="card-body">
@@ -280,7 +281,7 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
 
       <div class="col-12 col-lg-6 mb-4">
         <div class="card rounded">
-          <a href="./{{ event.url }}">
+          <a href="./{{ event.url }}" class="card-splash">
             <img src="{{ event.photo_url }}" class="card-img-top rounded-top" alt="" loading="lazy" decoding="async">
           </a>
           <div class="card-body">
@@ -308,6 +309,47 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
   </div>
 </section>
 {% endif %}
+<script>
+/* Splashes slide in top to bottom, each only once loaded and once every visible card above it has gone.
+   A failed image stays a shard; a card still dealing or hidden in a closed deck waits; a card still loading
+   while one below has been ready for 6 s is skipped and slides in by itself whenever it arrives. */
+var splashQueue = (function () {
+  var GAP = 90, WAIT = 6000, last = 0, timer = 0;
+  function ready(img)  { return img.__ok  || (img.hasAttribute('src') && img.complete && img.naturalWidth > 0); }
+  function failed(img) { return img.__err || !img.getAttribute('src') || (img.complete && !img.naturalWidth); }
+  function shown(card) { return card.offsetParent && !card.closest('.deck-deal'); }
+  function reveal(img) { img.__done = true; img.closest('.card').classList.add('splash-in'); last = performance.now(); }
+  function later(ms) { clearTimeout(timer); timer = setTimeout(pump, Math.max(0, ms)); }
+  function pump() {
+    var imgs = document.querySelectorAll('.card-splash > img'), now = performance.now();
+    for (var i = 0; i < imgs.length; i++) {
+      var img = imgs[i];
+      if (img.__done || img.__skip || !shown(img.closest('.card'))) continue;
+      if (failed(img)) { img.__done = true; continue; }
+      if (ready(img)) {
+        if (now - last < GAP) return later(GAP - (now - last));
+        reveal(img); now = performance.now(); continue;
+      }
+      var oldest = Infinity;
+      for (var j = i + 1; j < imgs.length; j++) {
+        var n = imgs[j];
+        if (!n.__done && !n.__skip && ready(n) && shown(n.closest('.card'))) oldest = Math.min(oldest, n.__readyAt || (n.__readyAt = now));
+      }
+      if (oldest === Infinity) return;
+      if (now - oldest < WAIT) return later(WAIT - (now - oldest));
+      img.__skip = true;
+    }
+  }
+  function watch(img) {
+    if (img.__w) return; img.__w = true;
+    img.addEventListener('load', function () { img.__ok = true; img.__readyAt = performance.now(); if (img.__skip && !img.__done) reveal(img); else pump(); });
+    img.addEventListener('error', function () { img.__err = true; pump(); });
+  }
+  function kick() { document.querySelectorAll('.card-splash > img').forEach(watch); pump(); }
+  kick();
+  return { kick: kick };
+})();
+</script>
 {# style + script kept outside the events_past conditional so the Read-more /
    Playlist buttons and show-more helpers also work when there are no past events #}
 <style>
@@ -389,6 +431,14 @@ window.addEventListener('resize', function () { clearTimeout(window.__deckT); wi
 .amb-story { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding: 6px 13px; min-height: 31px; line-height: 19px; font-size: .8rem; border: 0; cursor: pointer; border-radius: 5px; }
 .amb-story svg { transition: transform .3s; }
 .amb.open .amb-story svg { transform: rotate(180deg); }
+/* splash slides in only once loaded (and only after every card above it); until then the card is a splash-less shard */
+.splash-js .card-splash { display: grid; grid-template-rows: 0fr; overflow: hidden;
+  transition: grid-template-rows .55s cubic-bezier(.2,.8,.2,1); }
+.splash-js .card-splash > img { min-height: 0; opacity: 0; transform: translateY(-24px);
+  transition: opacity .45s ease .1s, transform .55s cubic-bezier(.2,.8,.2,1), filter .2s ease; }
+.splash-js .card.splash-in .card-splash { grid-template-rows: 1fr; }
+.splash-js .card.splash-in .card-splash > img { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .splash-js .card-splash, .splash-js .card-splash > img { transition: none; } }
 .amb-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1); }
 .amb-more > div { overflow: hidden; }
 .amb.open .amb-more { grid-template-rows: 1fr; }
