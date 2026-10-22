@@ -139,7 +139,7 @@
       <div class="ctl">
         <span class="lbl">File name</span>
         <input type="text" id="name" placeholder="Speaker Name.png" spellcheck="false">
-        <div class="hint">Follows the layers, as in talks.csv.</div>
+        <div class="hint">Follows the layer list, top to bottom, as in talks.csv.</div>
       </div>
       <div class="row"><button type="button" class="btn btn-main" id="dl" disabled>Download PNG</button><button type="button" class="btn btn-push" id="push" disabled hidden>Push to site</button></div>
       <div class="hint" id="push-msg"></div>
@@ -378,11 +378,11 @@
       setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
     }, 'image/png');
   });
-  // the file name follows the layers (Marek 2026-10-06): back to front = left to right after Auto, "A", "A & B",
-  // "A, B & C"; it updates on every add, remove and reorder until the name is typed by hand (emptying it hands it back)
+  // the file name follows the layer list as shown, top (front) to bottom (Marek 2026-10-22, was back to front): "A",
+  // "A & B", "A, B & C"; it updates on every add, remove and reorder until the name is typed by hand (emptying it hands it back)
   function autoName() {
     if (nameTouched) return;
-    var n = layers.map(function (L) { return L.name.replace(/\.[^.]+$/, ''); });
+    var n = layers.map(function (L) { return L.name.replace(/\.[^.]+$/, ''); }).reverse();
     $('name').value = n.length ? (n.length === 1 ? n[0] : n.slice(0, -1).join(', ') + ' & ' + n[n.length - 1]) + '.png' : '';
   }
   $('name').addEventListener('input', function () { nameTouched = this.value.trim() !== ''; if (!nameTouched) autoName(); });
