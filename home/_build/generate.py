@@ -1519,8 +1519,9 @@ print("Waitlist: %s" % (_wl_note or "%d waiting, %d placed" % (_wl_waiting, _wl_
 # first; a co-presented row ("A & B") gives one entry per person, paired with linkedin / linkedin2. Name, LinkedIn and
 # the event only. Someone listed more than once (same LinkedIn, else same name) gets the count on every entry.
 # Before the tag existed: home/_db/noshows.csv (name, linkedin, organization, event, removed, commit), a one-off mined from
-# the talks.csv git history on 2026-10-22 - a live speaker whose row was deleted (or set back to draft) from the evening
-# before the event to 3 days after, never back, not moved to another event, not part of a mass change. Those entries say
+# the talks.csv git history on 2026-10-22 - a live speaker whose row was deleted (or set back to draft) on the event day
+# (event's local time) or up to 3 days after, never back, not moved to another event, not part of a mass change. Telling
+# us the day before or earlier is a cancellation, not a no-show (Marek 2026-10-22). Those entries say
 # "removed <date>". New no-shows are tagged in talks.csv; the file is never regenerated.
 def _noshow_date(start):
     if not start:
