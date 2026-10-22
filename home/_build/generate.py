@@ -1518,6 +1518,16 @@ print("Waitlist: %s" % (_wl_note or "%d waiting, %d placed" % (_wl_waiting, _wl_
 # before we accept them again. Every event of this repo, top level and past/ (the build stages both in ../), newest event
 # first; a co-presented row ("A & B") gives one entry per person, paired with linkedin / linkedin2. Name, LinkedIn and
 # the event only. Someone listed more than once (same LinkedIn, else same name) gets the count on every entry.
+# Before the tag existed: home/_db/noshows.csv (name, linkedin, organization, event, removed, commit), a one-off mined from
+# the talks.csv git history on 2026-10-22 - a live speaker whose row was deleted (or set back to draft) from the evening
+# before the event to 3 days after, never back, not moved to another event, not part of a mass change. Those entries say
+# "removed <date>". New no-shows are tagged in talks.csv; the file is never regenerated.
+def _noshow_date(start):
+    if not start:
+        return ""
+    return start.strftime("%-d %b %Y") if os.name != "nt" else start.strftime("%d %b %Y").lstrip("0")
+
+
 def _noshow_build():
     names_by_folder = {}
     for key in ("events", "events_past"):
@@ -1525,7 +1535,7 @@ def _noshow_build():
             u = str((ev or {}).get("url") or "")
             if u.startswith("./"):
                 names_by_folder[u[2:].rstrip("/")] = str(ev.get("name") or "")
-    out = []
+    out, starts = [], {}
     for folder in sorted(_wl_glob.glob("../20*")):
         fname = os.path.basename(folder)
         talks_p = os.path.join(folder, "_db", "talks.csv")
@@ -1537,6 +1547,7 @@ def _noshow_build():
                 start = _wl_parse_ts(yaml.load(f, Loader=yaml.FullLoader).get("start_time"))
         except Exception:
             pass
+        starts[fname] = start
         try:
             with open(talks_p, encoding="utf-8-sig", errors="replace", newline="") as f:
                 rows = [r for r in _wl_csv.DictReader(line.replace("\0", "") for line in f) if _NOSHOW_RE.match(str(r.get("status") or ""))]
@@ -1553,10 +1564,31 @@ def _noshow_build():
                     "name": name, "linkedin": li, "organization": str(r.get("organization") or "").strip(),
                     "title": str(r.get("title") or "").strip(),
                     "event": names_by_folder.get(fname) or fname, "event_url": _site_root + fname + "/",
-                    "date": (start.strftime("%-d %b %Y") if os.name != "nt" else start.strftime("%d %b %Y").lstrip("0")) if start else "",
+                    "date": _noshow_date(start), "removed": "",
                     "start": start or datetime.datetime.min.replace(tzinfo=datetime.timezone.utc),
                     "key": _wl_slug(li) or _wl_norm(name),
                 })
+    tagged = {(x["key"], x["event_url"]) for x in out}
+    try:
+        with open(os.path.join("_db", "noshows.csv"), encoding="utf-8-sig", newline="") as f:
+            hist = list(_wl_csv.DictReader(f))
+    except OSError:
+        hist = []
+    for r in hist:
+        name, fname = str(r.get("name") or "").strip(), str(r.get("event") or "").strip()
+        li = str(r.get("linkedin") or "").strip()
+        if li and not _wl_re.match(r"^https?://", li):
+            li = "https://" + li.lstrip("/")
+        key = _wl_slug(li) or _wl_norm(name)
+        if not name or not fname or (key, _site_root + fname + "/") in tagged:
+            continue
+        removed = _wl_parse_ts(r.get("removed"))
+        out.append({
+            "name": name, "linkedin": li, "organization": str(r.get("organization") or "").strip(), "title": "",
+            "event": names_by_folder.get(fname) or fname, "event_url": _site_root + fname + "/",
+            "date": _noshow_date(starts.get(fname)), "removed": _noshow_date(removed),
+            "start": starts.get(fname) or datetime.datetime.min.replace(tzinfo=datetime.timezone.utc), "key": key,
+        })
     counts = {}
     for x in out:
         counts[x["key"]] = counts.get(x["key"], 0) + 1
