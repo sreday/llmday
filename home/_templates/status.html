@@ -607,7 +607,7 @@
   </section>
   <section class="noshow">
     <h2>No-shows</h2>
-    <div class="sub">Speakers who did not make it to the conference and did not let us know: talks.csv rows with the status <strong>noshow</strong>, which the website leaves out like any row that is not talk / keynote / workshop / draft. Every event of this site, newest first{% if status_noshows %}: <strong>{{ status_noshows | length }}</strong> no-show{{ '' if status_noshows | length == 1 else 's' }}, {{ status_noshow_people }} {{ 'person' if status_noshow_people == 1 else 'people' }}{% endif %}. Not a ban: a reminder to double-check them before accepting another talk.</div>
+    <div class="sub">Speakers who did not make it to the conference and did not let us know: talks.csv rows with the status <strong>noshow</strong>, which the website leaves out like any row that is not talk / keynote / workshop / draft. Every event of this site, newest first; the ones marked <em>removed</em> come from the talks.csv history before the tag existed (the row was deleted from the evening before the event to 3 days after){% if status_noshows %}: <strong>{{ status_noshows | length }}</strong> no-show{{ '' if status_noshows | length == 1 else 's' }}, {{ status_noshow_people }} {{ 'person' if status_noshow_people == 1 else 'people' }}{% endif %}. Not a ban: a reminder to double-check them before accepting another talk.</div>
     {% if status_noshows %}
     <div class="wl-tools">
       <input type="search" class="wl-search" id="ns-search" placeholder="Search name, company, conference" autocomplete="off">
@@ -621,7 +621,7 @@
         <tr class="wl-row" data-s="{{ n.search }}">
           <td class="wl-who"><strong>{{ n.name }}</strong>{% if n.times > 1 %}<span class="ns-times" title="listed {{ n.times }} times on this tab">{{ n.times }} no-shows</span>{% endif %}{% if n.organization %}<small>{{ n.organization }}</small>{% endif %}</td>
           <td class="ns-li">{% if n.linkedin %}<a href="{{ n.linkedin }}" target="_blank" rel="noopener noreferrer">{{ n.linkedin | replace('https://', '') | replace('www.', '') }}</a>{% else %}<span class="hr-mute">-</span>{% endif %}</td>
-          <td class="wl-for"><a href="{{ n.event_url }}">{{ n.event }}</a>{% if n.date %}<small>{{ n.date }}</small>{% endif %}</td>
+          <td class="wl-for"><a href="{{ n.event_url }}">{{ n.event }}</a>{% if n.date or n.removed %}<small>{{ n.date }}{% if n.removed %}{% if n.date %} · {% endif %}removed {{ n.removed }}{% endif %}</small>{% endif %}</td>
         </tr>
         {% endfor %}
         </tbody>
