@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>https://www.llmday.com/</loc>
+  <lastmod>2026-10-24T17:13:15.297558+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Marcel_Koert_MeloMarIT_The_Code_Was_the_Easy_Part_Building_Spaghetti_Code_Foundry</loc>
+  <lastmod>2026-10-24T17:13:15.297558+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Piotr_Zaniewski_vCluster_Labs_Your_Platform_Already_Has_AI_Users</loc>
+  <lastmod>2026-10-24T17:13:15.297558+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Ebrahim_Mirsafian_Lavan_Labs_Ltd_Testing_Voice_When_Your_Coding_Agent_Cant_Hear</loc>
+  <lastmod>2026-10-24T17:13:15.297558+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Ivan_Vokhmin_moebelde_Einrichten_und_Wohnen_GmbH_From_RAG_to_memory_decay_engineering_a_memory_for_c</loc>
+  <lastmod>2026-10-24T17:13:15.297558+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+<url>
+  <loc>https://www.llmday.com/Attila_Toth_ScyllaDB_The_hidden_infra_behind_For_You_pages_Realtime_AI_personalization</loc>
+  <lastmod>2026-10-24T17:13:15.297558+00:00</lastmod>
+  <priority>0.75</priority>
+</url>
+
+</urlset>
