@@ -98,12 +98,19 @@ _JT_LEGAL = _jt_re.compile(
 _JT_ASIDE = _jt_re.compile(r'\(\s*(?:ex|former|formerly|previously|prev)\b[^)]*\)', _jt_re.I)
 
 
-# universities and schools aren't presenting companies either (Marek 2026-10-25)
+# universities and schools aren't presenting companies either (Marek 2026-10-25), in the common languages:
+# university / université / universidad(e) / università / Universität / universiteit / universitet / uniwersytet /
+# univerzita / universitatea / üniversitesi / университет / Hochschule / politechnika / egyetem / yliopisto /
+# ülikool / sveučilište / πανεπιστήμιο / 大学 / 대학교 / جامعة / אוניברסיטה / มหาวิทยาลัย / विश्वविद्यालय / đại học.
+# No word boundary in front: compounds ("Fachhochschule") and scripts without spaces (東京大学) still match
 _JT_ACADEMIC = _jt_re.compile(
-    r'\b(?:universit\w*|universidad\w*|universidade\w*|universität\w*|college|hochschule|polytechnic|politecnico|'
-    r'polytechnique|institute\s+of\s+technology|school\s+of|business\s+school|'
-    r'tu\s+(?:munich|m\u00fcnchen|berlin|delft|dresden|wien|vienna|darmstadt|eindhoven)|'
-    r'lse|mit|ucl|eth\s+zurich|epfl|kth|tum|iit|iisc|kaist|nus|ntu)\b', _jt_re.I)
+    r'(?:univ[eе]rsi[tdт]\w*|univerz\w*|uniwersyt\w*|üniversite\w*|universitaet\w*|университет\w*|університет\w*|'
+    r'универзитет\w*|hochschule|polytechni\w*|politecnic\w*|politechnik\w*|polytechnique|egyetem\w*|yliopisto\w*|'
+    r'ülikool\w*|sveučilišt\w*|sveuciliste|πανεπιστήμ\w*|大学|大學|대학교|جامعة|אוניברסיט|มหาวิทยาลัย|'
+    r'विश्वविद्यालय|đại\s+học|'
+    r'\bcollege\b|\binstitute\s+of\s+technology|\binstituto\s+tecnol|\bschool\s+of\b|\bbusiness\s+school\b|'
+    r'\btu\s+(?:munich|münchen|berlin|delft|dresden|wien|vienna|darmstadt|eindhoven)\b|'
+    r'\b(?:lse|mit|ucl|eth\s+zurich|epfl|kth|tum|iit|iisc|kaist|nus|ntu|agh)\b)', _jt_re.I)
 
 _JT_OURS = _jt_re.compile(r'\b(?:sre\s*day|llm\s*day|platform\s*day|conf\s*42|prompt\s+engineering\s+conference|devops\s+not\s+dead)\b', _jt_re.I)
 
