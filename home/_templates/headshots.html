@@ -521,6 +521,7 @@
     L.zoom = Math.max(0.5, Math.min(3, w / (2 * C.r))); w = 2 * C.r * L.zoom; h = L.tone.height * (w / L.tone.width);
     var tx = slot ? C.x + slot.x * C.r : C.x + AUTO.faceDX * C.r, ty = C.y - (slot ? slot.up : AUTO.eyeY) * C.r;
     L.pan = { x: (tx - C.x + w / 2 - f.fx * w) / PAN_RANGE, y: (ty - top + L.headTop * h - f.ey * h) / PAN_RANGE };
+    L.anchor = { u: f.fx, v: f.ey, x: tx, y: ty };                       // eyes glued to the eye line until the photo is moved
     TONE_KEYS.forEach(function (k2) { L[k2] = AUTO.look[k2]; }); regray(L);
     var skin = skinBright(L, f);
     if (skin !== null && skin < SKIN_REF) L.exp = Math.min(EXP_MAX, Math.round((AUTO.look.exp + (SKIN_REF - skin) * SKIN_GAIN) * 20) / 20);
@@ -536,7 +537,7 @@
       layers.forEach(function (L, i) { var f = findFace(fl, L); if (f) autoLayer(L, f, i, layers.length); else missed.push(L.name); });
       select(active);
       commit();
-      msg.textContent = missed.length ? 'No face found in ' + missed.join(', ') + '; adjust that one by hand.' : (layers.length > 1 ? 'All layers framed and toned. Fine-tune any layer if needed.' : 'Framed and toned. Fine-tune if needed.');
+      msg.textContent = missed.length ? 'No face found in ' + missed.join(', ') + '; adjust that one by hand.' : (layers.length > 1 ? 'All layers framed and toned. Fine-tune any layer if needed.' : 'Framed and toned. Fine-tune if needed.') + ' Size keeps the eyes on the eye line until you move the photo.';
     }).catch(function (e) {
       msg.textContent = 'The face finder could not load (' + (e && e.message ? e.message : e) + '). Check the connection and try again.';
     }).then(function () { btn.disabled = !layers.length; });
@@ -826,7 +827,14 @@
     ['con', 'hil', 'sha', 'wht', 'blk'].forEach(function (k) { $(k + '-v').textContent = sg(tones[k].value); });
     var f = parseFloat(tones.flt.value); $('flt-v').textContent = f === 0 ? 'none' : (f > 0 ? 'warm ' : 'cool ') + Math.abs(f);
   }
-  function fromSliders() { var L = cur(); if (!L) return; L.zoom = parseFloat(zoom.value); TONE_KEYS.forEach(function (k) { L[k] = parseFloat(tones[k].value); }); }
+  function fromSliders() { var L = cur(); if (!L) return; L.zoom = parseFloat(zoom.value); TONE_KEYS.forEach(function (k) { L[k] = parseFloat(tones[k].value); }); glue(L); }
+  // eye anchor (Marek 2026-10-25): after Auto, Size scales the photo around the eyes, so they stay on the eye line;
+  // moving the photo (joystick, drag, Reset) unglues it until the next Auto
+  function glue(L) {
+    var A = L.anchor; if (!A) return;
+    var w = 2 * C.r * L.zoom, h = L.tone.height * (w / L.tone.width), top = C.y - C.r * 1.2;
+    L.pan = { x: (A.x - C.x + w / 2 - A.u * w) / PAN_RANGE, y: (A.y - top + L.headTop * h - A.v * h) / PAN_RANGE }; knobAt(L.pan);
+  }
   sliders.forEach(function (r) {
     r.addEventListener('input', function () { fromSliders(); readouts(); if (r === zoom) draw(); else retone(); });
     r.addEventListener('dblclick', function () { r.value = r.dataset.default; fromSliders(); readouts(); if (r === zoom) draw(); else retone(); commit(); });
@@ -834,7 +842,7 @@
   });
   $('reset').addEventListener('click', function () {
     var L = cur(); if (!L) return;
-    sliders.forEach(function (r) { r.value = r.dataset.default; }); fromSliders(); L.pan = { x: 0, y: 0 }; knobAt(L.pan); readouts(); retone(); commit();
+    L.anchor = null; sliders.forEach(function (r) { r.value = r.dataset.default; }); fromSliders(); L.pan = { x: 0, y: 0 }; knobAt(L.pan); readouts(); retone(); commit();
   });
 
   // joystick (as on the community hero page): the knob's place is the selected layer's offset, -1..1 = ±370 px
@@ -843,7 +851,7 @@
   function setPan(x, y) {
     var L = cur(); if (!L) return;
     var d = Math.sqrt(x * x + y * y); if (d > 1) { x /= d; y /= d; }
-    L.pan = { x: x, y: y }; knobAt(L.pan); draw();
+    L.anchor = null; L.pan = { x: x, y: y }; knobAt(L.pan); draw();
   }
   function joyAt(e) { var b = joy.getBoundingClientRect(); setPan((e.clientX - b.left - b.width / 2) / JOY_R, (e.clientY - b.top - b.height / 2) / JOY_R); }
   joy.addEventListener('pointerdown', function (e) { if (!cur()) return; e.preventDefault(); joy.setPointerCapture(e.pointerId); joyAt(e); });
@@ -872,7 +880,7 @@
   // released or reset, a joystick or photo drag, Auto, Reset layer, photos added, a layer removed or moved, the file name.
   // A step remembers which layers are in which order and every layer's settings (not the pictures themselves).
   var hist = [], hpos = -1, HMAX = 100, restoring = false;
-  function settingsOf(L) { var o = { zoom: L.zoom, pan: { x: L.pan.x, y: L.pan.y } }; TONE_KEYS.forEach(function (k) { o[k] = L[k]; }); return o; }
+  function settingsOf(L) { var o = { zoom: L.zoom, pan: { x: L.pan.x, y: L.pan.y }, anchor: L.anchor || null }; TONE_KEYS.forEach(function (k) { o[k] = L[k]; }); return o; }
   function snap() { return { list: layers.map(function (L) { return { L: L, s: settingsOf(L) }; }), active: active, name: $('name').value, nameTouched: nameTouched }; }
   function sameSnap(a, b) {
     if (!a || !b || a.list.length !== b.list.length || a.name !== b.name) return false;
@@ -889,7 +897,7 @@
     layers.length = 0;
     st.list.forEach(function (e) {
       var L = e.L, before = JSON.stringify(TONE_KEYS.map(function (k) { return L[k]; }));
-      L.zoom = e.s.zoom; L.pan = { x: e.s.pan.x, y: e.s.pan.y }; TONE_KEYS.forEach(function (k) { L[k] = e.s[k]; });
+      L.zoom = e.s.zoom; L.pan = { x: e.s.pan.x, y: e.s.pan.y }; L.anchor = e.s.anchor; TONE_KEYS.forEach(function (k) { L[k] = e.s[k]; });
       if (JSON.stringify(TONE_KEYS.map(function (k) { return L[k]; })) !== before) { regray(L); L.tone.getContext('2d').putImageData(applyTone(L.gray, lut(L)), 0, 0); }
       layers.push(L);
     });
