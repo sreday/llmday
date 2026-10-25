@@ -98,6 +98,13 @@ _JT_LEGAL = _jt_re.compile(
 _JT_ASIDE = _jt_re.compile(r'\(\s*(?:ex|former|formerly|previously|prev)\b[^)]*\)', _jt_re.I)
 
 
+# universities and schools aren't presenting companies either (Marek 2026-10-25)
+_JT_ACADEMIC = _jt_re.compile(
+    r'\b(?:universit\w*|universidad\w*|universidade\w*|universität\w*|college|hochschule|polytechnic|politecnico|'
+    r'polytechnique|institute\s+of\s+technology|school\s+of|business\s+school|'
+    r'tu\s+(?:munich|m\u00fcnchen|berlin|delft|dresden|wien|vienna|darmstadt|eindhoven)|'
+    r'lse|mit|ucl|eth\s+zurich|epfl|kth|tum|iit|iisc|kaist|nus|ntu)\b', _jt_re.I)
+
 _JT_OURS = _jt_re.compile(r'\b(?:sre\s*day|llm\s*day|platform\s*day|conf\s*42|prompt\s+engineering\s+conference|devops\s+not\s+dead)\b', _jt_re.I)
 
 
@@ -129,7 +136,16 @@ def company_parts(org):
             if not flags[i] and 0 < len(toks) <= 2 and all(t in _JT_GENERIC for t in toks):
                 flags[i] = True
     # our own brands aren't presenting companies (Marek 2026-10-19: "SREday Team" in the list); Reliaburger stays
-    return [p for p, f in zip(parts, flags) if p and not f and not _JT_OURS.search(p)]
+    keep = []
+    for p, f in zip(parts, flags):
+        if not p or f or _JT_OURS.search(p):
+            continue
+        if _JT_ACADEMIC.search(p):
+            # "T-Labs and Kozminski University": keep the company, drop the university
+            keep += [q.strip() for q in _jt_re.split(r'\s+and\s+', p) if q.strip() and not _JT_ACADEMIC.search(q)]
+        else:
+            keep.append(p)
+    return keep
 # ─────────────────────────────────────────────────────────────────────────────
 
 DIVIDER = "#"*80
