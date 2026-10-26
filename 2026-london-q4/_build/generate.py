@@ -2325,8 +2325,6 @@ for _n in (1, 2, 3):
         pass
 _SP_DARK = (-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80)
 context['sp_host_photos'] = len(_sp_photos)
-# a sponsors entry's own `role:` wins over partners.yaml (Marek 2026-10-25, Marcos for LLMday Montevideo: AWS Girls User Group
-# is a "Media Partner"); any role other than Sponsor / Partner gets its own group, after the partners
 context['sp_groups'] = {'Host': [], 'Sponsor': [], 'Partner': []}
 for _s in context.get('sponsors') or []:
     _logo = str((_s or {}).get('logo') or '').strip()
@@ -2349,11 +2347,10 @@ for _s in context.get('sponsors') or []:
                                                      'v': _i + 1, 'dark': _d, 'bright': round(.85 * (1 - _d / 100), 3),
                                                      'file': _base + (' - darker %d' % _d if _d > 0 else ' - lighter %d' % -_d if _d < 0 else '') + '.png'})
     else:
-        _role = str(_s.get('role') or '').strip() or ('Partner' if _logo.lower() in _sp_partner_logos else 'Sponsor')
-        context['sp_groups'].setdefault(_role, [])
+        _role = 'Partner' if _logo.lower() in _sp_partner_logos else 'Sponsor'
         context['sp_groups'][_role].append({'name': _nm, 'role': _role, 'logo': '../sponsors/' + _logo, 'photo': '',
                                             'file': '%s - %s.png' % (_safe, _role)})
-context['sp_cards'] = [c for _g in context['sp_groups'].values() for c in _g]
+context['sp_cards'] = context['sp_groups']['Host'] + context['sp_groups']['Sponsor'] + context['sp_groups']['Partner']
 # Generic covers (Marek 2026-10-08, the "Generic" tab): the event's own logo - drawn exactly as it is, never trimmed,
 # recoloured or glowing - big in the middle, then city and date, over the venue photos (the real ones; placeholders don't count)
 _GN_SITE = {'sreday': 'sreday.com', 'llmday': 'llmday.com', 'platformday': 'platformday.com', 'pec': 'promptengineering.rocks'}
