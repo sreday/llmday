@@ -43,21 +43,21 @@ breaks:
   talks_before: 4
 
 sponsors:
-  - logo: rebelnuts.png
-    url: https://www.rebelnuts.uy/
+  - logo: owu.png
+    url: https://www.owu.uy/
   # paying sponsor: bought Carla's flights and hotel (Marcos 2026-10-25)
   - logo: ccub.png
     name: Cámara de Comercio Uruguay-Bolivia
     url: https://ccub.uy/
-  - logo: owu.png
-    url: https://www.owu.uy/
+  - logo: reliaburger.png
+    url: https://reliaburger.com/
   - logo: dougbr.png
     url: https://dougbrazil.tech/
   - logo: aws-girls-uruguay.png
     name: AWS Girls User Group Uruguay
     url: https://www.meetup.com/aws-girls-ug-uy
-  - logo: reliaburger.png
-    url: https://reliaburger.com/
+  - logo: rebelnuts.png
+    url: https://www.rebelnuts.uy/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
 
