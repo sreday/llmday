@@ -28,8 +28,6 @@ non_sponsor_orgs:
 community_partners:
   - jug-amsterdam.png
   - k8sug.png
-  - kube-events.png
-  - kube_events.png
   - kube_careers.png
   - kubespaces.png
   - gdg_london.png
@@ -90,7 +88,8 @@ minor_companies:
 # Extra logo files of companies already shown under another filename
 hidden_duplicates:
   - gdg-london.jpg      # GDG London - shown as gdg_london.png (PEC repo filename)
-  - kube_events.png     # duplicate of kube-events.png
+  - kube_events.png     # Kube Events stopped listing us (Marek 2026-10-28) - hidden
+  - kube-events.png     # same
   - devit.png           # DevITjobs - shown as DevIT-usa.png (latest logo)
   - devitjobs.png       # DevITjobs - shown as DevIT-usa.png (latest logo)
   - DevIT_black.png     # DevITjobs - shown as DevIT-usa.png (latest logo)
