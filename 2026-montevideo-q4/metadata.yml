@@ -1,7 +1,7 @@
 # TODO - change these
 
 # start time includes timezone at the end relative to UTC
-start_time: "2026-12-05T09:00:00-03:00"
+start_time: "2026-12-05T08:00:00-03:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
@@ -25,17 +25,21 @@ rooms:
 - second room
 
 breaks:
-- title: Coffee break
-  duration: 30
+- title: Registration & Welcome
+  duration: 60
   comment: Main lobby
   # this decides how many talks in-between this and previous section
   talks_before: 0
-- title: Lunch & networking
-  duration: 60
+- title: Coffee Break & Networking
+  duration: 20
   comment: Main lobby
   talks_before: 4
-- title: Networking & sponsor crawl
-  duration: 30
+- title: Lunch & Networking
+  duration: 50
+  comment: Main lobby
+  talks_before: 4
+- title: Coffee Break & Networking
+  duration: 20
   comment: Main lobby
   talks_before: 4
 
