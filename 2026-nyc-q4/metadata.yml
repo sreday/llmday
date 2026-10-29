@@ -30,11 +30,11 @@ breaks:
   duration: 30
   comment: Main lobby
   talks_before: 5
-# afternoon break hidden 2026-10-23 (Marek) - uncomment to restore
-# - title: Play some Fallout !
-#   duration: 30
-#   comment: Main lobby
-#   talks_before: 5
+# afternoon break restored 2026-10-29 (Marek): in Paden Gayle's slot after his no-show
+- title: Play some Fallout !
+  duration: 30
+  comment: Main lobby
+  talks_before: 5
 
 sponsors:
   - logo: microsoft.png
