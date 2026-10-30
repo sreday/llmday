@@ -428,6 +428,11 @@
     width: 160px;
   }
 }
+/* Ambassador headshots pop in from the centre: 0 -> 110% -> 100% once loaded and on screen */
+img.amb-pop { transform: scale(0); transform-origin: 50% 50%; }
+img.amb-pop.popped { animation: amb-pop .6s ease-out both; }
+@keyframes amb-pop { 0% { transform: scale(0); } 60% { transform: scale(1.1); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { img.amb-pop, img.amb-pop.popped { transform: none; animation: none; } }
 </style>
 {% endblock %}
 
@@ -756,7 +761,7 @@
           <div class="card-body text-center">
             <div class="mb-3">
               <img src="/ambassadors/{{ ambassador.Headshot }}"
-                   class="rounded-circle img-fluid shadow-sm"
+                   class="rounded-circle img-fluid shadow-sm amb-pop"
                    style="width: 150px; height: 150px; object-fit: cover;"
                    alt="{{ ambassador.Name }}">
             </div>
@@ -786,6 +791,20 @@
   </div>
 </section>
 {% endif %}
+
+<noscript><style>img.amb-pop { transform: none; }</style></noscript>
+<script>
+/* Ambassador headshots: pop once the picture has loaded and scrolled into view (the frame is watched: a scale(0) picture has no size) */
+(function () {
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); e.target.querySelector('img.amb-pop').classList.add('popped'); } });
+  }, { threshold: 0.2 }) : null;
+  [].forEach.call(document.querySelectorAll('img.amb-pop'), function (img) {
+    function ready() { if (io) io.observe(img.parentNode); else img.classList.add('popped'); }
+    if (img.complete) ready(); else { img.addEventListener('load', ready); img.addEventListener('error', ready); }
+  });
+})();
+</script>
 
 <!-- ═══════════════════════════ CTA ════════════════════════════════════ -->
 <section id="apply" class="amb-cta amb-bubbles">
