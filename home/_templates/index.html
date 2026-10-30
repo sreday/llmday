@@ -111,7 +111,7 @@
             <article class="amb lg-glass">
                 <div class="amb-head">
                     <div class="amb-pic">
-                        <img src="./ambassadors/{{ ambassador.Headshot }}" loading="lazy" decoding="async" width="180" height="180" alt="{{ ambassador.Name }}">
+                        <img class="amb-pop" src="./ambassadors/{{ ambassador.Headshot }}" loading="lazy" decoding="async" width="180" height="180" alt="{{ ambassador.Name }}">
                         {% if ambassador.Linkedin %}<a class="amb-li" target="_blank" rel="noopener" href="{{ ambassador.Linkedin }}" aria-label="{{ ambassador.Name }} on LinkedIn"><i class="fab fa-linkedin-in"></i></a>{% endif %}
                     </div>
                     <div class="amb-name">{{ ambassador.Name }}</div>
@@ -156,6 +156,19 @@ document.addEventListener('DOMContentLoaded', equalizeAmb);
 window.addEventListener('load', equalizeAmb);
 if (document.fonts) document.fonts.ready.then(equalizeAmb);
 window.addEventListener('resize', function () { clearTimeout(window.__ambEqT); window.__ambEqT = setTimeout(equalizeAmb, 150); });
+</script>
+<noscript><style>img.amb-pop { transform: none; }</style></noscript>
+<script>
+/* Ambassador headshots: pop once the picture has loaded and scrolled into view (the frame is watched: a scale(0) picture has no size) */
+(function () {
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); e.target.querySelector('img.amb-pop').classList.add('popped'); } });
+  }, { threshold: 0.2 }) : null;
+  [].forEach.call(document.querySelectorAll('img.amb-pop'), function (img) {
+    function ready() { if (io) io.observe(img.parentNode); else img.classList.add('popped'); }
+    if (img.complete) ready(); else { img.addEventListener('load', ready); img.addEventListener('error', ready); }
+  });
+})();
 </script>
 <script>
 /* Decks: "Show N more" counts the cards hidden at the current width; opening deals them in */
@@ -416,6 +429,11 @@ var splashQueue = (function () {
 .amb-head { display: flex; flex-direction: column; align-items: center; }
 .amb-pic { position: relative; display: inline-block; width: 180px; height: 180px; }
 .amb-pic img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; display: block; color: transparent; transition: filter .2s ease; }
+/* Ambassador headshots pop in from the centre: 0 -> 110% -> 100% once loaded and on screen */
+img.amb-pop { transform: scale(0); transform-origin: 50% 50%; }
+img.amb-pop.popped { animation: amb-pop .6s ease-out both; }
+@keyframes amb-pop { 0% { transform: scale(0); } 60% { transform: scale(1.1); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { img.amb-pop, img.amb-pop.popped { transform: none; animation: none; } }
 .amb-li { position: absolute; right: 8px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
   color: rgba(10,102,194,.75); background: #dbe8f5; border: 3px solid rgba(255,255,255,.9); transition: background .2s, color .2s; text-decoration: none; }
 .amb-li:hover, .amb-li:focus { background: #c6dbf0; color: #0a66c2; }
