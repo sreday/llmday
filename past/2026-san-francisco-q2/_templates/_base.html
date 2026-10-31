@@ -308,7 +308,7 @@
 /* Speaker shards lean up to 1 degree towards the cursor - desktop mouse only, off for reduced motion */
 (function shardTilt() {
   if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var SEL = '.spk-glass .card', MAX = 1;
+  var SEL = '.spk-glass .card:not(.talk-speaker):not(.talk-content)', MAX = 1;   /* talk pages hold still: easier to read (Marek 2026-10-31) */
   var active = null, st = null, raf = 0;
   function frame() {
     raf = 0;
