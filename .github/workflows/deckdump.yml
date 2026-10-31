@@ -35,7 +35,7 @@ concurrency:
 jobs:
   pull:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 120   # a backfill (event: all) converts and shrinks dozens of decks
     steps:
       - name: Checkout
         uses: actions/checkout@v4
