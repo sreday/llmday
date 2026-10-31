@@ -49,7 +49,7 @@ WINDOW_DAYS = 14                 # same as DECKDUMP_DAYS in home/_build/generate
 MAX_BYTES = 5 * 1024 * 1024
 FALLBACK_BYTES = 10 * 1024 * 1024   # when 5 MB cannot be reached without flattening (Marek 2026-10-31)
 DPI_STEPS = (300, 220, 150, 110)
-FLAT_STEPS = (150, 110, 96)      # last resort: pages as images (text no longer selectable), only when nothing else fits
+FLAT_STEPS = (1920, 1600, 1280)  # last resort, page width in pixels: pages as images (text no longer selectable)
 BRAND_KEYS = {"SREday": "sreday", "LLMday": "llmday", "PLATFORMday": "platformday", "Prompt Engineering Conference": "pec"}
 LIVE_KINDS = ("talk", "keynote", "workshop")
 TEST_FOLDER = "2026-deckdump-test"   # fake event for --selftest with real decks (upload them with this folder)
@@ -198,8 +198,20 @@ def gs_dpi(src, dst, dpi):
     subprocess.run(GS + flags + ["-sOutputFile=" + dst, src], check=True, timeout=900)
 
 
-def gs_flat(src, dst, dpi):
-    """Last resort: every page drawn as one JPEG (q85). Always small; text is no longer selectable."""
+def page_width_pt(src):
+    """Width of page 1 in points (72 per inch); some exports use huge pages (Keynote: 40+ inches), so flattening is
+    sized in pixels, not dpi. 720 pt (10 in) when it cannot be read."""
+    try:
+        from pypdf import PdfReader
+        box = PdfReader(src).pages[0].mediabox
+        return max(1.0, float(box.width))
+    except Exception:
+        return 720.0
+
+
+def gs_flat(src, dst, width_px):
+    """Last resort: every page drawn as one JPEG (q85), width_px wide. Always small; text is no longer selectable."""
+    dpi = max(20, int(width_px * 72.0 / page_width_pt(src)))
     subprocess.run(["gs", "-sDEVICE=pdfimage24", "-r%d" % dpi, "-sCompression=JPEG", "-dJPEGQ=85", "-dNOPAUSE", "-dBATCH", "-dQUIET",
                     "-dSAFER", "-sOutputFile=" + dst, src], check=True, timeout=900)
 
@@ -255,16 +267,16 @@ def fit(src, workdir):
         path, step = first_under(FALLBACK_BYTES)
         return path, step + ", 5-10 MB"
     # still over 10 MB: heavy vector art (no images to resample) or giant photos. Flatten the pages, sharpest first.
-    for dpi in FLAT_STEPS:
-        out = os.path.join(workdir, "flat-%d.pdf" % dpi)
+    for px in FLAT_STEPS:
+        out = os.path.join(workdir, "flat-%d.pdf" % px)
         try:
-            gs_flat(src, out, dpi)
+            gs_flat(src, out, px)
         except (subprocess.SubprocessError, OSError) as e:
-            print("  ghostscript flatten %d dpi failed: %s" % (dpi, e))
+            print("  ghostscript flatten %d px failed: %s" % (px, e))
             continue
-        add(out, "flattened %d dpi" % dpi)
+        add(out, "flattened %d px" % px)
         if os.path.isfile(out) and os.path.getsize(out) <= FALLBACK_BYTES and pages(out) == n:
-            return out, "flattened %d dpi" % dpi
+            return out, "flattened %d px" % px
     path, step = min(tried, key=lambda t: os.path.getsize(t[0]))
     return path, step + ", over 10 MB"
 

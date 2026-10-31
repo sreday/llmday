@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deps
-        run: pip install -q pyyaml pillow
+        run: pip install -q pyyaml pillow pypdf   # pypdf: page size for the flatten step
 
       # generated decks + any real deck uploaded to the fake event folder 2026-deckdump-test; the shrunk PDFs of the
       # real ones are attached to the run ("deckdump-selftest") so the quality can be checked by eye
