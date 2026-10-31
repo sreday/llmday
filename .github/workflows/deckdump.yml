@@ -1,0 +1,68 @@
+name: Deck dump
+
+# Ships the slides speakers uploaded on /deckdump/ to their talk pages, the day after each event (Marek 2026-10-30).
+# _build/deckdump_pull.py does the work (byte-identical in sreday, llmday, platformday and PEC): only events whose last
+# day ended in the past 14 days are looked at, so most runs stop after a second. When it ships decks it commits them
+# (<event>/slides/<talk>.pdf) and starts "Build and Deploy" - a push made by this workflow would not start it by itself.
+# Needs the DECKDUMP_FEED secret: "Deck dump" Apps Script exec URL + ?list=1&token=... (llmday/_build/deckdump-form.gs).
+on:
+  schedule:
+    - cron: '25 3,9,15,21 * * *'   # 4 times a day: US events end at 04:00-08:00 UTC, the next run picks them up
+  workflow_dispatch:
+    inputs:
+      event:
+        description: Only this event folder (e.g. 2026-london-q4); ignores the 14-day window
+        required: false
+      dry_run:
+        description: Show what would ship, change nothing
+        type: boolean
+        default: false
+      selftest:
+        description: Prove the 5 MB ladder on generated decks (installs Ghostscript + qpdf), ship nothing
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  actions: write   # starts "Build and Deploy" after shipping
+concurrency:
+  group: deckdump
+  cancel-in-progress: false
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deps
+        run: pip install -q pyyaml pillow
+
+      - name: Self test
+        if: ${{ inputs.selftest }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ghostscript qpdf > /dev/null
+          python _build/deckdump_pull.py --selftest
+
+      - name: Pull the decks
+        if: ${{ !inputs.selftest }}
+        env:
+          DECKDUMP_FEED: ${{ secrets.DECKDUMP_FEED }}
+        run: |
+          args=""
+          if [ -n "${{ inputs.event }}" ]; then args="$args --event ${{ inputs.event }}"; fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then args="$args --dry-run"; fi
+          python _build/deckdump_pull.py $args
+
+      - name: Commit and deploy
+        if: ${{ !inputs.selftest && !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for d in 20*/slides past/20*/slides; do [ -d "$d" ] && git add -A -- "$d"; done
+          if git diff --cached --quiet; then echo "No new decks"; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Deck dump: $(git diff --cached --name-only | grep -c '\.pdf$') deck(s) for $(git diff --cached --name-only | sed -E 's#^(past/)?([^/]+)/.*#\2#' | sort -u | paste -sd, -)"
+          git pull -q --rebase origin ${{ github.ref_name }}
+          git push -q origin HEAD:${{ github.ref_name }}
+          gh workflow run static-build.yml --ref ${{ github.ref_name }}
