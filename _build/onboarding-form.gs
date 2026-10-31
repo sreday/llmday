@@ -217,7 +217,7 @@ function composeOnboarding(ev, brand) {
       ? '- Please register for your free ticket here: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
       : '- Please redeem your free ticket with the code *SPEAKERFREE* here: [' + ev.tickets_url + '](' + ev.tickets_url + ')' + String.fromCharCode(10) + '  (on luma, select the general self funding / general admission, and then find "Add a coupon" in the top right corner)',
     '- Speaking slots are ' + ev.slot_minutes + ' minutes (' + talk + ' min talk + 5 min Q&A)',
-    '- You will present from your own laptop. Please share your slides with us in advance as a backup: [' + ev.deckdump_url + '](' + ev.deckdump_url + ')',
+    '- You will present from your own laptop. Please upload the final version of your slides here before the event: [' + ev.deckdump_url + '](' + ev.deckdump_url + ')',
     "- As speakers confirm, we'll update the website and prepare social media graphics and promo posts for sharing.",
     '- The v1 schedule will be published as soon as we get most speakers confirmed',
     '- Most regular talks will take place in the afternoon, between 12PM-6PM. Some last minute schedule changes may happen, so please avoid tight travel planning.',
