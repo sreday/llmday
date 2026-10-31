@@ -2,8 +2,8 @@
      A speaker picks their conference and their talk from the lineup (deckdump_events, built by home/_build/generate.py:
      upcoming events + those that ended in the last 14 days, live talks only) and drops their latest slides. Before the
      upload the file is trimmed LOSSLESSLY in the browser (Marek: "do not make them soft or reduce quality - just trim
-     the fat"): PDF via pdf-lib (dead objects, thumbnails, XMP, attachments, duplicate streams, uncompressed streams
-     deflated; images untouched), PPTX via JSZip (unused + duplicate media, the preview thumbnail; media untouched).
+     the fat"): pdf-lib drops dead objects, thumbnails, XMP, attachments, duplicate streams and deflates uncompressed
+     streams; images untouched. PDF only (Marek 2026-10-31: decks go to Drive as PDF, and download as PDF on the talk pages).
      Anything that fails, or saves under 3%, goes up as is. Upload: deckdump_form_url (backend llmday/_build/
      deckdump-form.gs) opens a Drive resumable session, the browser PUTs the file there in 8 MB chunks; fallback = base64
      through the script (35 MB). ?event=<folder> preselects the conference (the onboarding email links that way).
@@ -73,7 +73,7 @@
 <main class="dd-wrap">
   <div class="dd-brand">{{ brand_name }} · deck dump</div>
   <h1 class="dd-title">Upload your slides</h1>
-  <p class="dd-intro">Please share the latest version of your slides with us before the conference. We keep them as a backup on the day, and after the event they go up on your talk page for everyone to download. Big files are fine, we only trim the extra weight and never touch the quality.</p>
+  <p class="dd-intro">Please share the final version of your slides with us as a PDF before the conference. We keep them as a backup on the day, and after the event they go up on your talk page for everyone to download. Big files are fine, we only trim the extra weight and never touch the quality.</p>
 
 {% if deckdump_events %}
   <form id="dd-form" novalidate>
@@ -89,10 +89,10 @@
         <ul class="dd-list" id="dd-list" role="listbox" hidden></ul>
         <div class="dd-picked" id="dd-picked" hidden><div><b id="dd-picked-name"></b><small id="dd-picked-title"></small></div><button type="button" class="dd-linkbtn" id="dd-change">Change</button></div>
       </div>
-      <div class="dd-field" data-field="file"><span>Slides <small>(PDF preferred; PPTX, Keynote and ODP work too; 200 MB max)</small></span>
+      <div class="dd-field" data-field="file"><span>Slides <small>(PDF, 200 MB max)</small></span>
         <label class="dd-drop" id="dd-drop">
-          <input type="file" name="file" accept=".pdf,.pptx,.key,.odp,application/pdf">
-          <span id="dd-drop-text"><b>Choose your deck</b> or drop it here.</span>
+          <input type="file" name="file" accept=".pdf,application/pdf">
+          <span id="dd-drop-text"><b>Choose your PDF</b> or drop it here.<br>From PowerPoint, Keynote or Google Slides: File &gt; Export (or Download) &gt; PDF.</span>
         </label>
         <div class="dd-hint" id="dd-file-hint"></div>
       </div>
@@ -115,14 +115,12 @@
 
 {% if deckdump_events %}
 <script src="../assets/js/deckdump/pdf-lib.min.js" defer></script>
-<script src="../assets/js/deckdump/jszip.min.js" defer></script>
 <script>
 var DD_URL    = "{{ deckdump_form_url | default('') }}";
 var DD_BRAND  = "{{ deckdump_brand }}";
 var DD_EVENTS = {{ deckdump_events | tojson }};
 var MAX_BYTES = 200 * 1024 * 1024, MAX_FALLBACK = 35 * 1024 * 1024, MAX_TRIM = 150 * 1024 * 1024, CHUNK = 8 * 1024 * 1024;
-var TYPES = { pdf: 'application/pdf', pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-              key: 'application/x-iwork-keynote-sffkey', odp: 'application/vnd.oasis.opendocument.presentation' };
+var TYPES = { pdf: 'application/pdf' };
 
 var $ = function(id) { return document.getElementById(id); };
 var form = $('dd-form'), sel = form.elements['event'], search = $('dd-search'), list = $('dd-list');
@@ -183,11 +181,10 @@ function extOf(name) { var m = /\.([a-z0-9]{2,5})$/i.exec(name || ''); return m 
 function takeFile(file) {
   deck = null; hint.className = 'dd-hint'; hint.textContent = '';
   var ext = extOf(file.name);
-  if (!TYPES[ext]) { hint.className = 'dd-hint warn'; hint.textContent = 'Please pick a PDF, PPTX, Keynote or ODP file.'; dropText.innerHTML = emptyText; return; }
+  if (!TYPES[ext]) { hint.className = 'dd-hint warn'; hint.textContent = 'Please export your slides to PDF first: in PowerPoint, Keynote or Google Slides use File > Export (or Download) > PDF.'; dropText.innerHTML = emptyText; return; }
   if (file.size > MAX_BYTES) { hint.className = 'dd-hint warn'; hint.textContent = 'That file is over 200 MB. Please export a smaller PDF, or email us a link.'; dropText.innerHTML = emptyText; return; }
   deck = file;
   dropText.innerHTML = '<b>Ready.</b> ' + esc(file.name) + ' (' + mb(file.size) + ')<br>Click or drop to replace.';
-  if (ext === 'key') { hint.textContent = 'Keynote works, but a PDF export is even better: it shows up on your talk page exactly as you made it.'; }
   drop.classList.remove('is-invalid');
 }
 ['dragenter', 'dragover'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.add('over'); }); });
@@ -259,78 +256,12 @@ async function trimPdf(file) {
   return new File([out], file.name, { type: TYPES.pdf });
 }
 
-function relsDir(path) { return path.replace(/_rels\/[^\/]*\.rels$/, ''); }
-function resolvePart(dir, target) {
-  if (target.charAt(0) === '/') return target.slice(1);
-  var parts = (dir + target).split('/'), out = [];
-  parts.forEach(function(p) { if (p === '..') out.pop(); else if (p !== '.' && p !== '') out.push(p); });
-  return out.join('/');
-}
-function relTargets(xml) {
-  var re = /<Relationship\b[^>]*>/g, m, out = [];
-  while ((m = re.exec(xml))) {
-    if (/TargetMode="External"/.test(m[0])) continue;
-    var t = /\bTarget="([^"]*)"/.exec(m[0]);
-    if (t) out.push({ tag: m[0], target: t[1].replace(/&amp;/g, '&') });
-  }
-  return out;
-}
-async function trimPptx(file) {
-  var zip = await JSZip.loadAsync(file), files = Object.keys(zip.files).filter(function(n) { return !zip.files[n].dir; });
-  var slides = files.filter(function(n) { return /^ppt\/slides\/slide\d+\.xml$/.test(n); }).length;
-  var rels = files.filter(function(n) { return /(^|\/)_rels\/[^\/]*\.rels$/.test(n); }), relXml = {};
-  for (var i = 0; i < rels.length; i++) relXml[rels[i]] = await zip.file(rels[i]).async('string');
-  // the preview thumbnail (only Finder/Explorer show it)
-  var thumbRe = /<Relationship\b[^>]*Type="[^"]*\/metadata\/thumbnail"[^>]*\/>/;
-  if (relXml['_rels/.rels'] && thumbRe.test(relXml['_rels/.rels'])) {
-    var tt = /\bTarget="([^"]*)"/.exec(relXml['_rels/.rels'].match(thumbRe)[0])[1].replace(/^\//, '');
-    relXml['_rels/.rels'] = relXml['_rels/.rels'].replace(thumbRe, '');
-    zip.remove(tt);
-    var ct = await zip.file('[Content_Types].xml').async('string');
-    zip.file('[Content_Types].xml', ct.replace(new RegExp('<Override\\b[^>]*PartName="/' + tt.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '"[^>]*/>'), ''));
-  }
-  // identical media stored once: relationships are repointed to the first copy
-  var media = files.filter(function(n) { return /^ppt\/media\//.test(n) && zip.file(n); }), byHash = {}, dup = {};
-  for (var j = 0; j < media.length; j++) {
-    var h = extOf(media[j]) + ':' + await sha(await zip.file(media[j]).async('uint8array'));
-    if (byHash[h]) dup[media[j]] = byHash[h]; else byHash[h] = media[j];
-  }
-  var used = {};
-  Object.keys(relXml).forEach(function(r) {
-    var dir = relsDir(r), xml = relXml[r];
-    relTargets(xml).forEach(function(t) {
-      var part = resolvePart(dir, t.target);
-      if (dup[part]) {
-        var canon = dup[part], base = canon.split('/').pop();
-        xml = xml.replace(t.tag, t.tag.replace(/\bTarget="([^"]*)"/, function(_, v) { return 'Target="' + v.replace(/[^\/]*$/, base) + '"'; }));
-        part = canon;
-      }
-      used[part] = 1;
-    });
-    relXml[r] = xml;
-  });
-  Object.keys(relXml).forEach(function(r) { if (zip.file(r)) zip.file(r, relXml[r]); });
-  // media no slide, layout or master points to (leftovers from deleted slides)
-  media.forEach(function(n) { if (!used[n]) zip.remove(n); });
-  var out = await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE', compressionOptions: { level: 9 } });
-  // sanity: it re-opens, same slides, every internal relationship target exists
-  var check = await JSZip.loadAsync(out), names = {};
-  Object.keys(check.files).forEach(function(n) { names[n] = 1; });
-  if (Object.keys(check.files).filter(function(n) { return /^ppt\/slides\/slide\d+\.xml$/.test(n); }).length !== slides) throw new Error('slide count changed');
-  for (var r2 in relXml) {
-    if (!names[r2]) continue;
-    var missing = relTargets(relXml[r2]).filter(function(t) { return !names[resolvePart(relsDir(r2), t.target)]; });
-    if (missing.some(function(t) { return /^ppt\/media\//.test(resolvePart(relsDir(r2), t.target)); })) throw new Error('missing media');
-  }
-  return new File([out], file.name, { type: TYPES.pptx });
-}
-
-// PDF and PPTX are trimmed; Keynote/ODP and anything that fails go up exactly as they are
+// anything that fails to trim goes up exactly as it is
 async function trim(file) {
   var ext = extOf(file.name), res = { file: file, trimmed: false };
   if (file.size > MAX_TRIM || !window.crypto || !crypto.subtle) return res;
   try {
-    var t = ext === 'pdf' && window.PDFLib ? await trimPdf(file) : ext === 'pptx' && window.JSZip ? await trimPptx(file) : null;
+    var t = ext === 'pdf' && window.PDFLib ? await trimPdf(file) : null;
     if (t && t.size < file.size * 0.97) { res.file = t; res.trimmed = true; }
   } catch (err) {
     console.warn('[deckdump] trim skipped:', err);
@@ -430,6 +361,7 @@ form.addEventListener('submit', async function(ev) {
     switch (err.message) {
       case 'invalid': msg = 'The server did not accept: ' + (res2.fields || []).join(', ') + '.'; break;
       case 'too many today': msg = "We've hit today's upload limit, please try again tomorrow or email us."; break;
+      case 'pdf only': msg = 'Please export your slides to PDF first, then upload the PDF.'; break;
       case 'too large': msg = 'That file is too large for this browser. Please export a smaller PDF, or email us a link.'; break;
       default: msg = "Hmm, that didn't go through (" + err.message + '). Please try again or email us your slides.';
     }

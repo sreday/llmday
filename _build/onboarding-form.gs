@@ -242,7 +242,7 @@ function composeOnboarding(ev, brand) {
     '1. There will be WiFi access in the venue',
     '1. Previous ' + ev.brand_name + ' talks: ' + (ev.youtube_url ? '[' + ev.youtube_url + '](' + ev.youtube_url + ')' : 'on our YouTube channel'),
     '1. Promo cards: [' + ev.event_url + 'teasers/](' + ev.event_url + 'teasers/). You can post about your session straight away!',
-    '1. Slides: upload the latest version any time on [' + ev.deckdump_url + '](' + ev.deckdump_url + '). After the conference, they go up on your talk page for download',
+    '1. Slides: upload the latest version as a PDF any time on [' + ev.deckdump_url + '](' + ev.deckdump_url + '). After the conference, they go up on your talk page for download',
   ].concat(ev.is_free ? [
     '1. The event is free to attend - feel free to invite your team and friends: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
   ] : [
