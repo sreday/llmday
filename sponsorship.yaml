@@ -14,7 +14,7 @@ exchange_rates:
 
 tiers:
   - id: leads
-    name: "Conference Leads"
+    name: "Conference Leads + On-site badge scanner"
 
     requires: "Cannot be purchased solo"
     price:
