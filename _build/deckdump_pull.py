@@ -47,6 +47,7 @@ RECENT_PAST = 3                  # the most recent finished events always shippe
 WINDOW_DAYS = 14                 # same as DECKDUMP_DAYS in home/_build/generate.py (how long /deckdump/ lists an event)
 MAX_BYTES = 5 * 1024 * 1024
 DPI_STEPS = (300, 220, 150, 110)
+FLAT_STEPS = (150, 110, 96)      # last resort: pages as images (text no longer selectable), only when nothing else fits
 BRAND_KEYS = {"SREday": "sreday", "LLMday": "llmday", "PLATFORMday": "platformday", "Prompt Engineering Conference": "pec"}
 LIVE_KINDS = ("talk", "keynote", "workshop")
 TEST_FOLDER = "2026-deckdump-test"   # fake event for --selftest with real decks (upload them with this folder)
@@ -195,6 +196,12 @@ def gs_dpi(src, dst, dpi):
     subprocess.run(GS + flags + ["-sOutputFile=" + dst, src], check=True, timeout=900)
 
 
+def gs_flat(src, dst, dpi):
+    """Last resort: every page drawn as one JPEG (q85). Always small; text is no longer selectable."""
+    subprocess.run(["gs", "-sDEVICE=pdfimage24", "-r%d" % dpi, "-sCompression=JPEG", "-dJPEGQ=85", "-dNOPAUSE", "-dBATCH", "-dQUIET",
+                    "-dSAFER", "-sOutputFile=" + dst, src], check=True, timeout=900)
+
+
 def fit(src, workdir):
     """-> (path, step): the highest-quality version under MAX_BYTES with the same page count; step 'original',
     'lossless', '<dpi> dpi', or '<dpi> dpi, over 5 MB' when even the last step does not fit (the smallest is used)."""
@@ -230,6 +237,17 @@ def fit(src, workdir):
             print("  ghostscript %d dpi failed: %s" % (dpi, e))
             continue
         take(out, "%d dpi" % dpi)
+        if best == out and os.path.getsize(out) <= MAX_BYTES:
+            return best, best_step
+    # still over: heavy vector art (no images to resample) or giant photos. Flatten the pages, sharpest first.
+    for dpi in FLAT_STEPS:
+        out = os.path.join(workdir, "flat-%d.pdf" % dpi)
+        try:
+            gs_flat(src, out, dpi)
+        except (subprocess.SubprocessError, OSError) as e:
+            print("  ghostscript flatten %d dpi failed: %s" % (dpi, e))
+            continue
+        take(out, "flattened %d dpi" % dpi)
         if best == out and os.path.getsize(out) <= MAX_BYTES:
             return best, best_step
     return best, (best_step + ", over 5 MB") if os.path.getsize(best) > MAX_BYTES else best_step
@@ -306,6 +324,9 @@ def process_event(folder_path, meta, files, token, args):
                                   "shipped": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
             shipped.append({"speaker": talk["name"], "title": talk["title"], "step": step, "bytes": size, "src": ext})
             print("  shipped %s: %s %s -> %s (%s)" % (talk["name"], ext, mb(int(f.get("size") or 0)), mb(size), step))
+            if step.startswith("flattened"):
+                problems.append({"pid": pid + ":flat", "speaker": talk["name"], "title": talk["title"], "file": f.get("name"),
+                                 "why": "pages flattened to images to fit 5 MB (%s): text is not selectable on the site copy" % step})
             if "over 5 MB" in step:
                 problems.append({"pid": pid + ":big", "speaker": talk["name"], "title": talk["title"], "file": f.get("name"),
                                  "why": "still %s at 110 dpi, shipped anyway; a lighter export would help" % mb(size)})
