@@ -1,0 +1,21 @@
+{
+ "reported": [],
+ "shipped": {
+  "Devang_Sharma_Meta_Inference_Economics_Engineering_LLMs_for_Cost__Latency__and_Scale": {
+   "bytes": 568335,
+   "file": "LLMday San Francisco 2026 Q4 - Devang Sharma - Devang_Sharma_Meta_Inference_Economics_Engineering_LLMs_for_Cost__Latency__and_Scale.pptx",
+   "id": "1wFOWc3g-AWrdEYHKZrV55b3hkmoV7aPl",
+   "modified": "2026-10-31T00:52:09.976Z",
+   "shipped": "2026-10-31T00:58:57Z",
+   "step": "lossless"
+  },
+  "Qazybek_Beken_UC_Berkeley_The_LLM_Is_Not_the_System": {
+   "bytes": 1413052,
+   "file": "LLMday San Francisco 2026 Q4 - Qazybek Beken - Qazybek_Beken_UC_Berkeley_The_LLM_Is_Not_the_System.pdf",
+   "id": "1Jb_F_1SmHtTEXT4de-2QyYK7elErc_yF",
+   "modified": "2026-10-31T00:52:03.262Z",
+   "shipped": "2026-10-31T00:58:59Z",
+   "step": "lossless"
+  }
+ }
+}

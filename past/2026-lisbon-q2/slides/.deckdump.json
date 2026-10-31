@@ -1,0 +1,21 @@
+{
+ "reported": [],
+ "shipped": {
+  "Afonso_Oliveira_OliveGradient_How_Far_Can_You_Go_With_AI_Without_Sharing_Your_Data": {
+   "bytes": 1702627,
+   "file": "LLMday Lisbon 2026 Q2 - Afonso Oliveira - Afonso_Oliveira_OliveGradient_How_Far_Can_You_Go_With_AI_Without_Sharing_Your_Data.pptx",
+   "id": "1dExNbkc_4qUMqJqHmySggNnScwcdfMmz",
+   "modified": "2026-10-31T00:51:14.069Z",
+   "shipped": "2026-10-31T00:58:15Z",
+   "step": "lossless"
+  },
+  "Fabricio_De_los_Santos_DELFA_The_Next_Step": {
+   "bytes": 126273,
+   "file": "LLMday Lisbon 2026 Q2 - Fabricio De los Santos - Fabricio_De_los_Santos_DELFA_The_Next_Step.pptx",
+   "id": "1Y5gFxnQwFVZft-jIx_shkyPo9BYv8DBc",
+   "modified": "2026-10-31T00:51:43.304Z",
+   "shipped": "2026-10-31T00:58:18Z",
+   "step": "lossless"
+  }
+ }
+}

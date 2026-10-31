@@ -1,0 +1,21 @@
+{
+ "reported": [],
+ "shipped": {
+  "Martin_Danner_scieneers_GmbH_Talk_Genomics_To_Me__From_Sequences_to_Sentences": {
+   "bytes": 3835668,
+   "file": "LLMday Hamburg 2026 Q2 - Martin Danner - Martin_Danner_scieneers_GmbH_Talk_Genomics_To_Me__From_Sequences_to_Sentences.pdf",
+   "id": "1MI24RFSWlj3C9xKs8DNOjMgFR-5TWS-R",
+   "modified": "2026-10-31T00:50:52.919Z",
+   "shipped": "2026-10-31T00:58:10Z",
+   "step": "lossless"
+  },
+  "Serhat_Kayikci_iC_Consult_The_Missing_Layer_RealTime_AI_Context_with_CDC_and_Kafka": {
+   "bytes": 419751,
+   "file": "LLMday Hamburg 2026 Q2 - Serhat Kayikci - Serhat_Kayikci_iC_Consult_The_Missing_Layer_RealTime_AI_Context_with_CDC_and_Kafka.pdf",
+   "id": "1eutBbB8X44kTc9DfbYnuEk_WKcMbLDt7",
+   "modified": "2026-10-31T00:50:20.720Z",
+   "shipped": "2026-10-31T00:58:11Z",
+   "step": "lossless"
+  }
+ }
+}

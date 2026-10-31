@@ -1,0 +1,45 @@
+{
+ "reported": [],
+ "shipped": {
+  "Akila_Balasubramanian_Principal_Software_Engineer_Semantic_Condensation_Making_HighCardinality_Time_": {
+   "bytes": 1376516,
+   "file": "LLMday San Francisco 2026 Q2 - Akila Balasubramanian - Akila_Balasubramanian_Principal_Software_Engineer_Semantic_Condensation_Making_HighCardinality_Time_.pdf",
+   "id": "1TwQThbR_vJhQF6i2fJCv3NqUYvQ3ebD2",
+   "modified": "2026-10-31T00:48:02.219Z",
+   "shipped": "2026-10-31T00:58:42Z",
+   "step": "lossless"
+  },
+  "Aoi_Minamoto_Aimoji_Healthcare_From_Voice_to_Cognitive_Insights_Building_KinaBot__an_AI_System_for_E": {
+   "bytes": 819498,
+   "file": "LLMday San Francisco 2026 Q2 - Aoi Minamoto - Aoi_Minamoto_Aimoji_Healthcare_From_Voice_to_Cognitive_Insights_Building_KinaBot__an_AI_System_for_E.pptx",
+   "id": "1JhtfrK3gYqsEHDtzulj7c8fYmcgnVPe6",
+   "modified": "2026-10-31T00:48:12.039Z",
+   "shipped": "2026-10-31T00:58:46Z",
+   "step": "lossless"
+  },
+  "Emilio_Andere_Wafer_AI_That_Makes_AI_Faster": {
+   "bytes": 848489,
+   "file": "LLMday San Francisco 2026 Q2 - Emilio Andere - Emilio_Andere_Wafer_AI_That_Makes_AI_Faster.pptx",
+   "id": "1U8pkRxKSxC38puYy6qpFNy6MXAJUh50g",
+   "modified": "2026-10-31T00:47:28.099Z",
+   "shipped": "2026-10-31T00:58:49Z",
+   "step": "lossless"
+  },
+  "James_Duffy_Lantern_Interviewing_Engineers_in_the_Age_of_AI": {
+   "bytes": 1321479,
+   "file": "LLMday San Francisco 2026 Q2 - James Duffy - James_Duffy_Lantern_Interviewing_Engineers_in_the_Age_of_AI.pptx",
+   "id": "1BlNFLENv1p48b2QIANLaZpmx0Gev8fzt",
+   "modified": "2026-10-31T00:47:38.191Z",
+   "shipped": "2026-10-31T00:58:52Z",
+   "step": "lossless"
+  },
+  "Stepan_Skopek_Apify_Enabling_Agents_to_Pay_Implementation_Challenges_of_x402_in_Production_Systems": {
+   "bytes": 3605058,
+   "file": "LLMday San Francisco 2026 Q2 - Stepan Skopek - Stepan_Skopek_Apify_Enabling_Agents_to_Pay_Implementation_Challenges_of_x402_in_Production_Systems.pdf",
+   "id": "1LDRkj7tpDAy_4ka71uKn5SGF5DLaqz_d",
+   "modified": "2026-10-31T00:47:56.919Z",
+   "shipped": "2026-10-31T00:58:54Z",
+   "step": "lossless"
+  }
+ }
+}
