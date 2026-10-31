@@ -38,11 +38,24 @@ jobs:
       - name: Deps
         run: pip install -q pyyaml pillow
 
+      # generated decks + any real deck uploaded to the fake event folder 2026-deckdump-test; the shrunk PDFs of the
+      # real ones are attached to the run ("deckdump-selftest") so the quality can be checked by eye
       - name: Self test
         if: ${{ inputs.selftest }}
+        env:
+          DECKDUMP_FEED: ${{ secrets.DECKDUMP_FEED }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ghostscript qpdf > /dev/null
           python _build/deckdump_pull.py --selftest
+
+      - name: Shrunk decks
+        if: ${{ always() && inputs.selftest }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: deckdump-selftest
+          path: deckdump-selftest/
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Pull the decks
         if: ${{ !inputs.selftest }}

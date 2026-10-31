@@ -48,6 +48,7 @@ MAX_BYTES = 5 * 1024 * 1024
 DPI_STEPS = (300, 220, 150, 110)
 BRAND_KEYS = {"SREday": "sreday", "LLMday": "llmday", "PLATFORMday": "platformday", "Prompt Engineering Conference": "pec"}
 LIVE_KINDS = ("talk", "keynote", "workshop")
+TEST_FOLDER = "2026-deckdump-test"   # fake event for --selftest with real decks (upload them with this folder)
 
 
 # ---- the lineup (same rules as the event and home builds) --------------------------------
@@ -370,6 +371,33 @@ def selftest():
         good = after <= MAX_BYTES and pages(out) == n
         ok &= good
         print("selftest %s: %s -> %s, %d pages -> %d, step %s: %s" % (name, mb(before), mb(after), n, pages(out), step, "OK" if good else "FAIL"))
+    # real decks: whatever was uploaded on /deckdump/ to the fake event folder TEST_FOLDER (never a real event, so the
+    # pull job never ships them); each is shrunk like a real one and kept in deckdump-selftest/ for the run's artifact
+    feed = os.environ.get("DECKDUMP_FEED", "").strip()
+    if feed:
+        res = http_json(feed, timeout=120)
+        real = [f for f in (res.get("files") or []) if (f.get("meta") or {}).get("folder") == TEST_FOLDER]
+        print("selftest: %d real deck(s) in %s" % (len(real), TEST_FOLDER))
+        keep = os.path.join(ROOT, "deckdump-selftest")
+        os.makedirs(keep, exist_ok=True)
+        for f in real:
+            m, d = f["meta"], tempfile.mkdtemp(dir=work)
+            ext = (m.get("ext") or "pdf").lower()
+            try:
+                raw = os.path.join(d, "deck." + ext)
+                download(f["id"], res.get("access_token") or "", raw)
+                pdf = raw if ext == "pdf" else to_pdf(raw, d)
+                n = pages(pdf)
+                out, step = fit(pdf, d)
+                good = os.path.getsize(out) <= MAX_BYTES and pages(out) == n
+                ok &= good
+                name = re.sub(r"[^\w .&-]+", "", m.get("original_name") or f["name"])
+                shutil.copyfile(out, os.path.join(keep, "shrunk - " + os.path.splitext(name)[0] + ".pdf"))
+                print("selftest real %s: %s -> %s, %d pages -> %d, step %s: %s" % (name, mb(int(f.get("size") or 0)), mb(os.path.getsize(out)),
+                                                                                 n, pages(out), step, "OK" if good else "FAIL"))
+            except Exception as e:
+                ok = False
+                print("selftest real %s: FAILED %s" % (f.get("name"), e))
     shutil.rmtree(work, ignore_errors=True)
     return 0 if ok else 1
 
