@@ -13,7 +13,11 @@
  *      it 30 days) and emails the speaker a receipt when they left an email.
  *   3. GET ?list=1&token=<DECKDUMP_TOKEN> - the manifest for _build/deckdump_pull.py (GitHub Actions, every repo):
  *      every finished deck + a short-lived Drive access token so the job can download the files directly.
- *   4. {action: "report", token} - the pull job's daily email to Mark ("Deck dump: <Event>"), filed under "Deck dump".
+ *   4. {action: "report", token} - unused since 2026-10-31 (Marek wants no Deck dump emails); kept for manual use.
+ *   5. {action: "scan", token, query} - decks already sitting in this mailbox (v2, 2026-10-31): returns only metadata
+ *      (sender, subject, date, deck attachments, Drive/Slides links) so Claude can match them to talks cheaply;
+ *      {action: "import", token, items} copies the matched ones into the folder server-side (Gmail attachment or Drive
+ *      file; Google Slides exported to PDF), dated by the email, never replacing a newer upload for the same talk.
  *
  * Abuse guards (no passphrase - speakers use this from the onboarding email): honeypot, daily cap (DECKDUMP_DAILY),
  * file type + size caps, names and keys checked against strict patterns. The page only offers lineup talks.
@@ -56,7 +60,7 @@ function doGet(e) {
     if (!tokenOk(p.token)) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, access_token: ScriptApp.getOAuthToken(), files: listDecks() });
   }
-  return respond({ ok: true, service: 'deckdump', version: 1 });
+  return respond({ ok: true, service: 'deckdump', version: 2 });   // v2: scan + import (decks already in the inbox)
 }
 
 function doPost(e) {
@@ -68,6 +72,8 @@ function doPost(e) {
   }
   if (data.website) return respond({ ok: true, upload_url: '', honeypot: true });   // honeypot -> pretend success
   if (data.action === 'report') return report(data);
+  if (data.action === 'scan') return scanInbox(data);
+  if (data.action === 'import') return importDecks(data);
 
   var brandKey = String(data.brand || '').toLowerCase();
   var brand = BRANDS[brandKey];
@@ -195,9 +201,9 @@ function findUploaded(id, name) {
   return best;
 }
 
-function finish(file, d, brand) {
+function finish(file, d, brand, when) {
   var meta = JSON.parse(JSON.stringify(d.meta));
-  meta.uploaded_at = new Date().toISOString();
+  meta.uploaded_at = (when || new Date()).toISOString();
   meta.status = 'ok';
   file.setDescription(JSON.stringify(meta));
   if (file.getName() !== d.filename) file.setName(d.filename);
@@ -232,6 +238,68 @@ function listDecks() {
                modified: f.getLastUpdated().toISOString(), meta: m });
   }
   return out;
+}
+
+// ---- decks already in the inbox (v2) ------------------------------------------------------
+var DECK_EXT = /\.(pdf|pptx|key|odp)$/i;
+var LINK_RE = /https:\/\/(?:docs\.google\.com\/presentation\/d\/|drive\.google\.com\/file\/d\/|drive\.google\.com\/open\?id=)([-\w]{20,})/g;
+
+function scanInbox(data) {
+  if (!tokenOk(data.token)) return respond({ ok: false, error: 'forbidden' });
+  var query = String(data.query || ''), start = Number(data.start) || 0, max = Math.min(Number(data.max) || 100, 200);
+  var threads = GmailApp.search(query, start, max), out = [];
+  threads.forEach(function (t) {
+    t.getMessages().forEach(function (m) {
+      var atts = m.getAttachments({ includeInlineImages: false }).filter(function (a) { return DECK_EXT.test(a.getName()) && a.getSize() > 150 * 1024; })
+        .map(function (a) { return { name: a.getName(), size: a.getSize() }; });
+      var links = {}, body = m.getPlainBody() || '', x;
+      LINK_RE.lastIndex = 0;
+      while ((x = LINK_RE.exec(body))) links[x[1]] = 1;
+      if (!atts.length && !Object.keys(links).length) return;
+      out.push({ id: m.getId(), date: m.getDate().toISOString(), from: m.getFrom(), subject: m.getSubject().slice(0, 140),
+                 attachments: atts, links: Object.keys(links) });
+    });
+  });
+  return respond({ ok: true, account: Session.getEffectiveUser().getEmail(), threads: threads.length, messages: out });
+}
+
+function importDecks(data) {
+  if (!tokenOk(data.token)) return respond({ ok: false, error: 'forbidden' });
+  var results = [];
+  (data.items || []).slice(0, 15).forEach(function (it) {
+    var r = { short_url: it.short_url, speaker: it.speaker };
+    try {
+      var msg = GmailApp.getMessageById(String(it.message_id)), when = msg.getDate(), blob = null, name = '';
+      if (it.attachment) {
+        var a = msg.getAttachments({ includeInlineImages: false }).filter(function (x) { return x.getName() === it.attachment; })[0];
+        if (!a) throw new Error('attachment not found');
+        blob = a.copyBlob(); name = a.getName();
+      } else if (it.drive_id) {
+        var f = DriveApp.getFileById(String(it.drive_id));
+        if (f.getMimeType() === MimeType.GOOGLE_SLIDES) { blob = f.getAs('application/pdf'); name = f.getName() + '.pdf'; }
+        else { blob = f.getBlob(); name = f.getName(); }
+        if (!DECK_EXT.test(name)) name += '.pdf';
+      } else {
+        throw new Error('nothing to import');
+      }
+      var d = normalizeDeck({ event: { folder: it.folder, event_name: it.event }, talk: { short_url: it.short_url, name: it.speaker, title: it.title },
+                              file: { name: name, size: blob.getBytes().length } }, String(it.brand || ''));
+      if (!BRANDS[it.brand] || d.errors.length) throw new Error('invalid: ' + d.errors.join(', '));
+      d.meta.source = 'email';
+      var newer = listDecks().filter(function (x) { return key(x.meta) === key(d.meta) && x.meta.uploaded_at > when.toISOString(); });
+      if (newer.length) { r.skipped = 'a newer upload exists'; results.push(r); return; }
+      blob.setName(d.filename);
+      if (d.ext !== 'pdf' || blob.getContentType() !== TYPES.pdf) blob.setContentType(TYPES[d.ext]);
+      var file = deckFolder().createFile(blob);
+      d.email = '';                                                 // no receipt for imports
+      var done = finish(file, d, BRANDS[it.brand], when);
+      r.ok = true; r.name = done.name; r.replaced = done.replaced;
+    } catch (err) {
+      r.error = String(err).slice(0, 200);
+    }
+    results.push(r);
+  });
+  return respond({ ok: true, results: results });
 }
 
 // ---- mail -----------------------------------------------------------------------------

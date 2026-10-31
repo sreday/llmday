@@ -402,11 +402,77 @@ def selftest():
     return 0 if ok else 1
 
 
+def events_all(today):
+    """{folder: (path, ends)} for every 2025+ event folder of this repo."""
+    out = {}
+    for path in glob.glob(os.path.join(ROOT, "20*")) + glob.glob(os.path.join(ROOT, "past", "20*")):
+        folder = os.path.basename(path)
+        if folder[:4] < "2025":
+            continue
+        try:
+            with open(os.path.join(path, "metadata.yml"), encoding="utf-8") as f:
+                w = event_window(yaml.load(f, Loader=yaml.FullLoader) or {}, today)
+        except (OSError, yaml.YAMLError):
+            continue
+        if w:
+            out[folder] = (path, w[0], w[2])
+    return out
+
+
+def cleanup(feed, brand, events, args):
+    """Quarterly (Marek 2026-10-31: "wipe the drive every 3 months, after checking that all uploaded decks are in the
+    repo"): every upload of this brand whose event ended more than WINDOW_DAYS ago AND whose deck is on the site
+    (<event>/slides/<key>.pdf in the repo) goes to the Drive trash (30 days to undo). Anything not on the site stays
+    and is listed. The fake test folder and other brands' uploads are left alone."""
+    res = http_json(feed, timeout=120)
+    if not res.get("ok"):
+        print("Deck dump feed refused: %s" % res.get("error"))
+        return 1
+    token = res.get("access_token") or ""
+    if token and os.environ.get("GITHUB_ACTIONS"):
+        print("::add-mask::" + token)
+    trashed, kept = [], []
+    for f in res.get("files") or []:
+        m = f.get("meta") or {}
+        if m.get("brand") != brand or m.get("folder") not in events:
+            continue
+        path, ends, now = events[m["folder"]]
+        if now < ends + datetime.timedelta(days=WINDOW_DAYS):
+            continue                                       # still in its shipping window
+        state = {}
+        try:
+            with open(os.path.join(path, "slides", ".deckdump.json"), encoding="utf-8") as fh:
+                state = json.load(fh).get("shipped") or {}
+        except (OSError, ValueError):
+            pass
+        keys = [k for k, v in state.items() if v.get("id") == f["id"]] + [m.get("short_url") or ""]
+        if any(k and os.path.isfile(os.path.join(path, "slides", k + ".pdf")) for k in keys):
+            if not args.dry_run:
+                req = urllib.request.Request("https://www.googleapis.com/drive/v3/files/%s?supportsAllDrives=true" % urllib.parse.quote(f["id"]),
+                                             data=b'{"trashed": true}', method="PATCH",
+                                             headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"})
+                urllib.request.urlopen(req, timeout=60).read()
+            trashed.append(f["name"])
+        else:
+            kept.append("%s (%s)" % (f["name"], "not on the site: check it"))
+    lines = ["Deck dump cleanup%s: %d upload(s) on the site %s, %d kept" % (
+        " (dry run)" if args.dry_run else "", len(trashed),
+        "would go to the Drive trash" if args.dry_run else "moved to the Drive trash", len(kept))]
+    lines += ["- trashed: %s" % n for n in trashed] + ["- kept: %s" % n for n in kept]
+    text = "\n".join(lines) + "\n"
+    print(text)
+    if os.environ.get("GITHUB_STEP_SUMMARY"):
+        with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as fh:
+            fh.write("## Deck dump cleanup\n\n```\n" + text + "```\n")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="read the feed and show what would ship; download and write nothing")
     ap.add_argument("--today", help="pretend it is this date (YYYY-MM-DD, noon UTC), for tests")
-    ap.add_argument("--event", help="only this event folder")
+    ap.add_argument("--event", help="only this event folder (ignores the 14-day window); 'all' = every event that has ended")
+    ap.add_argument("--cleanup", action="store_true", help="quarterly: trash Drive uploads that are on the site already")
     ap.add_argument("--selftest", action="store_true", help="run the 5 MB ladder on generated decks and exit")
     args = ap.parse_args()
     if args.selftest:
@@ -428,8 +494,8 @@ def main():
     events = []
     for path in sorted(glob.glob(os.path.join(ROOT, "20*")) + glob.glob(os.path.join(ROOT, "past", "20*"))):
         folder = os.path.basename(path)
-        if args.event and folder != args.event:
-            continue
+        if folder[:4] < "2025" or (args.event and args.event != "all" and folder != args.event):
+            continue                                      # frozen sreday 2022-2024 folders are never touched
         try:
             with open(os.path.join(path, "metadata.yml"), encoding="utf-8") as f:
                 meta = yaml.load(f, Loader=yaml.FullLoader) or {}
@@ -439,8 +505,10 @@ def main():
         if not w:
             continue
         opens, closes, now = w
-        if args.event or opens <= now <= closes:
+        if (args.event and args.event != "all") or (args.event == "all" and opens <= now) or opens <= now <= closes:
             events.append((path, meta))
+    if args.cleanup:
+        return cleanup(feed, brand, events_all(today), args)
     if not events:
         print("Deck dump: no %s event in its shipping window" % (brand or "?"))
         return 0
