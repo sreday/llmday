@@ -313,6 +313,22 @@ with open(BASE_FOLDER + "/404-index.json", "w", encoding="utf-8") as f:
                   ensure_ascii=False, separators=(",", ":"))
 print("Writing out 404-index.json (%d event folders, %d pages)" % (len(_idx_events), sum(len(v) for v in _idx_pages.values())))
 
+# /ambassadors.json (Marek 2026-10-31): every ambassador's name, country and headshot (+ its md5, so a changed photo is
+# fetched again) for the "Our ambassadors" slide of the hello decks, which shows the ambassadors of ALL the sister brands
+# (_event_template/_build/hello.py reads this file from each site). The photos are the site's /ambassadors/ folder.
+import hashlib as _hl_amb
+_amb_out = []
+for _a in context.get("ambassadors") or []:
+    _shot = str(_a.get("Headshot") or "").strip()
+    if not str(_a.get("Name") or "").strip() or not _shot or not os.path.exists("../ambassadors/" + _shot):
+        continue
+    with open("../ambassadors/" + _shot, "rb") as _f:
+        _amb_out.append({"name": str(_a["Name"]).strip(), "region": str(_a.get("Event") or "").strip(),
+                         "headshot": _shot, "md5": _hl_amb.md5(_f.read()).hexdigest()})
+with open(BASE_FOLDER + "/ambassadors.json", "w", encoding="utf-8") as f:
+    _json404.dump(_amb_out, f, ensure_ascii=False, separators=(",", ":"))
+print("Writing out ambassadors.json (%d ambassadors)" % len(_amb_out))
+
 # STATUS PAGE (hidden, /status/): lineup + sponsor progress of every upcoming event.
 # Talks: rows of ../<event>/_db/talks.csv with a live status (talk / keynote / workshop, legacy "confirmed"), against 12 slots
 # per track (tracks from the event metadata); status "draft" rows are shown next to them ("+ N draft") but never count. Sponsors: the event's sponsors list minus the partner
