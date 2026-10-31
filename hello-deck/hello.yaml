@@ -10,8 +10,8 @@ team:
   - {name: Miko, photo: team/miko.jpg}
   - {name: Aleksandra, photo: team/aleksandra.jpg}
   - {name: Anna, photo: team/anna.jpg}
-  - {name: Petras, photo: team/petras.jpg}
   - {name: Magda, photo: team/magda.jpg}
+  - {name: Petras, photo: team/petras.jpg}
   - {name: Emilia, photo: team/emilia.jpg}
 
 # Our open-source projects.
