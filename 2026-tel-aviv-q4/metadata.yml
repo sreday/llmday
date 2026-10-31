@@ -27,20 +27,30 @@ tracks: 1
 rooms:
 - main room
 
+# mirrors the in10t agenda (https://in10t.ai/llmday-dataday-tlv): doors 09:00, opening 09:45,
+# brunch 11:30, quick break 13:30, panel 13:45, lunch 14:30-15:15 (talks themselves stay 30 min here)
 breaks:
-- title: Coffee break
-  duration: 30
+- title: Registration & coffee
+  duration: 45
   comment: Main lobby
   # this decides how many talks in-between this and previous section
   talks_before: 0
-- title: Lunch & networking
-  duration: 60
-  comment: Main lobby
-  talks_before: 4
-- title: Networking & sponsor crawl
+- title: Brunch break
   duration: 30
   comment: Main lobby
-  talks_before: 4
+  talks_before: 5
+- title: Quick break
+  duration: 15
+  comment: Main lobby
+  talks_before: 2
+- title: Panel
+  duration: 45
+  comment: Main room
+  talks_before: 0
+- title: Lunch
+  duration: 45
+  comment: Main lobby
+  talks_before: 0
 
 sponsors:
   - logo: microsoftazure.png
