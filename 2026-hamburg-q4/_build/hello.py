@@ -1,12 +1,16 @@
 """/<event>/hello/ - the opening deck shown on the venue screen before the first talk (Marek 2026-10-19, after the
-PLATFORMday Austin deck): Hello <city>, the team, WhatsApp + LinkedIn, the event's partners, the sister brands,
-the community tools (cfp.ninja) and a Reliaburger slide drawn like reliaburger.com's hero (live version + catchphrase), the sister
-brands' upcoming events, then this brand's mascot sticker with its upcoming events. Full-screen button + clicker keys in the page.
+PLATFORMday Austin deck): Hello <city>, the team, every brand's ambassadors, WhatsApp + LinkedIn, the event's partners,
+the sister brands, the community tools (cfp.ninja) and a Reliaburger slide drawn like reliaburger.com's hero (live version +
+catchphrase), this brand's upcoming events (mascot sticker) then the sister brands', Let's chat (the empty lead form), the
+splash cards. Full-screen button + clicker keys in the page.
 
 Everything comes from data, nothing is typed per event:
   - this event's metadata.yml (city, sponsors, brand colour, LinkedIn) and the folder name
   - home/metadata.yml `events` + each listed folder's metadata.yml (this brand's upcoming events and their cards)
   - hello-deck/hello.yaml at the repo root (team, WhatsApp, sister brands with their logo, mascot, theme and site)
+  - every site's ambassadors: this repo's home/_db/ambassadors.csv, the sisters' published /ambassadors.json (see
+    _ambassadors below)
+  - hello-deck/chat/form-<brand>.png, the lead form screenshot (hello-deck/tools/shoot_lead_form.py)
   - the sister sites' published metadata.yml (https://llmday.com/metadata.yml and /<event>/metadata.yml),
     fetched once per build run and cached 30 min in ../.cache/hello-sisters.json (stale copy if the fetch fails;
     SKIP_CFP_CHECK=1 or SKIP_HELLO_FETCH=1 = offline build, cache only)
@@ -426,8 +430,13 @@ def _map_layout(rows, cities, brand):
         stops[k]['tentative'] = stops[k]['tentative'] and bool(r.get('tentative'))
         order.append((k, bool(r.get('tentative'))))
     pins = list(stops.values())
+    n = 0                                                    # the order of the tour (Marek 2026-10-31): a small number on
+    for k, tent in order:                                    # each confirmed city's dot, first date counts; none when grey
+        if not tent and 'num' not in stops[k]:
+            n += 1
+            stops[k]['num'] = n
     for p in pins:
-        p['w'] = max(len(p['city']) * 25, max(len(d['date']) for d in p['dates']) * 19) + 12
+        p['w'] =max(len(p['city']) * 25, max(len(d['date']) for d in p['dates']) * 19) + 12
         p['h'] = 48 + 38 * len(p['dates'])
     placed = []
     crowd = lambda p: -sum(1 for q in pins if q is not p and abs(q['x'] - p['x']) < 260 and abs(q['y'] - p['y']) < 200)  # noqa: E731
@@ -469,6 +478,163 @@ def _map_layout(rows, cities, brand):
     for p in pins:
         p['x'], p['y'] = round(p['x']), round(p['y'])
     return {'stops': pins, 'arcs': arcs}
+
+
+# ── "Our ambassadors": every brand's ambassadors, scattered and grouped by country ─────────────────────────────────
+# Marek 2026-10-31: after "Meet our team", all ambassadors of all the sister brands on one slide, some 1x, some 1.5x,
+# some 2x (random, but the same on every build), each country one cluster. This brand's from ../home/_db/ambassadors.csv
+# + ../ambassadors/; the sisters' from their published /ambassadors.json (home/_build/generate.py) + /ambassadors/<photo>,
+# list cached 30 min in ../.cache/hello-ambassadors.json, photos by md5 in ../.cache/hello-amb/ (same offline rules).
+AMB_CACHE = '../.cache/hello-ambassadors.json'
+AMB_PHOTOS = '../.cache/hello-amb'
+AMB_AREA = (70, 250, 1850, 1050)                             # where the cluster may go (below the heading)
+AMB_SIZES = ((1, .45), (1.5, .35), (2, .2))                  # size x weight
+BOX_AMB = (200, 200)
+
+
+def _country_of(region):
+    """'United States - West' -> 'United States'"""
+    return str(region or '').split(' - ')[0].strip() or 'Elsewhere'
+
+
+def _own_ambassadors():
+    import csv
+    out = []
+    try:
+        with open('../home/_db/ambassadors.csv', encoding='utf-8') as f:
+            for a in csv.DictReader(f):
+                shot = str(a.get('Headshot') or '').strip()
+                if str(a.get('Name') or '').strip() and shot and os.path.exists('../ambassadors/' + shot):
+                    out.append({'name': a['Name'].strip(), 'region': str(a.get('Event') or '').strip(), 'path': '../ambassadors/' + shot})
+    except OSError:
+        pass
+    return out
+
+
+def _fetch_photo(site, a):
+    import urllib.parse
+    ext = os.path.splitext(a['headshot'])[1].lower() or '.png'
+    path = os.path.join(AMB_PHOTOS, re.sub(r'[^0-9a-f]', '', str(a.get('md5') or '')) or hashlib.md5(a['headshot'].encode()).hexdigest()) + ext
+    if os.path.exists(path):
+        return path
+    if os.environ.get('SKIP_CFP_CHECK') or os.environ.get('SKIP_HELLO_FETCH'):
+        return ''
+    req = urllib.request.Request(site + 'ambassadors/' + urllib.parse.quote(a['headshot']), headers={'User-Agent': 'hello-deck-build'})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        data = r.read()
+    os.makedirs(AMB_PHOTOS, exist_ok=True)
+    tmp = '%s.%d.tmp' % (path, os.getpid())
+    with open(tmp, 'wb') as f:
+        f.write(data)
+    os.replace(tmp, path)
+    return path
+
+
+def _ambassadors(brands, key):
+    """[{name, country, path}] - this brand's first, then each sister's, one entry per person (by name)"""
+    sites = {b['key']: b['site'] for b in brands if b.get('site') and b['key'] != key}
+    cached = {}
+    try:
+        with open(AMB_CACHE, encoding='utf-8') as f:
+            cached = json.load(f)
+    except (OSError, ValueError):
+        pass
+    lists = cached.get('lists') or {}
+    offline = os.environ.get('SKIP_CFP_CHECK') or os.environ.get('SKIP_HELLO_FETCH')
+    if not offline and not (cached.get('sites') == sites and time.time() - cached.get('at', 0) < CACHE_TTL):
+        def one(site):
+            req = urllib.request.Request(site + 'ambassadors.json', headers={'User-Agent': 'hello-deck-build'})
+            with urllib.request.urlopen(req, timeout=8) as r:
+                return [a for a in json.loads(r.read().decode('utf-8')) if a.get('name') and a.get('headshot')]
+        for k, site in sites.items():
+            try:
+                lists[k] = one(site)
+            except Exception as e:                           # noqa: BLE001 - not published yet / site down: the cached list
+                print('WARN hello: %sambassadors.json unreachable (%s), using the cached list' % (site, e))
+        try:
+            os.makedirs(os.path.dirname(AMB_CACHE), exist_ok=True)
+            tmp = '%s.%d.tmp' % (AMB_CACHE, os.getpid())
+            with open(tmp, 'w', encoding='utf-8') as f:
+                json.dump({'at': time.time(), 'sites': sites, 'lists': lists}, f)
+            os.replace(tmp, AMB_CACHE)
+        except OSError:
+            pass
+    people = [dict(a, country=_country_of(a['region'])) for a in _own_ambassadors()]
+    jobs = [(site, a) for k, site in sites.items() for a in lists.get(k) or []]
+
+    def photo(job):
+        try:
+            return _fetch_photo(*job)
+        except Exception as e:                               # noqa: BLE001 - one photo missing must not drop the slide
+            print('WARN hello: ambassador photo %s unreachable (%s)' % (job[1]['headshot'], e))
+            return ''
+    with ThreadPoolExecutor(8) as ex:
+        for (site, a), path in zip(jobs, ex.map(photo, jobs)):
+            if path:
+                people.append({'name': a['name'], 'country': _country_of(a.get('region')), 'path': path})
+    seen, out = set(), []
+    for a in people:
+        if a['name'].lower() not in seen:
+            seen.add(a['name'].lower())
+            out.append(a)
+    return out
+
+
+def _amb_layout(people):
+    """people -> photos {x, y, d, name, path, country} filling AMB_AREA + one label per country. Greedy packing: the
+    biggest country first, from the middle out; each next photo touches one already placed, as close to its country's
+    middle as it can get (squashed: the area is ~2.2x wider than tall), a wider gap between countries than inside one."""
+    import math
+    import random
+    rng = random.Random('|'.join(sorted(a['name'] for a in people)))
+    groups = {}
+    for a in people:
+        groups.setdefault(a['country'], []).append(a)
+    order = sorted(groups, key=lambda c: (-len(groups[c]), c))
+    ax0, ay0, ax1, ay1 = AMB_AREA
+    stretch = (ax1 - ax0) / (ay1 - ay0)
+    gap_in, gap_out = .12, .9                                # in units of the 1x radius
+    placed = []                                              # (x, y, r, country)
+    for c in order:
+        members = groups[c][:]
+        rng.shuffle(members)
+        for a in members:
+            r = rng.choices([s for s, _ in AMB_SIZES], [w for _, w in AMB_SIZES])[0]
+            own = [p for p in placed if p[3] == c]
+            cx = sum(p[0] for p in own) / len(own) if own else 0.0
+            cy = sum(p[1] for p in own) / len(own) if own else 0.0
+            cands = [] if placed else [(0.0, 0.0)]
+            for p in (own or placed):
+                g = gap_in if p[3] == c else gap_out
+                off = rng.uniform(0, math.pi / 12)
+                for i in range(24):
+                    t = off + i * math.pi / 12
+                    cands.append((p[0] + (p[2] + r + g) * math.cos(t), p[1] + (p[2] + r + g) * math.sin(t)))
+            best = None
+            for x, y in cands:
+                if any(math.hypot(x - q[0], y - q[1]) < q[2] + r + (gap_in if q[3] == c else gap_out) - 1e-6 for q in placed):
+                    continue
+                dist = math.hypot(x - cx, (y - cy) * stretch) + rng.uniform(0, .35)   # + a little chaos
+                if best is None or dist < best[0]:
+                    best = (dist, x, y)
+            placed.append((best[1], best[2], r, c))
+            a['_p'] = placed[-1]
+    if not placed:
+        return {'people': [], 'labels': []}
+    bx0, bx1 = min(p[0] - p[2] for p in placed), max(p[0] + p[2] for p in placed)
+    by0, by1 = min(p[1] - p[2] for p in placed), max(p[1] + p[2] + .5 for p in placed)   # + room for the lowest label
+    k = min((ax1 - ax0) / (bx1 - bx0), (ay1 - ay0) / (by1 - by0), 60)   # a few ambassadors: 1x = 120 px at most
+    ox, oy = (ax0 + ax1) / 2 - (bx0 + bx1) / 2 * k, (ay0 + ay1) / 2 - (by0 + by1) / 2 * k
+    out = []
+    for a in people:
+        x, y, r, c = a.pop('_p')
+        out.append({'name': a['name'], 'country': c, 'path': a['path'], 'x': round(ox + x * k), 'y': round(oy + y * k),
+                    'd': round(2 * r * k)})
+    labels = []
+    for c in order:                                          # the country under its cluster's lowest photo, on its edge
+        low = max((p for p in out if p['country'] == c), key=lambda p: p['y'] + p['d'] / 2)
+        labels.append({'country': c, 'x': low['x'], 'y': round(low['y'] + low['d'] / 2)})
+    return {'people': out, 'labels': labels}
 
 
 # ── images: derived into <event>/hello/img/ under content-hashed names ──────────────────────────────────────────
@@ -691,6 +857,10 @@ def _build(context, env, base_folder):
         rows = _with_tentative(b, _upcoming(sisters.get(b['key']) or [], today), today, 10)
         if b['key'] != key and b.get('tour', True) and rows:
             tours.append(dict(b, events=rows, span=_span(rows), map=_map_layout(rows, cfg.get('cities'), b['key'])))
+    amb = _amb_layout(_ambassadors(brands, key))
+    for a in amb['people']:
+        a['src'] = img.picture(a.pop('path'), BOX_AMB)
+    chat_form = asset('chat/form-%s.png' % key, (860, 1060))   # hello-deck/tools/shoot_lead_form.py
 
     sponsors = []
     for s in context.get('sponsors') or []:
@@ -729,9 +899,12 @@ def _build(context, env, base_folder):
         'open_source': projects,
         'spotlights': spotlights,
         'fonts': fonts,
-        # the sister brands' roadmaps, then this brand's own (with its mascot sticker); then its splash cards + QR
-        'tours': tours + ([dict(me, events=own_rows, span=_span(own_rows), map=_map_layout(own_rows, cfg.get('cities'), key),
-                                mascot_src=me.get('sticker_src') or me.get('mascot_src'))] if own_rows else []),
+        # this brand's roadmap first (with its mascot sticker), then the sister brands' in hello.yaml order (Marek
+        # 2026-10-31: "start with the leading conference"); then Let's chat, then its splash cards + QR
+        'tours': ([dict(me, events=own_rows, span=_span(own_rows), map=_map_layout(own_rows, cfg.get('cities'), key),
+                        mascot_src=me.get('sticker_src') or me.get('mascot_src'))] if own_rows else []) + tours,
+        'ambassadors': amb,
+        'chat_form': chat_form, 'chat_url': base.rstrip('/') + '/#sponsor', 'chat_qr': qr_svg(base.rstrip('/') + '/#sponsor'),
         # the home page cards are lossless WebPs (~400 KB each, 5 on the slide): the deck gets its own q90 copies (~70 KB)
         'own_cards': [dict(r, card=img.picture(os.path.join('../home', r['card'].lstrip('/')), (650, 325)) or r['card'])
                       for r in own if r['card']][:5],
@@ -743,5 +916,7 @@ def _build(context, env, base_folder):
     html = env.get_template('hello.html').render(page='hello.html', deck=deck, **context)
     with open(os.path.join(out, 'index.html'), 'w', encoding='utf-8') as f:
         f.write(html)
-    print('Writing out hello/index.html (hidden, not in sitemap): %d team, %d partners, %d sister tours (%s), %d own events'
-          % (len(deck['team']), len(sponsors), len(tours), ', '.join('%s %d' % (t['key'], len(t['events'])) for t in tours) or '-', len(own)))
+    print('Writing out hello/index.html (hidden, not in sitemap): %d team, %d ambassadors (%d countries), %d partners, '
+          '%d sister tours (%s), %d own events'
+          % (len(deck['team']), len(amb['people']), len(amb['labels']), len(sponsors), len(tours),
+             ', '.join('%s %d' % (t['key'], len(t['events'])) for t in tours) or '-', len(own)))
