@@ -2001,13 +2001,13 @@ except OSError:
 print("Writing out status/index.html (hidden, not in sitemap)")
 
 # DECK DUMP (hidden, /deckdump/ - Marek 2026-10-30): speakers upload their latest slides before the conference. The page
-# lists this brand's upcoming events and the ones that ended in the last DECKDUMP_DAYS days, each with its lineup (live
+# lists this brand's upcoming events and its DECKDUMP_PAST most recent finished ones (late uploads, Marek 2026-10-31), each with its lineup (live
 # talks only, one entry per talk page). The key is the talk page's file name (generate_talk_url in the event build,
 # ported below - keep them identical), so the deck lands on exactly that page. Backend: "Deck dump" Apps Script
 # (llmday/_build/deckdump-form.gs, deckdump_form_url in metadata.yml); the decks reach the talk pages through
 # _build/deckdump_pull.py the day after the event.
 import string as _dd_string, json as _dd_json
-DECKDUMP_DAYS = 14
+DECKDUMP_PAST = 3     # finished events still listed; _build/deckdump_pull.py ships the same ones
 _DD_BRAND_KEYS = {"SREday": "sreday", "LLMday": "llmday", "PLATFORMday": "platformday", "Prompt Engineering Conference": "pec"}
 
 
@@ -2037,8 +2037,6 @@ for _ev in (context.get("events") or []) + (context.get("events_past") or []):
         continue
     _tz = _start.tzinfo or datetime.timezone.utc
     _ends = datetime.datetime.combine(_start.date() + datetime.timedelta(days=max(1, int(_em.get("days") or 1))), datetime.time(0, 0), _tz)
-    if _dd_now > _ends + datetime.timedelta(days=DECKDUMP_DAYS):
-        continue
     _talks, _seen = [], set()
     try:
         with open("../" + _folder + "/_db/talks.csv", encoding="utf-8", errors="replace") as _cf:
@@ -2056,9 +2054,10 @@ for _ev in (context.get("events") or []) + (context.get("events_past") or []):
     if not _talks:
         continue
     _talks.sort(key=lambda t: t["n"].lower())
-    _dd_events.append({"folder": _folder, "event_name": str(_ev.get("name") or _folder), "date": str(_em.get("date_string") or ""),
+    _dd_events.append({"folder": _folder, "event_name": str(_ev.get("name") or _folder), "date": str(_em.get("date_string") or ""), "past": _dd_now >= _ends, "ends": _ends.isoformat(),
                        "city": str(_em.get("city_name") or ""), "start": _start.isoformat(), "talks": _talks})
-_dd_events.sort(key=lambda e: e["start"])
+_dd_upcoming = sorted([e for e in _dd_events if not e["past"]], key=lambda e: e["start"])
+_dd_events = _dd_upcoming + sorted([e for e in _dd_events if e["past"]], key=lambda e: e["ends"], reverse=True)[:DECKDUMP_PAST]
 os.makedirs(BASE_FOLDER + "/deckdump", exist_ok=True)
 with open(BASE_FOLDER + "/deckdump/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("deckdump.html").render(
