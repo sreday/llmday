@@ -20,6 +20,7 @@
   <style>
     :root { --dd-accent: {{ deckdump_color }}; --dd-danger: #c0392b; }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }   /* .dd-picked's display:flex must not beat the hidden attribute */
     html, body { margin: 0; background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
     .dd-wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
     .dd-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--dd-accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
@@ -34,6 +35,7 @@
       width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #111; background: #fff; outline: none; font-family: inherit; transition: border-color .2s, box-shadow .2s;
     }
     .dd-field select:focus, .dd-field input:focus { border-color: var(--dd-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dd-accent) 18%, transparent); }
+    .dd-field input:disabled { background: #f2f2f4; color: #999; cursor: not-allowed; }
     .dd-field.is-invalid select, .dd-field.is-invalid input, .dd-drop.is-invalid { border-color: var(--dd-danger) !important; }
     .dd-list { position: absolute; left: 0; right: 0; top: 100%; z-index: 5; margin: 4px 0 0; padding: 6px; list-style: none; background: #fff; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.12); max-height: 320px; overflow-y: auto; }
     .dd-list li { padding: 9px 12px; border-radius: 8px; cursor: pointer; line-height: 1.35; }
@@ -81,11 +83,13 @@
       <label class="dd-field" data-field="event"><span>Conference</span>
         <select name="event">
           {% if deckdump_events | length > 1 %}<option value="">Pick your conference</option>{% endif %}
-          {% for e in deckdump_events %}<option value="{{ e.folder }}">{{ e.event_name }}{% if e.date %} · {{ e.date }}{% endif %}</option>{% endfor %}
+          {% set _up = deckdump_events | rejectattr('past') | list %}{% set _past = deckdump_events | selectattr('past') | list %}
+          {% if _up %}<optgroup label="Upcoming">{% for e in _up %}<option value="{{ e.folder }}">{{ e.event_name }}{% if e.date %} · {{ e.date }}{% endif %}</option>{% endfor %}</optgroup>{% endif %}
+          {% if _past %}<optgroup label="Already happened (late uploads)">{% for e in _past %}<option value="{{ e.folder }}">{{ e.event_name }}{% if e.date %} · {{ e.date }}{% endif %}</option>{% endfor %}</optgroup>{% endif %}
         </select>
       </label>
       <div class="dd-field" data-field="talk"><span>Your talk</span>
-        <input type="text" id="dd-search" placeholder="Start typing your name" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="dd-list">
+        <input type="text" id="dd-search" placeholder="Pick your conference first" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="dd-list" disabled>
         <ul class="dd-list" id="dd-list" role="listbox" hidden></ul>
         <div class="dd-picked" id="dd-picked" hidden><div><b id="dd-picked-name"></b><small id="dd-picked-title"></small></div><button type="button" class="dd-linkbtn" id="dd-change">Change</button></div>
       </div>
@@ -136,7 +140,10 @@ function currentEvent() { return DD_EVENTS.filter(function(e) { return e.folder 
   var want = new URLSearchParams(location.search).get('event');
   if (want && DD_EVENTS.some(function(e) { return e.folder === want; })) sel.value = want;
 })();
-sel.addEventListener('change', function() { clearPick(); });
+// the name box only works once a conference is picked
+function syncSearch() { var on = !!currentEvent(); search.disabled = !on; search.placeholder = on ? 'Start typing your name' : 'Pick your conference first'; }
+sel.addEventListener('change', function() { clearPick(); syncSearch(); if (currentEvent()) search.focus(); });
+syncSearch();
 
 var active = -1, shown = [];
 function render() {

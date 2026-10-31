@@ -43,6 +43,7 @@ import urllib.request
 import yaml
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+RECENT_PAST = 3                  # the most recent finished events always shipped (late uploads), = DECKDUMP_PAST
 WINDOW_DAYS = 14                 # same as DECKDUMP_DAYS in home/_build/generate.py (how long /deckdump/ lists an event)
 MAX_BYTES = 5 * 1024 * 1024
 DPI_STEPS = (300, 220, 150, 110)
@@ -493,7 +494,7 @@ def main():
         today = datetime.datetime.fromisoformat(args.today + "T12:00:00+00:00")
 
     # events in their shipping window (nothing to fetch when none is)
-    events = []
+    events, finished = [], []
     for path in sorted(glob.glob(os.path.join(ROOT, "20*")) + glob.glob(os.path.join(ROOT, "past", "20*"))):
         folder = os.path.basename(path)
         if folder[:4] < "2025" or (args.event and args.event != "all" and folder != args.event):
@@ -509,6 +510,12 @@ def main():
         opens, closes, now = w
         if (args.event and args.event != "all") or (args.event == "all" and opens <= now) or opens <= now <= closes:
             events.append((path, meta))
+        elif opens <= now:
+            finished.append((opens, path, meta))
+    # the 3 most recent finished events stay open for late uploads, like /deckdump/ (DECKDUMP_PAST in home/_build/generate.py)
+    if not args.event:
+        shown = {p for p, _ in events}
+        events += [(p, m) for _, p, m in sorted(finished, key=lambda x: x[0], reverse=True)[:RECENT_PAST] if p not in shown]
     if args.cleanup:
         return cleanup(feed, brand, events_all(today), args)
     if not events:
