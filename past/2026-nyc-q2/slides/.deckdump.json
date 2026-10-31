@@ -1,0 +1,21 @@
+{
+ "reported": [],
+ "shipped": {
+  "Chrys_Li_TAILORU_Collective_Beyond_Prompts_Context_Architecture_for_Reliable_LLM_Systems__": {
+   "bytes": 1787202,
+   "file": "LLMday NYC 2026 Q2 - Chrys Li - Chrys_Li_TAILORU_Collective_Beyond_Prompts_Context_Architecture_for_Reliable_LLM_Systems__.pdf",
+   "id": "19e4b_mLxjarmQpAB5-oeciBDG2oqC3y3",
+   "modified": "2026-10-31T00:49:59.234Z",
+   "shipped": "2026-10-31T00:58:34Z",
+   "step": "lossless"
+  },
+  "Vanchhit_Khare_MT_Bank_Your_AI_Is_Making_Things_Up_Here_Is_How_to_Stop_It": {
+   "bytes": 1284072,
+   "file": "LLMday NYC 2026 Q2 - Vanchhit Khare - Vanchhit_Khare_MT_Bank_Your_AI_Is_Making_Things_Up_Here_Is_How_to_Stop_It.pptx",
+   "id": "1tnKD46W_sFAr42z1eNwk2B-B1MTeons6",
+   "modified": "2026-10-31T00:49:53.055Z",
+   "shipped": "2026-10-31T00:58:40Z",
+   "step": "lossless"
+  }
+ }
+}

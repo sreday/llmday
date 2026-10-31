@@ -1,0 +1,37 @@
+{
+ "reported": [],
+ "shipped": {
+  "Geoff_Niehaus_Today_Mechanic_One_LLM_Call_Is_the_Wrong_Default": {
+   "bytes": 617198,
+   "file": "LLMday Austin 2026 Q4 - Geoff Niehaus - Geoff_Niehaus_Today_Mechanic_One_LLM_Call_Is_the_Wrong_Default.pptx",
+   "id": "1hvVmK1LUHKvHKX2cP9GYQSjWdFt1S0XC",
+   "modified": "2026-10-31T00:52:44.980Z",
+   "shipped": "2026-10-31T00:57:57Z",
+   "step": "lossless"
+  },
+  "Maryam_Astero_Genomenon_One_Thing__Many_Names_Building_Reliable_Entity_Mapping": {
+   "bytes": 211195,
+   "file": "LLMday Austin 2026 Q4 - Maryam Astero - Maryam_Astero_Genomenon_One_Thing__Many_Names_Building_Reliable_Entity_Mapping.pptx",
+   "id": "1l9TXB2BD6vCmhJB1vbOONuT93q_EPoPc",
+   "modified": "2026-10-31T00:52:41.184Z",
+   "shipped": "2026-10-31T00:58:00Z",
+   "step": "lossless"
+  },
+  "Matt_Barge_Superbuilders_Selling_Commercial_Real_Estate_with_Grok_Bot": {
+   "bytes": 1835544,
+   "file": "LLMday Austin 2026 Q4 - Matt Barge - Matt_Barge_Superbuilders_Selling_Commercial_Real_Estate_with_Grok_Bot.pptx",
+   "id": "19rYj9t__D0WwyDEnNOJe4Q4-Ox4j__YA",
+   "modified": "2026-10-31T00:52:49.426Z",
+   "shipped": "2026-10-31T00:58:03Z",
+   "step": "lossless"
+  },
+  "Nick_Smith_AstraPack_AINative__Not_AIReactive_Rethinking_How_We_Build_Companies_and_Careers": {
+   "bytes": 191907,
+   "file": "LLMday Austin 2026 Q4 - Nick Smith - Nick_Smith_AstraPack_AINative__Not_AIReactive_Rethinking_How_We_Build_Companies_and_Careers.pptx",
+   "id": "1NHSEiA_lRAmJu3joBU9p7eAHH1Doaogo",
+   "modified": "2026-10-31T00:52:56.945Z",
+   "shipped": "2026-10-31T00:58:05Z",
+   "step": "lossless"
+  }
+ }
+}

@@ -1,0 +1,29 @@
+{
+ "reported": [],
+ "shipped": {
+  "Andrei_Shcherbinin_Social_Discovery_Group_Hybrid_RuleMLLLM_Moderation_at_Scale": {
+   "bytes": 2972556,
+   "file": "LLMday London 2026 Q2 - Andrei Shcherbinin - Andrei_Shcherbinin_Social_Discovery_Group_Hybrid_RuleMLLLM_Moderation_at_Scale.pdf",
+   "id": "1iFHoSPg3I_2ibLsIo_PXVAO281_1KvP6",
+   "modified": "2026-10-31T00:49:07.191Z",
+   "shipped": "2026-10-31T00:58:21Z",
+   "step": "lossless"
+  },
+  "Daulet_Amirkhanov_Bead_AI_The_Agentic_Engine_Room_Prewarmed_Firecracker_sandboxes_for_safe_AI_execut": {
+   "bytes": 1957622,
+   "file": "LLMday London 2026 Q2 - Daulet Amirkhanov - Daulet_Amirkhanov_Bead_AI_The_Agentic_Engine_Room_Prewarmed_Firecracker_sandboxes_for_safe_AI_execut.pptx",
+   "id": "1TLE6dIUQr_IkjNAXtleC-uorEEeSnKtZ",
+   "modified": "2026-10-31T00:49:14.738Z",
+   "shipped": "2026-10-31T00:58:26Z",
+   "step": "lossless"
+  },
+  "Max_Helzberg_Northslope_Technologies_PurposeBuilt_AI_Ontologies_Why_Data_Modeling_Determines_LLM_Per": {
+   "bytes": 946957,
+   "file": "LLMday London 2026 Q2 - Max Helzberg - Max_Helzberg_Northslope_Technologies_PurposeBuilt_AI_Ontologies_Why_Data_Modeling_Determines_LLM_Per.pdf",
+   "id": "1qWD2LFMLkUfxgc8ekq3snGNhUMa953-q",
+   "modified": "2026-10-31T00:48:57.780Z",
+   "shipped": "2026-10-31T00:58:26Z",
+   "step": "lossless"
+  }
+ }
+}

@@ -1,0 +1,29 @@
+{
+ "reported": [],
+ "shipped": {
+  "David_Justus_Panasonic_Frontier_by_Default_Is_a_Design_Flaw": {
+   "bytes": 629779,
+   "file": "LLMday NYC 2026 Q4 - David Justus - David_Justus_Panasonic_Frontier_by_Default_Is_a_Design_Flaw.pdf",
+   "id": "1mpcUroJakGe8Ug-obLjJxftOXXlDASAs",
+   "modified": "2026-10-31T00:54:05.880Z",
+   "shipped": "2026-10-31T00:57:19Z",
+   "step": "lossless"
+  },
+  "Maureese_Williams_Google_What_Did_Your_Agent_Actually_Do": {
+   "bytes": 154214,
+   "file": "LLMday NYC 2026 Q4 - Maureese Williams - Maureese_Williams_Google_What_Did_Your_Agent_Actually_Do.pdf",
+   "id": "1upJA_It4ztM_75N6SOunJLrqqNeI3L7a",
+   "modified": "2026-10-31T00:53:40.458Z",
+   "shipped": "2026-10-31T00:57:20Z",
+   "step": "lossless"
+  },
+  "Pete_Nuwayser_Stigian_Consulting_Discussion_AI_can_help_me_with_my_burnout_right": {
+   "bytes": 882075,
+   "file": "LLMday NYC 2026 Q4 - Pete Nuwayser - Pete_Nuwayser_Stigian_Consulting_Discussion_AI_can_help_me_with_my_burnout_right.pdf",
+   "id": "1209GR8z5LqALszRuiZY89n1bz1ZXk-Mw",
+   "modified": "2026-10-31T00:54:00.693Z",
+   "shipped": "2026-10-31T00:57:34Z",
+   "step": "300 dpi"
+  }
+ }
+}

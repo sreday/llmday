@@ -1,0 +1,21 @@
+{
+ "reported": [],
+ "shipped": {
+  "Anna_SztyberBetley_Warsaw_University_of_Technology_Beware_of_finetuning_Subliminal_learning_and_weir": {
+   "bytes": 3202596,
+   "file": "LLMday Warsaw 2026 Q1 - Anna Sztyber-Betley - Anna_SztyberBetley_Warsaw_University_of_Technology_Beware_of_finetuning_Subliminal_learning_and_weir.pdf",
+   "id": "1uOvWyEwY0vtcXz-iSFuf_A-YEqQ0MQC_",
+   "modified": "2026-10-31T00:46:40.745Z",
+   "shipped": "2026-10-31T00:59:02Z",
+   "step": "lossless"
+  },
+  "Oktawia_Sepiol_EY_LAW_How_LLM_Capabilities_Trigger_AI_Act_Obligations": {
+   "bytes": 2397205,
+   "file": "LLMday Warsaw 2026 Q1 - Oktawia Sepiol - Oktawia_Sepiol_EY_LAW_How_LLM_Capabilities_Trigger_AI_Act_Obligations.pptx",
+   "id": "1djRNpw4JRgkQofjVCbAqFHVsX6N8j9LT",
+   "modified": "2026-10-31T00:46:53.909Z",
+   "shipped": "2026-10-31T00:59:18Z",
+   "step": "300 dpi"
+  }
+ }
+}
