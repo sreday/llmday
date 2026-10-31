@@ -486,6 +486,7 @@ def _map_layout(rows, cities, brand):
 # + ../ambassadors/; the sisters' from their published /ambassadors.json (home/_build/generate.py) + /ambassadors/<photo>,
 # list cached 30 min in ../.cache/hello-ambassadors.json, photos by md5 in ../.cache/hello-amb/ (same offline rules).
 AMB_CACHE = '../.cache/hello-ambassadors.json'
+AMB_CACHE_V = 2                                              # bump to drop every cached list (v1 kept a failed fetch as 'none')
 AMB_PHOTOS = '../.cache/hello-amb'
 AMB_AREA = (70, 250, 1850, 1050)                             # where the cluster may go (below the heading)
 AMB_SIZES = ((1, .45), (1.5, .35), (2, .2))                  # size x weight
@@ -539,9 +540,12 @@ def _ambassadors(brands, key):
             cached = json.load(f)
     except (OSError, ValueError):
         pass
+    if cached.get('v') != AMB_CACHE_V:
+        cached = {}
     lists = cached.get('lists') or {}
     offline = os.environ.get('SKIP_CFP_CHECK') or os.environ.get('SKIP_HELLO_FETCH')
-    if not offline and not (cached.get('sites') == sites and time.time() - cached.get('at', 0) < CACHE_TTL):
+    fresh = cached.get('sites') == sites and time.time() - cached.get('at', 0) < CACHE_TTL and all(lists.get(k) for k in sites)
+    if not offline and not fresh:                            # an empty list is asked again on every build (cheap: one small file)
         def one(site):
             req = urllib.request.Request(site + 'ambassadors.json', headers={'User-Agent': 'hello-deck-build'})
             with urllib.request.urlopen(req, timeout=8) as r:
@@ -557,7 +561,7 @@ def _ambassadors(brands, key):
             os.makedirs(os.path.dirname(AMB_CACHE), exist_ok=True)
             tmp = '%s.%d.tmp' % (AMB_CACHE, os.getpid())
             with open(tmp, 'w', encoding='utf-8') as f:
-                json.dump({'at': time.time() if ok else 0, 'sites': sites, 'lists': lists}, f)
+                json.dump({'v': AMB_CACHE_V, 'at': time.time() if ok else 0, 'sites': sites, 'lists': lists}, f)
             os.replace(tmp, AMB_CACHE)
         except OSError:
             pass
