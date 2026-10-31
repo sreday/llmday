@@ -755,7 +755,8 @@ context["keynotes"] = keynotes
 _break_cuts = set()
 _rows_before = 0
 for _brk in context.get("breaks") or []:
-    _rows_before += _brk.get("talks_before") or 0
+    # negative talks_before = a break between keynotes, not between track rows
+    _rows_before += max(int(_brk.get("talks_before") or 0), 0)
     _break_cuts.add(_rows_before)
 _rows_by_track = {}
 for _talk in talks:
