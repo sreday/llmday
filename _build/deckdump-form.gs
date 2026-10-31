@@ -256,11 +256,19 @@ function scanInbox(data) {
       LINK_RE.lastIndex = 0;
       while ((x = LINK_RE.exec(body))) links[x[1]] = 1;
       if (!atts.length && !Object.keys(links).length) return;
+      var linked = Object.keys(links).map(function (id) {                // what each link is, when this account can open it
+        try { var f = DriveApp.getFileById(id); return { id: id, name: f.getName(), mime: f.getMimeType(), deck: isDeckFile(f) }; }
+        catch (err) { return { id: id, error: 'no access' }; }
+      });
       out.push({ id: m.getId(), date: m.getDate().toISOString(), from: m.getFrom(), subject: m.getSubject().slice(0, 140),
-                 attachments: atts, links: Object.keys(links) });
+                 attachments: atts, links: linked });
     });
   });
   return respond({ ok: true, account: Session.getEffectiveUser().getEmail(), threads: threads.length, messages: out });
+}
+
+function isDeckFile(f) {
+  return f.getMimeType() === MimeType.GOOGLE_SLIDES || DECK_EXT.test(f.getName());
 }
 
 function importDecks(data) {
@@ -276,6 +284,7 @@ function importDecks(data) {
         blob = a.copyBlob(); name = a.getName();
       } else if (it.drive_id) {
         var f = DriveApp.getFileById(String(it.drive_id));
+        if (!isDeckFile(f)) throw new Error('not a deck: ' + f.getName() + ' (' + f.getMimeType() + ')');
         if (f.getMimeType() === MimeType.GOOGLE_SLIDES) { blob = f.getAs('application/pdf'); name = f.getName() + '.pdf'; }
         else { blob = f.getBlob(); name = f.getName(); }
         if (!DECK_EXT.test(name)) name += '.pdf';
