@@ -83,6 +83,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          git config user.name "github-actions[bot]"   # the rebase below needs an identity too, not only the commit
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for d in 20*/slides past/20*/slides; do [ -d "$d" ] && git add -A -- "$d"; done
           if git diff --cached --quiet; then echo "No new decks"; exit 0; fi
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
