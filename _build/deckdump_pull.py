@@ -278,6 +278,8 @@ def process_event(folder_path, meta, files, token, args):
         prev = shipped_state.get(key) or {}
         if prev.get("id") == f["id"] and prev.get("modified") == f.get("modified") and os.path.isfile(os.path.join(slides_dir, key + ".pdf")):
             continue
+        if m.get("converted_from") and prev and os.path.isfile(os.path.join(slides_dir, key + ".pdf")):
+            continue                                       # a PDF copy of a deck already on the site (v3 one-off convert)
         talk = by_key[key]
         pid = "%s@%s" % (f["id"], f.get("modified"))
         ext = (m.get("ext") or os.path.splitext(f.get("name") or "")[1].lstrip(".")).lower()

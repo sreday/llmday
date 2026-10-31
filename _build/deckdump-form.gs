@@ -18,6 +18,9 @@
  *      (sender, subject, date, deck attachments, Drive/Slides links) so Claude can match them to talks cheaply;
  *      {action: "import", token, items} copies the matched ones into the folder server-side (Gmail attachment or Drive
  *      file; Google Slides exported to PDF), dated by the email, never replacing a newer upload for the same talk.
+ *   6. PDFs only (v3, Marek 2026-10-31: "I want to have decks uploaded to the drive in PDF"): the page sends PDF only;
+ *      imports convert PowerPoint/ODP to PDF through Google Slides (toPdf); Keynote cannot be converted and is reported.
+ *      {action: "convert", token} converts the non-PDFs already in the folder once (original to the trash).
  *
  * Abuse guards (no passphrase - speakers use this from the onboarding email): honeypot, daily cap (DECKDUMP_DAILY),
  * file type + size caps, names and keys checked against strict patterns. The page only offers lineup talks.
@@ -60,7 +63,7 @@ function doGet(e) {
     if (!tokenOk(p.token)) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, access_token: ScriptApp.getOAuthToken(), files: listDecks() });
   }
-  return respond({ ok: true, service: 'deckdump', version: 2 });   // v2: scan + import (decks already in the inbox)
+  return respond({ ok: true, service: 'deckdump', version: 3 });   // v3: PDFs only (PowerPoint/ODP/Slides converted)
 }
 
 function doPost(e) {
@@ -74,12 +77,14 @@ function doPost(e) {
   if (data.action === 'report') return report(data);
   if (data.action === 'scan') return scanInbox(data);
   if (data.action === 'import') return importDecks(data);
+  if (data.action === 'convert') return convertFolder(data);
 
   var brandKey = String(data.brand || '').toLowerCase();
   var brand = BRANDS[brandKey];
   if (!brand) return respond({ ok: false, error: 'bad brand' });
   var d = normalizeDeck(data, brandKey);
   if (d.errors.length) return respond({ ok: false, error: 'invalid', fields: d.errors });
+  if (d.ext !== 'pdf') return respond({ ok: false, error: 'pdf only' });   // Marek 2026-10-31: the folder holds PDFs only
 
   if (data.action === 'start') {
     if (data.dry_run) return respond({ ok: true, dry_run: true, name: d.filename, meta: d.meta });
@@ -291,6 +296,7 @@ function importDecks(data) {
       } else {
         throw new Error('nothing to import');
       }
+      if (!/\.pdf$/i.test(name)) { blob = toPdf(blob, name); name = name.replace(/\.[a-z0-9]+$/i, '') + '.pdf'; }
       var d = normalizeDeck({ event: { folder: it.folder, event_name: it.event }, talk: { short_url: it.short_url, name: it.speaker, title: it.title },
                               file: { name: name, size: blob.getBytes().length } }, String(it.brand || ''));
       if (!BRANDS[it.brand] || d.errors.length) throw new Error('invalid: ' + d.errors.join(', '));
@@ -309,6 +315,58 @@ function importDecks(data) {
     results.push(r);
   });
   return respond({ ok: true, results: results });
+}
+
+// PowerPoint / ODP -> PDF through Google Slides: upload as a converted Slides file (resumable, so big decks never pass
+// through a byte array), export it as PDF, trash the temporary Slides file. Keynote has no converter.
+function toPdf(blob, name) {
+  var ext = (/\.([a-z0-9]+)$/i.exec(name || '') || [])[1];
+  ext = ext ? ext.toLowerCase() : '';
+  if (ext === 'key') throw new Error('Keynote file: needs a PDF export');
+  if (!TYPES[ext] || ext === 'pdf') throw new Error('cannot convert ' + name);
+  var auth = { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() };
+  var init = UrlFetchApp.fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id', {
+    method: 'post', contentType: 'application/json; charset=UTF-8', muteHttpExceptions: true,
+    headers: { Authorization: auth.Authorization, 'X-Upload-Content-Type': TYPES[ext] },
+    payload: JSON.stringify({ name: 'deckdump-convert-' + Date.now(), mimeType: MimeType.GOOGLE_SLIDES })
+  });
+  var loc = init.getHeaders().Location || init.getHeaders().location;
+  if (init.getResponseCode() !== 200 || !loc) throw new Error('convert: ' + init.getResponseCode() + ' ' + init.getContentText().slice(0, 200));
+  var up = UrlFetchApp.fetch(loc, { method: 'put', contentType: TYPES[ext], payload: blob.getBytes(), muteHttpExceptions: true });
+  if (up.getResponseCode() !== 200) throw new Error('convert upload: ' + up.getResponseCode() + ' ' + up.getContentText().slice(0, 200));
+  var id = JSON.parse(up.getContentText()).id;
+  try {
+    var ex = UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + id + '/export?mimeType=application%2Fpdf', { headers: auth, muteHttpExceptions: true });
+    if (ex.getResponseCode() !== 200) throw new Error('export: ' + ex.getResponseCode() + ' ' + ex.getContentText().slice(0, 200));
+    return ex.getBlob().setContentType('application/pdf');
+  } finally {
+    try { DriveApp.getFileById(id).setTrashed(true); } catch (err) {}
+  }
+}
+
+// one-off: every non-PDF already in the folder becomes a PDF with the same talk data; the original goes to the trash
+function convertFolder(data) {
+  if (!tokenOk(data.token)) return respond({ ok: false, error: 'forbidden' });
+  var out = [], started = Date.now();
+  listDecks().forEach(function (x) {
+    if (/\.pdf$/i.test(x.name) || Date.now() - started > 300000) return;     // stay inside the 6-minute limit; call again
+    var r = { name: x.name };
+    try {
+      var f = DriveApp.getFileById(x.id), pdf = toPdf(f.getBlob(), x.name);
+      var meta = JSON.parse(JSON.stringify(x.meta));
+      meta.ext = 'pdf'; meta.converted_from = x.name.split('.').pop().toLowerCase();
+      var name = x.name.replace(/\.[a-z0-9]+$/i, '') + '.pdf';
+      var nf = deckFolder().createFile(pdf.setName(name));
+      nf.setDescription(JSON.stringify(meta));
+      f.setTrashed(true);
+      r.ok = true; r.pdf = name;
+    } catch (err) {
+      r.error = String(err).slice(0, 200);
+    }
+    out.push(r);
+  });
+  var left = listDecks().filter(function (x) { return !/\.pdf$/i.test(x.name); }).length;
+  return respond({ ok: true, results: out, non_pdf_left: left });
 }
 
 // ---- mail -----------------------------------------------------------------------------
