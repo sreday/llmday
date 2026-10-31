@@ -12,9 +12,10 @@ timezone) less than WINDOW_DAYS ago:
   3. matches each deck to a talk by its key (the talk page file name, generate_talk_url in the event build); a talk
      retitled since the upload is found again by the speaker name; a deck whose talk left the lineup is reported;
   4. downloads it straight from Drive, converts PPTX/ODP to PDF (LibreOffice), reports Keynote files (no converter);
-  5. fits it under 5 MB (Marek: site decks never over 5 MB; Drive keeps the full-quality upload): a lossless pass
-     first (qpdf, then Ghostscript without resampling), then images resampled at 300 / 220 / 150 / 110 dpi, keeping
-     the FIRST step that fits; text, vectors and links stay; the page count is checked every time;
+  5. fits it under 5 MB (Drive keeps the full-quality upload): a lossless pass first (qpdf, then Ghostscript without
+     resampling), then images resampled at 300 / 220 / 150 / 110 dpi, keeping the FIRST step that fits; text, vectors
+     and links stay. When 5 MB cannot be reached, the best version under 10 MB is shipped (Marek 2026-10-31); only
+     beyond that are the pages flattened to images (flagged). The page count is checked every time;
   6. writes <event>/slides/<key>.pdf. The event build shows "Download slides" on the talk page from the same moment
      (_slides_open in _event_template/_build/generate.py) and copies the PDF into static/ only then.
 Then it writes one report per event (shipped, needs a hand, speakers with no deck yet) to the Actions job summary.
@@ -46,6 +47,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RECENT_PAST = 3                  # the most recent finished events always shipped (late uploads), = DECKDUMP_PAST
 WINDOW_DAYS = 14                 # same as DECKDUMP_DAYS in home/_build/generate.py (how long /deckdump/ lists an event)
 MAX_BYTES = 5 * 1024 * 1024
+FALLBACK_BYTES = 10 * 1024 * 1024   # when 5 MB cannot be reached without flattening (Marek 2026-10-31)
 DPI_STEPS = (300, 220, 150, 110)
 FLAT_STEPS = (150, 110, 96)      # last resort: pages as images (text no longer selectable), only when nothing else fits
 BRAND_KEYS = {"SREday": "sreday", "LLMday": "llmday", "PLATFORMday": "platformday", "Prompt Engineering Conference": "pec"}
@@ -203,32 +205,42 @@ def gs_flat(src, dst, dpi):
 
 
 def fit(src, workdir):
-    """-> (path, step): the highest-quality version under MAX_BYTES with the same page count; step 'original',
-    'lossless', '<dpi> dpi', or '<dpi> dpi, over 5 MB' when even the last step does not fit (the smallest is used)."""
+    """-> (path, step): the highest-quality version with the same page count that fits. Target MAX_BYTES (5 MB); when no
+    normal step gets there, the highest-quality one under FALLBACK_BYTES (10 MB, Marek 2026-10-31: "if 5MB fails, allow
+    10MB"); only when even that fails are the pages flattened (sharpest that fits 10 MB). Steps, best quality first:
+    'original', 'lossless', '<dpi> dpi', 'flattened <dpi> dpi'; ', over 10 MB' when nothing fits (the smallest is used)."""
     apt("qpdf", "ghostscript")
     n = pages(src)
-    best, best_step = src, "original"
+    tried = [(src, "original")]                            # every valid version, best quality first
 
-    def take(path, step):
-        nonlocal best, best_step
-        if os.path.isfile(path) and pages(path) == n and os.path.getsize(path) < os.path.getsize(best):
-            best, best_step = path, step
+    def add(path, step):
+        if os.path.isfile(path) and pages(path) == n:
+            tried.append((path, step))
+
+    def first_under(limit):
+        for path, step in tried:
+            if os.path.getsize(path) <= limit:
+                return path, step
+        return None
 
     q = os.path.join(workdir, "qpdf.pdf")
     subprocess.run(["qpdf", "--object-streams=generate", "--compress-streams=y", "--recompress-flate", "--compression-level=9",
                     src, q], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    take(q, "lossless")
-    if os.path.getsize(best) <= MAX_BYTES:
-        return best, best_step
+    if os.path.isfile(q) and os.path.getsize(q) < os.path.getsize(src):
+        tried.insert(0, (q, "lossless"))                   # same quality, smaller: preferred over the original
+    if first_under(MAX_BYTES):
+        return first_under(MAX_BYTES)
+    base = tried[0][0]
     g = os.path.join(workdir, "gs-lossless.pdf")
     try:
-        gs_lossless(best, g)
-        take(g, "lossless")
+        gs_lossless(base, g)
+        if os.path.isfile(g) and os.path.getsize(g) < os.path.getsize(base) and pages(g) == n:
+            tried.insert(0, (g, "lossless"))
+            base = g
     except (subprocess.SubprocessError, OSError) as e:
         print("  ghostscript lossless pass failed: %s" % e)
-    if os.path.getsize(best) <= MAX_BYTES:
-        return best, best_step
-    base = best
+    if first_under(MAX_BYTES):
+        return first_under(MAX_BYTES)
     for dpi in DPI_STEPS:
         out = os.path.join(workdir, "gs-%d.pdf" % dpi)
         try:
@@ -236,10 +248,13 @@ def fit(src, workdir):
         except (subprocess.SubprocessError, OSError) as e:
             print("  ghostscript %d dpi failed: %s" % (dpi, e))
             continue
-        take(out, "%d dpi" % dpi)
-        if best == out and os.path.getsize(out) <= MAX_BYTES:
-            return best, best_step
-    # still over: heavy vector art (no images to resample) or giant photos. Flatten the pages, sharpest first.
+        add(out, "%d dpi" % dpi)
+        if os.path.isfile(out) and os.path.getsize(out) <= MAX_BYTES and pages(out) == n:
+            return out, "%d dpi" % dpi
+    if first_under(FALLBACK_BYTES):                        # nothing under 5 MB: the best version under 10 MB
+        path, step = first_under(FALLBACK_BYTES)
+        return path, step + ", 5-10 MB"
+    # still over 10 MB: heavy vector art (no images to resample) or giant photos. Flatten the pages, sharpest first.
     for dpi in FLAT_STEPS:
         out = os.path.join(workdir, "flat-%d.pdf" % dpi)
         try:
@@ -247,10 +262,11 @@ def fit(src, workdir):
         except (subprocess.SubprocessError, OSError) as e:
             print("  ghostscript flatten %d dpi failed: %s" % (dpi, e))
             continue
-        take(out, "flattened %d dpi" % dpi)
-        if best == out and os.path.getsize(out) <= MAX_BYTES:
-            return best, best_step
-    return best, (best_step + ", over 5 MB") if os.path.getsize(best) > MAX_BYTES else best_step
+        add(out, "flattened %d dpi" % dpi)
+        if os.path.isfile(out) and os.path.getsize(out) <= FALLBACK_BYTES and pages(out) == n:
+            return out, "flattened %d dpi" % dpi
+    path, step = min(tried, key=lambda t: os.path.getsize(t[0]))
+    return path, step + ", over 10 MB"
 
 
 # ---- one event ----------------------------------------------------------------------------------
@@ -327,9 +343,9 @@ def process_event(folder_path, meta, files, token, args):
             if step.startswith("flattened"):
                 problems.append({"pid": pid + ":flat", "speaker": talk["name"], "title": talk["title"], "file": f.get("name"),
                                  "why": "pages flattened to images to fit 5 MB (%s): text is not selectable on the site copy" % step})
-            if "over 5 MB" in step:
+            if "over 10 MB" in step:
                 problems.append({"pid": pid + ":big", "speaker": talk["name"], "title": talk["title"], "file": f.get("name"),
-                                 "why": "still %s at 110 dpi, shipped anyway; a lighter export would help" % mb(size)})
+                                 "why": "still %s after every step, shipped anyway; a lighter export would help" % mb(size)})
         except Exception as e:   # one bad deck never stops the others
             print("  FAILED %s: %s" % (talk["name"], e))
             if pid not in reported:
@@ -392,7 +408,7 @@ def selftest():
         d = tempfile.mkdtemp(dir=work)
         out, step = fit(path, d)
         after = os.path.getsize(out)
-        good = after <= MAX_BYTES and pages(out) == n
+        good = after <= FALLBACK_BYTES and pages(out) == n
         ok &= good
         print("selftest %s: %s -> %s, %d pages -> %d, step %s: %s" % (name, mb(before), mb(after), n, pages(out), step, "OK" if good else "FAIL"))
     # real decks: whatever was uploaded on /deckdump/ to the fake event folder TEST_FOLDER (never a real event, so the
@@ -413,7 +429,7 @@ def selftest():
                 pdf = raw if ext == "pdf" else to_pdf(raw, d)
                 n = pages(pdf)
                 out, step = fit(pdf, d)
-                good = os.path.getsize(out) <= MAX_BYTES and pages(out) == n
+                good = os.path.getsize(out) <= FALLBACK_BYTES and pages(out) == n
                 ok &= good
                 name = re.sub(r"[^\w .&-]+", "", m.get("original_name") or f["name"])
                 shutil.copyfile(out, os.path.join(keep, "shrunk - " + os.path.splitext(name)[0] + ".pdf"))
