@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Deck dump: LLMday</title>
+	<!-- link previews: _build/og_images.py -->
+	<meta property="og:title" content="Deck dump: LLMday">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://llmday.com/deckdump/">
+	<meta property="og:site_name" content="LLMday">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta property="og:image:secure_url" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="800">
+	<meta property="og:image:alt" content="Deck dump: LLMday">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@llmday_com">
+	<meta name="twitter:creator" content="@llmday_com">
+	<meta name="twitter:title" content="Deck dump: LLMday">
+	<meta name="twitter:image" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta name="twitter:image:alt" content="Deck dump: LLMday">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png?v=67cb461a46">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
+  <style>
+    :root { --dd-accent: #26986A; --dd-danger: #c0392b; }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }   /* .dd-picked's display:flex must not beat the hidden attribute */
+    html, body { margin: 0; background: #f4f4f6; color: #111; font-family: 'Roboto', sans-serif; }
+    .dd-wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
+    .dd-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--dd-accent); font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+    .dd-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.8rem; margin: 0 0 14px; line-height: 1.2; }
+    .dd-intro { color: #333; font-size: 1rem; line-height: 1.6; margin: 0 0 26px; }
+    .dd-card { background: #fff; border: 1px solid #e6e6e6; border-left: 4px solid var(--dd-accent); border-radius: 16px; padding: 28px 32px; box-shadow: 0 4px 20px rgba(0,0,0,.06); margin-bottom: 22px; }
+    .dd-field { display: block; margin: 0 0 20px; position: relative; }
+    .dd-field:last-child { margin-bottom: 0; }
+    .dd-field > span { display: block; font-size: .8rem; font-weight: 600; color: #333; margin-bottom: 6px; letter-spacing: .02em; }
+    .dd-field > span small { font-weight: 400; color: #888; }
+    .dd-field select, .dd-field input[type=text], .dd-field input[type=email] {
+      width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; font-size: 1rem; color: #111; background: #fff; outline: none; font-family: inherit; transition: border-color .2s, box-shadow .2s;
+    }
+    .dd-field select:focus, .dd-field input:focus { border-color: var(--dd-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dd-accent) 18%, transparent); }
+    .dd-field input:disabled { background: #f2f2f4; color: #999; cursor: not-allowed; }
+    .dd-field.is-invalid select, .dd-field.is-invalid input, .dd-drop.is-invalid { border-color: var(--dd-danger) !important; }
+    .dd-list { position: absolute; left: 0; right: 0; top: 100%; z-index: 5; margin: 4px 0 0; padding: 6px; list-style: none; background: #fff; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.12); max-height: 320px; overflow-y: auto; }
+    .dd-list li { padding: 9px 12px; border-radius: 8px; cursor: pointer; line-height: 1.35; }
+    .dd-list li:hover, .dd-list li.on { background: color-mix(in srgb, var(--dd-accent) 10%, #fff); }
+    .dd-list li b { display: block; font-weight: 600; }
+    .dd-list li small { color: #777; }
+    .dd-list li.none { cursor: default; color: #777; }
+    .dd-picked { display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid color-mix(in srgb, var(--dd-accent) 40%, #fff); background: color-mix(in srgb, var(--dd-accent) 7%, #fff); border-radius: 10px; padding: 10px 14px; }
+    .dd-picked b { display: block; }
+    .dd-picked small { color: #666; }
+    .dd-linkbtn { background: none; border: none; padding: 0; color: var(--dd-accent); font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .dd-drop { border: 2px dashed #ccc; border-radius: 12px; padding: 22px; cursor: pointer; transition: border-color .2s, background .2s; background: #fafafa; display: block; font-size: .95rem; color: #444; line-height: 1.5; }
+    .dd-drop:hover, .dd-drop.over { border-color: var(--dd-accent); background: color-mix(in srgb, var(--dd-accent) 5%, #fff); }
+    .dd-drop input { display: none; }
+    .dd-drop b { color: var(--dd-accent); }
+    .dd-hint { font-size: .8rem; color: #888; margin-top: 6px; min-height: 1em; }
+    .dd-hint.warn { color: #b26a00; }
+    .dd-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 4px 32px 0; }
+    .btn-dd { display: inline-flex; align-items: center; justify-content: center; min-width: 170px; border: none; border-radius: 999px; padding: 12px 28px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.05rem; cursor: pointer; background: var(--dd-accent); color: #fff; transition: filter .15s, transform .1s; }
+    .btn-dd:hover { filter: brightness(1.1); }
+    .btn-dd:active { transform: scale(.97); }
+    .btn-dd[disabled] { opacity: .55; cursor: default; }
+    .dd-error { width: 100%; font-size: .92rem; color: var(--dd-danger); }
+    .dd-progress { width: 100%; margin-top: 4px; }
+    .dd-bar { height: 8px; border-radius: 999px; background: #e6e6e6; overflow: hidden; }
+    .dd-bar i { display: block; height: 100%; width: 0; background: var(--dd-accent); transition: width .3s; }
+    .dd-step { font-size: .88rem; color: #555; margin-top: 8px; }
+    .dd-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .dd-done { font-size: 1.05rem; line-height: 1.6; }
+    .dd-done strong { font-family: 'Montserrat', sans-serif; }
+    .dd-muted { color: #888; font-size: .85rem; margin-top: 30px; padding: 0 32px; }
+    .dd-muted a { color: #666; }
+    @media (max-width: 575.98px) { .dd-card { padding: 22px 18px; } .dd-row, .dd-muted { padding-left: 18px; padding-right: 18px; } .dd-title { font-size: 1.45rem; } }
+  </style>
+<meta name="build" content="85ab1dc7ab-20261031T102356Z">
+</head>
+<body>
+<main class="dd-wrap">
+  <div class="dd-brand">LLMday · deck dump</div>
+  <h1 class="dd-title">Upload your slides</h1>
+  <p class="dd-intro">Please share the final version of your slides with us as a PDF before the conference. We keep them as a backup on the day, and after the event they go up on your talk page for everyone to download. Big files are fine, we only trim the extra weight and never touch the quality.</p>
+
+
+  <form id="dd-form" novalidate>
+    <div class="dd-card">
+      <label class="dd-field" data-field="event"><span>Conference</span>
+        <select name="event">
+          <option value="">Pick your conference</option>
+          
+          <optgroup label="Upcoming"><option value="2026-tel-aviv-q4">LLMday + Data Tel Aviv 2026 Q4 · November 17, 2026</option><option value="2026-hamburg-q4">LLMday Hamburg 2026 Q4 · November 18, 2026</option><option value="2026-london-q4">LLMday + PEC London 2026 Q4 · November 26, 2026</option><option value="2026-montevideo-q4">LLMday Montevideo 2026 Q4 · December 5, 2026</option></optgroup>
+          <optgroup label="Already happened (late uploads)"><option value="2026-nyc-q4">LLMday NYC 2026 Q4 · October 29, 2026</option><option value="2026-austin-q4">LLMday Austin 2026 Q4 · October 14, 2026</option><option value="2026-san-francisco-q4">LLMday San Francisco 2026 Q4 · October 1, 2026</option></optgroup>
+        </select>
+      </label>
+      <div class="dd-field" data-field="talk"><span>Your talk</span>
+        <input type="text" id="dd-search" placeholder="Pick your conference first" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="dd-list" disabled>
+        <ul class="dd-list" id="dd-list" role="listbox" hidden></ul>
+        <div class="dd-picked" id="dd-picked" hidden><div><b id="dd-picked-name"></b><small id="dd-picked-title"></small></div><button type="button" class="dd-linkbtn" id="dd-change">Change</button></div>
+      </div>
+      <div class="dd-field" data-field="file"><span>Slides <small>(PDF, 200 MB max)</small></span>
+        <label class="dd-drop" id="dd-drop">
+          <input type="file" name="file" accept=".pdf,application/pdf">
+          <span id="dd-drop-text"><b>Choose your PDF</b> or drop it here.<br>From PowerPoint, Keynote or Google Slides: File &gt; Export (or Download) &gt; PDF.</span>
+        </label>
+        <div class="dd-hint" id="dd-file-hint"></div>
+      </div>
+      <label class="dd-field" data-field="email"><span>Email <small>(optional, for a receipt)</small></span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
+    </div>
+    <div class="dd-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="dd-row">
+      <button type="submit" class="btn-dd" id="dd-send">Upload my slides</button>
+      <div class="dd-progress" id="dd-progress" hidden><div class="dd-bar"><i id="dd-bar"></i></div><div class="dd-step" id="dd-step"></div></div>
+      <div class="dd-error" id="dd-error" hidden></div>
+    </div>
+  </form>
+
+  <div class="dd-card dd-done" id="dd-done" hidden></div>
+  <div class="dd-muted">Can't find your name? Email us at <a href="mailto:hello@llmday.com">hello@llmday.com</a> and attach your slides.</div>
+
+</main>
+
+
+<script src="../assets/js/deckdump/pdf-lib.min.js?v=0fe9d55504" defer></script>
+<script>
+var DD_URL    = "https://script.google.com/macros/s/AKfycbyBYyHafNCaZGxxCtWbcmp85kSi-VN43PQJzh8VWkIUzT5G23-4eCXeuTRgrSz6bHL2wQ/exec";
+var DD_BRAND  = "llmday";
+var DD_EVENTS = [{"city": "Tel Aviv", "date": "November 17, 2026", "ends": "2026-11-18T00:00:00+02:00", "event_name": "LLMday + Data Tel Aviv 2026 Q4", "folder": "2026-tel-aviv-q4", "past": false, "start": "2026-11-17T09:00:00+02:00", "talks": [{"k": "Avital_Tamir_groundcover_The_Ninth_Rewrite_Might_Be_a_Delete_Building_Production_AI_Agents_on_Shifti", "n": "Avital Tamir", "t": "The Ninth Rewrite Might Be a Delete: Building Production AI Agents on Shifting Ground"}, {"k": "Haggai_Zohar_TeraSky_Company_Brain_with_Fabric_and_Claude", "n": "Haggai Zohar", "t": "Company Brain with Fabric and Claude"}, {"k": "Nir_Adler_Komodor_Bye_Bye_Timestream__A_Tale_of_Migrating_59_Billion_Metrics_a_Day_to_ClickHouse", "n": "Nir Adler", "t": "Bye Bye Timestream - A Tale of Migrating 5.9 Billion Metrics a Day to ClickHouse"}, {"k": "Noa_Baron_Cato_Networks_Coming_Soon", "n": "Noa Baron", "t": "Coming Soon"}, {"k": "Roi_Lipman_FalkorDB_From_grep_to_graph_giving_AI_agents_a_map_of_your_code", "n": "Roi Lipman", "t": "From grep to graph: giving AI agents a map of your code"}, {"k": "Sharone_Revah_Zitzman_RTFM_Please_LTD_MC__Opening_Words", "n": "Sharone Revah Zitzman", "t": "MC \u0026 Opening Words"}, {"k": "Yev_Berman_TeraSky_Talk_to_Your_Cluster_It_Talks_Back", "n": "Yev Berman", "t": "Talk to Your Cluster. It Talks Back!"}]}, {"city": "Hamburg", "date": "November 18, 2026", "ends": "2026-11-19T00:00:00+01:00", "event_name": "LLMday Hamburg 2026 Q4", "folder": "2026-hamburg-q4", "past": false, "start": "2026-11-18T09:00:00+01:00", "talks": [{"k": "Attila_Toth_ScyllaDB_The_hidden_infra_behind_For_You_pages_Realtime_AI_personalization", "n": "Attila Toth", "t": "The hidden infra behind \"For You\" pages: Real-time AI personalization"}, {"k": "Ebrahim_Mirsafian_Lavan_Labs_Ltd_Testing_Voice_When_Your_Coding_Agent_Cant_Hear", "n": "Ebrahim Mirsafian", "t": "Testing Voice When Your Coding Agent Can\u0027t Hear"}, {"k": "Ivan_Vokhmin_moebelde_Einrichten_und_Wohnen_GmbH_From_RAG_to_memory_decay_engineering_a_memory_for_c", "n": "Ivan Vokhmin", "t": "From RAG to memory decay: engineering a memory for chatbots and beyond"}, {"k": "Marcel_Koert_MeloMarIT_The_Code_Was_the_Easy_Part_Building_Spaghetti_Code_Foundry", "n": "Marcel Koert", "t": "The Code Was the Easy Part: Building Spaghetti Code Foundry"}, {"k": "Philip_Laine_Kvick_Its_Time_to_Serve__AI_Models", "n": "Philip Laine", "t": "It\u2019s Time to Serve \ud83d\udc85 AI Models"}, {"k": "Piotr_Zaniewski_vCluster_Labs_Your_Platform_Already_Has_AI_Users", "n": "Piotr Zaniewski", "t": "Your Platform Already Has AI Users"}]}, {"city": "London", "date": "November 26, 2026", "ends": "2026-11-27T00:00:00+00:00", "event_name": "LLMday + PEC London 2026 Q4", "folder": "2026-london-q4", "past": false, "start": "2026-11-26T09:00:00+00:00", "talks": [{"k": "Alper_Nebi_Kanli_Optimizely_Interpretability_x_Retrieval_Inside_the_Models_That_Power_Search", "n": "Alper Nebi Kanli", "t": "Interpretability x Retrieval: Inside the Models That Power Search"}, {"k": "Artemis_Leonardou_NOFire_AI_Three_Hours_Debugging_Code_I_Never_Wrote", "n": "Artemis Leonardou", "t": "Three Hours Debugging Code I Never Wrote"}, {"k": "Egor_Grositskiy_Beat_Saber_When_Prompting_Isnt_Enough_Lessons_from_an_Art_Directors_Production_Pipel", "n": "Egor Grositskiy", "t": "When Prompting Isn\u0027t Enough: Lessons from an Art Director\u0027s Production Pipeline"}, {"k": "Egor_Levchenko_allhealth_Can_you_trust_an_AI_Scientist_Reproducibility_and_evaluation_of_AIdriven_di", "n": "Egor Levchenko", "t": "Can you trust an AI Scientist? Reproducibility and evaluation of AI-driven discovery"}, {"k": "Emmanuela_Opurum_SoftNet_Technologies_Designing_ProductionGrade_Prompt_Systems_for_AI_Agents_A_Solut", "n": "Emmanuela Opurum", "t": "Designing Production-Grade Prompt Systems for AI Agents: A Solution Architect\u2019s Perspective"}, {"k": "Guilherme_Santos_Blindsight_Prompt_Lawyering_How_AI_games_human_requests", "n": "Guilherme Santos", "t": "Prompt Lawyering. How AI games human requests"}, {"k": "Hannah_Morris_Busuu_Building_a_Knowledge_Graph_for_personalised_language_learning", "n": "Hannah Morris", "t": "Building a Knowledge Graph for personalised language learning"}, {"k": "Harrison_Kirby_Great_Wave_AI_The_Case_for_Boring_AI", "n": "Harrison Kirby", "t": "The Case for Boring AI"}, {"k": "Kannupriya_Kalra__Rory_Graves_LLM4S_Foundation__The_Trade_Desk_LLM4S_10_From_Idea_to_Production_AI_i", "n": "Kannupriya Kalra \u0026 Rory Graves", "t": "LLM4S 1.0: From Idea to Production AI in Scala/JVM"}, {"k": "Karthigeyan_R_J_Comply2Reg_Beyond_RAG_Graph_RAG__Small_Language_Models_for_Regulated_Industries", "n": "Karthigeyan R J", "t": "Beyond RAG: Graph RAG \u0026 Small Language Models for Regulated Industries"}, {"k": "Kayode_Adeniyi_AI_Research_Engineer_Closing_the_satellite_observation_gap_for_flood_insurance_with_A", "n": "Kayode Adeniyi", "t": "Closing the satellite observation gap for flood insurance with AI Agents"}, {"k": "Mark_Weston_FireHorse_AI_Agents__what_could_possibly_go_wrong", "n": "Mark Weston", "t": "AI Agents - what could possibly go wrong?"}, {"k": "Martina_Wyss_Caringdots_AI_Can_Read_the_Patient_But_Can_It_Understand_the_Human_Beyond_the_Chatbot_D", "n": "Martina Wyss", "t": "AI Can Read the Patient. But Can It Understand the Human? Beyond the Chatbot: Designing LLMs for Healthcare People Can Actually Trust"}, {"k": "Neil_Douek_OTTRA__GitLab_Engineering_at_the_Speed_of_Light", "n": "Neil Douek", "t": "Engineering at the Speed of Light"}, {"k": "Nick_Mecklenburg_Whitney_AI_Searching_Through_a_Virtual_World_PostTraining_a_4B_Search_Agent", "n": "Nick Mecklenburg", "t": "Searching Through a Virtual World: Post-Training a 4B Search Agent"}, {"k": "Oliver_Gooding_IFF_Research_Evaluating_LLM_Outputs_When_Quality_is_Subjective", "n": "Oliver Gooding", "t": "Evaluating LLM Outputs When Quality is Subjective"}, {"k": "Olushola_Oladipupo_AWS_Before_Your_Agent_Takes_Action_Evaluating_CustomerService_AI", "n": "Olushola Oladipupo", "t": "Before Your Agent Takes Action: Evaluating Customer-Service AI"}, {"k": "Paulius_Rauba_Cursive_Lessons_learned_from_posttraining_3_trillion_parameter_models", "n": "Paulius Rauba", "t": "Lessons learned from post-training 3 trillion parameter models"}, {"k": "Peter_Fox_IBM_From_Rules_to_Reasoning_Migrating_a_Virtual_Assistant_to_anLLMDriven_Orchestration_Pla", "n": "Peter Fox", "t": "From Rules to Reasoning: Migrating a Virtual Assistant to an\nLLM-Driven Orchestration Platform (Assisted by an AI Coding Agent)"}, {"k": "Phillip_Mortimer_Universite_Paris_Dauphine__PSL_Tools_to_Think_With", "n": "Phillip Mortimer", "t": "Tools to Think With"}, {"k": "Ritesh_Modi_Wise_Prompt_Release_Engineering", "n": "Ritesh Modi", "t": "Prompt Release Engineering"}, {"k": "Shashi_Jagtap_Superagentic_AI_Recursive_Prompt_Engineering_Who_Writes_the_Next_Prompt", "n": "Shashi Jagtap", "t": "Recursive Prompt Engineering: Who Writes the Next Prompt?"}, {"k": "Tahreem_Rasul_Red_Buffer_The_Agent_Eval_Stack_Outcomes__Trajectories__Reliability__and_Judges", "n": "Tahreem Rasul", "t": "The Agent Eval Stack: Outcomes, Trajectories, Reliability, and Judges"}, {"k": "Veronika_Ulanova_PhysicsX__Independent_Researcher_When_the_Ground_Truth_Disagrees_What_Atmospheric_B", "n": "Veronika Ulanova", "t": "When the Ground Truth Disagrees: What Atmospheric Blocking Teaches Us About Scientific AI"}, {"k": "Viktor_Gordienko_inDrive_Agentic_workflow__orchestration_in_iOS_development", "n": "Viktor Gordienko", "t": "Agentic workflow \u0026 orchestration in iOS development"}, {"k": "Zoe_Yan_Echelon_AI_Agents_Meet_the_System_of_Record_Putting_AI_to_Work_Inside_Enterprise_Systems", "n": "Zoe Yan", "t": "Agents Meet the System of Record: Putting AI to Work Inside Enterprise Systems"}]}, {"city": "Montevideo", "date": "December 5, 2026", "ends": "2026-12-06T00:00:00-03:00", "event_name": "LLMday Montevideo 2026 Q4", "folder": "2026-montevideo-q4", "past": false, "start": "2026-12-05T08:00:00-03:00", "talks": [{"k": "Axel_Labruna__Maika_de_Jesus_Esteves_Nubiral_AgentOps_The_future_is_here", "n": "Axel Labruna \u0026 Maika de Jesus Esteves", "t": "AgentOps: The future is here"}, {"k": "Ben_Sterne_Match_My_Email_Beyond_Vibe_Coding_How_AI_is_Changing_Development_Cycles", "n": "Ben Sterne", "t": "Beyond Vibe Coding: How AI is Changing Development Cycles"}, {"k": "Carla_Marcela_Florida_Roman_Bee_Zero_Science_at_Scale_AWS_Infrastructure_for_Reproducible_Scientific", "n": "Carla Marcela Florida Roman", "t": "Science at Scale: AWS Infrastructure for Reproducible Scientific Experimentation"}, {"k": "Fede_Rodrigo_CIO_Office_AI_Is_Never_the_Starting_Point", "n": "Fede Rodrigo", "t": "AI Is Never the Starting Point"}, {"k": "Federico_Novelli_Protect_Group_The_AI_Security_Paradox_Quantifying_Risk_in_the_Age_of_LLMs_and_Agent", "n": "Federico Novelli", "t": "The AI Security Paradox: Quantifying Risk in the Age of LLMs and Agents"}, {"k": "Gorka_Ludlow_Karma_Digital_Apps__not_chats_Shipping_macOS_products_that_run_AI_models_ondevice", "n": "Gorka Ludlow", "t": "Apps, not chats. Shipping macOS products that run AI models on-device"}, {"k": "Joaquin_Bonifacino_Zyte_Long_Running_Agents_The_Harness_Is_the_Product", "n": "Joaquin Bonifacino", "t": "Long Running Agents: The Harness Is the Product"}, {"k": "Josefina_R_Casanova_IBM_From_PDFs_to_Production_RAG_Lessons_from_Building_Document_Pipelines_with_Do", "n": "Josefina R. Casanova", "t": "From PDFs to Production RAG: Lessons from Building Document Pipelines with Docling"}, {"k": "Leon_Achata_TCS_RAG_Is_Not_a_Search_Problem", "n": "Leon Achata", "t": "RAG Is Not a Search Problem"}, {"k": "Lucia_Hernandez_Metodica_Digital_The_User_Is_Part_of_the_Harness_A_Year_Running_an_Agent_That_Adapts", "n": "Lucia Hernandez", "t": "The User Is Part of the Harness: A Year Running an Agent That Adapts to Cognitive Load"}, {"k": "Marcelo_B_San_Martin_Blizzard_Entertainment_The_Great_AI_Role_Rewrite", "n": "Marcelo B San Martin", "t": "The Great AI Role Rewrite"}, {"k": "Marcos_Martinez_Loopstudio_From_1_Hour_to_10_Minutes_Automating_Purchase_Orders_with_AI", "n": "Marcos Martinez", "t": "From 1 Hour to 10 Minutes: Automating Purchase Orders with AI"}, {"k": "Mark_Pawlikowski__Marcos_Novelli_Harispe_Reliaburger_Put_Down_the_Prompt_Set_Up__Test__and_Break_a_P", "n": "Mark Pawlikowski \u0026 Marcos Novelli Harispe", "t": "Put Down the Prompt: Set Up, Test, and Break a Production Cluster in Seconds with\nReliaburger"}, {"k": "Martin_Brian_Marvik_The_Harness_Auction_What_Makes_an_AI_Agent_Actually_Work", "n": "Martin Brian", "t": "The Harness Auction: What Makes an AI Agent Actually Work?"}, {"k": "Martin_Rojas_Cybersecurity_Specialist__Auditor_Breaking_the_GenAI_Data_Pipeline_Architectural_Securi", "n": "Martin Rojas", "t": "Breaking the GenAI Data Pipeline: Architectural Security and AI-DSPM with OWASP"}, {"k": "Thalita_Regina_Terpilauskas_de_Sa_Riverstone_Insights__Iowa_AI_Isnt_MagicBut_It_Can_Deliver_Remarkab", "n": "Thalita Regina Terpilauskas de Sa", "t": "AI Isn\u2019t Magic\u2014But It Can Deliver Remarkable Results"}]}, {"city": "NYC", "date": "October 29, 2026", "ends": "2026-10-30T00:00:00-04:00", "event_name": "LLMday NYC 2026 Q4", "folder": "2026-nyc-q4", "past": true, "start": "2026-10-29T09:00:00-04:00", "talks": [{"k": "Annie_Talvasto_Upbound_Platform_Engineer_to_Inference_Engineer", "n": "Annie Talvasto", "t": "Platform Engineer to Inference Engineer"}, {"k": "Chris_Harding_groundcover_HOT_TAKE_We_Dont_Need_Code_Reviews__How_AI_is_Changing_the_Last_Sacred_Eng", "n": "Chris Harding", "t": "HOT TAKE: We Don\u2019t Need Code Reviews - How AI is Changing the Last Sacred Engineering Ritual"}, {"k": "David_Justus_Panasonic_Frontier_by_Default_Is_a_Design_Flaw", "n": "David Justus", "t": "Frontier by Default Is a Design Flaw"}, {"k": "Jinlin_He__Rob_Bajra_Databricks_Omnigent_Swap_between_agent_harnesses_with_ease", "n": "Jinlin He \u0026 Rob Bajra", "t": "Omnigent: Swap between agent harnesses with ease"}, {"k": "Josh_Lee_Altinity_Zen_AI_Cohabitation_How_I_learned_to_embrace_the_slop", "n": "Josh Lee", "t": "Zen AI Cohabitation: How I learned to embrace the slop"}, {"k": "Marcelo_Labre_Kidar_Agentic_Engineering_The_Agent_Writes_the_Code__Not_the_Process", "n": "Marcelo Labre", "t": "Agentic Engineering: The Agent Writes the Code, Not the Process"}, {"k": "Maureese_Williams_Google_What_Did_Your_Agent_Actually_Do", "n": "Maureese Williams", "t": "What Did Your Agent Actually Do?"}, {"k": "Pete_Nuwayser_Stigian_Consulting_Discussion_AI_can_help_me_with_my_burnout_right", "n": "Pete Nuwayser", "t": "Discussion: AI can help me with my burnout... right?"}, {"k": "Rajanikant_Vellaturi_dbt_Labs_From_CSAT_to_AI_Insights", "n": "Rajanikant Vellaturi", "t": "From CSAT to AI Insights"}, {"k": "Sai_Varma_Dantuluri_VotalAI_Agents_Arent_Users", "n": "Sai Varma Dantuluri", "t": "Agents Aren\u0027t Users"}, {"k": "Sam_Currie_heyocomputer_Isolation_Containers__VMs__Namespaces__Oh_my", "n": "Sam Currie", "t": "Isolation: Containers, VMs, Namespaces, Oh my!"}, {"k": "Sevak_Avakians_USAA_Beyond_the_Next_Token_The_open_future_of_language_models", "n": "Sevak Avakians", "t": "Beyond the Next Token: The open future of language models"}, {"k": "Yiwen_Zhang_AWS_Token_Economics_for_Custom_Built_Agents", "n": "Yiwen Zhang", "t": "Token Economics for Custom Built Agents"}, {"k": "Yossi_Eliaz_Incredibuild_The_Sandbox_Is_the_Agent_Runtime_What_Breaks_When_Execution_Becomes_Disposa", "n": "Yossi Eliaz", "t": "The Sandbox Is the Agent Runtime: What Breaks When Execution Becomes Disposable"}, {"k": "Zachary_Gruenberg_Oasis_Security_Post_McpSessionId_Auth_and_Kill_Switches_for_Stateless_MCP_Agents", "n": "Zachary Gruenberg", "t": "Post Mcp-Session-Id: Auth and Kill Switches for Stateless MCP Agents"}]}, {"city": "Austin", "date": "October 14, 2026", "ends": "2026-10-15T00:00:00-05:00", "event_name": "LLMday Austin 2026 Q4", "folder": "2026-austin-q4", "past": true, "start": "2026-10-14T08:30:00-05:00", "talks": [{"k": "Colby_Mainard_RiskScout_Invisible_Data__The_Largest_Problem_Facing_AI", "n": "Colby Mainard", "t": "Invisible Data - The Largest Problem Facing AI"}, {"k": "Geoff_Niehaus_Today_Mechanic_One_LLM_Call_Is_the_Wrong_Default", "n": "Geoff Niehaus", "t": "One LLM Call Is the Wrong Default"}, {"k": "Kunle_Olutomilayo_Isiro_AI_30_More_KV_Cache_Headroom__100_Accuracy", "n": "Kunle Olutomilayo", "t": "30% More KV Cache Headroom, 100% Accuracy"}, {"k": "Leila_Anderson_Upheal_Evaluation_Without_Ground_Truth_Lessons_from_Expert_Disagreement", "n": "Leila Anderson", "t": "Evaluation Without Ground Truth: Lessons from Expert Disagreement"}, {"k": "Maryam_Astero_Genomenon_One_Thing__Many_Names_Building_Reliable_Entity_Mapping", "n": "Maryam Astero", "t": "One Thing, Many Names: Building Reliable Entity Mapping"}, {"k": "Matt_Barge_Superbuilders_Selling_Commercial_Real_Estate_with_Grok_Bot", "n": "Matt Barge", "t": "Selling Commercial Real Estate with Grok Bot"}, {"k": "Nate_Lemos_MakingFriendsapp_My_wife_is_a_vibecoder_So__what_now", "n": "Nate Lemos", "t": "My wife is a vibe-coder. So, what now?"}, {"k": "Nick_Smith_AstraPack_AINative__Not_AIReactive_Rethinking_How_We_Build_Companies_and_Careers", "n": "Nick Smith", "t": "AI-Native, Not AI-Reactive: Rethinking How We Build Companies and Careers"}, {"k": "Rahul_Azmeera_7Eleven_Visual_AI_Testing_Agent_ScreenshotFirst_Mobile_UI_Test_Automation_for_iOS_Simu", "n": "Rahul Azmeera", "t": "Visual AI Testing Agent: Screenshot-First Mobile UI Test Automation for iOS Simulator"}, {"k": "Rodney_Richard_Puplampu_Puplampu_Consulting_Ogummaa_Agent_Portal_Architecture__Security_Blueprint_fo", "n": "Rodney Richard Puplampu", "t": "Ogummaa Agent Portal. Architecture \u0026 Security Blueprint for Long-Horizon Agents"}, {"k": "Vashishtha_Patil_Amazon_Lab126_AutoResearch_on_a_Budget_Small_Models_in_the_Loop__Frontier_Models_on", "n": "Vashishtha Patil", "t": "Auto-Research on a Budget: Small Models in the Loop, Frontier Models on Call"}]}, {"city": "San Francisco", "date": "October 1, 2026", "ends": "2026-10-02T00:00:00-07:00", "event_name": "LLMday San Francisco 2026 Q4", "folder": "2026-san-francisco-q4", "past": true, "start": "2026-10-01T09:00:00-07:00", "talks": [{"k": "Andrew_Barkett_Miriel_AI_Your_Agent_Needs_a_Kernel__Not_a_Better_Prompt", "n": "Andrew Barkett", "t": "Your Agent Needs a Kernel, Not a Better Prompt"}, {"k": "Avneesh_Sharma_Amazon_Evidence_Grounded_Context_Layer_for_AI_Agents", "n": "Avneesh Sharma", "t": "Evidence Grounded Context Layer for AI Agents"}, {"k": "Devang_Sharma_Meta_Inference_Economics_Engineering_LLMs_for_Cost__Latency__and_Scale", "n": "Devang Sharma", "t": "Inference Economics: Engineering LLMs for Cost, Latency, and Scale"}, {"k": "Elizabeth_Fuentes_Leone_AWS_Your_Agents_Context_Window_Is_Full_Now_What", "n": "Elizabeth Fuentes Leone", "t": "Your Agent\u0027s Context Window Is Full. Now What?"}, {"k": "Fahd_Rafi_Noodle_Seed_The_Deploy_Line_When_Software_Becomes_Infinite", "n": "Fahd Rafi", "t": "The Deploy Line: When Software Becomes Infinite"}, {"k": "Funmilade_A_Lesi_Root_Inc_Gen_AI_Product_Strategy", "n": "Funmilade A. Lesi", "t": "Gen AI Product Strategy"}, {"k": "Gabriel_Nahum_GeyserData_inc_Agents_as_the_First_Line_of_Defense", "n": "Gabriel Nahum", "t": "Agents as the First Line of Defense"}, {"k": "Gully_Burns_Altos_Labs_Claude_Opus_as_a_Tabletop_Roleplaying_GamesMaster_for_the_Mythras_Imperative_", "n": "Gully Burns", "t": "Claude Opus as a Tabletop Roleplaying GamesMaster for the Mythras Imperative Rule Set"}, {"k": "Ivo_Dujmovic_uc2cai_FailClosed_by_Design_Why_Auditable_AI_Isnt_Agentic", "n": "Ivo Dujmovic", "t": "Fail-Closed by Design: Why Auditable AI Isn\u0027t Agentic"}, {"k": "Jack_Murphy_DeepTempo_From_the_Frontlines_of_Finetuning_What_Works_and_Why", "n": "Jack Murphy", "t": "From the Frontlines of Finetuning: What Works and Why"}, {"k": "Jyotirmoy_Sundi_Votalai_The_Insider_Threat_of_Agentic_AI", "n": "Jyotirmoy Sundi", "t": "The Insider Threat of Agentic AI"}, {"k": "Leon_Lobo_Oracle_Designing_Hybrid_Intelligence_for_Enterprise_Finance_Balancing_Agentic_Reasoning_an", "n": "Leon Lobo", "t": "Designing Hybrid Intelligence for Enterprise Finance: Balancing Agentic Reasoning and Business Integrity"}, {"k": "Matt_Schillerstrom_Harness_Keynote_Your_Customers_Are_Already_Building_Your_Roadmap", "n": "Matt Schillerstrom", "t": "Your Customers Are Already Building Your Roadmap"}, {"k": "Mike_Arbuzov_EchoStar_Corporation_Herding_Context_Keeping_16_Engineers_and_Their_Agents_in_Sync", "n": "Mike Arbuzov", "t": "Herding Context: Keeping 16 Engineers and Their Agents in Sync"}, {"k": "Miles_Maggio_Prest0_Prest0_AI_on_the_Rise_of_Selfdeveloping_AI_Startup_Whats_real__whats_theater__wh", "n": "Miles Maggio", "t": "Prest0 AI on the Rise of Self-developing AI Startup\": What\u0027s real, what\u0027s theater, what\u0027s next and the new rules of business in the AI era"}, {"k": "Paari_Krishnamurthy_OpenAI_No_Evals__No_Scale_An_Operators_Playbook_for_AI", "n": "Paari Krishnamurthy", "t": "No Evals, No Scale: An Operator\u2019s Playbook for AI"}, {"k": "Pranav_Saji_Symosis_Security_Your_Agents_Tools_Are_the_Attack_Surface", "n": "Pranav Saji", "t": "Your Agent\u0027s Tools Are the Attack Surface"}, {"k": "Pujitha_Paladugu_Independent_Researcher_ZeroTrust_Edge_Security_for_Enterprise_LLM_Applications", "n": "Pujitha Paladugu", "t": "Zero-Trust Edge Security for Enterprise LLM Applications"}, {"k": "Qazybek_Beken_UC_Berkeley_The_LLM_Is_Not_the_System", "n": "Qazybek Beken", "t": "The LLM Is Not the System"}, {"k": "Saurabh_Yergattikar_eBay_ShieldMCP_MCPs_Missing_Firewall", "n": "Saurabh Yergattikar", "t": "ShieldMCP: MCP\u0027s Missing Firewall"}, {"k": "Sebastian_Gomez_Buzz_Solutions_Founding_Engineer_Risk__Equity__AI", "n": "Sebastian Gomez", "t": "Founding Engineer: Risk, Equity \u0026 AI"}, {"k": "Sirisha_Ayyagari_Software_Developer_Agentic_Pricing_Intelligence_Embedding_LLMDriven_Decisioning_int", "n": "Sirisha Ayyagari", "t": "Agentic Pricing Intelligence: Embedding LLM-Driven Decisioning into Enterprise Order-to-Cash Systems"}, {"k": "Stan_Miasnikov_Verizon_RAG_That_Knows_When_to_Stop_Error_Budgets_for_Retrieval_Loops", "n": "Stan Miasnikov", "t": "RAG That Knows When to Stop: Error Budgets for Retrieval Loops"}, {"k": "Sujoy_Datta_Choudhury_Amazon_Why_Your_Agent_Fails_The_SelfCorrection_Paradox", "n": "Sujoy Datta Choudhury", "t": "Why Your Agent Fails: The Self-Correction Paradox"}, {"k": "Vaibhav_Mahajan_Workday_Retrieval_as_Classification_Hierarchical_Categorization_Without_Training", "n": "Vaibhav Mahajan", "t": "Retrieval as Classification: Hierarchical Categorization Without Training"}, {"k": "Vi_Tran_Ever_Guardrails_and_Traces_for_Agents_That_Act_in_the_World", "n": "Vi Tran", "t": "Guardrails and Traces for Agents That Act in the World"}]}];
+var MAX_BYTES = 200 * 1024 * 1024, MAX_FALLBACK = 35 * 1024 * 1024, MAX_TRIM = 150 * 1024 * 1024, CHUNK = 8 * 1024 * 1024;
+var TYPES = { pdf: 'application/pdf' };
+
+var $ = function(id) { return document.getElementById(id); };
+var form = $('dd-form'), sel = form.elements['event'], search = $('dd-search'), list = $('dd-list');
+var picked = null, deck = null;
+
+function esc(s) { return String(s).replace(/[&<>"]/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function mb(n) { return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+function fold(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l'); }
+function currentEvent() { return DD_EVENTS.filter(function(e) { return e.folder === sel.value; })[0] || null; }
+
+// ---- conference + talk picker ---------------------------------------------------------
+(function() {
+  var want = new URLSearchParams(location.search).get('event');
+  if (want && DD_EVENTS.some(function(e) { return e.folder === want; })) sel.value = want;
+})();
+// the name box only works once a conference is picked
+function syncSearch() { var on = !!currentEvent(); search.disabled = !on; search.placeholder = on ? 'Start typing your name' : 'Pick your conference first'; }
+sel.addEventListener('change', function() { clearPick(); syncSearch(); if (currentEvent()) search.focus(); });
+syncSearch();
+
+var active = -1, shown = [];
+function render() {
+  var ev = currentEvent(), q = fold(search.value.trim());
+  if (!ev) { list.innerHTML = '<li class="none">Pick your conference first.</li>'; list.hidden = false; return; }
+  shown = ev.talks.filter(function(t) { return !q || fold(t.n).split(/[^a-z0-9]+/).some(function(w) { return w.indexOf(q) === 0; }) || fold(t.n).indexOf(q) === 0; });
+  if (q.length >= 3) shown = shown.concat(ev.talks.filter(function(t) { return shown.indexOf(t) < 0 && (fold(t.n).indexOf(q) >= 0 || fold(t.t).indexOf(q) >= 0); }));
+  active = shown.length ? 0 : -1;
+  list.innerHTML = shown.length ? shown.map(function(t, i) { return '<li role="option" data-i="' + i + '"' + (i === 0 ? ' class="on"' : '') + '><b>' + esc(t.n) + '</b><small>' + esc(t.t) + '</small></li>'; }).join('')
+                                : '<li class="none">No match in this lineup.</li>';
+  list.hidden = false; search.setAttribute('aria-expanded', 'true');
+}
+function pick(t) {
+  picked = t;
+  $('dd-picked-name').textContent = t.n; $('dd-picked-title').textContent = t.t;
+  $('dd-picked').hidden = false; search.hidden = true; list.hidden = true; search.setAttribute('aria-expanded', 'false');
+  form.querySelector('[data-field="talk"]').classList.remove('is-invalid');
+}
+function clearPick() {
+  picked = null; $('dd-picked').hidden = true; search.hidden = false; search.value = ''; list.hidden = true;
+}
+search.addEventListener('focus', render);
+search.addEventListener('input', render);
+search.addEventListener('keydown', function(e) {
+  var items = list.querySelectorAll('li[data-i]');
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault(); if (!items.length) return;
+    active = (active + (e.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length;
+    items.forEach(function(li, i) { li.classList.toggle('on', i === active); });
+    items[active].scrollIntoView({ block: 'nearest' });
+  } else if (e.key === 'Enter') {
+    e.preventDefault(); if (active >= 0 && shown[active]) pick(shown[active]);
+  } else if (e.key === 'Escape') { list.hidden = true; }
+});
+list.addEventListener('mousedown', function(e) { var li = e.target.closest('li[data-i]'); if (li) { e.preventDefault(); pick(shown[+li.dataset.i]); } });
+search.addEventListener('blur', function() { setTimeout(function() { list.hidden = true; }, 150); });
+$('dd-change').addEventListener('click', function() { clearPick(); search.focus(); });
+
+// ---- the deck -------------------------------------------------------------------------
+var drop = $('dd-drop'), hint = $('dd-file-hint'), dropText = $('dd-drop-text'), emptyText = dropText.innerHTML;
+function extOf(name) { var m = /\.([a-z0-9]{2,5})$/i.exec(name || ''); return m ? m[1].toLowerCase() : ''; }
+function takeFile(file) {
+  deck = null; hint.className = 'dd-hint'; hint.textContent = '';
+  var ext = extOf(file.name);
+  if (!TYPES[ext]) { hint.className = 'dd-hint warn'; hint.textContent = 'Please export your slides to PDF first: in PowerPoint, Keynote or Google Slides use File > Export (or Download) > PDF.'; dropText.innerHTML = emptyText; return; }
+  if (file.size > MAX_BYTES) { hint.className = 'dd-hint warn'; hint.textContent = 'That file is over 200 MB. Please export a smaller PDF, or email us a link.'; dropText.innerHTML = emptyText; return; }
+  deck = file;
+  dropText.innerHTML = '<b>Ready.</b> ' + esc(file.name) + ' (' + mb(file.size) + ')<br>Click or drop to replace.';
+  drop.classList.remove('is-invalid');
+}
+['dragenter', 'dragover'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.add('over'); }); });
+['dragleave', 'drop'].forEach(function(ev) { drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.remove('over'); }); });
+drop.addEventListener('drop', function(e) { if (e.dataTransfer.files && e.dataTransfer.files[0]) takeFile(e.dataTransfer.files[0]); });
+form.elements['file'].addEventListener('change', function() { if (this.files && this.files[0]) takeFile(this.files[0]); });
+
+// ---- lossless trim ("trim the fat, never touch quality") ----------------------------------
+async function sha(bytes) {
+  var h = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes));
+  return Array.prototype.map.call(h, function(b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+}
+async function deflate(bytes) {                       // zlib stream = what /FlateDecode expects
+  var cs = new CompressionStream('deflate');
+  return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(cs)).arrayBuffer());
+}
+
+async function trimPdf(file) {
+  var P = window.PDFLib, N = function(n) { return P.PDFName.of(n); };
+  var src = new Uint8Array(await file.arrayBuffer());
+  var doc = await P.PDFDocument.load(src, { updateMetadata: false });   // encrypted -> throws -> sent as is
+  var pages = doc.getPageCount(), ctx = doc.context;
+  // dead weight: page thumbnails, app-private data, XMP, attachments, document JavaScript
+  doc.getPages().forEach(function(p) { ['Thumb', 'PieceInfo', 'Metadata'].forEach(function(k) { p.node.delete(N(k)); }); });
+  var cat = doc.catalog;
+  ['Metadata', 'PieceInfo'].forEach(function(k) { cat.delete(N(k)); });
+  var names = cat.lookupMaybe(N('Names'), P.PDFDict);
+  if (names) { names.delete(N('EmbeddedFiles')); names.delete(N('JavaScript')); }
+  // identical streams (the same logo or background on every slide) stored once
+  var byKey = {}, dup = {}, objs = ctx.enumerateIndirectObjects();
+  for (var i = 0; i < objs.length; i++) {
+    var ref = objs[i][0], obj = objs[i][1];
+    if (!(obj instanceof P.PDFRawStream)) continue;
+    var k = obj.dict.toString() + '|' + await sha(obj.contents);
+    if (byKey[k]) dup[ref.tag] = byKey[k]; else byKey[k] = ref;
+  }
+  function repoint(o) {
+    if (o instanceof P.PDFDict) o.entries().forEach(function(e) { var v = e[1]; if (v instanceof P.PDFRef && dup[v.tag]) o.set(e[0], dup[v.tag]); else repoint(v); });
+    else if (o instanceof P.PDFArray) for (var j = 0; j < o.size(); j++) { var v = o.get(j); if (v instanceof P.PDFRef && dup[v.tag]) o.set(j, dup[v.tag]); else repoint(v); }
+    else if (o instanceof P.PDFStream) repoint(o.dict);
+  }
+  if (Object.keys(dup).length) ctx.enumerateIndirectObjects().forEach(function(e) { repoint(e[1]); });
+  // whatever nothing points to any more is left out
+  var seen = {}, stack = [ctx.trailerInfo.Root, ctx.trailerInfo.Info, ctx.trailerInfo.Encrypt];
+  while (stack.length) {
+    var o = stack.pop();
+    if (!o) continue;
+    if (o instanceof P.PDFRef) { if (seen[o.tag]) continue; seen[o.tag] = 1; stack.push(ctx.lookup(o)); }
+    else if (o instanceof P.PDFDict) o.entries().forEach(function(e) { stack.push(e[1]); });
+    else if (o instanceof P.PDFArray) o.asArray().forEach(function(v) { stack.push(v); });
+    else if (o instanceof P.PDFStream) stack.push(o.dict);
+  }
+  ctx.enumerateIndirectObjects().forEach(function(e) { if (!seen[e[0].tag]) ctx.delete(e[0]); });
+  // streams stored without any compression get Flate (lossless); everything already encoded is left byte for byte
+  if (window.CompressionStream) {
+    var live = ctx.enumerateIndirectObjects();
+    for (var m = 0; m < live.length; m++) {
+      var s = live[m][1];
+      if (!(s instanceof P.PDFRawStream) || s.dict.has(N('Filter')) || s.contents.length < 1024) continue;
+      var z = await deflate(s.contents);
+      if (z.length >= s.contents.length) continue;
+      s.dict.set(N('Filter'), N('FlateDecode'));
+      ctx.assign(live[m][0], P.PDFRawStream.of(s.dict, z));
+    }
+  }
+  var out = await doc.save({ useObjectStreams: true, addDefaultPage: false, updateFieldAppearances: false });
+  var check = await P.PDFDocument.load(out, { updateMetadata: false });
+  if (check.getPageCount() !== pages) throw new Error('page count changed');
+  return new File([out], file.name, { type: TYPES.pdf });
+}
+
+// anything that fails to trim goes up exactly as it is
+async function trim(file) {
+  var ext = extOf(file.name), res = { file: file, trimmed: false };
+  if (file.size > MAX_TRIM || !window.crypto || !crypto.subtle) return res;
+  try {
+    var t = ext === 'pdf' && window.PDFLib ? await trimPdf(file) : null;
+    if (t && t.size < file.size * 0.97) { res.file = t; res.trimmed = true; }
+  } catch (err) {
+    console.warn('[deckdump] trim skipped:', err);
+  }
+  return res;
+}
+
+// ---- upload ----------------------------------------------------------------------------
+function post(body) {
+  return fetch(DD_URL, { method: 'POST', body: JSON.stringify(body) })
+    .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
+    .then(function(res) { if (!res || !res.ok) { var e = new Error((res && res.error) || 'rejected'); e.res = res || {}; throw e; } return res; });
+}
+function putChunk(url, blob, start, total) {
+  return new Promise(function(resolve, reject) {
+    var x = new XMLHttpRequest(), end = start + blob.size - 1;
+    x.open('PUT', url);
+    x.setRequestHeader('Content-Range', 'bytes ' + start + '-' + end + '/' + total);
+    x.upload.onprogress = function(e) { if (e.lengthComputable) progress((start + e.loaded) / total, 'Uploading... ' + mb(start + e.loaded) + ' of ' + mb(total)); };
+    x.onload = function() {
+      if (x.status === 308) return resolve(null);
+      if (x.status >= 200 && x.status < 300) { try { return resolve(JSON.parse(x.responseText || '{}')); } catch (e) { return resolve({}); } }
+      reject(new Error('HTTP ' + x.status));
+    };
+    x.onerror = function() { var e = new Error('network'); e.cors = start === 0; reject(e); };
+    x.send(blob);
+  });
+}
+async function resumable(url, file) {
+  var done = null;
+  for (var start = 0; start < file.size; start += CHUNK) {
+    var r = await putChunk(url, file.slice(start, Math.min(start + CHUNK, file.size)), start, file.size);
+    if (r) done = r;
+  }
+  return done || {};
+}
+function b64(file) {
+  return new Promise(function(resolve, reject) {
+    var rd = new FileReader();
+    rd.onload = function() { resolve(String(rd.result).split(',')[1] || ''); };
+    rd.onerror = reject;
+    rd.readAsDataURL(file);
+  });
+}
+function progress(f, text) { $('dd-progress').hidden = false; $('dd-bar').style.width = Math.round(Math.max(0, Math.min(1, f)) * 100) + '%'; if (text) $('dd-step').textContent = text; }
+
+function showError(msg) { var el = $('dd-error'); el.textContent = msg; el.hidden = false; }
+function validate() {
+  var checks = { event: !!currentEvent(), talk: !!picked, file: !!deck,
+                 email: !form.elements['email'].value.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.elements['email'].value.trim()) };
+  var bad = Object.keys(checks).filter(function(k) { return !checks[k]; });
+  Object.keys(checks).forEach(function(k) { (k === 'file' ? drop : form.querySelector('[data-field="' + k + '"]')).classList.toggle('is-invalid', !checks[k]); });
+  return bad;
+}
+
+form.addEventListener('submit', async function(ev) {
+  ev.preventDefault();
+  $('dd-error').hidden = true;
+  var bad = validate();
+  if (bad.length) { showError(bad[0] === 'talk' ? 'Please pick your talk from the list.' : bad[0] === 'file' ? 'Please choose your slides.' : bad[0] === 'email' ? 'That email address does not look right.' : 'Please pick your conference.'); return; }
+  if (!DD_URL) { showError('This page is not connected yet. Please email us your slides instead.'); return; }
+  var btn = $('dd-send'), ev0 = currentEvent();
+  btn.disabled = true; btn.textContent = 'Working...';
+  try {
+    progress(0, 'Trimming the extra weight...');
+    var t = await trim(deck), file = t.file;
+    progress(0, t.trimmed ? 'Trimmed ' + mb(deck.size) + ' to ' + mb(file.size) + ', same quality.' : 'Uploading...');
+    var body = { brand: DD_BRAND, event: { folder: ev0.folder, event_name: ev0.event_name }, talk: { short_url: picked.k, name: picked.n, title: picked.t },
+                 file: { name: file.name, size: file.size, type: file.type || TYPES[extOf(file.name)] },
+                 email: form.elements['email'].value.trim(), trimmed: t.trimmed, original_size: deck.size,
+                 website: form.elements['website'].value || '', origin: location.origin, page: location.href };
+    var res;
+    var start = await post(Object.assign({ action: 'start' }, body));
+    if (start.honeypot) { res = {}; }
+    else {
+      try {
+        var up = await resumable(start.upload_url, file);
+        res = await post(Object.assign({ action: 'finish', file_id: up.id || '' }, body));
+      } catch (err) {
+        if (!err.cors || file.size > MAX_FALLBACK) throw err;
+        progress(.2, 'Uploading another way...');   // the browser could not reach Drive directly: through the script
+        res = await post(Object.assign({ action: 'upload', file_b64: await b64(file) }, body));
+      }
+    }
+    progress(1, 'Done.');
+    var first = picked.n.split(/\s*(?:&|,| and )\s*/)[0].split(/\s+/)[0];
+    $('dd-done').innerHTML = '<strong>Got it, thanks ' + esc(first) + '!</strong> Your slides for ' + esc(ev0.event_name) + ' are with us.' +
+      (form.elements['email'].value.trim() ? ' A receipt is on its way.' : '') +
+      ' If you change anything, upload again and the new version replaces this one.<br><br><button type="button" class="dd-linkbtn" id="dd-again">Upload another deck</button>';
+    form.hidden = true; $('dd-done').hidden = false;
+    $('dd-again').addEventListener('click', function() {
+      clearPick(); deck = null; form.elements['file'].value = ''; dropText.innerHTML = emptyText; hint.textContent = '';
+      $('dd-progress').hidden = true; $('dd-done').hidden = true; form.hidden = false;
+    });
+  } catch (err) {
+    var res2 = err.res || {}, msg;
+    switch (err.message) {
+      case 'invalid': msg = 'The server did not accept: ' + (res2.fields || []).join(', ') + '.'; break;
+      case 'too many today': msg = "We've hit today's upload limit, please try again tomorrow or email us."; break;
+      case 'pdf only': msg = 'Please export your slides to PDF first, then upload the PDF.'; break;
+      case 'too large': msg = 'That file is too large for this browser. Please export a smaller PDF, or email us a link.'; break;
+      default: msg = "Hmm, that didn't go through (" + err.message + '). Please try again or email us your slides.';
+    }
+    $('dd-progress').hidden = true;
+    showError(msg);
+  }
+  btn.disabled = false; btn.textContent = 'Upload my slides';
+});
+</script>
+
+<script>/* rewrite_assets.py: reload when a newer build is out */(function(){var m=document.querySelector('meta[name="build"]');if(!m||!window.fetch)return;var mine=m.getAttribute('content'),busy=0,bar=null;function engaged(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;var f=document.querySelectorAll('input,textarea');for(var i=0;i<f.length;i++){var e=f[i];if(/^(checkbox|radio)$/.test(e.type)?e.checked!==e.defaultChecked:(e.type!=='hidden'&&e.value!==e.defaultValue))return true}return !!document.querySelector('.modal.show')}function offer(){if(bar||!document.body)return;bar=document.createElement('div');bar.setAttribute('role','status');bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2000;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#111;color:#fff;padding:10px 12px 10px 18px;border-radius:999px;font:600 14px/1.3 Montserrat,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)';var t=document.createElement('span');t.textContent='This page was just updated (schedule, speakers or sponsors)';bar.appendChild(t);var b=document.createElement('button');b.type='button';b.textContent='Refresh';b.style.cssText='border:0;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;background:#fff;color:#111';b.onclick=function(){location.reload()};bar.appendChild(b);document.body.appendChild(bar)}function check(auto){if(busy||document.visibilityState==='hidden')return;busy=1;fetch('/build.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!j.build||j.build===mine)return;var again=false;try{again=sessionStorage.getItem('fresh-reload')===j.build;sessionStorage.setItem('fresh-reload',j.build)}catch(e){}if(auto&&!again&&!engaged())location.reload();else offer()})['catch'](function(){busy=0})}check(true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')check(true)});addEventListener('pageshow',function(e){if(e.persisted)check(true)});setInterval(function(){check(false)},300000)})()</script>
+</body>
+</html>

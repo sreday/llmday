@@ -1,0 +1,91 @@
+YouTube,status,name,track,day,organization,photo,linkedin,linkedin2,twitter,twitter2,title,abstract,description,bio
+,talk,Sharone Revah Zitzman,1,1,RTFM Please LTD,Sharone Revah Zitzman.png,https://www.linkedin.com/in/sharonez/,,,,MC & Opening Words,"We're bringing LLMDay + Data to Tel Aviv for the first time ever in partnership with Microsoft and TeraSky to focus on the intersection between LLMs, AI and Big Data Engineering. Expect excellent talks on everything from LLMs to data engineering, analytics and how all of this powers what's coming next with AI.
+Join us at the Microsoft Reactor, in Midtown Tel Aviv with 200 data and LLM enthusiasts - and get your talks submitted, CFP is open until October 17th!",,"Sharone Zitzman, is a developer relations professional and an open source community builder, who likes to work with engineering teams that are building products that developers love. Having built both the DevOps Israel and Cloud Native & OSS Israel communities from the ground up, today she spends her time at her company RTFM Please, building dev-first adoption strategies to bring excellent technology and people together. You can find her at rtfmplease.dev, or on Twitter & Github as @shar1z."
+,talk,Yev Berman,1,1,TeraSky,Yev Berman.png,https://www.linkedin.com/in/yev-berman/,,,,Talk to Your Cluster. It Talks Back!,,,"Yev Berman is Director of Sales Engineering at TeraSky, where he helps enterprises design and adopt cloud native, hybrid cloud and automation platforms. Before his current role he led TeraSky's Private Cloud Delivery group and its Hybrid Cloud & Automation team, and he was named a VMware vExpert in 2024."
+,talk,Roi Lipman,1,1,FalkorDB,Roi Lipman.png,https://www.linkedin.com/in/roi-lipman-2a48065/,,,,From grep to graph: giving AI agents a map of your code,"AI coding agents do well on local tasks like fixing a function or writing a test. Ask one how a large system fits together, or what breaks if you change a shared type, and it falls back to grep and reading files one at a time. On a codebase spread across many repos, that is slow, burns tokens, and misses connections the agent never opens.
+This talk covers a different approach: turn the codebase into a graph and let the agent query its structure directly. Functions, calls, types, HTTP endpoints, and links between repos become nodes and edges the agent can traverse in a single query. The working example is Auryn, which parses 15 languages into a FalkorDB graph, updates it on every commit, and serves it to any agent over MCP, with semantic search so the agent can find code by what it does and not only by its name.
+I’ll cover how source code maps to a graph, how to keep the graph current as the code changes, and where the graph helps most and where reading files is still the right call. Then a live demo: an agent answering architecture and impact questions across repos, compared with the same questions answered by reading files.",,"Roi Lipman is CTO and co-founder of FalkorDB, the low-latency graph database built for GenAI and GraphRAG workloads. He created RedisGraph and led it as lead architect at Redis for eight years, and brings over 20 years of database engineering experience from Forter, StreamRail, AVG and the Israel Intelligence Corps."
+,talk,Avital Tamir,1,1,groundcover,Avital Tamir.png,https://www.linkedin.com/in/avital-tamir-5356a1407/,,,,The Ninth Rewrite Might Be a Delete: Building Production AI Agents on Shifting Ground,"Our production AI agent went through eight complete rewrites before its architecture finally held. Some fixed things we’d gotten fundamentally wrong. Others happened because the ground moved: a model or platform release turned last quarter’s hard-won infrastructure into a line in someone else’s changelog.
+
+When the model labs keep swallowing whole layers of the stack, every team building agents faces the same dilemma: build now, knowing you may be eclipsed in six months, or wait and fall behind. “Build vs. buy” stops being a milestone and becomes a decision you revisit every quarter.
+
+In this honest post-mortem, we’ll walk through what broke, the stack that earned its place (LangGraph for orchestration, AWS Bedrock and Google Vertex for model flexibility, Temporal for workflow reliability), and which of those choices we’d still bet on a year from now.
+
+The most durable lesson was the least glamorous: discoverability. Making the agent useful across a complex product meant building a common query interface that makes every capability, metric and data point legible to it in a consistent, verifiable way. That layer turned hallucination into an architecture problem with an architecture solution, and it’s the one part of our system no lab can ship for us.
+
+Attendees building agents in production will leave with a practical way to separate the layers worth owning from the ones worth renting, and what it concretely takes to make agent outputs evidence-backed rather than taken on faith. Sometimes the best engineering outcome is deleting code you were proud of. The hard part is knowing which code.",,"Avital Tamir is a generalist, software developer, twin-daddy and former pro musician. He taught himself BASIC at age 6 when he got his first x86 and has been tinkering with computers ever since. As a musician Avital released several studio albums and toured the world, before shifting to a full-time career in tech. Avital is the creator of the Cyphernetes query language and an avid user of everything AI."
+,talk,Noa Baron,1,1,Cato Networks,Noa Baron.png,https://www.linkedin.com/in/noa-baron-91a290a0/,,,,Coming Soon,,,"Noa is a Data Engineering Team Lead at Cato Networks with a big passion for infrastructure. Over the past 5 years she has been working with data and helping data teams to successfully handle the growing amount of data collected from the Cato Cloud. Her work focuses on building the new Cato Data Platform, to ensure it supports the organization growing demand for data in scale and use cases with efficient and cost-effective solutions, all while keeping up with Cato’s growth and achieving outstanding performance."
+,talk,Nir Adler,1,1,Komodor,Nir Adler.png,https://www.linkedin.com/in/niradler/,,,,Bye Bye Timestream - A Tale of Migrating 5.9 Billion Metrics a Day to ClickHouse,"Our platform relied on Amazon Timestream to store the metrics behind customer-facing dashboards and incident investigations. When AWS announced the service’s end of life, we had to migrate 5.9 billion metric rows a day to ClickHouse without taking queries offline or compromising the integrity of the data.
+
+This session breaks down the migration from the decisions that shaped the new schema and partitioning strategy for high-cardinality Kubernetes metrics to the validation process that gave us confidence to cut over. We ran dual-write and dual-read paths and compared 10.3 million production queries over 14 days to establish parity before switching over. We’ll cover where results diverged, why the migration took roughly eight weeks longer than estimated, and how the actual cost and performance gains compared with our expectations: approximately 85% lower costs and median queries around 20 times faster.
+
+Attendees will leave with a reproducible method for validating metrics-store migrations, the ClickHouse settings that mattered at this scale, and a practical cutover approach for moving production observability data without disrupting customers.",,"Nir Adler is an Innovation Engineer on Komodor’s CTO team, driving AI initiatives like Klaudia, the AI SRE transforming Kubernetes troubleshooting. A self-taught developer whose journey began with Lego Mindstorms, Nir’s career spans cybersecurity, infrastructure design, and open-source contributions, with senior roles at Palo Alto Networks and Snappy Gifts. Blending creativity with deep technical expertise, he helps teams build secure, scalable, and impactful products  ( and always with the loyal supervision of his dog, Maze.)"
+,workshop,Haggai Zohar,1,1,TeraSky,Haggai Zohar.png,https://www.linkedin.com/in/haggai-zohar-3a9611/,,,,Company Brain with Fabric and Claude,"Most enterprise knowledge doesn't answer questions — it sits locked in
+semantic models, dashboards, and databases, waiting for someone who
+knows DAX or SQL to ask. This workshop shows you how to connect
+Claude AI to a Microsoft Fabric semantic layer using the Model Context
+Protocol (MCP), turning your organization's data into a conversational
+Company Brain that any business user can talk to.
+We'll build an end-to-end agentic RAG architecture on Azure: indexing your
+Fabric schema into Azure AI Search, generating embeddings with Azure
+OpenAI, and deploying a Remote MCP Server on Azure Container Apps
+that exposes structured tools — schema retrieval, DAX execution, and
+dataset discovery — to Claude. You'll see how a business user can ask
+""what were our top products by revenue last quarter?"" in plain English and
+get an accurate, governed answer in seconds, with no DAX knowledge
+required.
+
+We'll also cover the security layer: OAuth 2.0 with Azure Entra ID, On-
+Behalf-Of token flow, and automatic row-level security — so your
+
+Company Brain respects the same governance policies as your Fabric
+workspace. You'll leave with a working architecture pattern you can adapt
+
+to your own data models, and a clear understanding of when RAG-over-
+schema beats fine-tuning or search-only approaches.",,"Haggai Zohar is a Data Tech Lead at TeraSky, where he designs cloud data platforms and the AI systems built on top of them. A Technion graduate (cum laude), he holds AWS Machine Learning Specialty and AWS Solutions Architect certifications and works across AWS, Azure and Microsoft Fabric. He recently spoke on ""RAG on Your Data Lake"" at TLV Community's AWS DevOps 2026 conference, and he loves turning messy company data into something an LLM can actually use."
+,workshop,Haggai Zohar,1,1,TeraSky,Haggai Zohar.png,https://www.linkedin.com/in/haggai-zohar-3a9611/,,,,Company Brain with Fabric and Claude,"Most enterprise knowledge doesn't answer questions — it sits locked in
+semantic models, dashboards, and databases, waiting for someone who
+knows DAX or SQL to ask. This workshop shows you how to connect
+Claude AI to a Microsoft Fabric semantic layer using the Model Context
+Protocol (MCP), turning your organization's data into a conversational
+Company Brain that any business user can talk to.
+We'll build an end-to-end agentic RAG architecture on Azure: indexing your
+Fabric schema into Azure AI Search, generating embeddings with Azure
+OpenAI, and deploying a Remote MCP Server on Azure Container Apps
+that exposes structured tools — schema retrieval, DAX execution, and
+dataset discovery — to Claude. You'll see how a business user can ask
+""what were our top products by revenue last quarter?"" in plain English and
+get an accurate, governed answer in seconds, with no DAX knowledge
+required.
+
+We'll also cover the security layer: OAuth 2.0 with Azure Entra ID, On-
+Behalf-Of token flow, and automatic row-level security — so your
+
+Company Brain respects the same governance policies as your Fabric
+workspace. You'll leave with a working architecture pattern you can adapt
+
+to your own data models, and a clear understanding of when RAG-over-
+schema beats fine-tuning or search-only approaches.",,"Haggai Zohar is a Data Tech Lead at TeraSky, where he designs cloud data platforms and the AI systems built on top of them. A Technion graduate (cum laude), he holds AWS Machine Learning Specialty and AWS Solutions Architect certifications and works across AWS, Azure and Microsoft Fabric. He recently spoke on ""RAG on Your Data Lake"" at TLV Community's AWS DevOps 2026 conference, and he loves turning messy company data into something an LLM can actually use."
+,workshop,Haggai Zohar,1,1,TeraSky,Haggai Zohar.png,https://www.linkedin.com/in/haggai-zohar-3a9611/,,,,Company Brain with Fabric and Claude,"Most enterprise knowledge doesn't answer questions — it sits locked in
+semantic models, dashboards, and databases, waiting for someone who
+knows DAX or SQL to ask. This workshop shows you how to connect
+Claude AI to a Microsoft Fabric semantic layer using the Model Context
+Protocol (MCP), turning your organization's data into a conversational
+Company Brain that any business user can talk to.
+We'll build an end-to-end agentic RAG architecture on Azure: indexing your
+Fabric schema into Azure AI Search, generating embeddings with Azure
+OpenAI, and deploying a Remote MCP Server on Azure Container Apps
+that exposes structured tools — schema retrieval, DAX execution, and
+dataset discovery — to Claude. You'll see how a business user can ask
+""what were our top products by revenue last quarter?"" in plain English and
+get an accurate, governed answer in seconds, with no DAX knowledge
+required.
+
+We'll also cover the security layer: OAuth 2.0 with Azure Entra ID, On-
+Behalf-Of token flow, and automatic row-level security — so your
+
+Company Brain respects the same governance policies as your Fabric
+workspace. You'll leave with a working architecture pattern you can adapt
+
+to your own data models, and a clear understanding of when RAG-over-
+schema beats fine-tuning or search-only approaches.",,"Haggai Zohar is a Data Tech Lead at TeraSky, where he designs cloud data platforms and the AI systems built on top of them. A Technion graduate (cum laude), he holds AWS Machine Learning Specialty and AWS Solutions Architect certifications and works across AWS, Azure and Microsoft Fabric. He recently spoke on ""RAG on Your Data Lake"" at TLV Community's AWS DevOps 2026 conference, and he loves turning messy company data into something an LLM can actually use."
