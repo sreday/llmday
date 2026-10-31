@@ -87,17 +87,9 @@
     .person span { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 40px; letter-spacing: .03em; text-transform: uppercase;
                    margin-top: 24px; text-shadow: 0 0 14px var(--glow); white-space: nowrap; }
 
-    /* 2b - every brand's ambassadors: positions + sizes from hello.py (_amb_layout), one cluster per country; they pop in
-       one after another when the slide comes up and then drift a little */
-    .s-amb .amb { position: absolute; margin: 0; border-radius: 50%; object-fit: cover; border: 4px solid #fff;
-                  box-shadow: 0 0 0 3px var(--accent), 0 10px 26px rgba(0,0,0,.35); transform: translate(-50%, -50%) scale(.2); opacity: 0; }
-    .s-amb.on .amb { animation: amb-in .5s cubic-bezier(.2,1.5,.4,1) forwards, amb-float 7s ease-in-out infinite alternate; }
-    @keyframes amb-in { to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
-    @keyframes amb-float { from { translate: 0 -3px; } to { translate: 0 4px; } }
-    .s-amb .ctry { position: absolute; transform: translate(-50%, -50%); z-index: 2; background: #fff; color: #111; border-radius: 999px;
-                   padding: 3px 14px; font: 600 20px 'Oswald', sans-serif; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
-                   box-shadow: 0 4px 14px rgba(0,0,0,.35); opacity: 0; transition: opacity .6s ease 1.2s; }
-    .s-amb.on .ctry { opacity: 1; }
+    /* 2b - every brand's ambassadors: positions + sizes from hello.py (_amb_layout), one cluster per country; the raw
+       headshots (round PNGs), nothing added (Marek 2026-10-31) */
+    .s-amb .amb { position: absolute; margin: 0; object-fit: contain; transform: translate(-50%, -50%); }
 
     /* 3 - share the love */
     .share { display: flex; gap: 220px; }
@@ -249,8 +241,7 @@
   {% if deck.ambassadors.people %}
   <section class="slide s-amb">
     <h2 class="glow h1">Our ambassadors</h2>
-    {% for a in deck.ambassadors.people %}<img class="amb" src="{{ a.src }}" alt="{{ a.name }}" title="{{ a.name }} ({{ a.country }})" loading="eager" style="left: {{ a.x }}px; top: {{ a.y }}px; width: {{ a.d }}px; height: {{ a.d }}px; animation-delay: {{ loop.index0 * 25 }}ms, {{ (loop.index0 * 7919) % 7000 }}ms;">{% endfor %}
-    {% for l in deck.ambassadors.labels %}<span class="ctry" style="left: {{ l.x }}px; top: {{ l.y }}px;">{{ l.country|e }}</span>{% endfor %}
+    {% for a in deck.ambassadors.people %}<img class="amb" src="{{ a.src }}" alt="{{ a.name }}" loading="eager" style="left: {{ a.x }}px; top: {{ a.y }}px; width: {{ a.d }}px; height: {{ a.d }}px;">{% endfor %}
   </section>
   {% endif %}
 

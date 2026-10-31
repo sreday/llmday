@@ -546,16 +546,18 @@ def _ambassadors(brands, key):
             req = urllib.request.Request(site + 'ambassadors.json', headers={'User-Agent': 'hello-deck-build'})
             with urllib.request.urlopen(req, timeout=8) as r:
                 return [a for a in json.loads(r.read().decode('utf-8')) if a.get('name') and a.get('headshot')]
+        ok = True
         for k, site in sites.items():
             try:
                 lists[k] = one(site)
             except Exception as e:                           # noqa: BLE001 - not published yet / site down: the cached list
+                ok = False
                 print('WARN hello: %sambassadors.json unreachable (%s), using the cached list' % (site, e))
-        try:
+        try:                                                 # a failed fetch is retried on the next build, not in 30 min
             os.makedirs(os.path.dirname(AMB_CACHE), exist_ok=True)
             tmp = '%s.%d.tmp' % (AMB_CACHE, os.getpid())
             with open(tmp, 'w', encoding='utf-8') as f:
-                json.dump({'at': time.time(), 'sites': sites, 'lists': lists}, f)
+                json.dump({'at': time.time() if ok else 0, 'sites': sites, 'lists': lists}, f)
             os.replace(tmp, AMB_CACHE)
         except OSError:
             pass
@@ -581,7 +583,7 @@ def _ambassadors(brands, key):
 
 
 def _amb_layout(people):
-    """people -> photos {x, y, d, name, path, country} filling AMB_AREA + one label per country. Greedy packing: the
+    """people -> photos {x, y, d, name, path, country} filling AMB_AREA, no labels. Greedy packing: the
     biggest country first, from the middle out; each next photo touches one already placed, as close to its country's
     middle as it can get (squashed: the area is ~2.2x wider than tall), a wider gap between countries than inside one."""
     import math
@@ -620,9 +622,9 @@ def _amb_layout(people):
             placed.append((best[1], best[2], r, c))
             a['_p'] = placed[-1]
     if not placed:
-        return {'people': [], 'labels': []}
+        return {'people': [], 'countries': 0}
     bx0, bx1 = min(p[0] - p[2] for p in placed), max(p[0] + p[2] for p in placed)
-    by0, by1 = min(p[1] - p[2] for p in placed), max(p[1] + p[2] + .5 for p in placed)   # + room for the lowest label
+    by0, by1 = min(p[1] - p[2] for p in placed), max(p[1] + p[2] for p in placed)
     k = min((ax1 - ax0) / (bx1 - bx0), (ay1 - ay0) / (by1 - by0), 60)   # a few ambassadors: 1x = 120 px at most
     ox, oy = (ax0 + ax1) / 2 - (bx0 + bx1) / 2 * k, (ay0 + ay1) / 2 - (by0 + by1) / 2 * k
     out = []
@@ -630,11 +632,7 @@ def _amb_layout(people):
         x, y, r, c = a.pop('_p')
         out.append({'name': a['name'], 'country': c, 'path': a['path'], 'x': round(ox + x * k), 'y': round(oy + y * k),
                     'd': round(2 * r * k)})
-    labels = []
-    for c in order:                                          # the country under its cluster's lowest photo, on its edge
-        low = max((p for p in out if p['country'] == c), key=lambda p: p['y'] + p['d'] / 2)
-        labels.append({'country': c, 'x': low['x'], 'y': round(low['y'] + low['d'] / 2)})
-    return {'people': out, 'labels': labels}
+    return {'people': out, 'countries': len(order)}
 
 
 # ── images: derived into <event>/hello/img/ under content-hashed names ──────────────────────────────────────────
@@ -918,5 +916,5 @@ def _build(context, env, base_folder):
         f.write(html)
     print('Writing out hello/index.html (hidden, not in sitemap): %d team, %d ambassadors (%d countries), %d partners, '
           '%d sister tours (%s), %d own events'
-          % (len(deck['team']), len(amb['people']), len(amb['labels']), len(sponsors), len(tours),
+          % (len(deck['team']), len(amb['people']), amb['countries'], len(sponsors), len(tours),
              ', '.join('%s %d' % (t['key'], len(t['events'])) for t in tours) or '-', len(own)))
