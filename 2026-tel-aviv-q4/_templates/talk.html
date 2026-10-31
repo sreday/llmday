@@ -63,6 +63,12 @@
                 <p>{{ talk.bio | markdown }}</p>
               </div>
 
+              {% if talk.slides_url %}
+              <div class="desc p-2 p-lg-3">
+                <h5 style="color:var(--brand);font-weight:700;">Slides</h5>
+                <a class="btn btn-primary" href="{{ talk.slides_url }}" download="{{ talk.slides_name }}">Download slides</a>
+              </div>
+              {% endif %}
               {% if talk.youtube_embed_url %}
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Video</h5>

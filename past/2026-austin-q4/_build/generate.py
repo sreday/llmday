@@ -2431,8 +2431,33 @@ def _og_talk_title(t):                                      # "Speaker: Talk tit
 def _og_talk_desc(t):                                       # the abstract's first ~200 characters, cut at a word
     _a = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', str(t.get('abstract') or ''))).strip()
     return _a if len(_a) <= 200 else _a[:200].rsplit(' ', 1)[0].rstrip(',;:.-') + '...'
+# DOWNLOAD SLIDES (Marek 2026-10-30): slides/<short_url>.pdf in the event folder (shipped by _build/deckdump_pull.py from
+# the /deckdump/ uploads, or dropped in by hand) puts a "Download slides" button on that talk page from the day after the
+# event: midnight after its last day, in the event's own timezone (the same moment deckdump_pull.py starts shipping;
+# earlier than the 24 h "event over" switch). Only then is the PDF copied into static/, so a deck is never public before
+# its talk.
+def _slides_open():
+    if _EVENT_ENDED:
+        return True
+    try:
+        _st = datetime.datetime.fromisoformat(str(context.get('start_time') or ''))
+    except ValueError:
+        return False
+    _tz = _st.tzinfo or datetime.timezone.utc
+    _days = max(1, int(context.get('days') or 1))
+    return datetime.datetime.now(_tz) >= datetime.datetime.combine(_st.date() + datetime.timedelta(days=_days), datetime.time(0, 0), _tz)
+_SLIDES_OPEN = _slides_open()
+def _slides_set(t):
+    import shutil as _sl_shutil
+    _src = os.path.join('slides', str(t.get('short_url') or '') + '.pdf')
+    if _SLIDES_OPEN and os.path.isfile(_src):
+        os.makedirs(BASE_FOLDER + '/slides', exist_ok=True)
+        _sl_shutil.copyfile(_src, BASE_FOLDER + '/' + _src)
+        t['slides_url'] = 'slides/' + t['short_url'] + '.pdf'
+        t['slides_name'] = re.sub(r'[\/:*?"<>|]+', ' ', '%s - %s.pdf' % (str(t.get('name') or '').strip(), context['onboarding_event']['event_name']))
 _th_by_talk = {_x['_id']: _x['thumb'] for _x in context['teaser_talks']}
 for talk in _talk_pages:
+    _slides_set(talk)
     _ctx = context
     if id(talk) in _th_by_talk:
         _ctx = dict(context, og_type='article', og_title=_og_talk_title(talk), og_description=_og_talk_desc(talk), og_image_url='https://%s/%s/teasers/%s' % (context['brand_domain'], _os.path.basename(_os.getcwd()),

@@ -31,6 +31,8 @@
  *   v11 (2026-09-22): the sent thread is archived (labelled, read) instead of pulled into the Inbox.
  *   v12 (2026-10-11): FAQ gains the promo cards link (<event>/teasers/) and speaker certificates; the visa letter
  *   point is gone (Marek: "it's being misunderstood too often").
+ *   v13 (2026-10-30): the slides line links the Deck dump page (<brand site>/deckdump/?event=<slug>) and the FAQ says
+ *   the slides go up on the talk page after the conference.
  */
 
 var BRANDS = {
@@ -52,7 +54,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 12 });   // v12: promo cards + certificates in the FAQ, no visa point
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 13 });   // v13: Deck dump link for the slides
 }
 
 function doPost(e) {
@@ -215,7 +217,7 @@ function composeOnboarding(ev, brand) {
       ? '- Please register for your free ticket here: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
       : '- Please redeem your free ticket with the code *SPEAKERFREE* here: [' + ev.tickets_url + '](' + ev.tickets_url + ')' + String.fromCharCode(10) + '  (on luma, select the general self funding / general admission, and then find "Add a coupon" in the top right corner)',
     '- Speaking slots are ' + ev.slot_minutes + ' minutes (' + talk + ' min talk + 5 min Q&A)',
-    '- You will present from your own laptop. Please share your slides with us in advance as a backup.',
+    '- You will present from your own laptop. Please share your slides with us in advance as a backup: [' + ev.deckdump_url + '](' + ev.deckdump_url + ')',
     "- As speakers confirm, we'll update the website and prepare social media graphics and promo posts for sharing.",
     '- The v1 schedule will be published as soon as we get most speakers confirmed',
     '- Most regular talks will take place in the afternoon, between 12PM-6PM. Some last minute schedule changes may happen, so please avoid tight travel planning.',
@@ -240,6 +242,7 @@ function composeOnboarding(ev, brand) {
     '1. There will be WiFi access in the venue',
     '1. Previous ' + ev.brand_name + ' talks: ' + (ev.youtube_url ? '[' + ev.youtube_url + '](' + ev.youtube_url + ')' : 'on our YouTube channel'),
     '1. Promo cards: [' + ev.event_url + 'teasers/](' + ev.event_url + 'teasers/). You can post about your session straight away!',
+    '1. Slides: upload the latest version any time on [' + ev.deckdump_url + '](' + ev.deckdump_url + '). After the conference, they go up on your talk page for download',
   ].concat(ev.is_free ? [
     '1. The event is free to attend - feel free to invite your team and friends: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
   ] : [
@@ -313,6 +316,7 @@ function normalizeEvent(raw, brand) {
     month_day:     clean(raw.month_day, 40),
     event_url:     okUrl(raw.event_url, site + (slug ? slug + '/' : '')),
     tickets_url:   okUrl(raw.tickets_url, site + (slug ? slug + '/#tickets' : '')),
+    deckdump_url:  site + 'deckdump/' + (slug ? '?event=' + slug : ''),
     venue_name:    clean(raw.venue_name, 120) || 'the venue',
     venue_address: clean(raw.venue_address, 200),
     attendees:     parseInt(raw.attendees, 10) > 0 ? parseInt(raw.attendees, 10) : 0,
