@@ -17,10 +17,10 @@ timezone) less than WINDOW_DAYS ago:
      the FIRST step that fits; text, vectors and links stay; the page count is checked every time;
   6. writes <event>/slides/<key>.pdf. The event build shows "Download slides" on the talk page from the same moment
      (_slides_open in _event_template/_build/generate.py) and copies the PDF into static/ only then.
-Then it emails Mark one report per event with news (shipped, needs a hand, speakers with no deck yet) through the
-same script, and writes the same table to the Actions job summary. Problems are reported once, not every run.
+Then it writes one report per event (shipped, needs a hand, speakers with no deck yet) to the Actions job summary.
+No email (Marek 2026-10-31: "I don't want to get notifications on deck dumps to my email"); /deckdump shows the same.
 
-Usage: python _build/deckdump_pull.py [--dry-run] [--today YYYY-MM-DD] [--event <folder>] [--no-email]
+Usage: python _build/deckdump_pull.py [--dry-run] [--today YYYY-MM-DD] [--event <folder>]
        python _build/deckdump_pull.py --selftest     (CI: proves the 5 MB ladder on generated decks; needs Pillow)
 Exit code 0 always unless the feed itself is broken (a bad deck never stops the others).
 """
@@ -407,7 +407,6 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="read the feed and show what would ship; download and write nothing")
     ap.add_argument("--today", help="pretend it is this date (YYYY-MM-DD, noon UTC), for tests")
     ap.add_argument("--event", help="only this event folder")
-    ap.add_argument("--no-email", action="store_true")
     ap.add_argument("--selftest", action="store_true", help="run the 5 MB ladder on generated decks and exit")
     args = ap.parse_args()
     if args.selftest:
@@ -456,8 +455,7 @@ def main():
         print("::add-mask::" + token)
     files = [f for f in (res.get("files") or []) if (f.get("meta") or {}).get("brand") == brand]
 
-    summary, report_url = [], feed.split("?")[0]
-    feed_token = urllib.parse.parse_qs(urllib.parse.urlsplit(feed).query).get("token", [""])[0]
+    summary = []
     for path, meta in events:
         folder = os.path.basename(path)
         mine = [f for f in files if f["meta"].get("folder") == folder]
@@ -468,12 +466,6 @@ def main():
         text = compose(event_name, site, folder, r)
         print(text)
         summary.append("### %s\n\n```\n%s```\n" % (event_name, text))
-        if (r["shipped"] or r["problems"]) and not args.dry_run and not args.no_email:
-            try:
-                http_json(report_url, {"action": "report", "token": feed_token, "brand": brand,
-                                       "subject": "Deck dump: %s (%d of %d decks)" % (event_name, r["with_deck"], r["talks"]), "text": text})
-            except Exception as e:
-                print("Report email failed: %s" % e)
     if os.environ.get("GITHUB_STEP_SUMMARY"):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
             f.write("## Deck dump\n\n" + "\n".join(summary))
