@@ -8,13 +8,18 @@ name: Deck dump
 on:
   schedule:
     - cron: '25 3,9,15,21 * * *'   # 4 times a day: US events end at 04:00-08:00 UTC, the next run picks them up
+    - cron: '40 4 1 1,4,7,10 *'    # quarterly cleanup (Marek 2026-10-31): uploads already on the site go to the Drive trash
   workflow_dispatch:
     inputs:
       event:
-        description: Only this event folder (e.g. 2026-london-q4); ignores the 14-day window
+        description: Only this event folder (e.g. 2026-london-q4), or "all" for every finished event; ignores the 14-day window
         required: false
       dry_run:
         description: Show what would ship, change nothing
+        type: boolean
+        default: false
+      cleanup:
+        description: Run the quarterly cleanup now (trash Drive uploads that are already on the site)
         type: boolean
         default: false
       selftest:
@@ -57,8 +62,14 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+      - name: Quarterly cleanup
+        if: ${{ github.event.schedule == '40 4 1 1,4,7,10 *' || inputs.cleanup }}
+        env:
+          DECKDUMP_FEED: ${{ secrets.DECKDUMP_FEED }}
+        run: python _build/deckdump_pull.py --cleanup $([ "${{ inputs.dry_run }}" = "true" ] && echo --dry-run)
+
       - name: Pull the decks
-        if: ${{ !inputs.selftest }}
+        if: ${{ !inputs.selftest && !inputs.cleanup && github.event.schedule != '40 4 1 1,4,7,10 *' }}
         env:
           DECKDUMP_FEED: ${{ secrets.DECKDUMP_FEED }}
         run: |
@@ -68,7 +79,7 @@ jobs:
           python _build/deckdump_pull.py $args
 
       - name: Commit and deploy
-        if: ${{ !inputs.selftest && !inputs.dry_run }}
+        if: ${{ !inputs.selftest && !inputs.dry_run && !inputs.cleanup && github.event.schedule != '40 4 1 1,4,7,10 *' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
