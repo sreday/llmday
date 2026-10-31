@@ -331,6 +331,17 @@
   // a speaker may leave the circle only above this line: 20% of the circle's height above its centre (Marek 2026-10-06)
   var CUT = 0.2;
   function layer(size) { var c = document.createElement('canvas'); c.width = c.height = size; return c; }
+  // shrink a big photo by halves to within 2x of the size it is drawn at, then the final draw: one big canvas-to-canvas
+  // drawImage (3-12x smaller) skips most source pixels in Chrome and leaves hair stair-stepped (Marek 2026-10-31)
+  function shrink(im, w, h) {
+    var c = im, cw = im.width, ch = im.height;
+    while (cw >= w * 2 && ch >= h * 2) {
+      cw = Math.round(cw / 2); ch = Math.round(ch / 2);
+      var n = document.createElement('canvas'); n.width = cw; n.height = ch;
+      var g = n.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(c, 0, 0, cw, ch); c = n;
+    }
+    return c;
+  }
   function compose(g, size, imgs, list) {                                 // imgs[i] = the picture to draw for list[i] (default: the layers)
     list = list || layers;
     var k = size / SIZE, hasCircle = circle.complete && circle.naturalWidth;
@@ -338,7 +349,7 @@
     if (!list.length) { if (hasCircle) g.drawImage(circle, 0, 0, size, size); return; }
     var P = layer(size), pg = P.getContext('2d');                       // all people, placed, back to front
     pg.imageSmoothingQuality = 'high';
-    list.forEach(function (L, i) { var im = imgs[i], p = placement(L, im); pg.drawImage(im, p.x * k, p.y * k, p.w * k, p.h * k); });
+    list.forEach(function (L, i) { var im = imgs[i], p = placement(L, im); pg.drawImage(shrink(im, p.w * k, p.h * k), p.x * k, p.y * k, p.w * k, p.h * k); });
     var Cc = layer(size), cg = Cc.getContext('2d');                     // the circle with the people cut out of it
     if (hasCircle) cg.drawImage(circle, 0, 0, size, size);
     cg.globalCompositeOperation = 'destination-out'; cg.drawImage(P, 0, 0);
