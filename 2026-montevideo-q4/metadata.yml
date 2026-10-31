@@ -18,10 +18,12 @@ cfp_url: https://cfp.ninja/e/llmday-2026-montevideo-q4
 days: 1
 attendees: 100
 speakers: 10+
-tracks: 1
+tracks: 2
 
+# Marcos 2026-10-30: track 2 is the "Ephemeral Stage" (3 talks); on the site it simply starts in the morning
 rooms:
-- main room
+- Main Stage
+- Ephemeral Stage
 
 breaks:
 - title: Registration & Welcome
@@ -30,17 +32,17 @@ breaks:
   # this decides how many talks in-between this and previous section
   talks_before: 0
 - title: Coffee Break & Networking
-  duration: 20
+  duration: 30
   comment: Main lobby
   talks_before: 4
 - title: Lunch & Networking
-  duration: 50
+  duration: 60
   comment: Main lobby
   talks_before: 4
 - title: Coffee Break & Networking
-  duration: 20
+  duration: 30
   comment: Main lobby
-  talks_before: 4
+  talks_before: 3
 
 sponsors:
   - logo: owu.png
