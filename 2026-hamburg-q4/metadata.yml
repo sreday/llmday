@@ -30,7 +30,7 @@ breaks:
   comment: Main lobby
   # this decides how many talks in-between this and previous section
   talks_before: 0
-- title: Hello Hamburg - about LLMday
+- title: "Hello Hamburg!!! - short Intro to LLMday"
   duration: 10
   comment: Main stage
   talks_before: 4
