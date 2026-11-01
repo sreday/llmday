@@ -7,7 +7,7 @@ start_time: "2026-12-05T08:00:00-03:00"
 # after  - hide ticket sales
 event_state: active
 date_string: "December 5, 2026"
-location_string: "Montevideo, Uruguay"
+location_string: "World Trade Center Montevideo, Montevideo, Uruguay"
 city_name: "Montevideo"
 # get this from the event url
 luma_evt: evt-THcPEG50zx51MsC
