@@ -75,7 +75,7 @@
     .s-hello .when b { display: block; font-weight: 600; font-size: 64px; letter-spacing: .03em; }
 
     /* 2-6 - the heading on one line, at the same size and height on every slide; the content centred in the space below it */
-    .s-team, .s-share, .s-partners, .s-family, .s-oss { justify-content: center; padding: 250px 0 40px; }
+    .s-team, .s-share, .s-partners, .s-family { justify-content: center; padding: 250px 0 40px; }
     .slide > h2.h1 { position: absolute; left: 0; right: 0; top: 110px; text-align: center; white-space: nowrap; }
 
     /* 2 - team */
@@ -119,8 +119,11 @@
     .family.four > div { width: 380px; }
     .family.four .logo { width: 280px; height: 280px; }
     .family.four .qr-box { width: 320px; }
+    .family.five { gap: 34px; }
+    .family.five > div { width: 330px; }
+    .family.five .logo { width: 240px; height: 240px; }
+    .family.five .qr-box { width: 280px; }
 
-    /* 6 - community tools: the same logo + QR sizes as "Other brands", so both slides line up */
 
     /* 7 - spotlight: an open-source project's own site hero on a slide (Reliaburger: reliaburger.com's paper, ink and rust,
        its system-ui headline + monospace wordmark and eyebrow, no web fonts). The eyebrow (version) and headline are read
@@ -275,23 +278,16 @@
   </section>
   {% endif %}
 
-  {# 5 - the family of conferences #}
-  {% if deck.family %}
-  <section class="slide s-family">
-    <h2 class="glow h1">Other brands</h2>
-    <div class="family{% if deck.family|length > 3 %} four{% endif %}">
-      {% for b in deck.family %}<div><img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager"><div class="qr-box">{{ b.qr }}</div></div>{% endfor %}
-    </div>
-  </section>
-  {% endif %}
-
-  {# 6 - community tools (hello.yaml open_source without spotlight: cfp.ninja); the spotlit ones get slide 7 instead #}
+  {# 5 - Call for papers (Marek 2026-11-01): the other brands' logos + QRs with the community tools (hello.yaml open_source
+     without spotlight: cfp.ninja) on one slide, the tools 4th - after the first three brands; the spotlit projects get
+     slide 7 instead #}
   {%- set tools = deck.open_source|rejectattr('spotlight')|list %}
-  {% if tools %}
-  <section class="slide s-oss">
-    <h2 class="glow h1">Community tool{% if tools|length > 1 %}s{% endif %}</h2>
-    <div class="family oss">
-      {% for o in tools %}<div><img class="logo" src="{{ o.logo_src }}" alt="{{ o.name }}" loading="eager"><div class="qr-box">{{ o.qr }}</div></div>{% endfor %}
+  {%- set cfp_items = deck.family[:3] + tools + deck.family[3:] %}
+  {% if cfp_items %}
+  <section class="slide s-family">
+    <h2 class="glow h1">Call for papers</h2>
+    <div class="family{% if cfp_items|length > 4 %} five{% elif cfp_items|length > 3 %} four{% endif %}">
+      {% for b in cfp_items %}<div><img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager"><div class="qr-box">{{ b.qr }}</div></div>{% endfor %}
     </div>
   </section>
   {% endif %}
