@@ -182,14 +182,43 @@
     .s-tour .mascot { position: absolute; right: 40px; bottom: 20px; height: 429px; }
     .s-tour .home-qr { position: absolute; left: 70px; bottom: 60px; width: 247px; }
 
-    /* Let's chat: the empty lead form (hello-deck/chat/form-<brand>.png) beside the heading and a QR to <home>/#sponsor */
+    /* Let's chat: the site's lead form (home/_templates/_lead_form_home.html, same sizes and colours) beside the heading and
+       a QR to <home>/#sponsor, filled in by film characters one after another (script at the bottom) */
     .s-chat { flex-direction: row; justify-content: center; align-items: center; gap: 130px; }
     .chat-side { display: flex; flex-direction: column; align-items: center; gap: 46px; }
     .chat-side .glow { font-size: 150px; text-align: center; }
     .chat-side .qr-box { width: 300px; }
     .chat-side .cap { margin-top: -26px; font-size: 36px; letter-spacing: .08em; text-transform: uppercase; }
-    .chat-form { width: 760px; height: auto; display: block; border-radius: 16px; transform: rotate(2deg);
-                 box-shadow: 0 0 0 10px rgba(255,255,255,.12), 0 30px 80px rgba(0,0,0,.55); }
+    .lf { --la: #333; width: 700px; flex: none; background: #fff; color: #111; border-radius: 16px; padding: 36px 40px; text-align: left;
+          font: 16px/1.5 'Roboto', sans-serif; transform: rotate(2deg) scale(1.1);
+          box-shadow: 0 0 0 10px rgba(255,255,255,.12), 0 30px 80px rgba(0,0,0,.55); }
+    .lf .lf-body { transition: opacity .35s ease; }
+    .lf.wipe .lf-body { opacity: 0; }
+    .lf-title { font: 700 17.6px 'Montserrat', sans-serif; margin-bottom: 2px; }
+    .lf-sub { font-size: 14.4px; color: #555; margin-bottom: 22px; }
+    .lf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; margin-bottom: 20px; }
+    .lf-wide { grid-column: 1 / -1; }
+    .lf-lbl { display: block; font-size: 12.8px; font-weight: 600; color: #333; margin-bottom: 5px; letter-spacing: .02em; }
+    .lf-in { border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; height: 48px; font-size: 16px; color: #111; white-space: nowrap;
+             overflow: hidden; transition: border-color .2s, box-shadow .2s; }
+    .lf-in.on { border-color: var(--la); box-shadow: 0 0 0 3px color-mix(in srgb, var(--la) 15%, transparent); }
+    .lf-in.on b::after { content: ''; display: inline-block; width: 2px; height: 1.15em; margin-left: 1px; vertical-align: -.2em; background: #111;
+                         animation: lf-caret 1s steps(1) infinite; }
+    .lf-in b { font-weight: 400; }
+    @keyframes lf-caret { 50% { opacity: 0; } }
+    .lf-grp { margin-bottom: 18px; }
+    .lf-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .lf-chip { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid #ddd; background: #f0f0f0; color: #555;
+               font-size: 14.4px; font-weight: 600; line-height: 1.5; transition: background .15s, color .15s, border-color .15s, transform .15s; }
+    .lf-chip.sel { background: var(--c, var(--la)); border-color: var(--c, var(--la)); color: #fff; }
+    .lf-chip.tap, .lf-box.tap, .lf-send.tap { transform: scale(.94); }
+    .lf-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 14.4px; color: #333; margin: 6px 0 24px; }
+    .lf-box { width: 18px; height: 18px; margin-top: 2px; flex: none; border: 2px solid #bbb; border-radius: 4px; transition: background .15s, transform .15s; }
+    .lf-box.sel { border-color: var(--la); background: var(--la) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; }
+    .lf-actions { display: flex; align-items: center; gap: 14px; }
+    .lf-send { min-width: 140px; padding: 12px 28px; border-radius: 8px; background: var(--la); color: #fff; text-align: center;
+               font: 700 20px 'Montserrat', sans-serif; transition: transform .15s; }
+    .lf-mailto { font-size: 14.4px; color: #888; }
 
     /* last: QR + splash cards (2:1 images) */
     .s-cards { flex-direction: row; justify-content: center; align-items: center; gap: 70px; padding: 0 60px; }
@@ -363,15 +392,34 @@
   </section>
   {% endfor %}
 
-  {# Let's chat: how easy it is to start a conversation - the empty Sponsor / Host / Partner form, scan to open it #}
-  {% if deck.chat_form %}
+  {# Let's chat: how easy it is to start a conversation - the Sponsor / Host / Partner form, filled in by one film character
+     after another (hello-deck/chat/characters.yaml), scan to open the real one #}
+  {% if deck.chat %}
   <section class="slide s-chat">
     <div class="chat-side">
       <h2 class="glow">Let's<br>chat!</h2>
       <div class="qr-box">{{ deck.chat_qr }}</div>
       <div class="cap">Sponsor &middot; Host &middot; Partner</div>
     </div>
-    <img class="chat-form" src="{{ deck.chat_form }}" alt="The sponsor, host and partner form on {{ deck.chat_url }}" loading="eager">
+    {#- the site's lead form, drawn (not a picture) so the script below can fill it in -#}
+    <div class="lf" style="--la: {{ deck.chat.accent }};" aria-label="The sponsor, host and partner form on {{ deck.chat_url }}">
+      <div class="lf-body">
+        <div class="lf-title">Let's talk!</div>
+        <div class="lf-sub">We'll email you and share prospectuses for relevant events.</div>
+        <div class="lf-grid">
+          <div><span class="lf-lbl">Name</span><div class="lf-in"><b></b></div></div>
+          <div><span class="lf-lbl">Company</span><div class="lf-in"><b></b></div></div>
+          <div class="lf-wide"><span class="lf-lbl">Work email</span><div class="lf-in"><b></b></div></div>
+        </div>
+        <div class="lf-grp" data-pick="1-2"><span class="lf-lbl">We'd like to</span><div class="lf-chips">{% for i in ['Sponsor', 'Host', 'Partner'] %}<span class="lf-chip">{{ i }}</span>{% endfor %}</div></div>
+        {% if deck.chat.brands %}<div class="lf-grp" data-pick="1-{{ deck.chat.brands|length }}"><span class="lf-lbl">Conferences</span><div class="lf-chips">{% for b in deck.chat.brands %}<span class="lf-chip" style="--c: {{ b.accent }};">{{ b.name }}</span>{% endfor %}</div></div>{% endif %}
+        <div class="lf-grp" data-pick="1-3"><span class="lf-lbl">Regions</span><div class="lf-chips">{% for r in ['US', 'UK', 'EU', 'ASIA', 'Middle East & Africa', 'LATAM'] %}<span class="lf-chip">{{ r }}</span>{% endfor %}</div></div>
+        <div class="lf-grp" data-pick="1-1"><span class="lf-lbl">Budget</span><div class="lf-chips">{% for m in ['No budget', 'Under $1K', '$1K-5K', '$5K-10K', '$10K-25K', '$25K+'] %}<span class="lf-chip">{{ m }}</span>{% endfor %}</div></div>
+        <div class="lf-consent"><span class="lf-box"></span><span>I agree to share all the information above with the organizer</span></div>
+        <div class="lf-actions"><span class="lf-send">Send</span><span class="lf-mailto">use mailto instead</span></div>
+      </div>
+    </div>
+    <script type="application/json" id="chat-data">{{ deck.chat.characters|tojson }}</script>
   </section>
   {% endif %}
 
@@ -489,6 +537,58 @@
     }
     pull(); setInterval(pull, 15 * 60 * 1000);
   });
+  // Let's chat (Marek 2026-11-01): a random film character types their name, company and email into the form, picks a
+  // few chips at random, ticks the consent, presses Send; the form wipes and the next one starts - a new character and a
+  // new combination every time
+  (function () {
+    var sl = stage.querySelector('.s-chat'), data = document.getElementById('chat-data');
+    if (!sl || !data || !window.Promise) return;
+    var who = JSON.parse(data.textContent || '[]'), form = sl.querySelector('.lf');
+    if (!who.length || !form) return;
+    var ins = [].slice.call(form.querySelectorAll('.lf-in')), groups = [].slice.call(form.querySelectorAll('.lf-grp')),
+        box = form.querySelector('.lf-box'), send = form.querySelector('.lf-send'), last = -1;
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+    function rnd(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+    function type(el, text) {
+      var b = el.querySelector('b'), i = 0;
+      el.classList.add('on');
+      return (function step() {
+        if (i >= text.length) return wait(300).then(function () { el.classList.remove('on'); });
+        b.textContent += text.charAt(i++);
+        return wait(rnd(45, 115)).then(step);
+      })();
+    }
+    function tap(el) {
+      el.classList.add('tap');
+      return wait(140).then(function () { el.classList.remove('tap'); el.classList.add('sel'); return wait(rnd(260, 520)); });
+    }
+    function chips(g) {                                       // data-pick="min-max" chips of the group, in reading order
+      var all = [].slice.call(g.querySelectorAll('.lf-chip')), mm = g.getAttribute('data-pick').split('-'),
+          n = Math.min(all.length, rnd(+mm[0], +mm[1])), pick = all.slice();
+      for (var i = pick.length - 1; i > 0; i--) { var j = rnd(0, i), t = pick[i]; pick[i] = pick[j]; pick[j] = t; }
+      pick = pick.slice(0, n).sort(function (a, b) { return all.indexOf(a) - all.indexOf(b); });
+      return pick.reduce(function (p, c) { return p.then(function () { return tap(c); }); }, Promise.resolve());
+    }
+    function clear() {
+      ins.forEach(function (el) { el.querySelector('b').textContent = ''; el.classList.remove('on'); });
+      [].forEach.call(form.querySelectorAll('.sel'), function (el) { el.classList.remove('sel'); });
+      send.textContent = 'Send';
+    }
+    function round() {
+      var k;
+      do { k = rnd(0, who.length - 1); } while (k === last && who.length > 1);
+      last = k;
+      var c = who[k], p = wait(700);
+      ins.forEach(function (el, i) { p = p.then(function () { return type(el, c[i]); }); });
+      groups.forEach(function (g) { p = p.then(function () { return wait(250).then(function () { return chips(g); }); }); });
+      return p.then(function () { return tap(box); })
+              .then(function () { return tap(send); })
+              .then(function () { send.classList.remove('sel'); send.textContent = 'Sent!'; return wait(2200); })
+              .then(function () { form.classList.add('wipe'); return wait(400); })
+              .then(function () { clear(); form.classList.remove('wipe'); });
+    }
+    (function loop() { round().then(loop); })();
+  })();
   fit(); go((parseInt(location.hash.slice(1), 10) || 1) - 1); wake();
 })();
 </script>
