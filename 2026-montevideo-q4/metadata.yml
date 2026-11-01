@@ -35,10 +35,14 @@ breaks:
   duration: 30
   comment: Main lobby
   talks_before: 4
-- title: Lunch & Networking
-  duration: 60
-  comment: Main lobby
+- title: Conference Intro
+  duration: 10
+  comment: Main Stage
   talks_before: 4
+- title: Lunch & Networking
+  duration: 50
+  comment: Main lobby
+  talks_before: 0
 - title: Coffee Break & Networking
   duration: 30
   comment: Main lobby
