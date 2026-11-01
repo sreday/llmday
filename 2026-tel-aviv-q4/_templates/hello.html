@@ -124,18 +124,18 @@
     .family.five .it { width: 330px; }
     .family.five .logo { width: 240px; height: 240px; }
     .family.five .qr-box { width: 280px; }
-    /* Call for papers: a label over each group (OTHER BRANDS over the brands, CFP.NINJA over the ninja), a bracket under it */
-    .family .grp { display: flex; flex-direction: column; align-items: stretch; }
-    .family .grp-items { display: flex; gap: 110px; align-items: flex-end; }
+    /* Other brands + Call for papers: the big glowing heading over each group (OTHER BRANDS over the brands, CALL FOR
+       PAPERS over cfp.ninja, on two lines to fit its column), a bracket under it */
+    .family .grp { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; }
+    .family .grp-items { display: flex; gap: 110px; align-items: flex-end; justify-content: center; }
     .family.four .grp-items { gap: 60px; }
     .family.five .grp-items { gap: 34px; }
-    .family .grp-lbl { position: relative; text-align: center; font: 600 46px/1 'Oswald', sans-serif; letter-spacing: .08em; text-transform: uppercase;
-                       color: #fff; text-shadow: 0 0 14px var(--glow); padding-bottom: 18px; margin: 0 30px 34px; white-space: nowrap;
+    .family .grp-lbl { position: relative; text-align: center; font-size: 80px; padding-bottom: 26px; margin: 0 20px 40px; white-space: nowrap;
                        border-bottom: 3px solid color-mix(in srgb, var(--glow) 70%, transparent); }
     .family .grp-lbl::before, .family .grp-lbl::after { content: ''; position: absolute; bottom: -3px; width: 3px; height: 18px;
                        background: color-mix(in srgb, var(--glow) 70%, transparent); }
     .family .grp-lbl::before { left: 0; } .family .grp-lbl::after { right: 0; }
-    .s-family .family { margin-top: -40px; }
+    .s-family { padding-top: 40px; }                         /* no slide heading: the group labels are the headings */
 
 
     /* 7 - spotlight: an open-source project's own site hero on a slide (Reliaburger: reliaburger.com's paper, ink and rust,
@@ -291,19 +291,18 @@
   </section>
   {% endif %}
 
-  {# 5 - Call for papers (Marek 2026-11-01): the other brands' logos + QRs under "Other brands", then the community tools
-     (hello.yaml open_source without spotlight: cfp.ninja) under their own name - 4th on the brand decks; the spotlit
-     projects get slide 7 instead #}
+  {# 5 - Other brands + Call for papers (Marek 2026-11-01): no slide heading; the other brands' logos + QRs under a big
+     "Other brands", the community tools (hello.yaml open_source without spotlight: cfp.ninja) under a big "Call for
+     papers" - 4th on the brand decks; the spotlit projects get slide 7 instead #}
   {%- set tools = deck.open_source|rejectattr('spotlight')|list %}
   {%- set cfp_n = deck.family|length + tools|length %}
   {% if cfp_n %}
   <section class="slide s-family">
-    <h2 class="glow h1">Call for papers</h2>
     <div class="family{% if cfp_n > 4 %} five{% elif cfp_n > 3 %} four{% endif %}">
-      {% if deck.family %}<div class="grp"><div class="grp-lbl">Other brands</div><div class="grp-items">
+      {% if deck.family %}<div class="grp"><h2 class="glow grp-lbl">Other brands</h2><div class="grp-items">
         {% for b in deck.family %}<div class="it"><img class="logo" src="{{ b.logo_src }}" alt="{{ b.name }}" loading="eager"><div class="qr-box">{{ b.qr }}</div></div>{% endfor %}
       </div></div>{% endif %}
-      {% for o in tools %}<div class="grp"><div class="grp-lbl">{{ o.name }}</div><div class="grp-items">
+      {% for o in tools %}<div class="grp"><h2 class="glow grp-lbl">Call for<br>papers</h2><div class="grp-items">
         <div class="it"><img class="logo" src="{{ o.logo_src }}" alt="{{ o.name }}" loading="eager"><div class="qr-box">{{ o.qr }}</div></div>
       </div></div>{% endfor %}
     </div>
