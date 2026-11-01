@@ -488,10 +488,11 @@ def _map_layout(rows, cities, brand):
 AMB_CACHE = '../.cache/hello-ambassadors.json'
 AMB_CACHE_V = 2                                              # bump to drop every cached list (v1 kept a failed fetch as 'none')
 AMB_PHOTOS = '../.cache/hello-amb'
-AMB_AREA = (30, 240, 1890, 1065)                             # where the cluster may go (below the heading)
-AMB_SIZES = ((1.3, .45), (1.5, .35), (2, .2))                # size x weight (Marek 2026-10-31: the small ones 30% up)
+AMB_AREA = (15, 232, 1905, 1075)                             # where the cluster may go (below the heading, to the edges)
+AMB_SIZES = ((1.3, .17), (1.4, .17), (1.5, .16), (1.6, .14), (1.7, .12), (1.8, .1), (1.95, .07), (2.6, .07))
+# size x weight: the small one 1.3 (Marek 2026-10-31: 30% up), then steps up to 1.5x of it for variety, a few big ones
 BOX_AMB = (260, 260)
-AMB_LAYOUT_V = 3                                             # bump when _amb_layout changes (its result is cached)
+AMB_LAYOUT_V = 4                                             # bump when _amb_layout changes (its result is cached)
 
 
 def _country_of(region):
