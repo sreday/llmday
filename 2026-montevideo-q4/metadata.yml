@@ -35,7 +35,7 @@ breaks:
   duration: 30
   comment: Main lobby
   talks_before: 4
-- title: Conference Intro
+- title: Hello Montevideo - about LLMday
   duration: 10
   comment: Main Stage
   talks_before: 4
