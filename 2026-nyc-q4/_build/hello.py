@@ -488,9 +488,10 @@ def _map_layout(rows, cities, brand):
 AMB_CACHE = '../.cache/hello-ambassadors.json'
 AMB_CACHE_V = 2                                              # bump to drop every cached list (v1 kept a failed fetch as 'none')
 AMB_PHOTOS = '../.cache/hello-amb'
-AMB_AREA = (70, 250, 1850, 1050)                             # where the cluster may go (below the heading)
-AMB_SIZES = ((1, .45), (1.5, .35), (2, .2))                  # size x weight
-BOX_AMB = (200, 200)
+AMB_AREA = (30, 240, 1890, 1065)                             # where the cluster may go (below the heading)
+AMB_SIZES = ((1.3, .45), (1.5, .35), (2, .2))                # size x weight (Marek 2026-10-31: the small ones 30% up)
+BOX_AMB = (260, 260)
+AMB_LAYOUT_V = 3                                             # bump when _amb_layout changes (its result is cached)
 
 
 def _country_of(region):
@@ -587,55 +588,93 @@ def _ambassadors(brands, key):
 
 
 def _amb_layout(people):
-    """people -> photos {x, y, d, name, path, country} filling AMB_AREA, no labels. Greedy packing: the
-    biggest country first, from the middle out; each next photo touches one already placed, as close to its country's
-    middle as it can get (squashed: the area is ~2.2x wider than tall), a wider gap between countries than inside one."""
+    """people -> photos {x, y, d, name, path, country} filling AMB_AREA, no labels. Greedy packing: the biggest country
+    first, from the middle out; each next photo touches one already placed (edge to edge, Marek 2026-10-31: "no gaps,
+    well populated"), as close to its country's middle as it can get, the distance squashed by `stretch`. Several
+    stretches are tried and the one whose cluster fills AMB_AREA best (biggest photos) wins."""
     import math
     import random
-    rng = random.Random('|'.join(sorted(a['name'] for a in people)))
     groups = {}
     for a in people:
         groups.setdefault(a['country'], []).append(a)
     order = sorted(groups, key=lambda c: (-len(groups[c]), c))
     ax0, ay0, ax1, ay1 = AMB_AREA
-    stretch = (ax1 - ax0) / (ay1 - ay0)
-    gap_in, gap_out = .12, .9                                # in units of the 1x radius
-    placed = []                                              # (x, y, r, country)
-    for c in order:
-        members = groups[c][:]
-        rng.shuffle(members)
-        for a in members:
-            r = rng.choices([s for s, _ in AMB_SIZES], [w for _, w in AMB_SIZES])[0]
-            own = [p for p in placed if p[3] == c]
-            cx = sum(p[0] for p in own) / len(own) if own else 0.0
-            cy = sum(p[1] for p in own) / len(own) if own else 0.0
-            cands = [] if placed else [(0.0, 0.0)]
-            for p in (own or placed):
-                g = gap_in if p[3] == c else gap_out
-                off = rng.uniform(0, math.pi / 12)
-                for i in range(24):
-                    t = off + i * math.pi / 12
-                    cands.append((p[0] + (p[2] + r + g) * math.cos(t), p[1] + (p[2] + r + g) * math.sin(t)))
-            best = None
-            for x, y in cands:
-                if any(math.hypot(x - q[0], y - q[1]) < q[2] + r + (gap_in if q[3] == c else gap_out) - 1e-6 for q in placed):
-                    continue
-                dist = math.hypot(x - cx, (y - cy) * stretch) + rng.uniform(0, .35)   # + a little chaos
-                if best is None or dist < best[0]:
-                    best = (dist, x, y)
-            placed.append((best[1], best[2], r, c))
-            a['_p'] = placed[-1]
-    if not placed:
+    gap = -.02                                               # in units of the 1x radius: a hair of overlap, no seams
+
+    def pack(stretch):
+        rng = random.Random('|'.join(sorted(a['name'] for a in people)))   # same people = same picture on every build
+        placed, where = [], {}                               # (x, y, r, country)
+        for c in order:
+            members = groups[c][:]
+            rng.shuffle(members)
+            for a in members:
+                r = rng.choices([z for z, _ in AMB_SIZES], [w for _, w in AMB_SIZES])[0]
+                own = [p for p in placed if p[3] == c]
+                cx = sum(p[0] for p in own) / len(own) if own else 0.0
+                cy = sum(p[1] for p in own) / len(own) if own else 0.0
+                cands = [] if placed else [(0.0, 0.0)]
+                near = own or placed                         # touching two photos at once (one of them its country's):
+                for i, p in enumerate(near):                 # the pockets fill up, no holes
+                    da = p[2] + r + gap
+                    for q in placed:
+                        if q is p:
+                            continue
+                        db = q[2] + r + gap
+                        dx, dy = q[0] - p[0], q[1] - p[1]
+                        d = math.hypot(dx, dy)
+                        if d >= da + db or d <= abs(da - db) or d == 0:
+                            continue
+                        u = (da * da - db * db + d * d) / (2 * d)
+                        h = math.sqrt(max(0.0, da * da - u * u))
+                        mx, my = p[0] + u * dx / d, p[1] + u * dy / d
+                        cands.append((mx + h * dy / d, my - h * dx / d))
+                        cands.append((mx - h * dy / d, my + h * dx / d))
+                    if len(placed) == 1:                     # the second photo: anywhere on the first one's rim
+                        cands += [(p[0] + da * math.cos(t / 6), p[1] + da * math.sin(t / 6)) for t in range(38)]
+                best = None
+                for x, y in cands:
+                    if any(math.hypot(x - q[0], y - q[1]) < q[2] + r + gap - 1e-6 for q in placed):
+                        continue
+                    if own:                                  # near its own country, the cluster kept round-ish
+                        dist = math.hypot(x - cx, (y - cy) * stretch)
+                    else:                                    # a new country starts on the rim of the whole cluster
+                        dist = math.hypot(x, y * stretch) * .6
+                    dist += rng.uniform(0, .1)               # + a little chaos
+                    if best is None or dist < best[0]:
+                        best = (dist, x, y)
+                placed.append((best[1], best[2], r, c))
+                where[id(a)] = placed[-1]
+        bx0, bx1 = min(p[0] - p[2] for p in placed), max(p[0] + p[2] for p in placed)
+        by0, by1 = min(p[1] - p[2] for p in placed), max(p[1] + p[2] for p in placed)
+        k = min((ax1 - ax0) / (bx1 - bx0), (ay1 - ay0) / (by1 - by0), 60)   # a few ambassadors: 1x = 120 px at most
+        return k, (bx0, bx1, by0, by1), where
+
+    if not people:
         return {'people': [], 'countries': 0}
-    bx0, bx1 = min(p[0] - p[2] for p in placed), max(p[0] + p[2] for p in placed)
-    by0, by1 = min(p[1] - p[2] for p in placed), max(p[1] + p[2] for p in placed)
-    k = min((ax1 - ax0) / (bx1 - bx0), (ay1 - ay0) / (by1 - by0), 60)   # a few ambassadors: 1x = 120 px at most
+    # every event of a build has the same people: the layout is worked out once (~10 s) and kept in ../.cache
+    memo = os.path.join('../.cache', 'hello-amb-layout-%s.json' % hashlib.sha256(json.dumps(
+        [AMB_LAYOUT_V, AMB_AREA, AMB_SIZES, [(a['name'], a['country']) for a in people]]).encode()).hexdigest()[:24])
+    try:
+        with open(memo, encoding='utf-8') as f:
+            got = json.load(f)
+        return {'people': [dict(o, path=a['path']) for o, a in zip(got['people'], people)], 'countries': got['countries']}
+    except (OSError, ValueError, KeyError):
+        pass
+    k, (bx0, bx1, by0, by1), where = max((pack(st) for st in (1.5, 1.9, 2.3, 2.7, 3.2)), key=lambda t: t[0])
     ox, oy = (ax0 + ax1) / 2 - (bx0 + bx1) / 2 * k, (ay0 + ay1) / 2 - (by0 + by1) / 2 * k
     out = []
     for a in people:
-        x, y, r, c = a.pop('_p')
+        x, y, r, c = where[id(a)]
         out.append({'name': a['name'], 'country': c, 'path': a['path'], 'x': round(ox + x * k), 'y': round(oy + y * k),
                     'd': round(2 * r * k)})
+    try:
+        os.makedirs('../.cache', exist_ok=True)
+        tmp = '%s.%d.tmp' % (memo, os.getpid())
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump({'people': [{x: v for x, v in o.items() if x != 'path'} for o in out], 'countries': len(order)}, f)
+        os.replace(tmp, memo)
+    except OSError:
+        pass
     return {'people': out, 'countries': len(order)}
 
 
@@ -674,13 +713,14 @@ class _Img:
         with open(path, 'rb') as f:
             return self._write(self._stem(path), os.path.splitext(path)[1].lstrip('.').lower(), f.read())
 
-    def picture(self, path, box=None):
-        """a hello-deck picture as WebP no bigger than box (on-screen px) x IMG_SCALE; never upscaled. box=None: full size"""
+    def picture(self, path, box=None, trim=False):
+        """a hello-deck picture as WebP no bigger than box (on-screen px) x IMG_SCALE; never upscaled. box=None: full size.
+        trim: cut the transparent margin off (the round ambassador headshots carry ~3-6%, which reads as a gap)"""
         if not path or not os.path.exists(path):
             return ''
         with open(path, 'rb') as f:
             src = f.read()
-        key = hashlib.sha256(('%s|%s|%s|' % (IMG_VERSION, IMG_SCALE, box)).encode() + src).hexdigest()[:32]
+        key = hashlib.sha256(('%s|%s|%s|%s' % (IMG_VERSION, IMG_SCALE, box, 'trim' if trim else '')).encode() + src).hexdigest()[:32]
         entry = os.path.join(IMG_CACHE, key + '.webp')
         try:
             with open(entry, 'rb') as f:
@@ -691,6 +731,11 @@ class _Img:
         im = Image.open(io.BytesIO(src))
         im.load()
         im = im.convert('RGBA' if im.mode in ('RGBA', 'LA', 'P') else 'RGB')
+        if trim and im.mode == 'RGBA':                       # the opaque part's box, squared around its middle
+            bb = im.getchannel('A').point(lambda v: 255 if v > 128 else 0).getbbox()
+            if bb:
+                cx, cy, h = (bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2, max(bb[2] - bb[0], bb[3] - bb[1]) / 2
+                im = im.crop((round(cx - h), round(cy - h), round(cx + h), round(cy + h)))
         if box:
             im.thumbnail((box[0] * IMG_SCALE, box[1] * IMG_SCALE), Image.LANCZOS)
         lossy, lossless = io.BytesIO(), io.BytesIO()
@@ -861,7 +906,7 @@ def _build(context, env, base_folder):
             tours.append(dict(b, events=rows, span=_span(rows), map=_map_layout(rows, cfg.get('cities'), b['key'])))
     amb = _amb_layout(_ambassadors(brands, key))
     for a in amb['people']:
-        a['src'] = img.picture(a.pop('path'), BOX_AMB)
+        a['src'] = img.picture(a.pop('path'), BOX_AMB, trim=True)
     chat_form = asset('chat/form-%s.png' % key, (860, 1060))   # hello-deck/tools/shoot_lead_form.py
 
     sponsors = []
