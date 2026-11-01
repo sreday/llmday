@@ -1,7 +1,7 @@
 """/<event>/hello/ - the opening deck shown on the venue screen before the first talk (Marek 2026-10-19, after the
 PLATFORMday Austin deck): Hello <city>, the team, every brand's ambassadors, WhatsApp + LinkedIn, the event's partners,
 the sister brands, the community tools (cfp.ninja) and a Reliaburger slide drawn like reliaburger.com's hero (live version +
-catchphrase), this brand's upcoming events (mascot sticker) then the sister brands', Let's chat (the empty lead form), the
+catchphrase), this brand's upcoming events (mascot sticker) then the sister brands', Let's chat (the lead form, typed in by film characters), the
 splash cards. Full-screen button + clicker keys in the page.
 
 Everything comes from data, nothing is typed per event:
@@ -10,7 +10,7 @@ Everything comes from data, nothing is typed per event:
   - hello-deck/hello.yaml at the repo root (team, WhatsApp, sister brands with their logo, mascot, theme and site)
   - every site's ambassadors: this repo's home/_db/ambassadors.csv, the sisters' published /ambassadors.json (see
     _ambassadors below)
-  - hello-deck/chat/form-<brand>.png, the lead form screenshot (hello-deck/tools/shoot_lead_form.py)
+  - hello-deck/chat/characters.yaml, the film characters who fill in the Let's chat form
   - the sister sites' published metadata.yml (https://llmday.com/metadata.yml and /<event>/metadata.yml),
     fetched once per build run and cached 30 min in ../.cache/hello-sisters.json (stale copy if the fetch fails;
     SKIP_CFP_CHECK=1 or SKIP_HELLO_FETCH=1 = offline build, cache only)
@@ -908,7 +908,18 @@ def _build(context, env, base_folder):
     amb = _amb_layout(_ambassadors(brands, key))
     for a in amb['people']:
         a['src'] = img.picture(a.pop('path'), BOX_AMB, trim=True)
-    chat_form = asset('chat/form-%s.png' % key, (860, 1060))   # hello-deck/tools/shoot_lead_form.py
+    # Let's chat: the site's lead form drawn in the page and filled in by film characters, one after another (Marek
+    # 2026-11-01); hello-deck/chat/characters.yaml. The Conferences row as on the site: this brand first, then the others
+    # (PEC's form has none)
+    try:
+        with open(os.path.join(DECK_DIR, 'chat', 'characters.yaml'), encoding='utf-8') as f:
+            characters = [list(map(str, c)) for c in yaml.safe_load(f) or [] if isinstance(c, list) and len(c) == 3]
+    except OSError:
+        characters = []
+    form_brands = [b for b in brands if b.get('form_accent') and b.get('tour', True)]
+    form_brands = sorted(form_brands, key=lambda b: b['key'] != key) if me.get('tour', True) else []
+    chat = {'characters': characters, 'accent': me.get('form_accent') or theme.get('accent') or '#333',
+            'brands': [{'name': b['name'], 'accent': b['form_accent']} for b in form_brands]}
 
     sponsors = []
     for s in context.get('sponsors') or []:
@@ -952,7 +963,7 @@ def _build(context, env, base_folder):
         'tours': ([dict(me, events=own_rows, span=_span(own_rows), map=_map_layout(own_rows, cfg.get('cities'), key),
                         mascot_src=me.get('sticker_src') or me.get('mascot_src'))] if own_rows else []) + tours,
         'ambassadors': amb,
-        'chat_form': chat_form, 'chat_url': base.rstrip('/') + '/#sponsor', 'chat_qr': qr_svg(base.rstrip('/') + '/#sponsor'),
+        'chat': chat, 'chat_url': base.rstrip('/') + '/#sponsor', 'chat_qr': qr_svg(base.rstrip('/') + '/#sponsor'),
         # the home page cards are lossless WebPs (~400 KB each, 5 on the slide): the deck gets its own q90 copies (~70 KB)
         'own_cards': [dict(r, card=img.picture(os.path.join('../home', r['card'].lstrip('/')), (650, 325)) or r['card'])
                       for r in own if r['card']][:5],

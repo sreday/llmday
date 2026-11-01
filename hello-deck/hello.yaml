@@ -41,6 +41,8 @@ open_source:
 #   tentative      = planned but not on the site yet: grey dots with the month only (a published event in the same city and
 #                    month replaces it). From Mark's 2027 planning emails to Harness and Teleport, 6-9 Oct 2026.
 #   sticker        = the mascot sticker with the logo on it, on the closing slide
+#   form_accent    = the lead form's colour on this brand's site (.lead-scope --lead-accent in home/_templates/_lead_form_home.html):
+#                    the animated form on the "Let's chat!" slide, and this brand's chip in its Conferences row
 #   theme          = the deck colours when this brand is the host (bg/bg2 slide gradient, deep = dark slides,
 #                    accent + glow = headings, pano_lo/pano_hi = the city panorama's duotone)
 brands:
@@ -52,6 +54,7 @@ brands:
     mascot: brands/mascot-sreday.png
     hello_mascot: brands/hello-sreday.png
     sticker: brands/sticker-sreday.png
+    form_accent: '#713660'
     tentative:
       - {city: NYC, month: 2027-02, country: USA}
       - {city: San Francisco, month: 2027-04, country: USA}
@@ -64,6 +67,7 @@ brands:
     mascot: brands/mascot-llmday.png
     hello_mascot: brands/hello-llmday.png
     sticker: brands/sticker-llmday.png
+    form_accent: '#26986A'
     tentative:
       - {city: NYC, month: 2027-02, country: USA}
       - {city: San Francisco, month: 2027-04, country: USA}
@@ -77,6 +81,7 @@ brands:
     mascot: brands/mascot-platformday.png
     hello_mascot: brands/hello-platformday.png
     sticker: brands/sticker-platformday.png
+    form_accent: '#E2971D'
     tentative:
       - {city: NYC, month: 2027-03, country: USA}
       - {city: San Francisco, month: 2027-04, country: USA}
@@ -88,6 +93,7 @@ brands:
     logo: brands/pec.png
     family: false
     tour: false
+    form_accent: '#6b40d8'
     theme: {bg: '#1d1250', bg2: '#4b26a8', deep: '#07051a', accent: '#8b6cff', glow: '#e2d9ff', pano_lo: '#07051a', pano_hi: '#7c6fd0'}
   - key: conf42
     name: Conf42
