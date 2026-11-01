@@ -1,5 +1,5 @@
-"""hello-deck/chat/form-<brand>.png - the empty "Let's talk!" lead form (Sponsor / Host / Partner) as a visitor sees it on
-the brand's home page, for the deck's "Let's chat!" slide (Marek 2026-10-31: "show how easy it is to start a conversation").
+"""hello-deck/chat/form-<brand>.png - the empty "Let's talk!" lead form (Sponsor / Host / Partner) from
+the brand's home page, every conference chip on, for the deck's "Let's chat!" slide (Marek 2026-10-31: "show how easy it is to start a conversation").
 Run by hand when the form changes, then copy hello-deck/chat/ into the other three repos (the folder is identical):
 
     pip install websocket-client pillow
@@ -57,13 +57,16 @@ def shoot(tab, key, url):
         print('%s: no lead form at %s' % (key, url))
         return
     time.sleep(2)
-    # unrolled, no transition, every field empty (the page brand's chip stays pre-checked, as visitors see it)
+    # unrolled, no transition, every field empty, all three brand chips on
     tab.js('''(function () {
       var p = document.getElementById('lead-panel');
       if (window.leadOpen) leadOpen(); else if (!p.classList.contains('open') && window.leadToggle) leadToggle();
       p.style.transition = 'none'; p.style.maxHeight = 'none'; p.style.height = 'auto'; p.style.opacity = '1';
       p.classList.add('open');
       document.querySelectorAll('#lead-form input[type=text], #lead-form input[type=email]').forEach(function (i) { i.value = ''; i.blur(); });
+      document.querySelectorAll('.lead-group.is-invalid').forEach(function (g) { g.classList.remove('is-invalid'); });
+      // every conference chip on (Marek 2026-11-01: "have all 3 brands highlighted")
+      document.querySelectorAll('#lead-form input[name=brands]').forEach(function (i) { i.checked = true; i.dispatchEvent(new Event('change', {bubbles: true})); });
       document.querySelectorAll('.lead-group.is-invalid').forEach(function (g) { g.classList.remove('is-invalid'); });
       p.scrollIntoView({block: 'center'});
     })()''')
