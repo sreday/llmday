@@ -90,8 +90,9 @@
     /* 2b - every brand's ambassadors: positions + sizes from hello.py (_amb_layout), one cluster per country; the raw
        headshots (round PNGs), nothing added (Marek 2026-10-31) */
     .s-amb .amb { position: absolute; margin: 0; object-fit: contain; transform: translate(-50%, -50%); }
-    .s-amb { background: #fff; }                             /* white with a dark heading on every brand (Marek 2026-11-01) */
-    .s-amb > h2.glow { color: #111; text-shadow: none; }
+    /* the Reliaburger slide's paper (hello.yaml light.paper) with a black heading glowing in the brand colour (Marek 2026-11-01) */
+    .s-amb { background: #fafbf9; }
+    .s-amb > h2.glow { color: #111; text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 28px var(--accent), 0 0 60px var(--accent); }
 
     /* 3 - share the love */
     .share { display: flex; gap: 220px; }
