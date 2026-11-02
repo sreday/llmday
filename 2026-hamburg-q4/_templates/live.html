@@ -7,85 +7,100 @@
 <title>Live - {{ brand_name }} {{ city_name }}</title>
 <!-- /<event>/live/: the schedule as it happens, for a screen at the venue. Built by _build/live.py from the same
      schedule as the event page; runs on the viewer's clock. ?at=10:40 tries it at another time. -->
+<link rel="stylesheet" href="../assets/css/fonts.css">
 <style>
-  :root { --accent: {{ brand_color or '#713660' }}; --bg: #0d1117; --card: #161b22; --line: #2d333b; --ink: #f5f7fa; --muted: #9aa4b2; --warn: #f5b84a; }
+  /* The site's look (Marek 2026-11-02: "white theme, liquid glass"): Montserrat, the soft aurora of the speaker
+     section, frosted grey glass panes with a white rim, brand-coloured pills. */
+  :root { --brand: {{ brand_color or '#713660' }}; --ink: #1d1b21; --muted: #5b5662; --track: rgba(30,15,40,.09); --warn: #b45309; --warnbar: #f59e0b; }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  body { display: flex; flex-direction: column; padding: 2.2vh 2.4vw; gap: 2vh; min-height: 100vh;
-    background: radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--accent) 38%, transparent), transparent 60%), var(--bg); }
-  header { display: flex; align-items: center; gap: 1.4vw; }
-  .live { display: inline-flex; align-items: center; gap: .6vw; padding: .5vh 1vw; border-radius: 999px; background: #e5484d;
-    font-weight: 800; font-size: clamp(14px, 1.5vw, 30px); letter-spacing: .08em; }
+  html, body { margin: 0; height: 100%; color: var(--ink); background: #f7f6f9;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  body { position: relative; isolation: isolate; display: flex; flex-direction: column; padding: 2.2vh 2.4vw; gap: 2vh; min-height: 100vh; overflow: hidden; }
+  .aurora { position: fixed; inset: -10%; z-index: -1; pointer-events: none; filter: blur(60px);
+    background: radial-gradient(40% 30% at 10% 12%, color-mix(in srgb, var(--brand) 40%, transparent), transparent 70%),
+      radial-gradient(35% 28% at 88% 10%, rgba(245,158,11,.30), transparent 70%),
+      radial-gradient(40% 30% at 72% 52%, rgba(20,184,166,.20), transparent 70%),
+      radial-gradient(42% 30% at 18% 62%, color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 30%, transparent), transparent 70%),
+      radial-gradient(40% 28% at 85% 90%, color-mix(in srgb, var(--brand) 30%, transparent), transparent 70%); }
+  .glass { background: rgba(226,227,232,.5); border: 1px solid rgba(255,255,255,.72);
+    -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%);
+    box-shadow: 0 18px 44px rgba(30,15,40,.14), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); }
+  header { display: flex; align-items: center; gap: 1.4vw; padding: 1.2vh 1.2vw 1.2vh 1.6vw; border-radius: 999px; }
+  .live { display: inline-flex; align-items: center; gap: .6vw; padding: .5vh 1vw; border-radius: 999px; background: #e5484d; color: #fff;
+    font-weight: 800; font-size: clamp(14px, 1.4vw, 28px); letter-spacing: .08em; }
   .live::before { content: ""; width: .8vw; height: .8vw; min-width: 8px; min-height: 8px; border-radius: 50%; background: #fff; animation: blink 1.4s infinite; }
-  .live.off { background: var(--line); }
-  .live.off::before { animation: none; opacity: .5; }
+  .live.off { background: rgba(30,15,40,.12); color: var(--muted); }
+  .live.off::before { animation: none; background: var(--muted); opacity: .6; }
   @keyframes blink { 50% { opacity: .2; } }
-  .event { flex: 1; min-width: 0; font-weight: 800; font-size: clamp(18px, 2.2vw, 44px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .event { flex: 1; min-width: 0; font-weight: 800; font-size: clamp(18px, 2.1vw, 42px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--brand); }
   .event small { color: var(--muted); font-weight: 600; margin-left: .8vw; font-size: .7em; }
-  .clock { font-weight: 800; font-size: clamp(28px, 4.2vw, 84px); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
-  #fs { font: inherit; font-weight: 700; font-size: clamp(12px, 1.1vw, 20px); color: var(--ink); background: var(--line); border: 0; border-radius: 999px; padding: 1vh 1.4vw; cursor: pointer; }
-  #fs:hover { background: #3b434d; }
+  .clock { font-weight: 800; font-size: clamp(28px, 3.8vw, 76px); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  #fs { font: inherit; font-weight: 700; font-size: clamp(12px, 1.05vw, 20px); color: #fff; background: var(--brand); border: 0; border-radius: 999px; padding: 1.1vh 1.6vw; cursor: pointer;
+    box-shadow: 0 6px 16px -8px var(--brand); }
+  #fs:hover { filter: brightness(1.1); }
   :fullscreen #fs { display: none; }
   main { flex: 1; display: flex; flex-direction: column; gap: 2vh; min-height: 0; }
-  h2 { margin: 0; font-size: clamp(14px, 1.5vw, 30px); text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 800; }
+  h2 { margin: 0; font-size: clamp(14px, 1.4vw, 28px); text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 800; padding-left: .4vw; }
   .grid { flex: 1; display: grid; gap: 1.4vw; grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)); min-height: 0; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 1.6vw; padding: 2.4vh 1.6vw; display: flex; flex-direction: column; gap: 1.6vh; min-width: 0; }
-  .room { font-weight: 800; font-size: clamp(14px, 1.45vw, 30px); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-  .pill { align-self: flex-start; padding: .4vh .8vw; border-radius: 999px; font-weight: 800; font-size: clamp(11px, 1.05vw, 22px); text-transform: uppercase; letter-spacing: .08em;
-    background: color-mix(in srgb, var(--accent) 55%, #000); }
-  .pill.workshop { background: #1f6f5c; }
-  .pill.break { background: #3b434d; }
-  .title { font-weight: 800; line-height: 1.15; font-size: var(--tsize, clamp(20px, 2.5vw, 56px)); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .who { display: flex; align-items: center; gap: 1vw; font-size: clamp(14px, 1.6vw, 34px); font-weight: 600; }
-  .who img { width: 6vh; height: 6vh; border-radius: 50%; object-fit: cover; flex: none; background: var(--line); }
+  .card { border-radius: 26px; padding: 2.4vh 1.6vw; display: flex; flex-direction: column; gap: 1.6vh; min-width: 0; }
+  .room { font-weight: 800; font-size: clamp(14px, 1.35vw, 28px); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .pill { align-self: flex-start; padding: .5vh .9vw; border-radius: 999px; font-weight: 800; font-size: clamp(11px, 1vw, 20px); text-transform: uppercase; letter-spacing: .08em;
+    color: #fff; background: var(--brand); }
+  .pill.keynote { background: color-mix(in srgb, var(--brand) 80%, #000); }
+  .pill.workshop { background: #0f766e; }
+  .pill.break { background: rgba(255,255,255,.75); color: var(--muted); border: 1px solid rgba(255,255,255,.9); }
+  .title { font-weight: 800; line-height: 1.15; font-size: var(--tsize, clamp(20px, 2.4vw, 54px)); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .who { display: flex; align-items: center; gap: 1vw; font-size: clamp(14px, 1.5vw, 32px); font-weight: 700; }
+  .who img { width: 6.4vh; height: 6.4vh; border-radius: 50%; object-fit: cover; flex: none; background: rgba(255,255,255,.7); border: 2px solid rgba(255,255,255,.95); }
   .who span { min-width: 0; }
   .who b { display: block; }
-  .who i { font-style: normal; color: var(--muted); }
+  .who i { font-style: normal; color: var(--muted); font-weight: 600; }
   .spacer { flex: 1; }
-  .bar { height: 2.2vh; min-height: 10px; border-radius: 999px; background: #2a313a; overflow: hidden; }
-  .bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--accent); background: color-mix(in srgb, var(--accent) 70%, #fff); transition: width 1s linear; }
+  .bar { height: 2.2vh; min-height: 10px; border-radius: 999px; background: var(--track); overflow: hidden; box-shadow: inset 0 1px 2px rgba(30,15,40,.08); }
+  .bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 75%, #fff), var(--brand)); transition: width 1s linear; }
   .left { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 1vw; font-weight: 800; }
-  .left b { font-size: clamp(22px, 3vw, 64px); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .left span { white-space: nowrap; }
-  .left span { color: var(--muted); font-size: clamp(13px, 1.3vw, 28px); font-weight: 700; }
-  .soon .bar i { background: var(--warn); }
+  .left b { font-size: clamp(22px, 2.9vw, 62px); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--brand); }
+  .left span { white-space: nowrap; color: var(--muted); font-size: clamp(13px, 1.25vw, 26px); font-weight: 700; }
+  .soon .bar i { background: var(--warnbar); }
   .soon .left b { color: var(--warn); }
-  .next { border-top: 1px solid var(--line); padding-top: 1.4vh; font-size: clamp(13px, 1.35vw, 28px); color: var(--muted); font-weight: 600; }
+  .next { border-top: 1px solid rgba(30,15,40,.1); padding-top: 1.4vh; font-size: clamp(13px, 1.3vw, 27px); color: var(--muted); font-weight: 600; }
   .next b { color: var(--ink); }
   .next .nt { color: var(--ink); font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .idle .title { color: var(--muted); }
-  /* A break for everyone: one big card. */
+  /* A break for everyone: one big pane. */
   .hero { flex: 1; justify-content: center; text-align: center; align-items: center; padding: 4vh 4vw; }
   .hero .pill { align-self: center; }
-  .hero .title { font-size: clamp(36px, 6vw, 140px); }
-  .hero .where { color: var(--muted); font-size: clamp(18px, 2.4vw, 52px); font-weight: 700; }
+  .hero .title { font-size: clamp(36px, 6vw, 140px); color: var(--brand); }
+  .hero .where { color: var(--muted); font-size: clamp(18px, 2.3vw, 50px); font-weight: 700; }
   .hero .bar { width: 70%; height: 3vh; }
   .hero .left { width: 70%; }
-  .hero .left b { font-size: clamp(30px, 4.6vw, 100px); }
+  .hero .left b { font-size: clamp(30px, 4.4vw, 96px); }
   /* Before / between days: a countdown and the first sessions. */
-  .count { font-weight: 800; font-size: clamp(36px, 7vw, 160px); line-height: 1; font-variant-numeric: tabular-nums; }
-  .list { display: flex; flex-direction: column; border-radius: 1.6vw; overflow: hidden; border: 1px solid var(--line); }
-  .row { display: grid; grid-template-columns: 9vw minmax(0, 1fr) auto; align-items: center; gap: 1.6vw; padding: 1.8vh 1.6vw; background: var(--card); border-top: 1px solid var(--line); }
+  .count { font-weight: 800; font-size: clamp(36px, 7vw, 160px); line-height: 1; font-variant-numeric: tabular-nums; color: var(--brand); padding-left: .2vw; }
+  .list { display: flex; flex-direction: column; border-radius: 26px; overflow: hidden; }
+  .row { display: grid; grid-template-columns: 9vw minmax(0, 1fr) auto; align-items: center; gap: 1.6vw; padding: 1.8vh 1.8vw; border-top: 1px solid rgba(255,255,255,.6); }
   .row:first-child { border-top: 0; }
-  .row .hm { font-weight: 800; font-size: clamp(18px, 2.4vw, 52px); font-variant-numeric: tabular-nums; }
-  .row .rt { font-weight: 800; font-size: clamp(16px, 2vw, 44px); line-height: 1.2; }
-  .row .rw { color: var(--muted); font-size: clamp(13px, 1.4vw, 30px); font-weight: 600; margin-top: .4vh; }
-  .row .rr { color: var(--muted); font-size: clamp(12px, 1.2vw, 26px); font-weight: 700; text-align: right; }
+  .row .hm { font-weight: 800; font-size: clamp(18px, 2.3vw, 50px); font-variant-numeric: tabular-nums; color: var(--brand); }
+  .row .rt { font-weight: 800; font-size: clamp(16px, 1.9vw, 42px); line-height: 1.2; }
+  .row .rw { color: var(--muted); font-size: clamp(13px, 1.35vw, 29px); font-weight: 600; margin-top: .4vh; }
+  .row .rr { color: var(--muted); font-size: clamp(12px, 1.15vw, 25px); font-weight: 700; text-align: right; }
   .row.brk .rt { color: var(--muted); }
-  footer { display: flex; justify-content: space-between; gap: 2vw; color: var(--muted); font-weight: 700; font-size: clamp(13px, 1.4vw, 30px); }
-  footer b { color: var(--ink); }
+  footer { display: flex; justify-content: space-between; gap: 2vw; color: var(--muted); font-weight: 600; font-size: clamp(13px, 1.35vw, 29px); padding: 0 .6vw; }
+  footer b { color: var(--ink); font-weight: 800; }
   .try { color: var(--warn); }
   @media (max-width: 800px) {
+    body { overflow: auto; }
     .grid { grid-template-columns: minmax(0, 1fr); }
     .row { grid-template-columns: 64px minmax(0, 1fr); }
     .row .rr { grid-column: 2; text-align: left; }
-    .card { border-radius: 16px; padding: 16px; }
+    .card { border-radius: 20px; padding: 16px; }
+    header { border-radius: 20px; flex-wrap: wrap; }
   }
 </style>
 </head>
 <body>
-<header>
+<div class="aurora" aria-hidden="true"></div>
+<header class="glass">
   <span class="live" id="liveTag">LIVE</span>
   <div class="event">{{ brand_name }} {{ city_name }}<small>{{ date_string }}</small></div>
   <div class="clock" id="clock">--:--</div>
@@ -176,10 +191,10 @@
     if (t < ds) {
       // Before the day: when it starts, and the first sessions.
       const all = merged(day).filter((it) => !it.wrap).slice(0, 5);
-      html = '<h2>' + multi + 'Starts in</h2><div class="count">' + span(ds - t) + '</div><h2>First up</h2><div class="list">' +
+      html = '<h2>' + multi + 'Starts in</h2><div class="count">' + span(ds - t) + '</div><h2>First up</h2><div class="list glass">' +
         all.map((it) => rowHTML(it, D.days[di].length > 1 ? it.room : '')).join('') + '</div>';
     } else if (t >= de) {
-      html = '<div class="card hero"><div class="title">That\'s a wrap!</div><div class="where">Thanks for coming to ' + esc(D.event) + '</div></div>';
+      html = '<div class="card glass hero"><div class="title">That\'s a wrap!</div><div class="where">Thanks for coming to ' + esc(D.event) + '</div></div>';
     } else {
       const rooms = day.map((r) => {
         const items = r.items.filter((it) => !it.wrap);
@@ -189,11 +204,11 @@
       const allBreak = curs.length > 0 && curs.every((c) => c.kind === 'break' && c.title === curs[0].title);
       if (allBreak) {
         const b = curs[0];
-        html = '<div class="card hero' + (soon(b, t) ? ' soon' : '') + '"><span class="pill break">Break</span><div class="title">' + esc(b.title) + '</div>' +
+        html = '<div class="card glass hero' + (soon(b, t) ? ' soon' : '') + '"><span class="pill break">Break</span><div class="title">' + esc(b.title) + '</div>' +
           (b.where ? '<div class="where">' + esc(b.where) + '</div>' : '') + progress(b, t, true) + '</div>';
         const after = rooms.filter((r) => r.next && r.next.kind !== 'break');
         if (after.length) {
-          html += '<h2>Right after</h2><div class="list">' + after.map((r) => rowHTML(r.next, after.length > 1 ? r.room : '')).join('') + '</div>';
+          html += '<h2>Right after</h2><div class="list glass">' + after.map((r) => rowHTML(r.next, after.length > 1 ? r.room : '')).join('') + '</div>';
         }
       } else {
         // A card per room with something on now (a keynote alone gets the
@@ -205,15 +220,15 @@
         html = '<div class="grid" style="--cols:' + Math.min(shown.length, 4) + tsize + '">' + shown.map((r) => {
           const c = r.cur;
           if (!c) {
-            return '<div class="card idle"><div class="room">' + esc(r.room) + '</div><span class="pill break">Next at ' + esc(r.next.hm) + '</span>' +
+            return '<div class="card glass idle"><div class="room">' + esc(r.room) + '</div><span class="pill break">Next at ' + esc(r.next.hm) + '</span>' +
               '<div class="title">' + esc(r.next.title) + '</div>' + who(r.next) + '<div class="spacer"></div><div class="left"><b>in ' + span(T(r.next.start) - t) + '</b></div></div>';
           }
-          return '<div class="card' + (soon(c, t) ? ' soon' : '') + '"><div class="room">' + esc(r.room) + '</div><span class="pill ' + c.kind + '">' + KIND[c.kind] + '</span>' +
+          return '<div class="card glass' + (soon(c, t) ? ' soon' : '') + '"><div class="room">' + esc(r.room) + '</div><span class="pill ' + c.kind + '">' + KIND[c.kind] + '</span>' +
             '<div class="title">' + esc(c.title) + '</div>' + (c.kind === 'break' && c.where ? '<div class="who">' + esc(c.where) + '</div>' : who(c)) +
             progress(c, t) + nextLine(r.next) + '</div>';
         }).join('') + '</div>';
         const later = on.length ? rooms.filter((r) => !r.cur && r.next && r.next.kind !== 'break' && T(r.next.start) - t < 60 * 60000) : [];
-        if (later.length) html += '<h2>Coming up in the other rooms</h2><div class="list">' + later.map((r) => rowHTML(r.next, r.room)).join('') + '</div>';
+        if (later.length) html += '<h2>Coming up in the other rooms</h2><div class="list glass">' + later.map((r) => rowHTML(r.next, r.room)).join('') + '</div>';
       }
       // The next break everyone shares, for the footer.
       const nb = merged(day).find((it) => it.kind === 'break' && !it.wrap && T(it.start) > t);
