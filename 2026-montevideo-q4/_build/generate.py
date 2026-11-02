@@ -2585,6 +2585,12 @@ print("Writing out onboardsponsor/index.html (hidden, not in sitemap)")
 import hello as _hello
 _hello.build(context, env, BASE_FOLDER)
 
+# HIDDEN PAGE: /<event>/live/ (the schedule as it happens, for a screen at the venue: what's on in every room with the
+# minutes left, what's next, the breaks; full-screen button). Built by _build/live.py from talks_by_tracks above; never
+# breaks the build.
+import live as _live
+_live.build(context, env, BASE_FOLDER)
+
 # SITEMAP
 print(DIVIDER)
 print("Generating sitemap.xml with %d items" % len(SITEMAP_URLS))
