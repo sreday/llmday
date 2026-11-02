@@ -206,3 +206,16 @@ events on a dotted world map in its own colours (not PEC: `tour: false`), then t
   `hello-deck/tools/make_world_dots.py`) places each city from `cities:` in `hello.yaml` - a new city needs its coordinates
   there (the build warns). One pin per city with all its dates; arcs in date order; "Many more to be announced soon!" below.
 - noindex, not in the sitemap; a failure prints `WARN hello` and never stops the build.
+
+### Live schedule
+
+Every event gets `/<event>/live/`: the schedule as it happens, for a screen at the venue (Marek 2026-11-02).
+- What's on now in every room (a keynote alone gets the whole screen), a progress bar with the minutes left, what's
+  next per room, a shared break as one big card, the next break and the wrap-up in the footer. Before the day: a
+  countdown and the first five items; after: "That's a wrap". Full-screen button (or the F key).
+- Built by `_event_template/_build/live.py` + `_templates/live.html` (identical in sreday, llmday, platformday, PEC)
+  from the same `talks_by_tracks` as the Schedule, so it always matches it; multi-day events get each day's date.
+- Runs on the viewer's clock (absolute times, any laptop time zone) and re-reads itself every 5 minutes, so a deployed
+  schedule change shows up without a reload. `?at=10:40` (or `?at=2026-11-02T10:40`) runs it from that event time,
+  for trying it out.
+- noindex, not in the sitemap, not built for past/ events; a failure prints `WARN live` and never stops the build.
