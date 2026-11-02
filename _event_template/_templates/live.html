@@ -96,8 +96,18 @@
     .grid { grid-template-columns: minmax(0, 1fr); }
     .row { grid-template-columns: 64px minmax(0, 1fr); }
     .row .rr { grid-column: 2; text-align: left; }
-    .card { border-radius: 20px; padding: 16px; }
-    header { border-radius: 20px; flex-wrap: wrap; }
+    /* a phone scrolls: cards at their natural height, every room shown, nothing clipped */
+    html, body { height: auto; }
+    body { padding: 12px 16px; gap: 12px; }
+    main, .grid { flex: none; }
+    .grid { grid-template-rows: none; gap: 12px; }
+    .card { border-radius: 20px; padding: 16px; overflow: visible; }
+    .card > * { flex-shrink: 0; }
+    .who img, .grid[style*="--cols"] .who img, .idle .who img { width: 88px; height: 88px; }
+    header { border-radius: 20px; flex-wrap: wrap; gap: 8px 10px; padding: 10px 14px; }
+    .event { order: 3; flex-basis: 100%; }
+    .clock { margin-left: auto; }
+    footer { flex-wrap: wrap; gap: 4px 12px; }
   }
 </style>
 </head>
