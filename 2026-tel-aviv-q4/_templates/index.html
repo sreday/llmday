@@ -455,7 +455,18 @@
   }
 </style>
 
-{% if event_state == 'before' %}
+{% if schedule_embed %}
+{# a 3rd-party schedule (Marek 2026-11-03, LLMday Tel Aviv on in10t): metadata.yml schedule_embed: | + their snippet, shown
+   as it is in place of our own schedule (and its "Coming soon"), whatever the event_state #}
+<style>.sched-embed { max-width: 960px; margin: 0 auto; text-align: start; }</style>
+<section id="schedule" class="schedule-section section theme-bg-light">
+  <div class="sched-aurora" aria-hidden="true"></div>
+  <div class="container">
+    <h2 class="section-heading text-center mb-5">Schedule</h2>
+    <div class="sched-embed">{{ schedule_embed|safe }}</div>
+  </div>
+</section>
+{% elif event_state == 'before' %}
 <section id="schedule" class="schedule-section section theme-bg-light">
   <div class="sched-aurora" aria-hidden="true"></div>
   <div class="container">

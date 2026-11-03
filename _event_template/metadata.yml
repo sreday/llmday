@@ -15,6 +15,10 @@ calendly_sponsor_url: "https://calendly.com/sreday/30min"
 # get this from the event url
 luma_evt: evt-xAhCqaXMWAXAEEm
 cfp_url: https://cfp.ninja/e/llmday-amsterdam-2025-q4
+# a 3rd-party schedule shown instead of ours (any embed snippet, kept as it is), e.g. in10t's agenda widget:
+# schedule_embed: |
+#   <div data-in10t-event="eqasup" data-in10t-widget="agenda" data-theme="site"></div>
+#   <script src="https://in10t.ai/embed.js" async></script>
 
 # the number of tracks needs to be the same per day
 # the tracks will be taken in the order they appear in the CSV file
