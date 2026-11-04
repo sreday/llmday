@@ -1070,24 +1070,29 @@ _LUMA_SAME = 0.85                    # difflib ratio at/above which a registrant
 _LUMA_CATS = (("paid", "Paid attendees"), ("free", "Freebies"), ("speakers", "Speakers"), ("sponsors", "Sponsors"))
 
 
+_luma_dead = []   # calls that failed every network retry; past 3 Luma is down and further calls fail fast (15-min deploy limit)
+
+
 def _luma_get(path, params, key):
-    """GET on the Luma public API -> (json, None) or (None, reason). One retry after a 429, honouring Retry-After."""
+    """GET on the Luma public API -> (json, None) or (None, reason). One retry after a 429, honouring Retry-After;
+    two retries after a timeout / connection error (Hamburg Q4 showed "TimeoutError" on /status/ for a whole day of
+    builds while the event was fine and managed - Marek 2026-11-04)."""
     import json as _json, time as _time, urllib.request as _ur, urllib.parse as _up, urllib.error as _ue
     url = _LUMA_API + path + "?" + _up.urlencode(params)
-    for attempt in (1, 2):
+    for attempt in (1, 2, 3):
         # Luma's edge blocks Python's default User-Agent ("blocked access based on your browser's signature",
         # seen 2026-09-17), so identify as a browser.
         req = _ur.Request(url, headers={"x-luma-api-key": key, "accept": "application/json",
                                         "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36"})
         try:
-            with _ur.urlopen(req, timeout=20) as resp:
+            with _ur.urlopen(req, timeout=20 if len(_luma_dead) < 3 else 10) as resp:
                 remaining = resp.headers.get("X-RateLimit-Remaining") or ""
                 body = _json.loads(resp.read().decode("utf-8"))
             if remaining.isdigit() and int(remaining) < 15:
                 _time.sleep(5)                               # stay under 200 req/min per calendar
             return body, None
         except _ue.HTTPError as e:
-            if e.code == 429 and attempt == 1:
+            if e.code == 429 and attempt < 3:
                 wait = e.headers.get("Retry-After") or ""
                 _time.sleep(min(60, int(wait)) if wait.isdigit() else 10)
                 continue
@@ -1103,7 +1108,13 @@ def _luma_get(path, params, key):
             except Exception:
                 pass
             return None, "HTTP %d%s" % (e.code, (": " + msg) if msg else "")
-        except Exception as e:                               # DNS, timeout, bad JSON: reason only, never the URL/key
+        except (TimeoutError, OSError) as e:                 # timeout, reset, DNS: worth another go (URLError is an OSError)
+            if attempt < 3 and len(_luma_dead) < 3:
+                _time.sleep(5 * attempt)
+                continue
+            _luma_dead.append(1)
+            return None, "%s after %d tries" % (type(e).__name__, attempt)
+        except Exception as e:                               # bad JSON etc.: reason only, never the URL/key
             return None, type(e).__name__
     return None, "rate limited"
 
@@ -1250,15 +1261,16 @@ def _luma_registrations(rows):
             # an event registering elsewhere (in10t) is not on Luma on purpose: no "create it on Luma" nudge
             r["luma_note"] = "registrations on in10t, not Luma" if r.get("in10t_event") else "no luma_evt in metadata.yml"
             continue
-        ev, used, why = None, None, ""
-        for key in _LUMA_KEYS:
+        ev, used, why = None, None, []
+        for i, key in enumerate(_LUMA_KEYS):
             data, err = _luma_get("/v1/events/get", {"event_id": evt}, key)
             if data and data.get("access") == "manage":
                 ev, used = data, key
                 break
-            why = err or ("access=%s" % (data or {}).get("access"))
+            # every key's answer, not just the last: a key that timed out must not hide one that said access=guest
+            why.append("key %d: %s" % (i + 1, err or ("access=%s" % (data or {}).get("access"))))
         if ev is None:
-            r["luma_note"] = "no key with manage access to this Luma event (%s)" % why
+            r["luma_note"] = "no key with manage access to this Luma event (%s)" % "; ".join(why)
             continue
         speakers = _luma_speaker_names(r["folder"])
         domains, stems = _luma_sponsor_keys(r.get("sponsor_list"))
