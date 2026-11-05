@@ -81,6 +81,24 @@ jobs:
           make clean
           make -j4 generate   # 4 events at a time (the runner has 4 cores); each builds in its own folder
 
+      # Auto-published schedules (Marek 2026-11-05): when an event on "before" reaches the threshold, the build flips
+      # event_state to active in its metadata.yml; this commits that back to main so the file matches the live site.
+      # A push made with the workflow token never starts another build. Never holds up the deploy.
+      - name: Commit auto-published schedules
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          changed=$(git diff --name-only -G'^event_state:' -- '*/metadata.yml')
+          [ -z "$changed" ] && { echo "No schedule auto-published"; exit 0; }
+          events=$(for f in $changed; do dirname "$f"; done | xargs)
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Schedule auto-published: event_state before -> active ($events)" -- $changed
+          for i in 1 2 3; do
+            git pull -q --rebase --autostash origin main && git push -q origin HEAD:main && { echo "Committed: $events"; exit 0; }
+            sleep 5
+          done
+          exit 1
+
       - name: Optimize Images
         run: python _build/optimize_images.py --prune
 

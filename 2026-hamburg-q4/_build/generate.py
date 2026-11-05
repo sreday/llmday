@@ -507,6 +507,14 @@ if str(context.get("event_state") or "").strip() == "before":
         and not re.search(r"\b(tba|tbc|tbd|to be (confirmed|announced))\b", _ob_vname, re.I)
     if _auto_pct >= SCHEDULE_AUTO_PCT and _auto_venue:
         context["event_state"] = "active"
+        # ...and metadata.yml says so too (Marek 2026-11-05): only the event_state value changes, comments stay;
+        # the CI build commits it back to main, so the flip happens once and the file matches the site
+        with open('metadata.yml', encoding='utf-8') as f:
+            _auto_src = f.read()
+        _auto_new = re.sub(r'^(event_state:[ \t]*)["\']?before["\']?', r'\1active', _auto_src, count=1, flags=re.M)
+        if _auto_new != _auto_src:
+            with open('metadata.yml', 'w', encoding='utf-8') as f:
+                f.write(_auto_new)
         print("Schedule auto-published: %d/%d talks (%d%%), event_state before -> active" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK, _auto_pct))
     else:
         print("Schedule not published yet: %d/%d talks (%d%%, publishes at %d%%)%s" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK, _auto_pct, SCHEDULE_AUTO_PCT, "" if _auto_venue else ", and no confirmed venue"))
