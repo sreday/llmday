@@ -5,7 +5,7 @@ start_time: "2026-11-17T09:00:00+02:00"
 # before - no schedule
 # active - schedule
 # after  - hide ticket sales
-event_state: before
+event_state: active
 date_string: "November 17, 2026"
 location_string: "Microsoft Reactor, Tel Aviv, Israel"
 city_name: "Tel Aviv"
