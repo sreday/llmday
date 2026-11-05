@@ -1171,6 +1171,8 @@
         var words = slot.dataset.names.split(/[^a-z0-9\u00c0-\u024f]+/).filter(Boolean);
         return q.split(/\s+/).every(function (t) { return words.some(function (w) { return wordClose(t, w); }); });
       }
+      // greyed-out cards (missing photo or title) always go last, whatever the sort (Marek 2026-11-05)
+      function naLast(a, b) { return a.classList.contains('tz-na') - b.classList.contains('tz-na'); }
       function render() {
         var q = search.value.trim().toLowerCase(), shown = 0;
         slots.forEach(function (s) { s.hidden = !!q && !matches(s, q); if (!s.hidden) shown++; });
@@ -1183,7 +1185,7 @@
             var k1 = mode, k2 = mode === 'first' ? 'last' : 'first';
             ordered.sort(function (a, b) { return a.dataset[k1].localeCompare(b.dataset[k1]) || a.dataset[k2].localeCompare(b.dataset[k2]) || a.dataset.i - b.dataset.i; });
           }
-          ordered.forEach(function (s) { pool.appendChild(s); });
+          ordered.sort(naLast).forEach(function (s) { pool.appendChild(s); });
         } else {
           pool.hidden = true;
           var order = [], by = {};
@@ -1197,7 +1199,7 @@
             var btn = head.querySelector('button'); btn.textContent = 'Download ' + k.toLowerCase();
             btn.addEventListener('click', function () { download(by[k], btn, k); });
             var grid = document.createElement('div'); grid.className = 'tz-grid';
-            by[k].forEach(function (s) { grid.appendChild(s); });
+            by[k].slice().sort(naLast).forEach(function (s) { grid.appendChild(s); });
             groups.appendChild(head); groups.appendChild(grid);
           });
         }
