@@ -47,6 +47,7 @@ ATTR_RE = re.compile(r'(\s(?:src|poster)\s*=\s*)(["\'])(.*?)\2', re.S | re.I)
 SRCSET_RE = re.compile(r'(\ssrcset\s*=\s*)(["\'])(.*?)\2', re.S | re.I)
 LINK_RE = re.compile(r'<link\b[^>]*>', re.I)
 HREF_RE = re.compile(r'(\shref\s*=\s*)(["\'])(.*?)\2', re.S | re.I)
+DOWNLOAD_A_RE = re.compile(r'<a\b(?=[^>]*\sdownload\b)[^>]*>', re.I)   # download links: versioned, see version_url()
 GIF_IMG_RE = re.compile(r'<img\b([^>]*?)\ssrc\s*=\s*(["\'])([^"\']+?\.gif)\2([^>]*)>', re.I)
 AUTOPLAY_VIDEO_RE = re.compile(r'<video\b([^>]*?)\ssrc\s*=\s*(["\'])([^"\']+)\2([^>]*\bautoplay\b[^>]*|[^>]*)>', re.I)
 LAZY_LOOP_JS = ("<script>/* rewrite_assets.py: loops load and play only while on screen */(function(){"
@@ -114,6 +115,20 @@ def rewrite_url(base_dir, url):
         return path + ("?" + parts.query if parts.query else "") + ("#" + parts.fragment if parts.fragment else "")
     _stats["versioned"] += 1
     return f"{path}?v={file_hash(target)}"
+
+
+def version_url(base_dir, url):
+    """A download link (<a download>, e.g. the teaser PNGs): ?v=<content hash> only - the file stays what it is (no
+    WebP swap). Those PNGs keep their names and are redrawn in place, and the CDN sends them with max-age=14400, so an
+    unversioned link handed out a 4-hour-old picture after a redraw (2026-11-05: Wassim Melakhessou's new headshot
+    on the page, the old one in the downloaded card). Missing files (not rendered yet) stay as they are."""
+    url = url.strip()
+    target = local_path(base_dir, url)
+    parts = urlsplit(url)
+    if target is None or parts.query or parts.fragment:
+        return url
+    _stats["versioned"] += 1
+    return f"{parts.path}?v={file_hash(target)}"
 
 
 def rewrite_srcset(base_dir, value):
@@ -213,6 +228,8 @@ def rewrite_html(path):
     new = SRCSET_RE.sub(lambda m: m.group(1) + m.group(2) + rewrite_srcset(base, m.group(3)) + m.group(2), new)
     new = LINK_RE.sub(lambda t: HREF_RE.sub(
         lambda m: m.group(1) + m.group(2) + rewrite_url(base, m.group(3)) + m.group(2), t.group(0)), new)
+    new = DOWNLOAD_A_RE.sub(lambda t: HREF_RE.sub(
+        lambda m: m.group(1) + m.group(2) + version_url(base, m.group(3)) + m.group(2), t.group(0)), new)
     new = rewrite_css_urls(base, new)
     if not priority:
         new = add_lazy(new)
