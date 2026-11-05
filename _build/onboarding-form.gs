@@ -33,6 +33,8 @@
  *   point is gone (Marek: "it's being misunderstood too often").
  *   v13 (2026-10-30): the slides line links the Deck dump page (<brand site>/deckdump/?event=<slug>) and the FAQ says
  *   the slides go up on the talk page after the conference.
+ *   v14 (2026-11-05): the slides bullet links the Deck dump on a bold "here"; the FAQ slides line (a repeat) and the
+ *   "If the budget allows ... speaker dinner" line are gone (a dinner text set in metadata still shows).
  */
 
 var BRANDS = {
@@ -54,7 +56,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 13 });   // v13: Deck dump link for the slides
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 14 });   // v14: bold 'here' Deck dump link, no FAQ slides / TBC dinner lines
 }
 
 function doPost(e) {
@@ -217,7 +219,7 @@ function composeOnboarding(ev, brand) {
       ? '- Please register for your free ticket here: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
       : '- Please redeem your free ticket with the code *SPEAKERFREE* here: [' + ev.tickets_url + '](' + ev.tickets_url + ')' + String.fromCharCode(10) + '  (on luma, select the general self funding / general admission, and then find "Add a coupon" in the top right corner)',
     '- Speaking slots are ' + ev.slot_minutes + ' minutes (' + talk + ' min talk + 5 min Q&A)',
-    '- You will present from your own laptop. Please upload the final version of your slides here before the event: [' + ev.deckdump_url + '](' + ev.deckdump_url + ')',
+    '- You will present from your own laptop. Please upload the final version of your slides [*here*](' + ev.deckdump_url + ') before the event',
     "- As speakers confirm, we'll update the website and prepare social media graphics and promo posts for sharing.",
     '- The v1 schedule will be published as soon as we get most speakers confirmed',
     '- Most regular talks will take place in the afternoon, between 12PM-6PM. Some last minute schedule changes may happen, so please avoid tight travel planning.',
@@ -226,10 +228,8 @@ function composeOnboarding(ev, brand) {
     '[g] Please reply with a quick "OK" so we know everything is accepted and acknowledged.',
     ''
   ]);
-  if (ev.dinner.toLowerCase() !== 'none') {
-    lines.push(ev.dinner.toUpperCase() === 'TBC'
-      ? "If the budget allows, we may organize a speaker dinner after the conference. If that's the case, we'll send you a calendar invite in advance."
-      : ev.dinner);
+  if (ev.dinner.toLowerCase() !== 'none' && ev.dinner.toUpperCase() !== 'TBC') {   // v14: no "maybe a dinner" line; only a set dinner text is shown
+    lines.push(ev.dinner);
     lines.push('');
   }
   lines = lines.concat([
@@ -242,7 +242,6 @@ function composeOnboarding(ev, brand) {
     '1. There will be WiFi access in the venue',
     '1. Previous ' + ev.brand_name + ' talks: ' + (ev.youtube_url ? '[' + ev.youtube_url + '](' + ev.youtube_url + ')' : 'on our YouTube channel'),
     '1. Promo cards: [' + ev.event_url + 'teasers/](' + ev.event_url + 'teasers/). You can post about your session straight away!',
-    '1. Slides: upload the latest version as a PDF any time on [' + ev.deckdump_url + '](' + ev.deckdump_url + '). After the conference, they go up on your talk page for download',
   ].concat(ev.is_free ? [
     '1. The event is free to attend - feel free to invite your team and friends: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
   ] : [
