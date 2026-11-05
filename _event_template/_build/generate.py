@@ -2457,6 +2457,26 @@ except Exception as _e:                                           # noqa: BLE001
     print('WARN sponsor cards: logos not trimmed (%s: %s)' % (type(_e).__name__, _e))
 context['teaser_talks'] = []
 _tz_shown ={id(_x) for _x in keynotes + talks}              # confirmed sessions (each repo sorts its rows into these)
+# a title that only says the talk isn't ready ("Coming Soon", "Title TBC", "Keynote - TBD", "???") greys the card out like a
+# missing one (Marek 2026-11-05): every piece between - | : / , ( ) must be one of these
+_TZ_PLACEHOLDERS = {
+    'tbd', 'tba', 'tbc', 'tbs', 'tbh', 'to be announced', 'to be confirmed', 'to be decided', 'to be determined',
+    'to be defined', 'to be revealed', 'to be shared', 'to be updated', 'to be added', 'to be finalised', 'to be finalized',
+    'to come', 'coming soon', 'coming shortly', 'soon', 'announced soon', 'announcing soon', 'revealed soon', 'reveal soon',
+    'more soon', 'more to come', 'details soon', 'more details soon', 'details to follow', 'stay tuned', 'watch this space',
+    'under wraps', 'will be announced', 'will be announced soon', 'will be confirmed', 'pending', 'title pending',
+    'topic pending', 'title tbd', 'title tbc', 'title tba', 'talk tbd', 'talk tbc', 'talk tba', 'topic tbd', 'topic tbc',
+    'topic tba', 'session tbd', 'session tbc', 'keynote tbd', 'keynote tbc', 'title coming soon', 'talk title coming soon',
+    'topic coming soon', 'talk coming soon', 'session coming soon', 'abstract coming soon', 'title to be announced',
+    'title to be confirmed', 'talk to be announced', 'topic to be announced', 'placeholder', 'untitled', 'untitled talk',
+    'no title', 'title', 'talk', 'topic', 'session', 'keynote', 'secret', 'secret talk', 'mystery talk', 'surprise',
+    'surprise talk', 'wip', 'work in progress', 'draft', 'na', 'none', 'null', 'xxx', 'lorem ipsum', 'later',
+}
+def _tz_placeholder_title(_s):
+    _s = re.sub(r'\bn/a\b', 'na', str(_s or '').lower().replace('\u2019', "'"))
+    _s = re.sub(r"[^\w\s'|:/,;()\[\]\u2013\u2014-]", ' ', _s)    # emoji, ?, !, ... and other decoration
+    _parts = [re.sub(r'\s+', ' ', _p).strip(" '") for _p in re.split(r'[-\u2013\u2014|:/,;()\[\]]+', _s)]
+    return all(_p in _TZ_PLACEHOLDERS for _p in _parts if _p)
 for _t in talks_raw:                                         # spreadsheet order
     if id(_t) not in _tz_shown or _t.get('merged_into'):
         continue
@@ -2468,7 +2488,7 @@ for _t in talks_raw:                                         # spreadsheet order
         continue
     # a card missing its photo or a real title is shown greyed out: no download, not in Download all / Duo / Trio /
     # Carousel, never rendered (Marek 2026-10-09)
-    _missing = [_w for _w, _gone in (('title', _title.strip(' .').lower() in ('', 'tbd', 'tba', 'tbc', 'to be announced', 'to be confirmed', 'to be decided')),
+    _missing = [_w for _w, _gone in (('title', _tz_placeholder_title(_title)),
                                      ('headshot', not _t.get('photo_url'))) if _gone]
     _title = _title or 'TBD'
     _org = (_t.get('organization') or '').strip()
