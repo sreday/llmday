@@ -157,13 +157,18 @@ def page_parts(index_html, slot="tz-slot"):
 
 def refs_digest(text, base_dir, h, outputs=()):
     """Feed the bytes of every local file the text refers to into h. Remote and data: refs, and the
-    cards' own output PNGs (each card links to its file for download), count by name only."""
+    cards' own output PNGs (each card links to its file for download), count by name only.
+    An output is a file next to index.html: a YouTube thumbnail is "<speaker>.png", the same name as the speaker's
+    headshot in ../../speakers/, and matching by name alone kept every headshot's bytes out of every key, so a new
+    headshot never redrew a picture (2026-11-05, Wassim Melakhessou: the page drew the new photo, the PNGs the old)."""
+    here = os.path.normpath(base_dir)
     for m in REF_RE.finditer(text):
         ref = (m.group(1) or m.group(2) or "").split("#")[0].split("?")[0]
-        if not ref or ref.startswith(("http:", "https:", "data:", "//", "mailto:")) or os.path.basename(ref) in outputs:
+        path = os.path.normpath(os.path.join(base_dir, ref))
+        if not ref or ref.startswith(("http:", "https:", "data:", "//", "mailto:")) or \
+                (os.path.basename(ref) in outputs and os.path.dirname(path) == here):
             h.update(ref.encode())
             continue
-        path = os.path.normpath(os.path.join(base_dir, ref))
         h.update(ref.encode())
         try:
             with open(path, "rb") as f:
