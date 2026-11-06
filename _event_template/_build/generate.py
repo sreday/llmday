@@ -909,12 +909,24 @@ context["tracks"] = tracks_ordered
 context["tracks_display"] = _planned_tracks or max(len(tracks_ordered), 1)
 
 # no keynotes (Marek 2026-10-06): the opening "Coffee break" (the break before the first talk) becomes "Registration and
-# coffee" - without a plenary to open the day, that slot is when people arrive and register
+# coffee" - without a plenary to open the day, that slot is when people arrive and register. On multi-track events the
+# Hello intro sits in that same opening group (Marek 2026-11-06: intro + coffee before the second track launches); without
+# keynotes registration comes first, so the intro waits until people are in.
 if not keynotes:
-    for _b in context.get("breaks") or []:
-        if int(_b.get("talks_before") or 0) == 0 and str(_b.get("title", "")).strip().lower() == "coffee break":
-            _b["title"] = "Registration and coffee"
-        break
+    _bl = context.get("breaks") or []
+    _lead = []
+    for _b in _bl:
+        if _b.get("opening"):
+            continue
+        if int(_b.get("talks_before") or 0) != 0:
+            break
+        _lead.append(_b)
+    _cof = next((b for b in _lead if str(b.get("title", "")).strip().lower() == "coffee break"), None)
+    if _cof is not None:
+        _cof["title"] = "Registration and coffee"
+        if _lead[0] is not _cof:
+            _bl.remove(_cof)
+            _bl.insert(_bl.index(_lead[0]), _cof)
 # insert breaks & wrap up into each track
 # a break with a NEGATIVE talks_before (-1, -2, ...) splits the keynotes instead:
 # it lands after that many keynotes of each day (e.g. -2 = after keynote 2), on
