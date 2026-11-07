@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Live - LLMday Tel Aviv</title>
+	<!-- link previews: _build/og_images.py -->
+	<meta property="og:title" content="Live - LLMday Tel Aviv">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://llmday.com/2026-tel-aviv-q4/live/">
+	<meta property="og:site_name" content="LLMday">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image" content="https://llmday.com/og/549cbed040d384a7.jpg">
+	<meta property="og:image:secure_url" content="https://llmday.com/og/549cbed040d384a7.jpg">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="600">
+	<meta property="og:image:alt" content="Live - LLMday Tel Aviv">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@llmday_com">
+	<meta name="twitter:creator" content="@llmday_com">
+	<meta name="twitter:title" content="Live - LLMday Tel Aviv">
+	<meta name="twitter:image" content="https://llmday.com/og/549cbed040d384a7.jpg">
+	<meta name="twitter:image:alt" content="Live - LLMday Tel Aviv">
+<!-- /<event>/live/: the schedule as it happens, for a screen at the venue. Built by _build/live.py from the same
+     schedule as the event page; runs on the viewer's clock. ?at=10:40 tries it at another time. -->
+<link rel="stylesheet" href="../assets/css/fonts.css?v=ac4f21e544">
+<style>
+  /* The site's look (Marek 2026-11-02: "white theme, liquid glass"): Montserrat, the soft aurora of the speaker
+     section, frosted grey glass panes with a white rim, brand-coloured pills. */
+  :root { --brand: #26986A; --ink: #1d1b21; --muted: #5b5662; --track: rgba(30,15,40,.09); --warn: #b45309; --warnbar: #f59e0b; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; color: var(--ink); background: #f7f6f9;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  body { position: relative; isolation: isolate; display: flex; flex-direction: column; padding: 2.2vh 2.4vw; gap: 2vh; min-height: 100vh; overflow: hidden; }
+  .aurora { position: fixed; inset: -10%; z-index: -1; pointer-events: none; filter: blur(60px);
+    background: radial-gradient(40% 30% at 10% 12%, color-mix(in srgb, var(--brand) 40%, transparent), transparent 70%),
+      radial-gradient(35% 28% at 88% 10%, rgba(245,158,11,.30), transparent 70%),
+      radial-gradient(40% 30% at 72% 52%, rgba(20,184,166,.20), transparent 70%),
+      radial-gradient(42% 30% at 18% 62%, color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 30%, transparent), transparent 70%),
+      radial-gradient(40% 28% at 85% 90%, color-mix(in srgb, var(--brand) 30%, transparent), transparent 70%); }
+  .glass { background: rgba(226,227,232,.5); border: 1px solid rgba(255,255,255,.72);
+    -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%);
+    box-shadow: 0 18px 44px rgba(30,15,40,.14), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); }
+  header { display: flex; align-items: center; gap: .8vw; padding: 1.2vh 1.2vw 1.2vh 1.6vw; border-radius: 999px; }
+  .live { display: inline-flex; align-items: center; gap: .6vw; padding: .5vh 1vw; border-radius: 999px; background: #e5484d; color: #fff;
+    font-weight: 800; font-size: clamp(14px, 1.4vw, 28px); letter-spacing: .08em; }
+  .live::before { content: ""; width: .8vw; height: .8vw; min-width: 8px; min-height: 8px; border-radius: 50%; background: #fff; animation: blink 1.4s infinite; }
+  .live.off { background: rgba(30,15,40,.12); color: var(--muted); }
+  .live.off::before { animation: none; background: var(--muted); opacity: .6; }
+  @keyframes blink { 50% { opacity: .2; } }
+  .event { flex: 1; min-width: 0; font-weight: 800; font-size: clamp(18px, 2.1vw, 42px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--brand); }
+  .event small { color: var(--muted); font-weight: 600; margin-left: .8vw; font-size: .7em; }
+  .clock { font-weight: 800; font-size: clamp(28px, 3.8vw, 76px); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  #fs { font: inherit; font-weight: 700; font-size: clamp(12px, 1.05vw, 20px); color: #fff; background: var(--brand); border: 0; border-radius: 999px; padding: 1.1vh 1.6vw; cursor: pointer;
+    box-shadow: 0 6px 16px -8px var(--brand); }
+  #fs:hover { filter: brightness(1.1); }
+  :fullscreen #fs { display: none; }
+  main { flex: 1; display: flex; flex-direction: column; gap: 2vh; min-height: 0; }
+  h2 { margin: 0; font-size: clamp(14px, 1.4vw, 28px); text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 800; padding-left: .4vw; }
+  .grid { flex: 1; display: grid; gap: 1.4vw; grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); min-height: 0; }
+  .card { border-radius: 26px; padding: 2.4vh 1.6vw; display: flex; flex-direction: column; gap: 1.6vh; min-width: 0; min-height: 0; overflow: hidden; }
+  .room { font-weight: 800; font-size: clamp(14px, 1.35vw, 28px); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .pill { align-self: flex-start; padding: .5vh .9vw; border-radius: 999px; font-weight: 800; font-size: clamp(11px, 1vw, 20px); text-transform: uppercase; letter-spacing: .08em;
+    color: #fff; background: var(--brand); }
+  .pill.keynote { background: color-mix(in srgb, var(--brand) 80%, #000); }
+  .pill.workshop { background: #0f766e; }
+  .pill.break { background: rgba(255,255,255,.75); color: var(--muted); border: 1px solid rgba(255,255,255,.9); }
+  .title { font-weight: 800; line-height: 1.15; font-size: var(--tsize, clamp(20px, 2.4vw, 54px)); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .who { display: flex; align-items: center; gap: .8vw; font-size: clamp(14px, 1.5vw, 32px); font-weight: 700; }
+  .who img { width: 14vh; height: 14vh; object-fit: contain; flex: none; }          /* the headshot as it is: no ring, no frame */
+  .grid[style*="--cols:1"] .who img { width: 24vh; height: 24vh; }                  /* one card fills the screen (keynotes) */
+  .grid[style*="--cols:3"] .who img, .grid[style*="--cols:4"] .who img { width: 11vh; height: 11vh; }
+  .idle .who img { width: 10vh; height: 10vh; }
+  .who span { min-width: 0; }
+  .who b { display: block; }
+  .who i { font-style: normal; color: var(--muted); font-weight: 600; }
+  .spacer { flex: 1; }
+  .bar { height: 2.2vh; min-height: 10px; border-radius: 999px; background: var(--track); overflow: hidden; box-shadow: inset 0 1px 2px rgba(30,15,40,.08); }
+  .bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 75%, #fff), var(--brand)); transition: width 1s linear; }
+  .left { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 1vw; font-weight: 800; }
+  .left b { font-size: clamp(22px, 2.9vw, 62px); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--brand); }
+  .left span { white-space: nowrap; color: var(--muted); font-size: clamp(13px, 1.25vw, 26px); font-weight: 700; }
+  .soon .bar i { background: var(--warnbar); }
+  .soon .left b { color: var(--warn); }
+  .next { border-top: 1px solid rgba(30,15,40,.1); padding-top: 1.4vh; font-size: clamp(13px, 1.3vw, 27px); color: var(--muted); font-weight: 600; }
+  .next b { color: var(--ink); }
+  .next .nt { color: var(--ink); font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .idle .title { color: var(--muted); }
+  /* A break for everyone: one big pane. */
+  .hero { flex: 1; justify-content: center; text-align: center; align-items: center; padding: 4vh 4vw; }
+  .hero .pill { align-self: center; }
+  .hero .title { font-size: clamp(36px, 6vw, 140px); color: var(--brand); }
+  .hero .where { color: var(--muted); font-size: clamp(18px, 2.3vw, 50px); font-weight: 700; }
+  .hero .bar { width: 70%; height: 3vh; }
+  .hero .left { width: 70%; }
+  .hero .left b { font-size: clamp(30px, 4.4vw, 96px); }
+  /* Before / between days: a countdown and the first sessions. */
+  .count { font-weight: 800; font-size: clamp(36px, 7vw, 160px); line-height: 1; font-variant-numeric: tabular-nums; color: var(--brand); padding-left: .2vw; }
+  .list { display: flex; flex-direction: column; border-radius: 26px; overflow: hidden; }
+  .row { display: grid; grid-template-columns: 9vw minmax(0, 1fr) auto; align-items: center; gap: 1.6vw; padding: 1.8vh 1.8vw; border-top: 1px solid rgba(255,255,255,.6); }
+  .row:first-child { border-top: 0; }
+  .row .hm { font-weight: 800; font-size: clamp(18px, 2.3vw, 50px); font-variant-numeric: tabular-nums; color: var(--brand); }
+  .row .rt { font-weight: 800; font-size: clamp(16px, 1.9vw, 42px); line-height: 1.2; }
+  .row .rw { color: var(--muted); font-size: clamp(13px, 1.35vw, 29px); font-weight: 600; margin-top: .4vh; }
+  .row .rr { color: var(--muted); font-size: clamp(12px, 1.15vw, 25px); font-weight: 700; text-align: right; }
+  .row.brk .rt { color: var(--muted); }
+  footer { display: flex; justify-content: space-between; gap: 2vw; color: var(--muted); font-weight: 600; font-size: clamp(13px, 1.35vw, 29px); padding: 0 .6vw; }
+  footer b { color: var(--ink); font-weight: 800; }
+  .try { color: var(--warn); }
+  @media (max-width: 800px) {
+    body { overflow: auto; }
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .row { grid-template-columns: 64px minmax(0, 1fr); }
+    .row .rr { grid-column: 2; text-align: left; }
+    /* a phone scrolls: cards at their natural height, every room shown, nothing clipped */
+    html, body { height: auto; }
+    body { padding: 12px 16px; gap: 12px; }
+    main, .grid { flex: none; }
+    .grid { grid-template-rows: none; gap: 12px; }
+    .card { border-radius: 20px; padding: 16px; overflow: visible; }
+    .card > * { flex-shrink: 0; }
+    .who img, .grid[style*="--cols"] .who img, .idle .who img { width: 88px; height: 88px; }
+    header { border-radius: 20px; flex-wrap: wrap; gap: 8px 10px; padding: 10px 14px; }
+    .event { order: 3; flex-basis: 100%; }
+    .clock { margin-left: auto; }
+    footer { flex-wrap: wrap; gap: 4px 12px; }
+  }
+</style>
+<meta name="build" content="c9fb93f690-20261107T110123Z">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+<header class="glass">
+  <span class="live" id="liveTag">LIVE</span>
+  <div class="event">LLMday Tel Aviv<small>November 17, 2026</small></div>
+  <div class="clock" id="clock">--:--</div>
+  <button id="fs" type="button">Full screen</button>
+</header>
+<main id="main"></main>
+<footer id="foot"></footer>
+<script id="live-data" type="application/json">{"event": "LLMday Tel Aviv", "date": "November 17, 2026", "venue": "Microsoft Reactor, Tel Aviv, Israel", "offset": 120, "days": [[{"room": "main room", "items": [{"start": "2026-11-17T09:00:00+02:00", "end": "2026-11-17T09:45:00+02:00", "hm": "09:00", "end_hm": "09:45", "kind": "break", "title": "Registration & coffee", "where": "Main lobby", "wrap": false}, {"start": "2026-11-17T09:45:00+02:00", "end": "2026-11-17T10:15:00+02:00", "hm": "09:45", "end_hm": "10:15", "kind": "talk", "title": "Opening Welcome - TeraSky & Microsoft", "who": "Sharone Revah Zitzman", "org": "RTFM Please LTD", "photo": "../../speakers/Sharone Revah Zitzman.png", "url": "../Sharone_Revah_Zitzman_RTFM_Please_LTD_Opening_Welcome__TeraSky__Microsoft"}, {"start": "2026-11-17T10:15:00+02:00", "end": "2026-11-17T10:45:00+02:00", "hm": "10:15", "end_hm": "10:45", "kind": "talk", "title": "Talk to Your Cluster. It Talks Back!", "who": "Yev Berman", "org": "TeraSky", "photo": "../../speakers/Yev Berman.png", "url": "../Yev_Berman_TeraSky_Talk_to_Your_Cluster_It_Talks_Back"}, {"start": "2026-11-17T10:45:00+02:00", "end": "2026-11-17T11:15:00+02:00", "hm": "10:45", "end_hm": "11:15", "kind": "talk", "title": "From grep to graph: giving AI agents a map of your code", "who": "Roi Lipman", "org": "FalkorDB", "photo": "../../speakers/Roi Lipman.png", "url": "../Roi_Lipman_FalkorDB_From_grep_to_graph_giving_AI_agents_a_map_of_your_code"}, {"start": "2026-11-17T11:15:00+02:00", "end": "2026-11-17T11:45:00+02:00", "hm": "11:15", "end_hm": "11:45", "kind": "talk", "title": "The Ninth Rewrite Might Be a Delete: Building Production AI Agents on Shifting Ground", "who": "Avital Tamir", "org": "groundcover", "photo": "../../speakers/Avital Tamir.png", "url": "../Avital_Tamir_groundcover_The_Ninth_Rewrite_Might_Be_a_Delete_Building_Production_AI_Agents_on_Shifti"}, {"start": "2026-11-17T11:45:00+02:00", "end": "2026-11-17T12:15:00+02:00", "hm": "11:45", "end_hm": "12:15", "kind": "talk", "title": "From Data Pipelines to Humans: Advantages of Mechanical Sympathy", "who": "Noa Baron", "org": "Cato Networks", "photo": "../../speakers/Noa Baron.png", "url": "../Noa_Baron_Cato_Networks_From_Data_Pipelines_to_Humans_Advantages_of_Mechanical_Sympathy"}, {"start": "2026-11-17T12:15:00+02:00", "end": "2026-11-17T12:45:00+02:00", "hm": "12:15", "end_hm": "12:45", "kind": "break", "title": "Brunch break", "where": "Main lobby", "wrap": false}, {"start": "2026-11-17T12:45:00+02:00", "end": "2026-11-17T13:15:00+02:00", "hm": "12:45", "end_hm": "13:15", "kind": "talk", "title": "Bye Bye Timestream - A Tale of Migrating 5.9 Billion Metrics a Day to ClickHouse", "who": "Nir Adler", "org": "Komodor", "photo": "../../speakers/Nir Adler.png", "url": "../Nir_Adler_Komodor_Bye_Bye_Timestream__A_Tale_of_Migrating_59_Billion_Metrics_a_Day_to_ClickHouse"}, {"start": "2026-11-17T13:15:00+02:00", "end": "2026-11-17T13:45:00+02:00", "hm": "13:15", "end_hm": "13:45", "kind": "talk", "title": "Just Roll Up and Die: When Your Agent Needs Data You Can't Aggregate", "who": "Liza Katz", "org": "Neradot", "photo": "../../speakers/Liza Katz.png", "url": "../Liza_Katz_Neradot_Just_Roll_Up_and_Die_When_Your_Agent_Needs_Data_You_Cant_Aggregate"}, {"start": "2026-11-17T13:45:00+02:00", "end": "2026-11-17T14:00:00+02:00", "hm": "13:45", "end_hm": "14:00", "kind": "break", "title": "Quick break", "where": "Main lobby", "wrap": false}, {"start": "2026-11-17T14:00:00+02:00", "end": "2026-11-17T14:45:00+02:00", "hm": "14:00", "end_hm": "14:45", "kind": "break", "title": "Panel", "where": "Main room", "wrap": false}, {"start": "2026-11-17T14:45:00+02:00", "end": "2026-11-17T15:30:00+02:00", "hm": "14:45", "end_hm": "15:30", "kind": "break", "title": "Lunch", "where": "Main lobby", "wrap": false}, {"start": "2026-11-17T15:30:00+02:00", "end": "2026-11-17T16:00:00+02:00", "hm": "15:30", "end_hm": "16:00", "kind": "talk", "title": "Coming Soon", "who": "Liran Tal", "org": "Snyk", "photo": "../../speakers/Liran Tal.png", "url": "../Liran_Tal_Snyk_Coming_Soon"}, {"start": "2026-11-17T16:00:00+02:00", "end": "2026-11-17T16:30:00+02:00", "hm": "16:00", "end_hm": "16:30", "kind": "workshop", "title": "Company Brain with Fabric and Claude", "who": "Haggai Zohar", "org": "TeraSky", "photo": "../../speakers/Haggai Zohar.png", "url": "../Haggai_Zohar_TeraSky_Company_Brain_with_Fabric_and_Claude"}, {"start": "2026-11-17T16:30:00+02:00", "end": "2026-11-17T17:00:00+02:00", "hm": "16:30", "end_hm": "17:00", "kind": "talk", "title": "Panel: The Intersection of Data Engineering + AI in 2026 - What's Next?", "who": "Adaya Tal & Einat Borohovich", "org": "ReasonLabs & Rambam Health Care Campus", "photo": "../../speakers/Adaya Tal & Einat Borohovich.png", "url": "../Adaya_Tal__Einat_Borohovich_ReasonLabs__Rambam_Health_Care_Campus_Panel_The_Intersection_of_Data_Eng"}, {"start": "2026-11-17T17:00:00+02:00", "end": "2026-11-17T17:00:00+02:00", "hm": "17:00", "end_hm": "17:00", "kind": "break", "title": "Wrap up", "where": "Scan each other's QR codes & head to a nearby pub!", "wrap": true}]}]]}</script>
+<script>
+(function () {
+  let D = JSON.parse(document.getElementById('live-data').textContent);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const T = (iso) => Date.parse(iso);
+
+  // ?at=10:40 or ?at=2026-11-02T10:40 (event time): run from then, for trying it out.
+  let shift = 0;
+  const at = new URLSearchParams(location.search).get('at');
+  if (at) {
+    const first = (D.days[0] && D.days[0][0] && D.days[0][0].items[0]) ? D.days[0][0].items[0].start.slice(0, 10) : new Date().toISOString().slice(0, 10);
+    const m = (/T/.test(at) ? at : first + 'T' + at).match(/^(\d{4})-(\d\d)-(\d\d)T(\d\d?):(\d\d)/);
+    if (m) shift = Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5]) - D.offset * 60000 - Date.now();
+  }
+  const now = () => Date.now() + shift;
+  const hm = (ms) => { const d = new Date(ms + D.offset * 60000); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
+  function span(ms) {
+    const m = Math.max(0, Math.ceil(ms / 60000));
+    if (m < 60) return m + ' min';
+    const d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), r = m % 60;
+    return d ? d + (d === 1 ? ' day ' : ' days ') + h + ' h' : h + ' h' + (r ? ' ' + r + ' min' : '');
+  }
+
+  // The day on now: the one running, else the next one, else the last.
+  function bounds(day) {
+    let s = Infinity, e = -Infinity;
+    for (const r of day) for (const it of r.items) { s = Math.min(s, T(it.start)); if (!it.wrap) e = Math.max(e, T(it.end)); }
+    return [s, e];
+  }
+  function pickDay(t) {
+    for (let i = 0; i < D.days.length; i++) { const [, e] = bounds(D.days[i]); if (t < e) return i; }
+    return D.days.length - 1;
+  }
+
+  const KIND = { keynote: 'Keynote', talk: 'Talk', workshop: 'Workshop', break: 'Break' };
+  function who(it) {
+    if (!it.who) return '';
+    const img = it.photo ? '<img src="' + esc(it.photo) + '" alt="" onerror="this.remove()">' : '';
+    return '<div class="who">' + img + '<span><b>' + esc(it.who) + '</b>' + (it.org ? '<i>' + esc(it.org) + '</i>' : '') + '</span></div>';
+  }
+  function progress(it, t, big) {
+    const s = T(it.start), e = T(it.end), left = e - t;
+    const pct = Math.min(100, Math.max(0, (t - s) / Math.max(1, e - s) * 100));
+    return '<div class="spacer"></div><div class="bar"><i style="width:' + pct.toFixed(1) + '%"></i></div>' +
+      '<div class="left"><b>' + span(left) + ' left</b><span>until ' + esc(it.end_hm) + '</span></div>';
+  }
+  const soon = (it, t) => T(it.end) - t <= 5 * 60000;
+  function nextLine(it) {
+    if (!it) return '';
+    return '<div class="next"><b>Next ' + esc(it.hm) + '</b>' + (it.kind === 'break' ? ' · ' + esc(it.title) : '') +
+      (it.kind !== 'break' ? '<div class="nt">' + esc(it.title) + '</div>' + (it.who ? esc(it.who) : '') : '') + '</div>';
+  }
+  function rowHTML(it, room) {
+    return '<div class="row' + (it.kind === 'break' ? ' brk' : '') + '"><div class="hm">' + esc(it.hm) + '</div><div><div class="rt">' + esc(it.title) + '</div>' +
+      (it.who ? '<div class="rw">' + esc(it.who) + (it.org ? ' · ' + esc(it.org) : '') + '</div>' : it.where ? '<div class="rw">' + esc(it.where) + '</div>' : '') +
+      '</div><div class="rr">' + (it.kind === 'break' ? '' : esc(room || '')) + '</div></div>';
+  }
+  // Everything in a day in time order, a break shared by the rooms once.
+  function merged(day) {
+    const seen = new Set(), all = [];
+    for (const r of day) for (const it of r.items) {
+      const k = it.start + '|' + it.title;
+      if (it.kind === 'break' && seen.has(k)) continue;
+      seen.add(k);
+      all.push(Object.assign({ room: r.room }, it));
+    }
+    return all.sort((a, b) => T(a.start) - T(b.start));
+  }
+
+  function render() {
+    const t = now();
+    if (!D.days.length) { $('main').innerHTML = '<h2>No schedule yet</h2>'; return; }
+    const di = pickDay(t), day = D.days[di], [ds, de] = bounds(day);
+    const multi = D.days.length > 1 ? 'Day ' + (di + 1) + ' · ' : '';
+    $('liveTag').className = 'live' + (t >= ds && t < de ? '' : ' off');
+    let html = '';
+    let foot = '';
+
+    if (t < ds) {
+      // Before the day: when it starts, and the first sessions.
+      const all = merged(day).filter((it) => !it.wrap).slice(0, 5);
+      html = '<h2>' + multi + 'Starts in</h2><div class="count">' + span(ds - t) + '</div><h2>First up</h2><div class="list glass">' +
+        all.map((it) => rowHTML(it, D.days[di].length > 1 ? it.room : '')).join('') + '</div>';
+    } else if (t >= de) {
+      html = '<div class="card glass hero"><div class="title">That\'s a wrap!</div><div class="where">Thanks for coming to ' + esc(D.event) + '</div></div>';
+    } else {
+      const rooms = day.map((r) => {
+        const items = r.items.filter((it) => !it.wrap);
+        return { room: r.room, cur: items.find((it) => T(it.start) <= t && t < T(it.end)), next: items.find((it) => T(it.start) > t) };
+      });
+      const curs = rooms.filter((r) => r.cur).map((r) => r.cur);
+      const allBreak = curs.length > 0 && curs.every((c) => c.kind === 'break' && c.title === curs[0].title);
+      if (allBreak) {
+        const b = curs[0];
+        html = '<div class="card glass hero' + (soon(b, t) ? ' soon' : '') + '"><span class="pill break">Break</span><div class="title">' + esc(b.title) + '</div>' +
+          (b.where ? '<div class="where">' + esc(b.where) + '</div>' : '') + progress(b, t, true) + '</div>';
+        const after = rooms.filter((r) => r.next && r.next.kind !== 'break');
+        if (after.length) {
+          html += '<h2>Right after</h2><div class="list glass">' + after.map((r) => rowHTML(r.next, after.length > 1 ? r.room : '')).join('') + '</div>';
+        }
+      } else {
+        // A card per room with something on now (a keynote alone gets the
+        // whole screen); a room with nothing on yet shows when its next
+        // session is, as a card if nothing is on anywhere, else in a list.
+        const on = rooms.filter((r) => r.cur);
+        const shown = on.length ? on : rooms.filter((r) => r.next);
+        const tsize = shown.length > 2 ? ';--tsize:clamp(18px,2vw,46px)' : shown.length === 1 ? ';--tsize:clamp(28px,4.4vw,96px)' : '';
+        html = '<div class="grid" style="--cols:' + Math.min(shown.length, 4) + tsize + '">' + shown.map((r) => {
+          const c = r.cur;
+          if (!c) {
+            return '<div class="card glass idle"><div class="room">' + esc(r.room) + '</div><span class="pill break">Next at ' + esc(r.next.hm) + '</span>' +
+              '<div class="title">' + esc(r.next.title) + '</div>' + who(r.next) + '<div class="spacer"></div><div class="left"><b>in ' + span(T(r.next.start) - t) + '</b></div></div>';
+          }
+          return '<div class="card glass' + (soon(c, t) ? ' soon' : '') + '"><div class="room">' + esc(r.room) + '</div><span class="pill ' + c.kind + '">' + KIND[c.kind] + '</span>' +
+            '<div class="title">' + esc(c.title) + '</div>' + (c.kind === 'break' && c.where ? '<div class="who">' + esc(c.where) + '</div>' : who(c)) +
+            progress(c, t) + nextLine(r.next) + '</div>';
+        }).join('') + '</div>';
+        const later = on.length ? rooms.filter((r) => !r.cur && r.next && r.next.kind !== 'break' && T(r.next.start) - t < 60 * 60000) : [];
+        if (later.length) html += '<h2>Coming up in the other rooms</h2><div class="list glass">' + later.map((r) => rowHTML(r.next, r.room)).join('') + '</div>';
+      }
+      // The next break everyone shares, for the footer.
+      const nb = merged(day).find((it) => it.kind === 'break' && !it.wrap && T(it.start) > t);
+      if (nb) foot = '<span>Next break: <b>' + esc(nb.title) + '</b> at <b>' + esc(nb.hm) + '</b> (in ' + span(T(nb.start) - t) + ')</span>';
+      const wrap = merged(day).find((it) => it.wrap);
+      if (wrap) foot += '<span>Wrap up at <b>' + esc(wrap.hm) + '</b></span>';
+    }
+    if (shift) foot += '<span class="try">Trying it at ' + hm(t) + ' (?at=)</span>';
+    $('main').innerHTML = html;
+    $('foot').innerHTML = foot;
+  }
+  function clock() { $('clock').textContent = hm(now()); }
+
+  // A schedule change deployed during the day: picked up without a reload
+  // (a reload would leave full screen).
+  async function refresh() {
+    try {
+      const r = await fetch(location.pathname, { cache: 'no-store' });
+      const m = (await r.text()).match(/<script id="live-data" type="application\/json">([\s\S]*?)<\/script>/);
+      if (m) { D = JSON.parse(m[1]); render(); }
+    } catch (e) {}
+  }
+
+  $('fs').addEventListener('click', () => {
+    const d = document, el = d.documentElement;
+    if (d.fullscreenElement) d.exitFullscreen();
+    else (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'f' || e.key === 'F') $('fs').click(); });
+  render();
+  clock();
+  setInterval(clock, 1000);
+  setInterval(render, 5000);
+  setInterval(refresh, 5 * 60000);
+})();
+</script>
+<script>/* rewrite_assets.py: reload when a newer build is out */(function(){var m=document.querySelector('meta[name="build"]');if(!m||!window.fetch)return;var mine=m.getAttribute('content'),busy=0,bar=null;function engaged(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;var f=document.querySelectorAll('input,textarea');for(var i=0;i<f.length;i++){var e=f[i];if(/^(checkbox|radio)$/.test(e.type)?e.checked!==e.defaultChecked:(e.type!=='hidden'&&e.value!==e.defaultValue))return true}return !!document.querySelector('.modal.show')}function offer(){if(bar||!document.body)return;bar=document.createElement('div');bar.setAttribute('role','status');bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2000;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#111;color:#fff;padding:10px 12px 10px 18px;border-radius:999px;font:600 14px/1.3 Montserrat,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)';var t=document.createElement('span');t.textContent='This page was just updated (schedule, speakers or sponsors)';bar.appendChild(t);var b=document.createElement('button');b.type='button';b.textContent='Refresh';b.style.cssText='border:0;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;background:#fff;color:#111';b.onclick=function(){location.reload()};bar.appendChild(b);document.body.appendChild(bar)}function check(auto){if(busy||document.visibilityState==='hidden')return;busy=1;fetch('/build.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!j.build||j.build===mine)return;var again=false;try{again=sessionStorage.getItem('fresh-reload')===j.build;sessionStorage.setItem('fresh-reload',j.build)}catch(e){}if(auto&&!again&&!engaged())location.reload();else offer()})['catch'](function(){busy=0})}check(true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')check(true)});addEventListener('pageshow',function(e){if(e.persisted)check(true)});setInterval(function(){check(false)},300000)})()</script>
+</body>
+</html>
