@@ -35,16 +35,12 @@ breaks:
   comment: Main lobby
   # this decides how many talks in-between this and previous section
   talks_before: 0
-- title: "Hello Montevideo!!! - short Intro to LLMday"
-  duration: 10
-  comment: Main Stage
-  talks_before: 0  # intro before the tracks launch (Marek 2026-11-06), straight after registration
 - title: Coffee Break & Networking
   duration: 30
   comment: Main lobby
   talks_before: 4
 - title: Lunch & Networking
-  duration: 50
+  duration: 60
   comment: Main lobby
   talks_before: 4
 - title: Coffee Break & Networking

@@ -87,6 +87,8 @@
   .row .rt { font-weight: 800; font-size: clamp(16px, 1.9vw, 42px); line-height: 1.2; }
   .row .rw { color: var(--muted); font-size: clamp(13px, 1.35vw, 29px); font-weight: 600; margin-top: .4vh; }
   .row .rr { color: var(--muted); font-size: clamp(12px, 1.15vw, 25px); font-weight: 700; text-align: right; }
+  .row.hello { background: #e0f2fe; border-radius: 10px; }
+  .row.hello .rt { color: #0369a1; font-weight: 700; }
   .row.brk .rt { color: var(--muted); }
   footer { display: flex; justify-content: space-between; gap: 2vw; color: var(--muted); font-weight: 600; font-size: clamp(13px, 1.35vw, 29px); padding: 0 .6vw; }
   footer b { color: var(--ink); font-weight: 800; }
@@ -176,7 +178,7 @@
       (it.kind !== 'break' ? '<div class="nt">' + esc(it.title) + '</div>' + (it.who ? esc(it.who) : '') : '') + '</div>';
   }
   function rowHTML(it, room) {
-    return '<div class="row' + (it.kind === 'break' ? ' brk' : '') + '"><div class="hm">' + esc(it.hm) + '</div><div><div class="rt">' + esc(it.title) + '</div>' +
+    return '<div class="row' + (it.kind === 'break' ? ' brk' : '') + (it.hello ? ' hello' : '') + '"><div class="hm">' + esc(it.hm) + '</div><div><div class="rt">' + esc(it.title) + '</div>' +
       (it.who ? '<div class="rw">' + esc(it.who) + (it.org ? ' · ' + esc(it.org) : '') + '</div>' : it.where ? '<div class="rw">' + esc(it.where) + '</div>' : '') +
       '</div><div class="rr">' + (it.kind === 'break' ? '' : esc(room || '')) + '</div></div>';
   }

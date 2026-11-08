@@ -768,6 +768,14 @@ context["keynotes"] = keynotes
 # breaks' "talks_before" counts sheet rows; the merged-away rows are dropped
 # after the breaks go in. Everything else (pages, modals, counts) sees each
 # session once.
+# HELLO INTRO (Marek 2026-11-08): the intro is built in (see HELLO INTRO below the break sync), so an old "Hello ..."
+# entry in metadata breaks is dropped; its talks_before moves on to the next break, so every other break stays put
+_hello_bl = context.get("breaks") or []
+for _hi in range(len(_hello_bl) - 1, -1, -1):
+    if re.match(r"\s*hello\b", str(_hello_bl[_hi].get("title", "")), re.I):
+        _hello_old = _hello_bl.pop(_hi)
+        if _hi < len(_hello_bl) and int(_hello_old.get("talks_before") or 0) > 0:
+            _hello_bl[_hi]["talks_before"] = int(_hello_bl[_hi].get("talks_before") or 0) + int(_hello_old["talks_before"])
 _break_cuts = set()
 _rows_before = 0
 for _brk in context.get("breaks") or []:
@@ -1030,6 +1038,60 @@ for _ti, _track in enumerate(tracks_ordered):
     if _toff(_track) and tracks[_track] and tracks[_track][-1].get("title") == "Wrap up":
         _same_day = tracks_ordered[_wd * (_ti // _wd):_wd * (_ti // _wd + 1)]
         tracks[_track][-1]["start_time"] = max(tracks[t][-1]["start_time"] for t in _same_day if tracks[t])
+
+# ── HELLO INTRO (Marek 2026-11-08) ───────────────────────────────────────────
+# Every day gets "Hello <city>!!! - short Intro to <brand>", 10 minutes carved out of a break that is already there, so
+# the listed breaks keep their even lengths (coffee 30, lunch 60) and the talks their even start times. It is never a
+# metadata break and can't be moved. We present before people split into rooms:
+# - one track that day: the first 10 minutes of the first lunch break
+# - several tracks: the last coffee break that ends before a second room starts its first talk (so an offset track
+#   still gets the intro in the morning); no coffee break before the split = the last break before it
+# A doors open / registration break (people still arriving) gives its LAST 10 minutes instead of the first.
+# Not with a 3rd-party schedule (schedule_embed): that agenda is the real one. Light blue in every schedule view.
+HELLO_MINUTES = 10
+_hello_rooms = context.get("rooms") or []
+_hello_where = str(_hello_rooms[0]).strip() if _hello_rooms else ""
+_hello_where = _hello_where[:1].upper() + _hello_where[1:]
+_hello_title = "Hello %s!!! - short Intro to %s" % (str(context.get("city_name") or "").strip(), str(context.get("brand_name") or "").strip())
+if context.get("city_name") and not context.get("schedule_embed"):
+    _hello_pd = max(len(tracks_ordered) // max(int(context.get("days") or 1), 1), 1)
+    for _hello_d in range(0, len(tracks_ordered), _hello_pd):
+        _hello_day = [t for t in tracks_ordered[_hello_d:_hello_d + _hello_pd] if tracks[t]]
+        _hello_brks = {}
+        for _t in _hello_day:
+            for _x in tracks[_t]:
+                if "_brk_idx" in _x and not _x.get("name") and int(_x.get("duration") or 0) > HELLO_MINUTES:
+                    _hello_brks.setdefault(_x["_brk_idx"], _x)
+        _hello_cands = sorted(_hello_brks.values(), key=lambda x: x["start_time"])
+        if len(_hello_day) == 1:
+            _hello_pick = next((x for x in _hello_cands if "lunch" in str(x.get("title", "")).lower()), None)
+        else:
+            _hello_firsts = sorted(min(x["start_time"] for x in tracks[t] if x.get("name"))
+                                   for t in _hello_day if any(x.get("name") for x in tracks[t]))
+            _hello_split = _hello_firsts[1] if len(_hello_firsts) > 1 else None
+            _hello_before = [x for x in _hello_cands if _hello_split is None
+                             or x["start_time"] + timedelta(minutes=int(x["duration"])) <= _hello_split]
+            _hello_pick = next((x for x in reversed(_hello_before) if "coffee" in str(x.get("title", "")).lower()),
+                               _hello_before[-1] if _hello_before else None)
+        if _hello_pick is None:
+            continue
+        _hello_last = bool(_hello_pick.get("opening")) or bool(re.search(r"doors open|registration", str(_hello_pick.get("title", "")), re.I))
+        for _t in _hello_day:
+            for _i, _x in enumerate(tracks[_t]):
+                if _x.get("_brk_idx") == _hello_pick["_brk_idx"] and not _x.get("name"):
+                    _x["duration"] = int(_x["duration"]) - HELLO_MINUTES
+                    _h = dict(title=_hello_title, comment=_hello_where, duration=HELLO_MINUTES, hello=True)
+                    if _hello_last:
+                        _h["start_time"] = _x["start_time"] + timedelta(minutes=_x["duration"])
+                        tracks[_t].insert(_i + 1, _h)
+                    else:
+                        _h["start_time"] = _x["start_time"]
+                        _x["start_time"] = _x["start_time"] + timedelta(minutes=HELLO_MINUTES)
+                        tracks[_t].insert(_i, _h)
+                    _h["end_time"] = _h["start_time"] + timedelta(minutes=HELLO_MINUTES)
+                    _x["end_time"] = _x["start_time"] + timedelta(minutes=_x["duration"])
+                    break
+# ── END HELLO INTRO ──────────────────────────────────────────────────────────
 
 # compute schedule time bracket
 schedule_start = datetime.datetime.fromisoformat(context.get("start_time"))
