@@ -688,7 +688,8 @@ for _ev in (context.get("events") or []):
                  and str(s.get("logo") or "").strip()
                  and str(s.get("logo")).strip().lower() not in _sp_exclude_logos
                  and str(s.get("logo")).strip().lower() not in _sp_hidden]
-    _available = _tracks * _days * _SLOTS_PER_TRACK
+    # track_offset slots (see the event generate.py) are not talk slots: a negative offset adds slots
+    _available = _tracks * _days * _SLOTS_PER_TRACK - sum(int(v or 0) for v in (_em.get("track_offset") or {}).values())
     _pct = round(100.0 * _confirmed / _available) if _available else 0
     _days_left = _status_days_left(_em.get("start_time"))
     # "Current start / end": the time bracket the event page itself renders in its schedule meta line

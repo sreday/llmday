@@ -25,6 +25,10 @@ rooms:
 - Main Stage
 - Ephemeral Stage
 
+# track_offset: {<track>: x} starts a track x slots after the others (x < 0: x slots into the opening break)
+track_offset:
+  2: 8     # Ephemeral Stage opens after lunch (Marek 2026-11-08)
+
 breaks:
 - title: Registration & Welcome
   duration: 60

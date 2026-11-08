@@ -30,6 +30,11 @@ tracks: 1
 rooms:
 - main room
 
+# track_offset (optional): start a track x slots (30 min) after the others, after the opening break(s), instead of
+# filler rows in the sheet; a negative x starts it x slots into the opening break. Keys are the CSV "track" values.
+# track_offset:
+#   2: 8
+
 breaks:
 - title: Coffee break
   duration: 30
