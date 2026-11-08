@@ -499,10 +499,18 @@ SCHEDULE_AUTO_PCT = 70
 SLOTS_PER_TRACK = 12
 # 2-day events (Marek 2026-10-20, Campinas 2026): 12 slots per track PER DAY, so the slot counts below use tracks x days
 SLOT_DAYS = int(re.sub(r"[^\d]", "", str(context.get("days") or "1")) or 1)
+# TRACK OFFSET (Marek 2026-11-08): metadata `track_offset: {<track>: x}` starts that track x slots (DEFAULT_TALK_DURATION
+# each) after the others would start it, right after the opening break(s), so a short track needs no filler rows in
+# the sheet; the breaks still land where they do on every other track. A negative x digs into the opening break(s)
+# instead: the track starts x slots earlier and its first block of talks gets x more rows. Keys are the CSV "track"
+# values (on a split 2-day track the offset applies to each day). The offset slots leave (or add to) the slot count.
+_track_offset = {str(k).strip(): int(v or 0) for k, v in (context.get("track_offset") or {}).items()}
+_toff = lambda track: _track_offset.get(str(track).split(" (day ")[0].strip(), 0)
+_TOFF_SLOTS = sum(_track_offset.values())
 if str(context.get("event_state") or "").strip() == "before":
     _auto_tracks = int(re.sub(r"[^\d]", "", str(context.get("tracks") or "1")) or 1) * SLOT_DAYS
     _auto_live = sum(1 for t in talks_raw if talk_kind(t.get("status")) in LIVE_KINDS)
-    _auto_pct = round(100.0 * _auto_live / (_auto_tracks * SLOTS_PER_TRACK))
+    _auto_pct = round(100.0 * _auto_live / max(_auto_tracks * SLOTS_PER_TRACK - _TOFF_SLOTS, 1))
     _auto_venue = not context.get("venue_tbc") and bool(_ob_vname) \
         and not re.search(r"\b(tba|tbc|tbd|to be (confirmed|announced))\b", _ob_vname, re.I)
     if _auto_pct >= SCHEDULE_AUTO_PCT and _auto_venue:
@@ -515,9 +523,9 @@ if str(context.get("event_state") or "").strip() == "before":
         if _auto_new != _auto_src:
             with open('metadata.yml', 'w', encoding='utf-8') as f:
                 f.write(_auto_new)
-        print("Schedule auto-published: %d/%d talks (%d%%), event_state before -> active" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK, _auto_pct))
+        print("Schedule auto-published: %d/%d talks (%d%%), event_state before -> active" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK - _TOFF_SLOTS, _auto_pct))
     else:
-        print("Schedule not published yet: %d/%d talks (%d%%, publishes at %d%%)%s" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK, _auto_pct, SCHEDULE_AUTO_PCT, "" if _auto_venue else ", and no confirmed venue"))
+        print("Schedule not published yet: %d/%d talks (%d%%, publishes at %d%%)%s" % (_auto_live, _auto_tracks * SLOTS_PER_TRACK - _TOFF_SLOTS, _auto_pct, SCHEDULE_AUTO_PCT, "" if _auto_venue else ", and no confirmed venue"))
 
 # SCHEDULE HEADING (Marek 2026-10-17): "Schedule - work in progress" until 80% of the talk slots are filled - the same
 # count as above, live talks.csv rows against 12 slots per track - then just "Schedule". An event that is over always
@@ -525,9 +533,9 @@ if str(context.get("event_state") or "").strip() == "before":
 SCHEDULE_FULL_PCT = 80
 _sh_tracks = int(re.sub(r"[^\d]", "", str(context.get("tracks") or "1")) or 1) * SLOT_DAYS
 _sh_live = sum(1 for t in talks_raw if talk_kind(t.get("status")) in LIVE_KINDS)
-context["schedule_fill_pct"] = round(100.0 * _sh_live / (_sh_tracks * SLOTS_PER_TRACK))
+context["schedule_fill_pct"] = round(100.0 * _sh_live / max(_sh_tracks * SLOTS_PER_TRACK - _TOFF_SLOTS, 1))
 context["schedule_wip"] = context["schedule_fill_pct"] < SCHEDULE_FULL_PCT
-print("Schedule heading: %d/%d talks (%d%%)%s" % (_sh_live, _sh_tracks * SLOTS_PER_TRACK, context["schedule_fill_pct"],
+print("Schedule heading: %d/%d talks (%d%%)%s" % (_sh_live, _sh_tracks * SLOTS_PER_TRACK - _TOFF_SLOTS, context["schedule_fill_pct"],
                                                   " - work in progress" if context["schedule_wip"] else ""))
 
 # EVENT OVER -> "after" (Marek 2026-10-15): over = metadata says event_state: after, OR a full 24 h have passed since
@@ -769,12 +777,12 @@ for _brk in context.get("breaks") or []:
 _rows_by_track = {}
 for _talk in talks:
     _rows_by_track.setdefault(_talk.get("track"), []).append(_talk)
-for _track_rows in _rows_by_track.values():
+for _track_key, _track_rows in _rows_by_track.items():
     _lead = None
-    for _pos, _talk in enumerate(_track_rows):
+    for _pos, _talk in enumerate(_track_rows, _toff(_track_key)):
         _raw = _talk.get("duration")
         _minutes = int(_raw) if _raw is not None and _raw != "" else DEFAULT_TALK_DURATION
-        if (_lead is not None and _pos not in _break_cuts
+        if (_lead is not None and (_pos <= 0 or _pos not in _break_cuts)
                 and _talk.get("name", "").strip() == _lead.get("name", "").strip()
                 and _talk.get("title", "").strip() == _lead.get("title", "").strip()):
             _talk["merged_into"] = _lead["id"]
@@ -924,13 +932,19 @@ for _bi, _brk in enumerate(breaks):
     _brk["_brk_idx"] = _bi
 keynote_breaks = [b for b in breaks if int(b.get("talks_before") or 0) < 0]
 for track in tracks_ordered:
-    old_order = tracks[track]
+    # TRACK OFFSET: x empty slots ahead of the first talk (dropped with the keynote placeholders, once the times are in)
+    _off = _toff(track)
+    old_order = [dict(placeholder=True, duration=DEFAULT_TALK_DURATION) for _ in range(max(_off, 0))] + tracks[track]
+    _extra = max(-_off, 0)
     new_order = []
     offset = 0
     for brk in breaks:
         if brk in keynote_breaks:
             continue
-        for i in range(brk.get("talks_before")):
+        _n = brk.get("talks_before")
+        if _extra and _n > 0:                     # negative offset: the first block takes x more rows
+            _n, _extra = _n + _extra, 0
+        for i in range(_n):
             if offset < len(old_order):
                 new_order.append(old_order[offset])
                 offset += 1
@@ -944,6 +958,17 @@ for track in tracks_ordered:
         comment="Scan each other's QR codes & head to a nearby pub!",
         duration=0,
     ))
+    # negative offset: the track starts x slots into the opening break(s), shortened from the end (gone at 0 min)
+    if _off < 0:
+        _lead_n = 0
+        while _lead_n < len(new_order) and "_brk_idx" in new_order[_lead_n] and not new_order[_lead_n].get("name"):
+            _lead_n += 1
+        _cut = -_off * DEFAULT_TALK_DURATION
+        for _b in reversed(new_order[:_lead_n]):
+            _take = min(_cut, int(_b.get("duration") or 0))
+            _b["duration"] = int(_b.get("duration") or 0) - _take
+            _cut -= _take
+        new_order = [b for b in new_order[:_lead_n] if b["duration"] > 0] + new_order[_lead_n:]
     # the breaks are placed by sheet row; now each longer session is one item
     tracks[track] = [t for t in new_order if not t.get("merged_into")]
 
@@ -998,6 +1023,13 @@ for brk in breaks:
                         tracks[track][j]["start_time"] = current
                         current += timedelta(minutes=tracks[track][j]["duration"])
                     break
+
+# TRACK OFFSET: a track with an offset wraps up with the rest of its day, not when its own talks run out
+_wd = max(len(tracks_ordered) // max(int(context.get("days") or 1), 1), 1)
+for _ti, _track in enumerate(tracks_ordered):
+    if _toff(_track) and tracks[_track] and tracks[_track][-1].get("title") == "Wrap up":
+        _same_day = tracks_ordered[_wd * (_ti // _wd):_wd * (_ti // _wd + 1)]
+        tracks[_track][-1]["start_time"] = max(tracks[t][-1]["start_time"] for t in _same_day if tracks[t])
 
 # compute schedule time bracket
 schedule_start = datetime.datetime.fromisoformat(context.get("start_time"))
