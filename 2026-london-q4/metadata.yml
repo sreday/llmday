@@ -25,12 +25,8 @@ rooms:
 - screen 3
 
 breaks:
-- title: "Hello London!!! - short Intro to LLMday"
-  duration: 10
-  comment: Main stage
-  talks_before: 0  # intro before the second track launches (Marek 2026-11-06), then coffee
 - title: Coffee break
-  duration: 20
+  duration: 30
   comment: Main lobby
   # this decides how many talks in-between this and previous section
   talks_before: 0

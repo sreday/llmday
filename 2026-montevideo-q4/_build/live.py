@@ -58,6 +58,7 @@ def _items(track_items, day_offset):
         }
         if kind == 'break':
             e['where'] = str(it.get('comment') or '').strip()
+            e['hello'] = bool(it.get('hello'))   # built-in Hello intro: light blue
             e['wrap'] = minutes == 0                         # "Wrap up": the end of the day
         else:
             e['who'] = str(it.get('name') or '').strip()
