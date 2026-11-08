@@ -133,7 +133,7 @@ events_past:
     photo_url: ./assets/images/events/llmday-2026-london-q2.png
     url: ./2026-london-q2/
     size: large
-    youtube_playlist:
+    youtube_playlist: https://www.youtube.com/playlist?list=PLacushtZhEMs
 
   - name: LLMday Austin 2026 Q2
     location: Austin, Texas, United States
