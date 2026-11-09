@@ -1,0 +1,44 @@
+[
+ {
+  "file": "llmday-sticker.png",
+  "label": "Sticker",
+  "note": "2000×2000 PNG",
+  "bg": "light"
+ },
+ {
+  "file": "llmday-logo.png",
+  "label": "Logo",
+  "note": "3178×2613 PNG",
+  "bg": "light"
+ },
+ {
+  "file": "llmday-logo.svg",
+  "label": "Logo, vector",
+  "note": "Vector (SVG)",
+  "bg": "light"
+ },
+ {
+  "file": "llmday-logo-on-black.png",
+  "label": "Logo on black",
+  "note": "2048×2048 PNG",
+  "bg": "light"
+ },
+ {
+  "file": "llmday-mascot-baby-llama.png",
+  "label": "Mascot, baby llama",
+  "note": "2048×2048 PNG",
+  "bg": "light"
+ },
+ {
+  "file": "llmday-mascot-llama.png",
+  "label": "Mascot, llama",
+  "note": "816×928 PNG",
+  "bg": "light"
+ },
+ {
+  "file": "llmday-gradient.png",
+  "label": "Brand gradient",
+  "note": "1024×1536 PNG",
+  "bg": "light"
+ }
+]

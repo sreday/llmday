@@ -415,6 +415,25 @@
     .gn-art { align-self: start; }
     .gn-art img { display: block; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.14); background: #f3f3f6; }
     .gn-art .gn-art-cap { margin-bottom: 10px; font: 600 .85rem 'Montserrat', sans-serif; color: #555; }
+    /* Media kit tab (Marek 2026-11-09, was Generic; same idea as conf42.com): the 2nd tab, and it stays after the event (a
+       finished event shows Thumbnails + Media kit). Upcoming: the event covers (#gn-pool, as before) and below them the
+       brand kit; finished: the brand kit only, so nothing new is ever rendered for a past event. The kit = the files in
+       home/assets/mediakit/ (served at /assets/mediakit/), listed in kit.json there; the markup sits after the page script,
+       outside every render key (render_teasers.py ends the last card at the next "<script"), and is moved under the covers. */
+    #mk-sec { display: none; }
+    body.gn-mode #mk-sec { display: block; }
+    .mk-h { font-size: 1.15rem; font-weight: 800; margin: 34px 0 14px; }
+    #mk-sec.mk-only .mk-h { margin-top: 6px; }
+    .mk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+    .mk-f { display: flex; flex-direction: column; gap: 4px; padding: 10px; border-radius: 12px; background: #fff; color: inherit; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.07); transition: transform .15s; }
+    .mk-f:hover { transform: translateY(-2px); }
+    .mk-f b { font-size: .92rem; }
+    .mk-f > span:last-child { color: #777; font-size: .8rem; }
+    .mk-pv { display: flex; align-items: center; justify-content: center; aspect-ratio: 16 / 10; border-radius: 8px; margin-bottom: 4px; overflow: hidden; }
+    .mk-pv img { max-width: 84%; max-height: 84%; object-fit: contain; }
+    .mk-light { background: #eceaf2; }
+    .mk-dark { background: #1d2333; }
+    .mk-file { background: #eceaf2; font-weight: 800; font-size: 1.5rem; color: #888; text-transform: uppercase; }
     /*/tools*/
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
     body.th-sheet { background: #000; }
@@ -436,13 +455,14 @@
       </div>
       <a class="tz-btn" href="../" style="text-decoration:none">Event page</a>
     </div>
-    <div class="tz-tabs" role="tablist"{% if teasers_expired %} hidden{% endif %}>
-      <button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>
+    <div class="tz-tabs" role="tablist">
+      {% if not teasers_expired %}<button type="button" role="tab" data-tab="tz" aria-selected="true">Talk teasers</button>{% endif %}
+      {% if not teasers_expired %}<button type="button" role="tab" data-tab="gn" aria-selected="false">Media kit</button>{% endif %}
       {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="mx" aria-selected="false">Duo / Trio</button>{% endif %}
-      {% if not teasers_expired %}<button type="button" role="tab" data-tab="gn" aria-selected="false">Generic</button>{% endif %}
       {% if teaser_talks and not teasers_expired %}<button type="button" role="tab" data-tab="cr" aria-selected="false">Carousel</button>{% endif %}
       {% if sp_cards and not teasers_expired %}<button type="button" role="tab" data-tab="sp" aria-selected="false">Sponsor cards</button>{% endif %}
-      <button type="button" role="tab" data-tab="th" aria-selected="false">Thumbnails</button>
+      <button type="button" role="tab" data-tab="th" aria-selected="{{ 'true' if teasers_expired else 'false' }}">Thumbnails</button>
+      {% if teasers_expired %}<button type="button" role="tab" data-tab="gn" aria-selected="false">Media kit</button>{% endif %}
     </div>
     <div class="tz-controls">
       <input class="tz-search" id="tz-search" type="search" placeholder="Search speaker, company or talk title" aria-label="Search speaker, company or talk title">
@@ -1346,6 +1366,7 @@
         document.querySelectorAll('.tz-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
         sub.textContent = t === 'th' ? 'YouTube thumbnail (1280 x 720 PNG) for each talk. Download individually, all of them or by track.'
           : t === 'cr' ? 'A LinkedIn carousel (a square PDF for a document post): a cover, then talks as singles or Duos & Trios, within the recommended length.'
+          : t === 'gn' && !document.querySelector('.gn-card') ? 'The ' + {{ brand_name|tojson }} + ' brand kit: logos, stickers and mascots, the files exactly as they are.'
           : t === 'gn' ? (['A cover', 'A cover', 'Two covers', 'Three covers', 'Four covers'][document.querySelectorAll('.gn-card').length] || 'Covers') + ' for the whole event (1500 x 1500 PNG): its logo, city and date only' + (document.querySelector('.gn-flag-bg') ? '; the Flag covers (for Luma) the logo alone, over the city in the flag\'s colours' : '') + '. Rendered here in your browser.'
           : t === 'mx' ? 'Pick 2 or 3 talks for one card (1500 x 1500 PNG), Columns or Stack; the arrows on the picture change the order. Auto-divide and download all makes every talk into Trios (and Duos for the rest), in website order; Shuffle and download all does the same in a random order. Rendered here in your browser.'
           : t === 'sp' ? 'Host, sponsor and partner cards (1500 x 1500 PNG): the host once per venue photo, then each sponsor and partner. Download individually or all of them.' : subTz;
@@ -1355,7 +1376,7 @@
         ready.then(function () { moveInk(t); fitTab(t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); if (t === 'cr' && typeof crDraw === 'function') crDraw(); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
-        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#generic' : b.dataset.tab === 'cr' ? '#carousel' : location.pathname); });
+        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#media-kit' : b.dataset.tab === 'cr' ? '#carousel' : location.pathname); });
       });
 
       // 4. downloads: every "Download all" is one ZIP (Marek 2026-10-08) of the shown cards' PNGs - the built files, or, where
@@ -2085,7 +2106,31 @@
         // the cover thumbnails, once the fonts are in
         ready.then(function () { document.querySelectorAll('.cr-cov[data-d]').forEach(function (el) { if (el.dataset.d !== 'none') crCard({ kind: 'cover', d: el.dataset.d }, el.querySelector('.tz-frame')); }); scale(); });
       }
-      setTab({% if teasers_expired %}'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : location.hash === '#generic' && document.getElementById('gn-pool') ? 'gn' : location.hash === '#carousel' && document.getElementById('cr-sec') ? 'cr' : 'tz'{% endif %});
+      setTab({% if teasers_expired %}location.hash === '#media-kit' ? 'gn' : 'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : (location.hash === '#media-kit' || location.hash === '#generic') && document.getElementById('gn-pool') ? 'gn' : location.hash === '#carousel' && document.getElementById('cr-sec') ? 'cr' : 'tz'{% endif %});
+    })();
+  </script>
+  <div id="mk-sec">
+    <h2 class="mk-h">{{ brand_name }}</h2>
+    <div class="mk-grid" id="mk-grid"></div>
+  </div>
+  <script>
+    // Media kit (Marek 2026-11-09): the brand kit from /assets/mediakit/kit.json, placed under the event covers (or alone on
+    // a finished event). Kept after the page script on purpose: out of every teaser card's render key.
+    (function () {
+      var sec = document.getElementById('mk-sec'), gp = document.getElementById('gn-pool');
+      if (gp) gp.parentNode.insertBefore(sec, gp.nextSibling); else { sec.classList.add('mk-only'); document.querySelector('.tz-page').appendChild(sec); }
+      fetch('/assets/mediakit/kit.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (kit) {
+        var g = document.getElementById('mk-grid');
+        kit.forEach(function (f) {
+          var a = document.createElement('a'), ext = f.file.split('.').pop().toLowerCase(), img = /^(png|jpe?g|webp|svg|gif)$/.test(ext);
+          a.className = 'mk-f'; a.href = '/assets/mediakit/' + f.file; a.download = f.file;
+          var pv = document.createElement('span'); pv.className = 'mk-pv ' + (img ? 'mk-' + (f.bg || 'light') : 'mk-file');
+          if (img) { var i = document.createElement('img'); i.src = a.href; i.alt = f.label; i.loading = 'lazy'; pv.appendChild(i); } else pv.textContent = '.' + ext;
+          var b = document.createElement('b'); b.textContent = f.label;
+          var s = document.createElement('span'); s.textContent = f.note || ext.toUpperCase();
+          a.appendChild(pv); a.appendChild(b); a.appendChild(s); g.appendChild(a);
+        });
+      }).catch(function () { sec.hidden = true; });
     })();
   </script>
 </body>
