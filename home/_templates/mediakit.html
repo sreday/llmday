@@ -1,4 +1,4 @@
-<!-- /media-kit/ (Marek 2026-11-09): the whole family's media kit, the same page on every site with that site's brand first
+<!-- /mediakit/ (Marek 2026-11-09): the whole family's media kit, the same page on every site with that site's brand first
      (data-home); every file and the index live on conf42.com/assets/brandkit/ (built once with conf42/brandkit/, not in CI) -->
 <!DOCTYPE html>
 <html lang="en" data-kit="https://www.conf42.com/assets/brandkit/" data-home="__HOME__">
@@ -289,7 +289,7 @@
       var head = el('div', 'bhead' + (b.light ? ' light' : '')), av = data.cards.filter(function (c) { return c.brand === b.key && c.section === 'stickers'; })[0];
       head.style.background = b.light ? 'linear-gradient(120deg,#fff,' + b.palette[3].hex + ')' : 'radial-gradient(120% 160% at 85% 100%,' + b.palette[0].hex + ',' + b.palette[2].hex + ')';
       head.innerHTML = (av ? '<img src="' + src(av.files[0]) + '" alt="">' : '') + '<div><h2>' + esc(b.name) + '</h2><div class="meta">' + esc(b.spelling) + ' · <a href="' + esc(b.site) + '" target="_blank" rel="noopener">' + esc(b.site.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</a></div></div><div class="sp"></div>';
-      head.appendChild(zipBtn(data.items.filter(function (f) { return f.brand === b.key; }), b.key + '-media-kit.zip', 'Everything for ' + (b.short || b.name)));
+      head.appendChild(zipBtn(data.items.filter(function (f) { return f.brand === b.key; }), b.key + '-mediakit.zip', 'Everything for ' + (b.short || b.name)));
       blk.appendChild(head);
       data.sections.forEach(function (s) {
         if (s.id === 'splashes') return;
@@ -324,7 +324,7 @@
     var nav = document.getElementById('nav'); nav.innerHTML = '';
     data.sections.forEach(function (s) { if (navSecs[s.id]) { var a = el('a', '', esc(s.title)); a.href = '#' + navSecs[s.id]; nav.appendChild(a); } });
     nav.appendChild(el('span', 'sp'));
-    nav.appendChild(zipBtn(data.items.filter(function (f) { return brand === 'all' || f.brand === brand; }), (brand === 'all' ? 'all-brands' : brand) + '-media-kit.zip', brand === 'all' ? 'Download everything' : 'Download everything for ' + (BY[brand].short || BY[brand].name)));
+    nav.appendChild(zipBtn(data.items.filter(function (f) { return brand === 'all' || f.brand === brand; }), (brand === 'all' ? 'all-brands' : brand) + '-mediakit.zip', brand === 'all' ? 'Download everything' : 'Download everything for ' + (BY[brand].short || BY[brand].name)));
   }
 
   fetch(KIT + 'brandkit.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
@@ -345,7 +345,7 @@
       white: "curl -s " + U + "brandkit.json | jq -r '.items[] | select(.variant==\"white\" and .fmt==\"svg\") | .url' | xargs -n1 curl -sO",
       colors: "curl -s " + U + "brandkit.json | jq '.brands[] | {(.key): [.palette[] | {(.name): .hex}] | add}'" };
     document.querySelectorAll('.cmd').forEach(function (c) { var code = c.querySelector('code'); code.textContent = CMDS[code.dataset.k]; c.querySelector('.copy').addEventListener('click', function () { navigator.clipboard.writeText(code.textContent); toast('Copied'); }); });
-    var q0 = new URLSearchParams(location.search).get('q'); if (q0) document.getElementById('q').value = q0;   // shareable searches: /media-kit/?q=white+logo
+    var q0 = new URLSearchParams(location.search).get('q'); if (q0) document.getElementById('q').value = q0;   // shareable searches: /mediakit/?q=white+logo
     render();
   });
   var t0; document.getElementById('q').addEventListener('input', function () { clearTimeout(t0); t0 = setTimeout(render, 140); });

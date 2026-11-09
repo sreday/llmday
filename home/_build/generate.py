@@ -2163,10 +2163,10 @@ for meetup in meetups:
         template = env.get_template("meetup.html")
         f.write(template.render(talks=talks_raw, meetup=meetup, **context))
 
-# MEDIA KIT (Marek 2026-11-09): /media-kit/ - the whole family's media kit (logos, colours, banners, profile pictures, mascots,
+# MEDIA KIT (Marek 2026-11-09): /mediakit/ - the whole family's media kit (logos, colours, banners, profile pictures, mascots,
 # animations, event splashes), the same page on every site with this brand first. Files + index live on
 # conf42.com/assets/brandkit/ (built once with conf42/brandkit/, never in CI).
-os.makedirs(BASE_FOLDER + "/media-kit", exist_ok=True)
-with open("_templates/media-kit.html", encoding="utf-8") as _mk_src, open(BASE_FOLDER + "/media-kit/index.html", "w", encoding="utf-8") as _mk_out:
+os.makedirs(BASE_FOLDER + "/mediakit", exist_ok=True)
+with open("_templates/mediakit.html", encoding="utf-8") as _mk_src, open(BASE_FOLDER + "/mediakit/index.html", "w", encoding="utf-8") as _mk_out:
     _mk_out.write(_mk_src.read().replace("__HOME__", "llmday"))
-print("Writing out media-kit/index.html")
+print("Writing out mediakit/index.html")
