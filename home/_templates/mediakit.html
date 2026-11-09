@@ -32,8 +32,9 @@
   .bt { border: 2px solid transparent; background: #fff; border-radius: 18px; padding: 12px 8px 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px;
         font: 700 .85rem 'Figtree'; box-shadow: 0 6px 18px rgba(0,0,0,.06); transition: transform .15s; text-align: center; color: var(--ink); }
   .bt:hover { transform: translateY(-2px); }
-  .bt img { width: 72px; height: 72px; object-fit: contain; }
-  .bt .all { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(#2c3fb0, #7b3fe4, #1f9d6b, #e2971d, #d9467a, #2c3fb0); color: #fff; font-size: 1.4rem; font-weight: 800; }
+  .bt img { width: 84px; height: 72px; object-fit: contain; }
+  .bt .all { width: 72px; height: 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .bt .all img { width: 34px; height: 34px; }
   .bt[aria-pressed="true"] { border-color: var(--ink); }
 
   .nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); padding: 10px 0; margin-bottom: 18px;
@@ -67,7 +68,8 @@
   .card { background: var(--card); border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,.06); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
   .pv { aspect-ratio: 16 / 10; border-radius: 11px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #fff; border: 1px solid var(--line); }
   .pv.dark { background: var(--dark); border-color: var(--dark); }
-  .pv.check { background: repeating-conic-gradient(#eceaf1 0% 25%, #fff 0% 50%) 50% / 18px 18px; }
+  .pv.alpha { background: #fff repeating-conic-gradient(#f2f1f6 0% 25%, transparent 0% 50%) 0 0 / 16px 16px; }
+  .pv.alpha.dark { background: #16171c repeating-conic-gradient(#1e1f26 0% 25%, transparent 0% 50%) 0 0 / 16px 16px; }
   .pv img { max-width: 86%; max-height: 82%; object-fit: contain; }
   .pv.full img { max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: cover; }
   .pv.fit img { max-width: 100%; max-height: 100%; }
@@ -235,7 +237,7 @@
     var d = el('div', 'card'); d.dataset.id = c.id;
     var byF = {}; c.files.forEach(function (f) { byF[f.fmt] = byF[f.fmt] || f; });
     var show = byF.png || byF.jpg || byF.jpeg || byF.webp || byF.svg || c.files[0];
-    var pv = el('div', 'pv' + (c.dark ? ' dark' : '') + (c.section === 'banners' || c.section === 'splashes' ? ' full' : '') + (c.section === 'illustrations' ? ' fit' : '') + (c.section === 'avatars' && /round/.test(c.id) ? ' check' : ''));
+    var pv = el('div', 'pv' + (c.dark ? ' dark' : '') + (c.section === 'banners' || c.section === 'splashes' ? ' full' : '') + (c.section === 'illustrations' ? ' fit' : '') + (c.alpha ? ' alpha' : ''));
     if (/^(png|jpe?g|webp|svg)$/.test(show.fmt)) { var i = el('img'); i.loading = 'lazy'; i.alt = c.title; i.src = show.preview || src(show); pv.appendChild(i); }
     else pv.innerHTML = '<b style="font-size:1.5rem;color:#9a9ca8">.' + show.fmt + '</b>';
     d.appendChild(pv);
@@ -332,11 +334,12 @@
     d.brands.forEach(function (b) { BY[b.key] = b; b.tagsN = (b.name + ' ' + (b.short || '') + ' ' + b.key).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean); });
     d.cards.forEach(function (c) { c.tagsN = c.tags.concat(c.title.toLowerCase().split(/[^a-z0-9]+/)).filter(Boolean); });
     if (brand !== 'all' && !BY[brand]) brand = 'all';
+    function stickerOf(k) { var c = d.cards.filter(function (c) { return c.brand === k && c.section === 'stickers'; })[0]; return c && (c.files.filter(function (f) { return f.fmt === 'png'; })[0] || c.files[0]); }
     var box = document.getElementById('brands'), order = [{ key: 'all', name: 'All brands' }].concat(d.brands.slice().sort(function (a, b) { return (b.key === HOME) - (a.key === HOME); }));
     order.forEach(function (b) {
       var t = el('button', 'bt'); t.type = 'button'; t.setAttribute('aria-pressed', b.key === brand);
-      var av = b.key === 'all' ? null : d.cards.filter(function (c) { return c.brand === b.key && c.section === 'avatars' && /round-400/.test(c.id); })[0];
-      t.innerHTML = (av ? '<img src="' + src(av.files.filter(function (f) { return f.fmt === 'png'; })[0]) + '" alt="">' : '<span class="all">★</span>') + esc(b.short || b.name);
+      var av = b.key === 'all' ? null : d.cards.filter(function (c) { return c.brand === b.key && c.section === 'stickers'; })[0];
+      t.innerHTML = (av ? '<img src="' + src(av.files.filter(function (f) { return f.fmt === 'png'; })[0] || av.files[0]) + '" alt="">' : '<span class="all">' + d.brands.slice(0, 4).map(function (x) { var s = stickerOf(x.key); return s ? '<img src="' + src(s) + '" alt="">' : ''; }).join('') + '</span>') + esc(b.short || b.name);
       t.addEventListener('click', function () { brand = b.key; box.querySelectorAll('.bt').forEach(function (x) { x.setAttribute('aria-pressed', x === t); }); render(); });
       box.appendChild(t);
     });
