@@ -881,7 +881,7 @@
         ready.then(function () { moveInk(t); fitTab(t); if (t === 'mx' && typeof mxDraw === 'function') mxDraw(); if (t === 'cr' && typeof crDraw === 'function') crDraw(); scale(); });
       }
       document.querySelectorAll('.tz-tabs button').forEach(function (b) {
-        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#media-kit' : b.dataset.tab === 'cr' ? '#carousel' : location.pathname); });
+        b.addEventListener('click', function () { setTab(b.dataset.tab); history.replaceState(null, '', b.dataset.tab === 'th' ? '#thumbnails' : b.dataset.tab === 'sp' ? '#sponsors' : b.dataset.tab === 'mx' ? '#duo-trio' : b.dataset.tab === 'gn' ? '#mediakit' : b.dataset.tab === 'cr' ? '#carousel' : location.pathname); });
       });
 
       // 4. downloads: every "Download all" is one ZIP (Marek 2026-10-08) of the shown cards' PNGs - the built files, or, where
@@ -1497,7 +1497,7 @@
         // the cover thumbnails, once the fonts are in
         ready.then(function () { document.querySelectorAll('.cr-cov[data-d]').forEach(function (el) { if (el.dataset.d !== 'none') crCard({ kind: 'cover', d: el.dataset.d }, el.querySelector('.tz-frame')); }); scale(); });
       }
-      setTab({% if teasers_expired %}location.hash === '#media-kit' ? 'gn' : 'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : (location.hash === '#media-kit' || location.hash === '#generic') && document.getElementById('gn-pool') ? 'gn' : location.hash === '#carousel' && document.getElementById('cr-sec') ? 'cr' : 'tz'{% endif %});
+      setTab({% if teasers_expired %}(location.hash === '#mediakit' || location.hash === '#media-kit') ? 'gn' : 'th'{% else %}location.hash === '#thumbnails' ? 'th' : location.hash === '#sponsors' && document.getElementById('sp-pool') ? 'sp' : location.hash === '#duo-trio' && document.getElementById('mx-sec') ? 'mx' : (location.hash === '#mediakit' || location.hash === '#media-kit' || location.hash === '#generic') && document.getElementById('gn-pool') ? 'gn' : location.hash === '#carousel' && document.getElementById('cr-sec') ? 'cr' : 'tz'{% endif %});
     })();
   </script>
   <div id="mk-sec">
@@ -1506,7 +1506,7 @@
   </div>
   <script>
     // Media kit (Marek 2026-11-09): this brand's part of the family kit (conf42.com/assets/brandkit/brandkit.json, the same
-    // files as /media-kit/), every picture with its PNG / SVG (or WebP / MP4) buttons. Kept after the page script on purpose:
+    // files as /mediakit/), every picture with its PNG / SVG (or WebP / MP4) buttons. Kept after the page script on purpose:
     // out of every teaser card's render key.
     (function () {
       var KIT = 'https://www.conf42.com/assets/brandkit/', KEY = {{ {'SREday': 'sreday', 'LLMday': 'llmday', 'PLATFORMday': 'platformday', 'Prompt Engineering Conference': 'pec'}.get(brand_name, '')|tojson }};
@@ -1532,7 +1532,7 @@
             });
             card.appendChild(pv); card.appendChild(b); card.appendChild(row); g.appendChild(card);
           });
-        var more = document.createElement('a'); more.className = 'mk-more'; more.href = '/media-kit/'; more.textContent = 'Open the full media kit: colours, every brand, event splashes →'; g.parentNode.appendChild(more);
+        var more = document.createElement('a'); more.className = 'mk-more'; more.href = '/mediakit/'; more.textContent = 'Open the full media kit: colours, every brand, event splashes →'; g.parentNode.appendChild(more);
       }).catch(function () { sec.hidden = true; });
     })();
   </script>
