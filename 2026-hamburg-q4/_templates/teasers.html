@@ -433,6 +433,10 @@
     .mk-pv img { max-width: 84%; max-height: 84%; object-fit: contain; }
     .mk-light { background: #eceaf2; }
     .mk-dark { background: #1d2333; }
+    .mk-dl { display: flex; gap: 6px; margin-top: 4px; }
+    .mk-dl button { flex: 1; border: 0; border-radius: 8px; padding: 7px 0; font: 700 .8rem inherit; background: #14151a; color: #fff; cursor: pointer; }
+    .mk-dl button + button { background: #fff; color: #14151a; border: 1px solid #ddd; }
+    .mk-more { display: inline-block; margin-top: 16px; font-weight: 700; color: inherit; }
     .mk-file { background: #eceaf2; font-weight: 800; font-size: 1.5rem; color: #888; text-transform: uppercase; }
     /*/tools*/
     /* thumbnail sheet mode (#thumbs-<start>-<count>): the chosen thumbnails stacked at 1280 x 720 */
@@ -2114,22 +2118,34 @@
     <div class="mk-grid" id="mk-grid"></div>
   </div>
   <script>
-    // Media kit (Marek 2026-11-09): the brand kit from /assets/mediakit/kit.json, placed under the event covers (or alone on
-    // a finished event). Kept after the page script on purpose: out of every teaser card's render key.
+    // Media kit (Marek 2026-11-09): this brand's part of the family kit (conf42.com/assets/brandkit/brandkit.json, the same
+    // files as /media-kit/), every picture with its PNG / SVG (or WebP / MP4) buttons. Kept after the page script on purpose:
+    // out of every teaser card's render key.
     (function () {
+      var KIT = 'https://www.conf42.com/assets/brandkit/', KEY = {{ {'SREday': 'sreday', 'LLMday': 'llmday', 'PLATFORMday': 'platformday', 'Prompt Engineering Conference': 'pec'}.get(brand_name, '')|tojson }};
       var sec = document.getElementById('mk-sec'), gp = document.getElementById('gn-pool');
-      if (gp) gp.parentNode.insertBefore(sec, gp.nextSibling); else { sec.classList.add('mk-only'); document.querySelector('.tz-page').appendChild(sec); }
-      fetch('/assets/mediakit/kit.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (kit) {
+      if (gp && sec.parentNode !== gp.parentNode) gp.parentNode.insertBefore(sec, gp.nextSibling);
+      else if (!gp && !sec.closest('#gn-wrap')) { sec.classList.add('mk-only'); (document.querySelector('.tz-page') || document.body).appendChild(sec); }
+      function save(url, name) { fetch(url).then(function (r) { return r.blob(); }).then(function (b) { var a = document.createElement('a'), u = URL.createObjectURL(b); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(u); }, 30000); }); }
+      var SHOW = ['logos', 'avatars', 'stickers', 'mascots', 'animations', 'banners'];
+      fetch(KIT + 'brandkit.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (k) {
         var g = document.getElementById('mk-grid');
-        kit.forEach(function (f) {
-          var a = document.createElement('a'), ext = f.file.split('.').pop().toLowerCase(), img = /^(png|jpe?g|webp|svg|gif)$/.test(ext);
-          a.className = 'mk-f'; a.href = '/assets/mediakit/' + f.file; a.download = f.file;
-          var pv = document.createElement('span'); pv.className = 'mk-pv ' + (img ? 'mk-' + (f.bg || 'light') : 'mk-file');
-          if (img) { var i = document.createElement('img'); i.src = a.href; i.alt = f.label; i.loading = 'lazy'; pv.appendChild(i); } else pv.textContent = '.' + ext;
-          var b = document.createElement('b'); b.textContent = f.label;
-          var s = document.createElement('span'); s.textContent = f.note || ext.toUpperCase();
-          a.appendChild(pv); a.appendChild(b); a.appendChild(s); g.appendChild(a);
-        });
+        k.cards.filter(function (c) { return c.brand === KEY && SHOW.indexOf(c.section) >= 0 && !/\|on-(light|dark)$/.test(c.id) && !(c.section === 'avatars' && /-400$/.test(c.id)); })
+          .sort(function (a, b) { return SHOW.indexOf(a.section) - SHOW.indexOf(b.section); })
+          .forEach(function (c) {
+            var by = {}; c.files.forEach(function (f) { by[f.fmt] = by[f.fmt] || f; });
+            var show = by.png || by.webp || by.jpg || by.svg; if (!show) return;
+            var card = document.createElement('div'); card.className = 'mk-f';
+            var pv = document.createElement('span'); pv.className = 'mk-pv ' + (c.dark ? 'mk-dark' : 'mk-light'); var i = document.createElement('img'); i.src = KIT + show.file; i.alt = c.title; i.loading = 'lazy'; pv.appendChild(i);
+            var b = document.createElement('b'); b.textContent = c.title;
+            var row = document.createElement('span'); row.className = 'mk-dl';
+            (by.mp4 ? [by.webp, by.mp4] : [by.png || by.jpg, by.svg]).forEach(function (f) {
+              if (!f) return; var x = document.createElement('button'); x.type = 'button'; x.textContent = f.fmt === 'webp' ? 'WebP' : f.fmt.toUpperCase();
+              x.addEventListener('click', function () { save(KIT + f.file, f.file.split('/').pop()); }); row.appendChild(x);
+            });
+            card.appendChild(pv); card.appendChild(b); card.appendChild(row); g.appendChild(card);
+          });
+        var more = document.createElement('a'); more.className = 'mk-more'; more.href = '/media-kit/'; more.textContent = 'Open the full media kit: colours, every brand, event splashes →'; g.parentNode.appendChild(more);
       }).catch(function () { sec.hidden = true; });
     })();
   </script>
