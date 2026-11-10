@@ -733,6 +733,32 @@
   }
 
   .schedule-section.theme-bg-light { background-color: #f0faf5 !important; }
+  /* talk shards on phones and tablets (Marek 2026-11-09, option S1 of Desktop "schedule shards mockups"): below 992px the
+     theme drew every Normal-view talk as a flat #f0f6fa rectangle; now each one is the speaker cards' frosted grey pane,
+     layout unchanged. The aurora runs the whole schedule (plain radial stops, no blur filter) so the glass has colour
+     behind it; breaks are slimmer, clearer shards without the empty photo; the time takes the brand colour; and
+     "... Read more" fades into the shard's own grey instead of mint (the green patch) */
+  @media (max-width: 991.98px) {
+    .schedule-section.theme-bg-light {
+      background-image:
+        radial-gradient(55% 300px at 4% 500px, color-mix(in srgb, var(--brand) 32%, transparent), transparent 70%),
+        radial-gradient(50% 280px at 96% 1000px, rgba(245,158,11,.24), transparent 70%),
+        radial-gradient(55% 300px at 8% 1500px, rgba(20,184,166,.2), transparent 70%),
+        radial-gradient(50% 280px at 94% 2000px, color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 26%, transparent), transparent 70%),
+        linear-gradient(#fff, #f0faf5 260px, #f0faf5 calc(100% - 320px), #fff) !important;
+      background-size: 100% 2100px, 100% 2100px, 100% 2100px, 100% 2100px, 100% 100% !important;
+      background-repeat: repeat-y, repeat-y, repeat-y, repeat-y, no-repeat !important; }
+    .schedule-section .schedule-tab-content .item { padding: 1.1rem 1.15rem 1.2rem; margin-bottom: 1.1rem; border-radius: 22px;
+      background: rgba(232,233,238,.66); border: 1px solid rgba(255,255,255,.72);
+      box-shadow: 0 10px 26px rgba(30,15,40,.12), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); }
+    .schedule-section .schedule-tab-content .item:last-child { margin-bottom: 0; }
+    .schedule-section .schedule-tab-content .item .meta .time { color: var(--brand); }
+    .schedule-section .schedule-tab-content .item:not(:has(.name:not(:empty))) { background: rgba(255,255,255,.38); padding: .8rem 1rem; }
+    .schedule-section .schedule-tab-content .item:not(:has(.name:not(:empty))) .time { margin-bottom: .4rem !important; }
+    .schedule-section .schedule-tab-content .item .profile-image[src=""], .schedule-section .schedule-tab-content .item .name:empty { display: none; }
+    .schedule-section .schedule-tab-content .item.item-hello { background: #e0f2fe; }
+    .schedule-abstract-read-more { background: linear-gradient(to right, rgba(238,240,244,0), #eef0f4 30%); }
+  }
 </style>
 
 <section id="schedule" class="schedule-section section theme-bg-light">
