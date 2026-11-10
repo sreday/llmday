@@ -579,9 +579,10 @@
   .sc-who { font-size: .88rem; color: #1f2328; margin-top: .15rem; }
   .sc-org, .sc-dur { color: #6b7280; }
   /* Hello intro (built in, Marek 2026-11-08): light blue in every schedule view */
-  .item.item-hello { background: #e0f2fe; border-radius: 12px; }
+  /* the Hello intro as a blue glass shard in the Normal view (Marek 2026-11-09) */
+  .item.item-hello { background: linear-gradient(160deg, rgba(224,242,254,.92), rgba(186,230,253,.68)); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 10px 26px rgba(3,105,161,.16), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); border-radius: 22px; }
   .item.item-hello .title, .item.item-hello .location { color: #0369a1 !important; }
-  .sc-row.sc-hello { background: #e0f2fe; border-radius: 8px; }
+  /* compact view: no blue background on the Hello row, only its blue text (Marek 2026-11-09) */
   .sc-row.sc-hello .sc-body { color: #0369a1; font-style: normal; font-weight: 600; }
   .schedule-grid-table td.hello-cell { background: #e0f2fe !important; color: #0369a1; font-weight: 600; }
   .sc-break .sc-body { font-style: italic; color: #6b7280; }
@@ -756,7 +757,8 @@
     .schedule-section .schedule-tab-content .item:not(:has(.name:not(:empty))) { background: rgba(255,255,255,.38); padding: .8rem 1rem; }
     .schedule-section .schedule-tab-content .item:not(:has(.name:not(:empty))) .time { margin-bottom: .4rem !important; }
     .schedule-section .schedule-tab-content .item .profile-image[src=""], .schedule-section .schedule-tab-content .item .name:empty { display: none; }
-    .schedule-section .schedule-tab-content .item.item-hello { background: #e0f2fe; }
+    .schedule-section .schedule-tab-content .item.item-hello,
+    .schedule-section .schedule-tab-content .item.item-hello:not(:has(.name:not(:empty))) { background: linear-gradient(160deg, rgba(224,242,254,.92), rgba(186,230,253,.68)); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 10px 26px rgba(3,105,161,.16), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); }
     .schedule-abstract-read-more { background: linear-gradient(to right, rgba(238,240,244,0), #eef0f4 30%); }
   }
 </style>
