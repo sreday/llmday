@@ -221,6 +221,7 @@ $('ob-preview').addEventListener('click', function() {
     if (p.valid.length) { $('ob-bcc').textContent = p.valid.join(', '); }
     else { $('ob-bcc').innerHTML = '<span style="color:var(--ob-danger)">(email required)</span>'; }   // Marek 2026-09-14
     $('ob-subject').textContent = res.subject || '';
+    if (res.sniff) { $('ob-subject').textContent += '  ·  Live Q&A: ' + res.sniff; }   // v15: Sniff bullet included / left out (why)
     $('ob-html').srcdoc = res.html || '';
     previewBox.hidden = false; previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }).catch(function(err) { idle(btn); showError(err); });
@@ -235,7 +236,7 @@ function requireScriptVersion(min) {
 // wording (no SPEAKERFREE / PLUSONE / DREAMTEAM / 20% codes); an older deployment silently sends the paid text
 // (happened 2026-09-18: v9 sat in the repo, v7 was deployed). So nothing is sent through an older script, and
 // the page says so as soon as it loads.
-var OB_MIN_VERSION = 10;
+var OB_MIN_VERSION = 15;   // v15: LIVE Q&A (Sniff) bullet, Marek's revised email
 function outdatedText(have) {
   return 'The deployed email script is version ' + (have || '?') + ', this page needs version ' + OB_MIN_VERSION + '. ' +
          (OB_EVENT.is_free ? 'This is a FREE event: the old script would still mention the SPEAKERFREE, PLUSONE, DREAMTEAM and discount codes. ' : '') +
