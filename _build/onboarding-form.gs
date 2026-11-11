@@ -35,6 +35,13 @@
  *   the slides go up on the talk page after the conference.
  *   v14 (2026-11-05): the slides bullet links the Deck dump on a bold "here"; the FAQ slides line (a repeat) and the
  *   "If the budget allows ... speaker dinner" line are gone (a dinner text set in metadata still shows).
+ *   v15 (2026-11-11, Marek's revised email): a "LIVE Q&A" bullet with the event's Sniff page and the speakers' PIN,
+ *   promo cards moved up into "What happens now", the "As speakers confirm" bullet gone, shorter laptop / travel
+ *   FAQ lines, certificates line points at certified.fyi. The script asks Snout for the Sniff link
+ *   (GET https://scan.sreday.com/api/sniff/link, header X-Sniff-Key = Script Property SNIFF_LINK_KEY, copied from
+ *   scan.sreday.com/sniff), so the secret link never sits in a public repo. No key, no Luma event yet, or Snout
+ *   down: the email goes without the LIVE Q&A bullet and the preview says why. New scope (external requests):
+ *   run testSniffLink() once from the editor before redeploying.
  */
 
 var BRANDS = {
@@ -51,12 +58,13 @@ var DAILY_MAX_SENDS = 50;
 var DAILY_MAX_RECIPIENTS = 500;
 var LOCK_STEPS = { 3: 15 * 60, 10: 24 * 60 * 60 };   // failed attempts -> lock seconds
 var MAX_DELAY_MINUTES = 24 * 60;   // 'schedule' can defer a send by at most a day
+var SNIFF_API = 'https://scan.sreday.com/api/sniff/link';
 
 function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, version: 14 });   // v14: bold 'here' Deck dump link, no FAQ slides / TBC dinner lines
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, sniff_key_set: !!sniffKey(), version: 15 });   // v15: LIVE Q&A (Sniff) bullet, Marek's revised email
 }
 
 function doPost(e) {
@@ -79,6 +87,8 @@ function doPost(e) {
   var brand = BRANDS[String(data.brand || '').toLowerCase()];
   if (!brand) return respond({ ok: false, error: 'bad brand' });
   var ev = normalizeEvent(data.event || {}, brand);
+  var sniff = sniffLink(String(data.brand || '').toLowerCase(), (data.event || {}).slug);
+  ev.sniff = sniff.ok ? sniff : null;
   var emails = normalizeEmails(data.emails);
   if (emails.bad.length) return respond({ ok: false, error: 'invalid emails', bad: emails.bad });
   if (emails.ok.length > MAX_RECIPIENTS) return respond({ ok: false, error: 'too many' });
@@ -87,7 +97,8 @@ function doPost(e) {
   var from = GmailApp.getAliases().indexOf(brand.from) !== -1 ? brand.from : Session.getEffectiveUser().getEmail();
 
   if (data.action === 'preview') {
-    return respond({ ok: true, subject: mail.subject, html: mail.html, text: mail.text, from: from, to: from, recipients: emails.ok.length });
+    return respond({ ok: true, subject: mail.subject, html: mail.html, text: mail.text, from: from, to: from, recipients: emails.ok.length,
+                     sniff: sniff.ok ? 'included' : 'left out: ' + sniff.error });
   }
   if (!emails.ok.length) return respond({ ok: false, error: 'no recipients' });
   var delay = parseInt(data.delay_minutes, 10);
@@ -218,11 +229,17 @@ function composeOnboarding(ev, brand) {
     ev.is_free
       ? '- Please register for your free ticket here: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
       : '- Please redeem your free ticket with the code *SPEAKERFREE* here: [' + ev.tickets_url + '](' + ev.tickets_url + ')' + String.fromCharCode(10) + '  (on luma, select the general self funding / general admission, and then find "Add a coupon" in the top right corner)',
-    '- Speaking slots are ' + ev.slot_minutes + ' minutes (' + talk + ' min talk + 5 min Q&A)',
+    '- Speaking slots are ' + ev.slot_minutes + ' minutes (' + talk + ' min talk + 5 min Q&A)'
+  ]);
+  if (ev.sniff) {   // v15: the event's Sniff page (live Q&A), when Snout has one
+    lines.push('- LIVE Q&A - you can use our app: [' + ev.sniff.url + '](' + ev.sniff.url + ').' + String.fromCharCode(10) + '  ' +
+               'PIN to access your dashboard and the mobile app: *' + ev.sniff.pin + '*');
+  }
+  lines = lines.concat([
     '- You will present from your own laptop. Please upload the final version of your slides [*here*](' + ev.deckdump_url + ') before the event',
-    "- As speakers confirm, we'll update the website and prepare social media graphics and promo posts for sharing.",
     '- The v1 schedule will be published as soon as we get most speakers confirmed',
     '- Most regular talks will take place in the afternoon, between 12PM-6PM. Some last minute schedule changes may happen, so please avoid tight travel planning.',
+    '- Promo cards: [' + ev.event_url + 'teasers/](' + ev.event_url + 'teasers/). You can post about your session straight away!',
     '- We may use AI to create graphics and short videos about your talk for social media promotion. Please let us know if you would prefer to opt out.',
     '',
     '[g] Please reply with a quick "OK" so we know everything is accepted and acknowledged.',
@@ -241,7 +258,6 @@ function composeOnboarding(ev, brand) {
     '1. Expected attendance - around ' + (ev.attendees || 100) + ' people',
     '1. There will be WiFi access in the venue',
     '1. Previous ' + ev.brand_name + ' talks: ' + (ev.youtube_url ? '[' + ev.youtube_url + '](' + ev.youtube_url + ')' : 'on our YouTube channel'),
-    '1. Promo cards: [' + ev.event_url + 'teasers/](' + ev.event_url + 'teasers/). You can post about your session straight away!',
   ].concat(ev.is_free ? [
     '1. The event is free to attend - feel free to invite your team and friends: [' + ev.tickets_url + '](' + ev.tickets_url + ')'
   ] : [
@@ -249,10 +265,10 @@ function composeOnboarding(ev, brand) {
     '1. 50% off for your team and colleagues - share code *DREAMTEAM*',
     '1. 20% off code you can spread everywhere on social media: *' + brand.code + '*'
   ]).concat([
-    "1. Laptop connection to present: wired or wireless. If it's wireless then Google Meet / ZOOM. If wired, then we'll have HDMI and USB-C connectors",
-    '1. Travel / accommodation / speaker compensation - unfortunately, those are not covered',
+    '1. Laptop connection to present: either wireless (google meet / zoom), or wired (hdmi / usb-c).',
+    '1. Travel / accommodation / speaker compensation - unfortunately, not covered',
     "1. Your company wants to sponsor the event? Here's the form: [" + ev.event_url + '#sponsors](' + ev.event_url + '#sponsors)',
-    "1. We'll distribute speaker certificates for every successfully delivered session after the conference"
+    "1. We'll distribute speaker certificates for every successfully delivered session after the conference. Look up ~certified.fyi~ in your spam folder."
   ]));
   return {
     subject: ev.event_name + ' - ' + ev.month_day + ' - Info for speakers',
@@ -263,6 +279,7 @@ function composeOnboarding(ev, brand) {
 
 var INLINE_LINK = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
 var INLINE_BOLD = /\*([^*\n]+)\*/g;
+var INLINE_ITALIC = /~([^~\n]+)~/g;   // v15: ~certified.fyi~ (tildes never occur in the links)
 var HIGHLIGHT = { y: '#fff59d', g: '#c8e6c9' };
 
 function renderText(lines) {
@@ -272,7 +289,8 @@ function renderText(lines) {
     if (m) { n += 1; l = n + '. ' + m[1]; } else if (!/^- /.test(l)) { n = 0; }
     return l.replace(/^\[[yg]\] /, '')
             .replace(INLINE_LINK, function (_, label, url) { return label === url ? url : label + ' (' + url + ')'; })
-            .replace(INLINE_BOLD, '$1');
+            .replace(INLINE_BOLD, '$1')
+            .replace(INLINE_ITALIC, '$1');
   }).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
@@ -282,7 +300,9 @@ function renderHtml(lines) {
   function inline(s) {
     return esc(s).replace(INLINE_LINK, function (_, label, url) { return '<a href="' + url + '">' + label + '</a>'; })
                  .replace(INLINE_BOLD, '<b>$1</b>')
-                 .replace(/\n\s*/g, '<br><span style="color:#555">') + (/\n/.test(s) ? '</span>' : '');
+                 .replace(INLINE_ITALIC, '<i>$1</i>')
+                 // v15: a second line in a bullet is grey only when it is a "(...)" note; the Sniff PIN line stays plain
+                 .replace(/\n\s*(\(?)/g, function (_, p) { return p ? '<br><span style="color:#555">(' : '<br><span>'; }) + (/\n/.test(s) ? '</span>' : '');
   }
   var para = [];
   function flushPara() { if (para.length) { out.push('<p>' + para.join('<br>') + '</p>'); para = []; } }
@@ -296,6 +316,35 @@ function renderHtml(lines) {
   });
   flushPara(); closeList();
   return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#111">' + out.join('\n') + '</div>';
+}
+
+// ---- Sniff (live Q&A) --------------------------------------------------------
+
+function sniffKey() { return String(props().getProperty('SNIFF_LINK_KEY') || '').trim(); }
+
+// The event's Sniff page and PIN from Snout, by brand + the site's event folder ("2026-london-q4").
+// { ok: true, url, pin } or { ok: false, error }. Never throws: the email simply goes without the bullet.
+function sniffLink(brandKey, slug) {
+  slug = String(slug || '');
+  if (!/^[0-9]{4}-[a-z0-9-]+-q[1-4]$/.test(slug)) return { ok: false, error: 'no event folder' };
+  var key = sniffKey();
+  if (!key) return { ok: false, error: 'Script Property SNIFF_LINK_KEY is not set' };
+  try {
+    var resp = UrlFetchApp.fetch(SNIFF_API + '?brand=' + encodeURIComponent(brandKey) + '&event=' + encodeURIComponent(slug),
+                                 { headers: { 'X-Sniff-Key': key }, muteHttpExceptions: true, followRedirects: false });
+    var body = JSON.parse(resp.getContentText() || '{}');
+    if (resp.getResponseCode() === 200 && body.ok && /^https:[/][/]scan[.]sreday[.]com[/]sniff[/][a-z0-9-]+$/.test(String(body.url)) && /^[0-9]{4}$/.test(String(body.pin))) {
+      return { ok: true, url: String(body.url), pin: String(body.pin) };
+    }
+    return { ok: false, error: body.error || ('Snout answered ' + resp.getResponseCode()) };
+  } catch (err) {
+    return { ok: false, error: 'Snout unreachable: ' + err };
+  }
+}
+
+// Run once from the editor after pasting v15: grants the external-request scope and checks the key.
+function testSniffLink() {
+  Logger.log(JSON.stringify(sniffLink('sreday', '2026-campinas-q4')));
 }
 
 // ---- validation -------------------------------------------------------------
