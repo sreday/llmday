@@ -221,7 +221,7 @@ $('ob-preview').addEventListener('click', function() {
     if (p.valid.length) { $('ob-bcc').textContent = p.valid.join(', '); }
     else { $('ob-bcc').innerHTML = '<span style="color:var(--ob-danger)">(email required)</span>'; }   // Marek 2026-09-14
     $('ob-subject').textContent = res.subject || '';
-    if (res.sniff) { $('ob-subject').textContent += '  ·  Live Q&A: ' + res.sniff; }   // v15: Sniff bullet included / left out (why)
+    (function (m) { var el = document.getElementById('ob-sniff-note'); if (!el) { el = document.createElement('div'); el.id = 'ob-sniff-note'; el.style.cssText = 'color:var(--ob-danger);font-size:.85rem;margin:-4px 0 10px'; m.parentNode.insertBefore(el, m.nextSibling); } el.textContent = res.sniff && res.sniff !== 'included' ? 'LIVE Q&A bullet ' + res.sniff : ''; el.hidden = !el.textContent; })(document.querySelector('.ob-preview-meta'));   // only when the Sniff bullet was left out (Marek: not in the subject)
     $('ob-html').srcdoc = res.html || '';
     previewBox.hidden = false; previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }).catch(function(err) { idle(btn); showError(err); });
