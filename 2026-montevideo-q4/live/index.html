@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Live - LLMday Montevideo</title>
+	<!-- link previews: _build/og_images.py -->
+	<meta property="og:title" content="Live - LLMday Montevideo">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://llmday.com/2026-montevideo-q4/live/">
+	<meta property="og:site_name" content="LLMday">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image" content="https://llmday.com/og/1e9a6537923a530a.jpg">
+	<meta property="og:image:secure_url" content="https://llmday.com/og/1e9a6537923a530a.jpg">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="600">
+	<meta property="og:image:alt" content="Live - LLMday Montevideo">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@llmday_com">
+	<meta name="twitter:creator" content="@llmday_com">
+	<meta name="twitter:title" content="Live - LLMday Montevideo">
+	<meta name="twitter:image" content="https://llmday.com/og/1e9a6537923a530a.jpg">
+	<meta name="twitter:image:alt" content="Live - LLMday Montevideo">
+<!-- /<event>/live/: the schedule as it happens, for a screen at the venue. Built by _build/live.py from the same
+     schedule as the event page; runs on the viewer's clock. ?at=10:40 tries it at another time. -->
+<link rel="stylesheet" href="../assets/css/fonts.css?v=ac4f21e544">
+<style>
+  /* The site's look (Marek 2026-11-02: "white theme, liquid glass"): Montserrat, the soft aurora of the speaker
+     section, frosted grey glass panes with a white rim, brand-coloured pills. */
+  :root { --brand: #26986A; --ink: #1d1b21; --muted: #5b5662; --track: rgba(30,15,40,.09); --warn: #b45309; --warnbar: #f59e0b; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; color: var(--ink); background: #f7f6f9;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  body { position: relative; isolation: isolate; display: flex; flex-direction: column; padding: 2.2vh 2.4vw; gap: 2vh; min-height: 100vh; overflow: hidden; }
+  .aurora { position: fixed; inset: -10%; z-index: -1; pointer-events: none; filter: blur(60px);
+    background: radial-gradient(40% 30% at 10% 12%, color-mix(in srgb, var(--brand) 40%, transparent), transparent 70%),
+      radial-gradient(35% 28% at 88% 10%, rgba(245,158,11,.30), transparent 70%),
+      radial-gradient(40% 30% at 72% 52%, rgba(20,184,166,.20), transparent 70%),
+      radial-gradient(42% 30% at 18% 62%, color-mix(in srgb, color-mix(in srgb, var(--brand) 45%, #ec4899) 30%, transparent), transparent 70%),
+      radial-gradient(40% 28% at 85% 90%, color-mix(in srgb, var(--brand) 30%, transparent), transparent 70%); }
+  .glass { background: rgba(226,227,232,.5); border: 1px solid rgba(255,255,255,.72);
+    -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%);
+    box-shadow: 0 18px 44px rgba(30,15,40,.14), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); }
+  header { display: flex; align-items: center; gap: .8vw; padding: 1.2vh 1.2vw 1.2vh 1.6vw; border-radius: 999px; }
+  .live { display: inline-flex; align-items: center; gap: .6vw; padding: .5vh 1vw; border-radius: 999px; background: #e5484d; color: #fff;
+    font-weight: 800; font-size: clamp(14px, 1.4vw, 28px); letter-spacing: .08em; }
+  .live::before { content: ""; width: .8vw; height: .8vw; min-width: 8px; min-height: 8px; border-radius: 50%; background: #fff; animation: blink 1.4s infinite; }
+  .live.off { background: rgba(30,15,40,.12); color: var(--muted); }
+  .live.off::before { animation: none; background: var(--muted); opacity: .6; }
+  @keyframes blink { 50% { opacity: .2; } }
+  .event { flex: 1; min-width: 0; font-weight: 800; font-size: clamp(18px, 2.1vw, 42px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--brand); }
+  .event small { color: var(--muted); font-weight: 600; margin-left: .8vw; font-size: .7em; }
+  .clock { font-weight: 800; font-size: clamp(28px, 3.8vw, 76px); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  #fs { font: inherit; font-weight: 700; font-size: clamp(12px, 1.05vw, 20px); color: #fff; background: var(--brand); border: 0; border-radius: 999px; padding: 1.1vh 1.6vw; cursor: pointer;
+    box-shadow: 0 6px 16px -8px var(--brand); }
+  #fs:hover { filter: brightness(1.1); }
+  :fullscreen #fs { display: none; }
+  main { flex: 1; display: flex; flex-direction: column; gap: 2vh; min-height: 0; }
+  h2 { margin: 0; font-size: clamp(14px, 1.4vw, 28px); text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 800; padding-left: .4vw; }
+  .grid { flex: 1; display: grid; gap: 1.4vw; grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); min-height: 0; }
+  .card { border-radius: 26px; padding: 2.4vh 1.6vw; display: flex; flex-direction: column; gap: 1.6vh; min-width: 0; min-height: 0; overflow: hidden; }
+  .room { font-weight: 800; font-size: clamp(14px, 1.35vw, 28px); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .pill { align-self: flex-start; padding: .5vh .9vw; border-radius: 999px; font-weight: 800; font-size: clamp(11px, 1vw, 20px); text-transform: uppercase; letter-spacing: .08em;
+    color: #fff; background: var(--brand); }
+  .pill.keynote { background: color-mix(in srgb, var(--brand) 80%, #000); }
+  .pill.workshop { background: #0f766e; }
+  .pill.break { background: rgba(255,255,255,.75); color: var(--muted); border: 1px solid rgba(255,255,255,.9); }
+  .title { font-weight: 800; line-height: 1.15; font-size: var(--tsize, clamp(20px, 2.4vw, 54px)); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .who { display: flex; align-items: center; gap: .8vw; font-size: clamp(14px, 1.5vw, 32px); font-weight: 700; }
+  .who img { width: 14vh; height: 14vh; object-fit: contain; flex: none; }          /* the headshot as it is: no ring, no frame */
+  .grid[style*="--cols:1"] .who img { width: 24vh; height: 24vh; }                  /* one card fills the screen (keynotes) */
+  .grid[style*="--cols:3"] .who img, .grid[style*="--cols:4"] .who img { width: 11vh; height: 11vh; }
+  .idle .who img { width: 10vh; height: 10vh; }
+  .who span { min-width: 0; }
+  .who b { display: block; }
+  .who i { font-style: normal; color: var(--muted); font-weight: 600; }
+  .spacer { flex: 1; }
+  .bar { height: 2.2vh; min-height: 10px; border-radius: 999px; background: var(--track); overflow: hidden; box-shadow: inset 0 1px 2px rgba(30,15,40,.08); }
+  .bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 75%, #fff), var(--brand)); transition: width 1s linear; }
+  .left { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 1vw; font-weight: 800; }
+  .left b { font-size: clamp(22px, 2.9vw, 62px); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--brand); }
+  .left span { white-space: nowrap; color: var(--muted); font-size: clamp(13px, 1.25vw, 26px); font-weight: 700; }
+  .soon .bar i { background: var(--warnbar); }
+  .soon .left b { color: var(--warn); }
+  .next { border-top: 1px solid rgba(30,15,40,.1); padding-top: 1.4vh; font-size: clamp(13px, 1.3vw, 27px); color: var(--muted); font-weight: 600; }
+  .next b { color: var(--ink); }
+  .next .nt { color: var(--ink); font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .idle .title { color: var(--muted); }
+  /* A break for everyone: one big pane. */
+  .hero { flex: 1; justify-content: center; text-align: center; align-items: center; padding: 4vh 4vw; }
+  .hero .pill { align-self: center; }
+  .hero .title { font-size: clamp(36px, 6vw, 140px); color: var(--brand); }
+  .hero .where { color: var(--muted); font-size: clamp(18px, 2.3vw, 50px); font-weight: 700; }
+  .hero .bar { width: 70%; height: 3vh; }
+  .hero .left { width: 70%; }
+  .hero .left b { font-size: clamp(30px, 4.4vw, 96px); }
+  /* Before / between days: a countdown and the first sessions. */
+  .count { font-weight: 800; font-size: clamp(36px, 7vw, 160px); line-height: 1; font-variant-numeric: tabular-nums; color: var(--brand); padding-left: .2vw; }
+  .list { display: flex; flex-direction: column; border-radius: 26px; overflow: hidden; }
+  .row { display: grid; grid-template-columns: 9vw minmax(0, 1fr) auto; align-items: center; gap: 1.6vw; padding: 1.8vh 1.8vw; border-top: 1px solid rgba(255,255,255,.6); }
+  .row:first-child { border-top: 0; }
+  .row .hm { font-weight: 800; font-size: clamp(18px, 2.3vw, 50px); font-variant-numeric: tabular-nums; color: var(--brand); }
+  .row .rt { font-weight: 800; font-size: clamp(16px, 1.9vw, 42px); line-height: 1.2; }
+  .row .rw { color: var(--muted); font-size: clamp(13px, 1.35vw, 29px); font-weight: 600; margin-top: .4vh; }
+  .row .rr { color: var(--muted); font-size: clamp(12px, 1.15vw, 25px); font-weight: 700; text-align: right; }
+  .row.hello { background: #e0f2fe; border-radius: 10px; }
+  .row.hello .rt { color: #0369a1; font-weight: 700; }
+  .row.brk .rt { color: var(--muted); }
+  footer { display: flex; justify-content: space-between; gap: 2vw; color: var(--muted); font-weight: 600; font-size: clamp(13px, 1.35vw, 29px); padding: 0 .6vw; }
+  footer b { color: var(--ink); font-weight: 800; }
+  .try { color: var(--warn); }
+  @media (max-width: 800px) {
+    body { overflow: auto; }
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .row { grid-template-columns: 64px minmax(0, 1fr); }
+    .row .rr { grid-column: 2; text-align: left; }
+    /* a phone scrolls: cards at their natural height, every room shown, nothing clipped */
+    html, body { height: auto; }
+    body { padding: 12px 16px; gap: 12px; }
+    main, .grid { flex: none; }
+    .grid { grid-template-rows: none; gap: 12px; }
+    .card { border-radius: 20px; padding: 16px; overflow: visible; }
+    .card > * { flex-shrink: 0; }
+    .who img, .grid[style*="--cols"] .who img, .idle .who img { width: 88px; height: 88px; }
+    header { border-radius: 20px; flex-wrap: wrap; gap: 8px 10px; padding: 10px 14px; }
+    .event { order: 3; flex-basis: 100%; }
+    .clock { margin-left: auto; }
+    footer { flex-wrap: wrap; gap: 4px 12px; }
+  }
+</style>
+<meta name="build" content="80f5157326-20261114T112357Z">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+<header class="glass">
+  <span class="live" id="liveTag">LIVE</span>
+  <div class="event">LLMday Montevideo<small>December 5, 2026</small></div>
+  <div class="clock" id="clock">--:--</div>
+  <button id="fs" type="button">Full screen</button>
+</header>
+<main id="main"></main>
+<footer id="foot"></footer>
+<script id="live-data" type="application/json">{"event": "LLMday Montevideo", "date": "December 5, 2026", "venue": "World Trade Center Montevideo, Montevideo, Uruguay", "offset": -180, "days": [[{"room": "Main Stage", "items": [{"start": "2026-12-05T08:00:00-03:00", "end": "2026-12-05T09:00:00-03:00", "hm": "08:00", "end_hm": "09:00", "kind": "break", "title": "Registration & Welcome", "where": "Main lobby", "hello": false, "wrap": false}, {"start": "2026-12-05T09:00:00-03:00", "end": "2026-12-05T09:30:00-03:00", "hm": "09:00", "end_hm": "09:30", "kind": "talk", "title": "From 1 Hour to 10 Minutes: Automating Purchase Orders with AI", "who": "Marcos Martinez", "org": "Loopstudio", "photo": "../../speakers/Marcos Martinez.png", "url": "../Marcos_Martinez_Loopstudio_From_1_Hour_to_10_Minutes_Automating_Purchase_Orders_with_AI"}, {"start": "2026-12-05T09:30:00-03:00", "end": "2026-12-05T10:00:00-03:00", "hm": "09:30", "end_hm": "10:00", "kind": "talk", "title": "Guardrails in Code, Not in Prompts: Building Reliable Multi-Agent Systems with Google ADK", "who": "German Pazos", "org": "albo", "photo": "../../speakers/German Pazos.png", "url": "../German_Pazos_albo_Guardrails_in_Code__Not_in_Prompts_Building_Reliable_MultiAgent_Systems_with_Googl"}, {"start": "2026-12-05T10:00:00-03:00", "end": "2026-12-05T10:30:00-03:00", "hm": "10:00", "end_hm": "10:30", "kind": "talk", "title": "The User Is Part of the Harness: A Year Running an Agent That Adapts to Cognitive Load", "who": "Lucia Hernandez", "org": "Metodica Digital", "photo": "../../speakers/Lucia Hernandez.png", "url": "../Lucia_Hernandez_Metodica_Digital_The_User_Is_Part_of_the_Harness_A_Year_Running_an_Agent_That_Adapts"}, {"start": "2026-12-05T10:30:00-03:00", "end": "2026-12-05T11:00:00-03:00", "hm": "10:30", "end_hm": "11:00", "kind": "talk", "title": "Tero: An Open-Source Agent Platform for Quality Intelligence", "who": "Roger Abelenda", "org": "Abstracta", "photo": "../../speakers/Roger Abelenda.png", "url": "../Roger_Abelenda_Abstracta_Tero_An_OpenSource_Agent_Platform_for_Quality_Intelligence"}, {"start": "2026-12-05T11:00:00-03:00", "end": "2026-12-05T11:10:00-03:00", "hm": "11:00", "end_hm": "11:10", "kind": "break", "title": "Hello Montevideo!!! - short Intro to LLMday", "where": "Main Stage", "hello": true, "wrap": false}, {"start": "2026-12-05T11:10:00-03:00", "end": "2026-12-05T11:30:00-03:00", "hm": "11:10", "end_hm": "11:30", "kind": "break", "title": "Coffee Break & Networking", "where": "Main lobby", "hello": false, "wrap": false}, {"start": "2026-12-05T11:30:00-03:00", "end": "2026-12-05T12:00:00-03:00", "hm": "11:30", "end_hm": "12:00", "kind": "talk", "title": "AgentOps: The future is here", "who": "Axel Labruna & Maika de Jesus Esteves", "org": "Nubiral", "photo": "../../speakers/Axel Labruna & Maika de Jesus Esteves.png", "url": "../Axel_Labruna__Maika_de_Jesus_Esteves_Nubiral_AgentOps_The_future_is_here"}, {"start": "2026-12-05T12:00:00-03:00", "end": "2026-12-05T12:30:00-03:00", "hm": "12:00", "end_hm": "12:30", "kind": "talk", "title": "From PDFs to Production RAG: Lessons from Building Document Pipelines with Docling", "who": "Josefina R. Casanova", "org": "IBM", "photo": "../../speakers/Josefina R. Casanova.png", "url": "../Josefina_R_Casanova_IBM_From_PDFs_to_Production_RAG_Lessons_from_Building_Document_Pipelines_with_Do"}, {"start": "2026-12-05T12:30:00-03:00", "end": "2026-12-05T13:00:00-03:00", "hm": "12:30", "end_hm": "13:00", "kind": "workshop", "title": "Put Down the Prompt: Set Up, Test, and Break a Production Cluster in Seconds with\nReliaburger", "who": "Mark Pawlikowski & Marcos Novelli Harispe", "org": "Reliaburger", "photo": "../../speakers/Mark Pawlikowski & Marcos Novelli Harispe.png", "url": "../Mark_Pawlikowski__Marcos_Novelli_Harispe_Reliaburger_Put_Down_the_Prompt_Set_Up__Test__and_Break_a_P"}, {"start": "2026-12-05T13:00:00-03:00", "end": "2026-12-05T13:30:00-03:00", "hm": "13:00", "end_hm": "13:30", "kind": "talk", "title": "Breaking the GenAI Data Pipeline: Architectural Security and AI-DSPM with OWASP", "who": "Martin Rojas", "org": "Cybersecurity Specialist & Auditor", "photo": "../../speakers/Martin Rojas.png", "url": "../Martin_Rojas_Cybersecurity_Specialist__Auditor_Breaking_the_GenAI_Data_Pipeline_Architectural_Securi"}, {"start": "2026-12-05T13:30:00-03:00", "end": "2026-12-05T14:30:00-03:00", "hm": "13:30", "end_hm": "14:30", "kind": "break", "title": "Lunch & Networking", "where": "Main lobby", "hello": false, "wrap": false}, {"start": "2026-12-05T14:30:00-03:00", "end": "2026-12-05T15:00:00-03:00", "hm": "14:30", "end_hm": "15:00", "kind": "talk", "title": "Beyond Vibe Coding: How AI is Changing Development Cycles", "who": "Ben Sterne", "org": "Match My Email", "photo": "../../speakers/Ben Sterne.png", "url": "../Ben_Sterne_Match_My_Email_Beyond_Vibe_Coding_How_AI_is_Changing_Development_Cycles"}, {"start": "2026-12-05T15:00:00-03:00", "end": "2026-12-05T15:30:00-03:00", "hm": "15:00", "end_hm": "15:30", "kind": "talk", "title": "Long Running Agents: The Harness Is the Product", "who": "Joaquin Bonifacino", "org": "Light-it", "photo": "../../speakers/Joaquin Bonifacino.png", "url": "../Joaquin_Bonifacino_Lightit_Long_Running_Agents_The_Harness_Is_the_Product"}, {"start": "2026-12-05T15:30:00-03:00", "end": "2026-12-05T16:00:00-03:00", "hm": "15:30", "end_hm": "16:00", "kind": "talk", "title": "AI Isn’t Magic—But It Can Deliver Remarkable Results", "who": "Thalita Regina Terpilauskas de Sa", "org": "Riverstone Insights - Iowa", "photo": "../../speakers/Thalita Regina Terpilauskas de Sa.png", "url": "../Thalita_Regina_Terpilauskas_de_Sa_Riverstone_Insights__Iowa_AI_Isnt_MagicBut_It_Can_Deliver_Remarkab"}, {"start": "2026-12-05T16:00:00-03:00", "end": "2026-12-05T16:30:00-03:00", "hm": "16:00", "end_hm": "16:30", "kind": "break", "title": "Coffee Break & Networking", "where": "Main lobby", "hello": false, "wrap": false}, {"start": "2026-12-05T16:30:00-03:00", "end": "2026-12-05T17:00:00-03:00", "hm": "16:30", "end_hm": "17:00", "kind": "talk", "title": "AI Is Never the Starting Point", "who": "Fede Rodrigo", "org": "CIO Office", "photo": "../../speakers/Fede Rodrigo.png", "url": "../Fede_Rodrigo_CIO_Office_AI_Is_Never_the_Starting_Point"}, {"start": "2026-12-05T17:00:00-03:00", "end": "2026-12-05T17:30:00-03:00", "hm": "17:00", "end_hm": "17:30", "kind": "talk", "title": "Apps, not chats. Shipping macOS products that run AI models on-device", "who": "Gorka Ludlow", "org": "Karma Digital", "photo": "../../speakers/Gorka Ludlow.png", "url": "../Gorka_Ludlow_Karma_Digital_Apps__not_chats_Shipping_macOS_products_that_run_AI_models_ondevice"}, {"start": "2026-12-05T17:30:00-03:00", "end": "2026-12-05T18:00:00-03:00", "hm": "17:30", "end_hm": "18:00", "kind": "talk", "title": "The Harness Auction: What Makes an AI Agent Actually Work?", "who": "Martin Brian", "org": "Marvik", "photo": "../../speakers/Martin Brian.png", "url": "../Martin_Brian_Marvik_The_Harness_Auction_What_Makes_an_AI_Agent_Actually_Work"}, {"start": "2026-12-05T18:00:00-03:00", "end": "2026-12-05T18:00:00-03:00", "hm": "18:00", "end_hm": "18:00", "kind": "break", "title": "Wrap up", "where": "Scan each other's QR codes & head to a nearby pub!", "hello": false, "wrap": true}]}, {"room": "Ephemeral Stage", "items": [{"start": "2026-12-05T08:00:00-03:00", "end": "2026-12-05T09:00:00-03:00", "hm": "08:00", "end_hm": "09:00", "kind": "break", "title": "Registration & Welcome", "where": "Main lobby", "hello": false, "wrap": false}, {"start": "2026-12-05T11:00:00-03:00", "end": "2026-12-05T11:10:00-03:00", "hm": "11:00", "end_hm": "11:10", "kind": "break", "title": "Hello Montevideo!!! - short Intro to LLMday", "where": "Main Stage", "hello": true, "wrap": false}, {"start": "2026-12-05T11:10:00-03:00", "end": "2026-12-05T11:30:00-03:00", "hm": "11:10", "end_hm": "11:30", "kind": "break", "title": "Coffee Break & Networking", "where": "Main lobby", "hello": false, "wrap": false}, {"start": "2026-12-05T13:30:00-03:00", "end": "2026-12-05T14:30:00-03:00", "hm": "13:30", "end_hm": "14:30", "kind": "break", "title": "Lunch & Networking", "where": "Main lobby", "hello": false, "wrap": false}, {"start": "2026-12-05T14:30:00-03:00", "end": "2026-12-05T15:00:00-03:00", "hm": "14:30", "end_hm": "15:00", "kind": "talk", "title": "RAG Is Not a Search Problem", "who": "Leon Achata", "org": "TCS", "photo": "../../speakers/Leon Achata.png", "url": "../Leon_Achata_TCS_RAG_Is_Not_a_Search_Problem"}, {"start": "2026-12-05T15:00:00-03:00", "end": "2026-12-05T15:30:00-03:00", "hm": "15:00", "end_hm": "15:30", "kind": "talk", "title": "The AI Security Paradox: Quantifying Risk in the Age of LLMs and Agents", "who": "Federico Novelli", "org": "Protect Group", "photo": "../../speakers/Federico Novelli.png", "url": "../Federico_Novelli_Protect_Group_The_AI_Security_Paradox_Quantifying_Risk_in_the_Age_of_LLMs_and_Agent"}, {"start": "2026-12-05T15:30:00-03:00", "end": "2026-12-05T16:00:00-03:00", "hm": "15:30", "end_hm": "16:00", "kind": "talk", "title": "The Great AI Role Rewrite", "who": "Marcelo B San Martin", "org": "Blizzard Entertainment", "photo": "../../speakers/Marcelo B San Martin.png", "url": "../Marcelo_B_San_Martin_Blizzard_Entertainment_The_Great_AI_Role_Rewrite"}, {"start": "2026-12-05T16:00:00-03:00", "end": "2026-12-05T16:30:00-03:00", "hm": "16:00", "end_hm": "16:30", "kind": "break", "title": "Coffee Break & Networking", "where": "Main lobby", "hello": false, "wrap": false}, {"start": "2026-12-05T18:00:00-03:00", "end": "2026-12-05T18:00:00-03:00", "hm": "18:00", "end_hm": "18:00", "kind": "break", "title": "Wrap up", "where": "Scan each other's QR codes & head to a nearby pub!", "hello": false, "wrap": true}]}]]}</script>
+<script>
+(function () {
+  let D = JSON.parse(document.getElementById('live-data').textContent);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const T = (iso) => Date.parse(iso);
+
+  // ?at=10:40 or ?at=2026-11-02T10:40 (event time): run from then, for trying it out.
+  let shift = 0;
+  const at = new URLSearchParams(location.search).get('at');
+  if (at) {
+    const first = (D.days[0] && D.days[0][0] && D.days[0][0].items[0]) ? D.days[0][0].items[0].start.slice(0, 10) : new Date().toISOString().slice(0, 10);
+    const m = (/T/.test(at) ? at : first + 'T' + at).match(/^(\d{4})-(\d\d)-(\d\d)T(\d\d?):(\d\d)/);
+    if (m) shift = Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5]) - D.offset * 60000 - Date.now();
+  }
+  const now = () => Date.now() + shift;
+  const hm = (ms) => { const d = new Date(ms + D.offset * 60000); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
+  function span(ms) {
+    const m = Math.max(0, Math.ceil(ms / 60000));
+    if (m < 60) return m + ' min';
+    const d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), r = m % 60;
+    return d ? d + (d === 1 ? ' day ' : ' days ') + h + ' h' : h + ' h' + (r ? ' ' + r + ' min' : '');
+  }
+
+  // The day on now: the one running, else the next one, else the last.
+  function bounds(day) {
+    let s = Infinity, e = -Infinity;
+    for (const r of day) for (const it of r.items) { s = Math.min(s, T(it.start)); if (!it.wrap) e = Math.max(e, T(it.end)); }
+    return [s, e];
+  }
+  function pickDay(t) {
+    for (let i = 0; i < D.days.length; i++) { const [, e] = bounds(D.days[i]); if (t < e) return i; }
+    return D.days.length - 1;
+  }
+
+  const KIND = { keynote: 'Keynote', talk: 'Talk', workshop: 'Workshop', break: 'Break' };
+  function who(it) {
+    if (!it.who) return '';
+    const img = it.photo ? '<img src="' + esc(it.photo) + '" alt="" onerror="this.remove()">' : '';
+    return '<div class="who">' + img + '<span><b>' + esc(it.who) + '</b>' + (it.org ? '<i>' + esc(it.org) + '</i>' : '') + '</span></div>';
+  }
+  function progress(it, t, big) {
+    const s = T(it.start), e = T(it.end), left = e - t;
+    const pct = Math.min(100, Math.max(0, (t - s) / Math.max(1, e - s) * 100));
+    return '<div class="spacer"></div><div class="bar"><i style="width:' + pct.toFixed(1) + '%"></i></div>' +
+      '<div class="left"><b>' + span(left) + ' left</b><span>until ' + esc(it.end_hm) + '</span></div>';
+  }
+  const soon = (it, t) => T(it.end) - t <= 5 * 60000;
+  function nextLine(it) {
+    if (!it) return '';
+    return '<div class="next"><b>Next ' + esc(it.hm) + '</b>' + (it.kind === 'break' ? ' · ' + esc(it.title) : '') +
+      (it.kind !== 'break' ? '<div class="nt">' + esc(it.title) + '</div>' + (it.who ? esc(it.who) : '') : '') + '</div>';
+  }
+  function rowHTML(it, room) {
+    return '<div class="row' + (it.kind === 'break' ? ' brk' : '') + (it.hello ? ' hello' : '') + '"><div class="hm">' + esc(it.hm) + '</div><div><div class="rt">' + esc(it.title) + '</div>' +
+      (it.who ? '<div class="rw">' + esc(it.who) + (it.org ? ' · ' + esc(it.org) : '') + '</div>' : it.where ? '<div class="rw">' + esc(it.where) + '</div>' : '') +
+      '</div><div class="rr">' + (it.kind === 'break' ? '' : esc(room || '')) + '</div></div>';
+  }
+  // Everything in a day in time order, a break shared by the rooms once.
+  function merged(day) {
+    const seen = new Set(), all = [];
+    for (const r of day) for (const it of r.items) {
+      const k = it.start + '|' + it.title;
+      if (it.kind === 'break' && seen.has(k)) continue;
+      seen.add(k);
+      all.push(Object.assign({ room: r.room }, it));
+    }
+    return all.sort((a, b) => T(a.start) - T(b.start));
+  }
+
+  function render() {
+    const t = now();
+    if (!D.days.length) { $('main').innerHTML = '<h2>No schedule yet</h2>'; return; }
+    const di = pickDay(t), day = D.days[di], [ds, de] = bounds(day);
+    const multi = D.days.length > 1 ? 'Day ' + (di + 1) + ' · ' : '';
+    $('liveTag').className = 'live' + (t >= ds && t < de ? '' : ' off');
+    let html = '';
+    let foot = '';
+
+    if (t < ds) {
+      // Before the day: when it starts, and the first sessions.
+      const all = merged(day).filter((it) => !it.wrap).slice(0, 5);
+      html = '<h2>' + multi + 'Starts in</h2><div class="count">' + span(ds - t) + '</div><h2>First up</h2><div class="list glass">' +
+        all.map((it) => rowHTML(it, D.days[di].length > 1 ? it.room : '')).join('') + '</div>';
+    } else if (t >= de) {
+      html = '<div class="card glass hero"><div class="title">That\'s a wrap!</div><div class="where">Thanks for coming to ' + esc(D.event) + '</div></div>';
+    } else {
+      const rooms = day.map((r) => {
+        const items = r.items.filter((it) => !it.wrap);
+        return { room: r.room, cur: items.find((it) => T(it.start) <= t && t < T(it.end)), next: items.find((it) => T(it.start) > t) };
+      });
+      const curs = rooms.filter((r) => r.cur).map((r) => r.cur);
+      const allBreak = curs.length > 0 && curs.every((c) => c.kind === 'break' && c.title === curs[0].title);
+      if (allBreak) {
+        const b = curs[0];
+        html = '<div class="card glass hero' + (soon(b, t) ? ' soon' : '') + '"><span class="pill break">Break</span><div class="title">' + esc(b.title) + '</div>' +
+          (b.where ? '<div class="where">' + esc(b.where) + '</div>' : '') + progress(b, t, true) + '</div>';
+        const after = rooms.filter((r) => r.next && r.next.kind !== 'break');
+        if (after.length) {
+          html += '<h2>Right after</h2><div class="list glass">' + after.map((r) => rowHTML(r.next, after.length > 1 ? r.room : '')).join('') + '</div>';
+        }
+      } else {
+        // A card per room with something on now (a keynote alone gets the
+        // whole screen); a room with nothing on yet shows when its next
+        // session is, as a card if nothing is on anywhere, else in a list.
+        const on = rooms.filter((r) => r.cur);
+        const shown = on.length ? on : rooms.filter((r) => r.next);
+        const tsize = shown.length > 2 ? ';--tsize:clamp(18px,2vw,46px)' : shown.length === 1 ? ';--tsize:clamp(28px,4.4vw,96px)' : '';
+        html = '<div class="grid" style="--cols:' + Math.min(shown.length, 4) + tsize + '">' + shown.map((r) => {
+          const c = r.cur;
+          if (!c) {
+            return '<div class="card glass idle"><div class="room">' + esc(r.room) + '</div><span class="pill break">Next at ' + esc(r.next.hm) + '</span>' +
+              '<div class="title">' + esc(r.next.title) + '</div>' + who(r.next) + '<div class="spacer"></div><div class="left"><b>in ' + span(T(r.next.start) - t) + '</b></div></div>';
+          }
+          return '<div class="card glass' + (soon(c, t) ? ' soon' : '') + '"><div class="room">' + esc(r.room) + '</div><span class="pill ' + c.kind + '">' + KIND[c.kind] + '</span>' +
+            '<div class="title">' + esc(c.title) + '</div>' + (c.kind === 'break' && c.where ? '<div class="who">' + esc(c.where) + '</div>' : who(c)) +
+            progress(c, t) + nextLine(r.next) + '</div>';
+        }).join('') + '</div>';
+        const later = on.length ? rooms.filter((r) => !r.cur && r.next && r.next.kind !== 'break' && T(r.next.start) - t < 60 * 60000) : [];
+        if (later.length) html += '<h2>Coming up in the other rooms</h2><div class="list glass">' + later.map((r) => rowHTML(r.next, r.room)).join('') + '</div>';
+      }
+      // The next break everyone shares, for the footer.
+      const nb = merged(day).find((it) => it.kind === 'break' && !it.wrap && T(it.start) > t);
+      if (nb) foot = '<span>Next break: <b>' + esc(nb.title) + '</b> at <b>' + esc(nb.hm) + '</b> (in ' + span(T(nb.start) - t) + ')</span>';
+      const wrap = merged(day).find((it) => it.wrap);
+      if (wrap) foot += '<span>Wrap up at <b>' + esc(wrap.hm) + '</b></span>';
+    }
+    if (shift) foot += '<span class="try">Trying it at ' + hm(t) + ' (?at=)</span>';
+    $('main').innerHTML = html;
+    $('foot').innerHTML = foot;
+  }
+  function clock() { $('clock').textContent = hm(now()); }
+
+  // A schedule change deployed during the day: picked up without a reload
+  // (a reload would leave full screen).
+  async function refresh() {
+    try {
+      const r = await fetch(location.pathname, { cache: 'no-store' });
+      const m = (await r.text()).match(/<script id="live-data" type="application\/json">([\s\S]*?)<\/script>/);
+      if (m) { D = JSON.parse(m[1]); render(); }
+    } catch (e) {}
+  }
+
+  $('fs').addEventListener('click', () => {
+    const d = document, el = d.documentElement;
+    if (d.fullscreenElement) d.exitFullscreen();
+    else (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'f' || e.key === 'F') $('fs').click(); });
+  render();
+  clock();
+  setInterval(clock, 1000);
+  setInterval(render, 5000);
+  setInterval(refresh, 5 * 60000);
+})();
+</script>
+<script>/* rewrite_assets.py: reload when a newer build is out */(function(){var m=document.querySelector('meta[name="build"]');if(!m||!window.fetch)return;var mine=m.getAttribute('content'),busy=0,bar=null;function engaged(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;var f=document.querySelectorAll('input,textarea');for(var i=0;i<f.length;i++){var e=f[i];if(/^(checkbox|radio)$/.test(e.type)?e.checked!==e.defaultChecked:(e.type!=='hidden'&&e.value!==e.defaultValue))return true}return !!document.querySelector('.modal.show')}function offer(){if(bar||!document.body)return;bar=document.createElement('div');bar.setAttribute('role','status');bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2000;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#111;color:#fff;padding:10px 12px 10px 18px;border-radius:999px;font:600 14px/1.3 Montserrat,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)';var t=document.createElement('span');t.textContent='This page was just updated (schedule, speakers or sponsors)';bar.appendChild(t);var b=document.createElement('button');b.type='button';b.textContent='Refresh';b.style.cssText='border:0;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;background:#fff;color:#111';b.onclick=function(){location.reload()};bar.appendChild(b);document.body.appendChild(bar)}function check(auto){if(busy||document.visibilityState==='hidden')return;busy=1;fetch('/build.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!j.build||j.build===mine)return;var again=false;try{again=sessionStorage.getItem('fresh-reload')===j.build;sessionStorage.setItem('fresh-reload',j.build)}catch(e){}if(auto&&!again&&!engaged())location.reload();else offer()})['catch'](function(){busy=0})}check(true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')check(true)});addEventListener('pageshow',function(e){if(e.persisted)check(true)});setInterval(function(){check(false)},300000)})()</script>
+</body>
+</html>

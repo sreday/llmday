@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Hello Hamburg - LLMday Hamburg 2026 Q4</title>
+	<!-- link previews: _build/og_images.py -->
+	<meta property="og:title" content="Hello Hamburg - LLMday Hamburg 2026 Q4">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://llmday.com/2026-hamburg-q4/hello/">
+	<meta property="og:site_name" content="LLMday">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image" content="https://llmday.com/og/2c9400e60b99729e.jpg">
+	<meta property="og:image:secure_url" content="https://llmday.com/og/2c9400e60b99729e.jpg">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="600">
+	<meta property="og:image:alt" content="Hello Hamburg - LLMday Hamburg 2026 Q4">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@llmday_com">
+	<meta name="twitter:creator" content="@llmday_com">
+	<meta name="twitter:title" content="Hello Hamburg - LLMday Hamburg 2026 Q4">
+	<meta name="twitter:image" content="https://llmday.com/og/2c9400e60b99729e.jpg">
+	<meta name="twitter:image:alt" content="Hello Hamburg - LLMday Hamburg 2026 Q4">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png?v=67cb461a46"><meta name="build" content="hello-deck">
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=ac4f21e544">
+  <style>
+    @font-face { font-family: 'Oswald'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(img/oswald-latin-0243e05f3f.woff2?v=85df1eb074) format('woff2');
+                 unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: 'Oswald'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(img/oswald-latin-ext-bd3eb11027.woff2?v=ced1084242) format('woff2');
+                 unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+    :root {
+      --bg: #06140e; --bg2: #0e3322; --deep: #020c09;
+      --accent: #3fcf8e; --glow: #b9ffd9;
+      --k: 1;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+    body { font-family: 'Oswald', 'Arial Narrow', sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+    .stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform: translate(-50%, -50%) scale(var(--k));
+             transform-origin: center; overflow: hidden; background: var(--deep); }
+    .slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .45s ease, visibility 0s linear .45s;
+             background: linear-gradient(135deg, var(--bg) 0%, var(--bg2) 100%); display: flex; flex-direction: column;
+             align-items: center; justify-content: center; }
+    .slide.on { opacity: 1; visibility: visible; transition: opacity .45s ease; }
+    .slide.dark { background: var(--deep); }
+    .slide .city-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .slide .city-bg + .veil { position: absolute; inset: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 35%, transparent) 0%,
+             color-mix(in srgb, var(--bg) 55%, transparent) 100%); }
+    .slide > * { position: relative; }
+    .slide > .city-bg, .slide > .veil { position: absolute; }
+
+    .glow { font-family: 'Montserrat', sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; color: #fff;
+            text-shadow: 0 0 6px rgba(255,255,255,.85), 0 0 22px var(--glow), 0 0 48px var(--accent); line-height: 1.1; margin: 0; }
+    .h1 { font-size: 92px; }
+    .qr { display: block; width: 100%; height: auto; }
+    .qr-box { background: #fff; padding: 10px; border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+    .ico { width: 84px; height: 84px; display: block; }
+    .cap { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 40px; text-align: center; color: #fff;
+           text-shadow: 0 0 14px var(--glow); margin-top: 14px; }
+    img.logo { display: block; object-fit: contain; }
+
+    /* 1 - hello */
+    .s-hello .logo { position: absolute; left: 70px; top: 50px; width: 330px; height: 330px; }
+    .s-hello .main-qr { position: absolute; right: 70px; top: 50px; width: 340px; }
+    .s-hello .main-qr .cap { font-size: 34px; }
+    .s-hello .socials { position: absolute; left: 70px; bottom: 60px; display: flex; gap: 40px; }
+    .s-hello .socials > div { width: 190px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .s-hello .center { position: absolute; left: 450px; right: 450px; top: 40px; display: flex; flex-direction: column; align-items: center; }
+    .s-hello .mascot { height: 320px; width: auto; filter: drop-shadow(0 12px 30px rgba(0,0,0,.35)); }
+    .s-hello .hello { font-size: 120px; margin-top: 20px; text-align: center; white-space: nowrap; }
+    .s-hello .hello span { display: block; }
+    .s-hello .cap { font-family: 'Roboto', sans-serif; }
+    .s-hello .when { position: absolute; right: 70px; bottom: 64px; text-align: right; font-family: 'Oswald', sans-serif; font-size: 40px;
+                     font-weight: 400; letter-spacing: .04em; line-height: 1.15; text-shadow: 0 2px 14px rgba(0,0,0,.45); }
+    .s-hello .when b { display: block; font-weight: 600; font-size: 64px; letter-spacing: .03em; }
+
+    /* 2-6 - the heading on one line, at the same size and height on every slide; the content centred in the space below it */
+    .s-team, .s-share, .s-partners, .s-family { justify-content: center; padding: 250px 0 40px; }
+    .slide > h2.h1 { position: absolute; left: 0; right: 0; top: 110px; text-align: center; white-space: nowrap; }
+
+    /* 2 - team */
+    .team-row { display: flex; justify-content: center; gap: 90px; }
+    .team-row + .team-row { margin-top: 56px; gap: 70px; }
+    .person { display: flex; flex-direction: column; align-items: center; width: 270px; }
+    .person img { width: 250px; height: 250px; border-radius: 50%; object-fit: cover; border: 6px solid #fff;
+                  box-shadow: 0 0 0 4px var(--accent), 0 14px 40px rgba(0,0,0,.35); }
+    .person span { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 40px; letter-spacing: .03em; text-transform: uppercase;
+                   margin-top: 24px; text-shadow: 0 0 14px var(--glow); white-space: nowrap; }
+
+    /* 2b - every brand's ambassadors: positions + sizes from hello.py (_amb_layout), one cluster per country; the raw
+       headshots (round PNGs), nothing added (Marek 2026-10-31) */
+    .s-amb .amb { position: absolute; margin: 0; object-fit: contain; transform: translate(-50%, -50%); }
+    /* the Reliaburger slide's paper (hello.yaml light.paper) with a black heading glowing in the brand colour (Marek 2026-11-01) */
+    .s-amb { background: #fafbf9; }
+    .s-amb > h2.glow { color: #111; text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 28px var(--accent), 0 0 60px var(--accent); }
+
+    /* 3 - share the love */
+    .share { display: flex; gap: 220px; }
+    .share > div { display: flex; flex-direction: column; align-items: center; width: 440px; }
+    .share .qr-box { width: 440px; }
+    .share .ico { width: 120px; height: 120px; margin-top: 26px; }
+
+    /* 4 - partners */
+    /* a pill as wide as its logos (wraps into rows past ~6) */
+    .partners { background: #fff; border-radius: 170px; padding: 50px 110px; width: fit-content; max-width: 1720px; min-height: 0;
+                display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 50px 80px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+    .partners { gap: 30px 40px; }
+    .partners img { width: 240px; height: 240px; object-fit: contain; }   /* the sponsor files are padded squares: shown whole */
+    .partners.many img { width: 175px; height: 175px; }
+    .s-partners .city-bg { filter: brightness(.8); }   /* the venue photo 20% darker under the veil */
+    .s-partners .city-bg + .veil { background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 55%, transparent) 0%,
+             color-mix(in srgb, var(--bg) 75%, transparent) 100%); }
+
+    /* 5 - other brands */
+    .family { display: flex; gap: 110px; align-items: flex-end; }
+    .family .it { display: flex; flex-direction: column; align-items: center; width: 400px; }
+    .family .logo { width: 330px; height: 330px; margin-bottom: 40px; }
+    .family .qr-box { width: 360px; }
+    .family.four { gap: 60px; }
+    .family.four .it { width: 380px; }
+    .family.four .logo { width: 280px; height: 280px; }
+    .family.four .qr-box { width: 320px; }
+    .family.five { gap: 34px; }
+    .family.five .it { width: 330px; }
+    .family.five .logo { width: 240px; height: 240px; }
+    .family.five .qr-box { width: 280px; }
+    /* Other brands + Call for papers: the big glowing heading over each group (OTHER BRANDS over the brands, CALL FOR
+       PAPERS over cfp.ninja, on two lines to fit its column), a bracket under it */
+    .family .grp { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; }
+    .family .grp-items { display: flex; gap: 110px; align-items: flex-end; justify-content: center; }
+    .family.four .grp-items { gap: 60px; }
+    .family.five .grp-items { gap: 34px; }
+    .family .grp-lbl { position: relative; text-align: center; font-size: 80px; padding-bottom: 26px; margin: 0 20px 40px; white-space: nowrap;
+                       border-bottom: 3px solid color-mix(in srgb, var(--glow) 70%, transparent); }
+    .family .grp-lbl::before, .family .grp-lbl::after { content: ''; position: absolute; bottom: -3px; width: 3px; height: 18px;
+                       background: color-mix(in srgb, var(--glow) 70%, transparent); }
+    .family .grp-lbl::before { left: 0; } .family .grp-lbl::after { right: 0; }
+    .s-family { padding-top: 40px; }                         /* no slide heading: the group labels are the headings */
+
+
+    /* 7 - spotlight: an open-source project's own site hero on a slide (Reliaburger: reliaburger.com's paper, ink and rust,
+       its system-ui headline + monospace wordmark and eyebrow, no web fonts). The eyebrow (version) and headline are read
+       from the site at build time and again in the page (data-pitch, below), so a release shows up without a rebuild. */
+    .s-spot { background: var(--paper); color: var(--ink); align-items: stretch; justify-content: center; padding: 0 0 0 110px; }
+    .spot { display: grid; grid-template-columns: 1090px 1fr; align-items: center; height: 100%; }
+    .spot-main { display: flex; flex-direction: column; }
+    .spot-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 96px; }
+    .spot-word { display: inline-flex; align-items: center; gap: 44px; font: 700 72px var(--mono); letter-spacing: -.06em; }
+    .spot-word .mark { display: inline-grid; place-items: center; width: 132px; height: 132px; background: var(--ink); color: var(--mark);
+                       border-radius: 12px; letter-spacing: -.08em; }
+    .spot-top .qr-box { width: 400px; flex: none; padding: 0; box-shadow: none; background: transparent; border-radius: 0; mix-blend-mode: multiply; }
+    .spot-main .eyebrow { font: 500 24px var(--mono); letter-spacing: .07em; color: var(--accent); margin-bottom: 44px; }
+    .spot-main .pitch { font: 650 100px/1.12 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                        letter-spacing: -.055em; margin: 0; }
+    .spot-main .pitch span { display: block; }
+    .spot-art { height: 100%; display: flex; align-items: center; justify-content: center; }
+    .spot-art video, .spot-art img { width: 100%; height: 960px; object-fit: contain; display: block; mix-blend-mode: multiply; }
+
+    /* tours - the sister brands' upcoming events */
+    .s-tour { background: radial-gradient(1200px 700px at 75% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+                          radial-gradient(900px 600px at 10% 100%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%), var(--deep); }
+    .s-tour .logo { position: absolute; left: 70px; top: 60px; width: 320px; height: 260px; object-position: left center; }
+    .s-tour .head { position: absolute; left: 400px; right: 70px; top: 80px; text-align: center; }
+    .s-tour .head .glow { font-size: 84px; }
+    .s-tour .map { position: absolute; background: var(--accent); opacity: .42; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+    .s-tour .arcs { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    .s-tour .arcs path { fill: none; stroke: var(--glow); stroke-width: 3.5; filter: drop-shadow(0 0 8px var(--accent)); opacity: .9; }
+    .s-tour .arcs line { stroke: rgba(255,255,255,.45); stroke-width: 2; }
+    .s-tour .dot { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: #fff;
+                   box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 50%, transparent), 0 0 28px 8px var(--accent); }
+    .s-tour .dot.tbc { background: #a6a6ae; box-shadow: 0 0 0 6px rgba(166,166,174,.25); }
+    /* the order of the tour on each confirmed city's dot: drawn after every dot, so a neighbour's glow never veils it */
+    .s-tour .num { position: absolute; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%; background: #fff;
+                   display: grid; place-items: center; font: 600 18px/1 'Oswald', sans-serif; color: var(--deep); }
+    .s-tour .lbl { position: absolute; line-height: 1.05; text-shadow: 0 2px 10px rgba(0,0,0,.85); }
+    .s-tour .lbl.left { text-align: right; }
+    .s-tour .lbl.mid { text-align: center; }
+    .s-tour .lbl b { display: block; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 44px; text-transform: uppercase; white-space: nowrap; }
+    .s-tour .lbl em { display: block; font-style: normal; font-weight: 600; font-size: 32px; color: var(--accent);
+                      text-shadow: 0 0 12px var(--accent), 0 2px 10px rgba(0,0,0,.85); white-space: nowrap; }
+    .s-tour .lbl .tbc { color: #a6a6ae; text-shadow: 0 2px 10px rgba(0,0,0,.85); }
+    .s-tour .mascot { position: absolute; right: 40px; bottom: 20px; height: 429px; }
+    .s-tour .home-qr { position: absolute; left: 70px; bottom: 60px; width: 247px; }
+
+    /* Let's chat: the site's lead form (home/_templates/_lead_form_home.html, same sizes and colours) beside the heading and
+       a QR to <home>/#sponsor, filled in by film characters one after another (script at the bottom) */
+    .s-chat { flex-direction: row; justify-content: center; align-items: center; gap: 130px; }
+    .chat-side { display: flex; flex-direction: column; align-items: center; gap: 46px; }
+    .chat-side .glow { font-size: 150px; text-align: center; }
+    .chat-side .qr-box { width: 300px; }
+    .chat-side .cap { margin-top: -26px; font-size: 36px; letter-spacing: .08em; text-transform: uppercase; }
+    .lf { --la: #333; width: 700px; flex: none; background: #fff; color: #111; border-radius: 16px; padding: 36px 40px; text-align: left;
+          font: 16px/1.5 'Roboto', sans-serif; transform: rotate(2deg) scale(1.1);
+          box-shadow: 0 0 0 10px rgba(255,255,255,.12), 0 30px 80px rgba(0,0,0,.55); }
+    .lf .lf-body { transition: opacity .35s ease; }
+    .lf.wipe .lf-body { opacity: 0; }
+    .lf-title { font: 700 17.6px 'Montserrat', sans-serif; margin-bottom: 2px; }
+    .lf-sub { font-size: 14.4px; color: #555; margin-bottom: 22px; }
+    .lf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; margin-bottom: 20px; }
+    .lf-wide { grid-column: 1 / -1; }
+    .lf-lbl { display: block; font-size: 12.8px; font-weight: 600; color: #333; margin-bottom: 5px; letter-spacing: .02em; }
+    .lf-in { border: 1px solid #ddd; border-radius: 10px; padding: 11px 14px; height: 48px; font-size: 16px; color: #111; white-space: nowrap;
+             overflow: hidden; transition: border-color .2s, box-shadow .2s; }
+    .lf-in.on { border-color: var(--la); box-shadow: 0 0 0 3px color-mix(in srgb, var(--la) 15%, transparent); }
+    .lf-in.on b::after { content: ''; display: inline-block; width: 2px; height: 1.15em; margin-left: 1px; vertical-align: -.2em; background: #111;
+                         animation: lf-caret 1s steps(1) infinite; }
+    .lf-in b { font-weight: 400; }
+    @keyframes lf-caret { 50% { opacity: 0; } }
+    .lf-grp { margin-bottom: 18px; }
+    .lf-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .lf-chip { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid #ddd; background: #f0f0f0; color: #555;
+               font-size: 14.4px; font-weight: 600; line-height: 1.5; transition: background .15s, color .15s, border-color .15s, transform .15s; }
+    .lf-chip.sel { background: var(--c, var(--la)); border-color: var(--c, var(--la)); color: #fff; }
+    .lf-chip.tap, .lf-box.tap, .lf-send.tap { transform: scale(.94); }
+    .lf-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 14.4px; color: #333; margin: 6px 0 24px; }
+    .lf-box { width: 18px; height: 18px; margin-top: 2px; flex: none; border: 2px solid #bbb; border-radius: 4px; transition: background .15s, transform .15s; }
+    .lf-box.sel { border-color: var(--la); background: var(--la) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M2 6.5l2.5 2.5L10 3.5'/%3E%3C/svg%3E") center / 12px 12px no-repeat; }
+    .lf-actions { display: flex; align-items: center; gap: 14px; }
+    .lf-send { min-width: 140px; padding: 12px 28px; border-radius: 8px; background: var(--la); color: #fff; text-align: center;
+               font: 700 20px 'Montserrat', sans-serif; transition: transform .15s; }
+    .lf-mailto { font-size: 14.4px; color: #888; }
+
+    /* last: QR + splash cards (2:1 images) */
+    .s-cards { flex-direction: row; justify-content: center; align-items: center; gap: 70px; padding: 0 60px; }
+    .cards-side { display: flex; flex-direction: column; align-items: center; gap: 50px; flex: none; }
+    .cards-side .logo { width: 260px; height: 260px; }
+    .cards-side .qr-box { width: 300px; }
+    /* the cards fill the ~1430 x 960 px right of the QR: two columns (5 = 2 + 2 + 1, 3 = 2 + 1, centred), 2 stacked, 1 big */
+    .splash { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 44px 40px; flex: none; width: 1430px; }
+    .splash .card { flex: none; width: 695px; }
+    .splash.n5 .card { width: 584px; }
+    .splash.n2 .card { width: 900px; }
+    .splash.n1 .card { width: 1300px; }
+    .splash .card { border-radius: 18px; overflow: hidden; aspect-ratio: 2 / 1; box-shadow: 0 18px 50px rgba(0,0,0,.55); }
+    .splash .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .splash .card.here { outline: 6px solid #fff; outline-offset: -6px; }
+
+    /* controls */
+    .ui { position: fixed; z-index: 10; transition: opacity .3s; font-family: system-ui, -apple-system, sans-serif; }
+    .idle .ui { opacity: 0; pointer-events: none; }
+    .idle { cursor: none; }
+    #fs { top: 16px; right: 16px; border: 0; border-radius: 999px; padding: 12px 22px; font-size: 16px; font-weight: 700; cursor: pointer;
+          background: #fff; color: #111; box-shadow: 0 6px 24px rgba(0,0,0,.4); display: flex; gap: 10px; align-items: center; }
+    #fs svg { width: 18px; height: 18px; }
+    #bar { left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,.6);
+           border-radius: 999px; padding: 6px; color: #fff; font-size: 14px; backdrop-filter: blur(6px); }
+    #bar button { border: 0; background: transparent; color: #fff; font-size: 20px; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; }
+    #bar button:hover { background: rgba(255,255,255,.15); }
+    #bar span { min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
+    #bar #load { min-width: 0; padding: 0 12px 0 4px; font-size: 13px; font-weight: 700; }
+    #load.busy { color: #ffd479; } #load.ok { color: #7ee2a8; } #load.bad { color: #ff8a8a; }
+    .idle #bar.loading { opacity: 1; }   /* stays up until every picture is in, so you know when the wifi can drop */
+    :fullscreen #fs { display: none; }
+  </style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+  
+  <section class="slide s-hello"><img class="city-bg" src="img/city-e57aafed2d.webp?v=55eb25c800" alt="" loading="eager" fetchpriority="high"><div class="veil"></div>
+    <img class="logo" src="img/llmday-535c0f4817.webp?v=da1cede95b" alt="LLMday" loading="eager" fetchpriority="high">
+    <div class="main-qr"><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.llmday.com/2026-hamburg-q4/"><rect width="33" height="33" fill="#fff"/><path d="M2 2h7v1h-7zM10 2h4v1h-4zM16 2h1v1h-1zM18 2h4v1h-4zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM13 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM13 4h4v1h-4zM20 4h3v1h-3zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM13 5h3v1h-3zM19 5h3v1h-3zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM11 6h2v1h-2zM17 6h1v1h-1zM19 6h3v1h-3zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM14 7h3v1h-3zM19 7h1v1h-1zM21 7h2v1h-2zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM16 9h4v1h-4zM21 9h1v1h-1zM2 10h1v1h-1zM4 10h2v1h-2zM7 10h3v1h-3zM11 10h3v1h-3zM18 10h2v1h-2zM24 10h1v1h-1zM27 10h1v1h-1zM29 10h2v1h-2zM4 11h4v1h-4zM9 11h2v1h-2zM14 11h2v1h-2zM18 11h1v1h-1zM21 11h6v1h-6zM30 11h1v1h-1zM4 12h1v1h-1zM8 12h2v1h-2zM15 12h1v1h-1zM19 12h1v1h-1zM23 12h4v1h-4zM28 12h2v1h-2zM3 13h1v1h-1zM7 13h1v1h-1zM11 13h1v1h-1zM14 13h5v1h-5zM24 13h3v1h-3zM30 13h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM7 14h2v1h-2zM11 14h3v1h-3zM17 14h4v1h-4zM27 14h2v1h-2zM3 15h2v1h-2zM7 15h1v1h-1zM10 15h1v1h-1zM15 15h7v1h-7zM24 15h2v1h-2zM28 15h3v1h-3zM3 16h4v1h-4zM8 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM16 16h1v1h-1zM19 16h1v1h-1zM21 16h1v1h-1zM23 16h1v1h-1zM25 16h2v1h-2zM28 16h3v1h-3zM6 17h2v1h-2zM9 17h1v1h-1zM12 17h2v1h-2zM15 17h1v1h-1zM17 17h2v1h-2zM20 17h4v1h-4zM25 17h2v1h-2zM29 17h1v1h-1zM2 18h3v1h-3zM8 18h1v1h-1zM10 18h4v1h-4zM18 18h1v1h-1zM21 18h3v1h-3zM26 18h2v1h-2zM29 18h1v1h-1zM3 19h3v1h-3zM7 19h1v1h-1zM9 19h1v1h-1zM11 19h2v1h-2zM15 19h1v1h-1zM17 19h1v1h-1zM20 19h1v1h-1zM25 19h1v1h-1zM27 19h3v1h-3zM2 20h1v1h-1zM8 20h4v1h-4zM13 20h2v1h-2zM17 20h1v1h-1zM19 20h1v1h-1zM22 20h1v1h-1zM24 20h2v1h-2zM28 20h1v1h-1zM4 21h2v1h-2zM9 21h1v1h-1zM11 21h1v1h-1zM14 21h1v1h-1zM17 21h1v1h-1zM19 21h1v1h-1zM22 21h2v1h-2zM28 21h1v1h-1zM3 22h1v1h-1zM5 22h2v1h-2zM8 22h3v1h-3zM12 22h4v1h-4zM18 22h2v1h-2zM22 22h7v1h-7zM10 23h1v1h-1zM12 23h1v1h-1zM14 23h3v1h-3zM18 23h5v1h-5zM26 23h5v1h-5zM2 24h7v1h-7zM10 24h2v1h-2zM15 24h1v1h-1zM18 24h5v1h-5zM24 24h1v1h-1zM26 24h2v1h-2zM29 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM10 25h4v1h-4zM20 25h1v1h-1zM22 25h1v1h-1zM26 25h2v1h-2zM29 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM16 26h1v1h-1zM19 26h1v1h-1zM22 26h5v1h-5zM28 26h1v1h-1zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM10 27h2v1h-2zM13 27h1v1h-1zM15 27h4v1h-4zM21 27h3v1h-3zM26 27h2v1h-2zM30 27h1v1h-1zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM10 28h1v1h-1zM12 28h5v1h-5zM21 28h1v1h-1zM25 28h1v1h-1zM28 28h1v1h-1zM30 28h1v1h-1zM2 29h1v1h-1zM8 29h1v1h-1zM11 29h3v1h-3zM15 29h1v1h-1zM17 29h1v1h-1zM20 29h1v1h-1zM22 29h1v1h-1zM25 29h1v1h-1zM27 29h1v1h-1zM29 29h1v1h-1zM2 30h7v1h-7zM10 30h1v1h-1zM13 30h1v1h-1zM20 30h3v1h-3zM27 30h1v1h-1zM29 30h1v1h-1z" fill="#000"/></svg></div><div class="cap">Schedule &amp; talks</div></div>
+    <div class="center">
+      <img class="mascot" src="img/hello-llmday-6e5dca5c3e.webp?v=eeaa0d896f" alt="" loading="eager" fetchpriority="high"><h1 class="glow hello">Hello<span style="font-size: 120px">Hamburg</span></h1>
+    </div>
+    <div class="socials">
+      <div><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges" role="img" aria-label="QR code: https://chat.whatsapp.com/KS1ce0jAHmNGAiOAoZG6zo"><rect width="37" height="37" fill="#fff"/><path d="M2 2h7v1h-7zM11 2h5v1h-5zM18 2h4v1h-4zM23 2h3v1h-3zM28 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM12 3h8v1h-8zM24 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM34 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM15 4h1v1h-1zM17 4h1v1h-1zM19 4h2v1h-2zM23 4h3v1h-3zM28 4h1v1h-1zM30 4h3v1h-3zM34 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM16 5h3v1h-3zM22 5h1v1h-1zM25 5h2v1h-2zM28 5h1v1h-1zM30 5h3v1h-3zM34 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h4v1h-4zM17 6h1v1h-1zM19 6h2v1h-2zM23 6h2v1h-2zM28 6h1v1h-1zM30 6h3v1h-3zM34 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h2v1h-2zM14 7h2v1h-2zM17 7h3v1h-3zM22 7h1v1h-1zM24 7h1v1h-1zM26 7h1v1h-1zM28 7h1v1h-1zM34 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h7v1h-7zM10 9h2v1h-2zM13 9h2v1h-2zM16 9h2v1h-2zM20 9h1v1h-1zM23 9h4v1h-4zM2 10h1v1h-1zM4 10h5v1h-5zM13 10h1v1h-1zM15 10h5v1h-5zM22 10h1v1h-1zM24 10h3v1h-3zM28 10h5v1h-5zM2 11h1v1h-1zM4 11h1v1h-1zM6 11h1v1h-1zM9 11h3v1h-3zM13 11h1v1h-1zM20 11h4v1h-4zM25 11h2v1h-2zM28 11h2v1h-2zM31 11h2v1h-2zM4 12h1v1h-1zM8 12h2v1h-2zM12 12h1v1h-1zM14 12h1v1h-1zM17 12h2v1h-2zM20 12h1v1h-1zM24 12h1v1h-1zM26 12h1v1h-1zM30 12h1v1h-1zM32 12h2v1h-2zM2 13h3v1h-3zM6 13h1v1h-1zM12 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM23 13h1v1h-1zM27 13h1v1h-1zM30 13h3v1h-3zM34 13h1v1h-1zM5 14h2v1h-2zM8 14h2v1h-2zM11 14h1v1h-1zM17 14h1v1h-1zM20 14h1v1h-1zM24 14h1v1h-1zM27 14h1v1h-1zM29 14h1v1h-1zM31 14h1v1h-1zM34 14h1v1h-1zM2 15h3v1h-3zM10 15h3v1h-3zM15 15h4v1h-4zM22 15h1v1h-1zM24 15h1v1h-1zM28 15h1v1h-1zM32 15h3v1h-3zM4 16h2v1h-2zM8 16h1v1h-1zM11 16h3v1h-3zM15 16h2v1h-2zM19 16h3v1h-3zM23 16h1v1h-1zM27 16h2v1h-2zM30 16h4v1h-4zM3 17h2v1h-2zM13 17h4v1h-4zM18 17h1v1h-1zM21 17h3v1h-3zM25 17h1v1h-1zM27 17h2v1h-2zM31 17h2v1h-2zM3 18h2v1h-2zM6 18h3v1h-3zM10 18h2v1h-2zM15 18h2v1h-2zM18 18h2v1h-2zM21 18h2v1h-2zM24 18h2v1h-2zM27 18h1v1h-1zM29 18h2v1h-2zM32 18h1v1h-1zM34 18h1v1h-1zM2 19h1v1h-1zM4 19h1v1h-1zM6 19h2v1h-2zM11 19h1v1h-1zM14 19h1v1h-1zM16 19h7v1h-7zM25 19h1v1h-1zM28 19h2v1h-2zM31 19h2v1h-2zM34 19h1v1h-1zM6 20h4v1h-4zM11 20h1v1h-1zM13 20h1v1h-1zM16 20h4v1h-4zM22 20h1v1h-1zM28 20h3v1h-3zM32 20h2v1h-2zM2 21h2v1h-2zM6 21h2v1h-2zM9 21h2v1h-2zM12 21h2v1h-2zM16 21h1v1h-1zM19 21h2v1h-2zM23 21h1v1h-1zM26 21h2v1h-2zM29 21h4v1h-4zM5 22h8v1h-8zM16 22h1v1h-1zM18 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM26 22h2v1h-2zM29 22h1v1h-1zM31 22h1v1h-1zM2 23h5v1h-5zM10 23h1v1h-1zM12 23h2v1h-2zM15 23h3v1h-3zM19 23h2v1h-2zM23 23h1v1h-1zM25 23h1v1h-1zM34 23h1v1h-1zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h4v1h-4zM17 24h3v1h-3zM22 24h2v1h-2zM29 24h2v1h-2zM32 24h2v1h-2zM2 25h1v1h-1zM4 25h4v1h-4zM9 25h3v1h-3zM13 25h1v1h-1zM16 25h2v1h-2zM23 25h2v1h-2zM26 25h3v1h-3zM30 25h3v1h-3zM2 26h1v1h-1zM5 26h1v1h-1zM8 26h3v1h-3zM14 26h2v1h-2zM17 26h1v1h-1zM19 26h1v1h-1zM24 26h1v1h-1zM26 26h5v1h-5zM10 27h1v1h-1zM12 27h1v1h-1zM14 27h5v1h-5zM20 27h3v1h-3zM24 27h1v1h-1zM26 27h1v1h-1zM30 27h1v1h-1zM32 27h3v1h-3zM2 28h7v1h-7zM11 28h1v1h-1zM13 28h1v1h-1zM15 28h4v1h-4zM20 28h1v1h-1zM22 28h1v1h-1zM24 28h3v1h-3zM28 28h1v1h-1zM30 28h1v1h-1zM32 28h1v1h-1zM2 29h1v1h-1zM8 29h1v1h-1zM10 29h1v1h-1zM12 29h1v1h-1zM14 29h3v1h-3zM18 29h1v1h-1zM21 29h1v1h-1zM23 29h4v1h-4zM30 29h4v1h-4zM2 30h1v1h-1zM4 30h3v1h-3zM8 30h1v1h-1zM10 30h1v1h-1zM12 30h1v1h-1zM15 30h1v1h-1zM20 30h1v1h-1zM23 30h1v1h-1zM26 30h6v1h-6zM33 30h1v1h-1zM2 31h1v1h-1zM4 31h3v1h-3zM8 31h1v1h-1zM10 31h1v1h-1zM12 31h1v1h-1zM14 31h6v1h-6zM22 31h2v1h-2zM26 31h2v1h-2zM30 31h2v1h-2zM33 31h2v1h-2zM2 32h1v1h-1zM4 32h3v1h-3zM8 32h1v1h-1zM10 32h1v1h-1zM12 32h2v1h-2zM16 32h1v1h-1zM21 32h1v1h-1zM23 32h2v1h-2zM28 32h2v1h-2zM31 32h2v1h-2zM2 33h1v1h-1zM8 33h1v1h-1zM11 33h1v1h-1zM13 33h2v1h-2zM16 33h1v1h-1zM18 33h1v1h-1zM21 33h3v1h-3zM26 33h3v1h-3zM30 33h3v1h-3zM2 34h7v1h-7zM10 34h1v1h-1zM14 34h1v1h-1zM16 34h1v1h-1zM19 34h4v1h-4zM24 34h6v1h-6zM32 34h2v1h-2z" fill="#000"/></svg></div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#25D366"/><path transform="translate(3.6 3.6) scale(.7)" fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
+      <div><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.linkedin.com/company/llmday/"><rect width="33" height="33" fill="#fff"/><path d="M2 2h7v1h-7zM11 2h2v1h-2zM18 2h5v1h-5zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM12 3h3v1h-3zM16 3h4v1h-4zM22 3h1v1h-1zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM14 4h1v1h-1zM17 4h2v1h-2zM21 4h1v1h-1zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h7v1h-7zM19 5h1v1h-1zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h2v1h-2zM14 6h1v1h-1zM18 6h5v1h-5zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h4v1h-4zM17 7h1v1h-1zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM10 9h1v1h-1zM12 9h2v1h-2zM16 9h3v1h-3zM21 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM11 10h6v1h-6zM19 10h3v1h-3zM24 10h5v1h-5zM3 11h1v1h-1zM5 11h2v1h-2zM11 11h1v1h-1zM14 11h3v1h-3zM18 11h4v1h-4zM23 11h4v1h-4zM30 11h1v1h-1zM4 12h1v1h-1zM6 12h3v1h-3zM10 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM24 12h1v1h-1zM2 13h1v1h-1zM4 13h2v1h-2zM9 13h2v1h-2zM16 13h3v1h-3zM21 13h3v1h-3zM25 13h1v1h-1zM27 13h1v1h-1zM29 13h1v1h-1zM2 14h1v1h-1zM4 14h6v1h-6zM11 14h1v1h-1zM15 14h1v1h-1zM19 14h1v1h-1zM21 14h1v1h-1zM27 14h2v1h-2zM2 15h3v1h-3zM7 15h1v1h-1zM10 15h3v1h-3zM14 15h2v1h-2zM18 15h1v1h-1zM20 15h5v1h-5zM26 15h1v1h-1zM30 15h1v1h-1zM5 16h6v1h-6zM13 16h1v1h-1zM15 16h6v1h-6zM22 16h4v1h-4zM27 16h2v1h-2zM2 17h3v1h-3zM10 17h1v1h-1zM13 17h2v1h-2zM16 17h1v1h-1zM18 17h1v1h-1zM25 17h2v1h-2zM29 17h1v1h-1zM6 18h7v1h-7zM19 18h1v1h-1zM21 18h1v1h-1zM25 18h1v1h-1zM27 18h2v1h-2zM2 19h3v1h-3zM10 19h6v1h-6zM19 19h8v1h-8zM28 19h1v1h-1zM30 19h1v1h-1zM2 20h1v1h-1zM5 20h4v1h-4zM12 20h8v1h-8zM24 20h2v1h-2zM28 20h1v1h-1zM2 21h1v1h-1zM7 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM14 21h2v1h-2zM17 21h1v1h-1zM22 21h5v1h-5zM29 21h1v1h-1zM2 22h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM8 22h2v1h-2zM13 22h2v1h-2zM16 22h1v1h-1zM18 22h2v1h-2zM22 22h5v1h-5zM28 22h3v1h-3zM10 23h5v1h-5zM18 23h3v1h-3zM22 23h1v1h-1zM26 23h5v1h-5zM2 24h7v1h-7zM12 24h1v1h-1zM17 24h1v1h-1zM21 24h2v1h-2zM24 24h1v1h-1zM26 24h3v1h-3zM2 25h1v1h-1zM8 25h1v1h-1zM10 25h2v1h-2zM14 25h1v1h-1zM16 25h1v1h-1zM18 25h1v1h-1zM21 25h2v1h-2zM26 25h1v1h-1zM29 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM10 26h1v1h-1zM12 26h3v1h-3zM19 26h1v1h-1zM22 26h5v1h-5zM28 26h3v1h-3zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM10 27h2v1h-2zM13 27h1v1h-1zM15 27h2v1h-2zM18 27h1v1h-1zM21 27h1v1h-1zM25 27h1v1h-1zM27 27h4v1h-4zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM10 28h1v1h-1zM13 28h1v1h-1zM15 28h4v1h-4zM20 28h2v1h-2zM23 28h7v1h-7zM2 29h1v1h-1zM8 29h1v1h-1zM11 29h5v1h-5zM17 29h1v1h-1zM20 29h1v1h-1zM22 29h4v1h-4zM27 29h1v1h-1zM29 29h1v1h-1zM2 30h7v1h-7zM10 30h4v1h-4zM17 30h1v1h-1zM19 30h1v1h-1zM21 30h1v1h-1zM24 30h5v1h-5z" fill="#000"/></svg></div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path fill="#fff" d="M5.3 9.4h2.8V19H5.3zM6.7 5a1.6 1.6 0 110 3.2 1.6 1.6 0 010-3.2zM9.9 9.4h2.7v1.3c.4-.7 1.3-1.5 2.7-1.5 2.9 0 3.4 1.9 3.4 4.3V19h-2.8v-4.9c0-1.2 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5v5H9.9z"/></svg></div>
+    </div>
+    <div class="when"><b>NOV 18, 2026</b>LLMday Hamburg</div>
+  </section>
+
+  
+  
+  <section class="slide s-team">
+    <h2 class="glow h1">Meet our team</h2>
+    <div class="team-row"><div class="person"><img src="img/mark-206c9104ad.webp?v=0c4be0a7b1" alt="Mark" loading="eager"><span>Mark</span></div><div class="person"><img src="img/miko-e8350d6279.webp?v=783398c3db" alt="Miko" loading="eager"><span>Miko</span></div></div>
+    <div class="team-row"><div class="person"><img src="img/aleksandra-e1124ed03c.webp?v=85bd84c9db" alt="Aleksandra" loading="eager"><span>Aleksandra</span></div><div class="person"><img src="img/anna-67a4438dca.webp?v=1a814c0019" alt="Anna" loading="eager"><span>Anna</span></div><div class="person"><img src="img/magda-c2d1f6247a.webp?v=9c8580837c" alt="Magda" loading="eager"><span>Magda</span></div><div class="person"><img src="img/petras-477cbec4f0.webp?v=89deedf80b" alt="Petras" loading="eager"><span>Petras</span></div><div class="person"><img src="img/emilia-15bdf3b61a.webp?v=363c4395a8" alt="Emilia" loading="eager"><span>Emilia</span></div></div>
+  </section>
+  
+
+  
+  
+  <section class="slide s-amb">
+    <h2 class="glow h1">Our ambassadors</h2>
+    <img class="amb" src="img/mansi-more-a8a0be5839.webp?v=e734f4be20" alt="Mansi More" loading="eager" style="left: 1062px; top: 679px; width: 124px; height: 124px;"><img class="amb" src="img/abby-wadhwa-d7fbf4f3ab.webp?v=a1d053f405" alt="Abby Wadhwa" loading="eager" style="left: 1041px; top: 473px; width: 117px; height: 117px;"><img class="amb" src="img/josh-lee-c49af9583b.webp?v=2404b26cf5" alt="Josh Lee" loading="eager" style="left: 790px; top: 570px; width: 109px; height: 109px;"><img class="amb" src="img/michael-levan-0fc7f6a06c.webp?v=32f93fce2b" alt="Michael Levan" loading="eager" style="left: 1288px; top: 648px; width: 101px; height: 101px;"><img class="amb" src="img/sonali-priya-007d7f119d.webp?v=6bf41d5988" alt="Sonali Priya" loading="eager" style="left: 947px; top: 679px; width: 109px; height: 109px;"><img class="amb" src="img/tim-spann-b21a553ef6.webp?v=b37eab2ff8" alt="Tim Spann" loading="eager" style="left: 1233px; top: 542px; width: 140px; height: 140px;"><img class="amb" src="img/alecia-cotterell-3a622a77ce.webp?v=12f4034dd1" alt="Alecia Cotterell" loading="eager" style="left: 886px; top: 802px; width: 132px; height: 132px;"><img class="amb" src="img/eiriel-de-roxas-b73fd73bc9.webp?v=94b837dd79" alt="Eiriel De Roxas" loading="eager" style="left: 1118px; top: 804px; width: 152px; height: 152px;"><img class="amb" src="img/lorenzo-bellucci-e0d45b75e2.webp?v=00fac5aef0" alt="Lorenzo Bellucci" loading="eager" style="left: 1085px; top: 933px; width: 117px; height: 117px;"><img class="amb" src="img/lucy-ernest-5f596ccc06.webp?v=a47fedada8" alt="Lucy Ernest" loading="eager" style="left: 759px; top: 792px; width: 124px; height: 124px;"><img class="amb" src="img/meletius-mgbeodichimma-igbokwe-c5a2237f97.webp?v=ea83a4e931" alt="Meletius Mgbeodichimma Igbokwe" loading="eager" style="left: 914px; top: 979px; width: 132px; height: 132px;"><img class="amb" src="img/russell-miles-5548aa7170.webp?v=0596d4691a" alt="Russell Miles" loading="eager" style="left: 997px; top: 770px; width: 101px; height: 101px;"><img class="amb" src="img/jacek-migdal-0239760bbb.webp?v=147cf8adca" alt="Jacek Migdal" loading="eager" style="left: 1847px; top: 551px; width: 117px; height: 117px;"><img class="amb" src="img/maciej-szymkowski-f08489d258.webp?v=bd67922350" alt="Maciej Szymkowski" loading="eager" style="left: 1647px; top: 484px; width: 132px; height: 132px;"><img class="amb" src="img/martyna-chrulska-02d8997a66.webp?v=8d5a524883" alt="Martyna Chrulska" loading="eager" style="left: 1588px; top: 624px; width: 124px; height: 124px;"><img class="amb" src="img/piotr-migdal-2e0c602fdd.webp?v=1b4f9da1ba" alt="Piotr Migdal" loading="eager" style="left: 1724px; top: 602px; width: 152px; height: 152px;"><img class="amb" src="img/geertjan-wielenga-135b8ed8e5.webp?v=b5a7b6b93d" alt="Geertjan Wielenga" loading="eager" style="left: 544px; top: 718px; width: 101px; height: 101px;"><img class="amb" src="img/maxim-salnikov-f0b5effd31.webp?v=83f2ba6700" alt="Maxim Salnikov" loading="eager" style="left: 177px; top: 817px; width: 117px; height: 117px;"><img class="amb" src="img/vanshika-gupta-e8796632a4.webp?v=f92e8332f0" alt="Vanshika Gupta" loading="eager" style="left: 1469px; top: 739px; width: 109px; height: 109px;"><img class="amb" src="img/71e7fd526399c537495370239bf67971-e62e7088ea.webp?v=1a91be6889" alt="Anquida Adams" loading="eager" style="left: 835px; top: 472px; width: 109px; height: 109px;"><img class="amb" src="img/ba97948f348e7ae7760368a8d01ed0cc-f721d1576e.webp?v=8c7f500427" alt="Kat Gaines" loading="eager" style="left: 1180px; top: 658px; width: 117px; height: 117px;"><img class="amb" src="img/3231ad7147d3c4a7f0b040ed505666cd-3e5a8228b0.webp?v=9e445cd408" alt="Matt Schillerstrom" loading="eager" style="left: 680px; top: 535px; width: 124px; height: 124px;"><img class="amb" src="img/9282ec106a2bffe26206bbd0d9b32e94-2350d8595c.webp?v=a2f3ca5c9c" alt="Maxwell Myers" loading="eager" style="left: 1108px; top: 568px; width: 117px; height: 117px;"><img class="amb" src="img/5706284ad46dca7c28888333fba41eba-2373b63184.webp?v=2eb5b90fc7" alt="Peter De Tender" loading="eager" style="left: 713px; top: 646px; width: 109px; height: 109px;"><img class="amb" src="img/993df2458769165691d6ae8e08f53650-147cb6a659.webp?v=4430a473cc" alt="Christopher Tineo" loading="eager" style="left: 997px; top: 583px; width: 109px; height: 109px;"><img class="amb" src="img/49fc589bb4898cb838f0c767470b7192-9331aeb03e.webp?v=54c773b8f0" alt="Leon Adato" loading="eager" style="left: 893px; top: 589px; width: 101px; height: 101px;"><img class="amb" src="img/174798f5630e9f40542875583bb32699-8faac3ce36.webp?v=bd10860cce" alt="Mandi Walls" loading="eager" style="left: 603px; top: 627px; width: 117px; height: 117px;"><img class="amb" src="img/623b29fd983a73b4f5bb315cc61e23f4-f863e966ec.webp?v=8525bedb38" alt="Patricia Lee" loading="eager" style="left: 936px; top: 499px; width: 101px; height: 101px;"><img class="amb" src="img/9945b8f79d45e574e5670a8904e6afa7-26a38e1cf2.webp?v=18ad3affd2" alt="Aaron Hunter" loading="eager" style="left: 1371px; top: 561px; width: 140px; height: 140px;"><img class="amb" src="img/22f850142d4e28d34713cb0edf3f784b-dd836c4cf6.webp?v=038e93659b" alt="Derrick Bozkurt" loading="eager" style="left: 827px; top: 684px; width: 132px; height: 132px;"><img class="amb" src="img/e58655cf41be5f5deae5e41fa9619c6b-0577f0098e.webp?v=25e2af844e" alt="Ben Pearce" loading="eager" style="left: 810px; top: 905px; width: 124px; height: 124px;"><img class="amb" src="img/ab5e45a9a227154325d51d1b947da2ce-9ab55e24ed.webp?v=118c9f6d0e" alt="Francisco Garau" loading="eager" style="left: 631px; top: 794px; width: 132px; height: 132px;"><img class="amb" src="img/3e091fc43175935605645097c77f4f77-5ea5e27041.webp?v=02a84aa000" alt="Kyle Forster" loading="eager" style="left: 506px; top: 832px; width: 132px; height: 132px;"><img class="amb" src="img/5e09da1222df02908dd66ce196462b1c-780ab393f7.webp?v=29b2499364" alt="Pawel Hajdan" loading="eager" style="left: 598px; top: 909px; width: 109px; height: 109px;"><img class="amb" src="img/ff73017d5bbf3bb087497155ac299640-f3c3db178f.webp?v=8ab281a3fa" alt="Rob Charlwood" loading="eager" style="left: 700px; top: 887px; width: 101px; height: 101px;"><img class="amb" src="img/969bebed4846be82bad1e8a1cfafad75-24f84ad54c.webp?v=7f1160c79d" alt="Ross Stretton" loading="eager" style="left: 984px; top: 877px; width: 117px; height: 117px;"><img class="amb" src="img/ee75750db7a0b4d54b51455cf9208ed0-1a67c00bb2.webp?v=21b94eabeb" alt="Heather Thacker" loading="eager" style="left: 77px; top: 632px; width: 124px; height: 124px;"><img class="amb" src="img/f507aaa8649950e6814e7e11284d04f2-2872e1d506.webp?v=7d58fa9e4a" alt="Daniel Afonso" loading="eager" style="left: 230px; top: 474px; width: 101px; height: 101px;"><img class="amb" src="img/1a032e1b7d10bfc821666b71e668a761-ed107d73f0.webp?v=216bc95509" alt="Fabio Sampaio" loading="eager" style="left: 457px; top: 477px; width: 124px; height: 124px;"><img class="amb" src="img/a1737d794f870d5f7fab0276e0b35493-bf059238ce.webp?v=2853ded88c" alt="Fabricio Monteiro" loading="eager" style="left: 338px; top: 488px; width: 117px; height: 117px;"><img class="amb" src="img/012a37c89e87c2da7de894e4c3ce6e6e-e6ed285941.webp?v=fa64def716" alt="Jake Page" loading="eager" style="left: 551px; top: 409px; width: 109px; height: 109px;"><img class="amb" src="img/0b409393dfd7b16d96961e4faee179c4-b99bb084dd.webp?v=8ddd351cb3" alt="Xenda Amici" loading="eager" style="left: 566px; top: 516px; width: 109px; height: 109px;"><img class="amb" src="img/19ba0aa570e18a6c50c979e35a13a199-1d76c9581d.webp?v=e5b061f391" alt="Piotr Zaniewski" loading="eager" style="left: 1473px; top: 631px; width: 109px; height: 109px;"><img class="amb" src="img/fddc54bcbff45c376d00ff2cf05c882b-91e2fd8c32.webp?v=68af372fb9" alt="Szymon Stawski" loading="eager" style="left: 1762px; top: 483px; width: 101px; height: 101px;"><img class="amb" src="img/2e9b42bfece9293fb11737bac484f00d-df1a313172.webp?v=9ce2c4b960" alt="Zbigniew Kaminski" loading="eager" style="left: 1515px; top: 515px; width: 140px; height: 140px;"><img class="amb" src="img/925b5de3b0a6d506f20e8fc42ebbccee-bb7ead9143.webp?v=7377d0dc42" alt="Bas van Alphen" loading="eager" style="left: 280px; top: 732px; width: 152px; height: 152px;"><img class="amb" src="img/172383784438f667409c6b96aaf5782c-166a066dfb.webp?v=4742f242b7" alt="Leo Visser" loading="eager" style="left: 210px; top: 598px; width: 152px; height: 152px;"><img class="amb" src="img/6b0e9b46669297b43d667de7fb2155e7-e922841d37.webp?v=ffbfd9eb9e" alt="Pete Nuwayser" loading="eager" style="left: 156px; top: 711px; width: 101px; height: 101px;"><img class="amb" src="img/961bbdd4198475a3238f4643d15374e7-534c2d54b5.webp?v=042def6cc7" alt="Samantha Burattini" loading="eager" style="left: 424px; top: 724px; width: 140px; height: 140px;"><img class="amb" src="img/dec6c7c2f0c4681583692412efe77961-e17006e1f3.webp?v=3fe7f0090d" alt="Stephan Mousset" loading="eager" style="left: 482px; top: 602px; width: 132px; height: 132px;"><img class="amb" src="img/d391c51bd1c46c1adee41dc33c3b3080-a7cad02668.webp?v=e3508faee2" alt="William Ravensbergen" loading="eager" style="left: 351px; top: 610px; width: 132px; height: 132px;"><img class="amb" src="img/372b56c086b8d39f5d0188d572a0c503-c0ca1ddfbe.webp?v=e862419799" alt="Bruno Paiuca" loading="eager" style="left: 1403px; top: 420px; width: 152px; height: 152px;"><img class="amb" src="img/6c24caefba4ea27cc736340f64b39194-7871b6a85e.webp?v=223da792e3" alt="Levi (Levinux) Leopoldino Alves" loading="eager" style="left: 1278px; top: 431px; width: 101px; height: 101px;"><img class="amb" src="img/64480ef01d24e15b8d652e086ee6280e-9592919cd4.webp?v=8a74b21061" alt="Marcos Novelli Harispe" loading="eager" style="left: 1244px; top: 324px; width: 124px; height: 124px;"><img class="amb" src="img/ebe02f08041270adcd79fdb52a808275-f2c06f8a58.webp?v=7968bceb3f" alt="Rod Anami" loading="eager" style="left: 1159px; top: 424px; width: 140px; height: 140px;"><img class="amb" src="img/54e0dabd67053fdfb861157cf7d1d726-d484da5cd2.webp?v=7a3d2f0e01" alt="Sharone Zitzman" loading="eager" style="left: 1199px; top: 971px; width: 124px; height: 124px;"><img class="amb" src="img/55f0ffa15df92e059036447ad0687637-fba63a95ae.webp?v=583767b865" alt="Balaji Venkatesan" loading="eager" style="left: 1323px; top: 911px; width: 152px; height: 152px;"><img class="amb" src="img/3a4f4a6f8caba85bcc2d19d48e497753-836b6e6cf6.webp?v=dec0fb125c" alt="Clarence Selestin" loading="eager" style="left: 1723px; top: 732px; width: 109px; height: 109px;"><img class="amb" src="img/19b7324531f4f0bdd09e2c00f217c29e-9256076a20.webp?v=7376021091" alt="Faizana Samreen" loading="eager" style="left: 1700px; top: 833px; width: 101px; height: 101px;"><img class="amb" src="img/dfeb62d434c7638359f18424c48f6504-16b248cd5d.webp?v=db49c32793" alt="Ganesh Padmanaban" loading="eager" style="left: 1371px; top: 704px; width: 101px; height: 101px;"><img class="amb" src="img/75221d01fdccdbc98c1cee592c26154b-95504bdc04.webp?v=dcfbcafe5d" alt="Jeevan Kumar Yerroju" loading="eager" style="left: 1492px; top: 861px; width: 140px; height: 140px;"><img class="amb" src="img/eb88b6961d120a4b2a4e9ab87b18cfa9-b2c62fcaf8.webp?v=e6948cedc0" alt="Neel Shah" loading="eager" style="left: 1387px; top: 803px; width: 101px; height: 101px;"><img class="amb" src="img/fd361707857ad95edcfa0bc85b63b73f-7319539beb.webp?v=a12f62a9c1" alt="Nishkarsh Raj" loading="eager" style="left: 1265px; top: 772px; width: 152px; height: 152px;"><img class="amb" src="img/2b3522e5e3f13cd8f9b9550de82b350f-086ac43786.webp?v=b76fa6f027" alt="Siva Bagavathi" loading="eager" style="left: 1801px; top: 807px; width: 109px; height: 109px;"><img class="amb" src="img/6a1a7f33145a62d2d968ccfa9dfef66c-5206fb92c1.webp?v=16d39d927c" alt="Subbarao Anaparthi" loading="eager" style="left: 1612px; top: 890px; width: 109px; height: 109px;"><img class="amb" src="img/96430a8f68d33846f6e3f268a0d7c4e4-af8aae6394.webp?v=dd6bdf3329" alt="Vinay Gattu" loading="eager" style="left: 1597px; top: 761px; width: 152px; height: 152px;"><img class="amb" src="img/73155dcd7e9fd262f53369fb02b82010-cc4a8fb333.webp?v=5f972932d7" alt="Benjamin Hofmann" loading="eager" style="left: 828px; top: 368px; width: 101px; height: 101px;"><img class="amb" src="img/f9c0bdff020bec3b99411989fa7ef3ee-d3a30b4a5f.webp?v=cea6f1d1c7" alt="Birol Yildiz" loading="eager" style="left: 730px; top: 422px; width: 124px; height: 124px;"><img class="amb" src="img/229327a0b87316a5ea76bca229cb3e0c-d5820f743f.webp?v=3962f5d632" alt="Poone Mokari" loading="eager" style="left: 958px; top: 393px; width: 117px; height: 117px;"><img class="amb" src="img/b6c001e452488fd58fdf591d02f8d85a-9c7ef79ebe.webp?v=7c85f8a342" alt="Dewan Ahmed" loading="eager" style="left: 351px; top: 893px; width: 202px; height: 202px;">
+  </section>
+  
+
+  
+  
+  <section class="slide s-share">
+    <h2 class="glow h1">Share the love</h2>
+    <div class="share">
+      <div><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges" role="img" aria-label="QR code: https://chat.whatsapp.com/KS1ce0jAHmNGAiOAoZG6zo"><rect width="37" height="37" fill="#fff"/><path d="M2 2h7v1h-7zM11 2h5v1h-5zM18 2h4v1h-4zM23 2h3v1h-3zM28 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM12 3h8v1h-8zM24 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM34 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM15 4h1v1h-1zM17 4h1v1h-1zM19 4h2v1h-2zM23 4h3v1h-3zM28 4h1v1h-1zM30 4h3v1h-3zM34 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM16 5h3v1h-3zM22 5h1v1h-1zM25 5h2v1h-2zM28 5h1v1h-1zM30 5h3v1h-3zM34 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h4v1h-4zM17 6h1v1h-1zM19 6h2v1h-2zM23 6h2v1h-2zM28 6h1v1h-1zM30 6h3v1h-3zM34 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h2v1h-2zM14 7h2v1h-2zM17 7h3v1h-3zM22 7h1v1h-1zM24 7h1v1h-1zM26 7h1v1h-1zM28 7h1v1h-1zM34 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h7v1h-7zM10 9h2v1h-2zM13 9h2v1h-2zM16 9h2v1h-2zM20 9h1v1h-1zM23 9h4v1h-4zM2 10h1v1h-1zM4 10h5v1h-5zM13 10h1v1h-1zM15 10h5v1h-5zM22 10h1v1h-1zM24 10h3v1h-3zM28 10h5v1h-5zM2 11h1v1h-1zM4 11h1v1h-1zM6 11h1v1h-1zM9 11h3v1h-3zM13 11h1v1h-1zM20 11h4v1h-4zM25 11h2v1h-2zM28 11h2v1h-2zM31 11h2v1h-2zM4 12h1v1h-1zM8 12h2v1h-2zM12 12h1v1h-1zM14 12h1v1h-1zM17 12h2v1h-2zM20 12h1v1h-1zM24 12h1v1h-1zM26 12h1v1h-1zM30 12h1v1h-1zM32 12h2v1h-2zM2 13h3v1h-3zM6 13h1v1h-1zM12 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM23 13h1v1h-1zM27 13h1v1h-1zM30 13h3v1h-3zM34 13h1v1h-1zM5 14h2v1h-2zM8 14h2v1h-2zM11 14h1v1h-1zM17 14h1v1h-1zM20 14h1v1h-1zM24 14h1v1h-1zM27 14h1v1h-1zM29 14h1v1h-1zM31 14h1v1h-1zM34 14h1v1h-1zM2 15h3v1h-3zM10 15h3v1h-3zM15 15h4v1h-4zM22 15h1v1h-1zM24 15h1v1h-1zM28 15h1v1h-1zM32 15h3v1h-3zM4 16h2v1h-2zM8 16h1v1h-1zM11 16h3v1h-3zM15 16h2v1h-2zM19 16h3v1h-3zM23 16h1v1h-1zM27 16h2v1h-2zM30 16h4v1h-4zM3 17h2v1h-2zM13 17h4v1h-4zM18 17h1v1h-1zM21 17h3v1h-3zM25 17h1v1h-1zM27 17h2v1h-2zM31 17h2v1h-2zM3 18h2v1h-2zM6 18h3v1h-3zM10 18h2v1h-2zM15 18h2v1h-2zM18 18h2v1h-2zM21 18h2v1h-2zM24 18h2v1h-2zM27 18h1v1h-1zM29 18h2v1h-2zM32 18h1v1h-1zM34 18h1v1h-1zM2 19h1v1h-1zM4 19h1v1h-1zM6 19h2v1h-2zM11 19h1v1h-1zM14 19h1v1h-1zM16 19h7v1h-7zM25 19h1v1h-1zM28 19h2v1h-2zM31 19h2v1h-2zM34 19h1v1h-1zM6 20h4v1h-4zM11 20h1v1h-1zM13 20h1v1h-1zM16 20h4v1h-4zM22 20h1v1h-1zM28 20h3v1h-3zM32 20h2v1h-2zM2 21h2v1h-2zM6 21h2v1h-2zM9 21h2v1h-2zM12 21h2v1h-2zM16 21h1v1h-1zM19 21h2v1h-2zM23 21h1v1h-1zM26 21h2v1h-2zM29 21h4v1h-4zM5 22h8v1h-8zM16 22h1v1h-1zM18 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM26 22h2v1h-2zM29 22h1v1h-1zM31 22h1v1h-1zM2 23h5v1h-5zM10 23h1v1h-1zM12 23h2v1h-2zM15 23h3v1h-3zM19 23h2v1h-2zM23 23h1v1h-1zM25 23h1v1h-1zM34 23h1v1h-1zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h4v1h-4zM17 24h3v1h-3zM22 24h2v1h-2zM29 24h2v1h-2zM32 24h2v1h-2zM2 25h1v1h-1zM4 25h4v1h-4zM9 25h3v1h-3zM13 25h1v1h-1zM16 25h2v1h-2zM23 25h2v1h-2zM26 25h3v1h-3zM30 25h3v1h-3zM2 26h1v1h-1zM5 26h1v1h-1zM8 26h3v1h-3zM14 26h2v1h-2zM17 26h1v1h-1zM19 26h1v1h-1zM24 26h1v1h-1zM26 26h5v1h-5zM10 27h1v1h-1zM12 27h1v1h-1zM14 27h5v1h-5zM20 27h3v1h-3zM24 27h1v1h-1zM26 27h1v1h-1zM30 27h1v1h-1zM32 27h3v1h-3zM2 28h7v1h-7zM11 28h1v1h-1zM13 28h1v1h-1zM15 28h4v1h-4zM20 28h1v1h-1zM22 28h1v1h-1zM24 28h3v1h-3zM28 28h1v1h-1zM30 28h1v1h-1zM32 28h1v1h-1zM2 29h1v1h-1zM8 29h1v1h-1zM10 29h1v1h-1zM12 29h1v1h-1zM14 29h3v1h-3zM18 29h1v1h-1zM21 29h1v1h-1zM23 29h4v1h-4zM30 29h4v1h-4zM2 30h1v1h-1zM4 30h3v1h-3zM8 30h1v1h-1zM10 30h1v1h-1zM12 30h1v1h-1zM15 30h1v1h-1zM20 30h1v1h-1zM23 30h1v1h-1zM26 30h6v1h-6zM33 30h1v1h-1zM2 31h1v1h-1zM4 31h3v1h-3zM8 31h1v1h-1zM10 31h1v1h-1zM12 31h1v1h-1zM14 31h6v1h-6zM22 31h2v1h-2zM26 31h2v1h-2zM30 31h2v1h-2zM33 31h2v1h-2zM2 32h1v1h-1zM4 32h3v1h-3zM8 32h1v1h-1zM10 32h1v1h-1zM12 32h2v1h-2zM16 32h1v1h-1zM21 32h1v1h-1zM23 32h2v1h-2zM28 32h2v1h-2zM31 32h2v1h-2zM2 33h1v1h-1zM8 33h1v1h-1zM11 33h1v1h-1zM13 33h2v1h-2zM16 33h1v1h-1zM18 33h1v1h-1zM21 33h3v1h-3zM26 33h3v1h-3zM30 33h3v1h-3zM2 34h7v1h-7zM10 34h1v1h-1zM14 34h1v1h-1zM16 34h1v1h-1zM19 34h4v1h-4zM24 34h6v1h-6zM32 34h2v1h-2z" fill="#000"/></svg></div><div class="cap">Community WhatsApp</div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#25D366"/><path transform="translate(3.6 3.6) scale(.7)" fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
+      <div><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.linkedin.com/company/llmday/"><rect width="33" height="33" fill="#fff"/><path d="M2 2h7v1h-7zM11 2h2v1h-2zM18 2h5v1h-5zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM12 3h3v1h-3zM16 3h4v1h-4zM22 3h1v1h-1zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM14 4h1v1h-1zM17 4h2v1h-2zM21 4h1v1h-1zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h7v1h-7zM19 5h1v1h-1zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h2v1h-2zM14 6h1v1h-1zM18 6h5v1h-5zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h4v1h-4zM17 7h1v1h-1zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM10 9h1v1h-1zM12 9h2v1h-2zM16 9h3v1h-3zM21 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM11 10h6v1h-6zM19 10h3v1h-3zM24 10h5v1h-5zM3 11h1v1h-1zM5 11h2v1h-2zM11 11h1v1h-1zM14 11h3v1h-3zM18 11h4v1h-4zM23 11h4v1h-4zM30 11h1v1h-1zM4 12h1v1h-1zM6 12h3v1h-3zM10 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM24 12h1v1h-1zM2 13h1v1h-1zM4 13h2v1h-2zM9 13h2v1h-2zM16 13h3v1h-3zM21 13h3v1h-3zM25 13h1v1h-1zM27 13h1v1h-1zM29 13h1v1h-1zM2 14h1v1h-1zM4 14h6v1h-6zM11 14h1v1h-1zM15 14h1v1h-1zM19 14h1v1h-1zM21 14h1v1h-1zM27 14h2v1h-2zM2 15h3v1h-3zM7 15h1v1h-1zM10 15h3v1h-3zM14 15h2v1h-2zM18 15h1v1h-1zM20 15h5v1h-5zM26 15h1v1h-1zM30 15h1v1h-1zM5 16h6v1h-6zM13 16h1v1h-1zM15 16h6v1h-6zM22 16h4v1h-4zM27 16h2v1h-2zM2 17h3v1h-3zM10 17h1v1h-1zM13 17h2v1h-2zM16 17h1v1h-1zM18 17h1v1h-1zM25 17h2v1h-2zM29 17h1v1h-1zM6 18h7v1h-7zM19 18h1v1h-1zM21 18h1v1h-1zM25 18h1v1h-1zM27 18h2v1h-2zM2 19h3v1h-3zM10 19h6v1h-6zM19 19h8v1h-8zM28 19h1v1h-1zM30 19h1v1h-1zM2 20h1v1h-1zM5 20h4v1h-4zM12 20h8v1h-8zM24 20h2v1h-2zM28 20h1v1h-1zM2 21h1v1h-1zM7 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM14 21h2v1h-2zM17 21h1v1h-1zM22 21h5v1h-5zM29 21h1v1h-1zM2 22h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM8 22h2v1h-2zM13 22h2v1h-2zM16 22h1v1h-1zM18 22h2v1h-2zM22 22h5v1h-5zM28 22h3v1h-3zM10 23h5v1h-5zM18 23h3v1h-3zM22 23h1v1h-1zM26 23h5v1h-5zM2 24h7v1h-7zM12 24h1v1h-1zM17 24h1v1h-1zM21 24h2v1h-2zM24 24h1v1h-1zM26 24h3v1h-3zM2 25h1v1h-1zM8 25h1v1h-1zM10 25h2v1h-2zM14 25h1v1h-1zM16 25h1v1h-1zM18 25h1v1h-1zM21 25h2v1h-2zM26 25h1v1h-1zM29 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM10 26h1v1h-1zM12 26h3v1h-3zM19 26h1v1h-1zM22 26h5v1h-5zM28 26h3v1h-3zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM10 27h2v1h-2zM13 27h1v1h-1zM15 27h2v1h-2zM18 27h1v1h-1zM21 27h1v1h-1zM25 27h1v1h-1zM27 27h4v1h-4zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM10 28h1v1h-1zM13 28h1v1h-1zM15 28h4v1h-4zM20 28h2v1h-2zM23 28h7v1h-7zM2 29h1v1h-1zM8 29h1v1h-1zM11 29h5v1h-5zM17 29h1v1h-1zM20 29h1v1h-1zM22 29h4v1h-4zM27 29h1v1h-1zM29 29h1v1h-1zM2 30h7v1h-7zM10 30h4v1h-4zM17 30h1v1h-1zM19 30h1v1h-1zM21 30h1v1h-1zM24 30h5v1h-5z" fill="#000"/></svg></div><div class="cap">LLMday</div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path fill="#fff" d="M5.3 9.4h2.8V19H5.3zM6.7 5a1.6 1.6 0 110 3.2 1.6 1.6 0 010-3.2zM9.9 9.4h2.7v1.3c.4-.7 1.3-1.5 2.7-1.5 2.9 0 3.4 1.9 3.4 4.3V19h-2.8v-4.9c0-1.2 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5v5H9.9z"/></svg></div>
+    </div>
+  </section>
+  
+
+  
+  
+  <section class="slide s-partners"><img class="city-bg" src="img/venue-1-055a3b3cc8.webp?v=0a6ae00658" alt="" loading="eager"><div class="veil"></div>
+    <h2 class="glow h1">Sponsors &amp; partners</h2><div class="partners" style="max-width: 1300px;">
+      <img src="../sponsors/houseofai.png?v=5266c67142" alt="houseofai" loading="eager"><img src="../sponsors/harness.webp?v=6144c22e52" alt="harness" loading="eager"><img src="../sponsors/reliaburger.webp?v=6b7d053a1c" alt="reliaburger" loading="eager"><img src="../sponsors/hockeystick.webp?v=8d7e53436f" alt="hockeystick" loading="eager">
+    </div>
+  </section>
+  
+
+  
+  
+  <section class="slide s-family">
+    <div class="family four">
+      <div class="grp"><h2 class="glow grp-lbl">Other brands</h2><div class="grp-items">
+        <div class="it"><img class="logo" src="img/sreday-dac13bce20.webp?v=71154d6705" alt="SREday" loading="eager"><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.sreday.com"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM11 2h2v1h-2zM15 2h2v1h-2zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM12 3h1v1h-1zM17 3h2v1h-2zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM13 4h2v1h-2zM16 4h2v1h-2zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM13 5h1v1h-1zM15 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h2v1h-2zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM14 7h4v1h-4zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM17 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM13 10h5v1h-5zM20 10h5v1h-5zM2 11h4v1h-4zM11 11h3v1h-3zM18 11h2v1h-2zM21 11h1v1h-1zM25 11h1v1h-1zM4 12h2v1h-2zM8 12h1v1h-1zM11 12h1v1h-1zM13 12h3v1h-3zM17 12h7v1h-7zM25 12h2v1h-2zM3 13h2v1h-2zM6 13h2v1h-2zM9 13h1v1h-1zM16 13h4v1h-4zM21 13h1v1h-1zM26 13h1v1h-1zM3 14h1v1h-1zM5 14h1v1h-1zM8 14h3v1h-3zM12 14h2v1h-2zM15 14h3v1h-3zM19 14h4v1h-4zM24 14h3v1h-3zM2 15h2v1h-2zM7 15h1v1h-1zM11 15h1v1h-1zM14 15h2v1h-2zM18 15h2v1h-2zM21 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM5 16h1v1h-1zM8 16h1v1h-1zM11 16h1v1h-1zM15 16h3v1h-3zM19 16h5v1h-5zM25 16h2v1h-2zM2 17h1v1h-1zM4 17h2v1h-2zM10 17h3v1h-3zM14 17h1v1h-1zM16 17h1v1h-1zM19 17h1v1h-1zM21 17h2v1h-2zM26 17h1v1h-1zM2 18h1v1h-1zM5 18h4v1h-4zM11 18h2v1h-2zM14 18h9v1h-9zM24 18h1v1h-1zM10 19h3v1h-3zM15 19h1v1h-1zM18 19h1v1h-1zM22 19h2v1h-2zM2 20h7v1h-7zM11 20h1v1h-1zM13 20h2v1h-2zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM13 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM22 21h2v1h-2zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h4v1h-4zM17 22h6v1h-6zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h3v1h-3zM14 23h2v1h-2zM18 23h1v1h-1zM20 23h1v1h-1zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h1v1h-1zM15 24h3v1h-3zM23 24h2v1h-2zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM14 25h2v1h-2zM18 25h2v1h-2zM21 25h3v1h-3zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h3v1h-3zM14 26h1v1h-1zM16 26h1v1h-1zM21 26h6v1h-6z" fill="#000"/></svg></div></div><div class="it"><img class="logo" src="img/platformday-12fd23f8f5.webp?v=14dfa036b4" alt="PLATFORMday" loading="eager"><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.platformday.com"><rect width="33" height="33" fill="#fff"/><path d="M2 2h7v1h-7zM13 2h2v1h-2zM16 2h1v1h-1zM19 2h1v1h-1zM21 2h1v1h-1zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h2v1h-2zM13 3h1v1h-1zM15 3h1v1h-1zM19 3h1v1h-1zM21 3h2v1h-2zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM12 4h2v1h-2zM17 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM11 5h1v1h-1zM15 5h1v1h-1zM18 5h1v1h-1zM21 5h1v1h-1zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h2v1h-2zM13 6h3v1h-3zM18 6h4v1h-4zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM13 7h2v1h-2zM16 7h3v1h-3zM20 7h2v1h-2zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM12 9h2v1h-2zM17 9h1v1h-1zM19 9h1v1h-1zM21 9h2v1h-2zM2 10h1v1h-1zM4 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM11 10h1v1h-1zM14 10h1v1h-1zM18 10h2v1h-2zM22 10h1v1h-1zM26 10h1v1h-1zM29 10h1v1h-1zM3 11h4v1h-4zM9 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM17 11h3v1h-3zM22 11h1v1h-1zM24 11h1v1h-1zM27 11h1v1h-1zM30 11h1v1h-1zM2 12h2v1h-2zM5 12h7v1h-7zM14 12h1v1h-1zM16 12h5v1h-5zM24 12h1v1h-1zM28 12h3v1h-3zM2 13h1v1h-1zM4 13h1v1h-1zM7 13h1v1h-1zM10 13h1v1h-1zM12 13h1v1h-1zM15 13h2v1h-2zM18 13h6v1h-6zM26 13h1v1h-1zM29 13h1v1h-1zM3 14h3v1h-3zM7 14h2v1h-2zM10 14h1v1h-1zM13 14h2v1h-2zM16 14h2v1h-2zM19 14h1v1h-1zM21 14h4v1h-4zM27 14h1v1h-1zM29 14h2v1h-2zM2 15h5v1h-5zM9 15h1v1h-1zM11 15h1v1h-1zM16 15h2v1h-2zM22 15h4v1h-4zM27 15h1v1h-1zM30 15h1v1h-1zM3 16h1v1h-1zM7 16h2v1h-2zM10 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM19 16h1v1h-1zM22 16h2v1h-2zM25 16h1v1h-1zM27 16h1v1h-1zM29 16h2v1h-2zM6 17h1v1h-1zM10 17h4v1h-4zM17 17h1v1h-1zM19 17h2v1h-2zM23 17h1v1h-1zM27 17h1v1h-1zM29 17h1v1h-1zM2 18h3v1h-3zM7 18h2v1h-2zM10 18h2v1h-2zM18 18h2v1h-2zM23 18h3v1h-3zM27 18h1v1h-1zM29 18h2v1h-2zM6 19h2v1h-2zM9 19h4v1h-4zM15 19h1v1h-1zM17 19h2v1h-2zM22 19h3v1h-3zM27 19h2v1h-2zM30 19h1v1h-1zM2 20h1v1h-1zM5 20h2v1h-2zM8 20h1v1h-1zM16 20h3v1h-3zM24 20h2v1h-2zM29 20h2v1h-2zM3 21h4v1h-4zM11 21h3v1h-3zM15 21h2v1h-2zM18 21h3v1h-3zM22 21h1v1h-1zM27 21h1v1h-1zM29 21h1v1h-1zM2 22h1v1h-1zM8 22h2v1h-2zM11 22h3v1h-3zM16 22h2v1h-2zM20 22h7v1h-7zM10 23h1v1h-1zM12 23h1v1h-1zM16 23h2v1h-2zM21 23h2v1h-2zM26 23h1v1h-1zM28 23h3v1h-3zM2 24h7v1h-7zM13 24h1v1h-1zM15 24h1v1h-1zM19 24h1v1h-1zM21 24h2v1h-2zM24 24h1v1h-1zM26 24h2v1h-2zM29 24h2v1h-2zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM13 25h2v1h-2zM17 25h1v1h-1zM22 25h1v1h-1zM26 25h2v1h-2zM30 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM10 26h3v1h-3zM14 26h1v1h-1zM18 26h1v1h-1zM22 26h5v1h-5zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM11 27h1v1h-1zM15 27h1v1h-1zM17 27h3v1h-3zM21 27h2v1h-2zM26 27h1v1h-1zM28 27h1v1h-1zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM10 28h2v1h-2zM14 28h5v1h-5zM20 28h4v1h-4zM25 28h3v1h-3zM30 28h1v1h-1zM2 29h1v1h-1zM8 29h1v1h-1zM11 29h3v1h-3zM15 29h1v1h-1zM18 29h5v1h-5zM26 29h1v1h-1zM29 29h1v1h-1zM2 30h7v1h-7zM10 30h2v1h-2zM13 30h1v1h-1zM16 30h2v1h-2zM20 30h3v1h-3zM24 30h4v1h-4zM29 30h2v1h-2z" fill="#000"/></svg></div></div><div class="it"><img class="logo" src="img/conf42-61b3468992.webp?v=2294bd4755" alt="Conf42" loading="eager"><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.conf42.com"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM11 2h1v1h-1zM13 2h1v1h-1zM16 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM13 3h1v1h-1zM15 3h1v1h-1zM17 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM14 4h1v1h-1zM17 4h2v1h-2zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM13 5h3v1h-3zM17 5h2v1h-2zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h4v1h-4zM15 6h1v1h-1zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h2v1h-2zM15 7h3v1h-3zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM10 9h5v1h-5zM18 9h1v1h-1zM2 10h1v1h-1zM4 10h5v1h-5zM11 10h1v1h-1zM14 10h4v1h-4zM20 10h5v1h-5zM5 11h1v1h-1zM7 11h1v1h-1zM10 11h2v1h-2zM18 11h2v1h-2zM21 11h1v1h-1zM25 11h1v1h-1zM2 12h3v1h-3zM6 12h5v1h-5zM14 12h2v1h-2zM17 12h1v1h-1zM19 12h5v1h-5zM25 12h2v1h-2zM2 13h2v1h-2zM6 13h2v1h-2zM11 13h1v1h-1zM13 13h1v1h-1zM16 13h1v1h-1zM18 13h2v1h-2zM21 13h1v1h-1zM26 13h1v1h-1zM3 14h2v1h-2zM6 14h6v1h-6zM13 14h1v1h-1zM15 14h2v1h-2zM19 14h4v1h-4zM24 14h3v1h-3zM2 15h2v1h-2zM5 15h1v1h-1zM11 15h1v1h-1zM14 15h2v1h-2zM18 15h2v1h-2zM21 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM5 16h1v1h-1zM7 16h2v1h-2zM11 16h2v1h-2zM15 16h9v1h-9zM25 16h2v1h-2zM2 17h1v1h-1zM4 17h1v1h-1zM7 17h1v1h-1zM9 17h1v1h-1zM11 17h1v1h-1zM14 17h1v1h-1zM16 17h1v1h-1zM18 17h2v1h-2zM21 17h2v1h-2zM26 17h1v1h-1zM2 18h1v1h-1zM4 18h6v1h-6zM11 18h1v1h-1zM14 18h3v1h-3zM18 18h5v1h-5zM24 18h1v1h-1zM10 19h1v1h-1zM12 19h1v1h-1zM15 19h1v1h-1zM17 19h2v1h-2zM22 19h2v1h-2zM2 20h7v1h-7zM11 20h4v1h-4zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM13 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM22 21h2v1h-2zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h4v1h-4zM17 22h6v1h-6zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h3v1h-3zM14 23h2v1h-2zM18 23h1v1h-1zM20 23h1v1h-1zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h3v1h-3zM15 24h3v1h-3zM23 24h2v1h-2zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h2v1h-2zM14 25h2v1h-2zM17 25h3v1h-3zM21 25h3v1h-3zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h1v1h-1zM12 26h1v1h-1zM14 26h1v1h-1zM16 26h1v1h-1zM21 26h6v1h-6z" fill="#000"/></svg></div></div>
+      </div></div>
+      <div class="grp"><h2 class="glow grp-lbl">Call for<br>papers</h2><div class="grp-items">
+        <div class="it"><img class="logo" src="img/cfpninja-c373df4236.webp?v=e21c48e32d" alt="cfp.ninja" loading="eager"><div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code: https://cfp.ninja"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM14 2h2v1h-2zM17 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM12 3h1v1h-1zM15 3h4v1h-4zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h6v1h-6zM17 4h1v1h-1zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h1v1h-1zM13 5h2v1h-2zM16 5h2v1h-2zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h5v1h-5zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM17 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM10 9h2v1h-2zM13 9h2v1h-2zM16 9h1v1h-1zM2 10h1v1h-1zM4 10h5v1h-5zM11 10h1v1h-1zM20 10h5v1h-5zM3 11h3v1h-3zM7 11h1v1h-1zM10 11h1v1h-1zM12 11h5v1h-5zM18 11h1v1h-1zM21 11h1v1h-1zM25 11h1v1h-1zM3 12h1v1h-1zM5 12h1v1h-1zM8 12h2v1h-2zM12 12h1v1h-1zM14 12h4v1h-4zM19 12h5v1h-5zM25 12h2v1h-2zM2 13h1v1h-1zM11 13h2v1h-2zM14 13h2v1h-2zM18 13h1v1h-1zM26 13h1v1h-1zM3 14h1v1h-1zM5 14h2v1h-2zM8 14h1v1h-1zM10 14h3v1h-3zM14 14h1v1h-1zM16 14h1v1h-1zM19 14h2v1h-2zM22 14h1v1h-1zM24 14h3v1h-3zM2 15h2v1h-2zM5 15h1v1h-1zM7 15h1v1h-1zM11 15h1v1h-1zM18 15h2v1h-2zM21 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM5 16h2v1h-2zM8 16h1v1h-1zM10 16h5v1h-5zM17 16h2v1h-2zM20 16h4v1h-4zM25 16h2v1h-2zM2 17h1v1h-1zM13 17h1v1h-1zM16 17h2v1h-2zM20 17h3v1h-3zM26 17h1v1h-1zM2 18h1v1h-1zM4 18h1v1h-1zM6 18h8v1h-8zM18 18h5v1h-5zM24 18h1v1h-1zM10 19h3v1h-3zM14 19h5v1h-5zM22 19h2v1h-2zM2 20h7v1h-7zM12 20h1v1h-1zM15 20h2v1h-2zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h2v1h-2zM14 21h2v1h-2zM18 21h1v1h-1zM22 21h2v1h-2zM25 21h2v1h-2zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h2v1h-2zM14 22h1v1h-1zM16 22h7v1h-7zM24 22h1v1h-1zM26 22h1v1h-1zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h2v1h-2zM17 23h2v1h-2zM20 23h1v1h-1zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h3v1h-3zM18 24h1v1h-1zM23 24h2v1h-2zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM13 25h1v1h-1zM16 25h4v1h-4zM21 25h3v1h-3zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h4v1h-4zM21 26h6v1h-6z" fill="#000"/></svg></div></div>
+      </div></div>
+    </div>
+  </section>
+  
+
+  
+  <section class="slide s-spot" data-pitch="https://reliaburger.com" style="--paper: #fafbf9; --ink: #181b19; --accent: #a83b15; --mark: #f49463; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;">
+    <div class="spot">
+      <div class="spot-main">
+        <div class="spot-top">
+          <div class="spot-word" aria-label="Reliaburger"><span class="mark" aria-hidden="true">r/</span>reliaburger</div>
+          <div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code: https://reliaburger.com"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM12 2h1v1h-1zM14 2h1v1h-1zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM11 3h1v1h-1zM13 3h1v1h-1zM16 3h3v1h-3zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h4v1h-4zM16 4h1v1h-1zM18 4h1v1h-1zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM13 5h1v1h-1zM15 5h3v1h-3zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h2v1h-2zM13 6h2v1h-2zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM12 7h4v1h-4zM17 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM10 9h1v1h-1zM12 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM11 10h5v1h-5zM17 10h2v1h-2zM20 10h5v1h-5zM2 11h1v1h-1zM4 11h2v1h-2zM7 11h1v1h-1zM11 11h5v1h-5zM18 11h1v1h-1zM21 11h1v1h-1zM25 11h1v1h-1zM2 12h2v1h-2zM8 12h1v1h-1zM10 12h1v1h-1zM14 12h7v1h-7zM22 12h2v1h-2zM25 12h2v1h-2zM2 13h5v1h-5zM12 13h1v1h-1zM14 13h1v1h-1zM17 13h4v1h-4zM26 13h1v1h-1zM4 14h3v1h-3zM8 14h4v1h-4zM13 14h10v1h-10zM24 14h3v1h-3zM2 15h1v1h-1zM5 15h3v1h-3zM9 15h1v1h-1zM11 15h1v1h-1zM18 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM5 16h2v1h-2zM8 16h1v1h-1zM11 16h1v1h-1zM13 16h3v1h-3zM17 16h1v1h-1zM19 16h1v1h-1zM21 16h3v1h-3zM25 16h2v1h-2zM2 17h1v1h-1zM5 17h1v1h-1zM7 17h1v1h-1zM9 17h1v1h-1zM11 17h1v1h-1zM13 17h1v1h-1zM16 17h1v1h-1zM20 17h3v1h-3zM26 17h1v1h-1zM2 18h1v1h-1zM4 18h1v1h-1zM6 18h5v1h-5zM13 18h1v1h-1zM15 18h8v1h-8zM24 18h1v1h-1zM10 19h3v1h-3zM14 19h2v1h-2zM17 19h2v1h-2zM22 19h2v1h-2zM2 20h7v1h-7zM15 20h2v1h-2zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM22 21h2v1h-2zM25 21h1v1h-1zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h3v1h-3zM14 22h9v1h-9zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h2v1h-2zM15 23h1v1h-1zM19 23h2v1h-2zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM13 24h2v1h-2zM16 24h2v1h-2zM23 24h2v1h-2zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h3v1h-3zM16 25h3v1h-3zM21 25h3v1h-3zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h1v1h-1zM13 26h2v1h-2zM19 26h8v1h-8z" fill="#000"/></svg></div>
+        </div>
+        <div class="eyebrow" data-pitch-eyebrow>RUST · APACHE 2.0 · 0.2.8</div>
+        <p class="pitch" data-pitch-lines><span>The container platform,</span><span>served ready.</span></p>
+      </div>
+      <div class="spot-art"><video autoplay muted loop playsinline preload="auto" disablepictureinpicture poster="img/reliaburger-still-de4e880017.webp?v=2e0597ac15" aria-label="Reliaburger">
+          <source src="img/reliaburger-loop-8c873a08e8.webm?v=e49de777c7" type="video/webm"><source src="img/reliaburger-loop-467d232d79.mp4?v=64eeb74ed8" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+  
+
+  
+  <section class="slide s-tour" style="--bg: #06140e; --bg2: #0e3322; --deep: #020c09; --accent: #3fcf8e; --glow: #b9ffd9;">
+    <img class="logo" src="img/llmday-535c0f4817.webp?v=da1cede95b" alt="LLMday" loading="eager">
+    <div class="head"><h2 class="glow">Upcoming events</h2></div><div class="map" style="left: 0px; top: 156px; width: 1920px; height: 924px; -webkit-mask-image: url(img/world-dots-f32b45e3a6.webp?v=30ee013125); mask-image: url(img/world-dots-f32b45e3a6.webp?v=30ee013125);"></div>
+    <svg class="arcs" viewBox="0 0 1920 1080" aria-hidden="true">
+      <path d="M1258.5 582.7 Q1224.7 449.3 1093.3 408.4"/><path d="M1093.3 408.4 Q1054.4 398.7 1025.8 426.7"/><path d="M1025.8 426.7 Q665.5 631.9 652.3 1046.3"/>
+      
+    </svg>
+    
+    <i class="dot" style="left: 1259px; top: 583px;"></i>
+    <div class="lbl left" style="left: 989px; top: 540px; width: 240px;">
+      <b class="">Tel Aviv</b><em class="">NOV 17, 2026</em>
+    </div>
+    
+    <i class="dot" style="left: 1093px; top: 408px;"></i>
+    <div class="lbl " style="left: 1123px; top: 365px; width: 240px;">
+      <b class="">Hamburg</b><em class="">NOV 18, 2026</em>
+    </div>
+    
+    <i class="dot" style="left: 1026px; top: 427px;"></i>
+    <div class="lbl left" style="left: 756px; top: 365px; width: 240px;">
+      <b class="">London</b><em class="">NOV 26, 2026</em><em class="tbc">NOV 2027</em>
+    </div>
+    
+    <i class="dot" style="left: 652px; top: 1046px;"></i>
+    <div class="lbl mid" style="left: 521px; top: 930px; width: 262px;">
+      <b class="">Montevideo</b><em class="">DEC 5, 2026</em>
+    </div>
+    
+    <i class="dot tbc" style="left: 533px; top: 517px;"></i>
+    <div class="lbl " style="left: 563px; top: 474px; width: 164px;">
+      <b class="tbc">NYC</b><em class="tbc">FEB 2027</em>
+    </div>
+    
+    <i class="dot tbc" style="left: 211px; top: 540px;"></i>
+    <div class="lbl mid" style="left: 42px; top: 424px; width: 337px;">
+      <b class="tbc">San Francisco</b><em class="tbc">APR 2027</em>
+    </div>
+    
+    <b class="num" style="left: 1259px; top: 583px;">1</b><b class="num" style="left: 1093px; top: 408px;">2</b><b class="num" style="left: 1026px; top: 427px;">3</b><b class="num" style="left: 652px; top: 1046px;">4</b>
+    <div class="home-qr qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.llmday.com"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM15 2h2v1h-2zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM13 3h2v1h-2zM17 3h2v1h-2zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM14 4h1v1h-1zM16 4h2v1h-2zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h1v1h-1zM13 5h1v1h-1zM15 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h4v1h-4zM15 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM15 7h3v1h-3zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM10 9h1v1h-1zM13 9h2v1h-2zM17 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM12 10h6v1h-6zM20 10h5v1h-5zM2 11h1v1h-1zM4 11h1v1h-1zM9 11h2v1h-2zM12 11h2v1h-2zM18 11h2v1h-2zM21 11h1v1h-1zM25 11h1v1h-1zM5 12h2v1h-2zM8 12h1v1h-1zM10 12h6v1h-6zM17 12h7v1h-7zM25 12h2v1h-2zM3 13h1v1h-1zM5 13h2v1h-2zM9 13h4v1h-4zM16 13h4v1h-4zM21 13h1v1h-1zM26 13h1v1h-1zM4 14h2v1h-2zM7 14h2v1h-2zM10 14h1v1h-1zM12 14h1v1h-1zM15 14h2v1h-2zM19 14h4v1h-4zM24 14h3v1h-3zM2 15h3v1h-3zM7 15h1v1h-1zM9 15h1v1h-1zM12 15h1v1h-1zM14 15h2v1h-2zM18 15h2v1h-2zM21 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM5 16h2v1h-2zM8 16h3v1h-3zM12 16h1v1h-1zM15 16h3v1h-3zM19 16h5v1h-5zM25 16h2v1h-2zM2 17h1v1h-1zM4 17h1v1h-1zM6 17h1v1h-1zM9 17h2v1h-2zM12 17h1v1h-1zM14 17h1v1h-1zM16 17h4v1h-4zM21 17h2v1h-2zM26 17h1v1h-1zM2 18h1v1h-1zM8 18h1v1h-1zM14 18h3v1h-3zM18 18h5v1h-5zM24 18h1v1h-1zM10 19h3v1h-3zM15 19h1v1h-1zM17 19h2v1h-2zM22 19h2v1h-2zM2 20h7v1h-7zM11 20h4v1h-4zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h2v1h-2zM13 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM22 21h2v1h-2zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h1v1h-1zM12 22h2v1h-2zM17 22h6v1h-6zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h3v1h-3zM14 23h2v1h-2zM17 23h1v1h-1zM20 23h1v1h-1zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h2v1h-2zM15 24h2v1h-2zM18 24h1v1h-1zM23 24h2v1h-2zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM14 25h2v1h-2zM17 25h3v1h-3zM21 25h3v1h-3zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h3v1h-3zM14 26h1v1h-1zM16 26h1v1h-1zM21 26h6v1h-6z" fill="#000"/></svg></div>
+    <img class="mascot" src="img/sticker-llmday-b4b5ffc3f7.webp?v=781a1fe01d" alt="" loading="eager">
+  </section>
+  <section class="slide s-tour" style="--bg: #2b2160; --bg2: #5e2a5e; --deep: #0b0620; --accent: #9d8cff; --glow: #d9d0ff;">
+    <img class="logo" src="img/sreday-dac13bce20.webp?v=71154d6705" alt="SREday" loading="eager">
+    <div class="head"><h2 class="glow">Upcoming events</h2></div><div class="map" style="left: 0px; top: 156px; width: 1920px; height: 924px; -webkit-mask-image: url(img/world-dots-f32b45e3a6.webp?v=30ee013125); mask-image: url(img/world-dots-f32b45e3a6.webp?v=30ee013125);"></div>
+    <svg class="arcs" viewBox="0 0 1920 1080" aria-hidden="true">
+      <path d="M712.9 959.3 Q1069.3 600.2 1561.8 716.4"/><path d="M1561.8 716.4 Q1447.2 457.7 1166.7 420.3"/><path d="M1166.7 420.3 Q1094.5 384.1 1025.8 426.7"/><path d="M1025.8 426.7 Q1092.7 396.5 1153.5 437.7"/>
+      <line x1="1562" y1="716" x2="1487" y2="716"/>
+    </svg>
+    
+    <i class="dot" style="left: 713px; top: 959px;"></i>
+    <div class="lbl " style="left: 743px; top: 916px; width: 259px;">
+      <b class="">Campinas</b><em class="">DEC 2-3, 2026</em>
+    </div>
+    
+    <i class="dot" style="left: 1562px; top: 716px;"></i>
+    <div class="lbl left" style="left: 1266px; top: 673px; width: 221px;">
+      <b class="">Chennai</b><em class="">DEC 5, 2026</em>
+    </div>
+    
+    <i class="dot tbc" style="left: 533px; top: 517px;"></i>
+    <div class="lbl " style="left: 563px; top: 474px; width: 164px;">
+      <b class="tbc">NYC</b><em class="tbc">FEB 2027</em>
+    </div>
+    
+    <i class="dot" style="left: 1167px; top: 420px;"></i>
+    <div class="lbl " style="left: 1197px; top: 377px; width: 240px;">
+      <b class="">Warsaw</b><em class="">FEB 24, 2027</em>
+    </div>
+    
+    <i class="dot" style="left: 1026px; top: 427px;"></i>
+    <div class="lbl left" style="left: 756px; top: 384px; width: 240px;">
+      <b class="">London</b><em class="">MAR 18, 2027</em>
+    </div>
+    
+    <i class="dot tbc" style="left: 211px; top: 540px;"></i>
+    <div class="lbl mid" style="left: 42px; top: 424px; width: 337px;">
+      <b class="tbc">San Francisco</b><em class="tbc">APR 2027</em>
+    </div>
+    
+    <i class="dot" style="left: 1153px; top: 438px;"></i>
+    <div class="lbl mid" style="left: 1043px; top: 468px; width: 221px;">
+      <b class="">Katowice</b><em class="">JUN 9, 2027</em>
+    </div>
+    
+    <b class="num" style="left: 713px; top: 959px;">1</b><b class="num" style="left: 1562px; top: 716px;">2</b><b class="num" style="left: 1167px; top: 420px;">3</b><b class="num" style="left: 1026px; top: 427px;">4</b><b class="num" style="left: 1153px; top: 438px;">5</b>
+    <div class="home-qr qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.sreday.com"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM11 2h2v1h-2zM15 2h2v1h-2zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM12 3h1v1h-1zM17 3h2v1h-2zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM13 4h2v1h-2zM16 4h2v1h-2zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM13 5h1v1h-1zM15 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h2v1h-2zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM14 7h4v1h-4zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM17 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM13 10h5v1h-5zM20 10h5v1h-5zM2 11h4v1h-4zM11 11h3v1h-3zM18 11h2v1h-2zM21 11h1v1h-1zM25 11h1v1h-1zM4 12h2v1h-2zM8 12h1v1h-1zM11 12h1v1h-1zM13 12h3v1h-3zM17 12h7v1h-7zM25 12h2v1h-2zM3 13h2v1h-2zM6 13h2v1h-2zM9 13h1v1h-1zM16 13h4v1h-4zM21 13h1v1h-1zM26 13h1v1h-1zM3 14h1v1h-1zM5 14h1v1h-1zM8 14h3v1h-3zM12 14h2v1h-2zM15 14h3v1h-3zM19 14h4v1h-4zM24 14h3v1h-3zM2 15h2v1h-2zM7 15h1v1h-1zM11 15h1v1h-1zM14 15h2v1h-2zM18 15h2v1h-2zM21 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM5 16h1v1h-1zM8 16h1v1h-1zM11 16h1v1h-1zM15 16h3v1h-3zM19 16h5v1h-5zM25 16h2v1h-2zM2 17h1v1h-1zM4 17h2v1h-2zM10 17h3v1h-3zM14 17h1v1h-1zM16 17h1v1h-1zM19 17h1v1h-1zM21 17h2v1h-2zM26 17h1v1h-1zM2 18h1v1h-1zM5 18h4v1h-4zM11 18h2v1h-2zM14 18h9v1h-9zM24 18h1v1h-1zM10 19h3v1h-3zM15 19h1v1h-1zM18 19h1v1h-1zM22 19h2v1h-2zM2 20h7v1h-7zM11 20h1v1h-1zM13 20h2v1h-2zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM13 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM22 21h2v1h-2zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h4v1h-4zM17 22h6v1h-6zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h3v1h-3zM14 23h2v1h-2zM18 23h1v1h-1zM20 23h1v1h-1zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h1v1h-1zM15 24h3v1h-3zM23 24h2v1h-2zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM14 25h2v1h-2zM18 25h2v1h-2zM21 25h3v1h-3zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h3v1h-3zM14 26h1v1h-1zM16 26h1v1h-1zM21 26h6v1h-6z" fill="#000"/></svg></div>
+    <img class="mascot" src="img/mascot-sreday-e5744450fd.webp?v=1ad5ae9fab" alt="" loading="eager">
+  </section>
+  <section class="slide s-tour" style="--bg: #c8923a; --bg2: #b07a26; --deep: #120a02; --accent: #E2971D; --glow: #fff1d0;">
+    <img class="logo" src="img/platformday-12fd23f8f5.webp?v=14dfa036b4" alt="PLATFORMday" loading="eager">
+    <div class="head"><h2 class="glow">Upcoming events</h2></div><div class="map" style="left: 0px; top: 156px; width: 1920px; height: 924px; -webkit-mask-image: url(img/world-dots-f32b45e3a6.webp?v=30ee013125); mask-image: url(img/world-dots-f32b45e3a6.webp?v=30ee013125);"></div>
+    <svg class="arcs" viewBox="0 0 1920 1080" aria-hidden="true">
+      
+      
+    </svg>
+    
+    <i class="dot tbc" style="left: 533px; top: 517px;"></i>
+    <div class="lbl " style="left: 563px; top: 474px; width: 164px;">
+      <b class="tbc">NYC</b><em class="tbc">MAR 2027</em>
+    </div>
+    
+    <i class="dot tbc" style="left: 211px; top: 540px;"></i>
+    <div class="lbl mid" style="left: 42px; top: 424px; width: 337px;">
+      <b class="tbc">San Francisco</b><em class="tbc">APR 2027</em>
+    </div>
+    
+    <i class="dot" style="left: 1026px; top: 427px;"></i>
+    <div class="lbl " style="left: 1056px; top: 384px; width: 240px;">
+      <b class="">London</b><em class="">MAY 13, 2027</em>
+    </div>
+    
+    <b class="num" style="left: 1026px; top: 427px;">1</b>
+    <div class="home-qr qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.platformday.com"><rect width="33" height="33" fill="#fff"/><path d="M2 2h7v1h-7zM13 2h2v1h-2zM16 2h1v1h-1zM19 2h1v1h-1zM21 2h1v1h-1zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h2v1h-2zM13 3h1v1h-1zM15 3h1v1h-1zM19 3h1v1h-1zM21 3h2v1h-2zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM12 4h2v1h-2zM17 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM11 5h1v1h-1zM15 5h1v1h-1zM18 5h1v1h-1zM21 5h1v1h-1zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h2v1h-2zM13 6h3v1h-3zM18 6h4v1h-4zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM13 7h2v1h-2zM16 7h3v1h-3zM20 7h2v1h-2zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM12 9h2v1h-2zM17 9h1v1h-1zM19 9h1v1h-1zM21 9h2v1h-2zM2 10h1v1h-1zM4 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM11 10h1v1h-1zM14 10h1v1h-1zM18 10h2v1h-2zM22 10h1v1h-1zM26 10h1v1h-1zM29 10h1v1h-1zM3 11h4v1h-4zM9 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM17 11h3v1h-3zM22 11h1v1h-1zM24 11h1v1h-1zM27 11h1v1h-1zM30 11h1v1h-1zM2 12h2v1h-2zM5 12h7v1h-7zM14 12h1v1h-1zM16 12h5v1h-5zM24 12h1v1h-1zM28 12h3v1h-3zM2 13h1v1h-1zM4 13h1v1h-1zM7 13h1v1h-1zM10 13h1v1h-1zM12 13h1v1h-1zM15 13h2v1h-2zM18 13h6v1h-6zM26 13h1v1h-1zM29 13h1v1h-1zM3 14h3v1h-3zM7 14h2v1h-2zM10 14h1v1h-1zM13 14h2v1h-2zM16 14h2v1h-2zM19 14h1v1h-1zM21 14h4v1h-4zM27 14h1v1h-1zM29 14h2v1h-2zM2 15h5v1h-5zM9 15h1v1h-1zM11 15h1v1h-1zM16 15h2v1h-2zM22 15h4v1h-4zM27 15h1v1h-1zM30 15h1v1h-1zM3 16h1v1h-1zM7 16h2v1h-2zM10 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM19 16h1v1h-1zM22 16h2v1h-2zM25 16h1v1h-1zM27 16h1v1h-1zM29 16h2v1h-2zM6 17h1v1h-1zM10 17h4v1h-4zM17 17h1v1h-1zM19 17h2v1h-2zM23 17h1v1h-1zM27 17h1v1h-1zM29 17h1v1h-1zM2 18h3v1h-3zM7 18h2v1h-2zM10 18h2v1h-2zM18 18h2v1h-2zM23 18h3v1h-3zM27 18h1v1h-1zM29 18h2v1h-2zM6 19h2v1h-2zM9 19h4v1h-4zM15 19h1v1h-1zM17 19h2v1h-2zM22 19h3v1h-3zM27 19h2v1h-2zM30 19h1v1h-1zM2 20h1v1h-1zM5 20h2v1h-2zM8 20h1v1h-1zM16 20h3v1h-3zM24 20h2v1h-2zM29 20h2v1h-2zM3 21h4v1h-4zM11 21h3v1h-3zM15 21h2v1h-2zM18 21h3v1h-3zM22 21h1v1h-1zM27 21h1v1h-1zM29 21h1v1h-1zM2 22h1v1h-1zM8 22h2v1h-2zM11 22h3v1h-3zM16 22h2v1h-2zM20 22h7v1h-7zM10 23h1v1h-1zM12 23h1v1h-1zM16 23h2v1h-2zM21 23h2v1h-2zM26 23h1v1h-1zM28 23h3v1h-3zM2 24h7v1h-7zM13 24h1v1h-1zM15 24h1v1h-1zM19 24h1v1h-1zM21 24h2v1h-2zM24 24h1v1h-1zM26 24h2v1h-2zM29 24h2v1h-2zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM13 25h2v1h-2zM17 25h1v1h-1zM22 25h1v1h-1zM26 25h2v1h-2zM30 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM10 26h3v1h-3zM14 26h1v1h-1zM18 26h1v1h-1zM22 26h5v1h-5zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM11 27h1v1h-1zM15 27h1v1h-1zM17 27h3v1h-3zM21 27h2v1h-2zM26 27h1v1h-1zM28 27h1v1h-1zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM10 28h2v1h-2zM14 28h5v1h-5zM20 28h4v1h-4zM25 28h3v1h-3zM30 28h1v1h-1zM2 29h1v1h-1zM8 29h1v1h-1zM11 29h3v1h-3zM15 29h1v1h-1zM18 29h5v1h-5zM26 29h1v1h-1zM29 29h1v1h-1zM2 30h7v1h-7zM10 30h2v1h-2zM13 30h1v1h-1zM16 30h2v1h-2zM20 30h3v1h-3zM24 30h4v1h-4zM29 30h2v1h-2z" fill="#000"/></svg></div>
+    <img class="mascot" src="img/mascot-platformday-da74daa607.webp?v=2e29d7fdd4" alt="" loading="eager">
+  </section>
+  
+
+  
+  
+  <section class="slide s-chat">
+    <div class="chat-side">
+      <h2 class="glow">Let's<br>chat!</h2>
+      <div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.llmday.com/#sponsor"><rect width="33" height="33" fill="#fff"/><path d="M2 2h7v1h-7zM14 2h1v1h-1zM17 2h5v1h-5zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM11 3h1v1h-1zM13 3h2v1h-2zM19 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM16 4h1v1h-1zM18 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h5v1h-5zM18 5h4v1h-4zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h2v1h-2zM13 6h5v1h-5zM20 6h3v1h-3zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM12 7h1v1h-1zM14 7h7v1h-7zM22 7h1v1h-1zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM10 9h1v1h-1zM13 9h1v1h-1zM15 9h1v1h-1zM17 9h1v1h-1zM21 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM11 10h1v1h-1zM13 10h1v1h-1zM16 10h2v1h-2zM19 10h1v1h-1zM21 10h1v1h-1zM24 10h5v1h-5zM3 11h1v1h-1zM5 11h1v1h-1zM10 11h3v1h-3zM14 11h1v1h-1zM17 11h2v1h-2zM21 11h6v1h-6zM30 11h1v1h-1zM4 12h3v1h-3zM8 12h1v1h-1zM19 12h2v1h-2zM22 12h1v1h-1zM24 12h1v1h-1zM2 13h5v1h-5zM9 13h1v1h-1zM12 13h2v1h-2zM16 13h1v1h-1zM18 13h1v1h-1zM21 13h1v1h-1zM23 13h1v1h-1zM25 13h1v1h-1zM27 13h1v1h-1zM29 13h1v1h-1zM8 14h2v1h-2zM14 14h1v1h-1zM18 14h2v1h-2zM27 14h2v1h-2zM3 15h2v1h-2zM6 15h2v1h-2zM9 15h5v1h-5zM15 15h3v1h-3zM21 15h4v1h-4zM26 15h1v1h-1zM30 15h1v1h-1zM3 16h4v1h-4zM8 16h2v1h-2zM12 16h1v1h-1zM15 16h4v1h-4zM20 16h1v1h-1zM24 16h2v1h-2zM27 16h2v1h-2zM3 17h2v1h-2zM7 17h1v1h-1zM9 17h1v1h-1zM11 17h2v1h-2zM15 17h1v1h-1zM17 17h1v1h-1zM20 17h4v1h-4zM25 17h2v1h-2zM29 17h1v1h-1zM5 18h1v1h-1zM8 18h2v1h-2zM11 18h1v1h-1zM16 18h2v1h-2zM19 18h1v1h-1zM21 18h1v1h-1zM25 18h1v1h-1zM27 18h2v1h-2zM2 19h3v1h-3zM7 19h1v1h-1zM11 19h3v1h-3zM17 19h5v1h-5zM23 19h4v1h-4zM28 19h1v1h-1zM30 19h1v1h-1zM2 20h1v1h-1zM5 20h1v1h-1zM8 20h1v1h-1zM11 20h1v1h-1zM13 20h1v1h-1zM19 20h1v1h-1zM22 20h1v1h-1zM24 20h2v1h-2zM28 20h1v1h-1zM2 21h1v1h-1zM4 21h1v1h-1zM6 21h2v1h-2zM11 21h1v1h-1zM13 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM25 21h2v1h-2zM29 21h1v1h-1zM2 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM11 22h1v1h-1zM13 22h2v1h-2zM19 22h1v1h-1zM21 22h6v1h-6zM28 22h3v1h-3zM10 23h2v1h-2zM13 23h5v1h-5zM19 23h4v1h-4zM26 23h5v1h-5zM2 24h7v1h-7zM11 24h1v1h-1zM13 24h1v1h-1zM15 24h3v1h-3zM19 24h1v1h-1zM21 24h2v1h-2zM24 24h1v1h-1zM26 24h3v1h-3zM2 25h1v1h-1zM8 25h1v1h-1zM10 25h4v1h-4zM15 25h1v1h-1zM20 25h3v1h-3zM26 25h1v1h-1zM30 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM10 26h1v1h-1zM12 26h3v1h-3zM16 26h4v1h-4zM22 26h5v1h-5zM28 26h1v1h-1zM30 26h1v1h-1zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM10 27h1v1h-1zM12 27h3v1h-3zM18 27h1v1h-1zM21 27h1v1h-1zM25 27h1v1h-1zM27 27h2v1h-2zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM10 28h1v1h-1zM12 28h1v1h-1zM15 28h1v1h-1zM17 28h4v1h-4zM23 28h7v1h-7zM2 29h1v1h-1zM8 29h1v1h-1zM12 29h1v1h-1zM15 29h2v1h-2zM18 29h1v1h-1zM22 29h1v1h-1zM25 29h1v1h-1zM27 29h1v1h-1zM29 29h1v1h-1zM2 30h7v1h-7zM10 30h3v1h-3zM14 30h1v1h-1zM16 30h1v1h-1zM19 30h1v1h-1zM21 30h1v1h-1zM23 30h1v1h-1zM25 30h4v1h-4z" fill="#000"/></svg></div>
+      <div class="cap">Sponsor &middot; Host &middot; Partner</div>
+    </div><div class="lf" style="--la: #26986A;" aria-label="The sponsor, host and partner form on https://www.llmday.com/#sponsor">
+      <div class="lf-body">
+        <div class="lf-title">Let's talk!</div>
+        <div class="lf-sub">We'll email you and share prospectuses for relevant events.</div>
+        <div class="lf-grid">
+          <div><span class="lf-lbl">Name</span><div class="lf-in"><b></b></div></div>
+          <div><span class="lf-lbl">Company</span><div class="lf-in"><b></b></div></div>
+          <div class="lf-wide"><span class="lf-lbl">Work email</span><div class="lf-in"><b></b></div></div>
+        </div>
+        <div class="lf-grp" data-pick="1-2"><span class="lf-lbl">We'd like to</span><div class="lf-chips"><span class="lf-chip">Sponsor</span><span class="lf-chip">Host</span><span class="lf-chip">Partner</span></div></div>
+        <div class="lf-grp" data-pick="1-3"><span class="lf-lbl">Conferences</span><div class="lf-chips"><span class="lf-chip" style="--c: #26986A;">LLMday</span><span class="lf-chip" style="--c: #713660;">SREday</span><span class="lf-chip" style="--c: #E2971D;">PLATFORMday</span></div></div>
+        <div class="lf-grp" data-pick="1-3"><span class="lf-lbl">Regions</span><div class="lf-chips"><span class="lf-chip">US</span><span class="lf-chip">UK</span><span class="lf-chip">EU</span><span class="lf-chip">ASIA</span><span class="lf-chip">Middle East & Africa</span><span class="lf-chip">LATAM</span></div></div>
+        <div class="lf-grp" data-pick="1-1"><span class="lf-lbl">Budget</span><div class="lf-chips"><span class="lf-chip">No budget</span><span class="lf-chip">Under $1K</span><span class="lf-chip">$1K-5K</span><span class="lf-chip">$5K-10K</span><span class="lf-chip">$10K-25K</span><span class="lf-chip">$25K+</span></div></div>
+        <div class="lf-consent"><span class="lf-box"></span><span>I agree to share all the information above with the organizer</span></div>
+        <div class="lf-actions"><span class="lf-send">Send</span><span class="lf-mailto">use mailto instead</span></div>
+      </div>
+    </div>
+    <script type="application/json" id="chat-data">[["Tony Stark", "Stark Industries", "tony@stark-industries.test"], ["Bruce Wayne", "Wayne Enterprises", "bruce@wayne-ent.test"], ["Ellen Ripley", "Weyland-Yutani", "e.ripley@weyland-yutani.test"], ["Marty McFly", "Hill Valley High", "marty@hillvalley.test"], ["Emmett Brown", "Brown Labs", "doc@brownlabs.test"], ["Sarah Connor", "Cyberdyne Systems", "sconnor@cyberdyne.test"], ["Miles Dyson", "Cyberdyne Systems", "mdyson@cyberdyne.test"], ["Willy Wonka", "Wonka Industries", "willy@wonka.test"], ["Charlie Bucket", "Wonka Industries", "charlie@wonka.test"], ["Peter Gibbons", "Initech", "peter.gibbons@initech.test"], ["Milton Waddams", "Initech", "milton@initech.test"], ["Eldon Tyrell", "Tyrell Corporation", "eldon@tyrell.test"], ["Rick Deckard", "LAPD Blade Runner Unit", "deckard@lapd-br.test"], ["Neo Anderson", "Metacortex", "t.anderson@metacortex.test"], ["Trinity", "Nebuchadnezzar Crew", "trinity@zion.test"], ["Morpheus", "Nebuchadnezzar Crew", "morpheus@zion.test"], ["John Hammond", "InGen", "hammond@ingen.test"], ["Ian Malcolm", "InGen", "malcolm@ingen.test"], ["Ellie Sattler", "InGen", "sattler@ingen.test"], ["Dennis Nedry", "InGen", "nedry@ingen.test"], ["Gordon Gekko", "Gekko \u0026 Co", "gordon@gekko.test"], ["Bud Fox", "Jackson Steinem", "bud.fox@jacksonsteinem.test"], ["Jordan Belfort", "Stratton Oakmont", "jordan@strattonoakmont.test"], ["Patrick Bateman", "Pierce \u0026 Pierce", "p.bateman@piercepierce.test"], ["Miranda Priestly", "Runway Magazine", "miranda@runway.test"], ["Andy Sachs", "Runway Magazine", "andy@runway.test"], ["Jerry Maguire", "Sports Management International", "jerry@smi.test"], ["Rod Tidwell", "Arizona Cardinals", "rod@quan.test"], ["Forrest Gump", "Bubba Gump Shrimp Co", "forrest@bubbagump.test"], ["Lieutenant Dan", "Bubba Gump Shrimp Co", "dan@bubbagump.test"], ["Ferris Bueller", "Shermer High", "ferris@shermer.test"], ["Cameron Frye", "Shermer High", "cameron@shermer.test"], ["Peter Venkman", "Ghostbusters", "venkman@ghostbusters.test"], ["Egon Spengler", "Ghostbusters", "egon@ghostbusters.test"], ["Ray Stantz", "Ghostbusters", "ray@ghostbusters.test"], ["Dana Barrett", "Ghostbusters", "dana@ghostbusters.test"], ["Indiana Jones", "Marshall College", "indy@marshall-college.test"], ["Marion Ravenwood", "Raven Bar", "marion@ravenbar.test"], ["Han Solo", "Millennium Falcon Freight", "han@falcon.test"], ["Leia Organa", "Rebel Alliance", "leia@rebellion.test"], ["Lando Calrissian", "Cloud City Mining", "lando@cloudcity.test"], ["Luke Skywalker", "Rebel Alliance", "luke@rebellion.test"], ["James Bond", "Universal Exports", "007@universal-exports.test"], ["Eve Moneypenny", "Universal Exports", "moneypenny@universal-exports.test"], ["Q", "Universal Exports", "q@universal-exports.test"], ["Ethan Hunt", "IMF", "ethan.hunt@imf.test"], ["Benji Dunn", "IMF", "benji@imf.test"], ["Jason Bourne", "Treadstone", "bourne@treadstone.test"], ["Danny Ocean", "Ocean Associates", "danny@ocean11.test"], ["Rusty Ryan", "Ocean Associates", "rusty@ocean11.test"], ["Terry Benedict", "Bellagio Holdings", "terry@benedict.test"], ["Vito Corleone", "Genco Olive Oil", "vito@genco.test"], ["Michael Corleone", "Genco Olive Oil", "michael@genco.test"], ["Tom Hagen", "Genco Olive Oil", "tom.hagen@genco.test"], ["Dorothy Gale", "Kansas Farms", "dorothy@kansasfarms.test"], ["Mary Poppins", "Banks Household", "mary@poppins.test"], ["Buzz Lightyear", "Star Command", "buzz@starcommand.test"], ["Woody Pride", "Al\u0027s Toy Barn", "woody@alstoybarn.test"], ["Mike Wazowski", "Monsters Inc", "mike@monstersinc.test"], ["James P. Sullivan", "Monsters Inc", "sulley@monstersinc.test"], ["Henry J. Waternoose", "Monsters Inc", "waternoose@monstersinc.test"], ["Edna Mode", "E Couture", "edna@ecouture.test"], ["Bob Parr", "Insuricare", "bob.parr@insuricare.test"], ["Helen Parr", "Supers Agency", "helen@supers.test"], ["Remy", "Gusteau\u0027s", "remy@gusteaus.test"], ["Lightning McQueen", "Rust-eze", "mcqueen@rusteze.test"], ["WALL-E", "Buy n Large", "wall-e@buynlarge.test"], ["EVE", "Buy n Large", "eve@buynlarge.test"], ["Carl Fredricksen", "Fredricksen Balloons", "carl@paradisefalls.test"], ["Shrek", "Swamp Holdings", "shrek@farfaraway.test"], ["Lord Farquaad", "Duloc Enterprises", "farquaad@duloc.test"], ["Po", "Valley of Peace Noodles", "po@peacevalley.test"], ["Gru", "Gru Labs", "gru@grulabs.test"], ["Dr. Nefario", "Gru Labs", "nefario@grulabs.test"], ["Hiro Hamada", "San Fransokyo Tech", "hiro@sftech.test"], ["Judy Hopps", "ZPD", "judy.hopps@zpd.test"], ["Nick Wilde", "ZPD", "nick.wilde@zpd.test"], ["Elsa", "Arendelle Royal Office", "elsa@arendelle.test"], ["Moana", "Motunui Voyages", "moana@motunui.test"], ["Wade Watts", "Gregarious Games", "parzival@oasis.test"], ["James Halliday", "Gregarious Games", "anorak@oasis.test"], ["Nolan Sorrento", "IOI", "sorrento@ioi.test"], ["Mark Watney", "NASA Ares III", "watney@ares3.test"], ["Joseph Cooper", "NASA Endurance", "cooper@endurance.test"], ["Murph Cooper", "NASA", "murph@endurance.test"], ["Dave Bowman", "Discovery One", "dave@discovery-one.test"], ["HAL 9000", "Discovery One", "hal@discovery-one.test"], ["Amelie Poulain", "Cafe des 2 Moulins", "amelie@deuxmoulins.test"], ["Truman Burbank", "Seahaven Insurance", "truman@seahaven.test"], ["Christof", "OmniCam", "christof@omnicam.test"], ["Lester Burnham", "Mr. Smiley\u0027s", "lester@mrsmileys.test"], ["The Dude", "Bowling League", "dude@abides.test"], ["Walter Sobchak", "Sobchak Security", "walter@sobchak.test"], ["Jules Winnfield", "Marsellus Wallace Ltd", "jules@wallace.test"], ["Mia Wallace", "Marsellus Wallace Ltd", "mia@wallace.test"], ["Tyler Durden", "Paper Street Soap Co", "tyler@paperstreet.test"], ["Ace Ventura", "Pet Detective Agency", "ace@petdetective.test"], ["Austin Powers", "British Intelligence", "austin@shagadelic.test"], ["Ron Burgundy", "KVWN Channel 4", "ron@kvwn.test"], ["Veronica Corningstone", "KVWN Channel 4", "veronica@kvwn.test"]]</script>
+  </section>
+  
+
+  
+  <section class="slide s-cards">
+    <div class="cards-side">
+      <img class="logo" src="img/llmday-535c0f4817.webp?v=da1cede95b" alt="LLMday" loading="eager">
+      <div class="qr-box"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code: https://www.llmday.com/"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM12 2h1v1h-1zM14 2h3v1h-3zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM12 3h1v1h-1zM14 3h1v1h-1zM17 3h2v1h-2zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM13 4h1v1h-1zM16 4h2v1h-2zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h1v1h-1zM12 5h4v1h-4zM17 5h1v1h-1zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h1v1h-1zM13 6h3v1h-3zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h4v1h-4zM15 7h3v1h-3zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM10 9h3v1h-3zM17 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM11 10h3v1h-3zM15 10h3v1h-3zM20 10h5v1h-5zM5 11h1v1h-1zM12 11h2v1h-2zM18 11h2v1h-2zM21 11h1v1h-1zM25 11h1v1h-1zM3 12h1v1h-1zM8 12h2v1h-2zM11 12h1v1h-1zM14 12h2v1h-2zM17 12h7v1h-7zM25 12h2v1h-2zM3 13h2v1h-2zM6 13h2v1h-2zM9 13h1v1h-1zM12 13h2v1h-2zM16 13h4v1h-4zM21 13h1v1h-1zM26 13h1v1h-1zM6 14h3v1h-3zM12 14h5v1h-5zM19 14h4v1h-4zM24 14h3v1h-3zM2 15h2v1h-2zM6 15h1v1h-1zM10 15h3v1h-3zM15 15h1v1h-1zM18 15h2v1h-2zM21 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM5 16h2v1h-2zM8 16h1v1h-1zM13 16h5v1h-5zM19 16h5v1h-5zM25 16h2v1h-2zM2 17h1v1h-1zM4 17h1v1h-1zM6 17h1v1h-1zM9 17h1v1h-1zM11 17h1v1h-1zM13 17h1v1h-1zM16 17h4v1h-4zM21 17h2v1h-2zM26 17h1v1h-1zM2 18h1v1h-1zM7 18h2v1h-2zM10 18h1v1h-1zM12 18h2v1h-2zM15 18h2v1h-2zM18 18h5v1h-5zM24 18h1v1h-1zM10 19h2v1h-2zM14 19h2v1h-2zM17 19h2v1h-2zM22 19h2v1h-2zM2 20h7v1h-7zM11 20h2v1h-2zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM14 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM22 21h2v1h-2zM25 21h1v1h-1zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h2v1h-2zM14 22h2v1h-2zM17 22h6v1h-6zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h1v1h-1zM12 23h1v1h-1zM15 23h1v1h-1zM17 23h1v1h-1zM20 23h1v1h-1zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h5v1h-5zM18 24h1v1h-1zM23 24h2v1h-2zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h3v1h-3zM16 25h4v1h-4zM21 25h3v1h-3zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h2v1h-2zM13 26h2v1h-2zM21 26h6v1h-6z" fill="#000"/></svg></div>
+    </div>
+    <div class="splash n4">
+      <div class="card"><img src="img/llmday-2026-tel-aviv-q4-60bfb7adde.webp?v=3492f17915" alt="LLMday Tel Aviv NOV 17, 2026" loading="eager"></div><div class="card here"><img src="img/llmday-2026-hamburg-q4-90536d53db.webp?v=9393d44ebd" alt="LLMday Hamburg NOV 18, 2026" loading="eager"></div><div class="card"><img src="img/llmday-2026-london-q4-1bab388a50.webp?v=e905222625" alt="LLMday London NOV 26, 2026" loading="eager"></div><div class="card"><img src="img/llmday-2026-montevideo-q4-840cf7e2ed.webp?v=d842b190b7" alt="LLMday Montevideo DEC 5, 2026" loading="eager"></div>
+    </div>
+    
+  </section>
+</div>
+
+<button class="ui" id="fs" type="button" title="Fullscreen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Fullscreen</button>
+<div class="ui" id="bar"><button type="button" id="prev" title="Previous (Left)">&#8249;</button><span id="count"></span><button type="button" id="next" title="Next (Right)">&#8250;</button><span id="load" title="Pictures loaded: once Ready, the deck runs without the wifi (don't reload)"></span></div>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage'), slides = [].slice.call(stage.querySelectorAll('.slide')),
+      count = document.getElementById('count'), cur = 0, idleT;
+  function fit() { stage.style.setProperty('--k', Math.min(innerWidth / 1920, innerHeight / 1080)); }
+  function go(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function (s, j) { s.classList.toggle('on', j === cur); });
+    count.textContent = (cur + 1) + ' / ' + slides.length;
+    history.replaceState(null, '', '#' + (cur + 1));
+  }
+  function fullscreen() {
+    var d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) { (d.exitFullscreen || d.webkitExitFullscreen).call(d); }
+    else { (el.requestFullscreen || el.webkitRequestFullscreen).call(el); }
+  }
+  function wake() {
+    document.body.classList.remove('idle'); clearTimeout(idleT);
+    idleT = setTimeout(function () { document.body.classList.add('idle'); }, 2500);
+  }
+  addEventListener('resize', fit);
+  addEventListener('mousemove', wake);
+  addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ' || k === 'Enter') go(cur + 1);
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') go(cur - 1);
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+    else if (k === 'f' || k === 'F') fullscreen();
+    else return;
+    e.preventDefault();
+  });
+  stage.addEventListener('click', function (e) { go(e.clientX < innerWidth / 3 ? cur - 1 : cur + 1); });
+  var x0 = null;
+  addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', function (e) {
+    if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+  });
+  document.getElementById('fs').addEventListener('click', fullscreen);
+  document.getElementById('prev').addEventListener('click', function () { go(cur - 1); });
+  document.getElementById('next').addEventListener('click', function () { go(cur + 1); });
+  // loading progress: every picture of every slide (+ the map mask) - open the deck early, wait for Ready
+  var load = document.getElementById('load'), bar = document.getElementById('bar'), want = 0, got = 0, bad = 0;
+  function show() {
+    var busy = got < want;
+    load.textContent = busy ? 'Loading ' + got + '/' + want : (bad ? bad + ' missing - reload' : 'Ready');
+    load.className = busy ? 'busy' : (bad ? 'bad' : 'ok');
+    bar.classList.toggle('loading', busy || bad > 0);
+  }
+  function track(im) {
+    want++;
+    if (im.complete) { got++; if (!im.naturalWidth) bad++; return; }
+    im.addEventListener('load', function () { got++; show(); });
+    im.addEventListener('error', function () { got++; bad++; show(); });
+  }
+  [].forEach.call(document.images, track);
+  [].forEach.call(stage.querySelectorAll('video'), function (v) {   // the spotlight loop: counted once it can play through
+    want++;
+    if (v.readyState >= 4) { got++; return; }
+    var done = false;
+    function end(ok) { if (done) return; done = true; got++; if (!ok) bad++; show(); }
+    v.addEventListener('canplaythrough', function () { end(true); });
+    var last = v.querySelector('source:last-of-type');                 // fails only when every <source> did
+    (last || v).addEventListener('error', function () { end(false); });
+  });
+  var masks = {};
+  [].forEach.call(stage.querySelectorAll('.map'), function (el) {
+    var cs = getComputedStyle(el), m = String(cs.webkitMaskImage || cs.maskImage || '').match(/url\(["']?([^"')]+)/);
+    if (m && !masks[m[1]]) { masks[m[1]] = 1; var p = new Image(); p.src = m[1]; track(p); }
+  });
+  show();
+
+  // the spotlight's version + headline straight from the project's site (CORS open on GitHub Pages), now and every 15 min
+  // while the deck runs: a release lands on the screen without a rebuild. Offline / blocked = the build-time copy stays.
+  [].forEach.call(stage.querySelectorAll('[data-pitch]'), function (sl) {
+    var url = sl.getAttribute('data-pitch'), eb = sl.querySelector('[data-pitch-eyebrow]'), h = sl.querySelector('[data-pitch-lines]');
+    function pull() {
+      if (!window.fetch || !window.DOMParser) return;
+      var ac = window.AbortController ? new AbortController() : null;
+      if (ac) setTimeout(function () { ac.abort(); }, 8000);
+      fetch(url, { cache: 'no-store', signal: ac && ac.signal }).then(function (r) { return r.ok ? r.text() : ''; }).then(function (t) {
+        if (!t) return;
+        var doc = new DOMParser().parseFromString(t, 'text/html'), e = doc.querySelector('.eyebrow'), h1 = doc.querySelector('h1');
+        if (e && e.textContent.trim()) eb.textContent = e.textContent.trim();
+        if (!h1) return;
+        var lines = h1.innerHTML.split(/<br\s*\/?>/i).map(function (x) {
+          var d = doc.createElement('div'); d.innerHTML = x; return d.textContent.trim();   // the inert parsed doc: nothing in it runs
+        }).filter(Boolean);
+        if (!lines.length) return;
+        h.textContent = '';
+        lines.forEach(function (x) { var s = document.createElement('span'); s.textContent = x; h.appendChild(s); });
+      }).catch(function () {});
+    }
+    pull(); setInterval(pull, 15 * 60 * 1000);
+  });
+  // Let's chat (Marek 2026-11-01): a random film character types their name, company and email into the form, picks a
+  // few chips at random, ticks the consent, presses Send; the form wipes and the next one starts - a new character and a
+  // new combination every time
+  (function () {
+    var sl = stage.querySelector('.s-chat'), data = document.getElementById('chat-data');
+    if (!sl || !data || !window.Promise) return;
+    var who = JSON.parse(data.textContent || '[]'), form = sl.querySelector('.lf');
+    if (!who.length || !form) return;
+    var ins = [].slice.call(form.querySelectorAll('.lf-in')), groups = [].slice.call(form.querySelectorAll('.lf-grp')),
+        box = form.querySelector('.lf-box'), send = form.querySelector('.lf-send'), last = -1;
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+    function rnd(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+    function type(el, text) {
+      var b = el.querySelector('b'), i = 0;
+      el.classList.add('on');
+      return (function step() {
+        if (i >= text.length) return wait(300).then(function () { el.classList.remove('on'); });
+        b.textContent += text.charAt(i++);
+        return wait(rnd(45, 115)).then(step);
+      })();
+    }
+    function tap(el) {
+      el.classList.add('tap');
+      return wait(140).then(function () { el.classList.remove('tap'); el.classList.add('sel'); return wait(rnd(260, 520)); });
+    }
+    function chips(g) {                                       // data-pick="min-max" chips of the group, in reading order
+      var all = [].slice.call(g.querySelectorAll('.lf-chip')), mm = g.getAttribute('data-pick').split('-'),
+          n = Math.min(all.length, rnd(+mm[0], +mm[1])), pick = all.slice();
+      for (var i = pick.length - 1; i > 0; i--) { var j = rnd(0, i), t = pick[i]; pick[i] = pick[j]; pick[j] = t; }
+      pick = pick.slice(0, n).sort(function (a, b) { return all.indexOf(a) - all.indexOf(b); });
+      return pick.reduce(function (p, c) { return p.then(function () { return tap(c); }); }, Promise.resolve());
+    }
+    function clear() {
+      ins.forEach(function (el) { el.querySelector('b').textContent = ''; el.classList.remove('on'); });
+      [].forEach.call(form.querySelectorAll('.sel'), function (el) { el.classList.remove('sel'); });
+      send.textContent = 'Send';
+    }
+    function round() {
+      var k;
+      do { k = rnd(0, who.length - 1); } while (k === last && who.length > 1);
+      last = k;
+      var c = who[k], p = wait(700);
+      ins.forEach(function (el, i) { p = p.then(function () { return type(el, c[i]); }); });
+      groups.forEach(function (g) { p = p.then(function () { return wait(250).then(function () { return chips(g); }); }); });
+      return p.then(function () { return tap(box); })
+              .then(function () { return tap(send); })
+              .then(function () { send.classList.remove('sel'); send.textContent = 'Sent!'; return wait(2200); })
+              .then(function () { form.classList.add('wipe'); return wait(400); })
+              .then(function () { clear(); form.classList.remove('wipe'); });
+    }
+    (function loop() { round().then(loop); })();
+  })();
+  fit(); go((parseInt(location.hash.slice(1), 10) || 1) - 1); wake();
+})();
+</script>
+</body>
+</html>
