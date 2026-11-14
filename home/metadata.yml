@@ -112,7 +112,7 @@ events_past:
     photo_url: ./assets/images/events/llmday-2026-bangalore-q2.png
     url: ./2026-bangalore-q2/
     size: small
-    youtube_playlist:
+    youtube_playlist: https://www.youtube.com/playlist?list=PLMYxMpPsmJIA
 
   - name: LLMday Hamburg 2026 Q2
     location: House of AI, Hamburg, Germany
