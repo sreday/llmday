@@ -35,7 +35,7 @@ This talk is the field report on what came next. Why I dropped PARA for an entit
 We’ll cover practical patterns but also cover the dark side of hidden branches, accidental behavior changes and an impressive new species of spaghetti.
 
 The goal is not to turn prompts into a templating religion. It is to make LLM behavior easier to reason about, debug, and safely evolve once prompts become a real part of your application.",,"Tal N. Mizrachi is a data scientist and founder of XP Lab, where he builds LLM-powered systems for evaluating analytical skills. With experience in data science, analytics leadership, and education, he focuses on the practical challenges of building reliable AI applications, from evaluating model outputs to keeping prompts and agent workflows from turning into spaghetti."
-,workshop,Haggai Zohar,1,1,TeraSky,Haggai Zohar.png,https://www.linkedin.com/in/haggai-zohar-3a9611/,,,,Company Brain with Fabric and Claude,"Most enterprise knowledge doesn't answer questions — it sits locked in
+,workshop,Haggai Zohar,2,1,TeraSky,Haggai Zohar.png,https://www.linkedin.com/in/haggai-zohar-3a9611/,,,,Company Brain with Fabric and Claude,"Most enterprise knowledge doesn't answer questions — it sits locked in
 semantic models, dashboards, and databases, waiting for someone who
 knows DAX or SQL to ask. This workshop shows you how to connect
 Claude AI to a Microsoft Fabric semantic layer using the Model Context

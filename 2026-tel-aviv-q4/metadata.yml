@@ -26,10 +26,11 @@ cfp_url: https://cfp.ninja/e/llmday-2026-tel-aviv-q4
 days: 1
 attendees: 150
 speakers: 10+
-tracks: 1
+tracks: 2
 
 rooms:
 - main room
+- workshop room
 
 # mirrors the in10t agenda (https://in10t.ai/llmday-dataday-tlv): doors 09:00, opening 09:45,
 # brunch 11:30, quick break 13:30, panel 13:45, lunch 14:30-15:15 (talks themselves stay 30 min here)
