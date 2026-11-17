@@ -15,7 +15,9 @@ site: $(addprefix static/,$(addsuffix /index.html,$(events))) static/index.html
 
 # .build/ = every event folder (top and past/) and home, hard-linked, their static/ left out; everything else at the
 # root linked in as it is. sponsors/ is hard-linked too: event Makefiles run "cp -r ../sponsors static", which would
-# copy a link as a link. An event both at the top and in past/ stops the build: an upload landed in the old folder.
+# copy a link as a link. Each one's static/ is made here, before anything builds: under make -j an event's "deps"
+# (mkdir static) and "theme" (cp ../_assets/template_v1/* static/) run side by side, and when the cp won it copied
+# assets/ AS static/ - no assets/css, a page without styles (Hamburg, 2026-11-17). An event both at the top and in past/ stops the build: an upload landed in the old folder.
 stage:
 	@for d in past/20*; do \
 		[ -d "$$d" ] || continue; \
@@ -25,6 +27,7 @@ stage:
 	@for d in 20* past/20* home sponsors; do \
 		[ -d "$$d" ] || continue; \
 		rsync -a --delete --exclude /static/ --link-dest="$(CURDIR)/$$d/" "$$d/" ".build/$$(basename $$d)/"; \
+		mkdir -p ".build/$$(basename $$d)/static"; \
 	done
 	@for e in .build/20*; do \
 		[ -d "$$e" ] || continue; \
