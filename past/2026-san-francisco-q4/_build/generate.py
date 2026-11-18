@@ -170,6 +170,13 @@ def md_plain(text):
     out = re.sub(r'(?<!\w)_+|_+(?!\w)', '', out)     # leftover _ / __ at word edges; snake_case keeps its underscores
     return re.sub(r'\s+', ' ', out).strip()
 
+# Nobody gets doxxed on our sites, not even by themselves (Marek 2026-11-18): an email address or a +country phone
+# number in any talks.csv cell (typed into the LinkedIn field, "contact me at ..." in a bio) never reaches a page.
+_DOX = re.compile(r"(?:mailto:)?[\w.+'-]+@[\w-]+(?:\.[\w-]+)+|(?<![\w/=.#-])\+\d[\d ()./-]{7,}\d")
+
+def undox(v):
+    return _DOX.sub("", v) if isinstance(v, str) else v
+
 def read_csv(path):
     """ Read the pre-process the CSV """
     items = []
@@ -177,7 +184,7 @@ def read_csv(path):
         # strip NUL bytes that some editors (e.g. Excel UTF-16 export) leave in
         reader = csv.DictReader(line.replace('\0', '') for line in f)
         for item in reader:
-            item = dict(item)
+            item = {k: undox(v) for k, v in dict(item).items()}
             if "abstract" in item:
                 item["abstract_s"] = textwrap.shorten(md_plain(item.get("abstract","")), 300, placeholder="...")
                 item["abstract_m"] = textwrap.shorten(md_plain(item.get("abstract","")), 1000, placeholder="...")
