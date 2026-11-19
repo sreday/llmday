@@ -1,0 +1,45 @@
+{
+ "reported": [],
+ "shipped": {
+  "Faris_Qatawneh_HeyBreez_AI_Voice_AI_Is_an_Operations_Problem_How_We_Ship_and_Run_Agents_at_Scale": {
+   "bytes": 277398,
+   "file": "LLMday Hamburg 2026 Q4 - Faris Qatawneh - Faris_Qatawneh_HeyBreez_AI_Voice_AI_Is_an_Operations_Problem_How_We_Ship_and_Run_Agents_at_Scale.pdf",
+   "id": "1iOr6tDL9rg6Iz5OwOVSkrHygRhz2TqZc",
+   "modified": "2026-11-17T20:15:46.760Z",
+   "shipped": "2026-11-19T11:57:04Z",
+   "step": "lossless"
+  },
+  "Gabriel_Awad_justtrack_GmbH_Design__Product__Engineering_What_Our_AIDriven_Design_Workflow_Fixed_and": {
+   "bytes": 2979291,
+   "file": "LLMday Hamburg 2026 Q4 - Gabriel Awad - Gabriel_Awad_justtrack_GmbH_Design__Product__Engineering_What_Our_AIDriven_Design_Workflow_Fixed_and.pdf",
+   "id": "1WdgAmJolLtYUy5LM2eShGJM91O0ECj9y",
+   "modified": "2026-11-17T12:02:57.119Z",
+   "shipped": "2026-11-19T11:57:26Z",
+   "step": "150 dpi"
+  },
+  "Jan_KleineKlatte_MoinMeister_Testing_AI_Agents_Like_SelfDriving_Cars": {
+   "bytes": 4968890,
+   "file": "LLMday Hamburg 2026 Q4 - Jan Kleine-Klatte - Jan_KleineKlatte_MoinMeister_Testing_AI_Agents_Like_SelfDriving_Cars.pdf",
+   "id": "1XlQA6C96H41-XmUuJX6u4GEX35yVi_nE",
+   "modified": "2026-11-17T19:49:51.819Z",
+   "shipped": "2026-11-19T11:57:31Z",
+   "step": "lossless"
+  },
+  "Kristaps_Pluto_IndependentFreelance_The_Untrusted_Web_Rethinking_Security_in_AI_Systems": {
+   "bytes": 842985,
+   "file": "LLMday Hamburg 2026 Q4 - Kristaps Pluto - Kristaps_Pluto_IndependentFreelance_The_Untrusted_Web_Rethinking_Security_in_AI_Systems.pdf",
+   "id": "1G7JCyYwoHX9hoPOBxJWamgHlPNX2CmhV",
+   "modified": "2026-11-16T19:51:34.820Z",
+   "shipped": "2026-11-19T11:57:33Z",
+   "step": "lossless"
+  },
+  "Miroslav_Dzunic_DKB_Code_Factory_GmbH_Build_Your_Own_Agentic_Factory_Agents_Still_Need_a_Definition_": {
+   "bytes": 1567315,
+   "file": "LLMday Hamburg 2026 Q4 - Miroslav Dzunic - Miroslav_Dzunic_DKB_Code_Factory_GmbH_Build_Your_Own_Agentic_Factory_Agents_Still_Need_a_Definition_.pdf",
+   "id": "1J9W9k07xUjTN293DjMKcrjhBsy6nhSaW",
+   "modified": "2026-11-17T21:32:41.591Z",
+   "shipped": "2026-11-19T11:57:36Z",
+   "step": "lossless"
+  }
+ }
+}
