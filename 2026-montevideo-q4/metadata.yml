@@ -66,6 +66,10 @@ sponsors:
     url: https://www.rebelnuts.uy/
   - logo: hockeystick.png
     url: https://www.hockeystick.show
+  # beers sponsor (Marcos 2026-11-18)
+  - logo: osopardo.png
+    name: Oso Pardo
+    url: https://www.osopardo.com.uy
 
 # these get displayed at the top
 hero_pictures:
