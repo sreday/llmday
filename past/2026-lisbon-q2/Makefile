@@ -7,7 +7,7 @@ deps:
 clean:
 	rm -rf ./static/*
 
-theme:
+theme: deps  # waits for mkdir static: under make -j the theme copy raced it and css landed at the event root (SREday Campinas, 2026-11-20)
 	cp -r ../_assets/template_v1/* static/
 	cp -r assets static
 	cp -r ../sponsors static
