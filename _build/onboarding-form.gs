@@ -42,6 +42,8 @@
  *   scan.sreday.com/sniff), so the secret link never sits in a public repo. No key, no Luma event yet, or Snout
  *   down: the email goes without the LIVE Q&A bullet and the preview says why. New scope (external requests):
  *   run testSniffLink() once from the editor before redeploying.
+ *   v16 (2026-11-23, Marek: "emphasize the deck dump more"): the Deck dump is its own bullet with a bold name and
+ *   says the slides go on the talk page right after the conference; the laptop line stands alone.
  */
 
 var BRANDS = {
@@ -64,7 +66,7 @@ function doGet() {
   // Health check. Never reveals the passphrase, only whether one is configured and whether the endpoint is locked.
   var lock = readJson('ONBOARDING_LOCK');
   return respond({ ok: true, service: 'speaker-onboarding', passphrase_set: !!expectedPassphrase(),
-                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, sniff_key_set: !!sniffKey(), version: 15 });   // v15: LIVE Q&A (Sniff) bullet, Marek's revised email
+                   failed_attempts: lock.count || 0, locked_for: currentLock(), queued: (readJson('ONBOARDING_QUEUE').items || []).length, sniff_key_set: !!sniffKey(), version: 16 });   // v16: the Deck dump is its own bullet
 }
 
 function doPost(e) {
@@ -236,7 +238,8 @@ function composeOnboarding(ev, brand) {
                'PIN to access your dashboard and the mobile app: *' + ev.sniff.pin + '*');
   }
   lines = lines.concat([
-    '- You will present from your own laptop. Please upload the final version of your slides [*here*](' + ev.deckdump_url + ') before the event',
+    '- You will present from your own laptop',
+    "- *Deck dump*: please upload the final version of your slides [*here*](" + ev.deckdump_url + ") before the event. We'll post them on your talk page right after the conference.",
     '- The v1 schedule will be published as soon as we get most speakers confirmed',
     '- Most regular talks will take place in the afternoon, between 12PM-6PM. Some last minute schedule changes may happen, so please avoid tight travel planning.',
     '- Promo cards: [' + ev.event_url + 'teasers/](' + ev.event_url + 'teasers/). You can post about your session straight away!',
