@@ -394,7 +394,7 @@ def _status_health(pct, days_left):
 # Logo stems the tidy-up below cannot guess (fused words, odd casing). Extend when a pill reads wrong.
 _STATUS_SPONSOR_NAMES = {"truffleroot": "truffleroot",   # their own lowercase spelling (ex Ultimosoft, rebranded 2026-09)
                          "cockroachlabs": "Cockroach Labs", "hockeystick": "HockeyStick", "devit-usa": "DevIT",
-                         "aiproductivityhub": "AI Productivity Hub", "prompthub": "PromptHub", "prompt-hub": "PromptHub"}
+                         "aiproductivityhub": "AI Productivity Hub", "misri": "Misri IT Solutions", "prompthub": "PromptHub", "prompt-hub": "PromptHub"}
 
 
 def _status_sponsor_name(logo):
