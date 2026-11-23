@@ -54,7 +54,7 @@ events:
     photo_url: ./assets/images/events/llmday-2026-austin-q4.png
     url: ./2026-austin-q4/
     size: medium
-    youtube_playlist:
+    youtube_playlist: https://www.youtube.com/playlist?list=PLFmUNKwrT9Uc
 
   - name: LLMday NYC 2026 Q4
     location: Microsoft Experience Center NYC, New York, United States
