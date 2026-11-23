@@ -48,6 +48,9 @@ breaks:
   comment: Main lobby
   talks_before: 3
 
+# the line under "Wrap up" at the end of the schedule (Marek 2026-11-23)
+wrap_up_comment: "Let's close the day with some beers, courtesy of Oso Pardo!"
+
 sponsors:
   - logo: owu.png
     url: https://www.owu.uy/

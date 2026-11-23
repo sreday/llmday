@@ -977,7 +977,7 @@ for track in tracks_ordered:
         offset += 1
     new_order.append(dict(
         title="Wrap up",
-        comment="Scan each other's QR codes & head to a nearby pub!",
+        comment=context.get("wrap_up_comment") or "Scan each other's QR codes & head to a nearby pub!",   # metadata wrap_up_comment: the event's own line
         duration=0,
     ))
     # negative offset: the track starts x slots into the opening break(s), shortened from the end (gone at 0 min)
