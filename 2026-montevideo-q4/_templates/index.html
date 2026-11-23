@@ -582,6 +582,13 @@
   /* the Hello intro as a blue glass shard in the Normal view (Marek 2026-11-09) */
   .item.item-hello { background: linear-gradient(160deg, rgba(224,242,254,.92), rgba(186,230,253,.68)); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 10px 26px rgba(3,105,161,.16), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.3); border-radius: 22px; }
   .item.item-hello .title, .item.item-hello .location { color: #0369a1 !important; }
+  /* desktop: the Hello shard gets even room above and below its text; time and dot move down with it (Marek 2026-11-23) */
+  @media (min-width: 992px) {
+    .schedule-section .schedule-tab-content .item.item-hello { padding: 1.1rem 0; }
+    .schedule-section .schedule-tab-content .item.item-hello .meta { top: 1.1rem; }
+    .schedule-section .schedule-tab-content .item.item-hello:after { top: calc(1.1rem + 5px); }
+    .schedule-section .schedule-tab-content .item.item-hello .content > :last-child { margin-bottom: 0 !important; }
+  }
   /* compact view: no blue background on the Hello row, only its blue text (Marek 2026-11-09) */
   .sc-row.sc-hello .sc-body { color: #0369a1; font-style: normal; font-weight: 600; }
   .schedule-grid-table td.hello-cell { background: #e0f2fe !important; color: #0369a1; font-weight: 600; }
