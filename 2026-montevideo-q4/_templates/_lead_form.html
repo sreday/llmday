@@ -188,6 +188,17 @@
 .lead-mailto-link { color: #cfcfcf; }
 .lead-mailto-link:hover, .lead-mailto-link:focus { color: #fff; }
 .lead-done { color: #f2f2f2; }
+/* "No budget" switches the Sponsor chip off (hint on hover) */
+.lead-chips .lead-chip.is-off { cursor: not-allowed; }
+.lead-chips .lead-chip.is-off span { opacity: .4; border-style: dashed; }
+.lead-chips .lead-chip.is-off span, .lead-chips .lead-chip.is-off:hover span { border-color: #999; }
+.lead-chip.is-off::after {
+  content: attr(data-hint); position: absolute; left: 0; bottom: calc(100% + 6px); z-index: 5;
+  background: var(--lead-accent); color: #fff; font-size: .78rem; font-weight: 600; white-space: nowrap;
+  padding: 5px 10px; border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  opacity: 0; pointer-events: none; transition: opacity .15s;
+}
+.lead-chip.is-off:hover::after { opacity: 1; }
 </style>
 <script>
 var LEAD_FORM_URL = "{{ lead_form_url | default('') }}";
@@ -271,11 +282,24 @@ function leadShowError(msg, d) {
   err.hidden = false;
   leadFit();
 }
+// "No budget" = no sponsorship: untick + switch off the Sponsor chip, back on for any real budget
+function leadBudgetGate(form) {
+  var b = form.querySelector('input[name="budget"]:checked');
+  var none = !!b && b.value === 'No budget';
+  var sp = form.querySelector('input[name="interests"][value="Sponsor"]');
+  if (!sp) return;
+  if (none) sp.checked = false;
+  sp.disabled = none;
+  var chip = sp.closest('.lead-chip');
+  chip.classList.toggle('is-off', none);
+  if (none) chip.setAttribute('data-hint', 'no budget = no sponsorship'); else chip.removeAttribute('data-hint');
+}
 // Clear a group's "pick at least one" marker as soon as something is picked
 document.getElementById('lead-form').addEventListener('change', function(ev) {
   var group = ev.target.closest('.lead-group');
   if (group) group.classList.remove('is-invalid');
   if (ev.target.classList) ev.target.classList.remove('is-invalid');
+  if (ev.target.name === 'budget') leadBudgetGate(this);
   leadFit();
 });
 document.getElementById('lead-form').addEventListener('submit', function(ev) {
