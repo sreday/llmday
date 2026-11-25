@@ -255,6 +255,7 @@ function openDeck(b) {
     }, { once: true });
   });
   if (typeof equalizeAmb === 'function') equalizeAmb();
+  if (typeof layoutStories === 'function') layoutStories();   /* dealt cards land under an open story at once */
   if (typeof hideShortReadMore === 'function') hideShortReadMore();
   glowIntensity();
 }
@@ -528,6 +529,7 @@ img.amb-pop.popped { animation: amb-pop .6s ease-out both; }
   #deck-amb .amb.open { margin-bottom: calc(-1 * var(--story-h, 0px)); z-index: 3; }
   #deck-amb .amb-more { display: block; height: 0; overflow: hidden; transition: height .4s cubic-bezier(.2,.8,.2,1); }
   #deck-amb .amb.open .amb-more { height: var(--story-h, auto); }
+  #deck-amb .amb.deck-deal { transition: none; }   /* a card being dealt in takes its place without sliding */
 }
 @media (prefers-reduced-motion: reduce) { #deck-amb, #deck-amb .amb, #deck-amb .amb-more { transition: none; } }
 #past-events { background: #26986A !important; }
