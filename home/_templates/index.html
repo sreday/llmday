@@ -137,9 +137,67 @@
 <script>
 /* Ambassador story opens underneath, inside the same card */
 function toggleStory(btn) {
-  var open = btn.closest('.amb').classList.toggle('open');
+  var card = btn.closest('.amb'), inGrid = !!card.closest('#deck-amb');
+  if (inGrid) storyHeight(card);
+  var open = card.classList.toggle('open');
   btn.setAttribute('aria-expanded', open);
+  if (inGrid) { layoutStories(); watchStory(card, open); }
   }
+/* Ambassador grid (2026-11-25): an open story pushes down only the cards of its own column.
+   The open card keeps its row's height (negative margin = story height), the cards under it slide
+   down with `translate` (shardTilt owns `transform`), and the grid grows at the bottom when needed. */
+function storyHeight(card) {
+  var inner = card.querySelector('.amb-more > div');
+  if (inner) card.style.setProperty('--story-h', inner.scrollHeight + 'px');
+}
+function ambOneColumn() { return !matchMedia('(min-width: 576px)').matches; }
+function layoutStories() {
+  var grid = document.getElementById('deck-amb');
+  if (!grid) return;
+  if (ambOneColumn()) {   /* phones: plain story, nothing slides */
+    [].forEach.call(grid.children, function (c) { c.style.translate = ''; });
+    grid.style.paddingBottom = '';
+    return;
+  }
+  var cards = [].filter.call(grid.children, function (c) { return c.classList.contains('amb') && c.offsetParent; });
+  var gap = parseFloat(getComputedStyle(grid).rowGap) || 0, cols = {}, natural = 0, needed = 0;
+  cards.forEach(function (c) {
+    var more = c.querySelector('.amb-more'), closed = c.offsetHeight - (more ? more.offsetHeight : 0);
+    c.__closed = closed;
+    c.__h = closed + (c.classList.contains('open') && more ? parseFloat(c.style.getPropertyValue('--story-h')) || 0 : 0);
+    natural = Math.max(natural, c.offsetTop + closed);
+    (cols[c.offsetLeft] = cols[c.offsetLeft] || []).push(c);
+  });
+  Object.keys(cols).forEach(function (k) {
+    var bottom = -Infinity;
+    cols[k].sort(function (a, b) { return a.offsetTop - b.offsetTop; }).forEach(function (c) {
+      var push = Math.max(0, Math.round(bottom + gap - c.offsetTop));
+      c.style.translate = push ? '0 ' + push + 'px' : '';
+      bottom = c.offsetTop + push + c.__h;
+    });
+    needed = Math.max(needed, bottom - natural);
+  });
+  grid.style.paddingBottom = needed > 0 ? Math.ceil(needed) + 'px' : '';
+}
+/* A story closes by itself once its card has scrolled out of view, so stories never pile up */
+var storyWatch = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+  es.forEach(function (e) {
+    if (e.isIntersecting || !e.target.classList.contains('open') || ambOneColumn()) return;
+    var b = e.target.querySelector('.amb-story');
+    if (b) toggleStory(b);
+  });
+}) : null;
+function watchStory(card, open) {
+  if (!storyWatch) return;
+  if (open) storyWatch.observe(card); else storyWatch.unobserve(card);
+}
+window.addEventListener('resize', function () {
+  clearTimeout(window.__storyT);
+  window.__storyT = setTimeout(function () {
+    [].forEach.call(document.querySelectorAll('#deck-amb .amb.open'), storyHeight);
+    layoutStories();
+  }, 160);
+});
 /* Every card in a row gets the row's tallest head, so closed cards line up */
 function equalizeAmb() {
   var heads = [].slice.call(document.querySelectorAll('.amb')).filter(function (c) { return c.offsetParent && !c.classList.contains('open'); })
@@ -193,6 +251,7 @@ function openDeck(b) {
     c.addEventListener('animationend', function () {
       c.classList.remove('deck-deal'); c.style.animationDelay = ''; if (window.splashQueue) splashQueue.kick();
       if (i === dealt.length - 1 && typeof equalizeAmb === 'function') equalizeAmb();
+      if (i === dealt.length - 1 && typeof layoutStories === 'function') layoutStories();
     }, { once: true });
   });
   if (typeof equalizeAmb === 'function') equalizeAmb();
@@ -461,6 +520,16 @@ img.amb-pop.popped { animation: amb-pop .6s ease-out both; }
 .amb-more > div { overflow: hidden; }
 .amb.open .amb-more { grid-template-rows: 1fr; }
 .amb-note { font-size: .9rem; line-height: 1.6; color: #2a3644; text-align: justify; -webkit-hyphens: auto; hyphens: auto; margin: 1rem 0 0; }
+/* Ambassador grid: a story pushes only its own column (see layoutStories) */
+/* Phones (one column) keep the plain story that opens in place */
+@media (min-width: 576px) {
+  #deck-amb { position: relative; transition: padding-bottom .4s cubic-bezier(.2,.8,.2,1); }
+  #deck-amb .amb { transition: box-shadow .35s ease, margin-bottom .4s cubic-bezier(.2,.8,.2,1), translate .4s cubic-bezier(.2,.8,.2,1); }
+  #deck-amb .amb.open { margin-bottom: calc(-1 * var(--story-h, 0px)); z-index: 3; }
+  #deck-amb .amb-more { display: block; height: 0; overflow: hidden; transition: height .4s cubic-bezier(.2,.8,.2,1); }
+  #deck-amb .amb.open .amb-more { height: var(--story-h, auto); }
+}
+@media (prefers-reduced-motion: reduce) { #deck-amb, #deck-amb .amb, #deck-amb .amb-more { transition: none; } }
 #past-events { background: #26986A !important; }
 #past-events .card, #past-events .card.rounded { border-radius: 24px !important; overflow: hidden; color: #141c25;
   background: linear-gradient(140deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.76) 50%, rgba(255,255,255,.80) 100%) !important;
