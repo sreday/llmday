@@ -137,23 +137,31 @@
 <script>
 /* Ambassador story opens underneath, inside the same card */
 function toggleStory(btn) {
-  var card = btn.closest('.amb'), inGrid = !!card.closest('#deck-amb');
-  if (inGrid) storyHeight(card);
+  var card = btn.closest('.amb'), grid = storyGrid(card);
+  if (grid) storyHeight(card);
   var open = card.classList.toggle('open');
   btn.setAttribute('aria-expanded', open);
-  if (inGrid) { layoutStories(); watchStory(card, open); }
+  if (grid) { layoutStories(grid); watchStory(card, open); }
+  return open;
   }
+/* Grids where an open card pushes only its own column: ambassador stories + testimonial "Read more" */
+var STORY_GRIDS = ['deck-amb', 'deck-testimonials'];
+function storyGrid(card) { var g = card.parentNode; return g && STORY_GRIDS.indexOf(g.id) >= 0 ? g : null; }
 /* Ambassador grid (2026-11-25): an open story pushes down only the cards of its own column.
    The open card keeps its row's height (negative margin = story height), the cards under it slide
    down with `translate` (shardTilt owns `transform`), and the grid grows at the bottom when needed. */
 function storyHeight(card) {
   var inner = card.querySelector('.amb-more > div');
-  if (inner) card.style.setProperty('--story-h', inner.scrollHeight + 'px');
+  if (inner) { card.style.setProperty('--story-h', inner.scrollHeight + 'px'); return; }
+  var t = card.querySelector('.testimonial-text');   /* testimonial: the quote grows from its three clamped lines */
+  if (!t) return;
+  var clamp = card.classList.contains('open') ? Math.round(parseFloat(getComputedStyle(t).lineHeight) * 3) : t.clientHeight;
+  card.style.setProperty('--clamp-h', clamp + 'px');
+  card.style.setProperty('--story-h', Math.max(0, t.scrollHeight - clamp) + 'px');
 }
 function ambOneColumn() { return !matchMedia('(min-width: 576px)').matches; }
-function layoutStories() {
-  var grid = document.getElementById('deck-amb');
-  if (!grid) return;
+function layoutStories(grid) {
+  if (!grid) { STORY_GRIDS.forEach(function (id) { var g = document.getElementById(id); if (g) layoutStories(g); }); return; }
   if (ambOneColumn()) {   /* phones: plain story, nothing slides */
     [].forEach.call(grid.children, function (c) { c.style.translate = ''; });
     grid.style.paddingBottom = '';
@@ -162,9 +170,11 @@ function layoutStories() {
   var cards = [].filter.call(grid.children, function (c) { return c.classList.contains('amb') && c.offsetParent; });
   var gap = parseFloat(getComputedStyle(grid).rowGap) || 0, cols = {}, natural = 0, needed = 0;
   cards.forEach(function (c) {
-    var more = c.querySelector('.amb-more'), closed = c.offsetHeight - (more ? more.offsetHeight : 0);
+    var more = c.querySelector('.amb-more'), quote = !more && c.querySelector('.testimonial-text');
+    var grown = more ? more.offsetHeight : quote ? quote.offsetHeight - (parseFloat(c.style.getPropertyValue('--clamp-h')) || quote.offsetHeight) : 0;
+    var closed = c.offsetHeight - grown;
     c.__closed = closed;
-    c.__h = closed + (c.classList.contains('open') && more ? parseFloat(c.style.getPropertyValue('--story-h')) || 0 : 0);
+    c.__h = closed + (c.classList.contains('open') && (more || quote) ? parseFloat(c.style.getPropertyValue('--story-h')) || 0 : 0);
     natural = Math.max(natural, c.offsetTop + closed);
     (cols[c.offsetLeft] = cols[c.offsetLeft] || []).push(c);
   });
@@ -184,7 +194,7 @@ var storyWatch = 'IntersectionObserver' in window ? new IntersectionObserver(fun
   es.forEach(function (e) {
     if (e.isIntersecting || !e.target.classList.contains('open') || ambOneColumn()) return;
     var b = e.target.querySelector('.amb-story');
-    if (b) toggleStory(b);
+    if (b) b.click();
   });
 }) : null;
 function watchStory(card, open) {
@@ -194,7 +204,7 @@ function watchStory(card, open) {
 window.addEventListener('resize', function () {
   clearTimeout(window.__storyT);
   window.__storyT = setTimeout(function () {
-    [].forEach.call(document.querySelectorAll('#deck-amb .amb.open'), storyHeight);
+    [].forEach.call(document.querySelectorAll('#deck-amb .amb.open, #deck-testimonials .amb.open'), storyHeight);
     layoutStories();
   }, 160);
 });
@@ -637,11 +647,20 @@ window.addEventListener('resize', function () { clearTimeout(window.__showMoreT)
 #testimonials .testimonial-body { margin-top: .9rem; text-align: left; font-size: .9rem; line-height: 1.6; color: #2a3644; }
 #testimonials .testimonial-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 #testimonials .amb.open .testimonial-text { display: block; -webkit-line-clamp: unset; overflow: visible; }
+/* Testimonial grid: "Read more" pushes only its own column (see layoutStories); phones open in place */
+@media (min-width: 576px) {
+  #deck-testimonials { position: relative; transition: padding-bottom .4s cubic-bezier(.2,.8,.2,1); }
+  #deck-testimonials .amb { transition: box-shadow .35s ease, margin-bottom .4s cubic-bezier(.2,.8,.2,1), translate .4s cubic-bezier(.2,.8,.2,1); }
+  #deck-testimonials .amb.open { margin-bottom: calc(-1 * var(--story-h, 0px)); z-index: 3; }
+  #deck-testimonials .testimonial-text { height: var(--clamp-h, auto); transition: height .4s cubic-bezier(.2,.8,.2,1); }
+  #deck-testimonials .amb.open .testimonial-text { height: calc(var(--clamp-h, 0px) + var(--story-h, 0px)); overflow: hidden; }
+  #deck-testimonials .amb.deck-deal { transition: none; }
+}
+@media (prefers-reduced-motion: reduce) { #deck-testimonials, #deck-testimonials .amb, #deck-testimonials .testimonial-text { transition: none; } }
 </style>
 <script>
 function toggleTestimonialBody(idx, btn) {
-  var open = btn.closest('.amb').classList.toggle('open');
-  btn.setAttribute('aria-expanded', open);
+  var open = toggleStory(btn);   /* same column push as the ambassador stories */
   btn.querySelector('span').textContent = open ? 'Show less' : 'Read more';
 }
 /* Short quotes that fit in three lines need no "Read more" */
