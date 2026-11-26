@@ -61,7 +61,7 @@ events:
     photo_url: ./assets/images/events/llmday-2026-nyc-q4.png
     url: ./2026-nyc-q4/
     size: medium
-    youtube_playlist:
+    youtube_playlist: https://www.youtube.com/playlist?list=PLPdEexrf-cac
 
   - name: LLMday + Data Tel Aviv 2026 Q4
     location: Microsoft Reactor, Tel Aviv, Israel
