@@ -323,7 +323,12 @@ for _a in context.get("ambassadors") or []:
     if not str(_a.get("Name") or "").strip() or not _shot or not os.path.exists("../ambassadors/" + _shot):
         continue
     with open("../ambassadors/" + _shot, "rb") as _f:
+        # job, company, linkedin (2026-11-26): what the site's card shows, for the badge printer's Ambassadors tab
+        # (badger snug/app/ambassadors.go). Only a LinkedIn link, never anything else typed into that field.
+        _li = str(_a.get("Linkedin") or "").strip()
         _amb_out.append({"name": str(_a["Name"]).strip(), "region": str(_a.get("Event") or "").strip(),
+                         "job": str(_a.get("Job") or "").strip(), "company": str(_a.get("Company") or "").strip(),
+                         "linkedin": _li if "linkedin.com/" in _li.lower() else "",
                          "headshot": _shot, "md5": _hl_amb.md5(_f.read()).hexdigest()})
 with open(BASE_FOLDER + "/ambassadors.json", "w", encoding="utf-8") as f:
     _json404.dump(_amb_out, f, ensure_ascii=False, separators=(",", ":"))
