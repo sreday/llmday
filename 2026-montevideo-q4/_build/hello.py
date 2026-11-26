@@ -613,36 +613,38 @@ def _amb_layout(people):
                 own = [p for p in placed if p[3] == c]
                 cx = sum(p[0] for p in own) / len(own) if own else 0.0
                 cy = sum(p[1] for p in own) / len(own) if own else 0.0
-                cands = [] if placed else [(0.0, 0.0)]
-                near = own or placed                         # touching two photos at once (one of them its country's):
-                for i, p in enumerate(near):                 # the pockets fill up, no holes
-                    da = p[2] + r + gap
-                    for q in placed:
-                        if q is p:
-                            continue
-                        db = q[2] + r + gap
-                        dx, dy = q[0] - p[0], q[1] - p[1]
-                        d = math.hypot(dx, dy)
-                        if d >= da + db or d <= abs(da - db) or d == 0:
-                            continue
-                        u = (da * da - db * db + d * d) / (2 * d)
-                        h = math.sqrt(max(0.0, da * da - u * u))
-                        mx, my = p[0] + u * dx / d, p[1] + u * dy / d
-                        cands.append((mx + h * dy / d, my - h * dx / d))
-                        cands.append((mx - h * dy / d, my + h * dx / d))
-                    if len(placed) == 1:                     # the second photo: anywhere on the first one's rim
-                        cands += [(p[0] + da * math.cos(t / 6), p[1] + da * math.sin(t / 6)) for t in range(38)]
                 best = None
-                for x, y in cands:
-                    if any(math.hypot(x - q[0], y - q[1]) < q[2] + r + gap - 1e-6 for q in placed):
-                        continue
-                    if own:                                  # near its own country, the cluster kept round-ish
-                        dist = math.hypot(x - cx, (y - cy) * stretch)
-                    else:                                    # a new country starts on the rim of the whole cluster
-                        dist = math.hypot(x, y * stretch) * .6
-                    dist += rng.uniform(0, .1)               # + a little chaos
-                    if best is None or dist < best[0]:
-                        best = (dist, x, y)
+                for near in ((own, placed) if own else (placed,)):   # touching two photos at once (one of them its
+                    if best is not None:                 # country's, or anyone's when its country is boxed in):
+                        break                            # the pockets fill up, no holes
+                    cands = [] if placed else [(0.0, 0.0)]
+                    for i, p in enumerate(near):
+                        da = p[2] + r + gap
+                        for q in placed:
+                            if q is p:
+                                continue
+                            db = q[2] + r + gap
+                            dx, dy = q[0] - p[0], q[1] - p[1]
+                            d = math.hypot(dx, dy)
+                            if d >= da + db or d <= abs(da - db) or d == 0:
+                                continue
+                            u = (da * da - db * db + d * d) / (2 * d)
+                            h = math.sqrt(max(0.0, da * da - u * u))
+                            mx, my = p[0] + u * dx / d, p[1] + u * dy / d
+                            cands.append((mx + h * dy / d, my - h * dx / d))
+                            cands.append((mx - h * dy / d, my + h * dx / d))
+                        if len(placed) == 1:                     # the second photo: anywhere on the first one's rim
+                            cands += [(p[0] + da * math.cos(t / 6), p[1] + da * math.sin(t / 6)) for t in range(38)]
+                    for x, y in cands:
+                        if any(math.hypot(x - q[0], y - q[1]) < q[2] + r + gap - 1e-6 for q in placed):
+                            continue
+                        if own:                                  # near its own country, the cluster kept round-ish
+                            dist = math.hypot(x - cx, (y - cy) * stretch)
+                        else:                                    # a new country starts on the rim of the whole cluster
+                            dist = math.hypot(x, y * stretch) * .6
+                        dist += rng.uniform(0, .1)               # + a little chaos
+                        if best is None or dist < best[0]:
+                            best = (dist, x, y)
                 placed.append((best[1], best[2], r, c))
                 where[id(a)] = placed[-1]
         bx0, bx1 = min(p[0] - p[2] for p in placed), max(p[0] + p[2] for p in placed)
