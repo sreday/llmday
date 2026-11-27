@@ -51,35 +51,35 @@ sponsors:
     url: https://www.hockeystick.show
   - logo: aiproductivityhub.png
     url: https://www.skool.com/ai-productivity-hub/about
-  - logo: prompt-hub.png
-    url: https://www.prompthub.us/
-  - logo: packt.png
-    url: https://packtpub.com/
-  - logo: pe-norway-full.png
-    url: https://www.meetup.com/promptengineering-community/
+  - logo: angular-london.png
+    url: https://www.meetup.com/angular-london/
+  - logo: city-js.png
+    url: https://cityjsconf.org/
+  - logo: cubixai.png
+    url: https://cubixai.com/
+  - logo: freecodecamp-london.png
+    url: https://www.meetup.com/freecodecamp-london/
   - logo: gdg_london.png
     name: GDG London
     url: https://www.meetup.com/gdglondon/
-  - logo: london-agentic-ai-meetup.png
-    url: https://www.meetup.com/london-agentic-ai/
-  - logo: it-schulungen.png
-    url: https://www.it-schulungen.com/
-  - logo: pec.png
-    url: https://www.pec.asia/2025/conference
-  - logo: cubixai.png
-    url: https://cubixai.com/
-  - logo: angular-london.png
-    url: https://www.meetup.com/angular-london/
-  - logo: freecodecamp-london.png
-    url: https://www.meetup.com/freecodecamp-london/
-  - logo: london-pytorch.png
-    url: https://www.meetup.com/london-pytorch-meetup/
-  - logo: techleadconf.png
-    url: https://techleadconf.com/
   - logo: gitnation.png
     url: https://gitnation.com/
-  - logo: city-js.png
-    url: https://cityjsconf.org/
+  - logo: it-schulungen.png
+    url: https://www.it-schulungen.com/
+  - logo: london-agentic-ai-meetup.png
+    url: https://www.meetup.com/london-agentic-ai/
+  - logo: london-pytorch.png
+    url: https://www.meetup.com/london-pytorch-meetup/
+  - logo: packt.png
+    url: https://packtpub.com/
+  - logo: pec.png
+    url: https://www.pec.asia/2025/conference
+  - logo: pe-norway-full.png
+    url: https://www.meetup.com/promptengineering-community/
+  - logo: prompt-hub.png
+    url: https://www.prompthub.us/
+  - logo: techleadconf.png
+    url: https://techleadconf.com/
 
 # these get displayed at the top
 hero_pictures:
