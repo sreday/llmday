@@ -17,12 +17,36 @@
    "shipped": "2026-10-31T00:58:26Z",
    "step": "lossless"
   },
+  "Erik_Schwartz_TheAiExpertai_From_Context_To_Impact_How_To_Ship_An_AI_App_In_A_Day": {
+   "bytes": 1177446,
+   "file": "LLMday London 2026 Q2 - Erik Schwartz - Erik_Schwartz_TheAiExpertai_From_Context_To_Impact_How_To_Ship_An_AI_App_In_A_Day.pdf",
+   "id": "1Df6ZI7nlk6Itbgn8N8z7RaBOkJqvn6T5",
+   "modified": "2026-11-27T13:19:44.306Z",
+   "shipped": "2026-11-27T23:37:29Z",
+   "step": "lossless"
+  },
   "Max_Helzberg_Northslope_Technologies_PurposeBuilt_AI_Ontologies_Why_Data_Modeling_Determines_LLM_Per": {
    "bytes": 946957,
    "file": "LLMday London 2026 Q2 - Max Helzberg - Max_Helzberg_Northslope_Technologies_PurposeBuilt_AI_Ontologies_Why_Data_Modeling_Determines_LLM_Per.pdf",
    "id": "1qWD2LFMLkUfxgc8ekq3snGNhUMa953-q",
    "modified": "2026-10-31T00:48:57.780Z",
    "shipped": "2026-10-31T00:58:26Z",
+   "step": "lossless"
+  },
+  "Richard_Dosumu_OctaTech_LLM_Evals_in_Production_How_to_Know_When_Your_Model_Is_Lying_to_You": {
+   "bytes": 394182,
+   "file": "LLMday London 2026 Q2 - Richard Dosumu - Richard_Dosumu_OctaTech_LLM_Evals_in_Production_How_to_Know_When_Your_Model_Is_Lying_to_You.pdf",
+   "id": "1C0K2cvXc-FEEG9Aor6tZvHe6UEsrejtk",
+   "modified": "2026-11-27T15:08:11.662Z",
+   "shipped": "2026-11-27T23:37:30Z",
+   "step": "lossless"
+  },
+  "Vishal_Bala_Redis_Context_Matters": {
+   "bytes": 2535586,
+   "file": "LLMday London 2026 Q2 - Vishal Bala - Vishal_Bala_Redis_Context_Matters.pdf",
+   "id": "14DW6iNPntrl7hDHNvCUTSYriRt0aUCSx",
+   "modified": "2026-11-27T14:04:45.930Z",
+   "shipped": "2026-11-27T23:37:34Z",
    "step": "lossless"
   }
  }

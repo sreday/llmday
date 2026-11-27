@@ -1,6 +1,22 @@
 {
  "reported": [],
  "shipped": {
+  "Alisson_Sol_Stealth_Startup_The_way_to_Edge_AI": {
+   "bytes": 2368612,
+   "file": "LLMday NYC 2026 Q1 - Alisson Sol - Alisson_Sol_Stealth_Startup_The_way_to_Edge_AI.pdf",
+   "id": "1XAatDk2cy4fCGH_Tg2h4C_zzGNyJNRgA",
+   "modified": "2026-11-27T18:56:31.211Z",
+   "shipped": "2026-11-27T23:37:46Z",
+   "step": "lossless"
+  },
+  "Jeremy_Curcio_Fearless_Engineering_Better_Prompts_for_AI_Assisted_Development": {
+   "bytes": 1356509,
+   "file": "LLMday NYC 2026 Q1 - Jeremy Curcio - Jeremy_Curcio_Fearless_Engineering_Better_Prompts_for_AI_Assisted_Development.pdf",
+   "id": "1bYFX9l_67qALk0RxVYIKeec3IQ6OJKJy",
+   "modified": "2026-11-27T13:06:05.787Z",
+   "shipped": "2026-11-27T23:37:48Z",
+   "step": "lossless"
+  },
   "Pranav_Kowadkar_New_Jersey_Institute_of_Technology__MultiAgent_Architectures_Solving_Production_LLM_": {
    "bytes": 1327786,
    "file": "LLMday NYC 2026 Q1 - Pranav Kowadkar - Pranav_Kowadkar_New_Jersey_Institute_of_Technology__MultiAgent_Architectures_Solving_Production_LLM_.pptx",

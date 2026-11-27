@@ -9,6 +9,14 @@
    "shipped": "2026-10-31T00:57:19Z",
    "step": "lossless"
   },
+  "Marcelo_Labre_Kidar_Agentic_Engineering_The_Agent_Writes_the_Code__Not_the_Process": {
+   "bytes": 126754,
+   "file": "LLMday NYC 2026 Q4 - Marcelo Labre - Marcelo_Labre_Kidar_Agentic_Engineering_The_Agent_Writes_the_Code__Not_the_Process.pdf",
+   "id": "10Gu27SJM6TGbwiqXffuU02aHySnqhk9M",
+   "modified": "2026-11-27T23:25:14.398Z",
+   "shipped": "2026-11-27T23:37:15Z",
+   "step": "lossless"
+  },
   "Maureese_Williams_Google_What_Did_Your_Agent_Actually_Do": {
    "bytes": 154214,
    "file": "LLMday NYC 2026 Q4 - Maureese Williams - Maureese_Williams_Google_What_Did_Your_Agent_Actually_Do.pdf",
@@ -23,6 +31,14 @@
    "id": "1209GR8z5LqALszRuiZY89n1bz1ZXk-Mw",
    "modified": "2026-10-31T00:54:00.693Z",
    "shipped": "2026-10-31T00:57:34Z",
+   "step": "300 dpi"
+  },
+  "Sai_Varma_Dantuluri_VotalAI_Agents_Arent_Users": {
+   "bytes": 3773567,
+   "file": "LLMday NYC 2026 Q4 - Sai Varma Dantuluri - Sai_Varma_Dantuluri_VotalAI_Agents_Arent_Users.pdf",
+   "id": "1_gyId9iC_yWav_vJWghYfbsl_f1S7Ue9",
+   "modified": "2026-11-27T15:02:21.326Z",
+   "shipped": "2026-11-27T23:37:19Z",
    "step": "300 dpi"
   }
  }
