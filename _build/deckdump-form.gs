@@ -26,6 +26,8 @@
  *      Setup: Script property WWW_SHEETS = {"sreday":"<sheet id>","llmday":"<id>","platformday":"<id>","pec":"<id>"}
  *      (never in this file: the repo is public), then run testRemind once (authorises Sheets), then a new version.
  *      v5 (2026-11-27): late: true = the "late ask" wording, for events that ended a month or more ago.
+ *      v6 (2026-11-27): {action: "mark_sent", token, brand, folder, note} records an event as reminded without
+ *      sending (a reminder sent by hand, or an event Marek skipped), so the week-after catch-up leaves it alone.
  *
  * Abuse guards (no passphrase - speakers use this from the onboarding email): honeypot, daily cap (DECKDUMP_DAILY),
  * file type + size caps, names and keys checked against strict patterns. The page only offers lineup talks.
@@ -68,7 +70,7 @@ function doGet(e) {
     if (!tokenOk(p.token)) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, access_token: ScriptApp.getOAuthToken(), files: listDecks() });
   }
-  return respond({ ok: true, service: 'deckdump', version: 5 });   // v3: PDFs only; v4: conference-day reminder; v5: late ask
+  return respond({ ok: true, service: 'deckdump', version: 6 });   // v4: conference-day reminder; v5: late ask; v6: mark_sent
 }
 
 function doPost(e) {
@@ -84,6 +86,7 @@ function doPost(e) {
   if (data.action === 'import') return importDecks(data);
   if (data.action === 'convert') return convertFolder(data);
   if (data.action === 'remind') return remind(data);
+  if (data.action === 'mark_sent') return markSent(data);
 
   var brandKey = String(data.brand || '').toLowerCase();
   var brand = BRANDS[brandKey];
@@ -505,6 +508,17 @@ function remind(data) {
   if (testTo) out.recipients = 1;
   out.sent = true;
   return respond(out);
+}
+
+// Record an event as reminded without sending: the reminder went out by hand, or Marek skipped the event.
+function markSent(data) {
+  if (!tokenOk(data.token)) return respond({ ok: false, error: 'forbidden' });
+  var brandKey = String(data.brand || '').toLowerCase(), folder = String(data.folder || '');
+  if (!BRANDS[brandKey] || !/^20\d\d-[a-z0-9-]+$/.test(folder)) return respond({ ok: false, error: 'invalid' });
+  var sentKey = 'REMIND_SENT|' + brandKey + '|' + folder, already = props().getProperty(sentKey);
+  if (already) return respond({ ok: true, already_sent: already });
+  props().setProperty(sentKey, new Date().toISOString() + ' marked: ' + clean(data.note, 80));
+  return respond({ ok: true, marked: true });
 }
 
 // Marek's wording (2026-11-27), "here" = the bold link to the conference-specific deck dump page. late = the event

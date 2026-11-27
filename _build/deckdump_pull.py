@@ -407,15 +407,27 @@ def compose(event_name, site, folder, r):
 # workflow tries 12:00-15:59 local so a dropped GitHub cron run is caught by the next one.
 
 REMIND_FROM_HOUR, REMIND_TO_HOUR = 12, 16
+CATCHUP_DAYS, CATCHUP_UNTIL_DAYS = 7, 30   # Marek 2026-11-27: "if for whatever reason github is down at the time of the
+                                           # conference, set the email to shoot a week after the event"
+CATCHUP_FROM = datetime.date(2026, 11, 28)   # earlier events were handled by the one-off send of 2026-11-27
 
 
 def remind_due(meta, now):
+    """Day 1, 12:00-15:59 local; or the catch-up: from 12:00 local a week after day 1 until 30 days after the end. The
+    script sends once per event (REMIND_SENT), so the catch-up only goes out when the day-1 email never did."""
     try:
         start = datetime.datetime.fromisoformat(str(meta.get("start_time") or ""))
     except ValueError:
         return False
-    local = now.astimezone(start.tzinfo or datetime.timezone.utc)
-    return local.date() == start.date() and REMIND_FROM_HOUR <= local.hour < REMIND_TO_HOUR
+    tz = start.tzinfo or datetime.timezone.utc
+    local = now.astimezone(tz)
+    if local.date() == start.date() and REMIND_FROM_HOUR <= local.hour < REMIND_TO_HOUR:
+        return True
+    if start.date() < CATCHUP_FROM:
+        return False
+    catchup = datetime.datetime.combine(start.date() + datetime.timedelta(days=CATCHUP_DAYS), datetime.time(REMIND_FROM_HOUR, 0), tz)
+    ends = datetime.datetime.combine(start.date() + datetime.timedelta(days=max(1, int(meta.get("days") or 1))), datetime.time(0, 0), tz)
+    return catchup <= local < ends + datetime.timedelta(days=CATCHUP_UNTIL_DAYS)
 
 
 def remind_lineup(folder_path):
@@ -476,7 +488,7 @@ def remind(feed, home, brand, site, args):
     if now.tzinfo is None:
         now = now.replace(tzinfo=datetime.timezone.utc)
     due = []
-    for path in sorted(glob.glob(os.path.join(ROOT, "20*"))):
+    for path in sorted(glob.glob(os.path.join(ROOT, "20*")) + glob.glob(os.path.join(ROOT, "past", "20*"))):
         folder = os.path.basename(path)
         if folder[:4] < "2025" or (args.event and folder != args.event):
             continue
@@ -488,7 +500,7 @@ def remind(feed, home, brand, site, args):
         if remind_due(meta, now):
             due.append(path)
     if not due:
-        print("Deck dump reminder: no %s event at 12:00-15:59 local time now" % (brand or "?"))
+        print("Deck dump reminder: no %s event due now (day 1 at 12:00-15:59 local, or the catch-up a week after)" % (brand or "?"))
         return 0
 
     res = http_json(feed, timeout=120)
