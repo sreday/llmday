@@ -419,7 +419,7 @@ def remind_due(meta, now):
 
 
 def remind_lineup(folder_path):
-    """Talks with ALL their speakers (co-speakers are separate rows with the same talk key)."""
+    """Talks with ALL their speakers: co-speakers are separate rows with the same talk key, or one "A & B" name."""
     talks = {}
     try:
         with open(os.path.join(folder_path, "_db", "talks.csv"), encoding="utf-8", errors="replace") as f:
@@ -428,8 +428,9 @@ def remind_lineup(folder_path):
                 if talk_kind(row.get("status")) not in LIVE_KINDS or not name:
                     continue
                 t = talks.setdefault(talk_url(row), {"key": talk_url(row), "names": [], "title": (row.get("title") or "").strip()})
-                if name not in t["names"]:
-                    t["names"].append(name)
+                for n in re.split(r"\s*(?:&| and )\s*", name):
+                    if n and n not in t["names"]:
+                        t["names"].append(n)
     except OSError:
         pass
     return list(talks.values())
@@ -468,6 +469,9 @@ def covered_keys(talks, uploads):
 
 
 def remind(feed, home, brand, site, args):
+    if brand == "pec":   # PEC lineups are LLMday's (transposed), so LLMday's reminder already reaches these speakers
+        print("Deck dump reminder: PEC speakers are reminded through the LLMday event with the same lineup")
+        return 0
     now = datetime.datetime.fromisoformat(args.now) if args.now else datetime.datetime.now(datetime.timezone.utc)
     if now.tzinfo is None:
         now = now.replace(tzinfo=datetime.timezone.utc)
