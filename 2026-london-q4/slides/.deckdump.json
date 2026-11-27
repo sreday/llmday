@@ -1,0 +1,109 @@
+{
+ "reported": [],
+ "shipped": {
+  "Alper_Nebi_Kanli_Optimizely_Interpretability_x_Retrieval_Inside_the_Models_That_Power_Search": {
+   "bytes": 1023237,
+   "file": "LLMday + PEC London 2026 Q4 - Alper Nebi Kanli - Alper_Nebi_Kanli_Optimizely_Interpretability_x_Retrieval_Inside_the_Models_That_Power_Search.pdf",
+   "id": "1R_93RDeac1ucp7x4VUf3lkKP_Y96-3WG",
+   "modified": "2026-11-26T15:43:50.314Z",
+   "shipped": "2026-11-27T12:51:33Z",
+   "step": "lossless"
+  },
+  "Andreas_Voniatis_Artios_Reverse_Engineering_AI_Search_Results": {
+   "bytes": 2961401,
+   "file": "LLMday + PEC London 2026 Q4 - Andreas Voniatis - Andreas_Voniatis_Artios_Reverse_Engineering_AI_Search_Results.pdf",
+   "id": "1s2WzalomGrNy_LXGHJ7q0KKDbYWJ2-Oo",
+   "modified": "2026-11-25T15:34:05.938Z",
+   "shipped": "2026-11-27T12:51:37Z",
+   "step": "300 dpi"
+  },
+  "Edoardo_Romani_MongoDB_Scaling_GTM_and_RevOps_Productivity_Driving_Growth_with_PersonaBased_AI_Agent": {
+   "bytes": 1010285,
+   "file": "LLMday + PEC London 2026 Q4 - Edoardo Romani - Edoardo_Romani_MongoDB_Scaling_GTM_and_RevOps_Productivity_Driving_Growth_with_PersonaBased_AI_Agent.pdf",
+   "id": "16PXVFDLT4z8V_2J527VMFDdxb8vrNSpO",
+   "modified": "2026-11-26T14:23:37.323Z",
+   "shipped": "2026-11-27T12:51:38Z",
+   "step": "lossless"
+  },
+  "Egor_Levchenko_allhealth_Can_you_trust_an_AI_Scientist_Reproducibility_and_evaluation_of_AIdriven_di": {
+   "bytes": 1913582,
+   "file": "LLMday + PEC London 2026 Q4 - Egor Levchenko - Egor_Levchenko_allhealth_Can_you_trust_an_AI_Scientist_Reproducibility_and_evaluation_of_AIdriven_di.pdf",
+   "id": "1Uk0iL1WBUTc1L1vVDyEt2VK1VXjtvw7X",
+   "modified": "2026-11-26T14:18:37.493Z",
+   "shipped": "2026-11-27T12:51:45Z",
+   "step": "lossless"
+  },
+  "Emmanuela_Opurum_SoftNet_Technologies_Designing_ProductionGrade_Prompt_Systems_for_AI_Agents_A_Solut": {
+   "bytes": 1847156,
+   "file": "LLMday + PEC London 2026 Q4 - Emmanuela Opurum - Emmanuela_Opurum_SoftNet_Technologies_Designing_ProductionGrade_Prompt_Systems_for_AI_Agents_A_Solut.pdf",
+   "id": "16Jw54eclSM_xjLk1JtDp1F9szYo1vjsO",
+   "modified": "2026-11-26T14:46:42.307Z",
+   "shipped": "2026-11-27T12:51:47Z",
+   "step": "lossless"
+  },
+  "Gabriele_Monti_Birkbeck_University_of_London_How_far_can_150_go_Finetuning_LLMs_and_Stable_Diffusion": {
+   "bytes": 1237261,
+   "file": "LLMday + PEC London 2026 Q4 - Gabriele Monti - Gabriele_Monti_Birkbeck_University_of_London_How_far_can_150_go_Finetuning_LLMs_and_Stable_Diffusion.pdf",
+   "id": "1XLztBB2csMIJ36U0MM3VDHxqZNN0f7Yi",
+   "modified": "2026-11-26T14:28:18.197Z",
+   "shipped": "2026-11-27T12:51:48Z",
+   "step": "lossless"
+  },
+  "Guilherme_Santos_Blindsight_Prompt_Lawyering_How_AI_games_human_requests": {
+   "bytes": 3617135,
+   "file": "LLMday + PEC London 2026 Q4 - Guilherme Santos - Guilherme_Santos_Blindsight_Prompt_Lawyering_How_AI_games_human_requests.pdf",
+   "id": "11Y9uGzR3NgaKS-qOpX8aVBu9yImbjrr-",
+   "modified": "2026-11-26T16:42:52.569Z",
+   "shipped": "2026-11-27T12:51:50Z",
+   "step": "lossless"
+  },
+  "Maxim_Salnikov_Microsoft_From_Assistant_to_Actor_The_New_Security_Risks_of_Coding_Agents": {
+   "bytes": 1003419,
+   "file": "LLMday + PEC London 2026 Q4 - Maxim Salnikov - Maxim_Salnikov_Microsoft_From_Assistant_to_Actor_The_New_Security_Risks_of_Coding_Agents.pdf",
+   "id": "1qy8ZzH9KtRTskf6Cv1ruWKW3RPcnoy0X",
+   "modified": "2026-11-26T14:38:03.787Z",
+   "shipped": "2026-11-27T12:51:53Z",
+   "step": "lossless"
+  },
+  "Oliver_Gooding_IFF_Research_Evaluating_LLM_Outputs_When_Quality_is_Subjective": {
+   "bytes": 1109632,
+   "file": "LLMday + PEC London 2026 Q4 - Oliver Gooding - Oliver_Gooding_IFF_Research_Evaluating_LLM_Outputs_When_Quality_is_Subjective.pdf",
+   "id": "1R9b1VWDibWWB3c2kdm-K0AfuNE3Ji9xO",
+   "modified": "2026-11-26T07:19:13.958Z",
+   "shipped": "2026-11-27T12:51:55Z",
+   "step": "lossless"
+  },
+  "Phillip_Mortimer_Universite_Paris_Dauphine__PSL_Tools_to_Think_With": {
+   "bytes": 2432230,
+   "file": "LLMday + PEC London 2026 Q4 - Phillip Mortimer - Phillip_Mortimer_Universite_Paris_Dauphine__PSL_Tools_to_Think_With.pdf",
+   "id": "1KGZrZadNM9sDuOXve0Un1TRBGw0zV8hH",
+   "modified": "2026-11-26T19:51:49.178Z",
+   "shipped": "2026-11-27T12:51:57Z",
+   "step": "lossless"
+  },
+  "Veronika_Ulanova_PhysicsX__Independent_Researcher_When_the_Ground_Truth_Disagrees_What_Atmospheric_B": {
+   "bytes": 1790049,
+   "file": "LLMday + PEC London 2026 Q4 - Veronika Ulanova - Veronika_Ulanova_PhysicsX__Independent_Researcher_When_the_Ground_Truth_Disagrees_What_Atmospheric_B.pdf",
+   "id": "1Vl64Uhzll6yHMvWv6pbCKxBvfA8v6XOy",
+   "modified": "2026-11-26T16:56:15.856Z",
+   "shipped": "2026-11-27T12:52:01Z",
+   "step": "300 dpi"
+  },
+  "Virginia_Roberts_Gemini_Rabbit_LLP_Fix_your_sad_agentic_AI": {
+   "bytes": 4624088,
+   "file": "LLMday + PEC London 2026 Q4 - Virginia Roberts - Virginia_Roberts_Gemini_Rabbit_LLP_Fix_your_sad_agentic_AI.pdf",
+   "id": "1zk_7Qjzk61ez33UbnzBjl9BQMro1KRqJ",
+   "modified": "2026-11-26T22:08:36.790Z",
+   "shipped": "2026-11-27T12:52:09Z",
+   "step": "lossless"
+  },
+  "Zoe_Yan_Echelon_AI_Agents_Meet_the_System_of_Record_Putting_AI_to_Work_Inside_Enterprise_Systems": {
+   "bytes": 4997780,
+   "file": "LLMday + PEC London 2026 Q4 - Zoe Yan - Zoe_Yan_Echelon_AI_Agents_Meet_the_System_of_Record_Putting_AI_to_Work_Inside_Enterprise_Systems.pdf",
+   "id": "17-DTwWSnxqfMm8ddUYTpTkt6whqPSZEf",
+   "modified": "2026-11-26T14:33:53.073Z",
+   "shipped": "2026-11-27T12:52:13Z",
+   "step": "lossless"
+  }
+ }
+}

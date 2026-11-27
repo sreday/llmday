@@ -17,6 +17,22 @@
    "shipped": "2026-11-19T11:57:26Z",
    "step": "150 dpi"
   },
+  "Ivan_Vokhmin_moebelde_Einrichten_und_Wohnen_GmbH_From_RAG_to_memory_decay_engineering_a_memory_for_c": {
+   "bytes": 1118687,
+   "file": "LLMday Hamburg 2026 Q4 - Ivan Vokhmin - Ivan_Vokhmin_moebelde_Einrichten_und_Wohnen_GmbH_From_RAG_to_memory_decay_engineering_a_memory_for_c.pdf",
+   "id": "1goOcacYKO2of2UjUhUMxMjw9WxbDWo-L",
+   "modified": "2026-11-27T09:36:30.433Z",
+   "shipped": "2026-11-27T12:51:27Z",
+   "step": "lossless"
+  },
+  "Izabel_Cvetkovic_OMR_Reviews_Hallucination_Gating_for_multiagentic_systems": {
+   "bytes": 554173,
+   "file": "LLMday Hamburg 2026 Q4 - Izabel Cvetkovic - Izabel_Cvetkovic_OMR_Reviews_Hallucination_Gating_for_multiagentic_systems.pdf",
+   "id": "1rhFNg9reSy4m3uF8ygzZ4vkLm3z_GJUt",
+   "modified": "2026-11-27T09:32:09.425Z",
+   "shipped": "2026-11-27T12:51:28Z",
+   "step": "lossless"
+  },
   "Jan_KleineKlatte_MoinMeister_Testing_AI_Agents_Like_SelfDriving_Cars": {
    "bytes": 4968890,
    "file": "LLMday Hamburg 2026 Q4 - Jan Kleine-Klatte - Jan_KleineKlatte_MoinMeister_Testing_AI_Agents_Like_SelfDriving_Cars.pdf",
@@ -31,6 +47,14 @@
    "id": "1G7JCyYwoHX9hoPOBxJWamgHlPNX2CmhV",
    "modified": "2026-11-16T19:51:34.820Z",
    "shipped": "2026-11-19T11:57:33Z",
+   "step": "lossless"
+  },
+  "Marcel_Koert_MeloMarIT_The_Code_Was_the_Easy_Part_Building_Spaghetti_Code_Foundry": {
+   "bytes": 5180614,
+   "file": "LLMday Hamburg 2026 Q4 - Marcel Koert - Marcel_Koert_MeloMarIT_The_Code_Was_the_Easy_Part_Building_Spaghetti_Code_Foundry.pdf",
+   "id": "1FGiL3cGdJp-YNuCraliM25-z1naRF0AJ",
+   "modified": "2026-11-27T12:35:18.800Z",
+   "shipped": "2026-11-27T12:51:31Z",
    "step": "lossless"
   },
   "Miroslav_Dzunic_DKB_Code_Factory_GmbH_Build_Your_Own_Agentic_Factory_Agents_Still_Need_a_Definition_": {
