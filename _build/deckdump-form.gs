@@ -28,6 +28,9 @@
  *      v5 (2026-11-27): late: true = the "late ask" wording, for events that ended a month or more ago.
  *      v6 (2026-11-27): {action: "mark_sent", token, brand, folder, note} records an event as reminded without
  *      sending (a reminder sent by hand, or an event Marek skipped), so the week-after catch-up leaves it alone.
+ *   8. {action: "inbox", token, ...} (v7, Marek 2026-11-27): decks that speakers EMAIL us (attached, or a Drive /
+ *      Slides / Dropbox link) are imported as if uploaded on the page. Hourly from _build/deckdump_pull.py --inbox.
+ *      See inboxScan() below. Same setup as 7 (WWW_SHEETS); run testInbox once after pasting.
  *
  * Abuse guards (no passphrase - speakers use this from the onboarding email): honeypot, daily cap (DECKDUMP_DAILY),
  * file type + size caps, names and keys checked against strict patterns. The page only offers lineup talks.
@@ -70,7 +73,7 @@ function doGet(e) {
     if (!tokenOk(p.token)) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, access_token: ScriptApp.getOAuthToken(), files: listDecks() });
   }
-  return respond({ ok: true, service: 'deckdump', version: 6 });   // v4: conference-day reminder; v5: late ask; v6: mark_sent
+  return respond({ ok: true, service: 'deckdump', version: 7 });   // v4: conference-day reminder; v5: late ask; v6: mark_sent; v7: inbox
 }
 
 function doPost(e) {
@@ -87,6 +90,7 @@ function doPost(e) {
   if (data.action === 'convert') return convertFolder(data);
   if (data.action === 'remind') return remind(data);
   if (data.action === 'mark_sent') return markSent(data);
+  if (data.action === 'inbox') return inboxScan(data);
 
   var brandKey = String(data.brand || '').toLowerCase();
   var brand = BRANDS[brandKey];
@@ -287,43 +291,55 @@ function isDeckFile(f) {
 
 function importDecks(data) {
   if (!tokenOk(data.token)) return respond({ ok: false, error: 'forbidden' });
-  var results = [];
-  (data.items || []).slice(0, 15).forEach(function (it) {
-    var r = { short_url: it.short_url, speaker: it.speaker };
-    try {
-      var msg = GmailApp.getMessageById(String(it.message_id)), when = msg.getDate(), blob = null, name = '';
-      if (it.attachment) {
-        var a = msg.getAttachments({ includeInlineImages: false }).filter(function (x) { return x.getName() === it.attachment; })[0];
-        if (!a) throw new Error('attachment not found');
-        blob = a.copyBlob(); name = a.getName();
-      } else if (it.drive_id) {
-        var f = DriveApp.getFileById(String(it.drive_id));
-        if (!isDeckFile(f)) throw new Error('not a deck: ' + f.getName() + ' (' + f.getMimeType() + ')');
-        if (f.getMimeType() === MimeType.GOOGLE_SLIDES) { blob = f.getAs('application/pdf'); name = f.getName() + '.pdf'; }
-        else { blob = f.getBlob(); name = f.getName(); }
-        if (!DECK_EXT.test(name)) name += '.pdf';
-      } else {
-        throw new Error('nothing to import');
-      }
-      if (!/\.pdf$/i.test(name)) { blob = toPdf(blob, name); name = name.replace(/\.[a-z0-9]+$/i, '') + '.pdf'; }
-      var d = normalizeDeck({ event: { folder: it.folder, event_name: it.event }, talk: { short_url: it.short_url, name: it.speaker, title: it.title },
-                              file: { name: name, size: blob.getBytes().length } }, String(it.brand || ''));
-      if (!BRANDS[it.brand] || d.errors.length) throw new Error('invalid: ' + d.errors.join(', '));
-      d.meta.source = 'email';
-      var newer = listDecks().filter(function (x) { return key(x.meta) === key(d.meta) && x.meta.uploaded_at > when.toISOString(); });
-      if (newer.length) { r.skipped = 'a newer upload exists'; results.push(r); return; }
-      blob.setName(d.filename);
-      if (d.ext !== 'pdf' || blob.getContentType() !== TYPES.pdf) blob.setContentType(TYPES[d.ext]);
-      var file = deckFolder().createFile(blob);
-      d.email = '';                                                 // no receipt for imports
-      var done = finish(file, d, BRANDS[it.brand], when);
-      r.ok = true; r.name = done.name; r.replaced = done.replaced;
-    } catch (err) {
-      r.error = String(err).slice(0, 200);
+  return respond({ ok: true, results: (data.items || []).slice(0, 15).map(importOne) });
+}
+
+// one deck from the mailbox into the folder: a Gmail attachment, a Drive/Slides file, or (v7) a Dropbox link
+function importOne(it) {
+  var r = { short_url: it.short_url, speaker: it.speaker };
+  try {
+    var msg = GmailApp.getMessageById(String(it.message_id)), when = msg.getDate(), blob = null, name = '';
+    if (it.attachment) {
+      var a = msg.getAttachments({ includeInlineImages: false }).filter(function (x) { return x.getName() === it.attachment; })[0];
+      if (!a) throw new Error('attachment not found');
+      blob = a.copyBlob(); name = a.getName();
+    } else if (it.drive_id) {
+      var f = DriveApp.getFileById(String(it.drive_id));
+      if (!isDeckFile(f)) throw new Error('not a deck: ' + f.getName() + ' (' + f.getMimeType() + ')');
+      if (f.getMimeType() === MimeType.GOOGLE_SLIDES) { blob = f.getAs('application/pdf'); name = f.getName() + '.pdf'; }
+      else { blob = f.getBlob(); name = f.getName(); }
+      if (!DECK_EXT.test(name)) name += '.pdf';
+    } else if (it.url && /^https:\/\/(www\.)?dropbox\.com\//i.test(it.url)) {
+      var url = String(it.url).replace(/([?&])dl=0\b/, '$1dl=1');
+      if (!/[?&]dl=1\b/.test(url)) url += (url.indexOf('?') < 0 ? '?' : '&') + 'dl=1';
+      var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true });
+      if (res.getResponseCode() !== 200) throw new Error('Dropbox link: HTTP ' + res.getResponseCode());
+      var h = res.getHeaders(), cd = String(h['Content-Disposition'] || h['content-disposition'] || '');
+      var fn = /filename\*=UTF-8''([^;]+)/i.exec(cd) || /filename="?([^";]+)/i.exec(cd);
+      name = fn ? decodeURIComponent(fn[1]) : '';
+      if (!DECK_EXT.test(name)) throw new Error('Dropbox link is not a deck file' + (name ? ': ' + name : ' (a folder?)'));
+      blob = res.getBlob();
+    } else {
+      throw new Error('nothing to import');
     }
-    results.push(r);
-  });
-  return respond({ ok: true, results: results });
+    if (/\.key$/i.test(name)) throw new Error('Keynote file: needs a PDF export');
+    if (!/\.pdf$/i.test(name)) { blob = toPdf(blob, name); name = name.replace(/\.[a-z0-9]+$/i, '') + '.pdf'; }
+    var d = normalizeDeck({ event: { folder: it.folder, event_name: it.event }, talk: { short_url: it.short_url, name: it.speaker, title: it.title },
+                            file: { name: name, size: blob.getBytes().length } }, String(it.brand || ''));
+    if (!BRANDS[it.brand] || d.errors.length) throw new Error('invalid: ' + d.errors.join(', '));
+    d.meta.source = 'email';
+    var newer = listDecks().filter(function (x) { return key(x.meta) === key(d.meta) && x.meta.uploaded_at > when.toISOString(); });
+    if (newer.length) { r.skipped = 'a newer upload exists'; return r; }
+    blob.setName(d.filename);
+    if (d.ext !== 'pdf' || blob.getContentType() !== TYPES.pdf) blob.setContentType(TYPES[d.ext]);
+    var file = deckFolder().createFile(blob);
+    d.email = '';                                                 // no receipt for imports
+    var done = finish(file, d, BRANDS[it.brand], when);
+    r.ok = true; r.name = done.name; r.replaced = done.replaced;
+  } catch (err) {
+    r.error = String(err).slice(0, 200);
+  }
+  return r;
 }
 
 // PowerPoint / ODP -> PDF through Google Slides: upload as a converted Slides file (resumable, so big decks never pass
@@ -547,14 +563,24 @@ function composeReminder(brand, folder, eventName, late) {
 // names one; copies, backups and placeholders skipped), the one where most of these speakers are found. Row layout:
 // a "name" column, and the address in the unlabelled column (the first cell of the row that looks like an address).
 function speakerEmails(brandKey, folder, names) {
+  var want = names.map(normName), best = bestTab(readTabs(brandKey), folder, want);
+  if (!best) throw new Error('no ' + folder.slice(0, 4) + ' tab of the WWW sheet lists these speakers');
+  var out = { tab: best.tab, emails: [], matched: [], unmatched: [] };
+  names.forEach(function (n, i) {
+    var e = best.map[want[i]];
+    if (e) { out.emails.push(e); out.matched.push(n); } else out.unmatched.push(n);
+  });
+  return out;
+}
+
+// every usable tab of the brand's WWW sheet as {tab, map: normalised name -> address} (copies, backups, placeholders out)
+function readTabs(brandKey) {
   var ids = readJson('WWW_SHEETS'), id = ids[brandKey];
   if (!id) throw new Error('no WWW sheet for ' + brandKey + ' in the WWW_SHEETS script property');
-  var year = folder.slice(0, 4), q = (folder.match(/-q(\d)$/) || [])[1];
-  var want = names.map(normName), best = null;
+  var out = [];
   SpreadsheetApp.openById(id).getSheets().forEach(function (sh) {
     var title = sh.getName();
-    if (title.indexOf(year) < 0 || /copy of|backup|old|placeholder/i.test(title)) return;
-    if (q && /\bq\d\b/i.test(title) && !new RegExp('\\bq' + q + '\\b', 'i').test(title)) return;
+    if (!/20\d\d/.test(title) || /copy of|backup|old|placeholder/i.test(title)) return;
     var rows = sh.getDataRange().getDisplayValues();
     if (!rows.length) return;
     var col = rows[0].map(function (h) { return String(h).trim().toLowerCase(); }).indexOf('name');
@@ -567,16 +593,21 @@ function speakerEmails(brandKey, folder, names) {
         if (k && addr && !map[k]) map[k] = String(addr).trim().toLowerCase();
       });
     });
-    var hits = want.filter(function (k) { return map[k]; }).length;
-    if (hits && (!best || hits > best.hits)) best = { tab: title, map: map, hits: hits };
-  });
-  if (!best) throw new Error('no ' + year + ' tab of the WWW sheet lists these speakers');
-  var out = { tab: best.tab, emails: [], matched: [], unmatched: [] };
-  names.forEach(function (n, i) {
-    var e = best.map[want[i]];
-    if (e) { out.emails.push(e); out.matched.push(n); } else out.unmatched.push(n);
+    out.push({ tab: title, map: map });
   });
   return out;
+}
+
+// the event's tab: names the event's year (and its quarter, when the tab names one), most of these speakers on it
+function bestTab(tabs, folder, want) {
+  var year = folder.slice(0, 4), q = (folder.match(/-q(\d)$/) || [])[1], best = null;
+  tabs.forEach(function (t) {
+    if (t.tab.indexOf(year) < 0) return;
+    if (q && /\bq\d\b/i.test(t.tab) && !new RegExp('\\bq' + q + '\\b', 'i').test(t.tab)) return;
+    var hits = want.filter(function (k) { return t.map[k]; }).length;
+    if (hits && (!best || hits > best.hits)) best = { tab: t.tab, map: t.map, hits: hits };
+  });
+  return best;
 }
 
 function normName(v) {   // = norm_name in _build/deckdump_pull.py: accents off, letters only
@@ -620,4 +651,175 @@ function testDeckdump() {
   }) } };
   Logger.log(doPost(e).getContent());
   Logger.log('Decks in the folder: ' + listDecks().length);
+}
+
+// ---- decks sent by email (v7, Marek 2026-11-27) ---------------------------------------------
+// {action: "inbox", token, brand, days, dry, events: [{folder, event_name, opens, closes, day1, talks: [{short_url,
+// names, title}]}]} from _build/deckdump_pull.py --inbox (the reminder workflow, hourly). "events" = this brand's open
+// events and their talks WITHOUT a deck. The last <days> days of mail are read; a message counts only when it comes
+// FROM one of those speakers (the address in the WWW sheet; else the exact sender name) and carries a deck: an attached
+// PDF/PowerPoint/ODP, or a Google Drive / Slides / Dropbox link this account can open. It is then imported exactly like
+// an upload on the page (PDF, the talk's file name, dated by the email; source "email"), and the thread gets the
+// "Deck dump" label. A deck we cannot take by ourselves (Keynote, a Drive link without access, Speaker Deck, OneDrive,
+// WeTransfer...) or a message that fits two talks gets the label "Deck dump/needs a hand", for Marek to look at in
+// Gmail (no notification emails, Marek 2026-10-31). The response holds names only: Actions logs of public repos are
+// public. Each message is looked at once (Script Property INBOX_SEEN).
+var OUR_DOMAINS = /@(sreday|llmday|platformday|conf42)\.com$|@promptengineering\.rocks$/i;
+var NEEDS_LABEL = 'Deck dump/needs a hand';
+var JUNK_NAME = /invoice|receipt|\bcv\b|resume|\bbio\b|visa|banner|headshot|photo|ticket|boarding|itinerary|contract|agreement|\bnda\b|passport|\bw-?[89]\b|expense|certificate|badge|logo|letter/i;
+var DROPBOX_RE = /https:\/\/(?:www\.)?dropbox\.com\/[^\s<>"')\]]+/gi;
+var ELSEWHERE_RE = /https?:\/\/(?:www\.)?(speakerdeck\.com|slideshare\.net|onedrive\.live\.com|1drv\.ms|[\w-]+\.sharepoint\.com|we\.tl|wetransfer\.com|pitch\.com|canva\.com|gamma\.app|figma\.com|box\.com|icloud\.com)\//i;
+var BRAND_WORDS = { sreday: ['sreday'], llmday: ['llmday', 'prompt engineering'], platformday: ['platformday'], pec: ['prompt engineering', 'llmday'] };
+var INBOX_IMPORTS_MAX = 10;                         // per call; the rest waits an hour (6-minute Apps Script limit)
+
+function inboxScan(data) {
+  if (!tokenOk(data.token)) return respond({ ok: false, error: 'forbidden' });
+  var brandKey = String(data.brand || '').toLowerCase();
+  if (!BRANDS[brandKey]) return respond({ ok: false, error: 'bad brand' });
+  var started = Date.now(), days = Math.max(1, Math.min(90, Math.round(Number(data.days) || 3)));
+  var events = (data.events || []).slice(0, 100).filter(function (ev) { return /^20\d\d-[a-z0-9-]+$/.test(String(ev && ev.folder || '')); });
+  var out = { ok: true, dry: !!data.dry, messages: 0, imported: [], needs_hand: [] };
+
+  // 1. the mailbox first: most hours nothing came in, and then the sheet is never opened
+  var seen = readJson('INBOX_SEEN'), cutoff = started - days * 864e5, msgs = [];
+  var q = 'newer_than:' + days + 'd -in:sent -in:chats (has:attachment OR "drive.google.com" OR "docs.google.com" OR "dropbox.com" ' +
+          'OR "speakerdeck.com" OR "slideshare" OR "sharepoint.com" OR "1drv.ms" OR "wetransfer" OR "we.tl" OR "canva.com" OR "pitch.com")';
+  GmailApp.search(q, 0, 200).forEach(function (t) {
+    t.getMessages().forEach(function (m) {
+      var from = String(m.getFrom() || ''), addr = ((/<([^>]+)>/.exec(from) || [])[1] || from).trim().toLowerCase();
+      if (m.getDate().getTime() < cutoff || seen[m.getId()] || OUR_DOMAINS.test(addr) || m.isInTrash()) return;
+      msgs.push({ m: m, thread: t, addr: addr, name: from.replace(/<[^>]*>/, '').replace(/"/g, '').trim(), date: m.getDate() });
+    });
+  });
+  out.messages = msgs.length;
+  if (!msgs.length || !events.length) return respond(out);
+  msgs.sort(function (a, b) { return b.date - a.date; });              // newest first: the latest deck wins
+
+  // 2. who is who: the WWW sheet tab of each event, as for the reminder
+  var tabs = readTabs(brandKey), byAddr = {}, byName = {};
+  events.forEach(function (ev) {
+    var talks = (ev.talks || []).filter(function (t) { return /^[A-Za-z0-9_]{3,100}$/.test(String(t.short_url || '')); });
+    var names = [];
+    talks.forEach(function (t) { (t.names || []).forEach(function (n) { names.push(normName(n)); }); });
+    var best = bestTab(tabs, ev.folder, names);
+    talks.forEach(function (t) {
+      (t.names || []).forEach(function (n) {
+        var c = { ev: ev, talk: t }, k = normName(n), a = best && best.map[k];
+        if (a) (byAddr[a] = byAddr[a] || []).push(c);
+        if (k.split(' ').length > 1) (byName[k] = byName[k] || []).push(c);
+      });
+    });
+  });
+
+  // 3. each speaker message with a deck
+  var done = {}, imports = 0;
+  var mine = BRAND_WORDS[brandKey], words = Object.keys(BRAND_WORDS).reduce(function (a, k) { return a.concat(BRAND_WORDS[k]); }, []);
+  msgs.forEach(function (x) {
+    if (Date.now() - started > 270000 || imports >= INBOX_IMPORTS_MAX) return;
+    var cands = byAddr[x.addr] || byName[normName(x.name)] || [];
+    cands = cands.filter(function (c) { return !done[c.ev.folder + '|' + c.talk.short_url]; });
+    if (!cands.length) return;
+    var text = (x.m.getSubject() + ' ' + x.thread.getFirstMessageSubject()).toLowerCase();
+    if (words.some(function (w) { return text.indexOf(w) >= 0; }) && !mine.some(function (w) { return text.indexOf(w) >= 0; })) return;   // another brand's thread
+
+    var src = deckSource(x.m);
+    seen[x.m.getId()] = Utilities.formatDate(x.date, 'UTC', 'yyMMdd');
+    if (!src) return;                                                   // a plain reply: nothing to take
+    var c = pickTalk(cands, text + ' ' + String(src.name || '').toLowerCase(), x.date);
+    if (!c || src.problem) {
+      out.needs_hand.push({ folder: (c || cands[0]).ev.folder, speaker: (c || cands[0]).talk.names.join(' & '),
+                            reason: !c ? 'fits more than one talk' : src.problem });
+      if (!data.dry) labelThread(x.thread, NEEDS_LABEL);
+      return;
+    }
+    var it = { message_id: x.m.getId(), brand: brandKey, folder: c.ev.folder, event: c.ev.event_name, short_url: c.talk.short_url,
+               speaker: c.talk.names.join(' & '), title: c.talk.title, attachment: src.attachment, drive_id: src.drive_id, url: src.url };
+    var rec = { folder: c.ev.folder, speaker: it.speaker, via: src.via, date: x.date.toISOString() };
+    if (data.dry) { out.imported.push(rec); done[c.ev.folder + '|' + c.talk.short_url] = 1; return; }
+    var r = importOne(it);
+    imports++;
+    if (r.ok || r.skipped) {
+      done[c.ev.folder + '|' + c.talk.short_url] = 1;
+      if (r.ok) { out.imported.push(rec); labelThread(x.thread, LABEL); }
+    } else {
+      out.needs_hand.push({ folder: c.ev.folder, speaker: it.speaker, reason: r.error });
+      labelThread(x.thread, NEEDS_LABEL);
+    }
+  });
+  if (!data.dry) saveSeen(seen);
+  return respond(out);
+}
+
+// The deck in a message: the biggest deck-like attachment, else a Drive/Slides link we can open, else a Dropbox link.
+// {problem} = there is a deck, but not one we can take by ourselves.
+function deckSource(m) {
+  var atts = m.getAttachments({ includeInlineImages: false }).filter(function (a) {
+    return DECK_EXT.test(a.getName()) && a.getSize() > 150 * 1024 && !JUNK_NAME.test(a.getName());
+  }).sort(function (a, b) { return b.getSize() - a.getSize(); });
+  var usable = atts.filter(function (a) { return !/\.key$/i.test(a.getName()); });
+  if (usable.length) return { attachment: usable[0].getName(), name: usable[0].getName(), via: 'attachment' };
+  if (atts.length) return { problem: 'Keynote file attached: needs a PDF export', name: atts[0].getName() };
+  var body = m.getPlainBody() || '', x, noAccess = false;
+  LINK_RE.lastIndex = 0;
+  while ((x = LINK_RE.exec(body))) {
+    try {
+      var f = DriveApp.getFileById(x[1]);
+      if (isDeckFile(f)) return { drive_id: x[1], name: f.getName(), via: 'Drive link' };
+    } catch (err) { noAccess = true; }
+  }
+  if (noAccess) return { problem: 'Drive link we cannot open: ask for access' };
+  DROPBOX_RE.lastIndex = 0;
+  if ((x = DROPBOX_RE.exec(body))) return { url: x[0], name: decodeURIComponent((/\/([^\/?]+)(?:\?|$)/.exec(x[0]) || [])[1] || ''), via: 'Dropbox link' };
+  var el = ELSEWHERE_RE.exec(body);
+  if (el) return { problem: 'link to ' + el[1] + ': download it by hand' };
+  return null;
+}
+
+// One talk for a message: the event named in the subject (full name, else the city), else the one whose window holds
+// the email's date; inside the event, the talk whose title words show up. null = still more than one.
+function pickTalk(cands, text, date) {
+  var k = {};
+  cands.forEach(function (c) { k[c.ev.folder + '|' + c.talk.short_url] = c; });
+  var list = Object.keys(k).map(function (x) { return k[x]; });
+  function narrow(test) { var l = list.filter(test); if (l.length) list = l; }
+  if (list.length > 1) narrow(function (c) { return text.indexOf(String(c.ev.event_name || '').toLowerCase()) >= 0; });
+  if (list.length > 1) narrow(function (c) {
+    return text.indexOf(c.ev.folder.replace(/^20\d\d-/, '').replace(/-q\d$/, '').replace(/-/g, ' ')) >= 0;
+  });
+  if (list.length > 1) narrow(function (c) { return date >= new Date(c.ev.opens) && date <= new Date(c.ev.closes); });
+  if (list.length > 1) {
+    var scored = list.map(function (c) {
+      var w = normName(c.talk.title).split(' ').filter(function (s) { return s.length > 3; });
+      return { c: c, n: w.filter(function (s) { return text.indexOf(s) >= 0; }).length };
+    }).sort(function (a, b) { return b.n - a.n; });
+    if (scored[0].n > 0 && scored[0].n > scored[1].n) list = [scored[0].c];
+  }
+  return list.length === 1 ? list[0] : null;
+}
+
+function labelThread(thread, name) {
+  try {
+    if (name.indexOf('/') > 0 && !GmailApp.getUserLabelByName(LABEL)) GmailApp.createLabel(LABEL);
+    thread.addLabel(GmailApp.getUserLabelByName(name) || GmailApp.createLabel(name));
+  } catch (err) {
+    Logger.log('Could not label the thread: ' + err);
+  }
+}
+
+// message id -> yyMMdd, the newest 250 (a Script Property holds 9 kB)
+function saveSeen(seen) {
+  var ids = Object.keys(seen).sort(function (a, b) { return seen[a] < seen[b] ? 1 : seen[a] > seen[b] ? -1 : 0; }).slice(0, 250), keep = {};
+  ids.forEach(function (id) { keep[id] = seen[id]; });
+  props().setProperty('INBOX_SEEN', JSON.stringify(keep));
+}
+
+// Editor test: dry-runs the inbox for one made-up talk (nothing is imported). Needs WWW_SHEETS.
+function testInbox() {
+  var e = { postData: { contents: JSON.stringify({
+    action: 'inbox', token: props().getProperty('DECKDUMP_TOKEN'), brand: 'llmday', days: 30, dry: true,
+    events: [{ folder: '2026-hamburg-q4', event_name: 'LLMday Hamburg 2026 Q4', opens: '2026-10-28T00:00:00+01:00',
+               closes: '2027-11-19T00:00:00+01:00', day1: '2026-11-18T00:00:00+01:00',
+               talks: [{ short_url: 'Test_talk_key', names: ['Marcel Koert'], title: 'Test talk' }] }]
+  }) } };
+  Logger.log(doPost(e).getContent());
 }

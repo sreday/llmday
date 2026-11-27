@@ -24,6 +24,8 @@ No email (Marek 2026-10-31: "I don't want to get notifications on deck dumps to 
 Usage: python _build/deckdump_pull.py [--dry-run] [--today YYYY-MM-DD] [--event <folder>]
        python _build/deckdump_pull.py --remind [--dry-run] [--now ISO] [--event <folder>] [--test-to <team address>]
                                       (conference day 12:00 local: one email to speakers with no deck, see remind())
+       python _build/deckdump_pull.py --inbox [--dry-run] [--days N] [--event <folder>]
+                                      (hourly: decks speakers emailed us go into the Deck Dump folder, see inbox())
        python _build/deckdump_pull.py --selftest     (CI: proves the 5 MB ladder on generated decks; needs Pillow)
 Exit code 0 always unless the feed itself is broken (a bad deck never stops the others).
 """
@@ -561,6 +563,90 @@ def remind(feed, home, brand, site, args):
     return 0
 
 
+# ---- decks sent by email (Marek 2026-11-27) ---------------------------------------------------
+# "some people aren't smart enough to click buttons, attaching slides to email or providing links": the speaker replies
+# to the reminder (or writes to us) with the deck attached or linked. Hourly (the reminder workflow), this job sends the
+# script the talks that still have no deck, for every 2026+ event from INBOX_BEFORE_DAYS before day 1 until LATE_DAYS
+# after the end. The script looks at the last few days of mail, keeps only messages FROM those speakers (address from
+# the WWW sheet, else the exact sender name) and copies the deck into the Deck Dump folder, as if uploaded on the page.
+# The normal shipping run then puts it on the talk page. Names only come back (public Actions logs).
+INBOX_BEFORE_DAYS = 21
+INBOX_DAYS = 3                   # how far back each hourly run reads the mailbox (runs overlap; imports are idempotent)
+
+
+def inbox(feed, home, brand, args):
+    if brand == "pec":   # PEC lineups are LLMday's: LLMday's run imports for both brands
+        print("Deck dump inbox: PEC decks are picked up through the LLMday event with the same lineup")
+        return 0
+    now = datetime.datetime.fromisoformat(args.now) if args.now else datetime.datetime.now(datetime.timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=datetime.timezone.utc)
+    open_events = []
+    for path in sorted(glob.glob(os.path.join(ROOT, "20*")) + glob.glob(os.path.join(ROOT, "past", "20*"))):
+        folder = os.path.basename(path)
+        if folder[:4] < FIRST_YEAR or (args.event and folder != args.event):
+            continue
+        try:
+            with open(os.path.join(path, "metadata.yml"), encoding="utf-8") as f:
+                meta = yaml.load(f, Loader=yaml.FullLoader) or {}
+            start = datetime.datetime.fromisoformat(str(meta.get("start_time") or ""))
+        except (OSError, yaml.YAMLError, ValueError):
+            continue
+        tz = start.tzinfo or datetime.timezone.utc
+        day1 = datetime.datetime.combine(start.date(), datetime.time(0, 0), tz)
+        ends = day1 + datetime.timedelta(days=max(1, int(meta.get("days") or 1)))
+        if upload_brands(brand, meta) and (args.event or day1 - datetime.timedelta(days=INBOX_BEFORE_DAYS) <= now <= ends + datetime.timedelta(days=LATE_DAYS)):
+            open_events.append((path, upload_brands(brand, meta), day1, ends))
+    if not open_events:
+        print("Deck dump inbox: no %s event open for decks" % (brand or "?"))
+        return 0
+
+    res = http_json(feed, timeout=120)
+    if not res.get("ok"):
+        print("Deck dump feed refused: %s" % res.get("error"))
+        return 1
+    exec_url = feed.split("?", 1)[0]
+    token = (urllib.parse.parse_qs(urllib.parse.urlsplit(feed).query).get("token") or [""])[0]
+    files = res.get("files") or []
+    payload, names = [], {}
+    for path, brands, day1, ends in open_events:
+        folder = os.path.basename(path)
+        uploads = [f.get("meta") or {} for f in files if (f.get("meta") or {}).get("brand") in brands and (f.get("meta") or {}).get("folder") == folder]
+        talks = remind_lineup(path)
+        covered = covered_keys(talks, uploads)
+        missing = [t for t in talks if t["key"] not in covered and not os.path.isfile(os.path.join(path, "slides", t["key"] + ".pdf"))]
+        if not missing:
+            continue
+        event_name = next((str(e.get("name")) for e in (home.get("events") or []) + (home.get("events_past") or [])
+                           if str((e or {}).get("url") or "").strip("./").rstrip("/") == folder), folder)
+        names[folder] = event_name
+        payload.append({"folder": folder, "event_name": event_name, "opens": (day1 - datetime.timedelta(days=INBOX_BEFORE_DAYS)).isoformat(),
+                        "closes": (ends + datetime.timedelta(days=LATE_DAYS)).isoformat(), "day1": day1.isoformat(),
+                        "talks": [{"short_url": t["key"], "names": t["names"], "title": t["title"]} for t in missing]})
+    if not payload:
+        print("Deck dump inbox: every talk of the open %s events has a deck" % brand)
+        return 0
+    body = {"action": "inbox", "token": token, "brand": brand, "days": args.days or INBOX_DAYS, "dry": bool(args.dry_run),
+            "events": payload}
+    r = http_json(exec_url, data=body, timeout=330)
+    if not r.get("ok"):   # a warning, not a red run: e.g. the script is older than v7 (no "inbox" action yet)
+        print("::warning::Deck dump inbox refused: %s (is the Deck dump script v7 deployed?)" % r.get("error"))
+        return 0
+    lines = ["Deck dump inbox: %d open events, %d talks without a deck, %d message(s) read from the last %s day(s)"
+             % (len(payload), sum(len(e["talks"]) for e in payload), r.get("messages", 0), body["days"])]
+    for x in r.get("imported") or []:
+        lines.append("%s %s - %s (%s, %s)" % ("WOULD IMPORT" if r.get("dry") else "IMPORTED", names.get(x.get("folder"), x.get("folder")),
+                                             x.get("speaker"), x.get("via"), x.get("date", "")[:10]))
+    for x in r.get("needs_hand") or []:
+        lines.append("NEEDS A HAND %s - %s: %s" % (names.get(x.get("folder"), x.get("folder") or "?"), x.get("speaker"), x.get("reason")))
+    text = "\n".join(lines) + "\n"
+    print(text)
+    if os.environ.get("GITHUB_STEP_SUMMARY"):
+        with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+            f.write("## Deck dump inbox\n\n```\n%s```\n" % text)
+    return 0
+
+
 def selftest():
     """A photo-heavy deck must land under 5 MB at the highest dpi step that fits, same pages, text kept;
     a light deck must stay as it is apart from the lossless pass."""
@@ -693,6 +779,8 @@ def main():
     ap.add_argument("--selftest", action="store_true", help="run the 5 MB ladder on generated decks and exit")
     ap.add_argument("--remind", action="store_true", help="conference day: email speakers with no deck yet (12:00-15:59 local)")
     ap.add_argument("--now", help="with --remind: pretend it is this moment (ISO, e.g. 2026-11-18T12:10+01:00), for tests")
+    ap.add_argument("--inbox", action="store_true", help="hourly: import decks that speakers emailed (attached or linked)")
+    ap.add_argument("--days", type=int, help="with --inbox: read this many days of mail (default %d)" % INBOX_DAYS)
     ap.add_argument("--test-to", help="with --remind: send the one email to this team address only (no speakers, no 'sent' mark)")
     args = ap.parse_args()
     if args.selftest:
@@ -708,6 +796,8 @@ def main():
     site = re.sub(r"^https?://(www\.)?", "", str(home.get("base_path") or "")).strip("/")
     if args.remind:
         return remind(feed, home, brand, site, args)
+    if args.inbox:
+        return inbox(feed, home, brand, args)
     today = None
     if args.today:
         today = datetime.datetime.fromisoformat(args.today + "T12:00:00+00:00")

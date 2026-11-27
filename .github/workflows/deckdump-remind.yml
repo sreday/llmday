@@ -7,6 +7,9 @@ name: Deck dump reminder
 # script looks the addresses up in the WWW sheet, sends the email and never sends twice for one event, so the
 # later hourly runs (a safety net for dropped GitHub cron runs) change nothing. Most runs stop after a second.
 # Its own workflow: the hourly runs never queue behind (or cancel) a long "Deck dump" shipping run.
+# Then the inbox (Marek 2026-11-27): decks speakers EMAILED us (attached, or a Drive / Slides / Dropbox link) go into
+# the Deck Dump folder like a page upload (--inbox, script action "inbox"); the next "Deck dump" run ships them.
+# What it cannot take by itself gets the Gmail label "Deck dump/needs a hand".
 on:
   schedule:
     - cron: '5 * * * *'
@@ -25,6 +28,9 @@ on:
       test_to:
         description: Send the one email to this team address only (mark@<brand>.com), not to speakers
         required: false
+      days:
+        description: Inbox - read this many days of mail (default 3; e.g. 30 for a one-off catch-up)
+        required: false
 permissions:
   contents: read
 concurrency:
@@ -33,7 +39,7 @@ concurrency:
 jobs:
   remind:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,5 +58,18 @@ jobs:
           if [ -n "$IN_EVENT" ]; then args="$args --event $IN_EVENT"; fi
           if [ -n "$IN_NOW" ]; then args="$args --now $IN_NOW"; fi
           if [ -n "$IN_TEST_TO" ]; then args="$args --test-to $IN_TEST_TO"; fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then args="$args --dry-run"; fi
+          python _build/deckdump_pull.py $args
+
+      - name: Inbox
+        if: ${{ always() }}
+        env:
+          DECKDUMP_FEED: ${{ secrets.DECKDUMP_FEED }}
+          IN_EVENT: ${{ inputs.event }}
+          IN_DAYS: ${{ inputs.days }}
+        run: |
+          args="--inbox"
+          if [ -n "$IN_EVENT" ]; then args="$args --event $IN_EVENT"; fi
+          if [ -n "$IN_DAYS" ]; then args="$args --days $IN_DAYS"; fi
           if [ "${{ inputs.dry_run }}" = "true" ]; then args="$args --dry-run"; fi
           python _build/deckdump_pull.py $args
