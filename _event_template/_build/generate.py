@@ -958,6 +958,11 @@ breaks = context.get("breaks") or []
 for _bi, _brk in enumerate(breaks):
     _brk["_brk_idx"] = _bi
 keynote_breaks = [b for b in breaks if int(b.get("talks_before") or 0) < 0]
+# an "opening: true" break (e.g. Doors open) comes before the first keynote on every track and
+# ENDS at start_time, so start_time stays the first keynote (countdown, calendar, cfp.ninja)
+# and the day starts that many minutes earlier (Marek 2026-10-28, SREday Amsterdam 2026 Q4)
+opening_breaks = [b for b in breaks if b.get("opening")]
+_opening_minutes = sum(int(b.get("duration") or 0) for b in opening_breaks)
 for track in tracks_ordered:
     # TRACK OFFSET: x empty slots ahead of the first talk (dropped with the keynote placeholders, once the times are in)
     _off = _toff(track)
@@ -966,7 +971,7 @@ for track in tracks_ordered:
     new_order = []
     offset = 0
     for brk in breaks:
-        if brk in keynote_breaks:
+        if brk in keynote_breaks or brk in opening_breaks:
             continue
         _n = brk.get("talks_before")
         if _extra and _n > 0:                     # negative offset: the first block takes x more rows
@@ -1018,11 +1023,11 @@ for i, track in enumerate(tracks_ordered):
         _after = -int(brk["talks_before"])
         if _after < len(prepend):
             prepend.insert(_after, brk.copy())
-    tracks[track] = prepend + tracks[track]
+    tracks[track] = [b.copy() for b in opening_breaks] + prepend + tracks[track]
 
 # insert times & durations
 for track in tracks:
-    current_time = datetime.datetime.fromisoformat(context.get("start_time"))
+    current_time = datetime.datetime.fromisoformat(context.get("start_time")) - timedelta(minutes=_opening_minutes)
     for talk in tracks[track]:
         raw = talk.get("duration")
         talk["duration"] = int(raw) if raw is not None and raw != "" else DEFAULT_TALK_DURATION
@@ -1113,7 +1118,7 @@ if context.get("city_name") and not context.get("schedule_embed"):
 # ── END HELLO INTRO ──────────────────────────────────────────────────────────
 
 # compute schedule time bracket
-schedule_start = datetime.datetime.fromisoformat(context.get("start_time"))
+schedule_start = datetime.datetime.fromisoformat(context.get("start_time")) - timedelta(minutes=_opening_minutes)
 schedule_end = schedule_start
 for track in tracks:
     for talk in tracks[track]:
