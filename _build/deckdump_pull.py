@@ -571,6 +571,7 @@ def remind(feed, home, brand, site, args):
 # the WWW sheet, else the exact sender name) and copies the deck into the Deck Dump folder, as if uploaded on the page.
 # The normal shipping run then puts it on the talk page. Names only come back (public Actions logs).
 INBOX_BEFORE_DAYS = 21
+INBOX_MIN_VERSION = 8
 INBOX_DAYS = 3                   # how far back each hourly run reads the mailbox (runs overlap; imports are idempotent)
 
 
@@ -608,6 +609,13 @@ def inbox(feed, home, brand, args):
     exec_url = feed.split("?", 1)[0]
     token = (urllib.parse.parse_qs(urllib.parse.urlsplit(feed).query).get("token") or [""])[0]
     files = res.get("files") or []
+    try:   # v7 took any deck-like PDF from a speaker's address (an organiser's sponsorship decks): v8 or nothing
+        version = int(http_json(exec_url, timeout=60).get("version") or 0)
+    except Exception:
+        version = 0
+    if version < INBOX_MIN_VERSION:
+        print("::warning::Deck dump inbox: the script is v%s, the inbox needs v%d - nothing read" % (version, INBOX_MIN_VERSION))
+        return 0
     payload, names = [], {}
     for path, brands, day1, ends in open_events:
         folder = os.path.basename(path)

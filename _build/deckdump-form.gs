@@ -31,6 +31,9 @@
  *   8. {action: "inbox", token, ...} (v7, Marek 2026-11-27): decks that speakers EMAIL us (attached, or a Drive /
  *      Slides / Dropbox link) are imported as if uploaded on the page. Hourly from _build/deckdump_pull.py --inbox.
  *      See inboxScan() below. Same setup as 7 (WWW_SHEETS); run testInbox once after pasting.
+ *      v8 (2026-11-27, after the first dry run caught an organiser's sponsorship PDFs and a bcc'd intro): only mail
+ *      sent TO us (not cc/bcc) that SAYS it is slides (slides/deck/presentation in the subject, the thread's subject,
+ *      the speaker's own words or the file name); sponsorship / proposal / invoice mail is never taken.
  *
  * Abuse guards (no passphrase - speakers use this from the onboarding email): honeypot, daily cap (DECKDUMP_DAILY),
  * file type + size caps, names and keys checked against strict patterns. The page only offers lineup talks.
@@ -73,7 +76,7 @@ function doGet(e) {
     if (!tokenOk(p.token)) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, access_token: ScriptApp.getOAuthToken(), files: listDecks() });
   }
-  return respond({ ok: true, service: 'deckdump', version: 7 });   // v4: conference-day reminder; v5: late ask; v6: mark_sent; v7: inbox
+  return respond({ ok: true, service: 'deckdump', version: 8 });   // v4: conference-day reminder; v5: late ask; v6: mark_sent; v7: inbox; v8: stricter inbox
 }
 
 function doPost(e) {
@@ -665,11 +668,14 @@ function testDeckdump() {
 // Gmail (no notification emails, Marek 2026-10-31). The response holds names only: Actions logs of public repos are
 // public. Each message is looked at once (Script Property INBOX_SEEN).
 var OUR_DOMAINS = /@(sreday|llmday|platformday|conf42)\.com$|@promptengineering\.rocks$/i;
+var OUR_TO_RE = /@(sreday|llmday|platformday)\.com\b/i;
 var NEEDS_LABEL = 'Deck dump/needs a hand';
 var JUNK_NAME = /invoice|receipt|\bcv\b|resume|\bbio\b|visa|banner|headshot|photo|ticket|boarding|itinerary|contract|agreement|\bnda\b|passport|\bw-?[89]\b|expense|certificate|badge|logo|letter/i;
 var DROPBOX_RE = /https:\/\/(?:www\.)?dropbox\.com\/[^\s<>"')\]]+/gi;
 var ELSEWHERE_RE = /https?:\/\/(?:www\.)?(speakerdeck\.com|slideshare\.net|onedrive\.live\.com|1drv\.ms|[\w-]+\.sharepoint\.com|we\.tl|wetransfer\.com|pitch\.com|canva\.com|gamma\.app|figma\.com|box\.com|icloud\.com)\//i;
 var BRAND_WORDS = { sreday: ['sreday'], llmday: ['llmday', 'prompt engineering'], platformday: ['platformday'], pec: ['prompt engineering', 'llmday'] };
+var DECK_WORDS = /slide|deck|presentation|\bppt|keynote/i;
+var NOT_DECK_SUBJECT = /sponsor|proposal|prospectus|brochure|invoice|quotation|\bquote\b|partnership|invitation:/i;
 var INBOX_IMPORTS_MAX = 10;                         // per call; the rest waits an hour (6-minute Apps Script limit)
 
 function inboxScan(data) {
@@ -720,11 +726,15 @@ function inboxScan(data) {
     cands = cands.filter(function (c) { return !done[c.ev.folder + '|' + c.talk.short_url]; });
     if (!cands.length) return;
     var text = (x.m.getSubject() + ' ' + x.thread.getFirstMessageSubject()).toLowerCase();
+    if (NOT_DECK_SUBJECT.test(text)) return;                                    // sponsorship, proposals, invoices
+    if (!OUR_TO_RE.test(String(x.m.getTo() || ''))) return;                       // sent to us, not cc'd or bcc'd
     if (words.some(function (w) { return text.indexOf(w) >= 0; }) && !mine.some(function (w) { return text.indexOf(w) >= 0; })) return;   // another brand's thread
 
     var src = deckSource(x.m);
     seen[x.m.getId()] = Utilities.formatDate(x.date, 'UTC', 'yyMMdd');
     if (!src) return;                                                   // a plain reply: nothing to take
+    var own = String(x.m.getPlainBody() || '').split(/\n\s*(?:On .{0,200}wrote:|>|-----Original Message|From: )/)[0].slice(0, 3000);
+    if (!DECK_WORDS.test(text + ' ' + own + ' ' + String(src.name || ''))) return;   // nothing says these are slides
     var c = pickTalk(cands, text + ' ' + String(src.name || '').toLowerCase(), x.date);
     if (!c || src.problem) {
       out.needs_hand.push({ folder: (c || cands[0]).ev.folder, speaker: (c || cands[0]).talk.names.join(' & '),
