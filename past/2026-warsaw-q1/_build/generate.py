@@ -627,6 +627,24 @@ _wl_luma = str(context.get('luma_evt') or '').strip()
 context['waitlist_event']['rsvp_url'] = ('https://lu.ma/event/' + _wl_luma) if _wl_luma else (context['waitlist_event']['event_url'] + '#tickets')
 # ── END SPEAKER WAITLIST ────────────────────────────────────────────────────
 
+# ── VIDEO RELEASE (Marek 2026-11-27): the LIVE factory uploads every talk private and YouTube makes it public 5 weeks
+# after the event at 09:00 local, so a talk page shows no player before then (a private video says "unavailable").
+# metadata.yml video_release (an ISO time) overrides the date; the daily build shows the players the morning after.
+def _videos_out():
+    try:
+        rel = str(context.get('video_release') or '').strip()
+        if rel:
+            t = datetime.datetime.fromisoformat(rel.replace('Z', '+00:00'))
+            t = t if t.tzinfo else t.replace(tzinfo=datetime.timezone.utc)
+        else:
+            start = datetime.datetime.fromisoformat(str(context.get('start_time') or ''))
+            tz = start.tzinfo or datetime.timezone.utc
+            t = datetime.datetime.combine(start.date() + datetime.timedelta(days=35), datetime.time(9, 0), tz)
+        return datetime.datetime.now(datetime.timezone.utc) >= t
+    except ValueError:
+        return True
+# ── END VIDEO RELEASE ───────────────────────────────────────────────────────
+
 # pick up the ids & photos
 for i, talk in enumerate(talks_raw):
     talk["id"] = str(i)
@@ -644,6 +662,8 @@ for i, talk in enumerate(talks_raw):
         talk["youtube_embed_url"] = "https://www.youtube.com/embed/" + m.group(1) if m else ""
     else:
         talk["youtube_embed_url"] = ""
+    if yt and not _videos_out():                   # the video is still private (VIDEO RELEASE above): no player,
+        talk["youtube_embed_url"] = talk["YouTube"] = ""   # no Watch button
     # smart line-breaking for speaker names on cards
     # split on ", " and " & " keeping separators, one name per line
     name = (talk.get("name") or "").strip()
