@@ -42,16 +42,19 @@ breaks:
 sponsors:
   - logo: coral.png
     url: https://withcoral.com/
+  - logo: reliaburger.png
+    url: https://reliaburger.com/
+  - logo: venquis.png
+    name: Venquis Group
+    url: https://www.venquis.com/
+  - logo: hockeystick.png
+    url: https://www.hockeystick.show
   - logo: aiproductivityhub.png
     url: https://www.skool.com/ai-productivity-hub/about
   - logo: prompt-hub.png
     url: https://www.prompthub.us/
   - logo: packt.png
     url: https://packtpub.com/
-  - logo: reliaburger.png
-    url: https://reliaburger.com/
-  - logo: hockeystick.png
-    url: https://www.hockeystick.show
   - logo: pe-norway-full.png
     url: https://www.meetup.com/promptengineering-community/
   - logo: gdg_london.png
