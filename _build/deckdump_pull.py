@@ -22,6 +22,8 @@ Then it writes one report per event (shipped, needs a hand, speakers with no dec
 No email (Marek 2026-10-31: "I don't want to get notifications on deck dumps to my email"); /deckdump shows the same.
 
 Usage: python _build/deckdump_pull.py [--dry-run] [--today YYYY-MM-DD] [--event <folder>]
+       python _build/deckdump_pull.py --remind [--dry-run] [--now ISO] [--event <folder>] [--test-to <team address>]
+                                      (conference day 12:00 local: one email to speakers with no deck, see remind())
        python _build/deckdump_pull.py --selftest     (CI: proves the 5 MB ladder on generated decks; needs Pillow)
 Exit code 0 always unless the feed itself is broken (a bad deck never stops the others).
 """
@@ -397,6 +399,140 @@ def compose(event_name, site, folder, r):
     return "\n".join(lines).rstrip() + "\n"
 
 
+# ---- conference-day reminder (Marek 2026-11-27) ----------------------------------------------
+# On day 1 of an event, from 12:00 local time, speakers whose deck is not in the Deck dump get ONE email. This job only
+# knows names: it posts them to the "Deck dump" Apps Script (action "remind"), which looks the addresses up in the
+# brand's WWW sheet, sends a single Bcc email from mark@<brand> and refuses a second send for the same event. The hourly
+# workflow tries 12:00-15:59 local so a dropped GitHub cron run is caught by the next one.
+
+REMIND_FROM_HOUR, REMIND_TO_HOUR = 12, 16
+
+
+def remind_due(meta, now):
+    try:
+        start = datetime.datetime.fromisoformat(str(meta.get("start_time") or ""))
+    except ValueError:
+        return False
+    local = now.astimezone(start.tzinfo or datetime.timezone.utc)
+    return local.date() == start.date() and REMIND_FROM_HOUR <= local.hour < REMIND_TO_HOUR
+
+
+def remind_lineup(folder_path):
+    """Talks with ALL their speakers (co-speakers are separate rows with the same talk key)."""
+    talks = {}
+    try:
+        with open(os.path.join(folder_path, "_db", "talks.csv"), encoding="utf-8", errors="replace") as f:
+            for row in csv.DictReader(f):
+                name = (row.get("name") or "").strip()
+                if talk_kind(row.get("status")) not in LIVE_KINDS or not name:
+                    continue
+                t = talks.setdefault(talk_url(row), {"key": talk_url(row), "names": [], "title": (row.get("title") or "").strip()})
+                if name not in t["names"]:
+                    t["names"].append(name)
+    except OSError:
+        pass
+    return list(talks.values())
+
+
+def same_person(a, b):
+    """Speaker names that are the same person: equal, or same surname and one first name starts with the other
+    ("Jon Smith" / "Jonathan Smith"; "Alttaf Hussain" / "Anwaar Hussain" stay apart)."""
+    a, b = norm_name(a).split(), norm_name(b).split()
+    if not a or not b:
+        return False
+    return a == b or (len(a) > 1 and len(b) > 1 and a[-1] == b[-1] and (a[0].startswith(b[0]) or b[0].startswith(a[0])))
+
+
+def covered_keys(talks, uploads):
+    """Talk keys that have a deck. An upload counts by its talk key; one whose key left the lineup (talk retitled or
+    reworded since) is matched to the ONE talk of the same speaker, else to the one talk with a near-identical title
+    (0.85: different talks of one event reach 0.73)."""
+    import difflib
+    keys = {t["key"] for t in talks}
+    out = set()
+    for m in uploads:
+        if m.get("short_url") in keys:
+            out.add(m["short_url"])
+            continue
+        names = [n for n in re.split(r"\s*(?:&|,| and )\s*", str(m.get("speaker") or "")) if n]
+        hits = [t for t in talks if any(same_person(n, s) for n in names for s in t["names"])]
+        if len(hits) != 1:
+            title = norm_name(m.get("title"))
+            scored = sorted(((difflib.SequenceMatcher(None, title, norm_name(t["title"])).ratio(), t["key"]) for t in talks
+                             if title and norm_name(t["title"])), reverse=True)
+            hits = [t for t in talks if scored and scored[0][0] >= 0.85 and t["key"] == scored[0][1]]
+        if hits:
+            out.add(hits[0]["key"])
+    return out
+
+
+def remind(feed, home, brand, site, args):
+    now = datetime.datetime.fromisoformat(args.now) if args.now else datetime.datetime.now(datetime.timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=datetime.timezone.utc)
+    due = []
+    for path in sorted(glob.glob(os.path.join(ROOT, "20*"))):
+        folder = os.path.basename(path)
+        if folder[:4] < "2025" or (args.event and folder != args.event):
+            continue
+        try:
+            with open(os.path.join(path, "metadata.yml"), encoding="utf-8") as f:
+                meta = yaml.load(f, Loader=yaml.FullLoader) or {}
+        except (OSError, yaml.YAMLError):
+            continue
+        if remind_due(meta, now):
+            due.append(path)
+    if not due:
+        print("Deck dump reminder: no %s event at 12:00-15:59 local time now" % (brand or "?"))
+        return 0
+
+    res = http_json(feed, timeout=120)
+    if not res.get("ok"):
+        print("Deck dump feed refused: %s" % res.get("error"))
+        return 1
+    exec_url = feed.split("?", 1)[0]
+    token = (urllib.parse.parse_qs(urllib.parse.urlsplit(feed).query).get("token") or [""])[0]
+    files = [f for f in (res.get("files") or []) if (f.get("meta") or {}).get("brand") == brand]
+
+    summary = []
+    for path in due:
+        folder = os.path.basename(path)
+        uploads = [f.get("meta") or {} for f in files if (f.get("meta") or {}).get("folder") == folder]
+        slides_dir = os.path.join(path, "slides")
+        talks = remind_lineup(path)
+        covered = covered_keys(talks, uploads)
+        missing = [t for t in talks if t["key"] not in covered and not os.path.isfile(os.path.join(slides_dir, t["key"] + ".pdf"))]
+        event_name = next((str(e.get("name")) for e in (home.get("events") or []) + (home.get("events_past") or [])
+                           if str((e or {}).get("url") or "").strip("./").rstrip("/") == folder), folder)
+        lines = ["%s: %d of %d talks have a deck, %d without one" % (event_name, len(talks) - len(missing), len(talks), len(missing))]
+        lines += ["- %s: %s" % (" & ".join(t["names"]), t["title"]) for t in missing]
+        if missing:
+            body = {"action": "remind", "token": token, "brand": brand, "folder": folder, "event_name": event_name,
+                    "speakers": [{"name": n, "title": t["title"]} for t in missing for n in t["names"]],
+                    "dry": bool(args.dry_run)}
+            if args.test_to:
+                body["test_to"] = args.test_to
+            r = http_json(exec_url, data=body, timeout=120)
+            if not r.get("ok"):
+                lines.append("Reminder NOT sent: %s" % r.get("error"))
+            elif r.get("already_sent"):
+                lines.append("Reminder already sent (%s)" % r["already_sent"])
+            else:
+                lines.append("%s %d speaker(s) from sheet tab \"%s\"" % ("Would email" if r.get("dry") else "Emailed",
+                                                                         r.get("recipients", 0), r.get("tab", "?")))
+                if r.get("unmatched"):
+                    lines.append("No email found in the sheet for: %s" % ", ".join(r["unmatched"]))
+                if r.get("dry") and r.get("subject"):
+                    lines += ["", "Subject: " + r["subject"], r.get("text", "")]
+        text = "\n".join(lines).rstrip() + "\n"
+        print(text)
+        summary.append("### %s\n\n```\n%s```\n" % (event_name, text))
+    if os.environ.get("GITHUB_STEP_SUMMARY"):
+        with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+            f.write("## Deck dump reminder\n\n" + "\n".join(summary))
+    return 0
+
+
 def selftest():
     """A photo-heavy deck must land under 5 MB at the highest dpi step that fits, same pages, text kept;
     a light deck must stay as it is apart from the lossless pass."""
@@ -526,6 +662,9 @@ def main():
     ap.add_argument("--event", help="only this event folder (ignores the 14-day window); 'all' = every event that has ended")
     ap.add_argument("--cleanup", action="store_true", help="quarterly: trash Drive uploads that are on the site already")
     ap.add_argument("--selftest", action="store_true", help="run the 5 MB ladder on generated decks and exit")
+    ap.add_argument("--remind", action="store_true", help="conference day: email speakers with no deck yet (12:00-15:59 local)")
+    ap.add_argument("--now", help="with --remind: pretend it is this moment (ISO, e.g. 2026-11-18T12:10+01:00), for tests")
+    ap.add_argument("--test-to", help="with --remind: send the one email to this team address only (no speakers, no 'sent' mark)")
     args = ap.parse_args()
     if args.selftest:
         return selftest()
@@ -538,6 +677,8 @@ def main():
         home = yaml.load(f, Loader=yaml.FullLoader) or {}
     brand = BRAND_KEYS.get(str(home.get("brand_name") or ""), "")
     site = re.sub(r"^https?://(www\.)?", "", str(home.get("base_path") or "")).strip("/")
+    if args.remind:
+        return remind(feed, home, brand, site, args)
     today = None
     if args.today:
         today = datetime.datetime.fromisoformat(args.today + "T12:00:00+00:00")

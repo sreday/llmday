@@ -21,6 +21,10 @@
  *   6. PDFs only (v3, Marek 2026-10-31: "I want to have decks uploaded to the drive in PDF"): the page sends PDF only;
  *      imports convert PowerPoint/ODP to PDF through Google Slides (toPdf); Keynote cannot be converted and is reported.
  *      {action: "convert", token} converts the non-PDFs already in the folder once (original to the trash).
+ *   7. {action: "remind", token, ...} (v4, Marek 2026-11-27): conference day, 12:00 local - ONE email to the speakers
+ *      with no deck yet (names from the pull job, addresses from the brand's WWW sheet). See remind() below.
+ *      Setup: Script property WWW_SHEETS = {"sreday":"<sheet id>","llmday":"<id>","platformday":"<id>","pec":"<id>"}
+ *      (never in this file: the repo is public), then run testRemind once (authorises Sheets), then a new version.
  *
  * Abuse guards (no passphrase - speakers use this from the onboarding email): honeypot, daily cap (DECKDUMP_DAILY),
  * file type + size caps, names and keys checked against strict patterns. The page only offers lineup talks.
@@ -63,7 +67,7 @@ function doGet(e) {
     if (!tokenOk(p.token)) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, access_token: ScriptApp.getOAuthToken(), files: listDecks() });
   }
-  return respond({ ok: true, service: 'deckdump', version: 3 });   // v3: PDFs only (PowerPoint/ODP/Slides converted)
+  return respond({ ok: true, service: 'deckdump', version: 4 });   // v3: PDFs only; v4: conference-day reminder
 }
 
 function doPost(e) {
@@ -78,6 +82,7 @@ function doPost(e) {
   if (data.action === 'scan') return scanInbox(data);
   if (data.action === 'import') return importDecks(data);
   if (data.action === 'convert') return convertFolder(data);
+  if (data.action === 'remind') return remind(data);
 
   var brandKey = String(data.brand || '').toLowerCase();
   var brand = BRANDS[brandKey];
@@ -446,6 +451,142 @@ function respond(obj) {
 }
 function clean(v, max) {
   return String(v == null ? '' : v).replace(/[\x00-\x1f\x7f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+// ---- conference-day reminder (v4, Marek 2026-11-27) ------------------------------------------
+// {action: "remind", token, brand, folder, event_name, speakers: [{name, title}], dry, test_to}
+// Sent by _build/deckdump_pull.py --remind (GitHub Actions, hourly) on day 1 of an event, from 12:00 local time, with
+// the NAMES of speakers who have no deck yet. The addresses are looked up here, in the brand's WWW sheet (ids in the
+// Script Property WWW_SHEETS, never in this public file), and never leave this script: the response holds names and
+// counts only, because Actions logs of public repos are public. ONE email from mark@<brand>, speakers in Bcc, filed
+// under the "Deck dump" label and archived (a reply brings the thread back to the Inbox). A second call for the same
+// event sends nothing (Script Property REMIND_SENT|<brand>|<folder>).
+var REMIND_MAX = 50;
+var TEAM_DOMAINS = /@(sreday|llmday|platformday)\.com$/i;   // test_to may only be one of ours
+
+function remind(data) {
+  if (!tokenOk(data.token)) return respond({ ok: false, error: 'forbidden' });
+  var brandKey = String(data.brand || '').toLowerCase(), brand = BRANDS[brandKey];
+  if (!brand) return respond({ ok: false, error: 'bad brand' });
+  var folder = String(data.folder || '');
+  if (!/^20\d\d-[a-z0-9-]+$/.test(folder)) return respond({ ok: false, error: 'bad folder' });
+  var eventName = clean(data.event_name, 120) || folder;
+  var testTo = clean(data.test_to, 120).toLowerCase();
+  if (testTo && !TEAM_DOMAINS.test(testTo)) return respond({ ok: false, error: 'test_to must be a team address' });
+  var sentKey = 'REMIND_SENT|' + brandKey + '|' + folder;
+  var already = props().getProperty(sentKey);
+  if (already && !testTo && !data.dry) return respond({ ok: true, already_sent: already });
+
+  var names = (data.speakers || []).slice(0, 100).map(function (s) { return clean(s && s.name, 120); }).filter(String);
+  if (!names.length) return respond({ ok: false, error: 'no speakers' });
+  var found;
+  try {
+    found = speakerEmails(brandKey, folder, names);
+  } catch (err) {
+    return respond({ ok: false, error: String(err.message || err) });
+  }
+  var emails = found.emails.filter(function (e, i, a) { return a.indexOf(e) === i; });
+  if (!emails.length) return respond({ ok: false, error: 'no addresses found', tab: found.tab, unmatched: found.unmatched });
+  if (emails.length > REMIND_MAX) return respond({ ok: false, error: 'more than ' + REMIND_MAX + ' recipients' });
+
+  var mail = composeReminder(brand, folder, eventName);
+  var out = { ok: true, tab: found.tab, recipients: emails.length, matched: found.matched, unmatched: found.unmatched };
+  if (data.dry) {
+    out.dry = true; out.subject = mail.subject; out.text = mail.text;
+    return respond(out);
+  }
+  var from = sender(brand), options = { name: SENDER_NAME, htmlBody: mail.html, bcc: (testTo ? [testTo] : emails).join(',') };
+  if (from === brand.from) options.from = brand.from;
+  var message = GmailApp.createDraft(from, mail.subject, mail.text, options).send();
+  fileQuietly(message);
+  if (!testTo) props().setProperty(sentKey, new Date().toISOString() + ' to ' + emails.length);
+  Logger.log('Deck dump reminder: %s -> %s (bcc, from %s)', eventName, testTo || emails.length + ' speakers', from);
+  if (testTo) out.recipients = 1;
+  out.sent = true;
+  return respond(out);
+}
+
+// Marek's wording (2026-11-27), "here" = the bold link to the conference-specific deck dump page.
+function composeReminder(brand, folder, eventName) {
+  var url = 'https://' + brand.site + '/deckdump/?event=' + encodeURIComponent(folder);
+  var subject = 'Reminder to upload your slides - ' + eventName;
+  var text = 'Hey!\n\n' +
+    'We don\'t have your slides yet, could you upload them here: ' + url + ' ?\n\n' +
+    'Attendees can browse the slides on the website, and we can use the PDF to fix any problems with your session ' +
+    'recording if needed - it\'s more handy than it seems!\n\n' +
+    'PDF works best!\n\n' +
+    'Thanks a lot!\nMark\n';
+  var html = '<div>Hey!</div><br>' +
+    '<div>We don\'t have your slides yet, could you upload them <b><a href="' + url + '">here</a></b>?</div><br>' +
+    '<div>Attendees can browse the slides on the website, and we can use the PDF to fix any problems with your session ' +
+    'recording if needed - it\'s more handy than it seems!</div><br>' +
+    '<div>PDF works best!</div><br>' +
+    '<div>Thanks a lot!<br>Mark</div>';
+  return { subject: subject, text: text, html: html };
+}
+
+// The event's tab: among the tabs of the brand's WWW sheet that name the event's year (and its quarter, when the tab
+// names one; copies, backups and placeholders skipped), the one where most of these speakers are found. Row layout:
+// a "name" column, and the address in the unlabelled column (the first cell of the row that looks like an address).
+function speakerEmails(brandKey, folder, names) {
+  var ids = readJson('WWW_SHEETS'), id = ids[brandKey];
+  if (!id) throw new Error('no WWW sheet for ' + brandKey + ' in the WWW_SHEETS script property');
+  var year = folder.slice(0, 4), q = (folder.match(/-q(\d)$/) || [])[1];
+  var want = names.map(normName), best = null;
+  SpreadsheetApp.openById(id).getSheets().forEach(function (sh) {
+    var title = sh.getName();
+    if (title.indexOf(year) < 0 || /copy of|backup|old|placeholder/i.test(title)) return;
+    if (q && /\bq\d\b/i.test(title) && !new RegExp('\\bq' + q + '\\b', 'i').test(title)) return;
+    var rows = sh.getDataRange().getDisplayValues();
+    if (!rows.length) return;
+    var col = rows[0].map(function (h) { return String(h).trim().toLowerCase(); }).indexOf('name');
+    if (col < 0) return;
+    var map = {};
+    rows.slice(1).forEach(function (r) {
+      var addr = r.filter(function (c) { return /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(c).trim()); })[0];
+      String(r[col] || '').split(/\s*(?:&|,| and )\s*/).forEach(function (n) {
+        var k = normName(n);
+        if (k && addr && !map[k]) map[k] = String(addr).trim().toLowerCase();
+      });
+    });
+    var hits = want.filter(function (k) { return map[k]; }).length;
+    if (hits && (!best || hits > best.hits)) best = { tab: title, map: map, hits: hits };
+  });
+  if (!best) throw new Error('no ' + year + ' tab of the WWW sheet lists these speakers');
+  var out = { tab: best.tab, emails: [], matched: [], unmatched: [] };
+  names.forEach(function (n, i) {
+    var e = best.map[want[i]];
+    if (e) { out.emails.push(e); out.matched.push(n); } else out.unmatched.push(n);
+  });
+  return out;
+}
+
+function normName(v) {   // = norm_name in _build/deckdump_pull.py: accents off, letters only
+  return String(v || '').toLowerCase().split(String.fromCharCode(322)).join('l')   // the Polish l with a stroke
+    .normalize('NFD').replace(/[^\x00-\x7f]/g, '')
+    .replace(/[^a-z]+/g, ' ').trim();
+}
+
+// Sent mail lives in Sent: archive the copy that lands in this mailbox, label it; a reply un-archives the thread.
+function fileQuietly(message) {
+  try {
+    var thread = message.getThread();
+    thread.moveToArchive();
+    thread.markRead();
+    var label = GmailApp.getUserLabelByName(LABEL) || GmailApp.createLabel(LABEL);
+    thread.addLabel(label);
+  } catch (err) {
+    Logger.log('Sent, but could not file the thread: ' + err);
+  }
+}
+
+// Editor test: authorises Sheets, then dry-runs a reminder (nothing is sent). Needs WWW_SHEETS set first.
+function testRemind() {
+  var e = { postData: { contents: JSON.stringify({
+    action: 'remind', token: props().getProperty('DECKDUMP_TOKEN'), brand: 'llmday', folder: '2026-hamburg-q4',
+    event_name: 'LLMday Hamburg 2026 Q4', speakers: [{ name: 'Marcel Koert' }, { name: 'Nobody Here' }], dry: true
+  }) } };
+  Logger.log(doPost(e).getContent());
 }
 
 // ---- editor test: authorises the scopes, creates the folder, dry-runs a start ------------
