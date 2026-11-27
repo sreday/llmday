@@ -83,3 +83,6 @@ Same structure: `sreday`. Changes to shared templates/logic often need to be app
 pip install jinja2 markdown pyyaml --break-system-packages
 ```
 If `jinja-markdown` fails to install (network proxy), a local stub exists at `_build/jinja_markdown.py` — copy it alongside `generate.py` before running the build.
+
+## Twin events: LLMday London = PEC London (Marek 2026-11-27, "until further notice")
+An event whose `metadata.yml` says `twin: pec` (today `2026-london-q4`) is ONE event under two brands: one lineup, schedule, sponsors, Luma (`luma_evt`) and CFP (`cfp_url`, this repo's cfp.ninja event), one tab in LLMday WWW. **Everything about it is changed here, in llmday.** promptengineering.rocks copies this folder every 15 minutes (PEC `twins.yml`, `_build/twin_sync.py`, workflow `twin.yml`), keeping only PEC's brand (`_build/twin.yml` there): an edit made on the PEC side is put back. Headshots reach PEC on the PEC circle automatically. Deck dump: this repo ships and reminds for both brands' uploads (`upload_brands()` in `_build/deckdump_pull.py`). PEC is not a cfp.ninja sync source, so the shared CFP never flip-flops. New twin: "announce LLMday London for <date>, with PEC as its subsidiary" (skill announce-twin).

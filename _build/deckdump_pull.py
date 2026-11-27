@@ -480,6 +480,17 @@ def covered_keys(talks, uploads):
     return out
 
 
+def upload_brands(brand, meta):
+    """Which brands' uploads belong to this repo's event. Twin events (Marek 2026-11-27, `twin: pec` in the LLMday
+    event's metadata.yml): one event under two brands, built in llmday. llmday ships and reminds for both brands'
+    uploads; the twin's copy (PEC, whose metadata carries the same `twin: pec`) does neither - its twin sync
+    (PEC _build/twin_sync.py) copies llmday's slides/ over."""
+    tw = str(meta.get("twin") or "").lower()
+    if tw and tw == brand:
+        return set()
+    return {brand} | ({tw} if tw else set())
+
+
 def remind(feed, home, brand, site, args):
     if brand == "pec":   # PEC lineups are LLMday's (transposed), so LLMday's reminder already reaches these speakers
         print("Deck dump reminder: PEC speakers are reminded through the LLMday event with the same lineup")
@@ -497,8 +508,8 @@ def remind(feed, home, brand, site, args):
                 meta = yaml.load(f, Loader=yaml.FullLoader) or {}
         except (OSError, yaml.YAMLError):
             continue
-        if remind_due(meta, now):
-            due.append(path)
+        if remind_due(meta, now) and upload_brands(brand, meta):
+            due.append((path, upload_brands(brand, meta)))
     if not due:
         print("Deck dump reminder: no %s event due now (day 1 at 12:00-15:59 local, or the catch-up a week after)" % (brand or "?"))
         return 0
@@ -509,12 +520,12 @@ def remind(feed, home, brand, site, args):
         return 1
     exec_url = feed.split("?", 1)[0]
     token = (urllib.parse.parse_qs(urllib.parse.urlsplit(feed).query).get("token") or [""])[0]
-    files = [f for f in (res.get("files") or []) if (f.get("meta") or {}).get("brand") == brand]
+    files = res.get("files") or []
 
     summary = []
-    for path in due:
+    for path, brands in due:
         folder = os.path.basename(path)
-        uploads = [f.get("meta") or {} for f in files if (f.get("meta") or {}).get("folder") == folder]
+        uploads = [f.get("meta") or {} for f in files if (f.get("meta") or {}).get("brand") in brands and (f.get("meta") or {}).get("folder") == folder]
         slides_dir = os.path.join(path, "slides")
         talks = remind_lineup(path)
         covered = covered_keys(talks, uploads)
@@ -607,7 +618,7 @@ def selftest():
     return 0 if ok else 1
 
 
-def events_all(today):
+def events_all(today, brand):
     """{folder: (path, ends)} for every 2025+ event folder of this repo."""
     out = {}
     for path in glob.glob(os.path.join(ROOT, "20*")) + glob.glob(os.path.join(ROOT, "past", "20*")):
@@ -616,11 +627,12 @@ def events_all(today):
             continue
         try:
             with open(os.path.join(path, "metadata.yml"), encoding="utf-8") as f:
-                w = event_window(yaml.load(f, Loader=yaml.FullLoader) or {}, today)
+                meta = yaml.load(f, Loader=yaml.FullLoader) or {}
+            w = event_window(meta, today)
         except (OSError, yaml.YAMLError):
             continue
         if w:
-            out[folder] = (path, w[0], w[2])
+            out[folder] = (path, w[0], w[2], upload_brands(brand, meta))
     return out
 
 
@@ -639,9 +651,9 @@ def cleanup(feed, brand, events, args):
     trashed, kept = [], []
     for f in res.get("files") or []:
         m = f.get("meta") or {}
-        if m.get("brand") != brand or m.get("folder") not in events:
+        if m.get("folder") not in events or m.get("brand") not in events[m["folder"]][3]:
             continue
-        path, ends, now = events[m["folder"]]
+        path, ends, now, _ = events[m["folder"]]
         if now < ends + datetime.timedelta(days=WINDOW_DAYS):
             continue                                       # still in its shipping window
         state = {}
@@ -726,7 +738,11 @@ def main():
         events += [(p, m) for o, p, m in sorted(finished, key=lambda x: x[0], reverse=True)
                    if p not in shown and os.path.basename(p)[:4] >= FIRST_YEAR and o > now_utc - datetime.timedelta(days=LATE_DAYS)]
     if args.cleanup:
-        return cleanup(feed, brand, events_all(today), args)
+        return cleanup(feed, brand, events_all(today, brand), args)
+    twins = [os.path.basename(p) for p, m in events if not upload_brands(brand, m)]
+    if twins:
+        print("Deck dump: %s shipped by LLMday (twin event), the twin sync copies the slides" % ", ".join(twins))
+    events = [(p, m) for p, m in events if upload_brands(brand, m)]
     if not events:
         print("Deck dump: no %s event in its shipping window" % (brand or "?"))
         return 0
@@ -739,12 +755,12 @@ def main():
     token = res.get("access_token") or ""
     if token and os.environ.get("GITHUB_ACTIONS"):
         print("::add-mask::" + token)
-    files = [f for f in (res.get("files") or []) if (f.get("meta") or {}).get("brand") == brand]
+    files = [f for f in (res.get("files") or []) if f.get("meta")]
 
     summary = []
     for path, meta in events:
         folder = os.path.basename(path)
-        mine = [f for f in files if f["meta"].get("folder") == folder]
+        mine = [f for f in files if f["meta"].get("folder") == folder and f["meta"].get("brand") in upload_brands(brand, meta)]
         print("%s: %d uploads" % (folder, len(mine)))
         r = process_event(path, meta, mine, token, args)
         event_name = next((str(e.get("name")) for e in (home.get("events") or []) + (home.get("events_past") or [])
