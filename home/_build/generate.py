@@ -2035,13 +2035,16 @@ except OSError:
 print("Writing out status/index.html (hidden, not in sitemap)")
 
 # DECK DUMP (hidden, /deckdump/ - Marek 2026-10-30): speakers upload their latest slides before the conference. The page
-# lists this brand's upcoming events and its DECKDUMP_PAST most recent finished ones (late uploads, Marek 2026-10-31), each with its lineup (live
+# lists this brand's upcoming events and every finished 2026+ event for 12 months after its end (late uploads, Marek
+# 2026-11-27: "allow deck dump to pick any event 2026+, then wipe the deck dump option when each event is 12 months
+# old"; was the 3 most recent since 2026-10-31), each with its lineup (live
 # talks only, one entry per talk page). The key is the talk page's file name (generate_talk_url in the event build,
 # ported below - keep them identical), so the deck lands on exactly that page. Backend: "Deck dump" Apps Script
 # (llmday/_build/deckdump-form.gs, deckdump_form_url in metadata.yml); the decks reach the talk pages through
 # _build/deckdump_pull.py the day after the event.
 import string as _dd_string, json as _dd_json
-DECKDUMP_PAST = 3     # finished events still listed; _build/deckdump_pull.py ships the same ones
+DECKDUMP_LATE_DAYS = 365   # a finished event stays listed this long after its end; = LATE_DAYS in _build/deckdump_pull.py
+DECKDUMP_FIRST_YEAR = "2026"
 _DD_BRAND_KEYS = {"SREday": "sreday", "LLMday": "llmday", "PLATFORMday": "platformday", "Prompt Engineering Conference": "pec"}
 
 
@@ -2061,10 +2064,11 @@ _dd_events = []
 _dd_now = datetime.datetime.now(datetime.timezone.utc)
 for _ev in (context.get("events") or []) + (context.get("events_past") or []):
     _folder = str((_ev or {}).get("url") or "").strip("./").rstrip("/")
-    if not _folder or not os.path.isdir("../" + _folder):
+    _dir = "../" + _folder if os.path.isdir("../" + _folder) else "../past/" + _folder   # finished events move to past/
+    if not _folder or not os.path.isdir(_dir):
         continue
     try:
-        with open("../" + _folder + "/metadata.yml", encoding="utf-8") as _f:
+        with open(_dir + "/metadata.yml", encoding="utf-8") as _f:
             _em = yaml.load(_f, Loader=yaml.FullLoader) or {}
         _start = datetime.datetime.fromisoformat(str(_em.get("start_time") or ""))
     except Exception:
@@ -2073,7 +2077,7 @@ for _ev in (context.get("events") or []) + (context.get("events_past") or []):
     _ends = datetime.datetime.combine(_start.date() + datetime.timedelta(days=max(1, int(_em.get("days") or 1))), datetime.time(0, 0), _tz)
     _talks, _seen = [], set()
     try:
-        with open("../" + _folder + "/_db/talks.csv", encoding="utf-8", errors="replace") as _cf:
+        with open(_dir + "/_db/talks.csv", encoding="utf-8", errors="replace") as _cf:
             for _row in csv.DictReader(_cf):
                 if _talk_kind(_row.get("status")) not in _LIVE_KINDS or not (_row.get("name") or "").strip():
                     continue
@@ -2091,7 +2095,9 @@ for _ev in (context.get("events") or []) + (context.get("events_past") or []):
     _dd_events.append({"folder": _folder, "event_name": str(_ev.get("name") or _folder), "date": str(_em.get("date_string") or ""), "past": _dd_now >= _ends, "ends": _ends.isoformat(),
                        "city": str(_em.get("city_name") or ""), "start": _start.isoformat(), "talks": _talks})
 _dd_upcoming = sorted([e for e in _dd_events if not e["past"]], key=lambda e: e["start"])
-_dd_events = _dd_upcoming + sorted([e for e in _dd_events if e["past"]], key=lambda e: e["ends"], reverse=True)[:DECKDUMP_PAST]
+_dd_late = _dd_now - datetime.timedelta(days=DECKDUMP_LATE_DAYS)
+_dd_events = _dd_upcoming + sorted([e for e in _dd_events if e["past"] and e["folder"][:4] >= DECKDUMP_FIRST_YEAR
+                                    and datetime.datetime.fromisoformat(e["ends"]) > _dd_late], key=lambda e: e["ends"], reverse=True)
 os.makedirs(BASE_FOLDER + "/deckdump", exist_ok=True)
 with open(BASE_FOLDER + "/deckdump/index.html", "w", encoding="utf-8") as f:
     f.write(env.get_template("deckdump.html").render(

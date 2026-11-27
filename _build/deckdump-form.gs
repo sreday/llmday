@@ -25,6 +25,7 @@
  *      with no deck yet (names from the pull job, addresses from the brand's WWW sheet). See remind() below.
  *      Setup: Script property WWW_SHEETS = {"sreday":"<sheet id>","llmday":"<id>","platformday":"<id>","pec":"<id>"}
  *      (never in this file: the repo is public), then run testRemind once (authorises Sheets), then a new version.
+ *      v5 (2026-11-27): late: true = the "late ask" wording, for events that ended a month or more ago.
  *
  * Abuse guards (no passphrase - speakers use this from the onboarding email): honeypot, daily cap (DECKDUMP_DAILY),
  * file type + size caps, names and keys checked against strict patterns. The page only offers lineup talks.
@@ -67,7 +68,7 @@ function doGet(e) {
     if (!tokenOk(p.token)) return respond({ ok: false, error: 'forbidden' });
     return respond({ ok: true, access_token: ScriptApp.getOAuthToken(), files: listDecks() });
   }
-  return respond({ ok: true, service: 'deckdump', version: 4 });   // v3: PDFs only; v4: conference-day reminder
+  return respond({ ok: true, service: 'deckdump', version: 5 });   // v3: PDFs only; v4: conference-day reminder; v5: late ask
 }
 
 function doPost(e) {
@@ -454,7 +455,7 @@ function clean(v, max) {
 }
 
 // ---- conference-day reminder (v4, Marek 2026-11-27) ------------------------------------------
-// {action: "remind", token, brand, folder, event_name, speakers: [{name, title}], dry, test_to}
+// {action: "remind", token, brand, folder, event_name, speakers: [{name, title}], dry, test_to, late}
 // Sent by _build/deckdump_pull.py --remind (GitHub Actions, hourly) on day 1 of an event, from 12:00 local time, with
 // the NAMES of speakers who have no deck yet. The addresses are looked up here, in the brand's WWW sheet (ids in the
 // Script Property WWW_SHEETS, never in this public file), and never leave this script: the response holds names and
@@ -489,7 +490,7 @@ function remind(data) {
   if (!emails.length) return respond({ ok: false, error: 'no addresses found', tab: found.tab, unmatched: found.unmatched });
   if (emails.length > REMIND_MAX) return respond({ ok: false, error: 'more than ' + REMIND_MAX + ' recipients' });
 
-  var mail = composeReminder(brand, folder, eventName);
+  var mail = composeReminder(brand, folder, eventName, !!data.late);
   var out = { ok: true, tab: found.tab, recipients: emails.length, matched: found.matched, unmatched: found.unmatched };
   if (data.dry) {
     out.dry = true; out.subject = mail.subject; out.text = mail.text;
@@ -506,18 +507,21 @@ function remind(data) {
   return respond(out);
 }
 
-// Marek's wording (2026-11-27), "here" = the bold link to the conference-specific deck dump page.
-function composeReminder(brand, folder, eventName) {
+// Marek's wording (2026-11-27), "here" = the bold link to the conference-specific deck dump page. late = the event
+// ended a month or more ago: same email, the first line owns up to the late ask.
+function composeReminder(brand, folder, eventName, late) {
   var url = 'https://' + brand.site + '/deckdump/?event=' + encodeURIComponent(folder);
-  var subject = 'Reminder to upload your slides - ' + eventName;
+  var subject = late ? 'Your slides from ' + eventName : 'Reminder to upload your slides - ' + eventName;
+  var ask = late ? 'We still don\'t have your slides from ' + eventName + ' - sorry for the late ask! Could you upload them '
+                 : 'We don\'t have your slides yet, could you upload them ';
   var text = 'Hey!\n\n' +
-    'We don\'t have your slides yet, could you upload them here: ' + url + ' ?\n\n' +
+    ask + 'here: ' + url + ' ?\n\n' +
     'Attendees can browse the slides on the website, and we can use the PDF to fix any problems with your session ' +
     'recording if needed - it\'s more handy than it seems!\n\n' +
     'PDF works best!\n\n' +
     'Thanks a lot!\nMark\n';
   var html = '<div>Hey!</div><br>' +
-    '<div>We don\'t have your slides yet, could you upload them <b><a href="' + url + '">here</a></b>?</div><br>' +
+    '<div>' + ask + '<b><a href="' + url + '">here</a></b>?</div><br>' +
     '<div>Attendees can browse the slides on the website, and we can use the PDF to fix any problems with your session ' +
     'recording if needed - it\'s more handy than it seems!</div><br>' +
     '<div>PDF works best!</div><br>' +

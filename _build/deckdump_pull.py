@@ -46,7 +46,8 @@ import urllib.request
 import yaml
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-RECENT_PAST = 3                  # the most recent finished events always shipped (late uploads), = DECKDUMP_PAST
+LATE_DAYS = 365                  # late uploads (Marek 2026-11-27): every finished 2026+ event ships for 12 months after
+FIRST_YEAR = "2026"              # its end, = DECKDUMP_LATE_DAYS / DECKDUMP_FIRST_YEAR in home/_build/generate.py
 WINDOW_DAYS = 14                 # same as DECKDUMP_DAYS in home/_build/generate.py (how long /deckdump/ lists an event)
 MAX_BYTES = 5 * 1024 * 1024
 FALLBACK_BYTES = 10 * 1024 * 1024   # when 5 MB cannot be reached without flattening (Marek 2026-10-31)
@@ -702,10 +703,12 @@ def main():
             events.append((path, meta))
         elif opens <= now:
             finished.append((opens, path, meta))
-    # the 3 most recent finished events stay open for late uploads, like /deckdump/ (DECKDUMP_PAST in home/_build/generate.py)
+    # finished 2026+ events stay open for late uploads for 12 months, like /deckdump/ (home/_build/generate.py)
     if not args.event:
         shown = {p for p, _ in events}
-        events += [(p, m) for _, p, m in sorted(finished, key=lambda x: x[0], reverse=True)[:RECENT_PAST] if p not in shown]
+        now_utc = today or datetime.datetime.now(datetime.timezone.utc)
+        events += [(p, m) for o, p, m in sorted(finished, key=lambda x: x[0], reverse=True)
+                   if p not in shown and os.path.basename(p)[:4] >= FIRST_YEAR and o > now_utc - datetime.timedelta(days=LATE_DAYS)]
     if args.cleanup:
         return cleanup(feed, brand, events_all(today), args)
     if not events:
