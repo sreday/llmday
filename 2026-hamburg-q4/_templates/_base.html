@@ -157,7 +157,7 @@
 </style>
 
 
-<body>
+<body{% if videos_waiting %} data-vr-release="{{ video_release_iso }}"{% endif %}>
 	<header id="header" class="header fixed-top">
 		<div class="branding">
 			<div class="container-fluid">
@@ -238,7 +238,7 @@
 						<li class="list-inline-item me-0"><a target="_blank" rel="noopener noreferrer" href="{{ youtube_url }}"><i class="fab fa-youtube fa-fw"></i></a></li>
 					</ul>
 					{% if youtube_playlist %}
-					<a class="btn btn-secondary btn-lg cta-right" href="{{ youtube_playlist }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="white" style="vertical-align:middle;margin-right:6px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Playlist</a>
+					<a class="btn btn-secondary btn-lg cta-right{% if videos_waiting %} vr-after{% endif %}" href="{{ youtube_playlist }}" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="white" style="vertical-align:middle;margin-right:6px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>Playlist</a>
 					{% elif event_state != 'after' %}
 					<a class="btn btn-secondary btn-lg cta-right" href="{% if talk %}./#sponsors{% else %}#sponsors{% endif %}">Sponsor</a>
 					{% endif %}
@@ -249,6 +249,17 @@
 
 	</div><!--//hero-block-->
 	{% endblock %}
+
+	{% if videos_waiting and not talk %}
+	{# PREMIERE COUNTDOWN (Marek 2026-11-28): the videos are uploaded and go public 5 weeks after the event #}
+	<div class="vr-strip vr-before">
+		<div class="container">
+			<span class="vr-badge">&#10003; Talk videos ready</span>
+			<span class="vr-line">Premiering <b data-vr-when>{{ video_release_text }}</b> &middot; <b data-vr-countdown></b></span>
+			<span class="vr-why">We publish every talk five weeks after the event.{% if next_live %} Can't wait? Be in the room: <a href="{{ next_live.url }}">{{ next_live.name }}</a>{% endif %}</span>
+		</div>
+	</div>
+	{% endif %}
 
 	<div class="stats-block theme-bg-primary text-white py-4 text-center">
 		<div class="container">
@@ -350,5 +361,52 @@
   document.documentElement.addEventListener('pointerleave', release);
 })();
 </script>
+{% if videos_waiting %}
+<style>
+  /* PREMIERE COUNTDOWN: before the release the .vr-before parts show; at the release moment the script swaps them
+     for the .vr-after ones (player, Watch buttons, playlist) in the visitor's browser */
+  body:not(.vr-released) .vr-after { display:none !important; }
+  body.vr-released .vr-before { display:none !important; }
+  .vr-strip { background:#101318; color:#e9edf2; padding:14px 0; text-align:center; font-size:16px; }
+  .vr-strip .container { display:flex; flex-wrap:wrap; gap:6px 14px; justify-content:center; align-items:center; }
+  .vr-strip .vr-why { color:#aab3bf; font-size:14px; flex-basis:100%; }
+  .vr-strip a, .vr-card a { color:#fff; text-decoration:underline; }
+  .vr-badge { display:inline-block; background:#1f9d55; color:#fff; font-weight:700; font-size:13px; padding:3px 10px;
+              border-radius:999px; letter-spacing:.02em; }
+  .vr-card { position:relative; aspect-ratio:16/9; border-radius:12px; overflow:hidden; color:#fff; display:flex;
+             align-items:center; justify-content:center; text-align:center;
+             background:radial-gradient(120% 90% at 50% 0%, #2a3140 0%, #0c0f14 70%); }
+  .vr-card-in { padding:18px 22px; max-width:560px; }
+  .vr-card .vr-title { font-size:20px; font-weight:700; margin:12px 0 4px; }
+  .vr-card .vr-count { font-size:34px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:.02em; }
+  .vr-card .vr-why { color:#c3cad4; font-size:14px; margin-top:10px; }
+  @media (max-width:560px) { .vr-card { aspect-ratio:auto; min-height:240px; } .vr-card .vr-count { font-size:26px; } }
+</style>
+<script>
+  (function () {
+    var body = document.body, at = new Date(body.getAttribute('data-vr-release')).getTime();
+    if (!at) return;
+    function each(sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); }
+    function when() {   // "Thursday 31 December, 09:00 your time", in the visitor's language and zone
+      try {
+        return new Intl.DateTimeFormat(undefined, {weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric',
+                                                    minute: '2-digit'}).format(new Date(at)) + ' your time';
+      } catch (e) { return new Date(at).toString(); }
+    }
+    function left(ms) {
+      var s = Math.max(0, Math.floor(ms / 1000)), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600),
+          m = Math.floor(s % 3600 / 60), x = s % 60, p = function (n) { return (n < 10 ? '0' : '') + n; };
+      return d ? d + 'd ' + h + 'h ' + p(m) + 'm' : h ? h + 'h ' + p(m) + 'm ' + p(x) + 's' : m + 'm ' + p(x) + 's';
+    }
+    each('[data-vr-when]', function (el) { el.textContent = when(); });
+    function paint() {
+      var ms = at - Date.now();
+      each('[data-vr-countdown]', function (el) { el.textContent = left(ms); });
+      if (ms <= 0) { body.classList.add('vr-released'); return true; }
+    }
+    if (!paint()) { var t = setInterval(function () { if (paint()) clearInterval(t); }, 1000); }
+  })();
+</script>
+{% endif %}
 </body>
 </html>

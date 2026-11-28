@@ -72,7 +72,18 @@
               {% if talk.youtube_embed_url %}
               <div class="desc p-2 p-lg-3">
                 <h5 style="color:var(--brand);font-weight:700;">Video</h5>
-                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                {% if talk.video_waiting %}
+                {# PREMIERE COUNTDOWN (see _base.html): the video is uploaded and goes public 5 weeks after the event #}
+                <div class="vr-card vr-before">
+                  <div class="vr-card-in">
+                    <div class="vr-badge">&#10003; Video ready</div>
+                    <div class="vr-title">Premieres <span data-vr-when>{{ video_release_text }}</span></div>
+                    <div class="vr-count" data-vr-countdown></div>
+                    <div class="vr-why">We publish every talk five weeks after the event.{% if next_live %} Can't wait? Catch the next one live: <a href="{{ next_live.url }}">{{ next_live.name }}</a>{% else %} Can't wait? Catch the next one live.{% endif %}</div>
+                  </div>
+                </div>
+                {% endif %}
+                <div class="{% if talk.video_waiting %}vr-after{% endif %}" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
                   {# Thumbnail first, player on click: the YouTube iframe is ~600 KB+ before anyone presses play (venue wifi) #}
                   <button type="button" aria-label="Play video"
                     data-src="{{ talk.youtube_embed_url | replace('www.youtube.com', 'www.youtube-nocookie.com') }}?autoplay=1"

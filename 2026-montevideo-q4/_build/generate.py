@@ -733,6 +733,62 @@ def _videos_out():
         return True
 # ── END VIDEO RELEASE ───────────────────────────────────────────────────────
 
+
+# ── PREMIERE COUNTDOWN (Marek 2026-11-28): "a timer like in conf42, suggesting the videos are uploaded, but they are
+# waiting for 5 weeks after the event - putting us in a spot where people are like 'oh ok, so they do it on purpose and
+# we can watch 5 weeks later, OR WE SHOULD ATTEND'". The release moment (the same rule as _videos_out) for the
+# countdown, and the next event to attend live (same city first) from home/metadata.yml.
+def _video_release_at():
+    try:
+        rel = str(context.get('video_release') or '').strip()
+        if rel:
+            t = datetime.datetime.fromisoformat(rel.replace('Z', '+00:00'))
+            return t if t.tzinfo else t.replace(tzinfo=datetime.timezone.utc)
+        start = datetime.datetime.fromisoformat(str(context.get('start_time') or ''))
+        return datetime.datetime.combine(start.date() + datetime.timedelta(days=35), datetime.time(9, 0),
+                                         start.tzinfo or datetime.timezone.utc)
+    except ValueError:
+        return None
+
+
+def _next_live():
+    import os as _o
+    try:
+        with open('../home/metadata.yml', encoding='utf-8') as _f:
+            _hm = yaml.load(_f, Loader=yaml.FullLoader) or {}
+    except (OSError, yaml.YAMLError):
+        return None
+    _here = _o.path.basename(_o.getcwd())
+    _city = re.sub(r'^\d{4}-|-q\d$', '', _here)
+    _ahead = []
+    for _e in _hm.get('events') or []:
+        _url = str((_e or {}).get('url') or '')
+        _folder = _url.strip('./').rstrip('/')
+        if not _url.startswith('./') or not _folder or _folder == _here:
+            continue
+        try:
+            with open('../' + _folder + '/metadata.yml', encoding='utf-8') as _f:
+                _m = yaml.load(_f, Loader=yaml.FullLoader) or {}
+            _s = datetime.datetime.fromisoformat(str(_m.get('start_time') or ''))
+        except (OSError, yaml.YAMLError, ValueError):
+            continue
+        if _s.date() >= datetime.date.today():
+            _ahead.append((_city not in _folder, _s.date(), _e.get('name') or _folder, '../' + _folder + '/'))
+    if not _ahead:
+        return None
+    _ahead.sort()
+    return {'name': _ahead[0][2], 'url': _ahead[0][3]}
+
+
+_vr_at = _video_release_at()
+context['videos_waiting'] = bool(_vr_at) and not _videos_out() and \
+    any((t.get('YouTube') or '').strip() for t in talks_raw)
+context['video_release_iso'] = _vr_at.astimezone(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ') if _vr_at else ''
+context['video_release_text'] = (_vr_at.astimezone(datetime.timezone.utc).strftime('%A %d %B, %H:%M UTC')
+                                 if _vr_at else '')
+context['next_live'] = _next_live() if context['videos_waiting'] else None
+# ── END PREMIERE COUNTDOWN ──────────────────────────────────────────────────
+
 # pick up the ids & photos
 for i, talk in enumerate(talks_raw):
     talk["id"] = str(i)
@@ -753,8 +809,9 @@ for i, talk in enumerate(talks_raw):
         talk["youtube_embed_url"] = "https://www.youtube.com/embed/" + m.group(1) if m else ""
     else:
         talk["youtube_embed_url"] = ""
-    if yt and not _videos_out():                   # the video is still private (VIDEO RELEASE above): no player,
-        talk["youtube_embed_url"] = talk["YouTube"] = ""   # no Watch button
+    # uploaded but still private (VIDEO RELEASE above): the pages show a premiere countdown instead of the player and
+    # the Watch buttons; both are in the page and appear by themselves at the release moment (no rebuild needed)
+    talk["video_waiting"] = bool(yt) and not _videos_out()
     # smart line-breaking for speaker names on cards
     # split on ", " and " & " keeping separators, one name per line
     name = (talk.get("name") or "").strip()

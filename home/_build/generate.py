@@ -71,6 +71,32 @@ if _now_past:
     context["events_past"] = list(reversed(_now_past)) + (context.get("events_past") or [])   # latest first
     print("Over, moved to past events: %s" % ", ".join(str(e.get("name")) for e in _now_past))
 
+
+# VIDEO RELEASE (Marek 2026-11-28): the LIVE factory links an event's playlist as soon as it makes it, while the talk
+# videos stay private until 5 weeks after the event: the card's Playlist button waits for that moment (the event's
+# video_release, else its day + 35 at 09:00 in its own offset - the rule of _videos_out in the event generator).
+def _folder_videos_out(folder):
+    try:
+        with open("../" + folder + "/metadata.yml", encoding="utf-8") as _f:
+            m = yaml.load(_f, Loader=yaml.FullLoader) or {}
+        rel = str(m.get("video_release") or "").strip()
+        if rel:
+            t = datetime.datetime.fromisoformat(rel.replace("Z", "+00:00"))
+            t = t if t.tzinfo else t.replace(tzinfo=datetime.timezone.utc)
+        else:
+            start = datetime.datetime.fromisoformat(str(m.get("start_time") or ""))
+            t = datetime.datetime.combine(start.date() + datetime.timedelta(days=35), datetime.time(9, 0),
+                                          start.tzinfo or datetime.timezone.utc)
+        return datetime.datetime.now(datetime.timezone.utc) >= t
+    except (OSError, yaml.YAMLError, ValueError):
+        return True
+
+
+for _e in (context.get("events") or []) + (context.get("events_past") or []):
+    _u = str((_e or {}).get("url") or "")
+    if _e and _e.get("youtube_playlist") and _u.startswith("./") and not _folder_videos_out(_u.strip("./").rstrip("/")):
+        _e["youtube_playlist"] = None
+
 # read the csv
 context["testimonials"] = read_csv("./_db/testimonials.csv")
 context["ambassadors"] = read_csv("./_db/ambassadors.csv")
