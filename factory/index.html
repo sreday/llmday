@@ -1,0 +1,1037 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>LLMday - LIVE talk factory</title>
+	<!-- link previews: _build/og_images.py -->
+	<meta property="og:title" content="LLMday - LIVE talk factory">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://llmday.com/factory/">
+	<meta property="og:site_name" content="LLMday">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta property="og:image:secure_url" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="800">
+	<meta property="og:image:alt" content="LLMday - LIVE talk factory">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@llmday_com">
+	<meta name="twitter:creator" content="@llmday_com">
+	<meta name="twitter:title" content="LLMday - LIVE talk factory">
+	<meta name="twitter:image" content="https://llmday.com/og/72f0be44e51d98e6.jpg">
+	<meta name="twitter:image:alt" content="LLMday - LIVE talk factory">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=67cb461a46">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
+  <style>
+    :root { --brand: #16734d; --head: #16734d; --headink: #ffffff; --ink: #1d1d1f; --mute: #6b6b70; --line: #e6e2e6; --bg: #f7f5f7; --card: #fff; --code: #f2eef2;
+            --ok: #2e7d32; --okbg: #e3f3e5; --run: #1565c0; --runbg: #e3eefc; --wait: #8a5a00; --waitbg: #fff1d6; --bad: #b3261e; --badbg: #fde5e3; --todo: #eeeaee; }
+    @media (prefers-color-scheme: dark) { :root { --brand: #5fd3a3; --ink: #ececee; --mute: #a3a0a6; --line: #333036; --bg: #151316; --card: #1e1b1f; --code: #2a262b;
+            --ok: #7fd085; --okbg: #1f3322; --run: #8ab8ff; --runbg: #1b2a40; --wait: #ffc56b; --waitbg: #3a2c12; --bad: #ff8a80; --badbg: #3d1d1b; --todo: #2a262b; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 Roboto, Arial, sans-serif; }
+    header { background: var(--head); color: var(--headink); padding: 16px 16px 0; }
+    header .in { max-width: 1000px; margin: 0 auto; }
+    header .t { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+    header b { font-family: Montserrat, sans-serif; font-size: 20px; } header span { opacity: .85; font-size: 14px; }
+    nav { display: flex; gap: 4px; margin-top: 12px; }
+    nav a { color: var(--headink); opacity: .85; text-decoration: none; padding: 8px 16px; border-radius: 8px 8px 0 0; font-family: Montserrat, sans-serif; font-size: 15px; }
+    nav a.on { background: var(--bg); color: var(--ink); opacity: 1; }
+    nav a { transition: background-color .22s ease, color .22s ease, opacity .22s ease; } nav a:hover { opacity: 1; }
+    main { max-width: 1000px; margin: 0 auto 60px; padding: 18px 16px; }
+    .card { background: var(--card); border-radius: 12px; padding: 8px 28px 30px; }
+    @media (max-width: 600px) { .card { padding: 4px 14px 20px; } }
+    .tab { display: none; } .tab.on { display: block; }
+    /* tab change (Marek 2026-10-16): the new tab fades in and rises a few pixels; the highlight eases over */
+    .tab.on { animation: tab-in .28s cubic-bezier(.2,.7,.3,1); }
+    .tab.on.from-right { animation: slide-from-right .34s cubic-bezier(.2,.7,.3,1); }
+    .tab.on.from-left { animation: slide-from-left .34s cubic-bezier(.2,.7,.3,1); }
+    @keyframes tab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes slide-from-right { from { opacity: 0; transform: translateX(48px); } to { opacity: 1; transform: none; } }
+    @keyframes slide-from-left { from { opacity: 0; transform: translateX(-48px); } to { opacity: 1; transform: none; } }
+    nav { position: relative; } nav a { position: relative; z-index: 1; }
+    nav a.on { background: transparent; }
+    nav .slider { position: absolute; z-index: 0; top: 0; bottom: 0; left: 0; width: 0; background: var(--bg);
+      border-radius: 8px 8px 0 0; transition: left .34s cubic-bezier(.2,.7,.3,1), width .34s cubic-bezier(.2,.7,.3,1); }
+    @media (prefers-reduced-motion: reduce) { .tab.on, .tab.on.from-right, .tab.on.from-left { animation: none; } nav a, nav.tabs a, nav .slider, nav.tabs .slider { transition: none; } }
+    h1, h2, h3 { font-family: Montserrat, sans-serif; line-height: 1.3; }
+    h1 { font-size: 28px; margin: 22px 0 8px; } h2 { font-size: 22px; margin: 38px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+    h3 { font-size: 18px; margin: 28px 0 6px; color: var(--brand); }
+    a { color: var(--brand); }
+    code { background: var(--code); padding: 1px 5px; border-radius: 4px; font-size: .88em; }
+    pre { background: #26222a; color: #f3eef3; padding: 14px 16px; border-radius: 10px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: inherit; }
+    blockquote { margin: 14px 0; padding: 8px 16px; background: var(--code); border-left: 3px solid var(--brand); border-radius: 6px; color: var(--mute); }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 14px; display: block; overflow-x: auto; }
+    th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-family: Montserrat, sans-serif; font-size: 13px; }
+    hr { border: 0; } li { margin: 3px 0; }
+    .ev h2 { border: 0; margin-top: 26px; padding-top: 0; } .meta { color: var(--mute); font-size: 14px; margin: -4px 0 8px; }
+    .p { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12px; white-space: nowrap; background: var(--todo); color: var(--mute); }
+    .p.done { background: var(--okbg); color: var(--ok); } .p.running { background: var(--runbg); color: var(--run); }
+    .p.waiting { background: var(--waitbg); color: var(--wait); } .p.failed { background: var(--badbg); color: var(--bad); }
+    .flag { color: var(--bad); font-size: 13px; } .small { color: var(--mute); font-size: 13px; }
+    .live { color: var(--run); font-weight: 600; } .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); margin-right: 6px; }
+    .bar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 6px 0 4px; }
+    .tag-good { color: #1e7d34; font-weight: 700; margin: -2px 0 14px; }
+    .tag-slow { color: #c4524e; font-weight: 600; margin: -2px 0 14px; }
+    @media (prefers-color-scheme: dark) { .tag-good { color: #7fd085; } .tag-slow { color: #ff9e98; } }
+    #gate { display: none; position: fixed; inset: 0; background: var(--gbg, #151316); z-index: 50; align-items: center; justify-content: center; }
+    body.locked #gate { display: flex; } body.locked header, body.locked main { display: none; }
+    #gate form { background: #fff; color: #1d1d1f; padding: 26px 28px; border-radius: 12px; width: min(340px, 90vw); font-family: Arial, sans-serif; }
+    #gate h2 { margin: 0 0 6px; font-size: 20px; border: 0; padding: 0; } #gate p { margin: 0 0 14px; color: #6b6b70; font-size: 14px; }
+    #gate input { width: 100%; padding: 9px 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; }
+    #gate button { margin-top: 10px; width: 100%; padding: 9px; font-size: 15px; border: 0; border-radius: 8px; background: var(--gbtn, #16734d); color: var(--headink); cursor: pointer; }
+    #gate .err { color: #b3261e; font-size: 13px; min-height: 18px; margin-top: 6px; }
+  </style>
+<meta name="build" content="6047ef1463-20261128T125348Z">
+</head>
+<body>
+<div id="gate"><form onsubmit="return enterFactory(event)">
+  <h2>The factory</h2><p>Team only - enter the factory password.</p>
+  <input type="password" id="gate-pw" autocomplete="current-password" autofocus>
+  <button type="submit">Enter</button><div class="err" id="gate-err"></div></form></div>
+<script>
+  // a soft gate for the team (Marek 2026-10-16): the password's SHA-256 is compared in the browser and remembered on
+  // this device. It keeps casual visitors out; it is not encryption - the sources of this page are in a public repo.
+  const GATE = "54b6ca6e5c7e0eb7e2e0cfdda988cb822dcbb539661d3359c1ac12398061d267";
+  // 5 wrong passwords lock this browser out for 24 h (Marek 2026-10-16) - kept in this browser's storage, so like the
+  // gate itself it stops casual guessing, not a determined person
+  const TRIES = 5, LOCK_MS = 24 * 3600 * 1000;
+  const store = {get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                 set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+                 del: k => { try { localStorage.removeItem(k); } catch (e) {} }};
+  function lockedUntil() { const u = +(store.get('factory-gate-lock') || 0); return u > Date.now() ? u : 0; }
+  function showLock() {
+    const u = lockedUntil(); if (!u) return false;
+    const when = new Date(u).toLocaleString([], {weekday: 'short', hour: '2-digit', minute: '2-digit'});
+    document.getElementById('gate-pw').disabled = true;
+    document.querySelector('#gate button').disabled = true;
+    document.getElementById('gate-err').textContent = 'Too many wrong passwords - the factory is closed on this browser until ' + when + '.';
+    return true;
+  }
+  if (store.get('factory-gate') !== GATE) { document.body.classList.add('locked'); showLock(); }
+  async function enterFactory(ev) {
+    ev.preventDefault();
+    if (showLock()) return false;
+    const pw = document.getElementById('gate-pw').value.trim();
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+    const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    if (hex === GATE) {
+      store.set('factory-gate', GATE); store.del('factory-gate-fails'); store.del('factory-gate-lock');
+      document.body.classList.remove('locked');
+      window.dispatchEvent(new Event('factory-unlocked'));   // the tabs place their highlight now that they are visible
+    } else {
+      const n = +(store.get('factory-gate-fails') || 0) + 1;
+      if (n >= TRIES) { store.set('factory-gate-lock', String(Date.now() + LOCK_MS)); store.del('factory-gate-fails'); showLock(); }
+      else { store.set('factory-gate-fails', String(n));
+             document.getElementById('gate-err').textContent = 'Not that one. ' + (TRIES - n) + (TRIES - n === 1 ? ' try' : ' tries') + ' left before a 24-hour lock.'; }
+    }
+    return false;
+  }
+</script>
+<header><div class="in">
+  <div class="t"><b>LLMday · LIVE talk factory</b><span>turns the recordings of a live event into a clean video per talk</span></div>
+  <nav><a href="#claude" data-tab="claude" class="on">Run with Claude</a><a href="#manual" data-tab="manual">No Claude, manual</a><a href="#factory" data-tab="factory">Factory logs</a></nav>
+</div></header>
+<main>
+  <section class="tab on card" id="tab-claude"><h1 id="live-talk-factory-with-claude">LIVE talk factory - with Claude</h1>
+<p class="tag-good">Recommended!</p>
+
+<p>The same job as the <strong>No Claude, manual</strong> tab, but you talk to Claude and it runs the factory for you: it adds the recordings,
+analyses them, reads the whole day's transcript to find every talk, cuts them, sends them to Descript, exports and
+writes the YouTube texts. You only do the two checks a person has to do - approving the cuts and reviewing the talks
+in Descript - and the YouTube upload.</p>
+<p>Claude knows the factory through the <strong>live-factory skill</strong> that comes with the sreday repo, so any teammate's Claude
+works the same way.</p>
+<hr />
+<h2 id="1-one-time-setup">1. One-time setup</h2>
+<ol>
+<li><strong>Claude Code</strong>: install it from https://claude.com/claude-code (the desktop app, or in a terminal
+   <code>npm install -g @anthropic-ai/claude-code</code>) and sign in with your Claude account.</li>
+<li>
+<p><strong>The repos</strong>, side by side in one folder (e.g. <code>Documents/GitHub/</code>):</p>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/sreday/sreday.git
+git clone https://github.com/sreday/llmday.git        # for LLMday events
+git clone https://github.com/sreday/platformday.git   # for PLATFORMday events
+</code></pre></div>
+</li>
+<li>
+<p><strong>The factory itself</strong>, once - this one you run yourself, because it asks for your Descript API token
+   (Descript → Settings → API tokens), which should never go through a chat:</p>
+<ul>
+<li>Mac: <code>bash sreday/live-factory/setup.sh</code></li>
+<li>Windows: double-click <code>sreday\live-factory\setup.cmd</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Start Claude in the sreday folder</strong>: open a terminal there and run <code>claude</code> (or open the folder in the desktop
+   app). Check it with: <em>"Is the LIVE talk factory ready on this computer?"</em> - Claude runs the health check and tells
+   you what, if anything, is missing.</p>
+</li>
+</ol>
+<hr />
+<h2 id="2-ship-an-event-in-one-go-autopilot">2. Ship an event in one go (autopilot)</h2>
+<p>Say <em>"Please ship the talks from SREday London 2026 Q1 through the live talk factory"</em> and give Claude the
+recordings (and the separate sound, if any). Claude does everything else without asking:
+- it finds the talks and their sharp starts and ends;
+- it checks the slides and the sound;
+- it approves the cuts itself;
+- it runs Descript;
+- after the export it checks every finished video itself, in place of your review in Descript: its first and last
+  words heard again, no silent stretch, no black picture, loudness, length;
+- it uploads each checked talk to the brand's YouTube channel.</p>
+<p>On YouTube, each talk gets:
+- its title, description and chapters;
+- the website's thumbnail and the subtitles;
+- a place in the event's playlist, in the order of the schedule;
+- a schedule: <strong>private, public exactly 5 weeks after the event at 09:00 local time</strong>.</p>
+<p>Claude also puts each link into the event's sheet (the website shows the video only from that day). Then it writes
+<code>ship report.md</code> and a postmortem:
+- what is on YouTube and when it goes public;
+- which talks are missing and why;
+- which are problematic and what would fix them;
+- the Descript credits, and the leftover compositions for you to delete.</p>
+<p>It goes in two parts. First, while you're there (about an hour after the recordings are in), Claude makes every
+decision: which talk is which, the exact start and end of each, the slides. Then it starts one long job and says <em>"you
+can put the laptop down"</em>. Leave it plugged in with the lid open: the factory keeps the computer awake by itself, but
+a closed lid or an update restart still stops it. Through the night the job:
+- cuts, edits, exports, proofreads, checks and uploads every talk;
+- tries again whatever failed for a passing reason;
+- waits for YouTube's next day if its daily limit is reached.</p>
+<p>Talks that are fine are shipped. Talks that are very likely fine but have something to look at (an unsure match, a
+long pause, a short blackout) are shipped too, and listed under "Please check" - they stay private until the release
+date, so there is time to watch them. Talks that can't be shipped (not recorded, sound lost) are left out, not
+shipped broken. When Claude starts the night
+job, it asks its one question in the same message: whether you have the missing material. It doesn't wait for the
+answer - everything else is already shipping - and whatever you send later goes in as a follow-up. After that it
+never stops to ask.</p>
+<p>Claude asks you nothing while it runs: every judgment call (an unsure talk, a missing source, a deck from another
+version) is made by the rules and written into the report. Afterwards, just say what you want: <em>"fetch Kevin's talk
+from this file"</em>, <em>"redo Jay's talk"</em>. A talk that isn't sure
+(its start lost, its sound dying) is never guessed: it waits, and the report says why.</p>
+<h3 id="a-new-computer-in-one-sentence">A new computer in one sentence</h3>
+<p>Install Claude Code (claude.com/claude-code) and sign in with your account. Open it anywhere and paste this, word for
+word:</p>
+<blockquote>
+<p>Set up the LIVE talk factory on this computer: clone https://github.com/sreday/sreday into Documents/GitHub and
+follow live-factory/SETUP.md</p>
+</blockquote>
+<p>That's all. Claude installs whatever is missing (Git, Python, ffmpeg), clones the brand repos, installs the factory,
+signs it in from your Drive, checks it and opens the progress page. The only thing it may ask: to turn on the Google
+Drive connector (claude.ai &gt; Settings &gt; Connectors). Later, on a computer that already has the repo, you can also
+start Claude Code in the sreday folder and say <em>"set up the factory on this computer"</em>. Claude
+clones the other brand repos, installs everything (<code>live-factory/bootstrap.py</code> - no questions), fetches your
+sign-ins from your private Drive vault through your Claude account's Drive connector (the YouTube channels and the
+Descript token - no API key to type), and runs the health check. Needed on the computer: Git, Python 3.9+, Claude Code
+signed in with your account (with the Google Drive connector on).</p>
+<p>The vault is one file, <code>live-factory vault.json</code>, in your owner-only Drive folder "Claude (private)". Claude keeps it
+current whenever a sign-in changes. To revoke everything at once: Google account &gt; Security &gt; third-party access
+("Conf42 factory"), and Descript &gt; Settings &gt; API tokens.</p>
+<h3 id="launch-checklist-once-per-computer-by-hand-or-what-claude-checks">Launch checklist: once per computer (by hand, or what Claude checks)</h3>
+<p>Do these once on every computer that ships events, Mac or Windows. Ask Claude <em>"Is the factory ready to ship
+<event>?"</em>: it runs the checks and tells you what is missing. A run that starts without them stops at the first
+missing piece.</p>
+<ol>
+<li><strong>The repos, side by side in one folder</strong> (e.g. <code>Documents/GitHub/</code>), all up to date with <code>git pull</code>. The
+   factory is in the first one; each event's lineup comes from its own brand's repo.
+    <div class="highlight"><pre><span></span><code>git clone https://github.com/sreday/sreday.git
+git clone https://github.com/sreday/llmday.git
+git clone https://github.com/sreday/platformday.git
+git clone https://github.com/Prompt-Engineering-Conference/2026.promptengineering.rocks.git
+</code></pre></div></li>
+<li><strong>Python and ffmpeg.</strong><ul>
+<li>Mac: <code>brew install python ffmpeg</code>.</li>
+<li>Windows: Python 3.12 from python.org (tick "Add to PATH"), and <code>winget install Gyan.FFmpeg</code>.</li>
+</ul>
+</li>
+<li><strong>The setup, by you</strong> (it asks for your Descript API token, which never goes through the chat):
+   <code>bash sreday/live-factory/setup.sh</code> on the Mac, or double-click <code>sreday\live-factory\setup.cmd</code> on Windows.<ul>
+<li><strong>Run it again after every update that changes <code>requirements.txt</code></strong>; the 2026-11-27 update added <code>tzdata</code> and
+  <code>pillow</code>. Otherwise <code>doctor</code> says "Python packages: missing".</li>
+</ul>
+</li>
+<li><strong>YouTube, once per channel, by you:</strong><ul>
+<li>You need to be the channel's <strong>owner or manager</strong>: an editor can't sign the factory in (PEC, for now).</li>
+<li>You need the OAuth client file of the Google Cloud project "Conf42 factory" (a "Desktop app" client, JSON).
+  Copy it to the computer yourself, from the private folder, e.g. to <code>~/.claude/private-work/youtube-client.json</code>.
+  Never put it in a repo or a chat.</li>
+<li>Then, in Claude Code (on Windows use <code>env\Scripts\python</code> in place of <code>env/bin/python</code>):
+  <div class="highlight"><pre><span></span><code>! cd sreday/live-factory &amp;&amp; env/bin/python -m live_factory youtube-login sreday ~/.claude/private-work/youtube-client.json
+</code></pre></div>
+  On Google's "Choose an account or brand account" screen, pick the <strong>SREday channel itself</strong>, not your own
+  account. Past the "unverified app" warning, use <em>Advanced</em>. Then do the same for <code>llmday</code>, <code>platformday</code> and
+  <code>pec</code>.</li>
+<li>The sign-in stays on that computer only, in <code>~/.live-factory/youtube/</code>, outside every repo. A channel other than
+  the brand's is refused.</li>
+</ul>
+</li>
+<li><strong>Claude Code on this computer, signed in</strong> - it proofreads the subtitles before they go to YouTube (on your
+   subscription, no API key). <code>doctor</code> shows "Claude Code (transcript proofread)".</li>
+<li><strong>The health check:</strong> <em>"run the factory doctor"</em>. Everything must say OK, and "YouTube sign-ins" must list the
+   brands you ship.</li>
+<li><strong>The first run downloads Whisper</strong> (large-v3, about 3 GB, into <code>~/.live-factory/whisper</code>), so it needs the
+   internet and the disk space.</li>
+<li><strong>Disk:</strong> 150 GB free for a full day: the copied recordings, the cuts, Descript's exports and the finals.</li>
+<li><strong>Power:</strong> plugged in, with the lid open. While a job runs the factory keeps the computer from sleeping by itself,
+   but a closed laptop lid, a flat battery or an update restart still stop it. On Windows, pause Windows Update for
+   the day.</li>
+<li><strong>One folder per computer:</strong> always run the factory from the same <code>sreday/live-factory</code>. Its <code>local/</code> folder keeps
+   the ledger of paid Descript edits, which stops an edit being paid for twice.</li>
+<li><strong>One computer per event:</strong> the event's work folder, its state and its YouTube record all live on the computer
+   that runs it.</li>
+</ol>
+<p>How fast it goes:
+- <strong>A PC with an NVIDIA card</strong> (Elephant, RTX 5090): an 8-hour day is analysed in about 15 minutes, and the edges
+  take about 1 minute a talk.
+- <strong>A Mac (M1/M2):</strong> the analysis takes about 35 minutes; the edges run on large-v3 too, a few minutes a talk.</p>
+<p>The Descript part and the uploads take the same time on either.</p>
+<h3 id="launch-checklist-before-each-event">Launch checklist: before each event</h3>
+<ol>
+<li><code>git pull</code> the brand's repo. The event's <code>metadata.yml</code> must have:<ul>
+<li><code>start_time</code> with the UTC offset, e.g. <code>"2026-10-23T09:00:00-05:00"</code> - the release date comes from it;</li>
+<li><code>city_name</code>, whose time zone must be in the factory's <code>settings.yml</code> (<code>youtube.timezones</code>) - else the release
+  can be an hour off in summer time; Claude adds a missing city;</li>
+<li>the brand's <code>youtube_url</code>.</li>
+</ul>
+</li>
+<li><strong>The thumbnails exist:</strong> open <code>https://&lt;brand&gt;.com/&lt;event&gt;/teasers/</code> - the YouTube tab must show a picture for
+   every talk. The website draws them; a talk added late needs the site rebuilt first.</li>
+<li><strong>The decks</strong> came in through the deck dump (<code>/deckdump</code>). Claude also checks this and lists the missing ones.</li>
+<li><strong>The recordings</strong>, and any separate sound, are on this computer or on a disk plugged into it.</li>
+<li>Then say <em>"Please ship the talks from <event> through the live talk factory"</em> and give the paths.</li>
+</ol>
+<p>Things to know during a run:
+- <strong>The YouTube limit:</strong> about 100 uploads a day per Google project. A big event or two events in one day can hit
+  it; the run says so, and the next run (or <em>"upload <event>"</em>) carries on.
+- <strong>Leftovers in Descript:</strong> a failed upload can leave a composition behind. The API can't delete one, so they are
+  listed in the report for you to delete.
+- <strong>The report and the postmortem</strong> come at the end. Talks that are missing, problematic or held are named there,
+  each with why.</p>
+<h2 id="3-process-an-event-step-by-step-what-to-say">3. Process an event step by step - what to say</h2>
+<p>Replace the event and paths with yours. Events are named like <code>sreday-2026-london-q1</code> or
+<code>platformday-2026-austin-q4</code>; Claude can find the right one if you just say "PLATFORMday Austin Q4".</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Say to Claude</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Launch</td>
+<td><em>"Launch the factory."</em></td>
+<td>Claude starts the app if needed and opens the progress page (http://localhost:8043) in your browser: bars per stage and per talk, then only what needs you. The detailed workbench is http://localhost:8043/workbench.</td>
+</tr>
+<tr>
+<td>Add</td>
+<td><em>"Add the recordings from /Volumes/CARD/DCIM for PLATFORMday Austin 2026 Q4, day 1."</em> (more rooms: <em>"…room 2 is track 2"</em>)</td>
+<td>The files are copied in as a checked, read-only backup. Your originals are never touched.</td>
+</tr>
+<tr>
+<td>Separate sound</td>
+<td><em>"The sound was recorded on the desk too: D:\ZOOM0001.wav, day 1."</em></td>
+<td>Added as separate sound. After the analysis it is placed on the videos by itself (different start, clock drift, files split in pieces - all fine); the talks it covers get its sound.</td>
+</tr>
+<tr>
+<td>Analyse</td>
+<td><em>"Analyse them."</em></td>
+<td>Sound, transcript, stills - free, on your computer. About 35 min for an 8-hour day; Claude runs it in the background and tells you when it's done.</td>
+</tr>
+<tr>
+<td>Find the talks</td>
+<td><em>"Match the lineup."</em></td>
+<td>Claude reads the whole day: greetings, "I'm …", the MC, closing lines, Q&amp;A, pauses, titles and abstracts. It gives you a table of every talk with start, end and anything doubtful, and asks you what only someone who was there knows ("who spoke last?").</td>
+</tr>
+<tr>
+<td>Sharp ends</td>
+<td><em>"Check the starts and ends."</em> (Claude does it anyway before the run)</td>
+<td>The factory listens closely at both ends of every talk; Claude reads each one and gives you its first and last sentence: the speaker's first words to the room, their last finished sentence before the Q&amp;A (ideally the closing "thank you"). The Q&amp;A is always out; a talk never stops mid-sentence. Anything unsure, Claude asks you.</td>
+</tr>
+<tr>
+<td>Saturated sound</td>
+<td><em>"Which talks have saturated sound?"</em></td>
+<td>The talks whose sound is clipped (cracking on loud words), with the minutes where. In the run: the clean track where there is one; else the repair tools tried on 30 s and judged, the best one repairs the talk (normal Studio Sound); Studio Sound 100% only when none helps.</td>
+</tr>
+<tr>
+<td>Slides check</td>
+<td><em>"Look at the slides."</em></td>
+<td>For every cut: which deck pages it found on screen and will show full screen, build steps, night mode, the separate sound - with a before/after picture per talk. Claude names any deck that looks like another version than the one presented: if only the fonts differ it can still use it (<em>"use Kevin's deck anyway"</em>); if the words differ, ask the speaker for the deck they presented.</td>
+</tr>
+<tr>
+<td>✋ Approve</td>
+<td>Open the workbench (http://localhost:8043/workbench), check the flagged cuts, tick them, <strong>Save cuts</strong> - or tell Claude <em>"approve all"</em> if you trust the table.</td>
+<td>Nothing goes to Descript before this.</td>
+</tr>
+<tr>
+<td>Descript</td>
+<td><em>"Run the factory."</em></td>
+<td>Claude says how many talks and roughly how many Descript credits (8-30 per talk), then cuts, uploads and edits them. Watch it on http://localhost:8043/status or ask <em>"how is it going?"</em>.</td>
+</tr>
+<tr>
+<td>✋ Review</td>
+<td>Watch each talk in Descript (the start and the end are final - nothing to trim), tick <strong>Reviewed</strong> in the workbench - or tell Claude <em>"Thomas, Jay and MJ are reviewed"</em>.</td>
+<td>Only reviewed talks are exported.</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><em>"Export the reviewed talks."</em></td>
+<td>Final light MP4s, subtitles, chapters, YouTube loudness.</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td><em>"Write the YouTube items."</em></td>
+<td>Titles, descriptions and thumbnail links, ready to paste. You upload.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-handy-things-to-ask">4. Handy things to ask</h2>
+<ul>
+<li><em>"What's the status of PLATFORMday Austin?"</em> / <em>"Which talks are waiting for my review?"</em></li>
+<li><em>"Why is Daniel flagged?"</em> - Claude reads the flags and the transcript and explains.</li>
+<li><em>"Which talks weren't recorded?"</em></li>
+<li><em>"Thomas's end is cut off - redo it with 2 more minutes."</em> - Claude fixes the cut and flags the talk for a redo: it
+  is cut again and uploaded as a fresh composition "Thomas Cameron (redo 2)"; the old one stays in Descript.</li>
+<li><em>"Edits are paused - what happened?"</em> - Claude reads the edit reports and tells you what to check in Descript
+  before it resumes.</li>
+<li><em>"Publish the status."</em> - updates the Factory logs tab of this page.</li>
+<li><em>"Which compositions do I delete in Descript?"</em> - Claude lists the leftovers failed uploads left behind (same name
+  as the talk, so it gives the length of the one to delete).</li>
+</ul>
+<h2 id="5-what-claude-wont-do-on-its-own">5. What Claude won't do on its own</h2>
+<ul>
+<li>Approve cuts or mark talks reviewed - unless you tell it to, or you ask it to ship an event (autopilot, above).</li>
+<li>Touch, move or delete your recordings, or free disk space by deleting things on its own. When your disk is low it offers to clean up junk and cache
+  files: it shows you what they are and how big, and deletes only what you pick.</li>
+<li>Handle your Descript token or any password.</li>
+<li>Upload to YouTube - except when you ask it to ship an event, and then only to the brand's own channel, private
+  until the release.</li>
+</ul>
+<p>If something looks off, just describe it - <em>"the sound on Raul's talk is only on the left"</em> - and Claude finds out why.</p>
+<hr />
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2026-11-28</strong> - Each uploaded video and the event's playlist go onto the website at once. Until the release the
+  talk page says the video is ready, with a countdown to its premiere and the next event to attend; the player
+  appears by itself at the release.</li>
+<li><strong>2026-11-28</strong> - Every bar on the progress page shows the estimated time left ("about 25 min left"), from its own pace, or from how long this event's talks usually take.</li>
+<li><strong>2026-11-28</strong> - On a laptop running from its battery, the factory says so: a yellow banner on the progress page,
+  a line in the log and in the health check, and Claude mentions it when it starts the night job.</li>
+<li><strong>2026-11-28</strong> - "Survival of the fittest": good talks ship; very likely good ones ship too, listed under "Please
+  check" (private until the release); unshippable ones are left out and asked about at launch.</li>
+<li><strong>2026-11-28</strong> - Overnight shipping: Claude makes all decisions first, then one job runs the whole night (retries,
+  and a wait for YouTube's next day when its limit is hit). Unshippable talks are left out, and the question about
+  missing material comes only at the end.</li>
+<li><strong>2026-11-28</strong> - Shipping an event asks no questions mid-run. Claude decides with the factory's rules (an unsure
+  talk is cut when the evidence is clear, otherwise skipped) and writes every call into the report. You say "fetch X"
+  or "redo Y" afterwards.</li>
+<li><strong>2026-11-28</strong> - PEC is on the shelf: it's a friend's channel, so the factory makes PEC's finished videos and leaves
+  them in the final videos folder to hand over, with no upload and no sign-in.</li>
+<li><strong>2026-11-28</strong> - A new computer in one sentence: <em>"set up the factory on this computer"</em>. Claude installs
+  everything with no questions and brings the YouTube sign-ins and the Descript token from your private Drive vault,
+  so no per-computer keys or sign-ins.</li>
+<li><strong>2026-11-27</strong> - The app opens on a plain progress page (bars, then only the real issues); the workbench is at
+  /workbench. The subtitles are proofread by Claude in the talk's context before they go to YouTube. After a full
+  review of the factory with Claude Fable, about 40 problems were fixed, among them:</li>
+<li>no Descript edit paid for twice after a network blip;</li>
+<li>a damaged recording no longer hangs the cut;</li>
+<li>portrait phone videos are no longer squashed;</li>
+<li>a talk from two cameras of different sizes is joined properly;</li>
+<li>a talk with no sound stops before Descript;</li>
+<li>the Windows crash after about 100 Whisper uses is gone;</li>
+<li>the speaker's own "on stage" / "next up" is no longer taken for the MC;</li>
+<li>one job per event at a time.</li>
+<li><strong>2026-11-27</strong> - Launch checklist for shipping a whole conference on any Mac or Windows computer (section 2). The
+  factory now keeps the computer awake while a job runs. The upload got tougher too: a talk YouTube refuses no
+  longer stops the others, and a rerun uploads what the day's limit left.</li>
+<li><strong>2026-11-27</strong> - Autopilot: <em>"ship the talks from <event> through the live talk factory"</em> runs the whole way to
+  the brand's YouTube channel. Claude approves the cuts, the factory checks each final video itself, and the upload
+  carries the title, description, chapters, thumbnail, subtitles and playlist. Each talk goes up private and becomes
+  public 5 weeks after the event at 09:00 local. Then come the sheet links, a ship report and the postmortem.</li>
+<li><strong>2026-11-27</strong> - Sharp starts and ends: the factory sets every talk's first and last words itself (Q&amp;A always out,
+  never mid-sentence, a close that trails off ends on the firm sentence before it); no extra footage to trim in
+  Descript.</li>
+<li>
+<p><strong>2026-11-27</strong> - Saturated sound: clipped talks are found (also before the run: <em>"which talks have saturated
+  sound?"</em>); the clean track is used where there is one, else the best repair tool that proves itself on a sample;
+  Studio Sound 100% in Descript only as the last resort.</p>
+</li>
+<li>
+<p><strong>2026-11-27</strong> - Every cut is checked before Descript (pages in the picture, the recorder's sound in sync, the
+  camera's pilot sound gone); a failing talk stops before any credits are spent and Claude tells you why.</p>
+</li>
+<li>
+<p><strong>2026-11-27</strong> - Best slides and best sound: deck pages replace the slides on screen (Presenter View, taskbar,
+  headshot, a TV in the room), builds kept, demos stay video; night mode put right; sound recorded on its own device
+  is placed on the videos and used. Ask <em>"look at the slides"</em> before a run to see it per talk.</p>
+</li>
+<li>
+<p><strong>2026-11-25</strong> - Fixed: a speaker with a dot in their name (e.g. "Funmilade A. Lesi") no longer fails at the Descript
+  upload. Claude also watches for an emptied room picking up sound from the other room, and knows the m4a in a Zoom
+  Drive zip can't fill a muted stretch.</p>
+</li>
+<li>
+<p><strong>2026-11-24</strong> - Talks that arrive already edited (one file per talk, from a partner) go to Descript whole: no trim,
+  their Q&amp;A kept. Fixed: a talk with only a short title and no abstract no longer makes every other talk look like a
+  "swapped slot".</p>
+</li>
+<li>
+<p><strong>2026-11-10</strong> - Claude checks which room each recording shows (the Meet/Zoom tile name on the frames), because one
+  recording can switch rooms during the day (PLATFORMday San Francisco: the keynotes, then the mini room).</p>
+</li>
+<li>
+<p><strong>2026-10-29</strong> - Claude cuts every closing Q&amp;A (you can put one back from the 60 s margin), asks before adding a
+  talk that isn't in the lineup, sends talks it is unsure of to Descript when you say so, and tells you when a Zoom
+  recording has stretches with the mic muted. Runs on Windows with an NVIDIA card. After every event Claude writes a postmortem
+  (<code>live-factory/postmortems/</code>) and acts on what it finds.</p>
+</li>
+<li>
+<p><strong>2026-10-19</strong> - Claude's morning report lists the leftover Descript compositions from the factory's own check
+  (with lengths), and the factory checks disk space before every cut and export, not only at the start.</p>
+</li>
+<li>
+<p><strong>2026-10-17</strong> - When the disk is low, Claude offers to clean up junk and cache files and shows you what first.</p>
+</li>
+<li><strong>2026-10-17</strong> - Each event gets its own Desktop folder named after the conference (<code>video factory - LLMday Austin
+  2026 Q4</code>).</li>
+<li><strong>2026-10-17</strong> - "Launch the factory" opens the workbench on the event you're working on.</li>
+<li><strong>2026-10-17</strong> - "Launch the factory" now always opens the workbench in your browser. Claude also writes each new
+  practice it learns on a real day into the factory's README and these manuals straight away.</li>
+<li><strong>2026-10-16</strong> - Tabs renamed and reordered: <strong>Run with Claude</strong> (first), <strong>No Claude, manual</strong>, <strong>Factory logs</strong>.</li>
+<li><strong>2026-10-16</strong> - First version, with the live-factory skill in the sreday repo.</li>
+</ul></section>
+  <section class="tab card" id="tab-manual"><h1 id="live-talk-factory-team-manual">LIVE talk factory - team manual</h1>
+<p class="tag-slow">Probably slower than manual editing for non-tech people...</p>
+
+<p>Turns the long recordings of a live event (SREday, LLMday, PLATFORMday, PEC, DevOps Not Dead) into one clean,
+YouTube-ready video per talk. Descript only gets the talks themselves: the breaks, set-up chatter, lunch and Q&amp;A
+never reach it, which saves about a third of its media hours.</p>
+<div class="highlight"><pre><span></span><code>recordings  →  analyse  →  find the talks  →  ✋ you check the cuts  →  cut + Descript edit  →  ✋ you check in Descript  →  export  →  YouTube
+</code></pre></div>
+<p>Two steps are yours (✋). Nothing is uploaded before you approve the cuts, and nothing is exported before you've
+looked at each talk in Descript.</p>
+<blockquote>
+<p>This is the <strong>No Claude, manual</strong> tab. The <strong>Factory logs</strong> tab shows what the factory has done, live: every computer that runs it
+publishes its progress - at the end of every job, and during a run whenever a talk is ready for review or finished
+(at most every 20 minutes) - and the tab checks for news every minute. <strong>Publish status</strong> in the workbench publishes
+right away. The same page is on sreday.com/factory, llmday.com/factory and platformday.com/factory; each shows its
+own brand's events (tick "show the other brands" for all).</p>
+<p>This page is the manual for operating the tool. The technical details live in <code>live-factory/README.md</code> in the
+sreday repo. When the tool changes, this page changes with it - see <strong>Changelog</strong> at the bottom.</p>
+</blockquote>
+<hr />
+<h2 id="1-one-time-setup-on-your-computer">1. One-time setup on your computer</h2>
+<p>You need: a Mac or a Windows PC with <strong>150 GB free</strong> for a full day of recordings, Git, and Python 3.9 or newer
+(the setup installs the rest).</p>
+<ol>
+<li>
+<p><strong>Get the repos.</strong> Put them side by side in one folder, e.g. <code>Documents/GitHub/</code>:</p>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/sreday/sreday.git
+git clone https://github.com/sreday/llmday.git          # only if you process LLMday events
+git clone https://github.com/sreday/platformday.git     # only if you process PLATFORMday events
+</code></pre></div>
+</li>
+<li>
+<p><strong>Run the setup</strong>, once:</p>
+<ul>
+<li><strong>Mac:</strong> <code>bash sreday/live-factory/setup.sh</code></li>
+<li><strong>Windows:</strong> double-click <code>sreday\live-factory\setup.cmd</code></li>
+</ul>
+<p>It installs ffmpeg and Whisper (the free speech-to-text that runs on your computer) and asks for a <strong>Descript API
+token</strong>: in Descript go to <strong>Settings → API tokens → Create</strong>. Use the team's Descript account. The token is stored
+on your computer only, never in git. It also puts a <strong>LIVE talk factory</strong> launcher on your Desktop.</p>
+</li>
+<li>
+<p><strong>Check it:</strong> the setup ends with a health check. Everything should say <code>OK</code>. You can run it again any time:
+    <code>env/bin/python -m live_factory doctor</code> (Mac) or <code>env\Scripts\python -m live_factory doctor</code> (Windows), from the
+    <code>live-factory</code> folder.</p>
+</li>
+</ol>
+<p><strong>Start the app:</strong> double-click <strong>LIVE talk factory</strong> on your Desktop (or <code>./run.sh</code> / <code>run.cmd</code> in <code>live-factory</code>).
+It opens two pages in your browser:</p>
+<ul>
+<li><strong>Progress</strong> - http://localhost:8043 - a plain page: a bar per stage of the day, then a bar per talk, then only
+  what needs you ("Missing recording for X", "X: not uploaded - needs a look"). Leave it open in a tab.</li>
+<li><strong>Workbench</strong> - http://localhost:8043/workbench - where you do everything by hand (cuts, review, redo).</li>
+<li><strong>Status</strong> - http://localhost:8043/status - read-only progress of the whole day; leave it open in a tab.</li>
+</ul>
+<p>The workbench opens on the event you worked on last (the events you've started are marked ● at the top of the list),
+and the address shows it (<code>?event=llmday-2026-austin-q4</code>), so a bookmark or a reload keeps it. Finished events in a
+repo's <code>past/</code> folder are listed too. Starting the app again while an older copy is still running replaces that copy;
+jobs already running carry on.</p>
+<p>Before every event, update the repos so the lineup is current: <code>git pull</code> in each repo folder.</p>
+<hr />
+<h2 id="2-process-an-event-step-by-step">2. Process an event, step by step</h2>
+<p>Events are named <code>&lt;brand&gt;-&lt;folder&gt;</code>, e.g. <code>sreday-2026-london-q1</code> or <code>platformday-2026-austin-q4</code> - the folder name
+from the site repo. Pick the event in the dropdown at the top of the workbench.</p>
+<h3 id="step-1-add-the-recordings">Step 1 - Add the recordings</h3>
+<p>In the workbench, open <strong>1. Recordings → Add recordings</strong>:</p>
+<ol>
+<li>
+<p>Paste the path of the recording, or of the folder on the SD card / drive that holds them, one per line.</p>
+<ul>
+<li>Mac: drag the file into the Terminal to get its path, e.g. <code>/Volumes/CARD/DCIM/day1.mp4</code>.</li>
+<li>Windows: Shift + right-click the file → <strong>Copy as path</strong>.
+2. Pick the <strong>Day</strong>, and the <strong>Track</strong> (the room) when the day had more than one room. A one-room day needs only the day.
+3. Leave <strong>read in place</strong> off: the recording is then copied into the factory's folder as a checked, read-only backup.
+Tick it only when the file is on a drive that stays plugged in and you don't want a second copy - then that file is
+the only copy, so back it up.</li>
+</ul>
+</li>
+<li>
+<p>Press <strong>Add</strong>.</p>
+</li>
+</ol>
+<p><strong>Sound recorded on its own device</strong> (a recorder on the mixing desk, the AV team's laptop - common with a wired set-up,
+where the camera only has its built-in mic): add those files too, the same way, for the same day. Sound files (.wav,
+.mp3, .m4a, .flac...) are taken as <em>separate sound</em> by themselves; a video file that should only give its sound goes in
+with Claude's <em>"…it's sound only"</em> (<code>--sound</code>). After the analysis the factory finds where each piece of sound belongs
+on the videos by itself - however the files start and stop, whatever their clocks say, even when one device drifts
+against the other - and every talk it covers gets that sound instead of the camera's. Where the recorder has a hole,
+was muted or is clearly worse, the camera's own sound stays.</p>
+<p>The factory never changes, moves or deletes your original files. If the disk doesn't have room for the whole job
+(about 2× the recordings), it refuses to start and tells you how much to free - with a red banner and a desktop
+notification.</p>
+<h3 id="step-2-analyse">Step 2 - Analyse</h3>
+<p>Press <strong>Analyse recordings</strong>. On your computer, for free, it:</p>
+<ul>
+<li>copies the recording in and checks the copy,</li>
+<li>measures the sound per second (and finds a recording that has sound on one side only),</li>
+<li>writes a transcript with Whisper,</li>
+<li>takes stills,</li>
+<li>places every separate sound recording on the videos (an 8-hour day takes about a minute).</li>
+</ul>
+<p>An 8-hour day takes about <strong>35 minutes</strong> on an M1/M2 Mac (faster on a PC with an NVIDIA card). You can watch it on
+the Status page and close the browser - it keeps running.</p>
+<h3 id="step-3-find-the-talks">Step 3 - Find the talks</h3>
+<p>Two ways:</p>
+<ul>
+<li>
+<p><strong>Automatic:</strong> press <strong>Draft cuts</strong>. The factory matches the recording to the lineup: the speaker's "Hi, I'm Dan",
+    the MC's "please welcome…", greetings, the closing "thank you", the Q&amp;A, the pauses. On our first real day it got
+    13 of 15 talks within 30 seconds and spotted the no-show.</p>
+</li>
+<li>
+<p><strong>With Claude Code</strong> (best results): press <strong>Brief for Claude</strong>, then ask Claude: <em>"match the lineup for
+    platformday-2026-austin-q4"</em>. Claude reads the whole transcript, checks frames at every boundary, and writes the cuts.</p>
+</li>
+</ul>
+<p>Either way, the result is a list of cuts, one per talk, waiting for you.</p>
+<h3 id="step-4-check-and-approve-the-cuts-gate-1">Step 4 - ✋ Check and approve the cuts (gate 1)</h3>
+<p>Section <strong>2. Cuts</strong> in the workbench, one tab per track:</p>
+<ul>
+<li>
+<p>The <strong>player</strong> shows the recording; the <strong>waveform</strong> under it shows the left channel above the line and the right
+    channel below (a one-sided recording shows only half). Click the waveform to jump there. Cuts are shaded - green
+    once approved.</p>
+</li>
+<li>
+<p>For every cut:</p>
+<ul>
+<li><strong>▶ start</strong> plays from the cut's start, <strong>▶ end</strong> plays its last 15 seconds.</li>
+<li><strong>−5 −1 +1 +5</strong> nudge a time by seconds; <strong>⇤ / ⇥</strong> set the start / end to where the player is now.</li>
+<li><strong>words</strong> shows what is said around the start and the end.</li>
+<li><strong>+ part</strong> - when a talk continues into the next recording file.</li>
+<li>The talk's name can be changed with the dropdown (a swapped slot).</li>
+<li><strong>Read the flags (⚑, red)</strong> - they are why you're here: very quiet or distorted sound, sound dropping out, too few
+words, the picture blank, much shorter or longer than its slot, or <em>"sounds like X's talk - swapped slot?"</em>.</li>
+</ul>
+</li>
+<li>
+<p>Under the list: <strong>Not cut</strong> (not recorded properly, or a no-show) and talks <strong>neither cut nor skipped</strong>. Check these
+    with whoever ran the room.</p>
+</li>
+<li>
+<p>Tick the checkbox of every cut you're happy with. <strong>Approve all unflagged</strong> ticks the clean ones; flagged and
+    low-confidence cuts must be ticked one by one, on purpose.</p>
+</li>
+<li>
+<p>Press <strong>Save cuts</strong>.</p>
+</li>
+</ul>
+<p>You don't need to be precise to the second: before cutting, the factory <strong>listens closely at both ends of every talk</strong>
+and sets the exact words itself - the speaker's first words to the room (not the MC, not "can you hear me?"), and
+their last finished sentence before the Q&amp;A, ideally the closing "thank you". The Q&amp;A is always left out. Claude reads
+each talk's first and last sentence (<code>ends_brief.md</code> in the event's folder) and tells you; a talk whose ends are not
+sure waits until they are. A cut must not <em>miss</em> part of the talk, though: it should hold the whole talk.</p>
+<h3 id="step-5-cut-and-edit-in-descript">Step 5 - Cut and edit in Descript</h3>
+<p>Press <strong>Run</strong>. For every approved talk the factory:</p>
+<ol>
+<li>
+<p>cuts it out of the recording (fixing sound that is on one side only, and zooming in slides that sit in black bars),
+    and makes the picture and the sound the best they can be:</p>
+<ul>
+<li><strong>the slides, sharp and full screen</strong>: wherever the recording shows a page of the speaker's deck - inside
+  PowerPoint's Presenter View, with the taskbar or a headshot over it, or filmed on a small TV in the room - that
+  stretch shows the deck page itself instead. Bullets that appear one by one appear one by one. A live demo, a
+  browser, code or the speaker on stage keep the recording. The deck comes from the deck dump (the talk page's
+  "Download slides" PDF) or from a PDF you drop into the event folder's <code>decks/</code> named after the speaker;</li>
+<li><strong>night mode</strong> (a yellow, Night Shift screen share): the deck pages have the true colours anyway; what stays
+  video gets its colours put back;</li>
+<li><strong>the separate sound</strong> where there is one (step 1);</li>
+<li><strong>saturated sound</strong> (a mic or recorder driven too hard, every loud word cracking): the factory hears which talks
+  have it and where. Where another track has the same moment clean (the camera next to a clipped recorder, the
+  other channel), it uses that one. With no choice it tries the repair tools on 30 s of the clipped speech,
+  checks the result with speech recognition, and repairs the whole talk with the best one that really helps -
+  that talk then gets the normal Studio Sound. Only when nothing helps does Descript get <strong>Studio Sound 100%</strong>,
+  the last resort. Ask <em>"which talks have saturated sound?"</em> before the run to see the list; the 30 s tried go
+  to <code>cuts/&lt;speaker&gt;.sound-trial/</code> for a listen.</li>
+</ul>
+<p><strong>Then the factory checks the cut itself before anything is uploaded</strong> (Descript costs money): the deck pages
+really are in the picture, the separate sound really is in the cut, in sync, and the camera's own "pilot" sound
+is gone. A talk that fails stops there - no credits spent - and says what is wrong; <code>cuts/&lt;speaker&gt;.check.jpg</code>
+shows frames of the cut.</p>
+<p>Before the run you can see what it will do: ask Claude <em>"look at the slides for PLATFORMday Austin"</em> - each talk
+gets a before/after picture <code>cuts/&lt;speaker&gt;.picture.jpg</code> in the event folder.
+2. uploads it to the event's Descript project (e.g. <strong>PLATFORMday Austin 2026 Q4</strong>), named after the speaker,
+3. has Descript's AI editor apply <strong>Studio Sound 80%</strong>, a limiter, the volume, remove the <strong>um / uh</strong> sounds (only
+those - real words are kept) and shorten pauses longer than 2 s to 1 s.</p>
+</li>
+</ol>
+<p>Then it stops and waits for you. Two talks go at a time; a day of 15 talks takes about an hour. Each edit costs about
+8-30 Descript AI credits - the Status page shows the total.</p>
+<h3 id="step-6-review-in-descript-gate-2">Step 6 - ✋ Review in Descript (gate 2)</h3>
+<p>Open the event's project in Descript (link on the Status page). For every talk:</p>
+<ol>
+<li>
+<p><strong>The start and the end are final already</strong> - no trimming. Check them: the talk should open on the speaker's first
+    words and end right after their last sentence, with no Q&amp;A. If one is wrong, flag the talk for redo (below) and
+    say what is wrong ("starts on the MC", "ends mid-sentence").</p>
+</li>
+<li>
+<p>Watch / skim it: the sound, the start and the end, the cuts around removed filler sounds.</p>
+</li>
+<li>Back in the workbench, section <strong>3. Talks in Descript</strong>, tick <strong>Reviewed</strong>.</li>
+</ol>
+<p><strong>Something wrong with a talk</strong> (cut off, wrong talk, bad zoom)? Fix its cut in section 2 if needed and save, then in
+section 3 type what's wrong and press <strong>flag for redo</strong>. On the next Run it is cut again and uploaded as a fresh
+composition, e.g. <strong>"Thomas Cameron (redo 2)"</strong> - the old one stays in Descript untouched, so you can compare.</p>
+<h3 id="step-7-export">Step 7 - Export</h3>
+<p>Press <strong>Run</strong> again. Every talk ticked <strong>Reviewed</strong> is:
+published from Descript → downloaded → subtitles (SRT) → YouTube chapters → trimmed to the first and last word →
+set to YouTube loudness (-14 LUFS) → saved as a light MP4 → checked.</p>
+<p>The finished videos are in the event's folder, <code>Desktop/video factory - &lt;event&gt;/final videos for YouTube/</code>, named
+<code>&lt;speaker&gt; - &lt;Event&gt;.mp4</code>. The event folder (button <strong>Event folder</strong>) has <code>YouTube items.txt</code>.</p>
+<h3 id="step-8-youtube">Step 8 - YouTube</h3>
+<p>For each talk, <code>YouTube items.txt</code> has, ready to paste:</p>
+<ul>
+<li>the <strong>title</strong>: <code>&lt;talk title&gt; | &lt;speaker&gt; | SREday London 2026 Q1</code> (at most 100 characters),</li>
+<li>the <strong>description</strong> in the channel's usual format (event and date, tickets link, CFPs link, chapters),</li>
+<li>the <strong>thumbnail</strong> link - the website already draws it; download and upload it.</li>
+</ul>
+<p>Upload to the brand's channel as usual. Then put the YouTube link in the event's sheet (the <strong>YouTube</strong> column) - in
+the Google Sheet, never in the repo's CSV.</p>
+<p>With Claude, the factory can do all of this itself on <strong>autopilot</strong> (the "With Claude" tab, "Ship an event in one
+go"). Each talk is uploaded private and YouTube makes it public exactly 5 weeks after the event at 09:00 local, with
+its thumbnail, subtitles and the event's playlist. The website shows a talk's video only from that day, so the link
+can go into the sheet straight away.</p>
+<hr />
+<h2 id="3-when-something-goes-wrong">3. When something goes wrong</h2>
+<table>
+<thead>
+<tr>
+<th>What you see</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Red banner <strong>Not enough disk space</strong></td>
+<td>Free the space it names, or set <code>work_root: D:/live-factory</code> (a bigger drive) in <code>live-factory/settings.local.yml</code>. Nothing was started, or the talk named in the banner stopped before writing its file - run again and it carries on.</td>
+</tr>
+<tr>
+<td>Banner <strong>Delete in Descript - leftovers of failed uploads</strong></td>
+<td>A failed upload left a composition with the talk's name - an empty 6 s one, or an unedited full-length twin. Delete the one with the length shown; the real, edited talk is the other one. The factory can't delete it itself (Descript doesn't allow it).</td>
+</tr>
+<tr>
+<td>A talk is <strong>failed</strong> at upload</td>
+<td>Press <strong>retry</strong> next to it. A dropped connection is retried 3 times automatically first.</td>
+</tr>
+<tr>
+<td><strong>EDITS PAUSED</strong> in the log</td>
+<td>The factory stopped all edits because a report looked like the AI editor touched another talk, or one edit cost too much. Check that talk in Descript; if all is fine, clear the pause - <code>env/bin/python -m live_factory unpause &lt;event&gt;</code> in the <code>live-factory</code> folder (Windows: <code>env\Scripts\python</code>) - then Run.</td>
+</tr>
+<tr>
+<td>Descript says <strong>402</strong></td>
+<td>The Descript plan is out of credits or media minutes. Top it up, then Run - finished steps are never paid for twice.</td>
+</tr>
+<tr>
+<td>A talk's sound is on one side only</td>
+<td>Nothing - the factory fixes it (it copies the live side to both).</td>
+</tr>
+<tr>
+<td>The wrong talk got a name, or a talk is missing</td>
+<td>Fix it in step 4 (change the name, add a cut with <strong>+ cut at the playhead</strong>), or flag it for redo in step 6.</td>
+</tr>
+<tr>
+<td>A talk <strong>wasn't recorded</strong></td>
+<td>It shows under <strong>Not cut</strong>. Tell the speaker; there is nothing to process.</td>
+</tr>
+<tr>
+<td>The workbench doesn't open</td>
+<td>Double-click the launcher again; if the page is still blank, run <code>doctor</code> (step 1.3).</td>
+</tr>
+<tr>
+<td>The run and the workbench <strong>stopped with no error</strong></td>
+<td>Something outside the factory closed them (it happened once in Dallas). Open the workbench again and press <strong>Run</strong>: it carries on where it stopped, and an edit Descript already finished is not paid for again.</td>
+</tr>
+<tr>
+<td>A stretch of a talk has <strong>no sound at all</strong></td>
+<td>In a Zoom recording, the room mic was muted in Zoom. The file can't bring it back - look for another recording (a phone, a camera, the Zoom cloud recording).</td>
+</tr>
+<tr>
+<td>You started a job and closed the browser</td>
+<td>That's fine - jobs run in the background. Reopen the workbench to see them.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>One computer per event.</strong> Two people processing the same event at once would fight over the Descript project.
+Agree who runs which event.</p>
+<hr />
+<h2 id="4-where-things-are">4. Where things are</h2>
+<p>On the computer that runs the event, one folder per conference on the Desktop, e.g.
+<code>Desktop/video factory - LLMday Austin 2026 Q4/</code>, so several events can run side by side:</p>
+<table>
+<thead>
+<tr>
+<th>Folder / file</th>
+<th>What's in it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>in/</code></td>
+<td>the backup copies of the recordings (read-only - never edit or delete)</td>
+</tr>
+<tr>
+<td><code>rec/</code></td>
+<td>the analysis: transcripts, sound levels, stills</td>
+</tr>
+<tr>
+<td><code>cuts/</code></td>
+<td>the talks as cut and uploaded to Descript</td>
+</tr>
+<tr>
+<td><code>out/</code>, <code>srt/</code></td>
+<td>Descript's downloads, subtitles</td>
+</tr>
+<tr>
+<td><code>cuts.json</code></td>
+<td>the cuts you approved (step 4)</td>
+</tr>
+<tr>
+<td><code>YouTube items.txt</code></td>
+<td>titles, descriptions, thumbnails (step 8)</td>
+</tr>
+<tr>
+<td><code>final videos for YouTube/</code></td>
+<td>the finished videos of this event</td>
+</tr>
+</tbody>
+</table>
+<p>When an event is published on YouTube and the raw recording is backed up elsewhere, the event folder can be archived
+or deleted to free space - ask first, the <code>in/</code> copy may be the only backup of the recording.</p>
+<hr />
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2026-11-27</strong> - The app opens on a plain progress page: one bar per stage, then a bar per talk, then a short
+  final report with only the real issues. The detailed workbench moved to /workbench. The YouTube subtitles are now
+  Descript's transcript proofread by Claude in the talk's context: misheard names and terms are fixed, the timings
+  never change.</li>
+<li><strong>2026-11-27</strong> - Autopilot (with Claude): one request ships an event to the brand's YouTube channel. The factory
+  checks each finished video itself, uploads it private with its title, description, thumbnail, subtitles and
+  playlist, and it goes public exactly 5 weeks after the event, at 09:00 local. The website's talk pages show the
+  video only from then.</li>
+<li><strong>2026-11-27</strong> - Sharp starts and ends: every talk now starts on the speaker's first words to the room and ends right
+  after their last finished sentence - never mid-sentence - with the Q&amp;A always out. There is no extra footage to
+  trim in Descript any more. A close that trails off into mumbling ends on the firm sentence before it.</li>
+<li>
+<p><strong>2026-11-27</strong> - Saturated sound: the factory hears which talks have clipped (saturated) sound and where; it takes
+  the clean track where there is one, else repairs the talk with the best open-source tool that proves itself on a
+  sample; Studio Sound 100% in Descript only when nothing helps.</p>
+</li>
+<li>
+<p><strong>2026-11-27</strong> - A check of every cut before it goes to Descript: deck pages in the picture, the separate sound in
+  sync and the camera's sound suppressed - a cut that fails is stopped before any credits are spent.</p>
+</li>
+<li>
+<p><strong>2026-11-27</strong> - The slides, sharp and full screen: wherever a talk's recording shows a page of the speaker's deck
+  (Presenter View, the taskbar or a headshot over it, a TV filmed in the room), the video shows the deck page itself;
+  builds appear as they did, demos keep the recording. Night mode (a yellow screen share) is put right. Sound recorded
+  on its own device is placed on the videos by itself and used for the talks it covers. A deck that is a different
+  version from the one presented is left alone (the recording stays) and named in the notes.</p>
+</li>
+<li>
+<p><strong>2026-11-25</strong> - Fixed: a talk whose speaker has a dot in their name (e.g. "Funmilade A. Lesi") was refused by
+  Descript as "invalid or unsupported media" on every try. It now uploads like any other.</p>
+</li>
+<li>
+<p><strong>2026-11-24</strong> - Talks that arrive already edited (one file per talk, from a partner) go to Descript whole: no trim,
+  their Q&amp;A kept. Fixed: a talk with only a short title and no abstract no longer makes every other talk look like a
+  "swapped slot".</p>
+</li>
+<li>
+<p><strong>2026-11-10</strong> - Fixed: an event moved to <code>past/</code> could be missing from the Factory logs tab when a local site
+  build had left a folder behind at the old place. <code>&lt;command&gt; --help</code> shows the help.</p>
+</li>
+<li><strong>2026-10-29</strong> - Works on Windows with an NVIDIA card (first day: SREday Dallas 2026 Q4 on an RTX 5090, a whole
+  8.7 h day transcribed in about 15 min). Fixed: on Windows the run could stop with "Access is denied" while the
+  workbench was open, and ticking Reviewed during a run could do the same. Fixed: transcribing failed with a newer PyAV (<code>metadata_errors</code>).</li>
+<li>
+<p><strong>2026-10-29</strong> - Closing Q&amp;As are always cut; the 60 s after the talk is there if you want a question back.</p>
+</li>
+<li>
+<p><strong>2026-10-19</strong> - Disk space is checked again before each talk is cut and before Descript's export is downloaded,
+  not only at the start of a run. A full disk stops that talk with the red banner, and the next run carries on.</p>
+</li>
+<li><strong>2026-10-19</strong> - After each run the workbench lists the leftover compositions failed uploads left in Descript
+  (empty 6 s ones, or an unedited full-length twin), with their length, so you know which one to delete.</li>
+<li>
+<p><strong>2026-10-19</strong> - A talk far quieter than the rest of its recording (a mic left far away) is flagged again, even
+  when the transcript understands it.</p>
+</li>
+<li>
+<p><strong>2026-10-17</strong> - One folder per event on the Desktop, named after the conference: <code>video factory - LLMday Austin
+  2026 Q4</code>, with its own <code>final videos for YouTube/</code>. Opening an event in the app no longer makes a folder for it.</p>
+</li>
+<li><strong>2026-10-17</strong> - Fewer false sound flags: when the room is nearly as loud as the speaker, stretches the
+  transcript hears as speech are no longer flagged as drop-outs or "hardly any sound".</li>
+<li><strong>2026-10-17</strong> - The workbench opens on the event you worked on last (or <code>?event=</code> in the address), lists events
+  that have moved to <code>past/</code>, and an app left running from an older version is replaced when you start it again.</li>
+<li><strong>2026-10-16</strong> - Tabs renamed and reordered: <strong>Run with Claude</strong> (first), <strong>No Claude, manual</strong>, <strong>Factory logs</strong>.</li>
+<li><strong>2026-10-16</strong> - New <strong>With Claude</strong> tab: run the factory by talking to Claude Code (the live-factory skill comes
+  with the sreday repo).</li>
+<li><strong>2026-10-16</strong> - The factory pages ask for the team password once per device (ask Mark).</li>
+<li><strong>2026-10-16</strong> - The page is on sreday.com, llmday.com and platformday.com (/factory), each with its own brand's
+  events; the Factory tab updates live, every minute.</li>
+<li><strong>2026-10-16</strong> - Two tabs on this page: <strong>Manual</strong> and <strong>Factory</strong>, where runs publish their progress (talk names,
+  steps and results only). <strong>Publish status</strong> button in the workbench, <code>unpause</code> command for paused edits.</li>
+<li>
+<p><strong>2026-10-16</strong> - Every clip gets 30 s of extra footage before the talk and 60 s after, for trimming in Descript.
+    Slides boxed in black bars are zoomed to fit the frame. <strong>Flag for redo</strong> for any talk. The filler-word removal takes
+    only um / uh sounds (it had muted real words). First real day processed: PLATFORMday Austin 2026 Q4.</p>
+</li>
+<li>
+<p><strong>2026-10-15</strong> - First version.</p>
+</li>
+</ul></section>
+
+  <section class="tab card" id="tab-factory">
+    <h1>Factory logs</h1>
+    <p class="small">What the factory has done for LLMday events, as the computer that runs it publishes it: at the end of
+      every job, and during a run whenever a talk is ready for review or finished. This page checks for news every minute.</p>
+    <div class="bar"><span id="fs-live" class="small"></span>
+      <label class="small"><input type="checkbox" id="fs-all"> show the other brands' events too</label></div>
+    <div id="fs-body"><p class="small">Loading…</p></div>
+    <noscript><p>This tab needs JavaScript.</p></noscript>
+  </section>
+</main>
+<script>
+  // tabs: "Run with Claude" by default; #manual / #factory open the others (the address stays shareable)
+  // sliding tabs (Marek 2026-10-16): the highlight glides to the chosen tab and the page slides in from that side
+  const NAV = document.querySelector('nav');
+  const slider = document.createElement('span'); slider.className = 'slider'; NAV.prepend(slider);
+  let current = null;
+  function place(a, instant) {
+    if (!a) return;
+    if (instant) slider.style.transition = 'none';
+    slider.style.left = a.offsetLeft + 'px'; slider.style.width = a.offsetWidth + 'px';
+    if (instant) { slider.offsetWidth; slider.style.transition = ''; }
+  }
+  function show(name) {
+    if (!document.getElementById('tab-' + name)) name = document.getElementById('tab-claude') ? 'claude' : 'manual';
+    const links = [...NAV.querySelectorAll('a')], order = links.map(a => a.dataset.tab);
+    const dir = current === null ? '' : order.indexOf(name) > order.indexOf(current) ? 'from-right' : order.indexOf(name) < order.indexOf(current) ? 'from-left' : '';
+    document.querySelectorAll('.tab').forEach(t => { t.classList.remove('on', 'from-right', 'from-left');
+      if (t.id === 'tab-' + name) { if (dir) t.classList.add(dir); void t.offsetWidth; t.classList.add('on'); } });
+    links.forEach(a => a.classList.toggle('on', a.dataset.tab === name));
+    place(links.find(a => a.dataset.tab === name), current === null);
+    current = name;
+  }
+  window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+  window.addEventListener('resize', () => place(NAV.querySelector('a.on'), true));
+  window.addEventListener('factory-unlocked', () => place(NAV.querySelector('a.on'), true));
+  // the tabs change size when the web font arrives after the first paint (the highlight was measured with the fallback
+  // font and came out too narrow after a refresh): follow their real size whenever it changes
+  const follow = () => place(NAV.querySelector('a.on'), true);
+  if (window.ResizeObserver) { const ro = new ResizeObserver(follow); NAV.querySelectorAll('a').forEach(a => ro.observe(a, {box: 'border-box'})); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(follow);
+  window.addEventListener('load', follow);
+  show(location.hash.slice(1));
+
+  // the Factory tab, live: the factory's status.json straight from GitHub (no rebuild needed), every minute
+  const SRC = 'https://raw.githubusercontent.com/sreday/sreday/main/live-factory/status.json';
+  const BRAND = "llmday";
+  const SITES = {sreday: 'https://sreday.com/factory/#factory', llmday: 'https://llmday.com/factory/#factory', platformday: 'https://platformday.com/factory/#factory'};
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const when = iso => { if (!iso) return ''; const m = Math.round((Date.now() - new Date(iso)) / 60000);
+    return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : iso.slice(0, 16).replace('T', ' '); };
+  const pill = s => `<span class="p ${esc(s)}">${esc(s || '-')}</span>`;
+  let DATA = null;
+  function render() {
+    if (!DATA) return;
+    const all = document.getElementById('fs-all').checked;
+    const evs = (DATA.events || []).filter(e => all || e.id.split('-')[0] === BRAND);
+    const others = (DATA.events || []).filter(e => e.id.split('-')[0] !== BRAND);
+    let h = '';
+    if (!evs.length) h = `<p>No ${esc("LLMday")} events published yet.</p>`;
+    for (const e of evs) {
+      h += `<div class="ev"><h2>${esc(e.title)}</h2><div class="meta">${esc(e.date)} · ${e.finished} of ${e.approved} talks finished` +
+        (e.review ? ` · <b>${e.review} waiting for review in Descript</b>` : '') +
+        ` · ${e.recordings} recording${e.recordings === 1 ? '' : 's'} (${e.hours} h), ${e.talk_hours} h of talks sent to Descript` +
+        ` · on ${esc(e.machine)}` + (e.running ? ` · <span class="live">${esc(e.job || 'job')} running</span>` : '') +
+        ` · updated ${when(e.updated)}</div>`;
+      if (e.talks && e.talks.length) {
+        h += '<table><thead><tr><th>Talk</th><th>Cut</th><th>Descript edit</th><th>Review</th><th>Export</th><th>Result</th></tr></thead><tbody>';
+        for (const t of e.talks) {
+          h += `<tr><td><b>${esc(t.talk)}</b><br><span class="small">${esc(t.title)}</span></td>` +
+            [t.cut, t.descript, t.review, t.export].map(s => `<td>${pill(s)}</td>`).join('') +
+            `<td>${t.finished ? pill('done').replace('>done<', '>finished<') + ' ' : ''}${t.minutes} min` +
+            (t.flags || []).map(f => `<div class="flag">${esc(f)}</div>`).join('') +
+            (t.error ? '<div class="flag">needs a retry</div>' : '') + (t.redo ? '<div class="flag">flagged for a redo</div>' : '') + '</td></tr>';
+        }
+        h += '</tbody></table>';
+      } else {
+        h += `<p class="small">${e.analysed} of ${e.recordings} recordings analysed - the cuts are not approved yet.</p>`;
+      }
+      if ((e.not_recorded || []).length) h += `<p class="small">Not recorded: ${e.not_recorded.map(n => esc(n.talk) + (n.why ? ` (${esc(n.why)})` : '')).join(', ')}</p>`;
+      h += '</div>';
+    }
+    // the other LIVE brands' factory pages, always (Marek 2026-10-17: LLMday's page didn't list SREday while SREday had
+    // nothing published), with how many events each has on the factory
+    const NAMES = {sreday: 'SREday', llmday: 'LLMday', platformday: 'PLATFORMday'};
+    const sisters = Object.keys(SITES).filter(b => b !== BRAND).map(b => {
+      const n = (DATA.events || []).filter(e => e.id.split('-')[0] === b).length;
+      return `<a href="${SITES[b]}">${NAMES[b]}</a>` + (n ? ` (${n} event${n === 1 ? '' : 's'})` : '');
+    });
+    h += `<p class="small">The other factories: ${sisters.join(' · ')}</p>`;
+    document.getElementById('fs-body').innerHTML = h;
+  }
+  async function load() {
+    try {
+      const r = await fetch(SRC + '?t=' + Math.floor(Date.now() / 60000), {cache: 'no-store'});
+      if (!r.ok) throw new Error(r.status === 404 ? 'nothing published yet' : 'HTTP ' + r.status);
+      DATA = await r.json();
+      document.getElementById('fs-live').innerHTML = `<span class="dot"></span>live · factory last published ${when(DATA.updated)}`;
+      render();
+    } catch (err) {
+      document.getElementById('fs-live').textContent = 'could not load the factory status (' + err.message + ') - trying again in a minute';
+      if (!DATA) document.getElementById('fs-body').innerHTML = '';
+    }
+  }
+  document.getElementById('fs-all').addEventListener('change', render);
+  load();
+  setInterval(load, 60000);
+</script>
+<script>/* rewrite_assets.py: reload when a newer build is out */(function(){var m=document.querySelector('meta[name="build"]');if(!m||!window.fetch)return;var mine=m.getAttribute('content'),busy=0,bar=null;function engaged(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;var f=document.querySelectorAll('input,textarea');for(var i=0;i<f.length;i++){var e=f[i];if(/^(checkbox|radio)$/.test(e.type)?e.checked!==e.defaultChecked:(e.type!=='hidden'&&e.value!==e.defaultValue))return true}return !!document.querySelector('.modal.show')}function offer(){if(bar||!document.body)return;bar=document.createElement('div');bar.setAttribute('role','status');bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:2000;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#111;color:#fff;padding:10px 12px 10px 18px;border-radius:999px;font:600 14px/1.3 Montserrat,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)';var t=document.createElement('span');t.textContent='This page was just updated (schedule, speakers or sponsors)';bar.appendChild(t);var b=document.createElement('button');b.type='button';b.textContent='Refresh';b.style.cssText='border:0;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;background:#fff;color:#111';b.onclick=function(){location.reload()};bar.appendChild(b);document.body.appendChild(bar)}function check(auto){if(busy||document.visibilityState==='hidden')return;busy=1;fetch('/build.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!j.build||j.build===mine)return;var again=false;try{again=sessionStorage.getItem('fresh-reload')===j.build;sessionStorage.setItem('fresh-reload',j.build)}catch(e){}if(auto&&!again&&!engaged())location.reload();else offer()})['catch'](function(){busy=0})}check(true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')check(true)});addEventListener('pageshow',function(e){if(e.persisted)check(true)});setInterval(function(){check(false)},300000)})()</script>
+</body>
+</html>
